@@ -244,6 +244,7 @@ namespace Jackett.Common.Indexers
             var torrentName = item.SelectToken("torrentName")?.ToString();
             var guid = item.SelectToken("guid")?.ToString();
             var quality = item.SelectToken("calidad")?.ToString();
+            var image = item.SelectToken("image")?.ToString();
 
             if (torrentName.IsNullOrWhiteSpace() || guid.IsNullOrWhiteSpace() || quality.IsNullOrWhiteSpace())
             {
@@ -272,6 +273,9 @@ namespace Jackett.Common.Indexers
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
+
+            if (image.IsNotNullOrWhiteSpace() && !image.Contains("/no-imagen.jpg"))
+                releaseInfo.Poster = new Uri(image);
 
             // Filter by category
             if (query.Categories.Any() && !query.Categories.Intersect(releaseInfo.Category).Any())
