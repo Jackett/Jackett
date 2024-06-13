@@ -189,6 +189,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NetHD (VietTorrent)
  * Newstudio (login)
  * NoNaMe Club (NNM-Club) (login)
+ * OxTorrent-vip
  * PornoLab
  * PussyTorrents
  * Rainbow Tracker
@@ -205,7 +206,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SkTorrent-org
  * themixingbowl (TMB)
  * Toloka.to
- * Torrent911
  * Torrent9-tel
  * TorrentMasters
  * Torrents-Local

@@ -62,6 +62,7 @@ namespace Jackett.Common.Services
             {"seals", "greatposterwall"},
             {"speedcdcookie", "speedcd"},
             {"tehconnectionme", "anthelion"},
+            {"torrent911", "oxtorrent-vip"},
             {"anthelion", "anthelion-api"},
             {"todotorrents", "dontorrent"},
             {"torrent9clone", "torrent9-tel"},
