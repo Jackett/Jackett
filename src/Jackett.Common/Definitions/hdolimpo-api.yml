@@ -32,10 +32,6 @@ settings:
     type: info
     label: About your API key
     default: "Find or Generate a new API Token by accessing your account <i>My configuration / Mi configuración => Secutiy / Seguridad</i> page and clicking on the <b>API Token</b> tab."
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -81,7 +77,6 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    "free": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
