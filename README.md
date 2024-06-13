@@ -61,7 +61,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * EZTV
  * Frozen Layer
  * GamesTorrents
- * GkTorrent
  * GloDLS
  * GTorrent.pro
  * Idope
@@ -114,13 +113,14 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TheRARBG
  * Tokyo Tosho
  * Torlock
- * Torrent[CORE]
+ * Torrent Downloads
  * Torrent Oyun indir
+ * Torrent[CORE]
  * torrent.by
  * torrent-pirat
  * Torrent9
  * TorrentFunk
- * TorrentDownloads
+ * TorrentDownload
  * TorrentGalaxy (TGx)
  * TorrentKitty
  * TorrentProject2
@@ -168,6 +168,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
+ * GkTorrent
  * HD-CzTorrent
  * HDGalaKtik
  * HellTorrents
@@ -205,11 +206,10 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * SkTorrent
  * SkTorrent-org
  * themixingbowl (TMB)
- * Toloka.to
+ * Toloka
  * Torrent9-tel
  * TorrentMasters
  * Torrents-Local
- * TorrentDownload
  * TribalMixes
  * Union Fansub
  * UniOtaku
@@ -427,7 +427,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Le-Cinephile
  * LearnBits
  * LearnFlakes
- * leech24
  * Les-Cinephiles
  * Lesbians4u
  * Libble
