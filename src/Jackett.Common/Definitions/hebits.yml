@@ -5,6 +5,7 @@ description: "The Israeli Tracker"
 language: he-IL
 type: private
 encoding: UTF-8
+# Status: https://status.hebits.net/
 links:
   - https://hebits.net/
 
