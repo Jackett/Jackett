@@ -29,7 +29,23 @@ namespace Jackett.Common.Indexers
         public override string Id => "wolfmax4k";
         public override string Name => "Wolfmax 4k";
         public override string Description => "Wolfmax 4k is a SPANISH public tracker for MOVIES / TV";
-        public override string SiteLink { get; protected set; } = "https://wolfmax4k.com/";
+
+        private string _siteLink = "https://wolfmax4k.com/";
+        private string SiteLinkSearch;
+
+        public override string SiteLink
+        {
+            get => _siteLink;
+            protected set
+            {
+                _siteLink = value;
+                var siteLinkUri = new UriBuilder(value);
+                siteLinkUri.Host = "admin." + siteLinkUri.Host;
+                siteLinkUri.Path = "/admin/admpctn/app/data.find.php";
+                SiteLinkSearch = siteLinkUri.Uri.ToString();
+            }
+        }
+
         public override string Language => "es-ES";
         public override string Type => "public";
 
@@ -61,6 +77,7 @@ namespace Jackett.Common.Indexers
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
             // avoid Cloudflare too many requests limiter
             webclient.requestDelay = 2.1;
+            webclient.EmulateBrowser = false;
         }
 
         private static TorznabCapabilities SetCapabilities()
@@ -103,56 +120,50 @@ namespace Jackett.Common.Indexers
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var releases = new List<ReleaseInfo>();
-
             var searchToken = await GetSearchTokenAsync();
 
             query = SanitizeTorznabQuery(query);
 
-            var maxPages = query.SearchTerm.IsNullOrWhiteSpace() ? 1 : 3;
-
-            if (query.SearchTerm.IsNullOrWhiteSpace())
+            var body = new Dictionary<string, string>
             {
-                query.SearchTerm = "%";
+                // wolfmax category&quality search is broken, do not use
+                { "pg", "" },
+                { "token", searchToken },
+                { "cidr", "" },
+                { "c", "0" },
+                { "q", query.SearchTerm },
+                { "l", query.SearchTerm.IsNullOrWhiteSpace() ? "100" : "1000" },
+            };
+
+            var result = await RequestWithCookiesAndRetryAsync(url: SiteLinkSearch, data: body, method: RequestType.POST, referer: SiteLink);
+            if (result.Status != HttpStatusCode.OK)
+                throw new ExceptionWithConfigData(result.ContentString, configData);
+
+            try
+            {
+                JObject jsonResponse = JObject.Parse(result.ContentString);
+                var data = jsonResponse.SelectToken("data.datafinds.0");
+                if (data == null)
+                    return new List<ReleaseInfo>();
+
+                return data.Values().Select(item => ExtractReleaseInfo(item as JObject, query)).ToList()
+                           .Where(x => x != null);
+            }
+            catch (Exception ex)
+            {
+                OnParseError(result.ContentString, ex);
             }
 
-            for (var i = 1; i <= maxPages; i++)
-            {
-                var result = await DoSearchAsync(query, searchToken, i);
-                try
-                {
-                    // Parse results
-                    var htmlParser = new HtmlParser();
-                    using var doc = htmlParser.ParseDocument(result.ContentString);
-                    var items = doc.QuerySelectorAll("#form-busqavanzada .card.card-movie");
-                    releases.AddRange(items.Select(elm => ExtractReleaseInfo(elm, query)).ToList()
-                                           .Where(x => x != null));
-
-                    // Check if has more pages
-                    var activePageElement = doc.QuerySelector(".btnpg.active");
-                    var nextPageElement = activePageElement?.NextElementSibling;
-                    if (activePageElement == null || nextPageElement == null ||
-                        activePageElement.GetAttribute("data-pg") == nextPageElement.GetAttribute("data-pg"))
-                    {
-                        break;
-                    }
-                }
-                catch (Exception ex)
-                {
-                    OnParseError(result.ContentString, ex);
-                }
-            }
-
-            return releases;
+            return new List<ReleaseInfo>();
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var wmPage = await RequestWithCookiesAndRetryAsync(link.ToString(), emulateBrowser: false);
+            var wmPage = await RequestWithCookiesAndRetryAsync(link.ToString());
             var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
             var enlacitoUrl = wmDoc.QuerySelector(".app-message a:not(.buttonPassword)")?.GetAttribute("href");
 
-            var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, emulateBrowser: false, referer: SiteLink);
+            var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, referer: SiteLink);
             var enlacitoDoc = new HtmlParser().ParseDocument(enlacitoPage.ContentString);
             var enlacitoFormUrl = enlacitoDoc.QuerySelector("form").GetAttribute("action");
             var enlacitoFormLinkser = enlacitoDoc.QuerySelector("input[name=\"linkser\"]").GetAttribute("value");
@@ -162,7 +173,7 @@ namespace Jackett.Common.Indexers
             {
                 { "linkser", enlacitoFormLinkser }
             };
-            var enlacito2Page = await RequestWithCookiesAndRetryAsync(enlacitoFormUrl, data: body, method: RequestType.POST, emulateBrowser: false);
+            var enlacito2Page = await RequestWithCookiesAndRetryAsync(enlacitoFormUrl, data: body, method: RequestType.POST);
             var regex = new Regex("var link_out = \"(.*)\"");
             var v = regex.Match(enlacito2Page.ContentString);
 
@@ -170,33 +181,16 @@ namespace Jackett.Common.Indexers
             var slink = Encoding.UTF8.GetString(Convert.FromBase64String(linkOut));
             var ulink = OpenSSLDecrypt(slink, TorrentLinkEncryptionKey);
 
-            var result = await RequestWithCookiesAndRetryAsync(ulink, emulateBrowser: false);
+            var result = await RequestWithCookiesAndRetryAsync(ulink);
             return result.ContentBytes;
         }
 
         private async Task<string> GetSearchTokenAsync()
         {
-            var resultIdx = await RequestWithCookiesAndRetryAsync(SiteLink, emulateBrowser: false);
+            var resultIdx = await RequestWithCookiesAndRetryAsync(SiteLink);
             var htmlParser = new HtmlParser();
             using var myDoc = htmlParser.ParseDocument(resultIdx.ContentString);
             return myDoc.QuerySelector("input[name='token']")?.GetAttribute("value");
-        }
-
-        private async Task<WebResult> DoSearchAsync(TorznabQuery query, string searchToken, int page = 1)
-        {
-            var body = new Dictionary<string, string>
-            {
-                // wolfmax category&quality search is broken, do not use
-                { "_ACTION", "buscar" },
-                { "token", searchToken },
-                { "q", query.SearchTerm },
-                { "pgb", page.ToString() }
-            };
-
-            var result = await RequestWithCookiesAndRetryAsync(SiteLink + "buscar", data: body, method: RequestType.POST, emulateBrowser: false);
-            if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-            return result;
         }
 
         private static TorznabQuery SanitizeTorznabQuery(TorznabQuery query)
@@ -213,7 +207,6 @@ namespace Jackett.Common.Indexers
             // replace punctuation symbols with spaces
             // searchTerm = Marco Polo 2014
             searchTerm = Regex.Replace(searchTerm, @"[-._\(\)@/\\\[\]\+\%]", " ");
-            searchTerm = Regex.Replace(searchTerm, @"\s+", "+");
             searchTerm = searchTerm.Trim();
 
             // we parse the year and remove it from search
@@ -234,7 +227,7 @@ namespace Jackett.Common.Indexers
             return query;
         }
 
-        private ReleaseInfo ExtractReleaseInfo(IElement cardElement, TorznabQuery query)
+        private ReleaseInfo ExtractReleaseInfo(JObject item, TorznabQuery query)
         {
             // https://wolfmax4k.com/descargar/peliculas-castellano/bebe-made-in-china-2020-/blurayrip-ac3-5-1/
             // https://wolfmax4k.com/descargar/la-sala-de-torturas-chinas/
@@ -248,8 +241,12 @@ namespace Jackett.Common.Indexers
             // https://wolfmax4k.com/descargar/serie-1080p/historial-delictivo/temporada-1/capitulo-02/
             // https://wolfmax4k.com/descargar-pelicula/avatar-v-extendida/bluray-1080p/
 
-            var quality = cardElement.QuerySelector(".quality")?.Text().Trim();
-            if (quality.IsNullOrWhiteSpace())
+            var torrentName = item.SelectToken("torrentName")?.ToString();
+            var guid = item.SelectToken("guid")?.ToString();
+            var quality = item.SelectToken("calidad")?.ToString();
+            var image = item.SelectToken("image")?.ToString();
+
+            if (torrentName.IsNullOrWhiteSpace() || guid.IsNullOrWhiteSpace() || quality.IsNullOrWhiteSpace())
             {
                 // Some torrents has no quality.
                 // Ignored it because they are torrents that are not well categorized
@@ -257,10 +254,10 @@ namespace Jackett.Common.Indexers
                 return null;
             }
 
-            var link = new Uri(new Uri(SiteLink), cardElement.GetAttribute("href"));
-            var title = ParseTitle(cardElement) + " SPANISH " + quality;
+            var link = new Uri(new Uri(SiteLink), guid);
+            var title = ParseTitle(torrentName, guid, quality);
             var episodes = GetEpisodesFromTitle(title);
-            var wolfmaxCategory = ParseCategory(cardElement);
+            var wolfmaxCategory = ParseCategory(guid, quality);
 
             var releaseInfo = new ReleaseInfo
             {
@@ -276,6 +273,9 @@ namespace Jackett.Common.Indexers
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1
             };
+
+            if (image.IsNotNullOrWhiteSpace() && !image.Contains("/no-imagen.jpg"))
+                releaseInfo.Poster = new Uri(image);
 
             // Filter by category
             if (query.Categories.Any() && !query.Categories.Intersect(releaseInfo.Category).Any())
@@ -298,26 +298,26 @@ namespace Jackett.Common.Indexers
             return releaseInfo;
         }
 
-        private string ParseTitle(IElement cardElement)
+        private string ParseTitle(string torrentName, string guid, string quality)
         {
-            var title = cardElement.QuerySelector(".title")?.Text();
-            title = Regex.Replace(title, @"(\- )?Temp\.\s+?\d+?", "").Trim();
-            var seasonEpisode = ParseSeasonAndEpisode(cardElement);
+            torrentName = Regex.Replace(torrentName, @"(\- )?Temp\.\s+?\d+?", "").Trim();
+            var seasonEpisode = ParseSeasonAndEpisode(guid);
             if (seasonEpisode.IsNotNullOrWhiteSpace())
             {
-                title += " " + seasonEpisode;
+                torrentName += " " + seasonEpisode;
             }
 
-            return title;
+            return torrentName + " SPANISH " + quality;
         }
 
-        private string ParseCategory(IElement cardElement)
+        private string ParseCategory(string guid, string quality)
         {
+            // TODO new categories
+            // ej: https://wolfmax4k.com/descargar/programas-tv/091-alerta-policia/hdtv-720p-ac3-5-1/
+            //     https://wolfmax4k.com/descargar/telenovelas/karagul/hdtv/karagul-tierra-de-secretos/2024-06-12/
             // If the url contains "/serie" or contains "/temporada-" & "/capitulo-" it's a tv show
             // If not it's a movie
-            var link = cardElement.GetAttribute("href");
-            var quality = cardElement.QuerySelector(".quality")?.Text();
-            var isTvShow = link.Contains("/serie") || (link.Contains("/temporada-") && link.Contains("/capitulo-"));
+            var isTvShow = guid.Contains("/serie") || (guid.Contains("/temporada-") && guid.Contains("/capitulo-"));
 
             string wolfmaxCat;
             if (isTvShow)
@@ -362,18 +362,17 @@ namespace Jackett.Common.Indexers
             return wolfmaxCat;
         }
 
-        private string ParseSeasonAndEpisode(IElement cardElement)
+        private string ParseSeasonAndEpisode(string guid)
         {
-            var link = cardElement.GetAttribute("href");
             var result = "";
 
-            var matchSeason = new Regex(@"/temporada-(\d+)").Match(link);
+            var matchSeason = new Regex(@"/temporada-(\d+)").Match(guid);
             if (matchSeason.Success)
             {
                 result += "S" + matchSeason.Groups[1].Value.PadLeft(2, '0');
             }
 
-            var matchEpisode = new Regex(@"/capitulo-(\d+)(-al-(\d+))?/").Match(link);
+            var matchEpisode = new Regex(@"/capitulo-(\d+)(-al-(\d+))?/").Match(guid);
             if (matchEpisode.Success)
             {
                 result += "E" + matchEpisode.Groups[1].Value.PadLeft(2, '0');
