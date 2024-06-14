@@ -870,7 +870,9 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1226, TorznabCatType.Audio, "|- Менестрели и ролевики (lossy и lossless)");
             caps.Categories.AddCategoryMapping(1842, TorznabCatType.AudioLossless, "Label Packs (lossless)");
             caps.Categories.AddCategoryMapping(1648, TorznabCatType.AudioMP3, "Label packs, Scene packs (lossy)");
-            caps.Categories.AddCategoryMapping(2495, TorznabCatType.Audio, "Отечественная поп-музыка");
+            caps.Categories.AddCategoryMapping(134, TorznabCatType.AudioLossless, "|- Неофициальные сборники и ремастеринги (lossless)");
+            caps.Categories.AddCategoryMapping(965, TorznabCatType.AudioMP3, "|- Неофициальные сборники (lossy)");
+            caps.Categories.AddCategoryMapping(2495, TorznabCatType.AudioMP3, "Отечественная поп-музыка ");
             caps.Categories.AddCategoryMapping(424, TorznabCatType.AudioMP3, "|- Популярная музыка России и стран бывшего СССР (lossy)");
             caps.Categories.AddCategoryMapping(1361, TorznabCatType.AudioMP3, "|- Популярная музыка России и стран бывшего СССР (сборники) (lossy)");
             caps.Categories.AddCategoryMapping(425, TorznabCatType.AudioLossless, "|- Популярная музыка России и стран бывшего СССР (lossless)");
@@ -1176,6 +1178,11 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(51, TorznabCatType.PCGames, "|- Стратегии в реальном времени");
             caps.Categories.AddCategoryMapping(2226, TorznabCatType.PCGames, "|- Пошаговые стратегии");
             caps.Categories.AddCategoryMapping(2228, TorznabCatType.PCGames, "|- IBM-PC-несовместимые компьютеры");
+            caps.Categories.AddCategoryMapping(1310, TorznabCatType.PCGames, "|- Старые игры (Экшены)");
+            caps.Categories.AddCategoryMapping(2410, TorznabCatType.PCGames, "|- Старые игры (Ролевые игры)");
+            caps.Categories.AddCategoryMapping(2205, TorznabCatType.PCGames, "|- Старые игры (Стратегии)");
+            caps.Categories.AddCategoryMapping(2225, TorznabCatType.PCGames, "|- Старые игры (Приключения и квесты)");
+            caps.Categories.AddCategoryMapping(2206, TorznabCatType.PCGames, "|- Старые игры (Симуляторы)");
             caps.Categories.AddCategoryMapping(139, TorznabCatType.PCGames, "Прочее для Windows-игр");
             caps.Categories.AddCategoryMapping(2478, TorznabCatType.PCGames, "|- Официальные патчи, моды, плагины, дополнения");
             caps.Categories.AddCategoryMapping(2480, TorznabCatType.PCGames, "|- Неофициальные модификации, плагины, дополнения");
@@ -1197,6 +1204,7 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(357, TorznabCatType.ConsoleOther, "|- PS2");
             caps.Categories.AddCategoryMapping(886, TorznabCatType.ConsolePS3, "|- PS3");
             caps.Categories.AddCategoryMapping(973, TorznabCatType.ConsolePS4, "|- PS4");
+            caps.Categories.AddCategoryMapping(546, TorznabCatType.ConsoleOther, "|- PS5");
             caps.Categories.AddCategoryMapping(1352, TorznabCatType.ConsolePSP, "|- PSP");
             caps.Categories.AddCategoryMapping(1116, TorznabCatType.ConsolePSP, "|- Игры PS1 для PSP");
             caps.Categories.AddCategoryMapping(595, TorznabCatType.ConsolePSVita, "|- PS Vita");
@@ -1246,8 +1254,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(1034, TorznabCatType.PC, "|- Информация и диагностика");
             caps.Categories.AddCategoryMapping(1066, TorznabCatType.PC, "|- Программы для интернет и сетей");
             caps.Categories.AddCategoryMapping(1035, TorznabCatType.PC, "|- ПО для защиты компьютера (Антивирусное ПО, Фаерволлы)");
-            caps.Categories.AddCategoryMapping(1038, TorznabCatType.PC, "|- Анти-шпионы и анти-трояны");
-            caps.Categories.AddCategoryMapping(1039, TorznabCatType.PC, "|- Программы для защиты информации");
             caps.Categories.AddCategoryMapping(1536, TorznabCatType.PC, "|- Драйверы и прошивки");
             caps.Categories.AddCategoryMapping(1051, TorznabCatType.PC, "|- Оригинальные диски к компьютерам и комплектующим");
             caps.Categories.AddCategoryMapping(1040, TorznabCatType.PC, "|- Серверное ПО для Windows");
@@ -1381,8 +1387,6 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping(630, TorznabCatType.OtherMisc, "|- Обои");
             caps.Categories.AddCategoryMapping(1664, TorznabCatType.OtherMisc, "|- Фото знаменитостей");
             caps.Categories.AddCategoryMapping(148, TorznabCatType.Audio, "|- Аудио");
-            caps.Categories.AddCategoryMapping(965, TorznabCatType.AudioMP3, "|- Музыка (lossy)");
-            caps.Categories.AddCategoryMapping(134, TorznabCatType.AudioLossless, "|- Музыка (lossless)");
             caps.Categories.AddCategoryMapping(807, TorznabCatType.TVOther, "|- Видео");
             caps.Categories.AddCategoryMapping(147, TorznabCatType.Books, "|- Публикации и учебные материалы (тексты)");
             caps.Categories.AddCategoryMapping(847, TorznabCatType.MoviesOther, "|- Трейлеры и дополнительные материалы к фильмам");
