@@ -38,39 +38,42 @@ namespace Jackett.Common.Services
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
         // if the indexer is removed, remove it from this list too
         // use: {"<old id>", "<new id>"}
+        // list alphabetically by the original name
+        // group successive and collective renames, use comments to indicate this
         private readonly Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>
         {
             {"audiobooktorrents", "abtorrents"},
             {"baibako", "rudub"},
             {"broadcastthenet", "broadcasthenet"},
             {"casatorrent", "teamctgame"},
-            {"icetorrent", "speedapp"},
             {"hdzone", "hdfun"},
+            {"icetorrent", "speedapp"}, // v
+            {"scenefz", "speedapp"}, //    |
+            {"xtremezone", "speedapp"}, // ^
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"kisssub", "miobt"},
-            {"legacyhd", "reelflix"},
-            {"reelflix", "reelflix-api"},
+            {"legacyhd", "reelflix"}, //     v
+            {"reelflix", "reelflix-api"}, // ^
             {"magico", "trellas"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"mteamtp2fa", "mteamtp"},
             {"nnm-club", "noname-club"},
-            {"oxtorrent", "torrent911"},
+            {"oxtorrent", "torrent911"}, //     v
+            {"torrent911", "oxtorrent-vip"}, // ^
             {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
-            {"scenefz", "speedapp"},
             {"seals", "greatposterwall"},
             {"speedcdcookie", "speedcd"},
-            {"tehconnectionme", "anthelion"},
-            {"torrent911", "oxtorrent-vip"},
-            {"anthelion", "anthelion-api"},
+            {"tehconnectionme", "anthelion"}, // v
+            {"anthelion", "anthelion-api"}, //   ^
             {"todotorrents", "dontorrent"},
             {"torrent9clone", "torrent9-tel"},
             {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentsurf", "xtremebytes"},
-            {"transmithenet", "nebulance"},
-            {"nebulance", "nebulanceapi"},
-            {"xtremezone", "speedapp"},
+            {"totheglorycookie", "totheglory2fa"},
+            {"transmithenet", "nebulance"}, // v
+            {"nebulance", "nebulanceapi"}, //  ^
             {"yourexotic", "exoticaz"}
         };
 
