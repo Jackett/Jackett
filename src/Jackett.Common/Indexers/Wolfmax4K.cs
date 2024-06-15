@@ -424,11 +424,11 @@ namespace Jackett.Common.Indexers
             var cap = matchCap.Groups[2].Value.Trim();
             if (cap.Length == 3)
             {
-                result = "S" + cap.Substring(0,1).PadLeft(2, '0') + "E" + cap.Substring(1);
+                result = "S" + cap.Substring(0, 1).PadLeft(2, '0') + "E" + cap.Substring(1);
             }
             else if (cap.Length == 4)
             {
-                result = "S" + cap.Substring(0,2) + "E" + cap.Substring(2);
+                result = "S" + cap.Substring(0, 2) + "E" + cap.Substring(2);
             }
 
             return result;
