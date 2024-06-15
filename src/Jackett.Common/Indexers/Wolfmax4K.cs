@@ -240,6 +240,8 @@ namespace Jackett.Common.Indexers
             // https://wolfmax4k.com/descargar/programas-tv/la-isla-de-las-tentaciones/temporada-7/capitulo-10/
             // https://wolfmax4k.com/descargar/serie-1080p/historial-delictivo/temporada-1/capitulo-02/
             // https://wolfmax4k.com/descargar-pelicula/avatar-v-extendida/bluray-1080p/
+            // https://wolfmax4k.com/descargar/programas-tv/091-alerta-policia/hdtv-720p-ac3-5-1/
+            // https://wolfmax4k.com/descargar/telenovelas/karagul/hdtv/karagul-tierra-de-secretos/2024-06-12/
 
             var torrentName = item.SelectToken("torrentName")?.ToString();
             var guid = item.SelectToken("guid")?.ToString();
@@ -254,10 +256,11 @@ namespace Jackett.Common.Indexers
                 return null;
             }
 
+            quality = ParseQuality(quality);
             var link = new Uri(new Uri(SiteLink), guid);
             var title = ParseTitle(torrentName, guid, quality);
             var episodes = GetEpisodesFromTitle(title);
-            var wolfmaxCategory = ParseCategory(guid, quality);
+            var wolfmaxCategory = ParseCategory(torrentName, guid, quality);
 
             var releaseInfo = new ReleaseInfo
             {
@@ -300,24 +303,33 @@ namespace Jackett.Common.Indexers
 
         private string ParseTitle(string torrentName, string guid, string quality)
         {
-            torrentName = Regex.Replace(torrentName, @"(\- )?Temp\.\s+?\d+?", "").Trim();
-            var seasonEpisode = ParseSeasonAndEpisode(guid);
+            var title = Regex.Replace(torrentName, @"(\- )?Temp(\.|orada)\s+?\d+?", "");
+            title = Regex.Replace(title, @"\[Esp\]", "", RegexOptions.IgnoreCase);
+
+            var seasonEpisode = ParseSeasonAndEpisode(torrentName, guid);
             if (seasonEpisode.IsNotNullOrWhiteSpace())
             {
-                torrentName += " " + seasonEpisode;
+                // only replace Cap. if it could be parsed
+                title = Regex.Replace(title, @"\[Cap\.(\s+)?(\d+)\]", "").Trim();
+                title += " " + seasonEpisode;
             }
 
-            return torrentName + " SPANISH " + quality;
+            // remove the "quality" from the torrentName and
+            // adds it from the "quality" field of the api
+            title = Regex.Replace(title, @"\[(.*)(HDTV|Bluray|4k)(.*)\]", "", RegexOptions.IgnoreCase);
+
+            title = title + " [" + quality + "] SPANISH";
+
+            return title.Trim();
         }
 
-        private string ParseCategory(string guid, string quality)
+        private string ParseCategory(string torrentName, string guid, string quality)
         {
-            // TODO new categories
-            // ej: https://wolfmax4k.com/descargar/programas-tv/091-alerta-policia/hdtv-720p-ac3-5-1/
-            //     https://wolfmax4k.com/descargar/telenovelas/karagul/hdtv/karagul-tierra-de-secretos/2024-06-12/
-            // If the url contains "/serie" or contains "/temporada-" & "/capitulo-" it's a tv show
+            // If the url contains "/serie" or contains "/temporada-" & "/capitulo-"
+            // or contains "Cap." in the torrentName it's a tv show
             // If not it's a movie
-            var isTvShow = guid.Contains("/serie") || (guid.Contains("/temporada-") && guid.Contains("/capitulo-"));
+            var isTvShow = guid.Contains("/serie") || (guid.Contains("/temporada-") && guid.Contains("/capitulo-")) ||
+                           Regex.IsMatch(torrentName, @"Cap\.(\s+)?(\d+)", RegexOptions.IgnoreCase);
 
             string wolfmaxCat;
             if (isTvShow)
@@ -330,7 +342,7 @@ namespace Jackett.Common.Indexers
                 {
                     wolfmaxCat = Wolfmax4KCatType.Serie1080;
                 }
-                else if (quality.ToLower().Contains("4k"))
+                else if (quality.ToLower().Contains("4k") || quality.ToLower().Contains("2160p"))
                 {
                     wolfmaxCat = Wolfmax4KCatType.Serie4K;
                 }
@@ -349,7 +361,7 @@ namespace Jackett.Common.Indexers
                 {
                     wolfmaxCat = Wolfmax4KCatType.Pelicula1080;
                 }
-                else if (quality.ToLower().Contains("4k"))
+                else if (quality.ToLower().Contains("4k") || quality.ToLower().Contains("2160p"))
                 {
                     wolfmaxCat = Wolfmax4KCatType.Pelicula4K;
                 }
@@ -362,7 +374,16 @@ namespace Jackett.Common.Indexers
             return wolfmaxCat;
         }
 
-        private string ParseSeasonAndEpisode(string guid)
+        private string ParseQuality(string quality)
+        {
+            return quality switch
+            {
+                "4KWebrip" => "WEBRip-2160p",
+                _ => quality
+            };
+        }
+
+        private string ParseSeasonAndEpisode(string torrentName, string guid)
         {
             var result = "";
 
@@ -380,6 +401,33 @@ namespace Jackett.Common.Indexers
                 {
                     result += "-E" + matchEpisode.Groups[3].Value.PadLeft(2, '0');
                 }
+            }
+
+            if (result.IsNotNullOrWhiteSpace())
+            {
+                return result;
+            }
+
+            // If no season/episde info found in guid, fallback to torrentName's "Cap." info
+            // Caps longer than 4 digits are not supported,
+            // We have not found any examples and
+            // the assumption we are making to get the season and episode may not be true
+            // Eg: 091 Alerta Policia [HDTV 720p][Cap.601]
+            //     Karagul [HDTV][Cap.1251]
+            var matchCap = new Regex(@"Cap\.(\s+)?(\d+)", RegexOptions.IgnoreCase).Match(torrentName);
+            if (!matchCap.Success)
+            {
+                return result;
+            }
+
+            var cap = matchCap.Groups[2].Value.Trim();
+            if (cap.Length == 3)
+            {
+                result = "S" + cap.Substring(0, 1).PadLeft(2, '0') + "E" + cap.Substring(1);
+            }
+            else if (cap.Length == 4)
+            {
+                result = "S" + cap.Substring(0, 2) + "E" + cap.Substring(2);
             }
 
             return result;
