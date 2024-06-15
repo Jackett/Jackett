@@ -376,12 +376,11 @@ namespace Jackett.Common.Indexers
 
         private string ParseQuality(string quality)
         {
-            if (quality == "4KWebrip")
+            return quality switch
             {
-                return "WEBRip-2160p";
-            }
-
-            return quality;
+                "4KWebrip" => "WEBRip-2160p",
+                _ => quality
+            };
         }
 
         private string ParseSeasonAndEpisode(string torrentName, string guid)
