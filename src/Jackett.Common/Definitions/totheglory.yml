@@ -1,7 +1,7 @@
 ---
 id: totheglory
 name: ToTheGlory
-description: "ToTheGlory (TTG) A Chinese tracker"
+description: "ToTheGlory (TTG) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -95,13 +95,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: 2facode
-    type: text
-    label: 2FA code
-  - name: info_2fa
-    type: info
-    label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the TTG Web Site. Otherwise just leave it empty."
   - name: passid
     type: select
     label: Security Question ID
@@ -118,14 +111,14 @@ settings:
   - name: info_passid
     type: info
     label: "About Security ID"
-    default: "Only select the <b>Security Question ID</b> from the pulldown if you have set it on the TTG Web Site. Otherwise just leave it as ignore not set."
+    default: "Only select the <b>Security Question ID</b> from the pulldown if you have set it on the TTG Web Site. Otherwise just leave it as <b>Ignore not set</b>."
   - name: passan
     type: text
     label: Security Question Answer
   - name: info_passan
     type: info
     label: "About Security Question Answer"
-    default: "Only fill in the <b>Security Question Answer</b> box if you have set it on the TTG Web Site. Dont forget to write your answer in the same language you saved it on the TTG Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>Security Question Answer</b> box if you have set it on the TTG Web Site. Don't forget to write your answer in the same language you saved it on the TTG Web Site. Otherwise just leave it empty."
 
 login:
   path: login.php?returnto=
@@ -135,7 +128,6 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     rememberme: yes
-    otp: "{{ .Config.2facode }}"
     passid: "{{ .Config.passid }}"
     passan: "{{ .Config.passan }}"
   error:
