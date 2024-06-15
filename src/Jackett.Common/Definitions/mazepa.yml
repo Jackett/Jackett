@@ -50,6 +50,7 @@ caps:
     - {id: 47, cat: TV/Sport, desc: "Автоспорт Чемпіонат та кубок України"}
     - {id: 46, cat: TV/Sport, desc: "Автоспорт Єврокубки"}
     - {id: 48, cat: TV/Sport, desc: "Автоспорт Чемпіонат Світу"}
+    - {id: 182, cat: TV/Sport, desc: "Автоспорт Євро 2024"}
     - {id: 49, cat: TV/Sport, desc: "Автоспорт Чемпіонат Європи"}
     - {id: 53, cat: TV/Sport, desc: "Автоспорт Закордонні чемпіонати"}
     - {id: 19, cat: TV/Sport, desc: "Бокс"}
