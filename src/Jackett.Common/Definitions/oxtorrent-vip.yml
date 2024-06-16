@@ -1,5 +1,8 @@
 ---
 id: oxtorrent-vip
+replaces:
+  - oxtorrent
+  - torrent911
 name: OxTorrent-vip
 description: "OxTorrent-vip is a French Semi-Private site for TV / MOVIES / GENERAL"
 language: fr-FR

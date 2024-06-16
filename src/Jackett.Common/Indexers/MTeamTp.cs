@@ -25,6 +25,7 @@ namespace Jackett.Common.Indexers
     public class MTeamTp : IndexerBase
     {
         public override string Id => "mteamtp";
+        public override string[] Replaces => new[] { "mteamtp2fa" };
         public override string Name => "M-Team - TP";
         public override string Description => "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / 3X";
         public override string SiteLink { get; protected set; } = "https://kp.m-team.cc/";

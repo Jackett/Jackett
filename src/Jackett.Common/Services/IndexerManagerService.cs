@@ -42,20 +42,12 @@ namespace Jackett.Common.Services
         // group successive and collective renames, use comments to indicate this
         private readonly Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>
         {
-            {"broadcastthenet", "broadcasthenet"},
-            {"icetorrent", "speedapp"}, // v
-            {"scenefz", "speedapp"}, //    |
-            {"xtremezone", "speedapp"}, // ^
             {"kickasstorrent-kathow", "kickasstorrents-ws"},
             {"kisssub", "miobt"},
             {"legacyhd", "reelflix"}, //     v
             {"reelflix", "reelflix-api"}, // ^
             {"metaliplayro", "romanianmetaltorrents"},
-            {"mteamtp2fa", "mteamtp"},
             {"nnm-club", "noname-club"},
-            {"oxtorrent", "torrent911"}, //     v
-            {"torrent911", "oxtorrent-vip"}, // ^
-            {"passtheheadphones", "redacted"},
             {"puntorrent", "puntotorrent"},
             {"rstorrent", "redstartorrent"},
             {"seals", "greatposterwall"},

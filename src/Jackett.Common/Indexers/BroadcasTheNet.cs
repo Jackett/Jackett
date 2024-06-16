@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers
     public class BroadcasTheNet : IndexerBase
     {
         public override string Id => "broadcasthenet";
+        public override string[] Replaces => new[] { "broadcastthenet" };
         public override string Name => "BroadcasTheNet";
         public override string Description => "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows";
         // Status: https://btn.trackerstatus.info/
