@@ -21,6 +21,7 @@ caps:
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
     - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
+    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dub or Vid issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
