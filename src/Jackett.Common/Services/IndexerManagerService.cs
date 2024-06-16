@@ -36,7 +36,7 @@ namespace Jackett.Common.Services
 
         // this map is used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
-        // if the indexer is removed, remove it from this list to
+        // if the indexer is removed, remove it from this list too.
         // use: {"<old id>", "<new id>"}
         // list alphabetically by the original name
         // group successive and collective renames, use comments to indicate this
