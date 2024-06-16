@@ -247,6 +247,8 @@ search:
       selector: td:nth-child(11) u
     seeders:
       selector: td.seedmed > b
+      optional: true
+      default: 0
     leechers:
       selector: td.leechmed > b
     grabs:
