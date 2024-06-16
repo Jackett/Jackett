@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers
         public override string Id => Definition.Id;
         public override string[] Replaces => Definition.Replaces.ToArray();
         public override string Name => Definition.Name;
-        public override string Description=> Definition.Description;
+        public override string Description => Definition.Description;
 
         protected IndexerDefinition Definition;
         protected WebResult landingResult;
