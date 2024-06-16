@@ -36,17 +36,13 @@ namespace Jackett.Common.Services
 
         // this map is used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
-        // if the indexer is removed, remove it from this list too
+        // if the indexer is removed, remove it from this list to
         // use: {"<old id>", "<new id>"}
         // list alphabetically by the original name
         // group successive and collective renames, use comments to indicate this
-        private readonly Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>
+        private readonly Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>
         {
-            {"audiobooktorrents", "abtorrents"},
-            {"baibako", "rudub"},
             {"broadcastthenet", "broadcasthenet"},
-            {"casatorrent", "teamctgame"},
-            {"hdzone", "hdfun"},
             {"icetorrent", "speedapp"}, // v
             {"scenefz", "speedapp"}, //    |
             {"xtremezone", "speedapp"}, // ^
@@ -54,7 +50,6 @@ namespace Jackett.Common.Services
             {"kisssub", "miobt"},
             {"legacyhd", "reelflix"}, //     v
             {"reelflix", "reelflix-api"}, // ^
-            {"magico", "trellas"},
             {"metaliplayro", "romanianmetaltorrents"},
             {"mteamtp2fa", "mteamtp"},
             {"nnm-club", "noname-club"},
@@ -65,17 +60,14 @@ namespace Jackett.Common.Services
             {"rstorrent", "redstartorrent"},
             {"seals", "greatposterwall"},
             {"speedcdcookie", "speedcd"},
-            {"tehconnectionme", "anthelion"}, // v
-            {"anthelion", "anthelion-api"}, //   ^
             {"todotorrents", "dontorrent"},
-            {"torrent9clone", "torrent9-tel"},
-            {"torrentgalaxyorg", "torrentgalaxy"},
             {"torrentsurf", "xtremebytes"},
-            {"totheglorycookie", "totheglory2fa"},
             {"transmithenet", "nebulance"}, // v
             {"nebulance", "nebulanceapi"}, //  ^
             {"yourexotic", "exoticaz"}
         };
+
+        private Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {
@@ -91,38 +83,61 @@ namespace Jackett.Common.Services
 
         public void InitIndexers(List<string> path)
         {
-            _logger.Info($"Using HTTP Client: {_webClient.GetType().Name}");
+            _logger.Info("Using HTTP Client: {0}", _webClient.GetType().Name);
 
-            MigrateRenamedIndexers();
             InitIndexers();
             InitCardigannIndexers(path);
+
+            _logger.Info("Loaded {0} indexers in total", _indexers.Count);
+
+            MigrateRenamedIndexers();
+            InitIndexersConfiguration();
             InitMetaIndexers();
             RemoveLegacyConfigurations();
         }
 
         private void MigrateRenamedIndexers()
         {
+            var indexerReplaces = _indexers
+                                  .Where(x => x.Value.Replaces.Any())
+                                  .SelectMany(x => x.Value.Replaces.ToDictionary(y => y, _ => x.Key))
+                                  .ToDictionary(x => x.Key, x => x.Value);
+            _renamedIndexers = _nativeRenamedIndexers
+                                  .Concat(indexerReplaces)
+                                  .ToDictionary(x => x.Key, x => x.Value);
+
             foreach (var oldId in _renamedIndexers.Keys)
             {
                 var oldPath = _configService.GetIndexerConfigFilePath(oldId);
+
                 if (File.Exists(oldPath))
                 {
                     // if the old configuration exists, we rename it to be used by the renamed indexer
-                    _logger.Info($"Old configuration detected: {oldPath}");
+                    _logger.Info("Old configuration detected: {0}", oldPath);
                     var newPath = _configService.GetIndexerConfigFilePath(_renamedIndexers[oldId]);
+
                     if (File.Exists(newPath))
+                    {
                         File.Delete(newPath);
+                    }
+
                     File.Move(oldPath, newPath);
+
                     // backups
                     var oldPathBak = oldPath + ".bak";
                     var newPathBak = newPath + ".bak";
+
                     if (File.Exists(oldPathBak))
                     {
                         if (File.Exists(newPathBak))
+                        {
                             File.Delete(newPathBak);
+                        }
+
                         File.Move(oldPathBak, newPathBak);
                     }
-                    _logger.Info($"Configuration renamed: {oldPath} => {newPath}");
+
+                    _logger.Info("Configuration renamed: {0} => {1}", oldPath, newPath);
                 }
             }
         }
@@ -150,18 +165,25 @@ namespace Jackett.Common.Services
                     return indexer;
                 }
 
-                _logger.Error($"Cannot instantiate Native indexer: {type.Name}");
+                _logger.Error("Cannot instantiate Native indexer: {0}", type.Name);
                 return null;
             }).Where(indexer => indexer != null).ToList();
 
             foreach (var indexer in nativeIndexers)
             {
                 _indexers.Add(indexer.Id, indexer);
-                _configService.Load(indexer);
             }
 
-            _logger.Info($"Loaded {nativeIndexers.Count} Native indexers.");
-            _logger.Debug($"Native indexers loaded: {string.Join(", ", nativeIndexers.Select(i => i.Id))}");
+            _logger.Info("Loaded {0} Native indexers.", nativeIndexers.Count);
+            _logger.Debug("Native indexers loaded: {0}", string.Join(", ", nativeIndexers.Select(i => i.Id)));
+        }
+
+        private void InitIndexersConfiguration()
+        {
+            foreach (var indexer in _indexers)
+            {
+                _configService.Load(indexer.Value);
+            }
         }
 
         private void InitCardigannIndexers(List<string> path)
@@ -234,7 +256,6 @@ namespace Jackett.Common.Services
             {
                 _logger.Error($"Error while loading Cardigann definitions: {e}");
             }
-            _logger.Info($"Loaded {_indexers.Count} indexers in total");
         }
 
         public void InitMetaIndexers()
@@ -280,11 +301,12 @@ namespace Jackett.Common.Services
             // old id of renamed indexer is used to maintain backward compatibility
             // both, the old id and the new one can be used until we remove it from renamedIndexers
             var realName = name;
-            if (_renamedIndexers.ContainsKey(name))
+
+            if (_renamedIndexers.TryGetValue(name, out var indexerName))
             {
-                realName = _renamedIndexers[name];
-                _logger.Warn($@"Indexer {name} has been renamed to {realName}. Please, update the URL of the feeds.
- This may stop working in the future.");
+                realName = indexerName;
+                _logger.Warn(@"Indexer {0} has been renamed to {1}. Please, update the URL of the feeds.
+ This may stop working in the future.", name, realName);
             }
 
             return GetWebIndexer(realName);
@@ -293,23 +315,31 @@ namespace Jackett.Common.Services
 
         public IWebIndexer GetWebIndexer(string name)
         {
-            if (_indexers.ContainsKey(name))
-                return _indexers[name] as IWebIndexer;
+            if (_indexers.TryGetValue(name, out var webIndexer))
+            {
+                return webIndexer as IWebIndexer;
+            }
 
             if (name == "all")
+            {
                 return _aggregateIndexer;
+            }
 
             if (_availableFilters.TryGetValue(name, out var indexer))
+            {
                 return indexer;
+            }
 
             if (FilterFunc.TryParse(name, out var filterFunc))
+            {
                 return _availableFilters.GetOrAdd(name, x => CreateFilterIndexer(name, filterFunc));
+            }
 
             _logger.Error($"Request for unknown indexer: {name.Replace(Environment.NewLine, "")}");
             throw new Exception($"Unknown indexer: {name}");
         }
 
-        public List<IIndexer> GetAllIndexers() => _indexers.Values.OrderBy(_ => _.Name).ToList();
+        public List<IIndexer> GetAllIndexers() => _indexers.Values.OrderBy(x => x.Name).ToList();
 
         public async Task TestIndexer(string name)
         {

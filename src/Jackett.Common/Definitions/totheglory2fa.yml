@@ -1,5 +1,7 @@
 ---
 id: totheglory2fa
+replaces:
+  - totheglorycookie
 name: ToTheGlory2FA
 description: "ToTheGlory (TTG) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses cookie login for 2FA."
 language: zh-CN

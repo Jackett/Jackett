@@ -1,5 +1,7 @@
 ---
 id: teamctgame
+replaces:
+  - casatorrent
 name: Team CT Game
 description: "Team CT Game (TCTG) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
