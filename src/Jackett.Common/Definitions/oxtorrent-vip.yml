@@ -97,9 +97,9 @@ login:
     pass: "{{ .Config.password }}"
     submit: submit
   error:
-    - selector: :root:contains("Pseudo ou Mot de passe erron")
+    - selector: :root:contains("Pseudo ou Mot de passe incorrect")
       message:
-        text: "Pseudo ou Mot de passe erroné"
+        text: "Pseudo ou Mot de passe incorrect"
   test:
     path: /
     selector: a[href="/index.php?page=logout"]
