@@ -32,6 +32,8 @@ namespace Jackett.Test.Common.Utils.FilterFuncs
 
         public virtual string Id => throw TestExceptions.UnexpectedInvocation;
 
+        public virtual string[] Replaces => throw TestExceptions.UnexpectedInvocation;
+
         public virtual Encoding Encoding => throw TestExceptions.UnexpectedInvocation;
 
         public virtual TorznabCapabilities TorznabCaps => throw TestExceptions.UnexpectedInvocation;
