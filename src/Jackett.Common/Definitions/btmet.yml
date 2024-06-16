@@ -72,6 +72,7 @@ search:
           args: ["<b style='color:#ea644a'>", ""]
         - name: replace
           args: ["</b>", ""]
+        - name: htmldecode
     details:
       selector: a.smashTitle
       attribute: href
