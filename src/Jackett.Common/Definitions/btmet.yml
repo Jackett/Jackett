@@ -34,6 +34,8 @@ settings:
       0: relevance
       1: created
       2: size
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 search:
   paths:
@@ -41,10 +43,6 @@ search:
     - path: search.php
   inputs:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
-    # does not support multi cats so defaulting to all
-    c: ""
-    # 1 Chinese, 2 Japanese, 3 Korean
-    l: ""
     o: "{{ if .Keywords }}{{ .Config.sort }}{{ else }}1{{ end }}"
 
   rows:
@@ -63,7 +61,7 @@ search:
         - name: replace
           args: ["Video", "TV"]
     title:
-      selector: a.smashTitle > script
+      selector: a.smashTitle > script:contains("decodeURIComponent")
       filters:
         - name: urldecode
         - name: replace
