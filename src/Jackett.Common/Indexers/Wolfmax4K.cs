@@ -444,7 +444,10 @@ namespace Jackett.Common.Indexers
 
             if (vals.Count == 2)
             {
-                return Enumerable.Range(vals[0], vals[1] - vals[0] + 1).ToList();
+                if (vals[1] > vals[0])
+                {
+                    return Enumerable.Range(vals[0], vals[1] - vals[0] + 1).ToList();
+                }
             }
 
             return new List<int>();
