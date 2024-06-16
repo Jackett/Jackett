@@ -1,9 +1,9 @@
 ---
 id: zetorrents
 name: zetorrents
-description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
+description: "zetorrents is a FRENCH Semi-Private site for MOVIES / TV / GENERAL"
 language: fr-FR
-type: public
+type: semi-private
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Zetorrents
 links:
@@ -35,6 +35,12 @@ caps:
   allowrawsearch: true
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: info_8000
     type: info
     label: About zetorrents Categories
@@ -58,6 +64,22 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
+
+login:
+  path: login
+  method: form
+  form: form#formLogin
+  inputs:
+    user: "{{ .Config.username }}"
+    pass: "{{ .Config.password }}"
+    submit: submit
+  error:
+    - selector: :root:contains("Pseudo ou Mot de passe incorrect")
+      message:
+        text: "Pseudo ou Mot de passe incorrect"
+  test:
+    path: /
+    selector: a[href="/index.php?page=logout"]
 
 download:
   infohash:
