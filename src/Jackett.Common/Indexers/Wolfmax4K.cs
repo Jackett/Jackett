@@ -8,7 +8,6 @@ using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
@@ -242,6 +241,8 @@ namespace Jackett.Common.Indexers
             // https://wolfmax4k.com/descargar-pelicula/avatar-v-extendida/bluray-1080p/
             // https://wolfmax4k.com/descargar/programas-tv/091-alerta-policia/hdtv-720p-ac3-5-1/
             // https://wolfmax4k.com/descargar/telenovelas/karagul/hdtv/karagul-tierra-de-secretos/2024-06-12/
+            // https://wolfmax4k.com/descargar-seriehd/archer/capitulo-88/hdtv-720p-ac3-5-1/
+            // https://wolfmax4k.com/descargar/series-animacion-y-manga/archer/temporada-13/capitulo-08/
 
             var torrentName = item.SelectToken("torrentName")?.ToString();
             var guid = item.SelectToken("guid")?.ToString();
@@ -303,8 +304,9 @@ namespace Jackett.Common.Indexers
 
         private string ParseTitle(string torrentName, string guid, string quality)
         {
-            var title = Regex.Replace(torrentName, @"(\- )?Temp(\.|orada)\s+?\d+?", "");
-            title = Regex.Replace(title, @"\[Esp\]", "", RegexOptions.IgnoreCase);
+            var title = Regex.Replace(torrentName, @"(\- )?(Tem.|Temp.|Temporada)\s+?\d+?", "");
+            title = Regex.Replace(title, @"\[(Esp|Spanish)\]", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\(?wolfmax4k\.com\)?", "", RegexOptions.IgnoreCase);
 
             var seasonEpisode = ParseSeasonAndEpisode(torrentName, guid);
             if (seasonEpisode.IsNotNullOrWhiteSpace())
@@ -316,7 +318,8 @@ namespace Jackett.Common.Indexers
 
             // remove the "quality" from the torrentName and
             // adds it from the "quality" field of the api
-            title = Regex.Replace(title, @"\[(.*)(HDTV|Bluray|4k)(.*)\]", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\[(.*)(HDTV|Bluray|4k|DVDRIP)(.*)\]", "",
+                                  RegexOptions.IgnoreCase);
 
             title = title + " [" + quality + "] SPANISH";
 
@@ -394,7 +397,7 @@ namespace Jackett.Common.Indexers
             }
 
             var matchEpisode = new Regex(@"/capitulo-(\d+)(-al-(\d+))?/").Match(guid);
-            if (matchEpisode.Success)
+            if (matchSeason.Success && matchEpisode.Success)
             {
                 result += "E" + matchEpisode.Groups[1].Value.PadLeft(2, '0');
                 if (matchEpisode.Groups[3].Value.IsNotNullOrWhiteSpace())
@@ -412,22 +415,27 @@ namespace Jackett.Common.Indexers
             // Caps longer than 4 digits are not supported,
             // We have not found any examples and
             // the assumption we are making to get the season and episode may not be true
+            // We assume that all episodes are from the same season
             // Eg: 091 Alerta Policia [HDTV 720p][Cap.601]
             //     Karagul [HDTV][Cap.1251]
-            var matchCap = new Regex(@"Cap\.(\s+)?(\d+)", RegexOptions.IgnoreCase).Match(torrentName);
-            if (!matchCap.Success)
+            //     La Familia Addams - Temporada 1 [DVDRIP][Cap. 120_121_122 FINAL][Spanish]
+            var matchCaps = new Regex(@"Cap\.\s*([\d_]+)", RegexOptions.IgnoreCase).Match(torrentName);
+            if (!matchCaps.Success)
             {
                 return result;
             }
 
-            var cap = matchCap.Groups[2].Value.Trim();
-            if (cap.Length == 3)
+            var caps = matchCaps.Groups[1].Value.Trim().Split('_')
+                                .Select(cap => cap.PadLeft(4, '0'))
+                                .Where(cap => cap.Length == 4).ToList();
+            var season = caps.First().Substring(0, 2);
+            var episodes = caps.Select(cap => cap.Substring(2)).ToList();
+
+            result = "S" + season + "E" + episodes.First();
+
+            if (episodes.Count > 1)
             {
-                result = "S" + cap.Substring(0, 1).PadLeft(2, '0') + "E" + cap.Substring(1);
-            }
-            else if (cap.Length == 4)
-            {
-                result = "S" + cap.Substring(0, 2) + "E" + cap.Substring(2);
+                result += "-E" + episodes.Last();
             }
 
             return result;
@@ -442,12 +450,9 @@ namespace Jackett.Common.Indexers
                 return new List<int> { vals[0] };
             }
 
-            if (vals.Count == 2)
+            if (vals.Count == 2 && vals[1] > vals[0])
             {
-                if (vals[1] > vals[0])
-                {
-                    return Enumerable.Range(vals[0], vals[1] - vals[0] + 1).ToList();
-                }
+                return Enumerable.Range(vals[0], vals[1] - vals[0] + 1).ToList();
             }
 
             return new List<int>();
