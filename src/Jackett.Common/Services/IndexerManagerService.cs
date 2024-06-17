@@ -37,9 +37,9 @@ namespace Jackett.Common.Services
         // maps used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
         // this one is for the C# indexers
-        private readonly Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>();
+        private  Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>();
         // and this one is for the yaml indexers
-        private readonly Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
+        private  Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {
