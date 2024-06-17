@@ -20,6 +20,11 @@ namespace Jackett.Common.Indexers
     public class NebulanceAPI : IndexerBase
     {
         public override string Id => "nebulanceapi";
+        public override string[] Replaces => new[]
+        {
+            "transmithenet",
+            "nebulance"
+        };
         public override string Name => "NebulanceAPI";
         public override string Description => "At Nebulance we will change the way you think about TV. Using API.";
         // Status: https://nbl.trackerstatus.info/

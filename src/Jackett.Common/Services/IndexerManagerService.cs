@@ -34,32 +34,12 @@ namespace Jackett.Common.Services
         private AggregateIndexer _aggregateIndexer;
         private ConcurrentDictionary<string, IWebIndexer> _availableFilters = new ConcurrentDictionary<string, IWebIndexer>();
 
-        // this map is used to maintain backward compatibility when renaming the id of an indexer
+        // maps used to maintain backward compatibility when renaming the id of an indexer
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
-        // if the indexer is removed, remove it from this list too.
-        // use: {"<old id>", "<new id>"}
-        // list alphabetically by the original name
-        // group successive and collective renames, use comments to indicate this
-        private readonly Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>
-        {
-            {"kickasstorrent-kathow", "kickasstorrents-ws"},
-            {"kisssub", "miobt"},
-            {"legacyhd", "reelflix"}, //     v
-            {"reelflix", "reelflix-api"}, // ^
-            {"metaliplayro", "romanianmetaltorrents"},
-            {"nnm-club", "noname-club"},
-            {"puntorrent", "puntotorrent"},
-            {"rstorrent", "redstartorrent"},
-            {"seals", "greatposterwall"},
-            {"speedcdcookie", "speedcd"},
-            {"todotorrents", "dontorrent"},
-            {"torrentsurf", "xtremebytes"},
-            {"transmithenet", "nebulance"}, // v
-            {"nebulance", "nebulanceapi"}, //  ^
-            {"yourexotic", "exoticaz"}
-        };
-
-        private Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
+        // this one is for the C# indexers
+        private readonly Dictionary<string, string> _nativeRenamedIndexers = new Dictionary<string, string>();
+        // and this one is for the yaml indexers
+        private readonly Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
 
         public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {

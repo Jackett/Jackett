@@ -1,5 +1,7 @@
 ---
 id: puntotorrent
+replaces:
+  - puntorrent
 name: PuntoTorrent
 description: "PuntoTorrent is a SPANISH site for General content"
 language: es-ES

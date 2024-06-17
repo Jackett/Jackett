@@ -1,5 +1,7 @@
 ---
 id: romanianmetaltorrents
+replaces:
+  - metaliplayro
 name: Romanian Metal Torrents
 description: "Romanian Metal Torrents (RMT) is a Private site dedicated to METAL MUSIC. This definition is for the English site."
 language: en-US

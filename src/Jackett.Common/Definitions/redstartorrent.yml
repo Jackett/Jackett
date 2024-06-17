@@ -1,5 +1,7 @@
 ---
 id: redstartorrent
+replaces:
+  - rstorrent
 name: Red Star Torrent
 description: "Red Star Torrent (RST) is a POLISH Private Torrent Tracker for TV"
 language: pl-PL
