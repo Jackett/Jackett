@@ -28,10 +28,9 @@ namespace Jackett.Common.Indexers
         public override string Id => "divxtotal";
         public override string Name => "DivxTotal";
         public override string Description => "DivxTotal is a SPANISH site for Movies, TV series and Software";
-        public override string SiteLink { get; protected set; } = "https://www4.divxtotal.mov/";
+        public override string SiteLink { get; protected set; } = "https://www5.divxtotal.mov/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www.divxtotal.pm/",
             "https://www.divxtotal.re/",
             "https://www.divxtotal.nl/",
             "https://www.divxtotal.ac/",
@@ -46,6 +45,7 @@ namespace Jackett.Common.Indexers
             "https://www2.divxtotal.zip/",
             "https://www2.divxtotal.mov/",
             "https://www3.divxtotal.mov/",
+            "https://www4.divxtotal.mov/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
