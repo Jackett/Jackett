@@ -12,6 +12,12 @@ namespace Jackett.Common.Indexers
     public class SpeedApp : SpeedAppTracker
     {
         public override string Id => "speedapp";
+        public override string[] Replaces => new[]
+        {
+            "icetorrent",
+            "scenefz",
+            "xtremezone"
+        };
         public override string Name => "SpeedApp";
         public override string Description => "SpeedApp is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://speedapp.io/";

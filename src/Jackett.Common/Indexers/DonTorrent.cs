@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers
     public class DonTorrent : IndexerBase
     {
         public override string Id => "dontorrent";
+        public override string[] Replaces => new[] { "todotorrents" };
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain

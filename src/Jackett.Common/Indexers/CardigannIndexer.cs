@@ -31,6 +31,11 @@ namespace Jackett.Common.Indexers
 {
     public class CardigannIndexer : BaseWebIndexer
     {
+        public override string Id => Definition.Id;
+        public override string[] Replaces => Definition.Replaces.ToArray();
+        public override string Name => Definition.Name;
+        public override string Description => Definition.Description;
+
         protected IndexerDefinition Definition;
         protected WebResult landingResult;
         protected IHtmlDocument landingResultDocument;
@@ -76,7 +81,6 @@ namespace Jackett.Common.Indexers
                    )
         {
             this.Definition = Definition;
-            Id = Definition.Id;
 
             // Add default data if necessary
             if (Definition.Settings == null)
@@ -113,8 +117,6 @@ namespace Jackett.Common.Indexers
             }
 
             // init missing mandatory attributes
-            Name = Definition.Name;
-            Description = Definition.Description;
             if (Definition.Links.Count > 1)
                 AlternativeSiteLinks = Definition.Links.ToArray();
             DefaultSiteLink = Definition.Links[0];

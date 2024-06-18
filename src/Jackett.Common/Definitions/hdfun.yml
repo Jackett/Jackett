@@ -1,5 +1,7 @@
 ---
 id: hdfun
+replaces:
+  - hdzone
 name: HDFun
 description: "HDFun (HDZone) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-CN

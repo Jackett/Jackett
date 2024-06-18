@@ -30,6 +30,7 @@ namespace Jackett.Common.Models
     public class IndexerDefinition
     {
         public string Id { get; set; }
+        public List<string> Replaces { get; set; } = new List<string>();
         public List<settingsField> Settings { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }

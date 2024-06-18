@@ -1,5 +1,7 @@
 ---
 id: abtorrents
+replaces:
+  - audiobooktorrents
 name: ABtorrents
 description: "ABtorrents (ABT) is a Private Torrent Tracker for AUDIOBOOKS"
 language: en-US

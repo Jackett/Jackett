@@ -1,5 +1,7 @@
 ---
 id: miobt
+replaces:
+  - kisssub
 name: MioBT
 description: "MioBT is a CHINESE Public torrent index"
 language: zh-CN

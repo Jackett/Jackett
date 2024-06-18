@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers
     public abstract class BaseIndexer : IIndexer
     {
         public virtual string Id { get; protected set; }
+        public virtual string[] Replaces { get; protected set; } = Array.Empty<string>();
         public virtual string Name { get; protected set; }
         public virtual string Description { get; protected set; }
 

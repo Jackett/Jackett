@@ -1,5 +1,7 @@
 ---
 id: kickasstorrents-ws
+replaces:
+  - kickasstorrent-kathow
 name: kickasstorrents.ws
 description: "kickasstorrents.ws is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
 language: en-US

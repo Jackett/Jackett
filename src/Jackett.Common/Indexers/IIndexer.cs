@@ -28,6 +28,7 @@ namespace Jackett.Common.Indexers
     public interface IIndexer
     {
         string Id { get; }
+        string[] Replaces { get; }
         string Name { get; }
         string Description { get; }
 

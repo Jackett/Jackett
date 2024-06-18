@@ -17,6 +17,7 @@ namespace Jackett.Common.Indexers
     public class Redacted : GazelleTracker
     {
         public override string Id => "redacted";
+        public override string[] Replaces => new[] { "passtheheadphones" };
         public override string Name => "Redacted";
         public override string Description => "A music tracker";
         // Status: https://red.trackerstatus.info/

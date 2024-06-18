@@ -22,6 +22,7 @@ namespace Jackett.Common.Indexers
     public class GreatPosterWall : GazelleTracker
     {
         public override string Id => "greatposterwall";
+        public override string[] Replaces => new[] { "seals" };
         public override string Name => "GreatPosterWall";
         public override string Description => "GreatPosterWall (GPW) is a CHINESE Private site for MOVIES";
         public override string SiteLink { get; protected set; } = "https://greatposterwall.com/";

@@ -1,5 +1,7 @@
 ---
 id: xtremebytes
+replaces:
+  - torrentsurf
 name: Xtreme Bytes
 description: "Xtreme Bytes (TorrentSurf) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
