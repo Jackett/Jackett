@@ -128,13 +128,13 @@ search:
     description:
       selector: div.tags
     poster:
-    # src=https:\/\/fapping.empornium.sx\/images\/2023\/05\/30\/MrLuckyPOV2023AlexisFawxXXX720pHEVCx265PRTmp4snapshot0950.jpg>
+    # src=\"https:\/\/fapping.empornium.sx\/images\/2023\/05\/30\/MrLuckyPOV2023AlexisFawxXXX720pHEVCx265PRTmp4snapshot0950.jpg\">
       selector: td:nth-child(2) > script
       filters:
         - name: regexp
           args: "src=(.*?)>"
         - name: re_replace
-          args: ["\\\\(.)", "$1"]
+          args: ["[\\\\\"]", ""]
         - name: replace
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
