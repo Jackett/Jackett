@@ -215,8 +215,10 @@ namespace Jackett.Common.Indexers
                 searchQuery.Discount = "FREE";
             }
 
+            var ApiUrl = "https://api." + $"{SiteLink}".Substring(SiteLink.IndexOf('.') + 1);
+
             var response = await RequestWithCookiesAndRetryAsync(
-                $"{SiteLink}api/torrent/search",
+                $"{ApiUrl}api/torrent/search",
                 method: RequestType.POST,
                 rawbody: STJson.ToJson(searchQuery),
                 headers: new Dictionary<string, string>
@@ -245,7 +247,7 @@ namespace Jackett.Common.Indexers
             {
                 var torrentId = int.Parse(torrent.Id);
                 var infoUrl = new Uri($"{SiteLink}detail/{torrentId}");
-                var downloadUrl = new Uri($"{SiteLink}api/torrent/genDlToken?id={torrentId}");
+                var downloadUrl = new Uri($"{ApiUrl}api/torrent/genDlToken?id={torrentId}");
 
                 var release = new ReleaseInfo
                 {
