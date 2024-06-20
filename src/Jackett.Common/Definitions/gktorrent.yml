@@ -1,19 +1,18 @@
 ---
 id: gktorrent
 name: GkTorrent
-description: "GkTorrent is a French Semi-Private site for TV / MOVIES / GENERAL"
+description: "GkTorrent is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
-type: semi-private
+type: public
 encoding: UTF-8
-followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
-  - https://www.gktorrent.tw/
+  - https://www.gktorrent.in/
 legacylinks:
   - https://www.rantop.org/
   - https://www.torrent.ws/
+  - https://www.protege-torrent.com/
   - https://gktorrent.nocensor.click/
-  - https://www.gktorrent.ac/
   - https://www.gktorrent.ph/
   - https://www.gktorrent.vc/
   - https://www.gktorrent.mx/
@@ -28,6 +27,7 @@ legacylinks:
   - https://www.gktorrent.eu/
   - https://www.gktorrent.xyz/
   - https://www.gktorrent.pm/
+  - https://www.gktorrent.tw/
 
 caps:
   categorymappings:
@@ -55,12 +55,8 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -80,22 +76,6 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
-
-login:
-  path: login
-  method: form
-  form: form#formLogin
-  inputs:
-    user: "{{ .Config.username }}"
-    pass: "{{ .Config.password }}"
-    submit: submit
-  error:
-    - selector: :root:contains("Pseudo ou Mot de passe erron")
-      message:
-        text: "Pseudo ou Mot de passe erroné"
-  test:
-    path: /
-    selector: a[href="/index.php?page=logout"]
 
 download:
   selectors:
