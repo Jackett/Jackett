@@ -121,9 +121,9 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonContent = JArray.Parse(response.ContentString);
+                var jsonContent = JObject.Parse(response.ContentString);
 
-                foreach (var torrent in jsonContent)
+                foreach (var torrent in jsonContent.Value<JArray>("torrents"))
                 {
                     if (torrent == null)
                     {
@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers
                     var release = new ReleaseInfo
                     {
                         Title = title,
-                        Details = new Uri($"{SiteLink}search/{title}"), // there is no details link
+                        Details = new Uri($"{SiteLink}search?q={title}"), // there is no details link
                         Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
                         InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },
