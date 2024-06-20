@@ -5,6 +5,8 @@ description: "BTSOW is a Public torrent indexer"
 language: en-US
 type: public
 encoding: UTF-8
+certificates:
+  - 649f6dc2a68535205b443ccfae128931734f9f6f # Expired 20 june 2024
 # use https://tellme.pw/btsow to find the new domain
 links:
   - https://btsow.motorcycles/
