@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -121,32 +123,31 @@ namespace Jackett.Common.Indexers
 
             try
             {
-                var jsonContent = JObject.Parse(response.ContentString);
+                var jsonResponse = STJson.Deserialize<TorrentsCSVResponse>(response.ContentString);
 
-                foreach (var torrent in jsonContent.Value<JArray>("torrents"))
+                foreach (var torrent in jsonResponse.Torrents)
                 {
                     if (torrent == null)
                     {
                         throw new Exception("Error: No data returned!");
                     }
 
-                    var infoHash = torrent.Value<string>("infohash");
-                    var title = torrent.Value<string>("name");
-                    var size = torrent.Value<long>("size_bytes");
-                    var seeders = torrent.Value<int?>("seeders") ?? 0;
-                    var leechers = torrent.Value<int?>("leechers") ?? 0;
-                    var grabs = torrent.Value<int?>("completed") ?? 0;
-                    var publishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(torrent.Value<long>("created_unix"));
+                    var infoHash = torrent.InfoHash;
+                    var title = torrent.Name;
+                    var seeders = torrent.Seeders ?? 0;
+                    var leechers = torrent.Leechers ?? 0;
+                    var grabs = torrent.Completed ?? 0;
+                    var publishDate = new DateTime(1970, 1, 1, 0, 0, 0, 0, DateTimeKind.Utc).AddSeconds(torrent.Created);
 
                     var release = new ReleaseInfo
                     {
-                        Title = title,
-                        Details = new Uri($"{SiteLink}search?q={title}"), // there is no details link
                         Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
+                        Details = new Uri($"{SiteLink}search?q={title}"), // there is no details link
+                        Title = title,
                         InfoHash = infoHash, // magnet link is auto generated from infohash
                         Category = new List<int> { TorznabCatType.Other.ID },
                         PublishDate = publishDate,
-                        Size = size,
+                        Size = torrent.Size,
                         Grabs = grabs,
                         Seeders = seeders,
                         Peers = leechers + seeders,
@@ -166,5 +167,30 @@ namespace Jackett.Common.Indexers
                    .OrderByDescending(o => o.PublishDate)
                    .ToArray();
         }
+    }
+
+    public class TorrentsCSVResponse
+    {
+        public IReadOnlyCollection<TorrentsCSVTorrent> Torrents { get; set; }
+    }
+
+    public class TorrentsCSVTorrent
+    {
+        [JsonPropertyName("infohash")]
+        public string InfoHash { get; set; }
+
+        public string Name { get; set; }
+
+        [JsonPropertyName("size_bytes")]
+        public long Size { get; set; }
+
+        [JsonPropertyName("created_unix")]
+        public long Created { get; set; }
+
+        public int? Leechers { get; set; }
+
+        public int? Seeders { get; set; }
+
+        public int? Completed { get; set; }
     }
 }
