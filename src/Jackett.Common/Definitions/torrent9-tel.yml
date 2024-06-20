@@ -3,16 +3,16 @@ id: torrent9-tel
 replaces:
   - torrent9clone
 name: Torrent9-tel
-description: "Torrent9-tel is a FRENCH Semi-Private tracker for TV / MOVIES / GENERAL"
+description: "Torrent9-tel is a FRENCH Public tracker for TV / MOVIES / GENERAL"
 language: fr-FR
-type: semi-private
+type: public
 encoding: UTF-8
-followredirect: true
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://www.torrent9.plus/
+  - https://www.torrent9.lc/
 legacylinks:
   - https://www.protege-liens.net/
+  - https://www.protege-torrent.com/
   - https://www.rantop.org/
   - https://www.torrent.ws/
   - https://www.torrent9.ink/
@@ -33,6 +33,7 @@ legacylinks:
   - https://www.torrent9.day/
   - https://www.torrent9.tel/
   - https://torrent9.unblockninja.com/
+  - https://www.torrent9.plus/
 
 caps:
   categorymappings:
@@ -61,12 +62,6 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
   - name: info_flaresolverr
     type: info_flaresolverr
   - name: multilang
@@ -88,22 +83,6 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
-
-login:
-  path: login
-  method: form
-  form: form#formLogin
-  inputs:
-    user: "{{ .Config.username }}"
-    pass: "{{ .Config.password }}"
-    submit: submit
-  error:
-    - selector: :root:contains("Pseudo ou Mot de passe incorrect")
-      message:
-        text: "Pseudo ou Mot de passe incorrect"
-  test:
-    path: /
-    selector: a[href="/index.php?page=logout"]
 
 download:
   selectors:
