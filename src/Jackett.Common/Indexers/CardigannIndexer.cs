@@ -174,6 +174,9 @@ namespace Jackett.Common.Indexers
                         case "info":
                             item = new DisplayInfoConfigurationItem(itemName, Setting.Default);
                             break;
+                        case "info_8000":
+                            item = new DisplayInfoConfigurationItem($"About {Definition.Name} Categories", $"{Definition.Name} does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).");
+                            break;
                         case "info_cookie":
                             item = new DisplayInfoConfigurationItem("How to get the Cookie", "<ol><li>Login to this tracker with your browser</li><li>If present in the login page, ensure you have the <b>Remember me</b> ticked and the <b>Log Me Out if IP Changes</b> unticked when you login</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>");
                             break;
