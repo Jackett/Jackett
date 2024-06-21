@@ -35,9 +35,7 @@ caps:
 
 settings:
   - name: info_8000
-    type: info
-    label: About cpasbienclone Categories
-    default: cpasbienclone does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+    type: info_8000
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
