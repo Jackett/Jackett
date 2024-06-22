@@ -496,6 +496,10 @@ login:
   path: login.php
   method: form
   form: form[action$="/login.php"]
+  captcha:
+    type: image
+    selector: img[src^="profile.php?mode=confirm&id="]
+    input: cfmcd
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
