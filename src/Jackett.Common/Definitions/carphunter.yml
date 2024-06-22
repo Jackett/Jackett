@@ -78,7 +78,7 @@ settings:
   - name: info_settings
     type: info
     label: Settings Requirement
-    default: This indexer only supports the detail links option.<br>Navigate to the web sites <b>Beállítások (Settings)</b> and change the <b>Letöltések (Download)</b> option to <b>Link a részletekhez (Link to Details)</b> and click <b>Mentés (Save)</b>. Selecting <i>Lenyíló menü (Dropdown Menu)</i> will return no results.
+    default: This indexer only supports the details link option.<br>Navigate to the web site account <b>Beállítások (Settings)</b>, change the <b>Letöltések (Download)</b> option to <b>Link a részletekhez (Link to Details)</b>, and click <b>Mentés (Save)</b>. Selecting <i>Lenyíló menü (Dropdown Menu)</i> will return no results.
 
 login:
   method: cookie
