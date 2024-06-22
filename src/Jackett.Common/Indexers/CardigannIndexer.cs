@@ -676,6 +676,12 @@ namespace Jackett.Common.Indexers
                         try
                         {
                             var value = handleSelector(selectorInput.Value, landingResultDocument.FirstElementChild, required: !selectorInput.Value.Optional);
+
+                            if (selectorInput.Value.Optional && value == null)
+                            {
+                                continue;
+                            }
+
                             pairs[selectorInput.Key] = value;
                         }
                         catch (Exception ex)
@@ -693,6 +699,12 @@ namespace Jackett.Common.Indexers
                         try
                         {
                             var value = handleSelector(selectorInput.Value, landingResultDocument.FirstElementChild, required: !selectorInput.Value.Optional);
+
+                            if (selectorInput.Value.Optional && value == null)
+                            {
+                                continue;
+                            }
+
                             queryCollection[selectorInput.Key] = value;
                         }
                         catch (Exception ex)
