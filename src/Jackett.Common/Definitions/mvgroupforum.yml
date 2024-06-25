@@ -26,8 +26,8 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: info_8000
-    type: info_8000
+  - name: info_category_8000
+    type: info_category_8000
   - name: hidef
     type: checkbox
     label: Show MVGroup HiDef Releases only

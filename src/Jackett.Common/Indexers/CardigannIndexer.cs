@@ -174,7 +174,7 @@ namespace Jackett.Common.Indexers
                         case "info":
                             item = new DisplayInfoConfigurationItem(itemName, Setting.Default);
                             break;
-                        case "info_8000":
+                        case "info_category_8000":
                             item = new DisplayInfoConfigurationItem($"About {Definition.Name} Categories", $"{Definition.Name} does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).");
                             break;
                         case "info_cookie":
