@@ -24,8 +24,8 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info_8000
-    type: info_8000
+  - name: info_category_8000
+    type: info_category_8000
 
 search:
   paths:

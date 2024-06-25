@@ -30,8 +30,8 @@ settings:
       seeders: seeders
   - name: info_flaresolverr
     type: info_flaresolverr
-  - name: info_8000
-    type: info_8000
+  - name: info_category_8000
+    type: info_category_8000
 
 search:
   # https://www.testdefinition1.cc/search?query=ubuntu&sort=created

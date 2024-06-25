@@ -5,6 +5,8 @@ description: "ExtremeBits is a Private Torrent Tracker for EXTREME SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 9ed38a5dc040a2d5a38d45fab2a47d0d0f9dbeaa # Expired 24 June 2024
 links:
   - https://extremebits.net/
 

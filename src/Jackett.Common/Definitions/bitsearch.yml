@@ -70,7 +70,7 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_8000
+  - name: info_category_8000
     type: info
     label: About BitSearch Categories
     default: BitSearch does not properly return categories in its search results for some releases.</br>To add to your Apps' Torznab indexer, you will need to include the 8000(Other) category.

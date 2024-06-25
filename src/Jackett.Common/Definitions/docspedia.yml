@@ -11,25 +11,37 @@ links:
 caps:
   categorymappings:
     - {id: 77, cat: PC, desc: "3D Models"}
+    - {id: 83, cat: Books/EBook, desc: "Action/Adventure"}
+    - {id: 84, cat: Books/EBook, desc: "Art"}
     - {id: 65, cat: Audio, desc: "Audio"}
+    - {id: 85, cat: Books/EBook, desc: "Biographical"}
     - {id: 64, cat: Books/EBook, desc: "Books"}
     - {id: 66, cat: Books, desc: "Business"}
     - {id: 68, cat: Books/Comics, desc: "Comics"}
     - {id: 80, cat: Books, desc: "Coooking"}
+    - {id: 86, cat: Books/EBook, desc: "Crafts"}
+    - {id: 92, cat: Books/EBook, desc: "Crime/Thriller"}
     - {id: 59, cat: TV/Documentary, desc: "Docs/Movies"}
     - {id: 60, cat: TV/Documentary, desc: "Docs/TV"}
     - {id: 79, cat: TV, desc: "Educational"}
+    - {id: 93, cat: Books/EBook, desc: "Fantasy"}
     - {id: 71, cat: Other, desc: "Fonts"}
+    - {id: 82, cat: Books/EBook, desc: "History"}
+    - {id: 87, cat: Books/EBook, desc: "Horror"}
     - {id: 72, cat: Books, desc: "IT Books"}
     - {id: 57, cat: Books/Mags, desc: "Magazine"}
+    - {id: 88, cat: Books/EBook, desc: "Math/Science/Tech"}
     - {id: 58, cat: Books, desc: "Medicine"}
     - {id: 70, cat: Books/EBook, desc: "Occult"}
+    - {id: 81, cat: Books/EBook, desc: "Photography"}
     - {id: 74, cat: Audio, desc: "Podcasts"}
     - {id: 69, cat: Other, desc: "PS Resources"}
+    - {id: 91, cat: Books/EBook, desc: "Romance"}
+    - {id: 89, cat: Books/EBook, desc: "Scinece Fiction"}
     - {id: 76, cat: Books, desc: "Self-Help"}
     - {id: 56, cat: TV/Sport, desc: "Sports"}
+    - {id: 90, cat: Books/EBook, desc: "Travel"}
     - {id: 61, cat: Other, desc: "Tutorials"}
-    - {id: 81, cat: Books, desc: "Wordpress"}
 
   modes:
     search: [q]
