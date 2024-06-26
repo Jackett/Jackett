@@ -28,6 +28,8 @@ namespace Jackett.Test.Common.Models
 
         public override TorznabCapabilities TorznabCaps { get; protected set; }
         public override Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson) => throw new NotImplementedException();
+        public override IIndexerRequestGenerator GetRequestGenerator() => throw new NotImplementedException();
+        public override IParseIndexerResponse GetParser() => throw new NotImplementedException();
         protected override Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query) => throw new NotImplementedException();
     }
 
