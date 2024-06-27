@@ -1,0 +1,177 @@
+---
+id: rptscene
+name: RPTScene
+description: "RPTScene is a Private tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://rptscene.xyz/
+legacylinks:
+  - https://rpthd.com/
+
+caps:
+  categorymappings:
+    - {id: 6, cat: PC/0day, desc: "Apps: Windows"}
+    - {id: 7, cat: PC/Mac, desc: "Apps: Mac"}
+    - {id: 8, cat: PC, desc: "Apps: Linux"}
+    - {id: 75, cat: Movies/DVD, desc: "Movies: DVD"}
+    - {id: 26, cat: Movies/BluRay, desc: "Movies: Blu-Ray"}
+    - {id: 42, cat: Movies/HD, desc: "Movies: FHD-HD"}
+    - {id: 50, cat: Movies/WEB-DL, desc: "Movies: Web-Dl"}
+    - {id: 74, cat: Movies/SD, desc: "Movies: SD"}
+    - {id: 49, cat: Movies/UHD, desc: "Movies: 4k"}
+    - {id: 46, cat: Movies/3D, desc: "Movies: 3D"}
+    - {id: 24, cat: Movies, desc: "Movies: Packs"}
+    - {id: 28, cat: Movies/Other, desc: "Movies: Cartoons"}
+    - {id: 47, cat: XXX, desc: "Movies: XXX"}
+    - {id: 41, cat: TV/HD, desc: "TV: HD"}
+    - {id: 52, cat: TV/WEB-DL, desc: "TV: WEB-DL"}
+    - {id: 48, cat: TV, desc: "TV: Packs"}
+    - {id: 9, cat: TV/Documentary, desc: "TV: Documentaries"}
+    - {id: 22, cat: Audio/MP3, desc: "Music: MP3"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music: FLAC"}
+    - {id: 25, cat: Audio/Video, desc: "Music: Video"}
+    - {id: 27, cat: Audio, desc: "Music: Pack"}
+    - {id: 53, cat: PC/Games, desc: "Games: Pc"}
+    - {id: 54, cat: Console, desc: "Games: PsP"}
+    - {id: 76, cat: Audio/Audiobook, desc: "Books: Audio"}
+    - {id: 77, cat: Books/EBook, desc: "Books: eBooks"}
+    - {id: 78, cat: TV/UHD, desc: "TV: 4k"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are not getting results, then access the site with your browser and mark as read all PMs."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). The accounts inactive for 3 months are deleted."
+
+login:
+  path: account-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.myFrame:contains("Access Denied")
+  test:
+    path: index.php
+    selector: a[href^="account-logout.php"]
+
+search:
+  paths:
+    # https://rptscene.xyz/torrents-search.php?c22=1&c23=1&c76=1&c77=1&search=&incldead=0&freeleech=0&inclrosub=0
+    - path: torrents-search.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    # 0 only active 1 incl dead 2 only dead
+    incldead: 1
+    # 0 all 1 not freeleech 2 only freeleech
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: table.ttable_headinner > tbody > tr
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrents-details.php?id="]:not(a[onmouseover*="images/nocover.png"])
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=([^\s]+)
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+    date:
+      # 15.11.21<br>07:47
+      selector: td:nth-child(5)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "d.MM.yyHH:mm"
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    genre:
+      selector: a:contains("Genre:")
+      filters:
+        - name: replace
+          args: ["Genre: ", ""]
+    _source:
+      case:
+        img[src="images/t_extern.png"]: External
+        "*": Local
+    description:
+      text: "{{ .Result._source }} - {{ .Result.genre }}"
+    downloadvolumefactor:
+      case:
+        img[src="images/t_extern.png"]: 0
+        img[src="images/free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# engine n/a
