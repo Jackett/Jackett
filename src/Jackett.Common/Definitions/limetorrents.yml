@@ -79,7 +79,7 @@ settings:
       date: created
       seeds: seeders
       size: size
-  - name: info_8000
+  - name: info_category_8000
     type: info
     label: About LimeTorrents Categories
     default: LimeTorrents only returns category <b>Other</b> in its <i>Keywordless</i> search results page.</br>To pass your apps' indexer TEST you will need to include the 8000(Other) category.

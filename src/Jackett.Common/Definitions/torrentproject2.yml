@@ -43,10 +43,8 @@ settings:
       oldest: "created asc"
       seeders: seeders
       size: size
-  - name: info_8000
-    type: info
-    label: About TorrentProject2 Categories
-    default: TorrentProject2 does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: info_category_8000
+    type: info_category_8000
 
 download:
   selectors:

@@ -26,10 +26,8 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: info_8000
-    type: info
-    label: About MVGroup Categories
-    default: MVGroup does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: info_category_8000
+    type: info_category_8000
   - name: hidef
     type: checkbox
     label: Show MVGroup HiDef Releases only

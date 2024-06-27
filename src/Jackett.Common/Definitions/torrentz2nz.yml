@@ -24,10 +24,8 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: info_8000
-    type: info
-    label: About Torrentz2nz Categories
-    default: Torrentz2nz does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: info_category_8000
+    type: info_category_8000
 
 search:
   paths:

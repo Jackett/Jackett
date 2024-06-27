@@ -229,7 +229,7 @@
                 },
                 "type":{
                     "type": "string",
-                    "enum": ["info", "text", "password", "checkbox", "select", "info_cookie", "info_flaresolverr", "info_useragent"]
+                    "enum": ["info", "text", "password", "checkbox", "select", "info_category_8000", "info_cookie", "info_flaresolverr", "info_useragent"]
                 },
                 "default": {
                     "oneOf": [

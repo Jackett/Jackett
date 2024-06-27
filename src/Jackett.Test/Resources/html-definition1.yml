@@ -28,14 +28,10 @@ settings:
       created: created
       length: size
       seeders: seeders
-  - name: flaresolverr
-    type: info
-    label: FlareSolverr
-    default: This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href="https://github.com/Jackett/Jackett#configuring-flaresolverr" target="_blank">FlareSolver</a> to access it.
-  - name: info_8000
-    type: info
-    label: About testdefinition1 Categories
-    default: testdefinition1 does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).
+  - name: info_flaresolverr
+    type: info_flaresolverr
+  - name: info_category_8000
+    type: info_category_8000
 
 search:
   # https://www.testdefinition1.cc/search?query=ubuntu&sort=created
