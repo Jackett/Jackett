@@ -672,37 +672,47 @@ namespace Jackett.Common.Indexers
                 }
 
                 // selector inputs
-                if (Login.Selectorinputs != null)
+                if (Login.Selectorinputs != null && Login.Selectorinputs.Any())
                 {
-                    foreach (var Selectorinput in Login.Selectorinputs)
+                    foreach (var selectorInput in Login.Selectorinputs)
                     {
-                        string value = null;
                         try
                         {
-                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
-                            pairs[Selectorinput.Key] = value;
+                            var value = handleSelector(selectorInput.Value, landingResultDocument.FirstElementChild, required: !selectorInput.Value.Optional);
+
+                            if (selectorInput.Value.Optional && value == null)
+                            {
+                                continue;
+                            }
+
+                            pairs[selectorInput.Key] = value;
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(string.Format("Error while parsing selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                            throw new Exception($"Error while parsing selector input={selectorInput.Key}, selector={selectorInput.Value.Selector}: {ex.Message}", ex);
                         }
                     }
                 }
 
                 // getselector inputs
-                if (Login.Getselectorinputs != null)
+                if (Login.Getselectorinputs != null && Login.Getselectorinputs.Any())
                 {
-                    foreach (var Selectorinput in Login.Getselectorinputs)
+                    foreach (var selectorInput in Login.Getselectorinputs)
                     {
-                        string value = null;
                         try
                         {
-                            value = handleSelector(Selectorinput.Value, landingResultDocument.FirstElementChild);
-                            queryCollection[Selectorinput.Key] = value;
+                            var value = handleSelector(selectorInput.Value, landingResultDocument.FirstElementChild, required: !selectorInput.Value.Optional);
+
+                            if (selectorInput.Value.Optional && value == null)
+                            {
+                                continue;
+                            }
+
+                            queryCollection[selectorInput.Key] = value;
                         }
                         catch (Exception ex)
                         {
-                            throw new Exception(string.Format("Error while parsing get selector input={0}, selector={1}, value={2}: {3}", Selectorinput.Key, Selectorinput.Value.Selector, value, ex.Message));
+                            throw new Exception($"Error while parsing get selector input={selectorInput.Key}, selector={selectorInput.Value.Selector}: {ex.Message}", ex);
                         }
                     }
                 }
@@ -1245,14 +1255,16 @@ namespace Jackett.Common.Indexers
             if (Selector.Selector != null)
             {
                 var selector_Selector = applyGoTemplateText(Selector.Selector, variables);
-                if (Dom.Matches(selector_Selector))
-                    selection = Dom;
-                else
-                    selection = QuerySelector(Dom, selector_Selector);
+
+                selection = Dom.Matches(selector_Selector) ? Dom : QuerySelector(Dom, selector_Selector);
+
                 if (selection == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("Selector \"{0}\" didn't match {1}", selector_Selector, Dom.ToHtmlPretty()));
+                    {
+                        throw new Exception($"Selector \"{selector_Selector}\" didn't match {Dom.ToHtmlPretty()}");
+                    }
+
                     return null;
                 }
             }
@@ -1292,7 +1304,10 @@ namespace Jackett.Common.Indexers
                 if (value == null)
                 {
                     if (required)
-                        throw new Exception(string.Format("Attribute \"{0}\" is not set for element {1}", Selector.Attribute, selection.ToHtmlPretty()));
+                    {
+                        throw new Exception($"Attribute \"{Selector.Attribute}\" is not set for element {selection.ToHtmlPretty()}");
+                    }
+
                     return null;
                 }
             }

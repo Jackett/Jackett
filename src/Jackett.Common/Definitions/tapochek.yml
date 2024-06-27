@@ -496,11 +496,28 @@ login:
   path: login.php
   method: form
   form: form[action$="/login.php"]
+  captcha:
+    type: image
+    selector: img[src^="profile.php?mode=confirm&id="]
+    input: cfmcd
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"
     autologin: 1
     redirect: index.php
+  selectorinputs:
+    cookie_test:
+      selector: input[name="cookie_test"]
+      attribute: value
+      optional: true
+    confirm_id:
+      selector: input[name="confirm_id"]
+      attribute: value
+      optional: true
+    sid:
+      selector: input[name="sid"]:not(input[id="dl-sid"])
+      attribute: value
+      optional: true
   error:
     - selector: h4:contains("Вы ввели")
   test:
