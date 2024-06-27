@@ -99,16 +99,16 @@ search:
 
   fields:
     download:
-      selector: a[href^="torrents.php?action=download&id="]
+      selector: a[href^="/torrents.php?action=download&id="]
       attribute: href
     description_tags:
       selector: div.tags
     description:
       case:
-        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        span.icon[title*="okay"]: "Verified: {{ .Result.description_tags }}"
         "*": "Unverified: {{ .Result.description_tags }}"
     title:
-      selector: a[href^="torrents.php?id="]
+      selector: a[href^="/torrents.php?id="]
     category:
       selector: a[href*="filter_cat"]
       attribute: href
@@ -116,7 +116,7 @@ search:
         - name: regexp
           args: "(\\d+)]=1"
     details:
-      selector: a[href^="torrents.php?id="]
+      selector: a[href^="/torrents.php?id="]
       attribute: href
     poster:
       selector: td:nth-child(2) > script
@@ -124,7 +124,7 @@ search:
         - name: regexp
           args: "src=(.*?)>"
         - name: re_replace
-          args: ["\\\\(.)", "$1"]
+          args: ["[\\\\\"]", ""]
         - name: replace
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
