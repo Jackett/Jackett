@@ -146,6 +146,8 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_activity
     type: info
     label: Account Inactivity
