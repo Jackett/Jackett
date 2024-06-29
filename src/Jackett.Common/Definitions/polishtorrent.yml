@@ -11,7 +11,6 @@ links:
 caps:
   categorymappings:
     - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
-    - {id: 26, cat: Movies, desc: "iNTERNAL"}
     - {id: 4, cat: TV/Anime, desc: "Bajki/Anime"}
     - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
@@ -27,13 +26,15 @@ caps:
     - {id: 19, cat: Other, desc: "Inne"}
     - {id: 8, cat: Audio, desc: "Muzyka"}
     - {id: 11, cat: Movies, desc: "Paczki"}
-    - {id: 20, cat: Books, desc: "Book"}
     - {id: 25, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 20, cat: Books, desc: "Book"}
+    - {id: 27, cat: TV/Other, desc: "Teatr Telewizyjny"}
     - {id: 21, cat: TV/Sport, desc: "Sport"}
     - {id: 9, cat: TV/HD, desc: "Seriale HD"}
     - {id: 22, cat: TV/SD, desc: "Seriale SD"}
     - {id: 23, cat: Movies/UHD, desc: "Filmy 4K"}
     - {id: 2, cat: TV/UHD, desc: "TV 4K"}
+    - {id: 28, cat: TV/Documentary, desc: "TV Dokument"}
     - {id: 7, cat: XXX, desc: "XXX 18+"}
 
   modes:
