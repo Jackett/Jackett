@@ -347,7 +347,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FunkyTorrents (FT)
  * FutureTorrent
  * Fuzer (FZ)
- * Gamera (駕瞑羅)
  * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)

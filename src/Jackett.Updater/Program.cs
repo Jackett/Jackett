@@ -411,6 +411,7 @@ namespace Jackett.Updater
                 "Definitions/fusionmayhem.yml",
                 "Definitions/gainbound.yml",
                 "Definitions/galeriens.yml",
+                "Definitions/gamera.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
