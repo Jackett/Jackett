@@ -164,7 +164,7 @@ namespace Jackett.Common.Indexers
             var qCaptchaImg = document.QuerySelector("img#captcha_pictcha");
             if (qCaptchaImg != null)
             {
-                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src");
+                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src").TrimStart('/');
                 var captchaImage = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
                 configData.CaptchaImage.Value = captchaImage.ContentBytes;
             }
