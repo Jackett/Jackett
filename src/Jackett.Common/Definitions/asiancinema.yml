@@ -55,6 +55,7 @@ settings:
     default: "Your account will be automatically deleted from the database after 90 days of inactivity. If you return or visit the site with your account before that amount of time passes, then the inactivity timer will reset and your account will be fine for another 90 days.<br>Keep in mind that 'activity' is considered a visit to any page and that torrent traffic is not counted as account activity. In order to reset the inactivity timer all you have to do is visit a single page while logged in with your account. If your account is deleted for inactivity, please do not ask the site staff to un-delete it for you. The deletion is performed automatically by the server and, as such, your account cannot be recovered after it has been deleted."
 
 login:
+  # note APIKEY is broken on this 5.3.0 site
   path: login
   method: form
   form: form[action$="/login"]
@@ -190,4 +191,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D 3.0.0
+# UNIT3D 5.3.0
