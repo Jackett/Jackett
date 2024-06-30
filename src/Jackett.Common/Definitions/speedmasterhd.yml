@@ -183,9 +183,9 @@ search:
     grabs:
       selector: div.selection_unter_ae
     seeders:
-      selector: div.selection_unter_aa > b
+      selector: div.selection_unter_aa
     leechers:
-      selector: div.selection_unter_aaa > b
+      selector: div.selection_unter_aaa
     date_day:
       # Heute 03:27:27
       # Gestern 21:00:59
@@ -196,7 +196,8 @@ search:
           args: ["Heute ", "Today"]
         - name: replace
           args: ["Gestern ", "Yesterday"]
-        - name: fuzzytime
+        - name: append
+          args: " +01:00" # CET
     date_year:
       # 03.03.2020 um 23:31:52
       selector: div.selection_unter_ab:not(:contains("Heute")):not(:contains("Gestern"))

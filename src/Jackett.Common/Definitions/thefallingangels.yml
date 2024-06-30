@@ -186,6 +186,8 @@ search:
           args: ["Heute", "Today"]
         - name: replace
           args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
     date_year:
       # 30.02.2018 um 23:12:50
       selector: div.selection_unter_ab:contains(".")
