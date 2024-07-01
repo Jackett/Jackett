@@ -99,11 +99,6 @@ settings:
   - name: info_flaresolverr
     type: info_flaresolverr
 
-download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
-
 search:
   paths:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}/?order={{ .Config.sort }}&sort={{ .Config.type }}{{ else }}latest/{{ end }}"
@@ -131,9 +126,12 @@ search:
     details:
       selector: td:nth-child(1) div a
       attribute: href
-    download:
-      selector: td:nth-child(1) div a
+    infohash:
+      selector: a[href^="magnet:?xt="]
       attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     size:
       selector: td:nth-child(2)
     files:
