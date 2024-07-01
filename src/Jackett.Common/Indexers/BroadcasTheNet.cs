@@ -30,10 +30,9 @@ namespace Jackett.Common.Indexers
 
         public override bool SupportsPagination => true;
 
-        public override TorznabCapabilities TorznabCaps => SetCapabilities();
+        public override int PageSize => 100;
 
-        // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
-        private readonly string APIBASE = "https://api.broadcasthe.net";
+        public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
         private new ConfigurationDataAPIKey configData
@@ -51,7 +50,7 @@ namespace Jackett.Common.Indexers
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            webclient.requestDelay = 4;
+            webclient.requestDelay = 5;
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -74,6 +73,16 @@ namespace Jackett.Common.Indexers
             caps.Categories.AddCategoryMapping("Portable Device", TorznabCatType.TVSD, "Portable Device");
 
             return caps;
+        }
+
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new BroadcastheNetRequestGenerator(configData, TorznabCaps);
+        }
+
+        public override IParseIndexerResponse GetParser()
+        {
+            return new BroadcastheNetParser(SiteLink, TorznabCaps.Categories);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -99,8 +108,116 @@ namespace Jackett.Common.Indexers
 
             return IndexerConfigurationStatus.Completed;
         }
+    }
 
-        private string JsonRPCRequest(string method, JArray parameters)
+    public class BroadcastheNetRequestGenerator : IIndexerRequestGenerator
+    {
+        private readonly ConfigurationDataAPIKey _configData;
+        private readonly TorznabCapabilities _torznabCaps;
+
+        // based on https://github.com/Prowlarr/Prowlarr/tree/develop/src/NzbDrone.Core/Indexers/Definitions/BroadcastheNet
+        private const string ApiBase = "https://api.broadcasthe.net";
+
+        public BroadcastheNetRequestGenerator(ConfigurationDataAPIKey configData, TorznabCapabilities torznabCaps)
+        {
+            _configData = configData;
+            _torznabCaps = torznabCaps;
+        }
+
+        public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            var searchTerm = query.SearchTerm ?? string.Empty;
+
+            var btnResults = query.Limit;
+            if (btnResults == 0)
+            {
+                btnResults = _torznabCaps.LimitsDefault.GetValueOrDefault(100);
+            }
+
+            var btnOffset = query.Offset;
+
+            var parameters = new BroadcastheNetSearchQuery();
+
+            if (query.IsTvdbQuery)
+            {
+                parameters.Tvdb = query.TvdbID.ToString();
+            }
+
+            if (searchTerm.IsNotNullOrWhiteSpace())
+            {
+                parameters.Search = searchTerm.Replace(" ", "%");
+            }
+
+            // If only the season/episode is searched for then change format to match expected format
+            if (query.Season > 0 && query.Episode.IsNullOrWhiteSpace())
+            {
+                // Search Season
+                parameters.Category = "Season";
+                parameters.Name = $"Season {query.Season}%";
+                pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
+
+                parameters = parameters.Clone();
+
+                // Search Episode
+                parameters.Category = "Episode";
+                parameters.Name = $"S{query.Season:00}E%";
+                pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
+            }
+            else if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            {
+                // Daily Episode
+                parameters.Name = showDate.ToString("yyyy.MM.dd");
+                parameters.Category = "Episode";
+                pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
+            }
+            else if (query.Season > 0 && int.TryParse(query.Episode, out var episode) && episode > 0)
+            {
+                // Standard (S/E) Episode
+                parameters.Name = $"S{query.Season:00}E{episode:00}%";
+                parameters.Category = "Episode";
+                pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
+            }
+            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && query.TvdbID > 0)
+            {
+                // Disable ID-based searches for episodes with absolute episode number
+                return new IndexerPageableRequestChain();
+            }
+            else
+            {
+                // Neither a season only search nor daily nor standard, fall back to query
+                pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
+            }
+
+            return pageableRequests;
+        }
+
+        private IEnumerable<IndexerRequest> GetPagedRequests(BroadcastheNetSearchQuery parameters, int results, int offset)
+        {
+            var webRequest = new WebRequest
+            {
+                Url = ApiBase,
+                Type = RequestType.POST,
+                Headers = new Dictionary<string, string>
+                {
+                    { "Accept", "application/json-rpc, application/json" },
+                    { "Content-Type", "application/json-rpc" }
+                },
+                RawBody = JsonRpcRequest("getTorrents", new JArray
+                {
+                    new JValue(_configData.Key.Value),
+                    JObject.FromObject(parameters),
+                    new JValue(results),
+                    new JValue(offset)
+                }),
+                EmulateBrowser = false
+            };
+
+            yield return new IndexerRequest(webRequest);
+        }
+
+        private string JsonRpcRequest(string method, JArray parameters)
         {
             dynamic request = new JObject();
             request["jsonrpc"] = "2.0";
@@ -109,215 +226,189 @@ namespace Jackett.Common.Indexers
             request["id"] = Guid.NewGuid().ToString().Substring(0, 8);
             return request.ToString();
         }
+    }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+    public class BroadcastheNetParser : IParseIndexerResponse
+    {
+        private readonly string _siteLink;
+        private readonly TorznabCapabilitiesCategories _categories;
+
+        public BroadcastheNetParser(string siteLink, TorznabCapabilitiesCategories categories)
         {
-            var searchTerm = query.SearchTerm ?? string.Empty;
+            _siteLink = siteLink;
+            _categories = categories;
+        }
 
-            var btnResults = query.Limit;
-            if (btnResults == 0)
-            {
-                btnResults = (int)TorznabCaps.LimitsDefault;
-            }
-
-            var btnOffset = query.Offset;
+        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
             var releases = new List<ReleaseInfo>();
 
-            var parameters = new Dictionary<string, object>();
+            var jsonResponse = JsonConvert.DeserializeObject<BroadcastheNetResponse>(indexerResponse.Content);
 
-            if (query.IsTvdbQuery)
+            if (jsonResponse?.Result?.Torrents == null)
             {
-                parameters["tvdb"] = query.TvdbID;
-            }
-
-            if (searchTerm.IsNotNullOrWhiteSpace())
-            {
-                parameters["search"] = searchTerm.Replace(" ", "%");
-            }
-
-            // If only the season/episode is searched for then change format to match expected format
-            if (query.Season > 0 && query.Episode.IsNullOrWhiteSpace())
-            {
-                parameters["category"] = "Episode";
-                parameters["name"] = $"S{query.Season:00}E%";
-            }
-            else if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
-            {
-                // Daily Episode
-                parameters["name"] = showDate.ToString("yyyy.MM.dd");
-                parameters["category"] = "Episode";
-            }
-            else if (query.Season > 0 && int.TryParse(query.Episode, out var episode) && episode > 0)
-            {
-                // Standard (S/E) Episode
-                parameters["name"] = $"S{query.Season:00}E{episode:00}%";
-                parameters["category"] = "Episode";
-            }
-            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && query.TvdbID > 0)
-            {
-                // Disable ID-based searches for episodes with absolute episode number
                 return releases;
             }
 
-            var requestPayload = new JArray
+            foreach (var itemKey in jsonResponse.Result.Torrents)
             {
-                new JValue(configData.Key.Value),
-                JObject.FromObject(parameters),
-                new JValue(btnResults),
-                new JValue(btnOffset)
-            };
+                var btnResult = itemKey.Value;
+                var descriptions = new List<string>();
 
-            var response = await RequestWithCookiesAndRetryAsync(
-                APIBASE, method: RequestType.POST,
-                headers: new Dictionary<string, string>
+                if (btnResult.Series.IsNotNullOrWhiteSpace())
                 {
-                    {"Accept", "application/json-rpc, application/json"},
-                    {"Content-Type", "application/json-rpc"}
-                }, rawbody: JsonRPCRequest("getTorrents", requestPayload), emulateBrowser: false);
-
-            try
-            {
-                var btnResponse = JsonConvert.DeserializeObject<BTNRPCResponse>(response.ContentString);
-
-                if (btnResponse?.Result?.Torrents == null)
-                {
-                    return releases;
+                    descriptions.Add("Series: " + btnResult.Series);
                 }
 
-                foreach (var itemKey in btnResponse.Result.Torrents)
+                if (btnResult.GroupName.IsNotNullOrWhiteSpace())
                 {
-                    var btnResult = itemKey.Value;
-                    var descriptions = new List<string>();
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Series))
-                    {
-                        descriptions.Add("Series: " + btnResult.Series);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.GroupName))
-                    {
-                        descriptions.Add("Group Name: " + btnResult.GroupName);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Source))
-                    {
-                        descriptions.Add("Source: " + btnResult.Source);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Container))
-                    {
-                        descriptions.Add("Container: " + btnResult.Container);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Codec))
-                    {
-                        descriptions.Add("Codec: " + btnResult.Codec);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Resolution))
-                    {
-                        descriptions.Add("Resolution: " + btnResult.Resolution);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.Origin))
-                    {
-                        descriptions.Add("Origin: " + btnResult.Origin);
-                    }
-
-                    if (!string.IsNullOrWhiteSpace(btnResult.YoutubeTrailer))
-                    {
-                        descriptions.Add(
-                            "Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer +
-                            "</a>");
-                    }
-
-                    var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
-                    var link = new Uri(btnResult.DownloadURL);
-                    var details = new Uri($"{SiteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
-                    var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
-
-                    var release = new ReleaseInfo
-                    {
-                        Guid = link,
-                        Details = details,
-                        Link = link,
-                        Title = btnResult.ReleaseName,
-                        Description = string.Join("<br />\n", descriptions),
-                        Category = MapTrackerCatToNewznab(btnResult.Resolution),
-                        InfoHash = btnResult.InfoHash,
-                        Size = btnResult.Size,
-                        Grabs = btnResult.Snatched,
-                        Seeders = btnResult.Seeders,
-                        Peers = btnResult.Seeders + btnResult.Leechers,
-                        PublishDate = publishDate,
-                        TVDBId = btnResult.TvdbID,
-                        RageID = btnResult.TvrageID,
-                        Imdb = imdb,
-                        DownloadVolumeFactor = 0, // ratioless
-                        UploadVolumeFactor = 1,
-                        MinimumRatio = 1,
-                        MinimumSeedTime = btnResult.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400 // 120 hours for seasons and 24 hours for episodes
-                    };
-
-                    if (!string.IsNullOrEmpty(btnResult.SeriesBanner))
-                    {
-                        release.Poster = new Uri(btnResult.SeriesBanner);
-                    }
-
-                    if (!release.Category.Any()) // default to TV
-                    {
-                        release.Category.Add(TorznabCatType.TV.ID);
-                    }
-
-                    releases.Add(release);
+                    descriptions.Add("Group Name: " + btnResult.GroupName);
                 }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(response.ContentString, ex);
+
+                if (btnResult.Source.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Source: " + btnResult.Source);
+                }
+
+                if (btnResult.Container.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Container: " + btnResult.Container);
+                }
+
+                if (btnResult.Codec.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Codec: " + btnResult.Codec);
+                }
+
+                if (btnResult.Resolution.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Resolution: " + btnResult.Resolution);
+                }
+
+                if (btnResult.Origin.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Origin: " + btnResult.Origin);
+                }
+
+                if (btnResult.YoutubeTrailer.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add(
+                        "Youtube Trailer: <a href=\"" + btnResult.YoutubeTrailer + "\">" + btnResult.YoutubeTrailer +
+                        "</a>");
+                }
+
+                var imdb = ParseUtil.GetImdbId(btnResult.ImdbID);
+                var link = new Uri(btnResult.DownloadURL);
+                var details = new Uri($"{_siteLink}torrents.php?id={btnResult.GroupID}&torrentid={btnResult.TorrentID}");
+                var publishDate = DateTimeUtil.UnixTimestampToDateTime(btnResult.Time);
+
+                var release = new ReleaseInfo
+                {
+                    Guid = link,
+                    Details = details,
+                    Link = link,
+                    Title = btnResult.ReleaseName,
+                    Description = string.Join("<br />\n", descriptions),
+                    Category = _categories.MapTrackerCatToNewznab(btnResult.Resolution),
+                    InfoHash = btnResult.InfoHash,
+                    Size = btnResult.Size,
+                    Grabs = btnResult.Snatched,
+                    Seeders = btnResult.Seeders,
+                    Peers = btnResult.Seeders + btnResult.Leechers,
+                    PublishDate = publishDate,
+                    TVDBId = btnResult.TvdbID,
+                    RageID = btnResult.TvrageID,
+                    Imdb = imdb,
+                    DownloadVolumeFactor = 0, // ratioless
+                    UploadVolumeFactor = 1,
+                    MinimumRatio = 1,
+                    MinimumSeedTime = btnResult.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400 // 120 hours for seasons and 24 hours for episodes
+                };
+
+                if (btnResult.SeriesBanner.IsNotNullOrWhiteSpace())
+                {
+                    var posterUrl = btnResult.SeriesBanner;
+
+                    if (posterUrl.StartsWith("//"))
+                    {
+                        posterUrl = "https:" + posterUrl;
+                    }
+
+                    release.Poster = new Uri(posterUrl);
+                }
+
+                if (!release.Category.Any()) // default to TV
+                {
+                    release.Category.Add(TorznabCatType.TV.ID);
+                }
+
+                releases.Add(release);
             }
 
             return releases;
         }
+    }
 
-        public class BTNRPCResponse
-        {
-            public string Id { get; set; }
-            public BTNResultPage Result { get; set; }
-        }
+    public class BroadcastheNetSearchQuery
+    {
+        [JsonProperty("category", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Category { get; set; }
 
-        public class BTNResultPage
-        {
-            public Dictionary<int, BTNResultItem> Torrents { get; set; }
-        }
+        [JsonProperty("name", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Name { get; set; }
 
-        public class BTNResultItem
+        [JsonProperty("search", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Search { get; set; }
+
+        [JsonProperty("tvdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Tvdb { get; set; }
+
+        [JsonProperty("tvrage", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Tvrage { get; set; }
+
+        public BroadcastheNetSearchQuery Clone()
         {
-            public int TorrentID { get; set; }
-            public string DownloadURL { get; set; }
-            public string GroupName { get; set; }
-            public int GroupID { get; set; }
-            public int SeriesID { get; set; }
-            public string Series { get; set; }
-            public string SeriesBanner { get; set; }
-            public string SeriesPoster { get; set; }
-            public string YoutubeTrailer { get; set; }
-            public string Category { get; set; }
-            public int? Snatched { get; set; }
-            public int? Seeders { get; set; }
-            public int? Leechers { get; set; }
-            public string Source { get; set; }
-            public string Container { get; set; }
-            public string Codec { get; set; }
-            public string Resolution { get; set; }
-            public string Origin { get; set; }
-            public string ReleaseName { get; set; }
-            public long Size { get; set; }
-            public long Time { get; set; }
-            public int? TvdbID { get; set; }
-            public int? TvrageID { get; set; }
-            public string ImdbID { get; set; }
-            public string InfoHash { get; set; }
+            return MemberwiseClone() as BroadcastheNetSearchQuery;
         }
+    }
+
+    public class BroadcastheNetResponse
+    {
+        public string Id { get; set; }
+        public BroadcastheNetResult Result { get; set; }
+    }
+
+    public class BroadcastheNetResult
+    {
+        public Dictionary<int, BroadcastheNetTorrent> Torrents { get; set; }
+    }
+
+    public class BroadcastheNetTorrent
+    {
+        public int TorrentID { get; set; }
+        public string DownloadURL { get; set; }
+        public string GroupName { get; set; }
+        public int GroupID { get; set; }
+        public int SeriesID { get; set; }
+        public string Series { get; set; }
+        public string SeriesBanner { get; set; }
+        public string SeriesPoster { get; set; }
+        public string YoutubeTrailer { get; set; }
+        public string Category { get; set; }
+        public int? Snatched { get; set; }
+        public int? Seeders { get; set; }
+        public int? Leechers { get; set; }
+        public string Source { get; set; }
+        public string Container { get; set; }
+        public string Codec { get; set; }
+        public string Resolution { get; set; }
+        public string Origin { get; set; }
+        public string ReleaseName { get; set; }
+        public long Size { get; set; }
+        public long Time { get; set; }
+        public int? TvdbID { get; set; }
+        public int? TvrageID { get; set; }
+        public string ImdbID { get; set; }
+        public string InfoHash { get; set; }
     }
 }
