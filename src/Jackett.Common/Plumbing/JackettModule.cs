@@ -1,5 +1,6 @@
 using Autofac;
 using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;

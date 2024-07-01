@@ -11,7 +11,7 @@ namespace Jackett.Test.Common.Indexers.Toloka
         [TestCaseSource(typeof(TitleParserTestData), nameof(TitleParserTestData.TestCases))]
         public string TestTitleParsing(string title, ICollection<int> category, bool stripCyrillicLetters)
         {
-            var titleParser = new Jackett.Common.Indexers.Toloka.TitleParser();
+            var titleParser = new Jackett.Common.Indexers.Definitions.Toloka.TitleParser();
 
             return titleParser.Parse(title, category, stripCyrillicLetters);
         }

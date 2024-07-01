@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Models;
 using Jackett.Test.TestHelpers;
 using NUnit.Framework;
