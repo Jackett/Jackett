@@ -52,7 +52,7 @@ settings:
 
 search:
   paths:
-    - path: /index.php
+    - path: index.php
   allowEmptyInputs: true
   inputs:
     view: Main
