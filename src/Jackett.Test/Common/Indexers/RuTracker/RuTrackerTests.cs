@@ -11,7 +11,7 @@ namespace Jackett.Test.Common.Indexers.RuTracker
         [TestCaseSource(typeof(TitleParserTestData), nameof(TitleParserTestData.TestCases))]
         public string TestTitleParsing(string title, ICollection<int> category, bool stripCyrillicLetters, bool moveAllTagsToEndOfReleaseTitle, bool moveFirstTagsToEndOfReleaseTitle)
         {
-            var titleParser = new Jackett.Common.Indexers.RuTracker.TitleParser();
+            var titleParser = new Jackett.Common.Indexers.Definitions.RuTracker.TitleParser();
 
             return titleParser.Parse(title, category, stripCyrillicLetters, moveAllTagsToEndOfReleaseTitle, moveFirstTagsToEndOfReleaseTitle);
         }

@@ -6,6 +6,7 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers;
+using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
