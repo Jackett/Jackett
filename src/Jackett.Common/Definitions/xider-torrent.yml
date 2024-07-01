@@ -22,6 +22,7 @@ caps:
     - {id: 11, cat: Movies/HD, desc: "Film/HD/Hun"}
     - {id: 2, cat: Movies/SD, desc: "Film/SD/Eng"}
     - {id: 1, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: 38, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 18, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 19, cat: PC/Games, desc: "Játék/Rip"}
     - {id: 24, cat: Other, desc: "Képek"}
