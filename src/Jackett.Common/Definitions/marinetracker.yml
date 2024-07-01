@@ -121,9 +121,12 @@ caps:
     - {id: 340, cat: Books, desc: "Examinations-Text books"}
     - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
-    - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
+    - {id: 375, cat: Audio, desc: "Audio-Documentary"}
+    - {id: 374, cat: Audio, desc: "Audio-Historical literature"}
+    - {id: 286, cat: Audio, desc: "Audio-Fantastic"}
+    - {id: 373, cat: Audio, desc: "Audio-Fiction"}
     - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
-    - {id: 286, cat: Audio, desc: "Audio-Fiction"}
+    - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
     - {id: 345, cat: Books, desc: "Yachting, sailing, boating-Solar boats"}
     - {id: 318, cat: Books, desc: "Yachting, sailing, boating-Sailing life"}
@@ -174,8 +177,8 @@ caps:
     - {id: 261, cat: Books, desc: "Wars at Sea-War at sea (World War II)"}
     - {id: 363, cat: Books, desc: "Wars at Sea-Russo-Japanese War"}
     - {id: 362, cat: Books, desc: "History of Naval Shipbuilding"}
-    - {id: 280, cat: Books, desc: "History of Naval Shipbuilding-Historic ships"}
     - {id: 279, cat: Books, desc: "History of Naval Shipbuilding-Marine vessels"}
+    - {id: 280, cat: Books, desc: "History of Naval Shipbuilding-Historic ships"}
     - {id: 278, cat: Books, desc: "History of Naval Shipbuilding-Warships"}
     - {id: 351, cat: Books, desc: "History of Naval Shipbuilding-Battleships"}
     - {id: 353, cat: Books, desc: "History of Naval Shipbuilding-Cruisers"}
