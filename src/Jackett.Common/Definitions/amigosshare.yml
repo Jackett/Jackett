@@ -14,81 +14,60 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 107, cat: XXX, desc: "Adultos: Gay"}
     - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
+    - {id: 107, cat: XXX, desc: "Adultos: Gay"}
     - {id: 108, cat: XXX, desc: "Adultos: Transex/Female"}
     - {id: 74, cat: XXX, desc: "Adultos: XXX"}
+    - {id: 146, cat: XXX, desc: "Adultos: OnlyFans"}
     - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
     - {id: 116, cat: TV/Anime, desc: "Anime: Filmes"}
     - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
-    - {id: 23, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
+    - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
+    - {id: 28, cat: PC/Mobile-iOS, desc: "Aplicativos: iPod"}
     - {id: 27, cat: PC/Mobile-iOS, desc: "Aplicativos: iPad"}
     - {id: 26, cat: PC/Mobile-iOS, desc: "Aplicativos: iPhone"}
-    - {id: 28, cat: PC/Mobile-iOS, desc: "Aplicativos: iPod"}
     - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
+    - {id: 23, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
     - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
-    - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
-    - {id: 72, cat: Books, desc: "Apostila: Apostila"}
-    - {id: 71, cat: Books, desc: "Apostila: Cursos"}
-    - {id: 121, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
-    - {id: 112, cat: Books, desc: "Ebook: HQs"}
+    - {id: 73, cat: Books, desc: "Cursos: Video Aula"}
+    - {id: 72, cat: Books, desc: "Cursos: Apostila"}
+    - {id: 71, cat: Books, desc: "Cursos: Cursos"}
     - {id: 67, cat: Books, desc: "Ebook: Livros"}
+    - {id: 112, cat: Books, desc: "Ebook: HQs"}
+    - {id: 147, cat: Books, desc: "Ebook: Mangas"}
+    - {id: 121, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
     - {id: 68, cat: Books, desc: "Ebook: Revistas"}
     - {id: 119, cat: Movies, desc: "Filmes:"}
-    - {id: 70, cat: XXX, desc: "Fotos: XXX"}
-    - {id: 57, cat: Console, desc: "Jogos: Android"}
-    - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
-    - {id: 109, cat: Console, desc: "Jogos: Emulação"}
-    - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
-    - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
-    - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
-    - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
-    - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
-    - {id: 49, cat: Console, desc: "Jogos: Ps1"}
-    - {id: 50, cat: Console, desc: "Jogos: Ps2"}
+    - {id: 70, cat: XXX, desc: "Fotos: Revistas, Livros e Fotos"}
     - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
-    - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
-    - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
-    - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
     - {id: 54, cat: Console/XBox 360, desc: "Jogos: Xbox360"}
+    - {id: 109, cat: Console, desc: "Jogos: Emulação"}
+    - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
+    - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
+    - {id: 50, cat: Console, desc: "Jogos: Ps2"}
+    - {id: 49, cat: Console, desc: "Jogos: Ps1"}
+    - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
+    - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
+    - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
+    - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
+    - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
+    - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+    - {id: 57, cat: Console, desc: "Jogos: Android"}
     - {id: 56, cat: Console/XBox, desc: "Jogos: Xbox"}
     - {id: 78, cat: Console/XBox One, desc: "Jogos: Xbox One"}
-    - {id: 29, cat: Audio, desc: "Musica: Axé"}
-    - {id: 38, cat: Audio, desc: "Musica: Blues"}
-    - {id: 39, cat: Audio, desc: "Musica: Dance"}
-    - {id: 40, cat: Audio, desc: "Musica: Discografia"}
-    - {id: 43, cat: Audio, desc: "Musica: Dubstep"}
-    - {id: 30, cat: Audio, desc: "Musica: Eletronica"}
-    - {id: 41, cat: Audio, desc: "Musica: Erudita"}
-    - {id: 42, cat: Audio, desc: "Musica: Forró"}
-    - {id: 31, cat: Audio, desc: "Musica: Funk"}
-    - {id: 84, cat: Audio, desc: "Musica: Game (OST)"}
-    - {id: 83, cat: Audio, desc: "Musica: Gospel"}
-    - {id: 37, cat: Audio, desc: "Musica: Hard Rock"}
-    - {id: 33, cat: Audio, desc: "Musica: Hip-Hop"}
-    - {id: 114, cat: Audio, desc: "Musica: MPB"}
-    - {id: 77, cat: Audio, desc: "Musica: Outros"}
-    - {id: 32, cat: Audio, desc: "Musica: Pagode"}
-    - {id: 115, cat: Audio, desc: "Musica: POP"}
-    - {id: 34, cat: Audio, desc: "Musica: Rap"}
-    - {id: 76, cat: Audio, desc: "Musica: Reggae"}
-    - {id: 36, cat: Audio, desc: "Musica: Rock"}
-    - {id: 45, cat: Audio, desc: "Musica: Samba"}
-    - {id: 46, cat: Audio, desc: "Musica: Sertanejo"}
-    - {id: 120, cat: TV, desc: "Series:"}
-    - {id: 65, cat: TV, desc: "Shows: Show"}
-    - {id: 63, cat: TV, desc: "Tv: Aberta"}
-    - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
-    - {id: 64, cat: TV, desc: "Tv: Fechada"}
-    - {id: 73, cat: TV, desc: "Video Aula: Video Aula"}
-    - {id: 127, cat: Other, desc: "Outros: Add-ons"}
-    - {id: 126, cat: Other, desc: "Outros: Extensões"}
+    - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
     - {id: 129, cat: Other, desc: "Outros: Fonts"}
+    - {id: 128, cat: Other, desc: "Outros: Scripts"}
+    - {id: 127, cat: Other, desc: "Outros: Add-ons"}
     - {id: 130, cat: Other, desc: "Outros: MOD"}
     - {id: 125, cat: Other, desc: "Outros: Pack de Imagens"}
-    - {id: 122, cat: Other, desc: "Outros: Plug-ins"}
-    - {id: 128, cat: Other, desc: "Outros: Scripts"}
     - {id: 124, cat: Other, desc: "Outros: Vetores"}
+    - {id: 122, cat: Other, desc: "Outros: Plug-ins"}
+    - {id: 126, cat: Other, desc: "Outros: Extensões"}
+    - {id: 120, cat: TV, desc: "Series:"}
+    - {id: 64, cat: TV, desc: "Tv: Fechada"}
+    - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
+    - {id: 63, cat: TV, desc: "Tv: Aberta"}
 
   modes:
     search: [q]
