@@ -46,6 +46,8 @@ namespace Jackett.Common.Models
         public string Title { get; set; }
         public string Publisher { get; set; }
 
+        public bool FreeTorrent { get; set; }
+
         public bool IsTest { get; set; }
 
         public string ImdbIDShort => ImdbID?.TrimStart('t');
@@ -194,7 +196,8 @@ namespace Jackett.Common.Models
                 TvmazeID = TvmazeID,
                 TraktID = TraktID,
                 DoubanID = DoubanID,
-                Cache = Cache
+                Cache = Cache,
+                FreeTorrent = FreeTorrent
             };
             if (Categories?.Length > 0)
             {
@@ -227,7 +230,9 @@ namespace Jackett.Common.Models
                 if (limit != null && limit > 0)
                 {
                     if (limit > queryString.Length)
+                    {
                         limit = queryString.Length;
+                    }
 
                     queryString = queryString.Substring(0, (int)limit);
                 }
@@ -244,13 +249,19 @@ namespace Jackett.Common.Models
         public string GetEpisodeSearchString()
         {
             if (Season == 0)
+            {
                 return string.Empty;
+            }
 
             string episodeString;
             if (DateTime.TryParseExact($"{Season} {Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            {
                 episodeString = showDate.ToString("yyyy.MM.dd");
+            }
             else if (string.IsNullOrEmpty(Episode))
+            {
                 episodeString = $"S{Season:00}";
+            }
             else
             {
                 try

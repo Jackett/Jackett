@@ -51,8 +51,10 @@ namespace Jackett.Common.Indexers.Definitions
 
         private new ConfigurationDataFileList configData => (ConfigurationDataFileList)base.configData;
 
+        private bool SearchFreeleech(TorznabQuery query) => query.FreeTorrent || configData.Freeleech.Value;
+
         public FileList(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+                        ICacheService cs)
             : base(configService: configService,
                    client: wc,
                    logger: l,
@@ -163,7 +165,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var isFreeleech = row.FreeLeech;
 
                     // skip non-freeleech results when freeleech only is set
-                    if (configData.Freeleech.Value && !isFreeleech)
+                    if (SearchFreeleech(query) && !isFreeleech)
                     {
                         continue;
                     }
@@ -215,7 +217,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {"category", string.Join(",", MapTorznabCapsToTrackers(query))}
             };
 
-            if (configData.Freeleech.Value)
+            if (SearchFreeleech(query))
             {
                 queryCollection.Set("freeleech", "1");
             }

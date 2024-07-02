@@ -1444,6 +1444,11 @@ namespace Jackett.Common.Indexers.Definitions
             variables[".Query.IsTvdbQuery"] = query.IsTvdbQuery ? "True" : null;
             variables[".Query.IsTvmazeQuery"] = query.IsTvmazeQuery ? "True" : null;
 
+            if (query.FreeTorrent)
+            {
+                variables[".Config.freeleech"] = "True";
+            }
+
             var mappedCategories = MapTorznabCapsToTrackers(query);
             if (mappedCategories.Count == 0)
             {
