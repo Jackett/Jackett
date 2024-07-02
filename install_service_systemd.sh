@@ -77,6 +77,14 @@ Environment="DOTNET_EnableDiagnostics=0"
 ExecStart=/bin/sh "${JACKETT_DIR}/jackett_launcher.sh"
 TimeoutStopSec=30
 
+ProtectHome=yes
+ProtectSystem=full
+PrivateTmp=yes
+NoNewPrivileges=yes
+ProtectDevices=yes
+ProtectKernelModules=yes
+ProtectKernelTunables=yes
+
 [Install]
 WantedBy=multi-user.target
 
