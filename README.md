@@ -535,7 +535,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Shazbat
  * SiamBIT
  * SkipTheCommercials
- * SkipTheTrailers
  * slosoul
  * SnowPT (SSPT)
  * SoulVoice (聆音Club)
