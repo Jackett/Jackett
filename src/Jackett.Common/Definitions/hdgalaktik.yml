@@ -114,7 +114,7 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: table.embedded > tbody > tr.torcontduo
+    selector: table.table > tbody > tr.torcontduo
 
   fields:
     category:
@@ -126,7 +126,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.alink
+      selector: a.link-secondary
       attribute: onmouseover
       filters:
         - name: regexp
@@ -189,10 +189,10 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.alink
+      selector: a.link-secondary
       attribute: href
     download:
-      selector: a.alink
+      selector: a.link-secondary
       attribute: href
       filters:
         - name: replace
@@ -260,6 +260,6 @@ search:
     minimumratio:
       text: 1.0
     description:
-      selector: a.alink
+      selector: a[href*="?tag="]
       attribute: title
 # engine n/a
