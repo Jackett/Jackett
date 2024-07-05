@@ -172,7 +172,7 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
-# Maintain global ratio above 0.5 or downloads will get disabled. No MST.
+# Maintain global ratio above 0.6 or downloads will get disabled. No MST.
     minimumratio:
-      text: 0.51
+      text: 0.61
 # json UNIT3D 8.1.3
