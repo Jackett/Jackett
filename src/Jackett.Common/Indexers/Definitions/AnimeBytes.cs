@@ -662,16 +662,16 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static int? ParseSeasonFromTitles(IReadOnlyCollection<string> titles)
         {
-            var advancedSeasonRegex = new Regex(@"(\d+)(st|nd|rd|th) Season", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            var advancedSeasonRegex = new Regex(@"\b(?:(?<season>\d+)(?:st|nd|rd|th) Season|Season (?<season>\d+))\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
-            var seasonNumberRegex = new Regex(@"\b(?:S)?([2-9])$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"\b(?<!Part[- ._])(?:S)?(?<season>[2-9])$", RegexOptions.Compiled);
 
             foreach (var title in titles)
             {
                 var advancedSeasonRegexMatch = advancedSeasonRegex.Match(title);
                 if (advancedSeasonRegexMatch.Success)
                 {
-                    return ParseUtil.CoerceInt(advancedSeasonRegexMatch.Groups[1].Value);
+                    return ParseUtil.CoerceInt(advancedSeasonRegexMatch.Groups["season"].Value);
                 }
 
                 var seasonCharactersRegexMatch = seasonCharactersRegex.Match(title);
@@ -683,7 +683,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var seasonNumberRegexMatch = seasonNumberRegex.Match(title);
                 if (seasonNumberRegexMatch.Success)
                 {
-                    return ParseUtil.CoerceInt(seasonNumberRegexMatch.Groups[1].Value);
+                    return ParseUtil.CoerceInt(seasonNumberRegexMatch.Groups["season"].Value);
                 }
             }
 
