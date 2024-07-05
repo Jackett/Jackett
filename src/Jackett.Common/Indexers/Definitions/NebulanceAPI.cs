@@ -3,16 +3,23 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -34,13 +41,13 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override bool SupportsPagination => true;
 
+        public override int PageSize => 100;
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         // Docs at https://nebulance.io/articles.php?topic=api_key
-        protected virtual string APIUrl => SiteLink + "api.php";
+        protected virtual string ApiUrl => SiteLink + "api.php";
         protected virtual int KeyLength => 32;
-
-        private readonly string[] _moveToTags = { "720p", "1080p", "2160p", "4k" };
 
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
         private new ConfigurationDataAPIKey configData
@@ -58,8 +65,7 @@ namespace Jackett.Common.Indexers.Definitions
                    cacheService: cs,
                    configData: new ConfigurationDataAPIKey())
         {
-            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));
-
+            configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(string.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -70,7 +76,7 @@ namespace Jackett.Common.Indexers.Definitions
                 LimitsMax = 1000,
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.Genre, TvSearchParam.TvmazeId
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvmazeId
                 },
                 SupportsRawSearch = true
             };
@@ -89,6 +95,16 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new NebulanceAPIRequestGenerator(TorznabCaps, configData, ApiUrl);
+        }
+
+        public override IParseIndexerResponse GetParser()
+        {
+            return new NebulanceAPIParser(TorznabCaps.Categories, SiteLink);
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -96,13 +112,18 @@ namespace Jackett.Common.Indexers.Definitions
             IsConfigured = false;
             var apiKey = configData.Key;
             if (apiKey.Value.Length != KeyLength)
+            {
                 throw new Exception($"Invalid API Key configured: expected length: {KeyLength}, got {apiKey.Value.Length}");
+            }
 
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Testing returned no results!");
+                }
+
                 IsConfigured = true;
                 SaveConfig();
             }
@@ -113,190 +134,366 @@ namespace Jackett.Common.Indexers.Definitions
 
             return IndexerConfigurationStatus.Completed;
         }
+    }
 
-        private string JsonRPCRequest(string method, JArray parameters)
+    public class NebulanceAPIRequestGenerator : IIndexerRequestGenerator
+    {
+        private readonly TorznabCapabilities _torznabCaps;
+        private readonly ConfigurationDataAPIKey _configData;
+        private readonly string _apiUrl;
+
+        private readonly string[] _moveToTags = { "720p", "1080p", "2160p", "4k" };
+
+        public NebulanceAPIRequestGenerator(TorznabCapabilities torznabCaps, ConfigurationDataAPIKey configData, string apiUrl)
+        {
+            _torznabCaps = torznabCaps;
+            _configData = configData;
+            _apiUrl = apiUrl;
+        }
+
+        public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
+
+            var offset = query.Offset;
+            var limit = query.Limit;
+            if (limit == 0)
+            {
+                limit = _torznabCaps.LimitsDefault.GetValueOrDefault(100);
+            }
+
+            var queryParams = new NebulanceQuery
+            {
+                Age = ">0"
+            };
+
+            if (query.IsTvmazeQuery && query.TvmazeID.HasValue)
+            {
+                queryParams.TvMaze = query.TvmazeID;
+            }
+
+            var searchQuery = query.SanitizedSearchTerm.Trim();
+
+            if (searchQuery.IsNotNullOrWhiteSpace())
+            {
+                var searchTerms = Regex.Split(searchQuery, "\\s+").ToList();
+                var movingToTags = searchTerms.Intersect(_moveToTags, StringComparer.OrdinalIgnoreCase).ToList();
+                movingToTags.ForEach(tag => searchTerms.RemoveAll(searchTerm => searchTerm.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+
+                if (!searchTerms.Any())
+                {
+                    // NBL API does not support tag calls without name, series, id, imdb, tvmaze, or time keys.
+                    return new IndexerPageableRequestChain();
+                }
+
+                queryParams.Tags = movingToTags.ToArray();
+                queryParams.Name = searchTerms.Join(" ");
+            }
+
+            if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            {
+                queryParams.Release = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
+            }
+            else
+            {
+                if (query.Season > 0)
+                {
+                    queryParams.Season = query.Season;
+                }
+
+                if (query.Episode.IsNotNullOrWhiteSpace() && int.TryParse(query.Episode, out var episodeNumber))
+                {
+                    queryParams.Episode = episodeNumber;
+                }
+            }
+
+            pageableRequests.Add(GetPagedRequests(queryParams, limit, offset));
+
+            return pageableRequests;
+        }
+
+        private IEnumerable<IndexerRequest> GetPagedRequests(NebulanceQuery parameters, int limit, int offset)
+        {
+            var webRequest = new WebRequest
+            {
+                Url = _apiUrl,
+                Type = RequestType.POST,
+                Headers = new Dictionary<string, string>
+                {
+                    { "Accept", "application/json-rpc, application/json" },
+                    { "Content-Type", "application/json-rpc" }
+                },
+                RawBody = JsonRpcRequest("getTorrents", new JArray
+                {
+                    new JValue(_configData.Key.Value),
+                    JObject.FromObject(parameters),
+                    new JValue(limit),
+                    new JValue(offset)
+                }),
+                EmulateBrowser = false
+            };
+
+            yield return new IndexerRequest(webRequest);
+        }
+
+        private string JsonRpcRequest(string method, JArray parameters)
         {
             dynamic request = new JObject();
             request["jsonrpc"] = "2.0";
             request["method"] = method;
             request["params"] = parameters;
             request["id"] = Guid.NewGuid().ToString().Substring(0, 8);
-
             return request.ToString();
         }
+    }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+    public class NebulanceAPIParser : IParseIndexerResponse
+    {
+        private readonly TorznabCapabilitiesCategories _categories;
+        private readonly string _siteLink;
+
+        private readonly HashSet<string> _validCategories = new HashSet<string>
         {
-            var validList = new List<string>
-            {
-                "action",
-                "adventure",
-                "children",
-                "biography",
-                "comedy",
-                "crime",
-                "documentary",
-                "drama",
-                "family",
-                "fantasy",
-                "game-show",
-                "history",
-                "horror",
-                "medical",
-                "music",
-                "musical",
-                "mystery",
-                "news",
-                "reality-tv",
-                "romance",
-                "sci-fi",
-                "sitcom",
-                "sport",
-                "talk-show",
-                "thriller",
-                "travel",
-                "war",
-                "western"
-            };
-            var validCats = new List<string>
-            {
-                "sd",
-                "hd",
-                "uhd",
-                "4k",
-                "480p",
-                "720p",
-                "1080i",
-                "1080p",
-                "2160p"
-            };
+            "sd",
+            "hd",
+            "uhd",
+            "4k",
+            "480p",
+            "720p",
+            "1080i",
+            "1080p",
+            "2160p"
+        };
 
-            var searchParam = new JObject
-            {
-                ["age"] = ">0"
-            };
+        private readonly HashSet<string> _validTags = new HashSet<string>
+        {
+            "action",
+            "adventure",
+            "children",
+            "biography",
+            "comedy",
+            "crime",
+            "documentary",
+            "drama",
+            "family",
+            "fantasy",
+            "game-show",
+            "history",
+            "horror",
+            "medical",
+            "music",
+            "musical",
+            "mystery",
+            "news",
+            "reality-tv",
+            "romance",
+            "sci-fi",
+            "sitcom",
+            "sport",
+            "talk-show",
+            "thriller",
+            "travel",
+            "war",
+            "western"
+        };
 
-            var searchString = query.GetQueryString();
-            if (!string.IsNullOrWhiteSpace(searchString))
-            {
-                var searchTerms = Regex.Split(searchString, "\\s+").ToList();
-                var movingToTags = searchTerms.Intersect(_moveToTags, StringComparer.OrdinalIgnoreCase).ToList();
-                movingToTags.ForEach(
-                    tag => searchTerms.RemoveAll(searchTerm => searchTerm.Equals(tag, StringComparison.OrdinalIgnoreCase)));
+        public NebulanceAPIParser(TorznabCapabilitiesCategories categories, string siteLink)
+        {
+            _categories = categories;
+            _siteLink = siteLink;
+        }
 
-                searchString = searchTerms.Join(" ");
-                searchParam["tags"] = new JArray(movingToTags);
-                searchParam["name"] = "%" + Regex.Replace(searchString, "[\\W]+", "%").Trim() + "%";
+        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
+            if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
+            {
+                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request");
             }
 
-            if (query.IsTvmazeQuery && query.TvmazeID.HasValue)
+            if (indexerResponse.Content != null && indexerResponse.Content.Contains("Invalid params"))
             {
-                searchParam["tvmaze"] = query.TvmazeID;
-                searchParam["name"] = "%" + Regex.Replace(query.GetEpisodeSearchString(), "[\\W]+", "%").Trim() + "%";
-            }
-
-            if (query.IsGenreQuery)
-            {
-                var genre = new JArray
-                {
-                    new JValue(query.Genre)
-                };
-                searchParam["tags"] = genre;
-            }
-
-            var limit = query.Limit;
-            if (limit == 0)
-                limit = (int)TorznabCaps.LimitsDefault;
-            var offset = query.Offset;
-
-            var parameters = new JArray
-            {
-                new JValue(configData.Key.Value),
-                JObject.FromObject(searchParam),
-                new JValue(limit),
-                new JValue(offset)
-            };
-
-            var response = await RequestWithCookiesAndRetryAsync(
-                APIUrl, method: RequestType.POST,
-                headers: new Dictionary<string, string>
-                {
-                    {"Accept", "application/json-rpc, application/json"},
-                    {"Content-Type", "application/json-rpc"}
-                }, rawbody: JsonRPCRequest("getTorrents", parameters), emulateBrowser: false);
-
-            if (response.ContentString != null && response.ContentString.Contains("Invalid params"))
                 throw new Exception("Invalid API Key configured");
-            if (response.ContentString != null && response.ContentString.Contains("API is down"))
-                throw new Exception("NBL API is down at the moment");
+            }
 
-            char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+            if (indexerResponse.Content != null && indexerResponse.Content.Contains("API is down"))
+            {
+                throw new Exception("NBL API is down at the moment");
+            }
 
             var releases = new List<ReleaseInfo>();
 
+            NebulanceRpcResponse<NebulanceResponse> jsonResponse;
+
             try
             {
-                var jsonContent = JObject.Parse(response.ContentString);
-
-                foreach (var item in jsonContent.Value<JObject>("result").Value<JArray>("items"))
-                {
-                    var link = new Uri(item.Value<string>("download"));
-                    var details = new Uri($"{SiteLink}torrents.php?id={item.Value<string>("group_id")}");
-
-                    var releaseName = item.Value<string>("rls_name");
-                    var groupName = item.Value<string>("group_name");
-                    var title = releaseName.IsNotNullOrWhiteSpace() ? releaseName : groupName;
-
-                    var descriptions = new List<string>();
-                    if (groupName.IsNotNullOrWhiteSpace())
-                    {
-                        descriptions.Add("Group Name: " + groupName);
-                    }
-                    var tags = string.Join(",", item.Value<JArray>("tags"));
-                    var releaseGenres = validList.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
-                    if (releaseGenres.Count >= 1)
-                    {
-                        descriptions.Add("Genre: " + string.Join(",", releaseGenres));
-                    }
-                    var releaseCats = validCats.Intersect(tags.ToLower().Split(delimiters, StringSplitOptions.RemoveEmptyEntries)).ToList();
-
-                    var release = new ReleaseInfo
-                    {
-                        Guid = link,
-                        Link = link,
-                        Details = details,
-                        Title = title.Trim(),
-                        Category = MapTrackerCatToNewznab(releaseCats.Any() ? releaseCats.First() : "TV"),
-                        PublishDate = DateTime.Parse(item.Value<string>("rls_utc"), CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
-                        Seeders = item.Value<int>("seed"),
-                        Peers = item.Value<int>("seed") + item.Value<int>("leech"),
-                        Size = item.Value<long>("size"),
-                        Files = item.Value<JArray>("file_list").Count,
-                        Grabs = item.Value<int>("snatch"),
-                        DownloadVolumeFactor = 0, // ratioless
-                        UploadVolumeFactor = 1,
-                        MinimumRatio = 0, // ratioless
-                        MinimumSeedTime = item.Value<string>("cat").ToLower() == "season" ? 432000 : 86400, // 120 hours for seasons and 24 hours for episodes
-                        Description = string.Join("<br />\n", descriptions)
-                    };
-
-                    if (release.Genres == null)
-                        release.Genres = new List<string>();
-                    release.Genres = releaseGenres;
-
-                    var banner = item.Value<string>("series_banner");
-                    if (!string.IsNullOrEmpty(banner) && !banner.Contains("noimage.png"))
-                        release.Poster = new Uri(banner);
-
-                    releases.Add(release);
-                }
+                jsonResponse = STJson.Deserialize<NebulanceRpcResponse<NebulanceResponse>>(indexerResponse.Content);
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                throw new Exception($"Unexpected response from indexer request: {ex.Message}", ex);
+            }
+
+            if (jsonResponse.Error != null || jsonResponse.Result == null)
+            {
+                throw new Exception($"Indexer API call returned an error [{jsonResponse.Error}]");
+            }
+
+            if (jsonResponse.Result?.Items == null || jsonResponse.Result.Items.Count == 0)
+            {
+                return releases;
+            }
+
+            var rows = jsonResponse.Result.Items;
+
+            foreach (var row in rows)
+            {
+                var details = new Uri(_siteLink + "torrents.php?id=" + row.TorrentId);
+
+                var title = row.ReleaseTitle.IsNotNullOrWhiteSpace() ? row.ReleaseTitle : row.GroupName;
+
+                var tags = row.Tags.Select(t => t.ToLowerInvariant()).ToList();
+                var releaseCategories = _validCategories.Intersect(tags).ToList();
+
+                var descriptions = new List<string>();
+
+                if (row.GroupName.IsNotNullOrWhiteSpace())
+                {
+                    descriptions.Add("Group Name: " + row.GroupName);
+                }
+
+                var genres = _validTags.Intersect(tags).ToList();
+                if (genres.Any())
+                {
+                    descriptions.Add("Genre: " + string.Join(", ", genres));
+                }
+
+                var release = new ReleaseInfo
+                {
+                    Guid = details,
+                    Link = new Uri(row.Download),
+                    Title = title.Trim(),
+                    Category = _categories.MapTrackerCatToNewznab(releaseCategories.FirstOrDefault() ?? "TV"),
+                    Size = ParseUtil.CoerceLong(row.Size),
+                    Files = row.FileList.Length,
+                    PublishDate = DateTime.Parse(row.PublishDateUtc, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                    Grabs = ParseUtil.CoerceInt(row.Snatch),
+                    Seeders = ParseUtil.CoerceInt(row.Seed),
+                    Peers = ParseUtil.CoerceInt(row.Seed) + ParseUtil.CoerceInt(row.Leech),
+                    MinimumRatio = 0, // ratioless
+                    MinimumSeedTime = row.Category.ToLower() == "season" ? 432000 : 86400, // 120 hours for seasons and 24 hours for episodes
+                    DownloadVolumeFactor = 0, // ratioless tracker
+                    UploadVolumeFactor = 1,
+                    Genres = genres,
+                    Description = string.Join("<br />\n", descriptions)
+                };
+
+                if (row.TvMazeId.IsNotNullOrWhiteSpace())
+                {
+                    release.TVMazeId = ParseUtil.CoerceInt(row.TvMazeId);
+                }
+
+                if (row.Banner.IsNotNullOrWhiteSpace() && !row.Banner.Contains("noimage.png"))
+                {
+                    release.Poster = new Uri(row.Banner);
+                }
+
+                releases.Add(release);
             }
 
             return releases;
         }
+    }
+
+    public class NebulanceQuery
+    {
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Id { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Time { get; set; }
+
+        [JsonProperty(PropertyName="age", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Age { get; set; }
+
+        [JsonProperty(PropertyName="tvmaze", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int? TvMaze { get; set; }
+
+        [JsonProperty(PropertyName="imdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Imdb { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Hash { get; set; }
+
+        [JsonProperty(PropertyName="tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string[] Tags { get; set; }
+
+        [JsonProperty(PropertyName="name", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Name { get; set; }
+
+        [JsonProperty(PropertyName="release", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Release { get; set; }
+
+        [JsonProperty(PropertyName="category", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Category { get; set; }
+
+        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Series { get; set; }
+
+        [JsonProperty(PropertyName="season", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int? Season { get; set; }
+
+        [JsonProperty(PropertyName="episode", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public int? Episode { get; set; }
+
+        public NebulanceQuery Clone()
+        {
+            return MemberwiseClone() as NebulanceQuery;
+        }
+    }
+
+    public class NebulanceRpcResponse<T>
+    {
+        public T Result { get; set; }
+        public JToken Error { get; set; }
+    }
+
+    public class NebulanceResponse
+    {
+        public List<NebulanceTorrent> Items { get; set; }
+    }
+
+    public class NebulanceTorrent
+    {
+        [JsonPropertyName("rls_name")]
+        public string ReleaseTitle { get; set; }
+
+        [JsonPropertyName("cat")]
+        public string Category { get; set; }
+
+        public string Size { get; set; }
+        public string Seed { get; set; }
+        public string Leech { get; set; }
+        public string Snatch { get; set; }
+        public string Download { get; set; }
+
+        [JsonPropertyName("file_list")]
+        public string[] FileList { get; set; } = Array.Empty<string>();
+
+        [JsonPropertyName("group_name")]
+        public string GroupName { get; set; }
+
+        [JsonPropertyName("series_banner")]
+        public string Banner { get; set; }
+
+        [JsonPropertyName("group_id")]
+        public string TorrentId { get; set; }
+
+        [JsonPropertyName("series_id")]
+        public string TvMazeId { get; set; }
+
+        [JsonPropertyName("rls_utc")]
+        public string PublishDateUtc { get; set; }
+
+        public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
     }
 }
