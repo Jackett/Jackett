@@ -412,37 +412,37 @@ namespace Jackett.Common.Indexers.Definitions
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Time { get; set; }
 
-        [JsonProperty(PropertyName="age", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "age", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Age { get; set; }
 
-        [JsonProperty(PropertyName="tvmaze", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "tvmaze", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int? TvMaze { get; set; }
 
-        [JsonProperty(PropertyName="imdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "imdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Imdb { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Hash { get; set; }
 
-        [JsonProperty(PropertyName="tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string[] Tags { get; set; }
 
-        [JsonProperty(PropertyName="name", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "name", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Name { get; set; }
 
-        [JsonProperty(PropertyName="release", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "release", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Release { get; set; }
 
-        [JsonProperty(PropertyName="category", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "category", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Category { get; set; }
 
         [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Series { get; set; }
 
-        [JsonProperty(PropertyName="season", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "season", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int? Season { get; set; }
 
-        [JsonProperty(PropertyName="episode", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        [JsonProperty(PropertyName = "episode", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public int? Episode { get; set; }
 
         public NebulanceQuery Clone()
