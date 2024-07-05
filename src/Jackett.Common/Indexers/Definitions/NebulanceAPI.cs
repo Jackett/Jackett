@@ -374,7 +374,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Title = title.Trim(),
                     Category = _categories.MapTrackerCatToNewznab(releaseCategories.FirstOrDefault() ?? "TV"),
                     Size = ParseUtil.CoerceLong(row.Size),
-                    Files = row.FileList.Length,
+                    Files = row.FileList.Count(),
                     PublishDate = DateTime.Parse(row.PublishDateUtc, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
                     Grabs = ParseUtil.CoerceInt(row.Snatch),
                     Seeders = ParseUtil.CoerceInt(row.Seed),
@@ -477,7 +477,7 @@ namespace Jackett.Common.Indexers.Definitions
         public string Download { get; set; }
 
         [JsonPropertyName("file_list")]
-        public string[] FileList { get; set; } = Array.Empty<string>();
+        public IEnumerable<string> FileList { get; set; } = Array.Empty<string>();
 
         [JsonPropertyName("group_name")]
         public string GroupName { get; set; }
