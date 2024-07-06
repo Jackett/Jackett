@@ -95,7 +95,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new NebulanceAPIRequestGenerator(TorznabCaps, configData, SiteLink);
+            return new NebulanceAPIRequestGenerator(TorznabCaps, configData, SiteLink, logger);
         }
 
         public override IParseIndexerResponse GetParser()
@@ -140,12 +140,14 @@ namespace Jackett.Common.Indexers.Definitions
         private readonly TorznabCapabilities _torznabCaps;
         private readonly ConfigurationDataAPIKey _configData;
         private readonly string _siteLink;
+        private readonly Logger _logger;
 
-        public NebulanceAPIRequestGenerator(TorznabCapabilities torznabCaps, ConfigurationDataAPIKey configData, string siteLink)
+        public NebulanceAPIRequestGenerator(TorznabCapabilities torznabCaps, ConfigurationDataAPIKey configData, string siteLink, Logger logger)
         {
             _torznabCaps = torznabCaps;
             _configData = configData;
             _siteLink = siteLink;
+            _logger = logger;
         }
 
         public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
@@ -183,15 +185,25 @@ namespace Jackett.Common.Indexers.Definitions
             }
             else
             {
-                if (query.Season > 0)
+                if (query.Season.HasValue)
                 {
-                    queryParams.Season = query.Season;
+                    queryParams.Season = query.Season.Value;
                 }
 
                 if (query.Episode.IsNotNullOrWhiteSpace() && int.TryParse(query.Episode, out var episodeNumber))
                 {
                     queryParams.Episode = episodeNumber;
                 }
+            }
+
+            if ((queryParams.Season.HasValue || queryParams.Episode.HasValue) &&
+                queryParams.Name.IsNullOrWhiteSpace() &&
+                queryParams.Release.IsNullOrWhiteSpace() &&
+                !queryParams.TvMaze.HasValue)
+            {
+                _logger.Debug("NBL API does not support season calls without name, series, id, imdb, tvmaze, or time keys.");
+
+                return new IndexerPageableRequestChain();
             }
 
             pageableRequests.Add(GetPagedRequests(queryParams, limit, offset));

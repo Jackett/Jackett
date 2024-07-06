@@ -288,7 +288,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             // Filter by Season
-            if (query.Season != 0 && !releaseInfo.Title.Contains("S" + query.Season.ToString("D2")))
+            if (query.Season.HasValue && !releaseInfo.Title.Contains("S" + query.Season.Value.ToString("D2")))
             {
                 return null;
             }

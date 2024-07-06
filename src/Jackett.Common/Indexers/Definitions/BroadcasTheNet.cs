@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers.Definitions
             else if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
             {
                 // Daily Episode
-                parameters.Name = showDate.ToString("yyyy.MM.dd");
+                parameters.Name = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
                 parameters.Category = "Episode";
                 pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
             }

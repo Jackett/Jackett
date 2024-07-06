@@ -31,7 +31,7 @@ namespace Jackett.Common.Models
         [JsonIgnore]
         public bool Cache { get; set; } = true;
 
-        public int Season { get; set; }
+        public int? Season { get; set; }
         public string Episode { get; set; }
         public string SearchTerm { get; set; }
 
@@ -227,7 +227,9 @@ namespace Jackett.Common.Models
                 if (limit != null && limit > 0)
                 {
                     if (limit > queryString.Length)
+                    {
                         limit = queryString.Length;
+                    }
 
                     queryString = queryString.Substring(0, (int)limit);
                 }
@@ -243,14 +245,20 @@ namespace Jackett.Common.Models
 
         public string GetEpisodeSearchString()
         {
-            if (Season == 0)
+            if (Season == null || Season == 0)
+            {
                 return string.Empty;
+            }
 
             string episodeString;
             if (DateTime.TryParseExact($"{Season} {Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
-                episodeString = showDate.ToString("yyyy.MM.dd");
-            else if (string.IsNullOrEmpty(Episode))
+            {
+                episodeString = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
+            }
+            else if (Episode.IsNullOrWhiteSpace())
+            {
                 episodeString = $"S{Season:00}";
+            }
             else
             {
                 try
@@ -261,8 +269,8 @@ namespace Jackett.Common.Models
                 {
                     episodeString = $"S{Season:00}E{Episode}";
                 }
-
             }
+
             return episodeString;
         }
     }
