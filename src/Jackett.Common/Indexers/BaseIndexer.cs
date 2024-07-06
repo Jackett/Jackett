@@ -182,6 +182,11 @@ namespace Jackett.Common.Indexers
                 ).ToList();
             }
 
+            if (query.FreeTorrent)
+            {
+                filteredResults = filteredResults.Where(release => release.DownloadVolumeFactor == 0.0).ToList();
+            }
+
             // eliminate excess results
             if (query.Limit > 0)
             {
