@@ -481,7 +481,9 @@
                                     <td class="fit">{{jacketTimespan PublishDate}}</td>
                                     <td class="fit">{{jacketTimespan FirstSeen}}</td>
                                     <td class="fit">{{Tracker}}</td>
-                                    <td class="Title" style="word-break: break-all"><a href="{{Details}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                                    <td class="Title" style="word-break: break-all">
+                                        {{#if Details}}<a href="{{Details}}" target="_blank">{{Title}}</a>{{else}}{{Title}}{{/if}} <span class="release-labels"></span>
+                                    </td>
                                     <td class="fit">{{Size}}</td>
                                     <td class="fit">{{jacketSize Size}}</td>
                                     <td class="fit">{{Files}}</td>
@@ -629,7 +631,9 @@
                     <td class="text-center">{{PublishDate}}</td>
                     <td class="text-center" title="{{dateFormat PublishDate format="YYYY-MM-DD HH:mm:ss Z"}}">{{jacketTimespan PublishDate}}</td>
                     <td class="text-center">{{Tracker}}</td>
-                    <td class="Title" style="word-break: break-all"><a href="{{Details}}" target="_blank">{{Title}}</a> <span class="release-labels"></span></td>
+                    <td class="Title" style="word-break: break-all">
+                        {{#if Details}}<a href="{{Details}}" target="_blank">{{Title}}</a>{{else}}{{Title}}{{/if}} <span class="release-labels"></span>
+                    </td>
                     <td class="text-right">{{Size}}</td>
                     <td class="text-right fit">{{jacketSize Size}}</td>
                     <td class="text-center">{{Files}}</td>
