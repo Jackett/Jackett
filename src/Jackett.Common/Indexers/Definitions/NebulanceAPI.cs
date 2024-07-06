@@ -5,7 +5,6 @@ using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Text.Json.Serialization;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -46,7 +45,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         // Docs at https://nebulance.io/articles.php?topic=api_key
-        protected virtual string ApiUrl => SiteLink + "api.php";
         protected virtual int KeyLength => 32;
 
         // TODO: remove ConfigurationDataAPIKey class and use ConfigurationDataPasskey instead
@@ -97,7 +95,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IIndexerRequestGenerator GetRequestGenerator()
         {
-            return new NebulanceAPIRequestGenerator(TorznabCaps, configData, ApiUrl);
+            return new NebulanceAPIRequestGenerator(TorznabCaps, configData, SiteLink);
         }
 
         public override IParseIndexerResponse GetParser()
@@ -119,6 +117,7 @@ namespace Jackett.Common.Indexers.Definitions
             try
             {
                 var results = await PerformQuery(new TorznabQuery());
+
                 if (!results.Any())
                 {
                     throw new Exception("Testing returned no results!");
@@ -140,15 +139,13 @@ namespace Jackett.Common.Indexers.Definitions
     {
         private readonly TorznabCapabilities _torznabCaps;
         private readonly ConfigurationDataAPIKey _configData;
-        private readonly string _apiUrl;
+        private readonly string _siteLink;
 
-        private readonly string[] _moveToTags = { "720p", "1080p", "2160p", "4k" };
-
-        public NebulanceAPIRequestGenerator(TorznabCapabilities torznabCaps, ConfigurationDataAPIKey configData, string apiUrl)
+        public NebulanceAPIRequestGenerator(TorznabCapabilities torznabCaps, ConfigurationDataAPIKey configData, string siteLink)
         {
             _torznabCaps = torznabCaps;
             _configData = configData;
-            _apiUrl = apiUrl;
+            _siteLink = siteLink;
         }
 
         public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
@@ -176,22 +173,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (searchQuery.IsNotNullOrWhiteSpace())
             {
-                var searchTerms = Regex.Split(searchQuery, "\\s+").ToList();
-                var movingToTags = searchTerms.Intersect(_moveToTags, StringComparer.OrdinalIgnoreCase).ToList();
-                movingToTags.ForEach(tag => searchTerms.RemoveAll(searchTerm => searchTerm.Equals(tag, StringComparison.OrdinalIgnoreCase)));
-
-                if (!searchTerms.Any())
-                {
-                    // NBL API does not support tag calls without name, series, id, imdb, tvmaze, or time keys.
-                    return new IndexerPageableRequestChain();
-                }
-
-                queryParams.Tags = movingToTags.ToArray();
-                queryParams.Name = searchTerms.Join(" ");
+                queryParams.Release = searchQuery;
             }
 
             if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
             {
+                queryParams.Name = searchQuery;
                 queryParams.Release = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
             }
             else
@@ -216,7 +203,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var webRequest = new WebRequest
             {
-                Url = _apiUrl,
+                Url = _siteLink + "api.php",
                 Type = RequestType.POST,
                 Headers = new Dictionary<string, string>
                 {
