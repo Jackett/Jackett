@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
@@ -12,6 +11,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -35,11 +35,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private string ApiEndpoint => SiteLink + "api/?";
-
-        private static readonly Regex _RegexSize = new Regex(@"\&xl=(?<size>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
-        public SubsPlease(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+        public SubsPlease(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
                    client: wc,
                    logger: l,
@@ -69,6 +65,16 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new SubsPleaseRequestGenerator(SiteLink);
+        }
+
+        public override IParseIndexerResponse GetParser()
+        {
+            return new SubsPleaseParser(SiteLink);
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -80,121 +86,160 @@ namespace Jackett.Common.Indexers.Definitions
             return IndexerConfigurationStatus.Completed;
         }
 
-        // If the search string is empty use the latest releases
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-            => query.IsTest || string.IsNullOrWhiteSpace(query.SearchTerm)
-            ? await FetchNewReleases()
-            : await PerformSearch(query);
-
-        private async Task<IEnumerable<ReleaseInfo>> PerformSearch(TorznabQuery query)
         {
-            // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
-            var searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
+            var releases = await base.PerformQuery(query);
 
-            // If the search terms contain a resolution, remove it from the query sent to the API
-            var resMatch = Regex.Match(searchTerm, "\\d{3,4}[p|P]");
-            if (resMatch.Success)
+            if (query.SearchTerm.IsNotNullOrWhiteSpace())
             {
-                searchTerm = searchTerm.Replace(resMatch.Value, string.Empty);
+                releases = releases.Where(release => query.MatchQueryStringAND(release.Title));
+
+                // If we detected a resolution in the search terms earlier, filter by it
+                var resolutionMatch = Regex.Match(query.SearchTerm, @"\d{3,4}p", RegexOptions.IgnoreCase);
+
+                if (resolutionMatch.Success)
+                {
+                    releases = releases.Where(release => release.Title.IndexOf(resolutionMatch.Value, StringComparison.OrdinalIgnoreCase) >= 0);
+                }
             }
 
-            // Only include season > 1 in searchTerm, format as S2 rather than S02
-            if (query.Season != 0)
-            {
-                searchTerm = query.Season == 1 ? searchTerm : searchTerm + $" S{query.Season}";
-                query.Season = 0;
-            }
+            return releases;
+        }
+    }
+
+    public class SubsPleaseRequestGenerator : IIndexerRequestGenerator
+    {
+        private readonly string _siteLink;
+
+        private static readonly Regex _ResolutionRegex = new Regex(@"\d{3,4}p", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public SubsPleaseRequestGenerator(string siteLink)
+        {
+            _siteLink = siteLink;
+        }
+
+        public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var queryParameters = new NameValueCollection
             {
-                { "f", "search" },
-                { "tz", "America/New_York" },
-                { "s", searchTerm }
+                { "tz", "UTC" }
             };
-            var response = await RequestWithCookiesAndRetryAsync(ApiEndpoint + queryParameters.GetQueryString());
-            if (response.Status != HttpStatusCode.OK)
+
+            if (query.SearchTerm.IsNullOrWhiteSpace())
             {
-                throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
+                queryParameters.Set("f", "latest");
             }
-
-            var results = ParseApiResults(response.ContentString);
-            var filteredResults = results.Where(release => query.MatchQueryStringAND(release.Title));
-
-            // If we detected a resolution in the search terms earlier, filter by it
-            if (resMatch.Success)
+            else
             {
-                filteredResults = filteredResults.Where(release => release.Title.IndexOf(resMatch.Value, StringComparison.OrdinalIgnoreCase) >= 0);
-            }
+                // If the search terms contain [SubsPlease] or SubsPlease, remove them from the query sent to the API
+                var searchTerm = Regex.Replace(query.SearchTerm, "\\[?SubsPlease\\]?\\s*", string.Empty, RegexOptions.IgnoreCase).Trim();
 
-            return filteredResults;
-        }
+                // If the search terms contain a resolution, remove it from the query sent to the API
+                var resolutionMatch = _ResolutionRegex.Match(searchTerm);
 
-        private async Task<IEnumerable<ReleaseInfo>> FetchNewReleases()
-        {
-            var queryParameters = new NameValueCollection
-            {
-                { "f", "latest" },
-                { "tz", "America/New_York" }
-            };
-            var response = await RequestWithCookiesAndRetryAsync(ApiEndpoint + queryParameters.GetQueryString());
-            if (response.Status != HttpStatusCode.OK)
-            {
-                throw new WebException($"SubsPlease search returned unexpected result. Expected 200 OK but got {response.Status}.", WebExceptionStatus.ProtocolError);
-            }
-
-            return ParseApiResults(response.ContentString);
-        }
-
-        private List<ReleaseInfo> ParseApiResults(string json)
-        {
-            var releaseInfo = new List<ReleaseInfo>();
-
-            // When there are no results, the API returns an empty array or empty response instead of an object
-            if (string.IsNullOrWhiteSpace(json) || json == "[]")
-            {
-                return releaseInfo;
-            }
-
-            var releases = JsonConvert.DeserializeObject<Dictionary<string, SubsPleaseRelease>>(json);
-
-            foreach (var keyValue in releases)
-            {
-                var r = keyValue.Value;
-
-                var baseRelease = new ReleaseInfo
+                if (resolutionMatch.Success)
                 {
-                    Details = new Uri(SiteLink + $"shows/{r.Page}/"),
-                    PublishDate = r.ReleaseDate.DateTime,
-                    Files = 1,
-                    Category = new List<int> { TorznabCatType.TVAnime.ID },
-                    Seeders = 1,
-                    Peers = 2,
-                    MinimumRatio = 1,
-                    MinimumSeedTime = 172800, // 48 hours
-                    DownloadVolumeFactor = 0,
-                    UploadVolumeFactor = 1
-                };
-
-                if (r.Episode.ToLowerInvariant() == "movie")
-                {
-                    baseRelease.Category.Add(TorznabCatType.MoviesOther.ID);
+                    searchTerm = searchTerm.Replace(resolutionMatch.Value, string.Empty);
                 }
 
+                // Only include season > 1 in searchTerm, format as S2 rather than S02
+                if (query.Season.HasValue && query.Season.Value > 1)
+                {
+                    searchTerm += $" S{query.Season}";
+                    query.Season = 0;
+                }
+
+                queryParameters.Set("f", "search");
+                queryParameters.Set("s", searchTerm);
+            }
+
+            pageableRequests.Add(GetRequest(queryParameters));
+
+            return pageableRequests;
+        }
+
+        private IEnumerable<IndexerRequest> GetRequest(NameValueCollection queryParameters)
+        {
+            var searchUrl = $"{_siteLink}api/?{queryParameters.GetQueryString()}";
+
+            var webRequest = new WebRequest
+            {
+                Url = searchUrl,
+                Headers = new Dictionary<string, string>
+                {
+                    { "Accept", "application/json" },
+                }
+            };
+
+            yield return new IndexerRequest(webRequest);
+        }
+    }
+
+    public class SubsPleaseParser : IParseIndexerResponse
+    {
+        private readonly string _siteLink;
+
+        private static readonly Regex _RegexSize = new Regex(@"\&xl=(?<size>\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        public SubsPleaseParser(string siteLink)
+        {
+            _siteLink = siteLink;
+        }
+
+        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
+            var releases = new List<ReleaseInfo>();
+
+            // When there are no results, the API returns an empty array or empty response instead of an object
+            if (indexerResponse.Content.IsNullOrWhiteSpace() || indexerResponse.Content == "[]")
+            {
+                return releases;
+            }
+
+            var jsonResponse = JsonConvert.DeserializeObject<Dictionary<string, SubsPleaseRelease>>(indexerResponse.Content);
+
+            foreach (var r in jsonResponse.Values)
+            {
                 foreach (var d in r.Downloads)
                 {
-                    var release = (ReleaseInfo)baseRelease.Clone();
+                    var release = new ReleaseInfo
+                    {
+                        Details = new Uri($"{_siteLink}shows/{r.Page}/"),
+                        PublishDate = r.ReleaseDate.LocalDateTime,
+                        Files = 1,
+                        Category = new List<int> { TorznabCatType.TVAnime.ID },
+                        Seeders = 1,
+                        Peers = 2,
+                        MinimumRatio = 1,
+                        MinimumSeedTime = 172800, // 48 hours
+                        DownloadVolumeFactor = 0,
+                        UploadVolumeFactor = 1
+                    };
+
+                    if (r.ImageUrl.IsNotNullOrWhiteSpace())
+                    {
+                        release.Poster = new Uri(_siteLink + r.ImageUrl.TrimStart('/'));
+                    }
+
+                    if (r.Episode.ToLowerInvariant() == "movie")
+                    {
+                        release.Category.Add(TorznabCatType.MoviesOther.ID);
+                    }
+
                     // Ex: [SubsPlease] Shingeki no Kyojin (The Final Season) - 64 (1080p)
-                    release.Title += $"[SubsPlease] {r.Show} - {r.Episode} ({d.Resolution}p)";
+                    release.Title = $"[SubsPlease] {r.Show} - {r.Episode} ({d.Resolution}p)";
                     release.MagnetUri = new Uri(d.Magnet);
                     release.Link = null;
                     release.Guid = new Uri(d.Magnet);
                     release.Size = GetReleaseSize(d);
 
-                    releaseInfo.Add(release);
+                    releases.Add(release);
                 }
             }
 
-            return releaseInfo;
+            return releases;
         }
 
         private static long GetReleaseSize(SubsPleaseDownloadInfo info)
@@ -220,26 +265,28 @@ namespace Jackett.Common.Indexers.Definitions
                 _ => 1.Gigabytes()
             };
         }
+    }
 
-        public class SubsPleaseRelease
-        {
-            public string Time { get; set; }
+    public class SubsPleaseRelease
+    {
+        public string Time { get; set; }
 
-            [JsonProperty("release_date")]
-            public DateTimeOffset ReleaseDate { get; set; }
-            public string Show { get; set; }
-            public string Episode { get; set; }
-            public SubsPleaseDownloadInfo[] Downloads { get; set; }
-            public string Xdcc { get; set; }
-            public string ImageUrl { get; set; }
-            public string Page { get; set; }
-        }
+        [JsonProperty("release_date")]
+        public DateTimeOffset ReleaseDate { get; set; }
+        public string Show { get; set; }
+        public string Episode { get; set; }
+        public SubsPleaseDownloadInfo[] Downloads { get; set; }
+        public string Xdcc { get; set; }
 
-        public class SubsPleaseDownloadInfo
-        {
-            [JsonProperty("res")]
-            public string Resolution { get; set; }
-            public string Magnet { get; set; }
-        }
+        [JsonProperty("image_url")]
+        public string ImageUrl { get; set; }
+        public string Page { get; set; }
+    }
+
+    public class SubsPleaseDownloadInfo
+    {
+        [JsonProperty("res")]
+        public string Resolution { get; set; }
+        public string Magnet { get; set; }
     }
 }
