@@ -357,6 +357,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var release = new ReleaseInfo
                 {
                     Guid = details,
+                    Details = details,
                     Link = new Uri(row.Download),
                     Title = title.Trim(),
                     Category = _categories.MapTrackerCatToNewznab(releaseCategories.FirstOrDefault() ?? "TV"),
