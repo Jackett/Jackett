@@ -87,7 +87,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var isFreeload = bool.TryParse((string)torrent["isFreeload"], out var freeload) && freeload;
 
-            if (configData.FreeloadOnly != null && configData.FreeloadOnly.Value && !isFreeload)
+            if (configData.FreeloadOnly is { Value: true } && !isFreeload)
             {
                 return true;
             }

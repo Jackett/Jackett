@@ -64,7 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
-        private int ShowPagesFetchLimit => int.TryParse(configData.ShowPagesFetchLimit.Value, out var limit) && limit > 0 && limit <= 5 ? limit : 2;
+        private int ShowPagesFetchLimit => int.TryParse(configData.ShowPagesFetchLimit.Value, out var limit) && limit is > 0 and <= 5 ? limit : 2;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {

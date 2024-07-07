@@ -82,11 +82,11 @@ namespace Jackett.Service
 
         private void StopConsoleApplication()
         {
-            if (consoleProcess != null && !consoleProcess.HasExited)
+            if (consoleProcess is { HasExited: false })
             {
                 consoleProcess.StandardInput.Close();
                 consoleProcess.WaitForExit(2000);
-                if (consoleProcess != null && !consoleProcess.HasExited)
+                if (consoleProcess is { HasExited: false })
                 {
                     consoleProcess.Kill();
                 }

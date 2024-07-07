@@ -102,7 +102,7 @@ namespace Jackett.Common.Models
             Publisher.IsNotNullOrWhiteSpace() ||
             Year.HasValue;
 
-        public bool HasSpecifiedCategories => (Categories != null && Categories.Length > 0);
+        public bool HasSpecifiedCategories => Categories is { Length: > 0 };
 
         public string SanitizedSearchTerm
         {
@@ -224,7 +224,7 @@ namespace Jackett.Common.Models
             {
                 var queryString = !string.IsNullOrWhiteSpace(queryStringOverride) ? queryStringOverride : GetQueryString();
 
-                if (limit != null && limit > 0)
+                if (limit is > 0)
                 {
                     if (limit > queryString.Length)
                     {

@@ -1535,7 +1535,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 searchString = searchString.Replace("-", " ");
 
-                if (query.Season.HasValue && query.Season > 0)
+                if (query.Season is > 0)
                 {
                     searchString += " Сезон: " + query.Season;
                 }

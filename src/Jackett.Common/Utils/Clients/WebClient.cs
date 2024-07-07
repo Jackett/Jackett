@@ -192,7 +192,7 @@ namespace Jackett.Common.Utils.Clients
                 var body = "";
                 var bodySize = 0;
                 var isBinary = false;
-                if (result.ContentBytes != null && result.ContentBytes.Length > 0)
+                if (result.ContentBytes is { Length: > 0 })
                 {
                     bodySize = result.ContentBytes.Length;
                     var contentString = result.ContentString.Trim();

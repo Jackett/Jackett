@@ -225,13 +225,13 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
                     var description = "";
                     var jAudio = row.Value<JArray>("audio");
-                    if (jAudio != null && jAudio.HasValues)
+                    if (jAudio is { HasValues: true })
                     {
                         var audioList = jAudio.Select(tag => tag.Value<string>("language")).ToList();
                         description += $"Audio: {string.Join(", ", audioList)}";
                     }
                     var jSubtitle = row.Value<JArray>("subtitle");
-                    if (jSubtitle != null && jSubtitle.HasValues)
+                    if (jSubtitle is { HasValues: true })
                     {
                         var subtitleList = jSubtitle.Select(tag => tag.Value<string>("language")).ToList();
                         description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
@@ -260,7 +260,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                         Subs = row.Value<JArray>("subtitle")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
                     };
 
-                    if (release.Size.HasValue && release.Size > 0)
+                    if (release.Size is > 0)
                     {
                         var sizeGigabytes = release.Size.Value / Math.Pow(1024, 3);
 
@@ -270,7 +270,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                     }
 
                     var jMovieTv = row.Value<JToken>("movie_tv");
-                    if (jMovieTv != null && jMovieTv.HasValues)
+                    if (jMovieTv is { HasValues: true })
                     {
                         release.Imdb = ParseUtil.GetImdbId(jMovieTv.Value<string>("imdb"));
 

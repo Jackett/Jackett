@@ -234,11 +234,11 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 queryCollection.Set("filter_cat[" + cat + "]", "1");
             }
 
-            if (configData.FreeleechOnly != null && configData.FreeleechOnly.Value)
+            if (configData.FreeleechOnly is { Value: true })
             {
                 queryCollection.Set("freetorrent", "1");
             }
-            else if (configData.FreeloadOnly != null && configData.FreeloadOnly.Value)
+            else if (configData.FreeloadOnly is { Value: true })
             {
                 queryCollection.Set("freetorrent", "4");
             }
@@ -397,7 +397,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             var isFreeleech = bool.TryParse((string)torrent["isFreeleech"], out var freeleech) && freeleech;
 
             // skip non-freeleech results when freeleech only is set
-            return configData.FreeleechOnly != null && configData.FreeleechOnly.Value && !isFreeleech;
+            return configData.FreeleechOnly is { Value: true } && !isFreeleech;
         }
 
         protected void FillReleaseInfoFromJson(ReleaseInfo release, JObject torrent)
@@ -522,7 +522,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             }
 
             var isPersonalFreeleech = (bool?)torrent["isPersonalFreeleech"];
-            if (isPersonalFreeleech != null && isPersonalFreeleech == true)
+            if (isPersonalFreeleech is true)
             {
                 release.DownloadVolumeFactor = 0;
             }

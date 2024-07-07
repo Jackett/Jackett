@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             var isPersonalFreeleech = (bool?)torrent["isPersonalFreeleech"];
-            if (isPersonalFreeleech != null && isPersonalFreeleech == true)
+            if (isPersonalFreeleech is true)
                 release.DownloadVolumeFactor = 0;
 
             var imdbID = (string)result["imdbId"];
