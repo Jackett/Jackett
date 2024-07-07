@@ -1534,11 +1534,13 @@ namespace Jackett.Common.Indexers.Definitions
             else // use the normal search
             {
                 searchString = searchString.Replace("-", " ");
-                if (query.Season.HasValue && query.Season != 0)
+
+                if (query.Season.HasValue && query.Season > 0)
                 {
                     searchString += " Сезон: " + query.Season;
                 }
-                if (!string.IsNullOrWhiteSpace(query.Episode))
+
+                if (query.Episode.IsNotNullOrWhiteSpace())
                 {
                     searchString += " Серии: " + query.Episode;
                 }
