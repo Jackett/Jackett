@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
                 else
                 {
-                    if (query.Season != 0)
+                    if (query.Season > 0)
                     {
                         requestData["tvdb"]["season"] = query.Season;
                     }
