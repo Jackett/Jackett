@@ -385,7 +385,7 @@ namespace Jackett.Common.Indexers.Definitions
                     foreach (var serie in series)
                     {
                         var link = serie["link"].ToString();
-                        var season = query.Season == 0 ? "/seasons" : "/season_" + query.Season.ToString();
+                        var season = query.Season.HasValue && query.Season > 0 ? $"/season_{query.Season}" : "/seasons";
                         var url = SiteLink + link.TrimStart('/') + season;
 
                         if (!string.IsNullOrEmpty(query.Episode)) // Fetch single episode releases

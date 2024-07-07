@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -279,7 +280,8 @@ namespace Jackett.Common.Indexers.Definitions
                 if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 {
                     var searchString = query.SanitizedSearchTerm;
-                    if (query.Season == 0 && string.IsNullOrWhiteSpace(query.Episode))
+
+                    if (!query.Season.HasValue && query.Episode.IsNullOrWhiteSpace())
                     {
                         //Jackett doesn't check for lowercase s00e00 so do it here.
                         var searchMatch = _seriesInfoSearchRegex.Match(searchString);
@@ -301,11 +303,14 @@ namespace Jackett.Common.Indexers.Definitions
                 queryParams.Add("c", Convert.ToBase64String(plainTextBytes));
             }
 
-            if (query.Season != 0)
+            if (query.Season.HasValue && query.Season > 0)
             {
                 queryParams.Add("s", query.Season.ToString());
-                if (!string.IsNullOrWhiteSpace(query.Episode))
+
+                if (query.Episode.IsNotNullOrWhiteSpace())
+                {
                     queryParams.Add("e", query.Episode);
+                }
             }
 
             var results = await RequestWithCookiesAndRetryAsync(SearchUrl + "?" + queryParams.GetQueryString());

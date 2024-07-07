@@ -123,12 +123,12 @@ namespace Jackett.Common.Indexers.Definitions
                 }
                 else
                 {
-                    if (query.Season != 0)
+                    if (query.Season.HasValue)
                     {
                         requestData["tvdb"]["season"] = query.Season;
                     }
 
-                    if (!string.IsNullOrEmpty(query.Episode))
+                    if (query.Episode.IsNotNullOrWhiteSpace())
                     {
                         requestData["tvdb"]["episode"] = query.Episode;
                     }

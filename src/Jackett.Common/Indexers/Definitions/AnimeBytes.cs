@@ -455,12 +455,12 @@ namespace Jackett.Common.Indexers.Definitions
 
                         if (FilterSeasonEpisode)
                         {
-                            if (query.Season != 0 && season != null && season != query.Season) // skip if season doesn't match
+                            if (query.Season.HasValue && query.Season > 0 && season != null && season != query.Season) // skip if season doesn't match
                             {
                                 continue;
                             }
 
-                            if (query.Episode != null && episode != null && episode != int.Parse(query.Episode)) // skip if episode doesn't match
+                            if (query.Episode.IsNotNullOrWhiteSpace() && episode != null && episode != int.Parse(query.Episode)) // skip if episode doesn't match
                             {
                                 continue;
                             }
