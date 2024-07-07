@@ -222,7 +222,7 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         // check there are results
                         var rows = table.Children;
-                        if (rows != null && rows.Length > 0)
+                        if (rows is { Length: > 0 })
                             foreach (var row in rows)
                             {
                                 var rowQuality = row.Children[0].Children[0].Children[0].TextContent;

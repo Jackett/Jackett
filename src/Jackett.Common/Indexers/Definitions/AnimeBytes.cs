@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string ScrapeUrl => SiteLink + "scrape.php";
         private bool AllowRaws => ConfigData.IncludeRaw.Value;
-        private bool PadEpisode => ConfigData.PadEpisode != null && ConfigData.PadEpisode.Value;
+        private bool PadEpisode => ConfigData.PadEpisode is { Value: true };
         private bool AddJapaneseTitle => ConfigData.AddJapaneseTitle.Value;
         private bool AddRomajiTitle => ConfigData.AddRomajiTitle.Value;
         private bool AddAlternativeTitles => ConfigData.AddAlternativeTitles.Value;
@@ -455,7 +455,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                         if (FilterSeasonEpisode)
                         {
-                            if (query.Season.HasValue && query.Season > 0 && season != null && season != query.Season) // skip if season doesn't match
+                            if (query.Season is > 0 && season != null && season != query.Season) // skip if season doesn't match
                             {
                                 continue;
                             }

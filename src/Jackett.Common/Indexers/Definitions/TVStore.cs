@@ -303,7 +303,7 @@ namespace Jackett.Common.Indexers.Definitions
                 queryParams.Add("c", Convert.ToBase64String(plainTextBytes));
             }
 
-            if (query.Season.HasValue && query.Season > 0)
+            if (query.Season is > 0)
             {
                 queryParams.Add("s", query.Season.ToString());
 

@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 // Only include season > 1 in searchTerm, format as S2 rather than S02
-                if (query.Season.HasValue && query.Season.Value > 1)
+                if (query.Season is > 1)
                 {
                     searchTerm += $" S{query.Season}";
                     query.Season = 0;

@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (Definition.RequestDelay != null)
                 webclient.requestDelay = Definition.RequestDelay.Value;
 
-            if (Definition.Login != null && Definition.Login.Method == null)
+            if (Definition.Login is { Method: null })
                 Definition.Login.Method = "form";
 
             if (Definition.Search.Paths == null)
@@ -146,7 +146,7 @@ namespace Jackett.Common.Indexers.Definitions
                         case "checkbox":
                             item = new BoolConfigurationItem(itemName) { Value = false };
 
-                            if (Setting.Default != null && Setting.Default == "true")
+                            if (Setting.Default is "true")
                             {
                                 ((BoolConfigurationItem)item).Value = true;
                             }
@@ -1557,7 +1557,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var results = response.ContentString;
 
-                if (SearchPath.Response != null && SearchPath.Response.Type.Equals("json"))
+                if (SearchPath.Response is { Type: "json" })
                 {
                     // check if we need to login again
                     var loginNeeded = CheckIfLoginIsNeeded(response);
@@ -1591,8 +1591,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
 
                     if (response.Status == HttpStatusCode.OK
-                        && SearchPath.Response != null
-                        && SearchPath.Response.NoResultsMessage != null
+                        && SearchPath.Response is { NoResultsMessage: not null }
                         && (SearchPath.Response.NoResultsMessage != string.Empty && results.Contains(SearchPath.Response.NoResultsMessage) || (SearchPath.Response.NoResultsMessage == string.Empty && results == string.Empty)))
                     {
                         continue;
@@ -1733,7 +1732,7 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         IHtmlCollection<IElement> rowsDom;
 
-                        if (SearchPath.Response != null && SearchPath.Response.Type.Equals("xml"))
+                        if (SearchPath.Response is { Type: "xml" })
                         {
                             var SearchResultParser = new XmlParser();
                             var SearchResultDocument = SearchResultParser.ParseDocument(results);
