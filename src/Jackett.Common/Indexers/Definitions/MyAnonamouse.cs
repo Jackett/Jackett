@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -163,7 +164,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Your man_id did not work");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -197,13 +200,19 @@ namespace Jackett.Common.Indexers.Definitions
             };
 
             if (configData.SearchInDescription.Value)
+            {
                 qParams.Add("tor[srchIn][description]", "true");
+            }
 
             if (configData.SearchInSeries.Value)
+            {
                 qParams.Add("tor[srchIn][series]", "true");
+            }
 
             if (configData.SearchInFilenames.Value)
+            {
                 qParams.Add("tor[srchIn][filenames]", "true");
+            }
 
             var catList = MapTorznabCapsToTrackers(query);
             if (catList.Any())
@@ -216,11 +225,15 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
             else
+            {
                 qParams.Add("tor[cat][]", "0");
+            }
 
             var urlSearch = SearchUrl;
             if (qParams.Count > 0)
+            {
                 urlSearch += $"?{qParams.GetQueryString()}";
+            }
 
             var response = await RequestWithCookiesAndRetryAsync(
                 urlSearch,
@@ -228,8 +241,11 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     {"Accept", "application/json"}
                 });
+
             if (response.ContentString.StartsWith("Error"))
+            {
                 throw new Exception(response.ContentString);
+            }
 
             var releases = new List<ReleaseInfo>();
 
@@ -239,8 +255,10 @@ namespace Jackett.Common.Indexers.Definitions
                 var sitelink = new Uri(SiteLink);
 
                 var error = jsonContent.Value<string>("error");
-                if (error != null && error == "Nothing returned, out of 0")
+                if (error.IsNotNullOrWhiteSpace() && error.StartsWithIgnoreCase("Nothing returned, out of"))
+                {
                     return releases;
+                }
 
                 foreach (var item in jsonContent.Value<JArray>("data"))
                 {
@@ -271,35 +289,47 @@ namespace Jackett.Common.Indexers.Definitions
 
                     var authorInfo = item.Value<string>("author_info");
                     if (authorInfo != null)
+                    {
                         try
                         {
                             var authorInfoList = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorInfo);
                             var author = authorInfoList?.Take(5).Select(v => v.Value).ToList();
 
                             if (author != null && author.Any())
+                            {
                                 release.Title += " by " + string.Join(", ", author);
+                            }
                         }
                         catch (Exception)
                         {
                             // the JSON on author_info field can be malformed due to double quotes
                             logger.Warn($"{Name} error parsing author_info: {authorInfo}");
                         }
+                    }
 
                     var flags = new List<string>();
 
                     var langCode = item.Value<string>("lang_code");
                     if (!string.IsNullOrEmpty(langCode))
+                    {
                         flags.Add(langCode);
+                    }
 
                     var filetype = item.Value<string>("filetype");
                     if (!string.IsNullOrEmpty(filetype))
+                    {
                         flags.Add(filetype.ToUpper());
+                    }
 
                     if (flags.Count > 0)
+                    {
                         release.Title += " [" + string.Join(" / ", flags) + "]";
+                    }
 
                     if (item.Value<bool>("vip"))
+                    {
                         release.Title += " [VIP]";
+                    }
 
                     releases.Add(release);
                 }
