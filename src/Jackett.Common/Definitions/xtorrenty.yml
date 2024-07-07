@@ -77,7 +77,7 @@ settings:
       asc: asc
 
 login:
-  path: login.html
+  path: ?do=login
   method: form
   form: form
   inputs:
@@ -85,6 +85,10 @@ login:
     login_password: "{{ .Config.password }}"
     login_not_save: ""
     login: submit
+  error:
+    - selector: div.berrors b:contains("Wystąpił błąd podczas autoryzacji")
+      message:
+        text: "Uwaga! Logowanie na stronie nie powiodło się. Nieprawidłowy adres e-mail lub hasło."
   test:
     path: /
     selector: a[href$="/index.php?action=logout"]
@@ -175,4 +179,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# DataLife v22
