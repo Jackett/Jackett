@@ -9,11 +9,10 @@ requestDelay: 2
 links:
   - https://www.torlock.com/
   - https://www.torlock2.com/
-  - https://torlock.unblockit.black/
+  - https://torlock.unblockit.meme/
 legacylinks:
   - https://torlock.com/
   - https://www.torlock.icu/
-  - https://torlock.unblockit.asia/
   - https://torlock.unblockit.mov/
   - https://torlock.unblockit.rsvp/
   - https://torlock.unblockit.vegas/
@@ -29,6 +28,7 @@ legacylinks:
   - https://torlock.unblockit.casa/
   - https://torlock.unblockit.sbs/
   - https://torlock.unblockit.ong/
+  - https://torlock.unblockit.black/
 
 caps:
   # dont forget to update the search fields category case block

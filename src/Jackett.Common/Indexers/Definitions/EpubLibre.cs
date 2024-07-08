@@ -26,12 +26,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.epublibre.org/",
-            "https://epublibre.unblockit.black/"
+            "https://epublibre.unblockit.meme/",
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://epublibre.org/",
-            "https://epublibre.unblockit.asia/",
             "https://epublibre.unblockit.mov/",
             "https://epublibre.unblockit.rsvp/",
             "https://epublibre.unblockit.vegas/",
@@ -45,6 +44,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://epublibre.unblockit.casa/",
             "https://epublibre.unblockit.sbs/", // empty response
             "https://epublibre.unblockit.ong/", // empty response
+            "https://epublibre.unblockit.black/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";

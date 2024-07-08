@@ -7,11 +7,12 @@ type: public
 encoding: UTF-8
 links:
   - https://www.oxtorrent.co/
-  - https://oxtorrent.unblockit.black/
+  - https://oxtorrent.unblockit.meme/
 legacylinks:
   - https://oxtorrent.unblockit.casa/
   - https://oxtorrent.unblockit.sbs/
   - https://oxtorrent.unblockit.ong/
+  - https://oxtorrent.unblockit.black/
 
 caps:
   categorymappings:
