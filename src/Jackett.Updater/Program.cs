@@ -521,6 +521,7 @@ namespace Jackett.Updater
                 "Definitions/netcosmo.yml",
                 "Definitions/netlab.yml",
                 "Definitions/newpct-me.yml",
+                "Definitions/nextjav.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
                 "Definitions/nitro.yml",
