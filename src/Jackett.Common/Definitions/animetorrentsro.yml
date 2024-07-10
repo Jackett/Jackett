@@ -65,14 +65,17 @@ settings:
     default: "Inactive accounts under VIP and without parked are automatically deleted after about a year."
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    x: 0
-    y: 0
     referer: /
+  selectorinputs:
+    csrf_token:
+      selector: input[name="csrf_token"]
+      attribute: value
   error:
     - selector: table.main:contains("esuat")
   test:
