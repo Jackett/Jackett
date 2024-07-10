@@ -336,7 +336,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Fappaizuri
  * FearNoPeer
  * Femdomcult
- * File-Shack
  * FileList (FL)
  * FinElite (FE)
  * FinVip
