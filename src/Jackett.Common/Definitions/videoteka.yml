@@ -76,7 +76,7 @@ settings:
   - name: info
     type: info
     label: Layout
-    default: "<ol><li>Only the Classic list is supported.</li><li>Make sure to set the <b>Torrent Listing (Prikaz torrentov)</b> option in your profile to <b>Classic</b></li><li>Using the <i>Modern</i> list will prevent results</li></ol>"
+    default: "<ul><li>Only the Classic list is supported.</li><li>Make sure to set the <b>Torrent Listing (Prikaz torrentov)</b> option in your profile to <b>Classic</b></li><li>Using the <i>Modern</i> list will prevent results</li></ul>"
 
 login:
   path: ?p=home&pid=1
