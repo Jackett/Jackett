@@ -10,13 +10,15 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.oxtorrent.la/
+  - https://www.oxtorrent.uno/
 legacylinks:
   - https://www.protege-liens.com/
+  # latest domains list
   - https://www.protege-torrent.com/
   - https://www.rantop.org/
   - https://www.torrent.ws/
-  - https://www.oxtorrent.pm/
+  - https://oxtorrent.blog/
+  # actual legacylinks
   - https://www.torrent911.pe/ # now on poster layout
   - https://oxtorrent.unblockninja.com/ # proxy for torrent911
   - https://torrent911.ninjaproxy1.com/ # proxy for torrent911
@@ -31,6 +33,7 @@ legacylinks:
   - https://www.oxtorrent.zip/
   - https://www.oxtorrent.vip/
   - https://www.oxtorrent.lol/
+  - https://www.oxtorrent.la/
 
 caps:
   categorymappings:
