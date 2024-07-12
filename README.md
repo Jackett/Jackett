@@ -380,7 +380,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDFun (HDZone)
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
  * HDKylin (麒麟)
- * HDMaYi (小蚂蚁PT站)
  * HDPT (明教) [![(invite needed)][inviteneeded]](#)
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
