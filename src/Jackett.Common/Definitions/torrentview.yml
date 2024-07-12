@@ -7,9 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://viewtorrent19.com/
+  - https://torrentview1.com/
 legacylinks:
-  - https://viewtorrent2.com/
   - https://viewtorrent4.com/
   - https://viewtorrent5.com/
   - https://viewtorrent6.com/
@@ -24,6 +23,7 @@ legacylinks:
   - https://viewtorrent16.com/
   - https://viewtorrent17.com/
   - https://viewtorrent18.com/
+  - https://viewtorrent19.com/
 
 caps:
   categorymappings:
