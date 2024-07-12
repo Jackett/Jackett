@@ -7,11 +7,11 @@ type: public
 encoding: UTF-8
 links:
   - https://isohunt.nz/
-  - https://isohunt.fun/
-  - https://isohunt.tv/
   - https://isohunt.ch/
 legacylinks:
-  - https://isohunt2.net/
+  - https://isohunt2.net/ # redirects to torrentproject.cc
+  - https://isohunt.fun/ # redirects to torrentproject.cc
+  - https://isohunt.tv/ # redirects to torrentproject.cc
 
 caps:
   categorymappings:
