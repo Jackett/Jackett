@@ -30,6 +30,7 @@ caps:
     - {id: 20, cat: Books, desc: "Book"}
     - {id: 27, cat: TV/Other, desc: "Teatr Telewizyjny"}
     - {id: 21, cat: TV/Sport, desc: "Sport"}
+    - {id: 29, cat: Movies, desc: "Stare Filmy"}
     - {id: 9, cat: TV/HD, desc: "Seriale HD"}
     - {id: 22, cat: TV/SD, desc: "Seriale SD"}
     - {id: 23, cat: Movies/UHD, desc: "Filmy 4K"}
