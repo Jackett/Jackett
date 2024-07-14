@@ -113,7 +113,7 @@ search:
     details:
       text: "/torrents/{{ .Result._id }}"
     download:
-      text: "/torrent/download/{{ .Result._id }}.{{ .Config.rsskey }}"
+      text: "/torrents/download/{{ .Result._id }}.{{ .Config.rsskey }}"
     infohash:
       selector: info_hash
     poster:
