@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://www.cpasbien.tw/
+  - https://www.cpasbien.love/
 legacylinks:
   - https://www1.cpasbiens.ws/
   - https://www2.cpasbiens.ws/
@@ -22,6 +22,7 @@ legacylinks:
   - https://www.cpasbien.gg/
   - https://www.cpasbien.vip/
   - https://cpasbien.to/
+  - https://www.cpasbien.tw/
 
 caps:
   categories:
