@@ -334,6 +334,7 @@ namespace Jackett.Updater
                 "Definitions/casatorrent.yml", // renamed to teamctgame
                 "Definitions/casstudiotv.yml",
                 "Definitions/ccfbits.yml",
+                "Definitions/centraltorrent.yml",
                 "Definitions/channelx.yml",
                 "Definitions/cheggit.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
