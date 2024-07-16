@@ -204,9 +204,10 @@ namespace Jackett.Common.Indexers.Definitions
                 releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.imdb_id);
             }
 
-            if (bhdResult.tmdb_id.IsNotNullOrWhiteSpace() && ParseUtil.TryCoerceLong(bhdResult.tmdb_id.Split('/')[1], out var tmdbResult))
+            if (bhdResult.tmdb_id.IsNotNullOrWhiteSpace())
             {
-                releaseInfo.TMDb = tmdbResult;
+                var tmdbId = bhdResult.tmdb_id.Split('/').ElementAtOrDefault(1);
+                releaseInfo.TMDb = tmdbId != null && ParseUtil.TryCoerceInt(tmdbId, out var tmdbResult) ? tmdbResult : 0;
             }
 
             releaseInfo.DownloadVolumeFactor = 1;
