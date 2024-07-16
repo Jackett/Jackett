@@ -179,7 +179,9 @@ namespace Jackett.Common.Indexers.Definitions
             LoadValuesFromJson(configJson);
 
             if (configData.Passkey.Value.Length != 32)
+            {
                 throw new Exception("Invalid Passkey configured. Expected length: 32");
+            }
 
             var releases = await PerformQuery(new TorznabQuery());
 
@@ -266,7 +268,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                         //SPECIAL CASES
                         if (GetFreeLeech && dlVolumeFactor == 1)
+                        {
                             continue;
+                        }
 
                         if (GetReplaceMulti)
                         {
@@ -315,8 +319,13 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 response = await RequestWithCookiesAsync(link.ToString());
             }
-            else if (response.Status != HttpStatusCode.OK)
-                throw new Exception($"Unknown error in download: {response.ContentBytes}");
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                logger.Debug("Unknown error in download: {0}", response.ContentString);
+
+                throw new Exception($"Unexpected status code: {(int)response.Status} ({response.Status})");
+            }
 
             return response.ContentBytes;
         }
