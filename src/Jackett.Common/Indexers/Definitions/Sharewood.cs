@@ -48,8 +48,8 @@ namespace Jackett.Common.Indexers.Definitions
                    cacheService: cs,
                    configData: new ConfigurationDataPasskey())
         {
-            // requestDelay for API Limit (1 request per 2 seconds)
-            webclient.requestDelay = 2.1;
+            // requestDelay for API Limit (1 request per 4 seconds)
+            webclient.requestDelay = 4.1;
 
             var freeLeechOnly = new BoolConfigurationItem("Search freeleech only");
             configData.AddDynamic("freeleechonly", freeLeechOnly);
