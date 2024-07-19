@@ -209,15 +209,9 @@ search:
     size:
       selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(6)
-      filters:
-        - name: split
-          args: ["|", 0]
+      selector: span[title="Раздают"]
     leechers:
-      selector: td:nth-child(6)
-      filters:
-        - name: split
-          args: ["|", 1]
+      selector: span[title="Качают"]
     date_today:
       # Сегодня в 18:22
       selector: a[href^="browse.php?date="]:contains("Сегодня")
