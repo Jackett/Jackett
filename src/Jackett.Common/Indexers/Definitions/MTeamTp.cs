@@ -215,10 +215,10 @@ namespace Jackett.Common.Indexers.Definitions
                 searchQuery.Discount = "FREE";
             }
 
-            var ApiUrl = "https://api." + $"{SiteLink}".Substring(SiteLink.IndexOf('.') + 1);
+            var apiUrl = "https://api." + $"{SiteLink}".Substring(SiteLink.IndexOf('.') + 1);
 
             var response = await RequestWithCookiesAndRetryAsync(
-                $"{ApiUrl}api/torrent/search",
+                $"{apiUrl}api/torrent/search",
                 method: RequestType.POST,
                 rawbody: STJson.ToJson(searchQuery),
                 headers: new Dictionary<string, string>
@@ -240,6 +240,13 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (jsonResponse?.Data?.Torrents == null)
             {
+                if (jsonResponse != null &&
+                    jsonResponse.Message.IsNotNullOrWhiteSpace() &&
+                    jsonResponse.Message.ToUpperInvariant() != "SUCCESS")
+                {
+                    throw new Exception($"Invalid response received from M-Team. Response from API: {jsonResponse.Message}");
+                }
+
                 return releases;
             }
 
@@ -247,7 +254,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var torrentId = int.Parse(torrent.Id);
                 var infoUrl = new Uri($"{SiteLink}detail/{torrentId}");
-                var downloadUrl = new Uri($"{ApiUrl}api/torrent/genDlToken?id={torrentId}");
+                var downloadUrl = new Uri($"{apiUrl}api/torrent/genDlToken?id={torrentId}");
 
                 var release = new ReleaseInfo
                 {
@@ -330,6 +337,7 @@ namespace Jackett.Common.Indexers.Definitions
     internal class MTeamTpApiResponse
     {
         public MTeamTpApiData Data { get; set; }
+        public string Message { get; set; }
     }
 
     internal class MTeamTpApiData
