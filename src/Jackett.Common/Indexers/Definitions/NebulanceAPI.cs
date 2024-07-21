@@ -178,9 +178,15 @@ namespace Jackett.Common.Indexers.Definitions
                 queryParams.Release = searchQuery;
             }
 
-            if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            if (query.Season.HasValue &&
+                query.Episode.IsNotNullOrWhiteSpace() &&
+                DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
             {
-                queryParams.Name = searchQuery;
+                if (searchQuery.IsNotNullOrWhiteSpace())
+                {
+                    queryParams.Name = searchQuery;
+                }
+
                 queryParams.Release = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
             }
             else
@@ -206,8 +212,7 @@ namespace Jackett.Common.Indexers.Definitions
                 return new IndexerPageableRequestChain();
             }
 
-
-            if (queryParams.Name is { Length: < 3 } || queryParams.Release is { Length: < 3 })
+            if (queryParams.Name is { Length: > 0 and < 3 } || queryParams.Release is { Length: > 0 and < 3 })
             {
                 _logger.Debug("NBL API does not support release calls that are 2 characters or fewer.");
 
