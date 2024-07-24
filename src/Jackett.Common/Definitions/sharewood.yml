@@ -137,7 +137,7 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["[\\:\\-\\/\\|]+", " "]
+      args: ["[\\:\\-\\/\\|\\(\\)]+", " "]
 
   rows:
     selector: div.table-responsive-line

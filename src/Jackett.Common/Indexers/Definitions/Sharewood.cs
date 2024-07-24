@@ -203,7 +203,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             var term = query.GetQueryString().Trim();
-            term = Regex.Replace(term, @"[\:\-\/\|]+", " ");
+            term = Regex.Replace(term, @"[\:\-\/\|\(\)]+", " ");
 
             foreach (var categoryId in categoryMapping)
             {
