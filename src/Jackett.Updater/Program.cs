@@ -276,6 +276,7 @@ namespace Jackett.Updater
                 "Definitions/anime-free.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
+                "Definitions/animetime.yml",
                 "Definitions/animetracker.yml",
                 "Definitions/animeworld.yml", // switch to *-API #8682
                 "Definitions/anitoons.yml",
