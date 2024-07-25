@@ -732,6 +732,7 @@ namespace Jackett.Updater
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/xxxtorrents.yml",
+                "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Definitions/zooqle.yml",
