@@ -15,11 +15,13 @@ caps:
     - {id: 32, cat: Movies/HD, desc: "HD"}
     - {id: 114, cat: Movies/UHD, desc: "UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "BluRay"}
+    - {id: 143, cat: TV/Anime, desc: "Anime"}
     - {id: 138, cat: Movies, desc: "Pack`s"}
     # Serien
     - {id: 60, cat: TV/SD, desc: "SD"}
     - {id: 57, cat: TV/HD, desc: "HD"}
     - {id: 139, cat: TV/UHD, desc: "UHD"}
+    - {id: 144, cat: TV/Anime, desc: "Anime"}
     - {id: 59, cat: TV, desc: "Pack`s"}
     # Audio
     - {id: 110, cat: Audio/MP3, desc: "MP3"}
