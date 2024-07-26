@@ -6,12 +6,12 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://www.torrentbd.net/
   - https://www.torrentbd.org/
 legacylinks:
   - http://www.torrentbd.com/torrent
   - http://www.torrentbd.com/
   - https://www.torrentbd.com/
-  - https://www.torrentbd.net/
 
 caps:
   categorymappings:
