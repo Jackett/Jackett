@@ -258,7 +258,8 @@ namespace Jackett.Common.Indexers.Definitions
                 await ApplyConfiguration(null);
                 response = await RequestWithCookiesAndRetryAsync(searchUrl);
             }
-            else if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
+
+            if (response.ContentString != null && response.ContentString.Contains("failure") && useApiKey)
             {
                 // reason for failure should be explained.
                 var jsonError = JObject.Parse(response.ContentString);
@@ -270,7 +271,12 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var json = JObject.Parse(response.ContentString);
 
-                foreach (var gObj in JObject.FromObject(json["response"]))
+                if (json.Value<object>("response") is not JObject results)
+                {
+                    return releases;
+                }
+
+                foreach (var gObj in results)
                 {
                     var groupId = int.Parse(gObj.Key);
                     var group = gObj.Value as JObject;
