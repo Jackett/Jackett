@@ -32,6 +32,8 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: downloadlink
     type: select
     label: Download link
