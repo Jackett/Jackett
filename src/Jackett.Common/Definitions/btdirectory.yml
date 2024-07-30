@@ -1,0 +1,76 @@
+---
+id: btdirectory
+name: BTdirectory
+description: "BTdirectory (BT目录) is a Public DHT Crawler"
+language: en-US
+type: public
+encoding: UTF-8
+# current domain at https://cursor.vip/btmulu then follow links to the final search-movie link
+links:
+  - https://btmulu.work/
+  - https://www.btmulu.digital/
+
+caps:
+  categorymappings:
+    - {id: Other, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+search:
+  paths:
+    # https://www.btmulu.digital/search-create.html
+    # https://btmulu.work/search.html?name=the+boys+s04e08
+    - path: "{{ if .Keywords }}search.html{{ else }}search-create.html{{ end }}"
+  inputs:
+    name: "{{ re_replace .Keywords \"[\\s]+\" \"+\" }}"
+
+  rows:
+    selector: article.item
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: h4
+      remove: span
+    details:
+      selector: a[href^="/hash/"]
+      attribute: href
+    infohash:
+      selector: article.item
+      attribute: data-key
+    date:
+      selector: p
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
+    files:
+      selector: p
+      filters:
+        - name: regexp
+          args: "File Count：(\\d+)"
+    size:
+      selector: p
+      filters:
+        - name: regexp
+          args: "Size：(\\d+\\.?\\d+ [K|M|G]B)"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
