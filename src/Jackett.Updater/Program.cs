@@ -494,7 +494,6 @@ namespace Jackett.Updater
                 "Definitions/lilleskyorg.yml",
                 "Definitions/limetorrentsclone.yml",
                 "Definitions/mactorrents.yml",
-                "Definitions/madsrevolution.yml",
                 "Definitions/magicheaven.yml",
                 "Definitions/magico.yml", // renamed to trellas
                 "Definitions/magnet4you.yml",
