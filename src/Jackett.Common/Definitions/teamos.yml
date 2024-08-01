@@ -16,7 +16,6 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 18, cat: PC, desc: "Team-OS VIP Releases"}
-    - {id: 23, cat: PC, desc: "Team OS Program"}
     - {id: 19, cat: PC, desc: "Windows 7 Releases"}
     - {id: 20, cat: PC, desc: "Windows 7 Releases 32 Bit"}
     - {id: 21, cat: PC, desc: "Windows 7 Releases 64 Bit"}
@@ -29,6 +28,7 @@ caps:
     - {id: 109, cat: PC, desc: "Windows 10 Releases 64 Bit"}
     - {id: 110, cat: PC, desc: "Windows 10 Releases x86-x64 AIO"}
     - {id: 28, cat: PC, desc: "Operating Systems"}
+    - {id: 175, cat: PC, desc: "Windows AIO Operating Systems"}
     - {id: 29, cat: PC, desc: "Windows XP"}
     - {id: 30, cat: PC, desc: "Windows XP 32 Bit"}
     - {id: 31, cat: PC, desc: "Windows XP 64 Bit"}
@@ -46,14 +46,9 @@ caps:
     - {id: 44, cat: PC, desc: "Windows 10 (x64)"}
     - {id: 45, cat: PC, desc: "Windows 10 (x86 & x64)"}
     - {id: 157, cat: PC, desc: "Windows 11"}
-    - {id: 158, cat: PC, desc: "Windows 11 (x86)"}
     - {id: 159, cat: PC, desc: "Windows 11 (x64)"}
-    - {id: 160, cat: PC, desc: "Windows 11 (x86 & x64)"}
     - {id: 140, cat: PC/Mac, desc: "MacOS"}
     - {id: 41, cat: PC, desc: "Windows Servers/Old Windows OS/Others"}
-    - {id: 112, cat: PC, desc: "Windows Servers Ghost Images"}
-    - {id: 113, cat: PC, desc: "Windows Servers 32 Bit Ghost Images"}
-    - {id: 114, cat: PC, desc: "Windows Servers 64 Bit Ghost Images"}
     - {id: 46, cat: PC/ISO, desc: "Windows Untouched ISO(MSDN)"}
     - {id: 47, cat: PC, desc: "Windows 7 Untouched (MSDN)"}
     - {id: 48, cat: PC, desc: "Windows 7 32 Bit Untouched (MSDN)"}
