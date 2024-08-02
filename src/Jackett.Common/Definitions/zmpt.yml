@@ -184,4 +184,4 @@ search:
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "
-# NexusPHP v1.8.8 2023-09-25
+# NexusPHP v1.8.12 2023-06-13
