@@ -58,6 +58,10 @@ settings:
     type: info
     label: Account Inactivity
     default: "There is an automatic system for blocking inactive accounts. The system will block any account below Heb Prophet rank without activity for at least 90 days."
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Login failed: Selector \"a[href*=\"/logout.php?auth=\"]\" didn't match</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
 
 login:
   method: cookie
