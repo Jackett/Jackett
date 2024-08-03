@@ -22,7 +22,7 @@ caps:
     - {id: 1070, cat: Audio/Lossless, desc: "Audio: Musik/Flac"}
     - {id: 1014, cat: Audio/MP3, desc: "Audio: Musik/MP3"}
     - {id: 1071, cat: Audio, desc: "Audio: Soundtracks"}
-    - {id: 1110, cat: Audio, desc: "Audio: Musik WOTT"}
+    - {id: 1110, cat: Audio, desc: "Audio: WOTT"}
     - {id: 1049, cat: Movies/HD, desc: "Filme: 1080p"}
     - {id: 1090, cat: Movies/3D, desc: "Filme: 3D"}
     - {id: 1048, cat: Movies/HD, desc: "Filme: 720p"}
