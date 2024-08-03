@@ -246,8 +246,7 @@ namespace Jackett.Common.Indexers.Definitions
                     else if (row.QuerySelector("img[src$=\"75.png\"]") != null)
                         dlVolumeFactor = 0.25;
 
-                    var imdbLink = row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href");
-                    var imdb = !string.IsNullOrWhiteSpace(imdbLink) ? ParseUtil.GetLongFromString(imdbLink) : null;
+                    var imdb = ParseUtil.GetImdbId(row.QuerySelector("a[href*=\"www.imdb.com/title/\"]")?.GetAttribute("href")?.TrimEnd('/')?.Split('/')?.LastOrDefault());
 
                     var release = new ReleaseInfo
                     {

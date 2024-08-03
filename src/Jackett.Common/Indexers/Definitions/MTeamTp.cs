@@ -290,7 +290,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (torrent.Imdb.IsNotNullOrWhiteSpace())
                 {
-                    release.Imdb = ParseUtil.GetImdbId(torrent.Imdb.Split('/').LastOrDefault()).GetValueOrDefault();
+                    release.Imdb = ParseUtil.GetImdbId(torrent.Imdb.TrimEnd('/').Split('/').LastOrDefault()).GetValueOrDefault();
                 }
 
                 if (torrent.Status?.CreatedDate != null &&
