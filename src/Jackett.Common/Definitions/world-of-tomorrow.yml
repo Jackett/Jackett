@@ -38,7 +38,7 @@ caps:
     - {id: 1079, cat: TV/HD, desc: "Serien: 1080P"}
     - {id: 1095, cat: TV/UHD, desc: "Serien: 2160P"}
     - {id: 1078, cat: TV/HD, desc: "Serien: 720P"}
-    - {id: 1105, cat: TV/Anime, desc: "Serien; Anime"}
+    - {id: 1105, cat: TV/Anime, desc: "Serien: Anime"}
     - {id: 1100, cat: TV/HD, desc: "Serien: Packs HD"}
     - {id: 1016, cat: TV/SD, desc: "Serien: Packs-SD"}
     - {id: 1077, cat: TV/SD, desc: "Serien: SD"}
