@@ -1,0 +1,131 @@
+---
+id: elitetorrent-wf
+name: Elitetorrent-wf
+description: "Elitetorrent-wf is a SPANISH Public tracker for MOVIES / TV"
+language: es-ES
+type: public
+encoding: UTF-8
+links:
+  - https://www.elitetorrent.wf/
+
+caps:
+  categories:
+    series: TV
+    peliculas: Movies
+    other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?"]
+      attribute: href
+
+search:
+  paths:
+    - path: /
+  allowEmptyInputs: true
+  keywordsfilters:
+    # most ES/ITA TV torrents are in XXxYY format, so we search without S/E prefixes and filter later
+    - name: re_replace
+      args: ["(?i)S0?(\\d{1,2})", " $1 "]
+    - name: re_replace
+      args: ["(?i)E(\\d{2,3})", " $1 "]
+  inputs:
+    s: "{{ .Keywords }}"
+    x: 0
+    y: 0
+
+  rows:
+    selector: "#principal .miniboxs-ficha li:has(span:nth-of-type(2))"
+    filters:
+      - name: andmatch
+
+  fields:
+    category_movie:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(peliculas)/.*$"
+    category_tv:
+      selector: .meta a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^.*/(series)/.*$"
+    category:
+      text: "{{ if or .Result.category_movie .Result.category_tv }}{{ or .Result.category_movie .Result.category_tv }}{{ else }}other{{ end }}"
+    _quality:
+      selector: span:nth-of-type(2) > i
+      filters:
+        - name: replace
+          args: ["---", ""]
+    _language:
+      selector: span#idiomacio > i > img
+      attribute: title
+      filters:
+        - name: replace
+          args: ["Pelicula en ", ""]
+        - name: replace
+          args: ["Español Latino", "LATiN SPANiSH"]
+        - name: replace
+          args: ["Español Castellano", "SPANiSH"]
+        - name: replace
+          args: ["Ingles", "English"]
+        - name: replace
+          args: ["Subtitulado", " SPASUBS"]
+        - name: replace
+          args: ["VOSE", ""]
+    title:
+      selector: div.imagen > a
+      attribute: title
+      # normalize to SXXEYY format
+      filters:
+        - name: replace
+          args: [" – ", " "]
+        - name: replace
+          args: ["(", ""]
+        - name: replace
+          args: [")", ""]
+        - name: re_replace
+          args: ["(\\d{2})×(\\d{2})", "S$1E$2"]
+        - name: re_replace
+          args: ["(\\d{1})×(\\d{2})", "S0$1E$2"]
+        - name: append
+          args: " {{ .Result._quality }} {{ .Result._language }}"
+    details:
+      selector: .meta a
+      attribute: href
+    download:
+      selector: .meta a
+      attribute: href
+    poster:
+      selector: .imagen img
+      attribute: data-src
+    size_optional:
+      selector: .voto1
+      optional: true
+      filters:
+        - name: replace
+          args: ["desc.", "512 MB"]
+        - name: replace
+          args: ["s", ""]
+    size:
+      text: "{{ if .Result.size_optional }}{{ .Result.size_optional }}{{ else }}512 MB{{ end }}"
+    date:
+      text: now
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
