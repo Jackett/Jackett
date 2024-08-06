@@ -423,6 +423,7 @@ namespace Jackett.Updater
                 "Definitions/greeklegends.yml",
                 "Definitions/greekteam.yml",
                 "Definitions/gtorrent.yml",
+                "Definitions/h-p2p.yml",
                 "Definitions/hachede-c.yml",
                 "Definitions/hachede.yml",
                 "Definitions/hamsterstudio.yml",
