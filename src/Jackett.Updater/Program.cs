@@ -598,6 +598,7 @@ namespace Jackett.Updater
                 "Definitions/rus-media.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
+                "Definitions/scenelinks.yml",
                 "Definitions/scenepalace.yml",
                 "Definitions/scenereactor.yml",
                 "Definitions/scenexpress.yml",
