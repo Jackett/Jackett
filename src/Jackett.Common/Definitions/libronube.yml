@@ -1,0 +1,75 @@
+---
+id: libronube
+name: Libronube
+description: "Libronube is a Spanish Public tracker for EBOOKS"
+language: es-ES
+type: public
+encoding: UTF-8
+links:
+  - https://www.libronube.com/
+
+caps:
+  categorymappings:
+    - {id: ebook, cat: Books, desc: "EBook"}
+
+  modes:
+    search: [q]
+    book-search: [q]
+
+settings:
+  - name: ebook
+    type: select
+    label: Ebook Type
+    default: epub
+    options:
+      epub: EPUB
+      mobi: MOBI
+      pdf: PDF
+
+download:
+  selectors:
+    - selector: "a[href*=\"magnet\"][href*=\"{{ .Config.ebook }}\"]"
+      attribute: href
+      filters:
+        - name: replace
+          args: ["http://demagnetize.link/?magnet=", ""]
+        - name: urldecode
+
+search:
+  paths:
+    - path: dibros/
+  allowEmptyInputs: true
+  inputs:
+    q1: "{{ .Keywords }}"
+    sin_filtrar: on
+
+  rows:
+    selector: div.row[style^="margin-top"][style*="margin-bottom"]:first-of-type > div.ebookitem
+
+  fields:
+    category:
+      text: ebook
+    title:
+      selector: h1
+    details:
+      selector: a[href^="/descargar-"]
+      attribute: href
+    download:
+      selector: a[href^="/descargar-"]
+      attribute: href
+    poster:
+      selector: img.tapa
+      attribute: src
+    date:
+      text: now
+    size:
+      text: 512 MB
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
