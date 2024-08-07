@@ -70,6 +70,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(55, TorznabCatType.XXX, "Hentai");
             caps.Categories.AddCategoryMapping(56, TorznabCatType.XXXOther, "H Doujinshi");
             caps.Categories.AddCategoryMapping(57, TorznabCatType.TVOther, "Tokusatsu");
+            caps.Categories.AddCategoryMapping(58, TorznabCatType.TVOther, "Live Action");
 
             return caps;
         }
