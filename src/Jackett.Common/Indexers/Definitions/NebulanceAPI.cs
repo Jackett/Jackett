@@ -10,6 +10,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Serializer;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -55,12 +56,12 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public NebulanceAPI(IIndexerConfigurationService configService, WebClient wc, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataAPIKey())
         {
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(string.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));

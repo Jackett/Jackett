@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -20,12 +21,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public PrivateHD(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                         ICacheService cs)
+                         CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs
+                   cm: cm
                    )
         {
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To avoid account deletion you must login at least 1 time every 90 days, and you must download at least 1 torrent every 6 months. Simply keeping torrents seeding long term will not protect your account"));

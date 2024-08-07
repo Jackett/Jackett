@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json;
@@ -38,12 +39,12 @@ namespace Jackett.Common.Indexers.Definitions
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "tracker.php";
 
-        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+        public Toloka(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataToloka())
         {
         }

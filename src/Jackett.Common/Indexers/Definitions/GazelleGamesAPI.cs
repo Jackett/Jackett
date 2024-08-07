@@ -10,6 +10,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -38,12 +39,12 @@ namespace Jackett.Common.Indexers.Definitions
         protected override int ApiKeyLength => 64;
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    supportsFreeleechTokens: true,
                    supportsFreeleechOnly: true,
                    has2Fa: false,
