@@ -10,7 +10,7 @@ links:
   # if the primary domain changes then don't forget to update the details, download and poster replace args
   - https://yts.mx/
 # official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
-  - https://yts.unblockit.meme/
+  - https://yts.unblockit.download/
   - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
@@ -18,7 +18,9 @@ links:
   - https://yts.torrentbay.st/
   - https://yts.torrentsbay.org/
 legacylinks:
-  - https://yts.unblockit.mov/
+  - https://yts.lt/
+  - https://yts.am/
+  - https://yts.ag/
   - https://yts.unblockit.rsvp/
   - https://yts.unblockit.vegas/
   - https://yts.unblockit.esq/
@@ -35,9 +37,7 @@ legacylinks:
   - https://yts.unblockit.ong/
   - https://yts.abcproxy.org/
   - https://yts.unblockit.black/
-  - https://yts.lt/
-  - https://yts.am/
-  - https://yts.ag/
+  - https://yts.unblockit.meme/
 
 caps:
   categorymappings:

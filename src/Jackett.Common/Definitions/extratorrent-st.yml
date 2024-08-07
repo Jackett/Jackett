@@ -11,8 +11,6 @@ links:
   - https://extratorrent.proxyninja.org/
   - https://extratorrent.proxyninja.net/
 legacylinks:
-  - https://extratorrent.unblockit.mov/
-  - https://extratorrent.mrunblock.life/
   - https://extratorrent.unblockit.rsvp/
   - https://extratorrent.unblockit.vegas/
   - https://extratorrent.unblockit.esq/
@@ -29,6 +27,7 @@ legacylinks:
   - https://extratorrent.unblockit.ong/ # 502
   - https://extratorrent.unblockit.black/ # 502
   - https://extratorrent.unblockit.meme/ # 502
+  - https://extratorrent.unblockit.download/ # 502
 
 caps:
   categorymappings:

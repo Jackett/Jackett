@@ -8,11 +8,10 @@ encoding: UTF-8
 links:
   - https://glodls.to/
   - https://gtso.cc/
-  - https://glotorrents.unblockit.meme/
+  - https://glotorrents.unblockit.download/
 legacylinks:
   - https://glodls.rocks/
   - https://gtdb.to/
-  - https://glotorrents.unblockit.mov/
   - https://glotorrents.unblockit.rsvp/
   - https://gtdb.cc/
   - https://glotorrents.unblockit.vegas/
@@ -32,6 +31,7 @@ legacylinks:
   - https://glodls.unblockninja.com/ # blank
   - https://glodls.ninjaproxy1.com/ # blank
   - https://glotorrents.unblockit.black/
+  - https://glotorrents.unblockit.meme/
 
 caps:
   categorymappings:
