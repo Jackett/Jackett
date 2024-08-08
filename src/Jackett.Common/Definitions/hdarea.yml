@@ -81,6 +81,11 @@ login:
     path: index.php
     selector: a[href="usercp.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     - path: torrents.php
@@ -127,7 +132,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-last-child(6) > span[title]
       attribute: title
       optional: true
       filters:
@@ -137,7 +142,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-last-child(6):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -147,13 +152,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-last-child(5)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-last-child(4)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-last-child(3)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-last-child(2)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -173,4 +178,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP Standard v1.5 Beta 4  (customised)
