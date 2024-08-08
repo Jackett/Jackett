@@ -458,6 +458,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NCore [![(invite needed)][inviteneeded]](#)
  * Nebulance (NBL) (TransmiTheNet)
+ * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
  * NorBits
  * NORDiCHD
@@ -587,7 +588,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TorrentDay (TD)
  * TorrentDD
  * Torrenteros (TTR)
- * TorrentHeaven (German) [![(invite needed)][inviteneeded]](#)
  * TorrentHR [![(invite needed)][inviteneeded]](#)
  * Torrenting (TT)
  * Torrentland

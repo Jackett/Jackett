@@ -1,0 +1,203 @@
+---
+id: newheaven
+name: New Heaven
+description: New Heaven is a GERMAN Private tracker for MOVIES / AUDIO / TV / GENERAL
+language: de-DE
+type: private
+encoding: iso-8859-1
+requestDelay: 2
+links:
+  - https://newheaven.nl/
+legacylinks:
+  - https://torrentheaven.myfqdn.info/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC/Games, desc: GAMES- PC}
+    - {id: 3, cat: Console, desc: GAMES - Sonstige}
+    - {id: 59, cat: Console/PS4, desc: GAMES - PlayStation}
+    - {id: 60, cat: Console/PSP, desc: GAMES- PSP}
+    - {id: 63, cat: Console/Wii, desc: GAMES - Wii}
+    - {id: 67, cat: Console/XBox 360, desc: GAMES - XBOX 360}
+    - {id: 68, cat: PC/Mobile-Other, desc: GAMES - PDA / Handy}
+    - {id: 72, cat: Console/NDS, desc: GAMES - NDS}
+    - {id: 101, cat: Movies/HD, desc: MOVIES - 720p}
+    - {id: 102, cat: Movies/HD, desc: MOVIES - 1080p}
+    - {id: 103, cat: Movies/HD, desc: MOVIES - AVCHD}
+    - {id: 7, cat: Movies/DVD, desc: MOVIES - DVD}
+    - {id: 8, cat: Movies/SD, desc: MOVIES - SD}
+    - {id: 37, cat: Movies/DVD, desc: MOVIES - DVD Spezial}
+    - {id: 109, cat: Movies/UHD, desc: MOVIES - 4K}
+    - {id: 104, cat: Movies/BluRay, desc: MOVIES - Blu Ray}
+    - {id: 106, cat: Movies/3D, desc: MOVIES - 3D}
+    - {id: 41, cat: Movies/Foreign, desc: MOVIES - International}
+    - {id: 14, cat: Audio/MP3, desc: AUDIO - Musik}
+    - {id: 36, cat: Audio/Lossless, desc: AUDIO - Flac}
+    - {id: 15, cat: Audio/Audiobook, desc: AUDIO - Hörbücher}
+    - {id: 16, cat: Audio/Audiobook, desc: AUDIO - Hörspiele}
+    - {id: 58, cat: Audio/Video, desc: AUDIO - Musikvideos}
+    - {id: 42, cat: Audio/Other, desc: AUDIO/Soundtracks}
+    - {id: 18, cat: TV/SD, desc: TV/Serien - Serien SD}
+    - {id: 19, cat: TV/HD, desc: TV/Serien - Serien 720p}
+    - {id: 20, cat: TV/HD, desc: TV/Serien - Serien 1080p}
+    - {id: 49, cat: TV/SD, desc: TV/Serien - DVD}
+    - {id: 110, cat: TV/UHD, desc: TV/Serien - 4k}
+    - {id: 53, cat: TV, desc: TV/Serien - Serien Complete Packs}
+    - {id: 51, cat: TV/Documentary, desc: TV/Serien - Doku SD}
+    - {id: 52, cat: TV/Documentary, desc: TV/Serien - Doku HD}
+    - {id: 54, cat: TV/Sport, desc: TV/Serien - Sport}
+    - {id: 66, cat: TV/Foreign, desc: TV - International}
+    - {id: 108, cat: TV/Anime, desc: TV/Serien - Anime}
+    - {id: 22, cat: Books/EBook, desc: MISC - EBooks}
+    - {id: 24, cat: Other, desc: MISC - Sonstiges}
+    - {id: 25, cat: Other, desc: MISC- Tonspuren}
+    - {id: 28, cat: PC, desc: APPLICATIONS - PC}
+    - {id: 29, cat: PC/Mobile-Other, desc: APPLICATIONS - Mobile}
+    - {id: 30, cat: PC, desc: APPLICATIONS - Sonstige}
+    - {id: 70, cat: PC, desc: APPLICATIONS - Linux}
+    - {id: 71, cat: PC/Mac, desc: APPLICATIONS - Mac}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: torrent_added
+    options:
+      torrent_added: created
+      torrent_seeder: seeders
+      torrent_size: size
+      torrent_name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: d
+    options:
+      d: desc
+      a: asc
+      n: none
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="index.php?strWebValue=account&strWebAction=logout"]
+
+search:
+  paths:
+    # 25 rows per page
+    - path: index.php
+      inputs:
+        page: 0
+    - path: index.php
+      inputs:
+        page: 1
+    - path: index.php
+      inputs:
+        page: 2
+    - path: index.php
+      inputs:
+        page: 3
+
+  inputs:
+    strWebValue: torrent
+    strWebAction: search
+    # title, info, descr, all
+    details: "{{ if .Query.IMDBID }}descr{{ else }}title{{ end }}"
+    do_search: suchen
+    # 0 any, 1 1day, 2 1week, 3 30days, 4 90days
+    time: 0
+    sort: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+    # 0 active, 1 inactive, 2 all
+    type: 2
+    $raw: "{{ range .Categories }}dirs{{.}}=1&{{end}}"
+    searchstring: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+
+  rows:
+    selector: table.torrenttable > tbody > tr:not(:has(td.torrenttableheader))
+
+  fields:
+    category:
+      selector: a[href^="index.php?strWebValue=torrent&strWebAction=search&dir="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: dir
+    title:
+      selector: a[href^="index.php?strWebValue=torrent&strWebAction=details&id="]
+    details:
+      selector: a[href^="index.php?strWebValue=torrent&strWebAction=details&id="]
+      attribute: href
+    download:
+      selector: a[href^="index.php?strWebValue=torrent&strWebAction=download&id="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+      filters:
+        - name: querystring
+          args: url
+      # 2 flavours of dates
+    date_day:
+      # Heute 13:30
+      # Gestern 09:10
+      selector: font:has(a):contains("Heute"), font:has(a):contains("Gestern")
+      optional: true
+      filters:
+        - name: regexp
+          args: "((Heute|Gestern)\\s\\d{2}\\:\\d{2}))"
+        - name: replace
+          args: ["Heute", "Today"]
+        - name: replace
+          args: ["Gestern", "Yesterday"]
+        - name: append
+          args: "+01:00" # CET
+    date_year:
+      # 16.04.2021 20:01
+      selector: font:has(a):not(:contains("Heute")):not(:contains("Gestern"))
+      optional: true
+      filters:
+        - name: regexp
+          args: "(\\d{2}\\.\\d{2}.\\d{4})\\s\\d{2}\\:\\d{2})"
+        - name: append
+          args: "+01:00" # CET
+        - name: dateparse
+          args: "dd.MM.yyyy HH:mm zzz"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img[src$="/DL50.png"]: 0.5
+        img[src$="/DL25.png"]: 0.25
+        img[src$="/freeleech.png"]: 0
+        img[src$="/onlyup.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="/freeleech.png"]: 0
+        div:has("200% UP"): 2 # probably incorrect as there are no div in rows
+        img[title*="200% UP"]: 2 # unconfirmed, guess based on previous div:has()
+        "*": 1
+    minimumratio:
+      text: 0.8
+# Aeonflux
