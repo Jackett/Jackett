@@ -68,6 +68,8 @@ settings:
   - name: cookie
     type: text
     label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: sort
     type: select
     label: Sort requested from site
