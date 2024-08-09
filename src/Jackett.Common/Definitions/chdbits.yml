@@ -129,7 +129,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-last-child(6) > span[title]
+      selector: td.rowfollow:nth-last-child(7) > span[title]
       attribute: title
       optional: true
       filters:
@@ -139,7 +139,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-last-child(6):not(:has(span))
+      selector: td.rowfollow:nth-last-child(7):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -149,13 +149,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-last-child(5)
+      selector: td.rowfollow:nth-last-child(6)
     seeders:
-      selector: td.rowfollow:nth-last-child(4)
+      selector: td.rowfollow:nth-last-child(5)
     leechers:
-      selector: td.rowfollow:nth-last-child(3)
+      selector: td.rowfollow:nth-last-child(4)
     grabs:
-      selector: td.rowfollow:nth-last-child(2)
+      selector: td.rowfollow:nth-last-child(3)
     downloadvolumefactor:
       case:
         img.pro_free: 0
