@@ -125,7 +125,7 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="details.php?id="]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
