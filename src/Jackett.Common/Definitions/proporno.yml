@@ -71,25 +71,18 @@ search:
     poster:
       selector: img[src*="/uploads/posts/"]
       attribute: src
-    date_today:
+    date_day:
       # Сегодня, 19:56
-      selector: div.mini:contains("Сегодня")
-      optional: true
-      filters:
-        - name: regexp
-          args: "(Сегодня, \\d{2}:\\d{2})"
-        - name: replace
-          args: ["Сегодня", "Today"]
-        - name: fuzzytime
-    date_yday:
       # Вчера, 20:01
-      selector: div.mini:contains("Вчера")
+      selector: div.mini:contains("Сегодня"), div.mini:contains("Вчера")
       optional: true
       filters:
         - name: regexp
-          args: "(Вчера, \\d{2}:\\d{2})"
+          args: "((Вчера|Сегодня)(, \\d{2}:\\d{2}))"
         - name: replace
           args: ["Вчера", "Yesterday"]
+        - name: replace
+          args: ["Сегодня", "Today"]
         - name: fuzzytime
     date_year:
       # 20-09-2020, 19:41
@@ -103,7 +96,7 @@ search:
         - name: dateparse
           args: "d-MM-yyyy, HH:mm zzz"
     date:
-      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
       text: "1 GB"
     seeders:

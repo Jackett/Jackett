@@ -212,23 +212,16 @@ search:
       selector: span[title="Раздают"]
     leechers:
       selector: span[title="Качают"]
-    date_today:
+    date_day:
       # Сегодня в 18:22
-      selector: a[href^="browse.php?date="]:contains("Сегодня")
+      # Вчера в 20:52
+      selector: a[href^="browse.php?date="]:contains("Сегодня"), a[href^="browse.php?date="]:contains("Вчера")
       optional: true
       filters:
         - name: regexp
-          args: "(Сегодня в \\d{2}:\\d{2})"
+          args: "((Вчера в|Сегодня в)( \\d{2}:\\d{2}))"
         - name: replace
           args: ["Сегодня в", "Today"]
-        - name: fuzzytime
-    date_yday:
-      # Вчера в 20:52
-      selector: a[href^="browse.php?date="]:contains("Вчера")
-      optional: true
-      filters:
-        - name: regexp
-          args: "(Вчера в \\d{2}:\\d{2})"
         - name: replace
           args: ["Вчера в", "Yesterday"]
         - name: fuzzytime
@@ -244,7 +237,7 @@ search:
         - name: dateparse
           args: "HH:mm dd/MM zzz"
     date:
-      text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday }}{{ or .Result.date_year .Result.date_today .Result.date_yday }}{{ else }}now{{ end }}"
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     downloadvolumefactor:
       case:
         img[src="/pic/freedownload.gif"]: 0
