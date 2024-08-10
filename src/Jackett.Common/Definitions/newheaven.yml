@@ -178,7 +178,7 @@ search:
         - name: replace
           args: ["Gestern", "Yesterday"]
         - name: append
-          args: "+01:00" # CET
+          args: " +01:00" # CET
     date_year:
       # 16.04.2021 20:01
       selector: font:has(a):not(:contains("Heute")):not(:contains("Gestern"))
