@@ -209,7 +209,7 @@ search:
     uploadvolumefactor:
       case:
         img[src$="/freeleech.png"]: 0 # nothing is counted
-        div:contains("200% UP"): 2 
+        div:contains("200% UP"): 2
         "*": 1
     minimumratio:
       text: 0.8
