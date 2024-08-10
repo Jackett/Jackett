@@ -155,6 +155,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * AniDUB
  * AnimeLayer
  * ArenaBG
+ * Best-Torrents [PAY2DL]
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
  * BookTracker
  * BootyTape
@@ -385,7 +386,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDSky [![(invite needed)][inviteneeded]](#)
  * HDT-LaFenice
  * HDtime
- * HDTorrents.it [![(invite needed)][inviteneeded]](#)
+ * HDTorrents.it [PAY2DL]
  * HDTurk
  * HDU
  * hdvbits
