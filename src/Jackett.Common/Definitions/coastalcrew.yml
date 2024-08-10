@@ -66,10 +66,6 @@ settings:
   - name: password
     type: password
     label: Password
-  - name: freeleech
-    type: checkbox
-    label: Filter FreeLeech only
-    default: false
   - name: onlyupload
     type: checkbox
     label: Filter OnlyUpload only
