@@ -21,36 +21,36 @@ caps:
     - {id: 67, cat: Console/XBox 360, desc: GAMES - XBOX 360}
     - {id: 68, cat: PC/Mobile-Other, desc: GAMES - PDA / Handy}
     - {id: 72, cat: Console/NDS, desc: GAMES - NDS}
-    - {id: 101, cat: Movies/HD, desc: MOVIES - 720p}
-    - {id: 102, cat: Movies/HD, desc: MOVIES - 1080p}
-    - {id: 103, cat: Movies/HD, desc: MOVIES - AVCHD}
     - {id: 7, cat: Movies/DVD, desc: MOVIES - DVD}
     - {id: 8, cat: Movies/SD, desc: MOVIES - SD}
     - {id: 37, cat: Movies/DVD, desc: MOVIES - DVD Spezial}
-    - {id: 109, cat: Movies/UHD, desc: MOVIES - 4K}
+    - {id: 41, cat: Movies/Foreign, desc: MOVIES - International}
+    - {id: 101, cat: Movies/HD, desc: MOVIES - 720p}
+    - {id: 102, cat: Movies/HD, desc: MOVIES - 1080p}
+    - {id: 103, cat: Movies/HD, desc: MOVIES - AVCHD}
     - {id: 104, cat: Movies/BluRay, desc: MOVIES - Blu Ray}
     - {id: 106, cat: Movies/3D, desc: MOVIES - 3D}
-    - {id: 41, cat: Movies/Foreign, desc: MOVIES - International}
+    - {id: 109, cat: Movies/UHD, desc: MOVIES - 4K}
     - {id: 14, cat: Audio/MP3, desc: AUDIO - Musik}
+    - {id: 15, cat: Audio/Audiobook, desc: AUDIO - Hoerbuecher}
+    - {id: 16, cat: Audio/Audiobook, desc: AUDIO - Hoerspiele}
     - {id: 36, cat: Audio/Lossless, desc: AUDIO - Flac}
-    - {id: 15, cat: Audio/Audiobook, desc: AUDIO - Hörbücher}
-    - {id: 16, cat: Audio/Audiobook, desc: AUDIO - Hörspiele}
-    - {id: 58, cat: Audio/Video, desc: AUDIO - Musikvideos}
     - {id: 42, cat: Audio/Other, desc: AUDIO/Soundtracks}
+    - {id: 58, cat: Audio/Video, desc: AUDIO - Musikvideos}
     - {id: 18, cat: TV/SD, desc: TV/Serien - Serien SD}
-    - {id: 19, cat: TV/HD, desc: TV/Serien - Serien 720p}
-    - {id: 20, cat: TV/HD, desc: TV/Serien - Serien 1080p}
-    - {id: 49, cat: TV/SD, desc: TV/Serien - DVD}
-    - {id: 110, cat: TV/UHD, desc: TV/Serien - 4k}
-    - {id: 53, cat: TV, desc: TV/Serien - Serien Complete Packs}
+    - {id: 19, cat: TV/HD, desc: TV/Serien - Serien HD 720p}
+    - {id: 20, cat: TV/HD, desc: TV/Serien - Serien HD 1080p}
+    - {id: 49, cat: TV/SD, desc: TV/Serien - Serien DVD}
     - {id: 51, cat: TV/Documentary, desc: TV/Serien - Doku SD}
     - {id: 52, cat: TV/Documentary, desc: TV/Serien - Doku HD}
+    - {id: 53, cat: TV, desc: TV/Serien - Serien Complete Packs}
     - {id: 54, cat: TV/Sport, desc: TV/Serien - Sport}
-    - {id: 66, cat: TV/Foreign, desc: TV - International}
-    - {id: 108, cat: TV/Anime, desc: TV/Serien - Anime}
+    - {id: 66, cat: TV/Foreign, desc: TV/Serien - International}
+    - {id: 110, cat: TV/UHD, desc: TV/Serien - 4K}
     - {id: 22, cat: Books/EBook, desc: MISC - EBooks}
     - {id: 24, cat: Other, desc: MISC - Sonstiges}
     - {id: 25, cat: Other, desc: MISC- Tonspuren}
+    - {id: 108, cat: TV/Anime, desc: TV/Serien - Anime}
     - {id: 28, cat: PC, desc: APPLICATIONS - PC}
     - {id: 29, cat: PC/Mobile-Other, desc: APPLICATIONS - Mobile}
     - {id: 30, cat: PC, desc: APPLICATIONS - Sonstige}
@@ -70,6 +70,14 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: onlyupload
+    type: checkbox
+    label: Filter OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About Freeleech and OnlyUpload at NewHeaven
+    default: "<ul><li>FreeLeech are torrents where neither the download or upload is counted. (On the Jackett dashboard search results these are tagged as NoUpload).</li><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li></ul>"
   - name: sort
     type: select
     label: Sort requested from site
@@ -94,7 +102,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: a[href="index.php?strWebValue=account&strWebAction=logout"]
+    selector: a[href*="index.php?strWebValue=account&strWebAction=logout"]
 
 search:
   paths:
@@ -115,36 +123,41 @@ search:
   inputs:
     strWebValue: torrent
     strWebAction: search
-    # title, info, descr, all
-    details: "{{ if .Query.IMDBID }}descr{{ else }}title{{ end }}"
-    do_search: suchen
-    # 0 any, 1 1day, 2 1week, 3 30days, 4 90days
-    time: 0
     sort: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
-    # 0 active, 1 inactive, 2 all
-    type: 2
     $raw: "{{ range .Categories }}dirs{{.}}=1&{{end}}"
     searchstring: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 inactive, 2 all
+    type: 2
+    do_search: suchen
+    # 0 any, 1 1day, 7 1week, 30 30days, 90 90days
+    time: 0
+    # title, nfo, descr, all
+    details: "{{ if .Query.IMDBID }}descr{{ else }}title{{ end }}"
 
   rows:
-    selector: table.torrenttable > tbody > tr:not(:has(td.torrenttableheader))
+    selector: "table.torrenttable > tbody > tr:not(:has(td.torrenttableheader)){{ if .Config.onlyupload }}:has(img[src$=\"/onlyup.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href^="index.php?strWebValue=torrent&strWebAction=search&dir="]
+      selector: a[href*="index.php?strWebValue=torrent&strWebAction=search&dir="]
       attribute: href
       filters:
         - name: querystring
           args: dir
     title:
-      selector: a[href^="index.php?strWebValue=torrent&strWebAction=details&id="]
+      selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="]
     details:
-      selector: a[href^="index.php?strWebValue=torrent&strWebAction=details&id="]
+      selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="]
       attribute: href
+    _id:
+      selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
     download:
-      selector: a[href^="index.php?strWebValue=torrent&strWebAction=download&id="]
-      attribute: href
+      text: "index.php?strWebValue=torrent&strWebAction=download&id={{ .Result._id }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -159,7 +172,7 @@ search:
       optional: true
       filters:
         - name: regexp
-          args: "((Heute|Gestern)\\s\\d{2}\\:\\d{2}))"
+          args: "((Heute|Gestern)(\\s\\d{2}\\:\\d{2}))"
         - name: replace
           args: ["Heute", "Today"]
         - name: replace
@@ -172,7 +185,7 @@ search:
       optional: true
       filters:
         - name: regexp
-          args: "(\\d{2}\\.\\d{2}.\\d{4})\\s\\d{2}\\:\\d{2})"
+          args: "(\\d{2}\\.\\d{2}.\\d{4}\\s\\d{2}\\:\\d{2})"
         - name: append
           args: "+01:00" # CET
         - name: dateparse
@@ -189,16 +202,14 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        img[src$="/DL50.png"]: 0.5
-        img[src$="/DL25.png"]: 0.25
-        img[src$="/freeleech.png"]: 0
-        img[src$="/onlyup.png"]: 0
+        div:contains("50% DL"): 0.5
+        div:contains("25% DL"): 0.25
+        img[src$="/onlyup.png"]: 0 # only upload is counted
         "*": 1
     uploadvolumefactor:
       case:
-        img[src$="/freeleech.png"]: 0
-        div:has("200% UP"): 2 # probably incorrect as there are no div in rows
-        img[title*="200% UP"]: 2 # unconfirmed, guess based on previous div:has()
+        img[src$="/freeleech.png"]: 0 # nothing is counted
+        div:contains("200% UP"): 2 
         "*": 1
     minimumratio:
       text: 0.8
