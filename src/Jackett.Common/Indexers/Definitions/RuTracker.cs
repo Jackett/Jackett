@@ -95,8 +95,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2092, TorznabCatType.MoviesForeign, "|- Фильмы 2006-2010");
             caps.Categories.AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             caps.Categories.AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
-            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2022");
-            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2023");
+            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2023");
+            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2024");
             caps.Categories.AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы Ближнего Зарубежья");
             caps.Categories.AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             caps.Categories.AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
