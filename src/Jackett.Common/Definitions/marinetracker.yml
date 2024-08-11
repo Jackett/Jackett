@@ -21,13 +21,18 @@ caps:
     - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
     - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
     - {id: 226, cat: Books, desc: "Mobile Apps for Seafarers"}
+    - {id: 380, cat: PC, desc: "Mobile Apps for Seafarers-Apps for Deck Officers"}
+    - {id: 381, cat: PC, desc: "Mobile Apps for Seafarers-Apps for Marine Engineers"}
+    - {id: 383, cat: PC, desc: "Mobile Apps for Seafarers-Exam Apps &amp;Test Answers"}
+    - {id: 384, cat: PC, desc: "Mobile Apps for Seafarers-Foreign languages learning"}
+    - {id: 382, cat: PC, desc: "Mobile Apps for Seafarers-Other mobile Apps"}
     - {id: 6, cat: PC, desc: "Maritime Software"}
-    - {id: 12, cat: PC, desc: "Maritime Software-Answers to tests"}
     - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
     - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
     - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
-    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
     - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
+    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
+    - {id: 376, cat: PC, desc: "Maritime Software-Games"}
     - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
     - {id: 317, cat: PC, desc: "Maritime Software-Shareware (demo, trial)"}
     - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
@@ -54,6 +59,7 @@ caps:
     - {id: 302, cat: Books, desc: "Safety of Navigation-Emergency and life-saving equipment"}
     - {id: 301, cat: Books, desc: "Safety of Navigation-Cybersecurity"}
     - {id: 8, cat: Movies, desc: "Video for Seamen"}
+    - {id: 377, cat: Movies, desc: "Video for Seamen-Documentary video"}
     - {id: 234, cat: Movies, desc: "Video for Seamen-Video for Deck Officers"}
     - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
     - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
@@ -72,11 +78,11 @@ caps:
     - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
     - {id: 10, cat: Books, desc: "English for seamen"}
+    - {id: 270, cat: Books, desc: "English for seamen-RU↔EN dictionaries & phrasebooks"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
     - {id: 268, cat: Books, desc: "English for seamen-English for ETO's"}
     - {id: 269, cat: Books, desc: "English for seamen-English for Shipbuilders"}
-    - {id: 270, cat: Books, desc: "English for seamen-RU↔EN dictionaries & phrasebooks"}
     - {id: 265, cat: Books, desc: "English for seamen-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 271, cat: Books, desc: "English for seamen-Business English and Correspondence"}
     - {id: 205, cat: Books, desc: "General english"}
@@ -109,12 +115,13 @@ caps:
     - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
     - {id: 349, cat: Books, desc: "Purpose-built ships-Dynamic positioning vessels"}
     - {id: 330, cat: Books, desc: "Examinations"}
-    - {id: 333, cat: Books, desc: "Examinations-IMU CET"}
-    - {id: 334, cat: Books, desc: "Examinations-NCV"}
-    - {id: 336, cat: Books, desc: "Examinations-ASM"}
-    - {id: 337, cat: Books, desc: "Examinations-TME"}
-    - {id: 338, cat: Books, desc: "Examinations-MEO"}
-    - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I)"}
+    - {id: 12, cat: Books, desc: "Examinations-Answers to tests"}
+    - {id: 333, cat: Books, desc: "Examinations-IMU CET (Indian Maritime University Common Entrance Test)"}
+    - {id: 334, cat: Books, desc: "Examinations-NCV (Near Coastal Voyages)"}
+    - {id: 336, cat: Books, desc: "Examinations-ASM (Master)"}
+    - {id: 337, cat: Books, desc: "Examinations-TME (Trainee Marine Engineer)"}
+    - {id: 338, cat: Books, desc: "Examinations-MEO (Maritime Engineering Officer)"}
+    - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I) & Orals"}
     - {id: 343, cat: Books, desc: "Examinations-ROR - Colregs"}
     - {id: 335, cat: Books, desc: "Examinations-Second Mates"}
     - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
@@ -212,9 +219,11 @@ caps:
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
     - {id: 162, cat: Books, desc: "Archive"}
-#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
-    - {id: 322, cat: Books, desc: "Archive-No seeds"}
     - {id: 321, cat: Books, desc: "Archive-Outdated software"}
+    - {id: 379, cat: Books, desc: "Archive-Video materials (Archive)"}
+    - {id: 378, cat: Books, desc: "Archive-Audio materials (Archive) "}
+    - {id: 322, cat: Books, desc: "Archive-No seeds"}
+#    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
 
   modes:
