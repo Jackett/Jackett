@@ -154,6 +154,8 @@ search:
       case:
         False: 1 # normal
         True: 2 # double
+    minimumratio:
+      text: 1.0
     minimumseedtime:
       # 6 hours (as seconds = 6 x 60 x 60)
       text: 21600
