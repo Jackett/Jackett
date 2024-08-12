@@ -13,7 +13,6 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 238, cat: Movies, desc: "Новинки кино (2024). Новые фильмы скачать бесплатно"}
-    - {id: 368, cat: Movies/SD, desc: "CAMRip, TS, DVDScreener"}
     - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
     - {id: 50, cat: Movies/HD, desc: "DVDRip"}
     - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
@@ -60,6 +59,7 @@ caps:
     - {id: 160, cat: TV, desc: "Теория большого взрыва"}
     - {id: 20, cat: TV, desc: "Русские сериалы"}
     - {id: 210, cat: TV, desc: "!!! Полные завершенные сериалы !!!"}
+    - {id: 969, cat: TV, desc: "13"}
     - {id: 707, cat: TV, desc: "Агент"}
     - {id: 1028, cat: TV, desc: "Белые волки"}
     - {id: 736, cat: TV, desc: "Бомбила. Продолжение"}
@@ -85,6 +85,7 @@ caps:
     - {id: 774, cat: TV, desc: "Кулинар-2"}
     - {id: 989, cat: TV, desc: "Курортная полиция"}
     - {id: 961, cat: TV, desc: "Личное дело"}
+    - {id: 639, cat: TV, desc: "Ловушка"}
     - {id: 1013, cat: TV, desc: "Лучшие враги"}
     - {id: 131, cat: TV, desc: "Майор полиции"}
     - {id: 727, cat: TV, desc: "Маяковский - Два дня"}
@@ -113,6 +114,7 @@ caps:
     - {id: 755, cat: TV, desc: "Студия 17"}
     - {id: 1039, cat: TV, desc: "Тайны следствия"}
     - {id: 360, cat: TV, desc: "Такси"}
+    - {id: 981, cat: TV, desc: "Темный мир: Равновесие"}
     - {id: 1046, cat: TV, desc: "Тест на беременность"}
     - {id: 977, cat: TV, desc: "Тихая охота"}
     - {id: 681, cat: TV, desc: "Топтуны"}
@@ -125,8 +127,10 @@ caps:
     - {id: 780, cat: TV, desc: "Шерлок Холмс"}
     - {id: 805, cat: TV, desc: "Этаж"}
     - {id: 743, cat: TV, desc: "Ясмин"}
+    - {id: 973, cat: TV, desc: "Умник"}
     - {id: 733, cat: TV, desc: "Хмуров"}
     - {id: 505, cat: TV, desc: "Хозяйка моей судьбы"}
+    - {id: 1004, cat: TV, desc: "Анжелика"}
     - {id: 1047, cat: TV, desc: "Бессмертник"}
     - {id: 1074, cat: TV, desc: "Без свидетелей"}
     - {id: 692, cat: TV, desc: "Верное средство"}
@@ -146,6 +150,7 @@ caps:
     - {id: 1083, cat: TV, desc: "Код Константина"}
     - {id: 1092, cat: TV, desc: "Измены"}
     - {id: 565, cat: TV, desc: "Кодекс чести"}
+    - {id: 797, cat: TV, desc: "Корабль"}
     - {id: 1070, cat: TV, desc: "Инспектор Купер"}
     - {id: 640, cat: TV, desc: "Легавый"}
     - {id: 1048, cat: TV, desc: "Луна"}
@@ -174,9 +179,11 @@ caps:
     - {id: 1024, cat: TV, desc: "Литейный"}
     - {id: 1023, cat: TV, desc: "Раскаяние"}
     - {id: 1076, cat: TV, desc: "Родители"}
+    - {id: 972, cat: TV, desc: "Сватьи"}
     - {id: 1073, cat: TV, desc: "Чужое гнездо"}
     - {id: 1078, cat: TV, desc: "Чтец"}
     - {id: 628, cat: TV, desc: "Карпов"}
+    - {id: 691, cat: TV, desc: "Черные кошки"}
     - {id: 1101, cat: TV, desc: "Квест"}
     - {id: 1088, cat: TV, desc: "Лондонград"}
     - {id: 1072, cat: TV, desc: "Меч"}
@@ -194,6 +201,7 @@ caps:
     - {id: 1181, cat: TV, desc: "Вышибала"}
     - {id: 1165, cat: TV, desc: "Гастролеры (Беглецы)"}
     - {id: 1150, cat: TV, desc: "Гражданин Никто"}
+    - {id: 509, cat: TV, desc: "Два отца и два сына"}
     - {id: 656, cat: TV, desc: "Деффчонки"}
     - {id: 1128, cat: TV, desc: "Другой майор Соколов"}
     - {id: 1192, cat: TV, desc: "Жемчуга"}
@@ -205,7 +213,9 @@ caps:
     - {id: 1077, cat: TV, desc: "Клан Ювелиров"}
     - {id: 1118, cat: TV, desc: "Команда"}
     - {id: 1132, cat: TV, desc: "Кости"}
+    - {id: 354, cat: TV, desc: "Кухня"}
     - {id: 1040, cat: TV, desc: "Мажор"}
+    - {id: 1104, cat: TV, desc: "Метод"}
     - {id: 1189, cat: TV, desc: "Москва. Центральный округ"}
     - {id: 1135, cat: TV, desc: "На глубине"}
     - {id: 1151, cat: TV, desc: "Напарницы"}
@@ -296,10 +306,6 @@ caps:
     - {id: 596, cat: TV/Anime, desc: "Zero no Tsukaima Princess no Rondo TV-3 / Подручный бездарной Луизы: Рондо Принцессы ТВ-3"}
     - {id: 597, cat: TV/Anime, desc: "Zero no Tsukaima F TV-4 / Подручный бездарной Луизы Финал ТВ-4"}
     - {id: 242, cat: TV, desc: "Без перевода"}
-    - {id: 164, cat: TV, desc: "Фильмы"}
-    - {id: 167, cat: TV, desc: "Сериалы"}
-    - {id: 165, cat: TV, desc: "Мультфильмы"}
-    - {id: 166, cat: TV, desc: "Передачи - Тв-шоу"}
     - {id: 241, cat: TV, desc: "ТВ-Шоу, документальные, спорт"}
     - {id: 23, cat: TV, desc: "ТВ-Шоу и развлекательные передачи"}
     - {id: 1075, cat: TV, desc: "Архив ТВ-Шоу"}
@@ -417,6 +423,8 @@ caps:
     - {id: 480, cat: TV, desc: "Камеди Woman"}
     - {id: 459, cat: TV, desc: "Говорим и показываем"}
     - {id: 479, cat: TV, desc: "Comedy Club - Камеди Клаб"}
+    - {id: 33, cat: TV, desc: "ДОМ 2"}
+    - {id: 270, cat: TV, desc: "Архив Дом-2"}
     - {id: 1484, cat: TV, desc: "ДНК"}
     - {id: 1483, cat: TV, desc: "За гранью"}
     - {id: 1469, cat: TV, desc: "Звезды сошлись"}
@@ -785,7 +793,13 @@ caps:
     - {id: 1349, cat: Books, desc: "Детские журналы"}
     - {id: 1351, cat: Books, desc: "Военные журналы"}
     - {id: 1350, cat: Books, desc: "Хобби (Разное)"}
-    - {id: 1292, cat: Books, desc: "Хобби (Разное)"}
+    - {id: 1292, cat: Other, desc: "Шаблоны оформления раздач"}
+    - {id: 1310, cat: Other, desc: "Шаблон RePack от xatab"}
+    - {id: 1298, cat: Other, desc: "Шаблон оформления VickNet"}
+    - {id: 1300, cat: Other, desc: "Шаблон стандартного оформления"}
+    - {id: 1353, cat: Other, desc: "Стандартное оформление"}
+    - {id: 1406, cat: Other, desc: "Шаблон RG Games"}
+    - {id: 1707, cat: Other, desc: "Шаблоны BBCode таблиц"}
 
   modes:
     search: [q]
