@@ -133,8 +133,9 @@ search:
         type: json
 
   inputs:
-    # https://hellashut.net/api.php?passkey=1234567890abcdef&search=&incldead=1&freeleech=0
+    # https://hellashut.net/api.php?passkey=1234567890abcdef&search=&incldead=1&freeleech=0&c[]=85
     passkey: "{{ .Config.passkey }}"
+    $raw: "{{ range .Categories }}&c[]={{.}}{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 both, 2 dead
     incldead: 1
@@ -157,6 +158,8 @@ search:
       text: "torrents-details.php?id={{ .Result._id }}"
     download:
       text: "{{ .Result.details }}"
+    imdbid:
+      selector: imdb
     files:
       selector: numfiles
     size:
@@ -171,7 +174,11 @@ search:
     grabs:
       selector: times_completed
     downloadvolumefactor:
-      text: 1
+      selector: freeleech
+      # 0 notfree, 1 free
+      case:
+        0: 1
+        1: 0
     uploadvolumefactor:
       text: 1
     minimumratio:
@@ -179,4 +186,4 @@ search:
     minimumseedtime:
       # 10 day (as seconds = 10 x 24 x 60 x 60)
       text: 864000
-# JSON honAPI SECOND EDITION
+# JSON honAPI v2.2.4
