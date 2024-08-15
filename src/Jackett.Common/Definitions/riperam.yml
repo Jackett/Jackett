@@ -884,11 +884,14 @@ search:
     selector: li.row:has(a[href^="./download/file.php?id="])
 
   fields:
-    categorydesc_optional:
-      selector: dt a:last-of-type
+    category_optional:
+      selector: a[href*="/viewtopic.php?f="]
       optional: true
-    categorydesc:
-      text: "{{ if .Result.categorydesc_optional }}{{ .Result.categorydesc_optional }}{{ else }}Разное{{ end }}"
+      filters:
+        - name: querystring
+          args: f
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}726{{ end }}"
     title:
       selector: a.topictitle
       filters:
