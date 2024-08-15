@@ -168,7 +168,7 @@ settings:
 login:
   method: form
   path: /auth/login
-  form: form[action="/auth/process_login"]
+  form: form.login-form
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
