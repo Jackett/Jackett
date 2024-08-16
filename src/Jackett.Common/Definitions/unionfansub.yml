@@ -99,7 +99,7 @@ search:
         - name: querystring
           args: cat
     title_fansub:
-      selector: td:nth-child(2) .fansubbd
+      selector: td:nth-child(2) span
       optional: true
     title_season:
       selector: td:nth-child(2) a
