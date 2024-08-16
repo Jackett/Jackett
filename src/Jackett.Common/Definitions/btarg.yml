@@ -57,7 +57,7 @@ settings:
   - name: type
     type: select
     label: Order requested from site
-    default: desc
+    default: DESC
     options:
       DESC: desc
       ASC: asc
