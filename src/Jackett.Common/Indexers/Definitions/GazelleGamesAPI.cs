@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers.Definitions
         protected override int ApiKeyLength => 64;
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
 
-        private static Regex YearRegex => new (@"\b(?:19|20|21)\d{2}\b", RegexOptions.Compiled);
+        private static Regex YearRegex => new Regex(@"\b(?:19|20|21)\d{2}\b", RegexOptions.Compiled);
 
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
