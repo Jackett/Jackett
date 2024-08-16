@@ -111,9 +111,8 @@ search:
           args: ["(?i)\\b(\\d+)(st|nd|rd|th) (Season|Temporada)\\b", "S$1"]
         - name: re_replace
           args: ["(?i)\\b(Season|Temporada) (\\d+)(st|nd|rd|th)\\b", "S$2"]
-
     title:
-      text: "{{ .Result.title_season }} [{{.Result.title_fansub}}]"
+      text: "{{ .Result.title_season }} [{{ .Result.title_fansub }}]"
     details:
       selector: td:nth-child(2) a
       attribute: href
