@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
@@ -37,6 +38,9 @@ namespace Jackett.Common.Indexers.Definitions
         protected override string AuthorizationName => "X-API-Key";
         protected override int ApiKeyLength => 64;
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
+
+        private static Regex YearRegex => new (@"\b(?:19|20|21)\d{2}\b", RegexOptions.Compiled);
+
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
             : base(configService: configService,
@@ -317,16 +321,16 @@ namespace Jackett.Common.Indexers.Definitions
                         var link = GetDownloadUrl(torrentId, false);
 
                         var title = WebUtility.HtmlDecode(torrent.Value<string>("ReleaseTitle"));
-                        var groupYear = group.Value<int>("year");
+                        var groupYear = group.Value<int?>("year");
 
-                        if (groupYear > 0 && !title.Contains(groupYear.ToString()))
+                        if (groupYear is > 0 && title.IsNotNullOrWhiteSpace() && !YearRegex.Match(title).Success)
                         {
                             title += $" ({groupYear})";
                         }
 
                         if (torrent.Value<string>("RemasterTitle").IsNotNullOrWhiteSpace())
                         {
-                            title += $" [{$"{torrent.Value<string>("RemasterTitle")} {torrent.Value<int>("RemasterYear")}".Trim()}]";
+                            title += $" [{$"{WebUtility.HtmlDecode(torrent.Value<string>("RemasterTitle"))} {torrent.Value<int>("RemasterYear")}".Trim()}]";
                         }
 
                         var tags = new List<string>();
@@ -353,6 +357,11 @@ namespace Jackett.Common.Indexers.Definitions
                             {
                                 tags.Add(tagValue);
                             }
+                        }
+
+                        if (torrent.Value<int>("Dupable") == 1)
+                        {
+                            tags.Add("Trumpable");
                         }
 
                         if (tags.Count > 0)
