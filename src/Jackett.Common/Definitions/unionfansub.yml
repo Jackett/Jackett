@@ -105,7 +105,7 @@ search:
       selector: td:nth-child(2) a
       filters:
         - name: re_replace
-          args: ["(?i)\\b\\d{1,4}[ºª]\\b", ""]
+          args: ["(?i)\\b(\\d{1,4})([ºª])\\b", "$1"]
         - name: re_replace
           args: ["(?i)\\b(Temporada|Season) (\\d+)\\b", "S$2"]
         - name: re_replace
