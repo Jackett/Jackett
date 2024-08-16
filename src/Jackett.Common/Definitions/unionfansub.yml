@@ -98,8 +98,22 @@ search:
       filters:
         - name: querystring
           args: cat
-    title:
+    title_fansub:
+      selector: td:nth-child(2) .fansubbd
+    title_season:
       selector: td:nth-child(2) a
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b\\d{1,4}[ºª]\\b", ""]
+        - name: re_replace
+          args: ["(?i)\\b(Temporada|Season) (\\d+)\\b", "S$2"]
+        - name: re_replace
+          args: ["(?i)\\b(\\d+)(st|nd|rd|th) (Season|Temporada)\\b", "S$1"]
+        - name: re_replace
+          args: ["(?i)\\b(Season|Temporada) (\\d+)(st|nd|rd|th)\\b", "S$2"]
+
+    title:
+      text: "{{ .Result.title_season }} [{{.Result.title_fansub}}]"
     details:
       selector: td:nth-child(2) a
       attribute: href
