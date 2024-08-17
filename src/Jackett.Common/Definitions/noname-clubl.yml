@@ -727,12 +727,11 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -767,16 +766,7 @@ settings:
     default: This Indexer requires specific columns to be active on your account search settings.<br>Login to the web site and ensure that only the <b>Автор</b> (Author) and <b>Форум</b> (Forum) checkboxes are ticked in the <b>Показывать колонку</b> (Show Columns) section of the <b>Настройки поиска Torrent</b> (Torrent Search Settings) page.<br>Having other columns active may prevent the Indexer processing/displaying results correctly.
 
 login:
-  path: forum/login.php
-  method: form
-  form: form#loginFrm
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    autologin: 1
-    redirect: index.php
-  error:
-    - selector: span.gen:contains("Вы ввели")
+  method: cookie
   test:
     path: forum/index.php
     selector: table.menutable a.mainmenu:contains("Выход")
