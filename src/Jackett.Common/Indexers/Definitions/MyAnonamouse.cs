@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -32,6 +33,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private string SearchUrl => SiteLink + "tor/js/loadSearchJSONbasic.php";
+
+        private static readonly Regex _SanitizeSearchQueryRegex = new Regex("[^\\w]+", RegexOptions.IgnoreCase | RegexOptions.Compiled);
 
         private new ConfigurationDataMyAnonamouse configData => (ConfigurationDataMyAnonamouse)base.configData;
 
@@ -181,12 +184,23 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            var releases = new List<ReleaseInfo>();
+
+            var term = _SanitizeSearchQueryRegex.Replace(query.GetQueryString(), " ").Trim();
+
+            if (query.SearchTerm.IsNotNullOrWhiteSpace() && term.IsNullOrWhiteSpace())
+            {
+                logger.Debug("Search term is empty after being sanitized, stopping search. Initial search term: '{0}'", query.SearchTerm);
+
+                return releases;
+            }
+
             var limit = query.Limit > 0 ? query.Limit : 100;
             var offset = query.Offset > 0 ? query.Offset : 0;
 
             var qParams = new NameValueCollection
             {
-                {"tor[text]", query.GetQueryString()},
+                {"tor[text]", term},
                 {"tor[searchType]", configData.SearchType.Value},
                 {"tor[srchIn][title]", "true"},
                 {"tor[srchIn][author]", "true"},
@@ -246,8 +260,6 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 throw new Exception(response.ContentString);
             }
-
-            var releases = new List<ReleaseInfo>();
 
             try
             {
