@@ -28,7 +28,7 @@ namespace Jackett.Server.Controllers
     public class RequiresApiKey : IActionFilter
     {
         public IServerService serverService;
-        
+
         public RequiresApiKey(IServerService ss) => serverService = ss;
 
         public void OnActionExecuting(ActionExecutingContext context)
