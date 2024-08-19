@@ -47,7 +47,7 @@ namespace Jackett.Common.Services.Cache
             {
                 _logger.Error(e, "Failed UpdateConnectionString MongoDB");
             }
-            
+
         }
 
         public void Initialize()
