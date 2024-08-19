@@ -26,7 +26,7 @@
     
 	<!-- Conditionally obtain references for the .NET462 target -->
     <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.42.0" />
+    <PackageReference Include="Microsoft.Data.Sqlite" Version="3.1.32" />
 	<Reference Include="System.Web" />
   </ItemGroup>
   
