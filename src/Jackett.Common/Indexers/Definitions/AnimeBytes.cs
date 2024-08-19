@@ -651,6 +651,13 @@ namespace Jackett.Common.Indexers.Definitions
                 OnParseError(response.ContentString, ex);
             }
 
+            releases = releases.OrderByDescending(o => o.PublishDate).ToList();
+
+            if (query.IsRssSearch)
+            {
+                releases = releases.Where((r, index) => r.PublishDate > DateTime.Now.AddDays(-1) || index < 20).ToList();
+            }
+
             // Add to the cache
             lock (cache)
             {
