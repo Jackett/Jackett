@@ -187,7 +187,7 @@ namespace Jackett.Common.Services.Cache
             {
                 _logger.Info("Cache Memory Initialized");
             }
-        } 
+        }
 
         private bool IsCacheEnabled()
         {
