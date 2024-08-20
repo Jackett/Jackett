@@ -69,12 +69,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Filter freeleech only
@@ -105,14 +104,7 @@ settings:
     default: "Inactive users are not welcome on the tracker. Anyone who does not delete (or seed) a file at least once a month risks having their account deactivated."
 
 login:
-  path: takelogin.php
-  method: post
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
-  error:
-    - selector: table:contains("Fehler")
+  method: cookie
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]

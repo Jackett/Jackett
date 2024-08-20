@@ -171,4 +171,4 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)\\s*(剩余时间:|剩餘時間：|will end in)\\s*", ""]
-# NexusPHP 59e6a24 2024-5-9
+# NexusPHP Standard v1.5 Beta 4
