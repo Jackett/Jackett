@@ -39,6 +39,8 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_tpp
     type: info
     label: Results Per Page
