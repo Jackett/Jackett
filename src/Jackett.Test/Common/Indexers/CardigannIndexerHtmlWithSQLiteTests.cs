@@ -68,6 +68,7 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public async Task TestCardigannHtmlWithSQLiteCacheAsync()
         {
+            SQLitePCL.Batteries_V2.Init();
             var cacheServiceFactory = _container.Resolve<CacheServiceFactory>();
             DeleteTestBaseFile();
 

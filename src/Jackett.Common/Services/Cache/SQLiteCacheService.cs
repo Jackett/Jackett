@@ -38,6 +38,7 @@ namespace Jackett.Common.Services.Cache
                 //TODO My test for MONO :(
                 //SQLitePCL.Batteries_V2.Init();
                 //SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+                SQLitePCL.Batteries_V2.Init();
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
                     connection.Open();
@@ -111,7 +112,7 @@ namespace Jackett.Common.Services.Cache
             }
             catch (Exception e)
             {
-                _logger.Error("Cache SQLite Initialize error: {0}", e.Message);
+                _logger.Info("Cache SQLite Initialize error: {0}", e.Message);
             }
         }
 
