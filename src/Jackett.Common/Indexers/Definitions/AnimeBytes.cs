@@ -284,7 +284,7 @@ namespace Jackett.Common.Indexers.Definitions
                         mainTitle = seriesName;
                     }
 
-                    var synonyms = new HashSet<string>
+                    var synonyms = new HashSet<string>(StringComparer.OrdinalIgnoreCase)
                     {
                         mainTitle
                     };
@@ -470,32 +470,32 @@ namespace Jackett.Common.Indexers.Definitions
                         {
                             // Ignore these categories as they'll cause hell with the matcher
                             // TV Special, DVD Special, BD Special
-                            if (groupName == "TV Special" || groupName == "DVD Special" || groupName == "BD Special")
+                            if (groupName is "TV Special" or "DVD Special" or "BD Special")
                             {
                                 continue;
                             }
 
-                            if (groupName == "TV Series" || groupName == "OVA" || groupName == "ONA")
+                            if (groupName is "TV Series" or "OVA" or "ONA")
                             {
                                 category = new List<int> { TorznabCatType.TVAnime.ID };
                             }
 
-                            if (groupName == "Movie" || groupName == "Live Action Movie")
+                            if (groupName is "Movie" or "Live Action Movie")
                             {
                                 category = new List<int> { TorznabCatType.Movies.ID };
                             }
 
-                            if (categoryName == "Manga" || categoryName == "Oneshot" || categoryName == "Anthology" || categoryName == "Manhwa" || categoryName == "Manhua" || categoryName == "Light Novel")
+                            if (categoryName is "Manga" or "Oneshot" or "Anthology" or "Manhwa" or "Manhua" or "Light Novel")
                             {
                                 category = new List<int> { TorznabCatType.BooksComics.ID };
                             }
 
-                            if (categoryName == "Novel" || categoryName == "Artbook")
+                            if (categoryName is "Novel" or "Artbook")
                             {
                                 category = new List<int> { TorznabCatType.BooksComics.ID };
                             }
 
-                            if (categoryName == "Game" || categoryName == "Visual Novel")
+                            if (categoryName is "Game" or "Visual Novel")
                             {
                                 if (properties.Contains("PSP"))
                                 {
@@ -535,7 +535,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         else if (searchType == "music")
                         {
-                            if (categoryName == "Single" || categoryName == "EP" || categoryName == "Album" || categoryName == "Compilation" || categoryName == "Soundtrack" || categoryName == "Remix CD" || categoryName == "PV" || categoryName == "Live Album" || categoryName == "Image CD" || categoryName == "Drama CD" || categoryName == "Vocal CD")
+                            if (categoryName is "Single" or "EP" or "Album" or "Compilation" or "Soundtrack" or "Remix CD" or "PV" or "Live Album" or "Image CD" or "Drama CD" or "Vocal CD")
                             {
                                 if (properties.Any(p => p.Contains("Lossless")))
                                 {
@@ -569,7 +569,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                         foreach (var title in synonyms)
                         {
-                            var releaseTitle = groupName == "Movie" || groupName == "Live Action Movie" ?
+                            var releaseTitle = groupName is "Movie" or "Live Action Movie" ?
                                 $"{releaseGroup}{title} {year} {infoString}" :
                                 $"{releaseGroup}{title} {releaseInfo} {infoString}";
 
