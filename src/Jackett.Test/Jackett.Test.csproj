@@ -48,8 +48,19 @@
   <!-- Conditionally obtain references for the .NET462 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.9" />
     <Reference Include="System.Web" />
   </ItemGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
+    <SQLitePCLRawLibESQLite3x64Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x64\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x64Path>
+    <SQLitePCLRawLibESQLite3x86Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x86\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x86Path>
+  </PropertyGroup>
+
+  <Target Name="CopySQLiteLib" AfterTargets="Build;Test" Condition="'$(TargetFramework)' == 'net462'">
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x64Path)" DestinationFolder="$(OutDir)runtimes/linux-x64/native/" />
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x86Path)" DestinationFolder="$(OutDir)runtimes/linux-x86/native/" />
+  </Target>
 
   <ItemGroup>
     <Content Include="Resources\*">

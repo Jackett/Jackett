@@ -37,8 +37,7 @@ namespace Jackett.Common.Services.Cache
             {
                 //TODO My test for MONO :(
                 //SQLitePCL.Batteries_V2.Init();
-                SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
-
+                //SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
                     connection.Open();
