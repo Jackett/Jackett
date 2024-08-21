@@ -67,6 +67,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>A parked account is deleted after 175 days (six months), for experienced users and regular users.</li><li>A disabled account is deleted after 2 months (increased to 93 days) , for experienced users and regular users.</li></ul>"
 
 login:
   path: takelogin.php
