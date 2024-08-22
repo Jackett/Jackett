@@ -396,7 +396,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HHanClub
  * HomePornTorrents (HPT)
  * House of Devil
- * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
  * ICC2022 (冰淇淋)
