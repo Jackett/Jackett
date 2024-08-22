@@ -448,6 +448,7 @@ namespace Jackett.Updater
                 "Definitions/hdreactor.yml", // renamed to hdhouse
                 "Definitions/hdspain.yml",
                 "Definitions/hdstreet.yml",
+                "Definitions/hdvbits.yml",
                 "Definitions/hdzone.yml", // renamed to hdfun
                 "Definitions/heavens-hell.yml",
                 "Definitions/hellastz.yml",
