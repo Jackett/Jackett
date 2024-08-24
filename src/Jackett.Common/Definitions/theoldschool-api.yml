@@ -197,12 +197,7 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    _featured:
-      selector: featured
-      case:
-        False: "{{ .False }}"
-        True: "{{ .True }}"
-    downloadvolumefactor_freeleech:
+    downloadvolumefactor:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -212,16 +207,12 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    downloadvolumefactor:
-      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
-    uploadvolumefactor_double_upload:
+    uploadvolumefactor:
       # api returns False, True
       selector: double_upload
       case:
         False: 1 # normal
         True: 2 # double
-    uploadvolumefactor:
-      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # global MR is 0.6 but torrents must be seeded for 2 days regardless of ratio
 #    minimumratio:
 #      text: 0.6
