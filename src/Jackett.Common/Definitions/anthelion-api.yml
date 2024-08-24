@@ -8,6 +8,8 @@ description: "Anthelion is a Private MOVIES tracker"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - f93e9050553f072f700f6fb60b837edbef6f377d # Expired 25th August 2024
 # Status: https://ant.trackerstatus.info/
 links:
   - https://anthelion.me/
