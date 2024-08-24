@@ -166,6 +166,7 @@ search:
       selector: size
     _featured:
       selector: featured
+      optional: true
       case:
         False: "{{ .False }}"
         True: "{{ .True }}"
