@@ -338,6 +338,7 @@ namespace Jackett.Updater
                 "Definitions/centraltorrent.yml",
                 "Definitions/channelx.yml",
                 "Definitions/cheggit.yml",
+                "Definitions/chilebt.yml",
                 "Definitions/cili180.yml", // renamed to liaorencili
                 "Definitions/cilipro.yml",
                 "Definitions/cinefilhd.yml",
