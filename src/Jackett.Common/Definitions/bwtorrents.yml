@@ -180,6 +180,8 @@ search:
 
   rows:
     selector: table[width="1200"] > tbody > tr:has(a[href^="download.php/"])
+    filters:
+      - name: andmatch
 
   fields:
     category:
