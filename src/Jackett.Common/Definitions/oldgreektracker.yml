@@ -38,11 +38,15 @@ caps:
     - {id: 95, cat: TV/HD, desc: "Greek TV BluRay HD"}
     - {id: 96, cat: TV/WEB-DL, desc: "Greek TV WEB-DL HD"}
     - {id: 15, cat: Movies/SD, desc: "Movies"}
+    - {id: 105, cat: Movies, desc: "Movies Animation"}
     - {id: 103, cat: Movies/BluRay, desc: "Movies BluRay"}
     - {id: 101, cat: Movies/BluRay, desc: "Movies BRRip"}
+    - {id: 106, cat: Movies, desc: "Movies Cartoons"}
     - {id: 99, cat: Movies/DVD, desc: "Movies DVDRip"}
     - {id: 20, cat: Movies/SD, desc: "Filmographies"}
+    - {id: 107, cat: Movies, desc: "Greek Animation"}
     - {id: 81, cat: Movies/BluRay, desc: "Greek BRRip"}
+    - {id: 108, cat: Movies, desc: "Greek Cartoons"}
     - {id: 82, cat: Movies/DVD, desc: "Greek DVDRip"}
     - {id: 16, cat: Movies/SD, desc: "DVDRip-WEBRip-BRRip"}
     - {id: 21, cat: Movies/SD, desc: "Greek Filmographies"}
@@ -59,6 +63,7 @@ caps:
     - {id: 49, cat: Movies/HD, desc: "BluRay / 720p"}
     - {id: 45, cat: Movies/BluRay, desc: "BluRay Disk / 1080p"}
     - {id: 66, cat: Movies/BluRay, desc: "BluRay Disk / 4K (UHD)"}
+    - {id: 110, cat: Movies/HD, desc: "Bluray MicroHD"}
     - {id: 42, cat: Movies/HD, desc: "Remux / 1080p"}
     - {id: 46, cat: Movies/UHD, desc: "Remux / 4K (UHD)"}
     - {id: 47, cat: Movies/WEB-DL, desc: "WEB-DL / 1080p"}
