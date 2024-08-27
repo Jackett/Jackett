@@ -655,7 +655,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (query.IsRssSearch)
             {
-                releases = releases.Where((r, index) => r.PublishDate > DateTime.Now.AddDays(-1) || index < 20).ToList();
+                releases = releases.Where((r, index) => r.PublishDate > DateTime.UtcNow.AddDays(-1) || index < 20).ToList();
             }
 
             // Add to the cache
