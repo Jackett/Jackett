@@ -495,6 +495,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PTCafe (咖啡)
  * PTChina (铂金学院)
  * PTerClub (PT之友俱乐部)
+ * PTFans
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
