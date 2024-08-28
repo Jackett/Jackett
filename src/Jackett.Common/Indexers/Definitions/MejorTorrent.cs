@@ -153,7 +153,16 @@ namespace Jackett.Common.Indexers.Definitions
             var url = SiteLink + NewTorrentsUrl;
             var result = await RequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    throw new ExceptionWithConfigData("HTTP 500 Internal Server Error", configData);
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
             try
             {
                 var searchResultParser = new HtmlParser();
@@ -207,7 +216,14 @@ namespace Jackett.Common.Indexers.Definitions
                 var url = SiteLink + SearchUrl + i + "?" + qc.GetQueryString();
                 var result = await RequestWithCookiesAsync(url);
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                    if (result.Status == HttpStatusCode.InternalServerError)
+                    {
+                        throw new ExceptionWithConfigData("HTTP 500 Internal Server Error", configData);
+                    }
+                    else
+                    {
+                        throw new ExceptionWithConfigData(result.ContentString, configData);
+                    }
                 try
                 {
                     var searchResultParser = new HtmlParser();
