@@ -101,7 +101,7 @@ namespace Jackett.Common.Services
 
             if (currentVersion == new Version(0, 0, 0))
             {
-                logger.Info("Skipping checking for new releases because Jackett is runing in IDE.");
+                logger.Info("Skipping checking for new releases because Jackett is running in IDE.");
                 return;
             }
 
