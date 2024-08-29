@@ -8,6 +8,8 @@
 
     <!-- Set the Product and Version info for our own projects -->
     <PropertyGroup Condition="'$(JackettProject)'=='true'">
+        <Version>0.0.0</Version>
+
         <PathMap>$(MSBuildProjectDirectory)=./$(MSBuildProjectName)/</PathMap>
     </PropertyGroup>
 
