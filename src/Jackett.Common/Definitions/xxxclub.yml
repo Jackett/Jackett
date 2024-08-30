@@ -5,6 +5,7 @@ description: "XXXClub is a Public torrent site for 3X"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 3
 links:
   - https://xxxclub.to/
 
