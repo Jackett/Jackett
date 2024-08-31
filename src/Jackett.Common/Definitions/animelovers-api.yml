@@ -191,5 +191,6 @@ search:
 #      text: 0.4
     minimumseedtime:
       # 3.5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 302400
+#      text: 302400
+      text: 604800 # site is actually using 7d despite rules, teething issues
 # json UNIT3D 8.2.0
