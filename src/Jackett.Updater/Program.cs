@@ -632,6 +632,7 @@ namespace Jackett.Updater
                 "Definitions/soundpark.yml",
                 "Definitions/spacetorrent.yml",
                 "Definitions/speed-share.yml",
+                "Definitions/speedtorrentreloaded.yml",
                 "Definitions/spidertk.yml",
                 "Definitions/sporthd.yml",
                 "Definitions/sukebei-pantsu.yml",
