@@ -360,7 +360,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * GimmePeers (formerly ILT)
  * GiroTorrent
  * GreatPosterWall (GPW)
- * GreekDiamond
  * HaiDan
  * Hǎitáng (海棠PT)
  * HappyFappy

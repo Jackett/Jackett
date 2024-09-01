@@ -423,6 +423,7 @@ namespace Jackett.Updater
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
                 "Definitions/gormogon.yml",
+                "Definitions/greekdiamond.yml",
                 "Definitions/greeklegends.yml",
                 "Definitions/greekteam.yml",
                 "Definitions/gtorrent.yml",
