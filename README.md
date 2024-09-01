@@ -23,6 +23,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
 * macOS 12.0+ (Monterey) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
 
+#### Supported Trackers
 <details> <summary> <b> Supported Public Trackers </b> </summary>
 
  * ØMagnet
