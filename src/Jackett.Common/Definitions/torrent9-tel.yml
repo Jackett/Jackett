@@ -46,6 +46,7 @@ caps:
     - {id: Ebooks, cat: Books, desc: "Books"}
     - {id: Livres, cat: Books, desc: "Livres"}
     - {id: Logiciels, cat: PC, desc: "Software"}
+    - {id: Applications, cat: PC, desc: "Applications"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
     - {id: Porno, cat: XXX, desc: "Porno"}
