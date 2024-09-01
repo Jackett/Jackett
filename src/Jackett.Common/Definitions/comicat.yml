@@ -1,15 +1,13 @@
 ---
 id: comicat
 name: comicat
-description: "comicat is a CHINESE Public tracker for Anime / Hentai / Manga"
+description: "comicat is a CHINESE Semi-Private tracker for Anime / Hentai / Manga"
 language: zh-CN
-type: public
+type: semi-private
 encoding: UTF-8
 requestDelay: 2
 links:
   - https://www.comicat.org/
-
-settings: []
 
 caps:
   categorymappings:
@@ -26,6 +24,15 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+
+settings: []
+
+login:
+  path: addon.php?r=document/view&page=visitor-test
+  method: form
+  form: form#visitor-test-form
+  inputs:
+    visitor_test: human
 
 search:
   paths:

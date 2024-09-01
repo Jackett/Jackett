@@ -47,7 +47,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BTSOW
  * Byrutor
  * Cinecalidad
- * comicat
  * cpasbien
  * cpasbienClone
  * CrackingPatching
@@ -83,7 +82,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * MegaPeer
  * MejorTorrent
  * Mikan
- * MioBT
  * MixTapeTorrent
  * MoviesDVDR
  * MyPornClub
@@ -161,6 +159,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BookTracker
  * BootyTape
  * Catorrent
+ * comicat
  * Deildu
  * Devil-Torrents
  * DreamingTree
@@ -189,6 +188,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Masters-TB
  * Mazepa
  * Metal Tracker
+ * MioBT
  * MIRcrew
  * MuseBootlegs (MB)
  * MVGroup Forum

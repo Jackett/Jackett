@@ -3,9 +3,9 @@ id: miobt
 replaces:
   - kisssub
 name: MioBT
-description: "MioBT is a CHINESE Public torrent index"
+description: "MioBT is a CHINESE Semi-Private torrent index"
 language: zh-CN
-type: public
+type: semi-private
 encoding: UTF-8
 links:
   - https://miobt.com/
@@ -28,6 +28,13 @@ caps:
     book-search: [q]
 
 settings: []
+
+login:
+  path: addon.php?r=document/view&page=visitor-test
+  method: form
+  form: form#visitor-test-form
+  inputs:
+    visitor_test: human
 
 search:
   paths:
