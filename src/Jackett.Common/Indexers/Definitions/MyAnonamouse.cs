@@ -263,43 +263,46 @@ namespace Jackett.Common.Indexers.Definitions
 
             try
             {
-                var jsonContent = JObject.Parse(response.ContentString);
                 var sitelink = new Uri(SiteLink);
 
-                var error = jsonContent.Value<string>("error");
+                var jsonResponse = JsonConvert.DeserializeObject<MyAnonamouseResponse>(response.ContentString);
+
+                var error = jsonResponse.Error;
                 if (error.IsNotNullOrWhiteSpace() && error.StartsWithIgnoreCase("Nothing returned, out of"))
                 {
                     return releases;
                 }
 
-                foreach (var item in jsonContent.Value<JArray>("data"))
+                foreach (var item in jsonResponse.Data)
                 {
-                    var id = item.Value<long>("id");
-                    var link = new Uri(sitelink, "/tor/download.php?tid=" + id);
-                    var details = new Uri(sitelink, "/t/" + id);
+                    var id = item.Id;
+                    var link = new Uri(sitelink, $"/tor/download.php?tid={id}");
+                    var details = new Uri(sitelink, $"/t/{id}");
+
+                    var isFreeLeech = item.Free || item.PersonalFreeLeech;
 
                     var release = new ReleaseInfo
                     {
                         Guid = details,
-                        Title = item.Value<string>("title").Trim(),
-                        Description = item.Value<string>("description").Trim(),
+                        Title = item.Title.Trim(),
+                        Description = item.Description.Trim(),
                         Link = link,
                         Details = details,
-                        Category = MapTrackerCatToNewznab(item.Value<string>("category")),
-                        PublishDate = DateTime.ParseExact(item.Value<string>("added"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
-                        Grabs = item.Value<long>("times_completed"),
-                        Files = item.Value<long>("numfiles"),
-                        Seeders = item.Value<int>("seeders"),
-                        Peers = item.Value<int>("seeders") + item.Value<int>("leechers"),
-                        Size = ParseUtil.GetBytes(item.Value<string>("size")),
-                        DownloadVolumeFactor = item.Value<bool>("free") ? 0 : 1,
+                        Category = MapTrackerCatToNewznab(item.Category),
+                        PublishDate = DateTime.ParseExact(item.Added, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
+                        Grabs = item.Grabs,
+                        Files = item.NumFiles,
+                        Seeders = item.Seeders,
+                        Peers = item.Seeders + item.Leechers,
+                        Size = ParseUtil.GetBytes(item.Size),
+                        DownloadVolumeFactor = isFreeLeech ? 0 : 1,
                         UploadVolumeFactor = 1,
 
                         // MinimumRatio = 1, // global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
                         MinimumSeedTime = 259200 // 72 hours
                     };
 
-                    var authorInfo = item.Value<string>("author_info");
+                    var authorInfo = item.AuthorInfo;
                     if (authorInfo != null)
                     {
                         try
@@ -321,13 +324,13 @@ namespace Jackett.Common.Indexers.Definitions
 
                     var flags = new List<string>();
 
-                    var langCode = item.Value<string>("lang_code");
+                    var langCode = item.LanguageCode;
                     if (!string.IsNullOrEmpty(langCode))
                     {
                         flags.Add(langCode);
                     }
 
-                    var filetype = item.Value<string>("filetype");
+                    var filetype = item.Filetype;
                     if (!string.IsNullOrEmpty(filetype))
                     {
                         flags.Add(filetype.ToUpper());
@@ -338,7 +341,7 @@ namespace Jackett.Common.Indexers.Definitions
                         release.Title += " [" + string.Join(" / ", flags) + "]";
                     }
 
-                    if (item.Value<bool>("vip"))
+                    if (item.Vip)
                     {
                         release.Title += " [VIP]";
                     }
@@ -353,5 +356,37 @@ namespace Jackett.Common.Indexers.Definitions
 
             return releases;
         }
+    }
+
+    public class MyAnonamouseResponse
+    {
+        public string Error { get; set; }
+        public List<MyAnonamouseTorrent> Data { get; set; }
+    }
+
+    public class MyAnonamouseTorrent
+    {
+        public int Id { get; set; }
+        public string Title { get; set; }
+        [JsonProperty(PropertyName = "author_info")]
+        public string AuthorInfo { get; set; }
+        public string Description { get; set; }
+        [JsonProperty(PropertyName = "lang_code")]
+        public string LanguageCode { get; set; }
+        public string Filetype { get; set; }
+        public bool Vip { get; set; }
+        public bool Free { get; set; }
+        [JsonProperty(PropertyName = "personal_freeleech")]
+        public bool PersonalFreeLeech { get; set; }
+        [JsonProperty(PropertyName = "fl_vip")]
+        public bool FreeVip { get; set; }
+        public string Category { get; set; }
+        public string Added { get; set; }
+        [JsonProperty(PropertyName = "times_completed")]
+        public int Grabs { get; set; }
+        public int Seeders { get; set; }
+        public int Leechers { get; set; }
+        public int NumFiles { get; set; }
+        public string Size { get; set; }
     }
 }
