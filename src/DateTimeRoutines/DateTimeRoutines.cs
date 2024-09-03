@@ -169,7 +169,7 @@ namespace DateTimeRoutines
             /// </summary>
             UkDate,
             ///// <summary>
-            ///// time is specifed through AM or PM
+            ///// time is specified through AM or PM
             ///// </summary>
             //USA_TIME,
         }
