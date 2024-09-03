@@ -172,6 +172,6 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumseedtime:
-      # 60h (as seconds = 60 x 60 x 60)
+      # 2.5 days (as seconds = 2.5 x 24 x 60 x 60)
       text: 216000
 # json UNIT3D 6.5.0

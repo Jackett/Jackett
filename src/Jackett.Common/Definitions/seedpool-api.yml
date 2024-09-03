@@ -192,6 +192,6 @@ search:
 #    minimumratio:
 #      text: 1.0
     minimumseedtime:
-      # 10 day (as seconds = 2 x 24 x 60 x 60)
+      # 10 days (as seconds = 10 x 24 x 60 x 60)
       text: 864000
 # json UNIT3D 8.2.0

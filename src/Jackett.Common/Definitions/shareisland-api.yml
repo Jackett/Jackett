@@ -218,10 +218,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 6 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 6 day (as seconds = 6 x 24 x 60 x 60)
+      # 6 days (as seconds = 6 x 24 x 60 x 60)
       text: 518400
 # json UNIT3D 8.2.0 (custom)
