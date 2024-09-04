@@ -20,7 +20,7 @@ caps:
     - {id: 5, cat: Audio/Lossless, desc: "Music"}
     - {id: 6, cat: TV/Anime, desc: "Anime"}
     - {id: 7, cat: Books/EBook, desc: "E-Books"}
-    - {id: 7, cat: Movies, desc: "BoxSet"}
+    - {id: 13, cat: Movies, desc: "BoxSet"}
     - {id: 14, cat: Console/PS4, desc: "PS4"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audiobook"}
     - {id: 11, cat: Other, desc: "Other"}
