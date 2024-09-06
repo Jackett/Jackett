@@ -318,14 +318,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
-            if (indexerResponse.WebResponse.Status == HttpStatusCode.Forbidden)
-            {
-                throw new Exception("You do not meet the login requirements: VPN with 2FA or ISP in home country.");
-            }
-
             if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
             {
-                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request");
+                STJson.TryDeserialize<NebulanceRpcResponse<NebulanceErrorResponse>>(indexerResponse.Content, out var errorResponse);
+
+                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request: {errorResponse?.Result?.Error?.Message ?? "Check the logs for more information."}");
             }
 
             if (indexerResponse.Content != null && indexerResponse.Content.Contains("Invalid params"))
@@ -514,5 +511,15 @@ namespace Jackett.Common.Indexers.Definitions
         public string PublishDateUtc { get; set; }
 
         public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
+    }
+
+    public class NebulanceErrorResponse
+    {
+        public NebulanceErrorMessage Error { get; set; }
+    }
+
+    public class NebulanceErrorMessage
+    {
+        public string Message { get; set; }
     }
 }
