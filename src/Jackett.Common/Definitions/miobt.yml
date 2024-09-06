@@ -85,11 +85,9 @@ search:
     size:
       selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(5)
+      text: 1
     leechers:
-      selector: td:nth-child(6)
-    grabs:
-      selector: td:nth-child(7)
+      text: 1
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
