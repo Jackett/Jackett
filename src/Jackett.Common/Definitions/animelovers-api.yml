@@ -13,6 +13,7 @@ caps:
     - {id: 1, cat: Movies/Other, desc: "Anime Movies"}
     - {id: 2, cat: TV/Anime, desc: "Anime Series"}
     - {id: 3, cat: TV/Anime, desc: "Anime OVA"}
+    - {id: 11, cat: TV/Anime, desc: "Donghua Anime"}
     - {id: 9, cat: XXX, desc: "Doujinshi"}
     - {id: 4, cat: Books/Comics, desc: "Manhua/Manhwa"}
     - {id: 8, cat: Books/Comics, desc: "Manga"}
