@@ -64,6 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationDataAPIKey())
         {
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(string.Empty, "Generate a new key by accessing your account profile settings at <a href=\"https://nebulance.io/\" target=_blank>Nebulance</a>, scroll down to the <b>API Keys</b> section, tick the <i>New Key</i>, <i>list</i> and <i>download</i> checkboxes and save."));
+            configData.AddDynamic("loginRequirements", new DisplayInfoConfigurationItem(string.Empty, "You must meet the login requirements: VPN with 2FA or ISP in home country."));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -317,6 +318,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.WebResponse.Status == HttpStatusCode.Forbidden)
+            {
+                throw new Exception("You do not meet the login requirements: VPN with 2FA or ISP in home country.");
+            }
+
             if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
             {
                 throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request");
