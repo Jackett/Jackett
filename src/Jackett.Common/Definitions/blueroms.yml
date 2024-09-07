@@ -91,11 +91,30 @@ search:
       attribute: href
     size:
       selector: td:nth-child(4)
-    date:
-      selector: td:nth-child(5)
+    date_year:
+      selector: td:nth-child(5):not(:contains("-"))
+      optional: true
       filters:
         - name: dateparse
-          args: "YYYY-MM-dd"
+          args: "yyyy"
+    date_month:
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2})
+        - name: dateparse
+          args: "yyyy-MM"
+    date_day:
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2})
+        - name: dateparse
+          args: "yyyy-MM-dd"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_month }}{{ or .Result.date_year .Result.date_day .Result.date_month }}{{ else }}now{{ end }}"
     seeders:
       text: 1
     leechers:
