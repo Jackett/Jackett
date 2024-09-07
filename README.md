@@ -41,6 +41,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * BigFANGroup
  * BitRu
  * BitSearch
+ * BlueRoms
  * BT.etree
  * BTdirectory (BT目录)
  * BTMET
