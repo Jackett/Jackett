@@ -12,105 +12,62 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 3, cat: PC, desc: "Applications"}
-    - {id: 7, cat: PC/Mobile-Android, desc: "Android Applications"}
-    - {id: 5, cat: PC/0day, desc: "Linux Applications"}
-    - {id: 6, cat: PC/Mac, desc: "Macintosh Applications"}
-    - {id: 4, cat: PC/0day, desc: "Windows Applications"}
-    - {id: 22, cat: Books, desc: "Documents"}
-    - {id: 69, cat: Audio/Audiobook, desc: "Audio Books"}
-    - {id: 23, cat: Books/EBook, desc: "Books"}
-    - {id: 27, cat: Books/Comics, desc: "Comics"}
-    - {id: 24, cat: Books/EBook, desc: "Greek Books"}
-    - {id: 38, cat: Books/EBook, desc: "Greek Documentaries"}
-    - {id: 26, cat: Other, desc: "Greek Pictures"}
-    - {id: 25, cat: Other, desc: "Pictures"}
+    - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 7, cat: PC/Mobile-Android, desc: "Apps: Android"}
+    - {id: 5, cat: PC/0day, desc: "Apps: Linux"}
+    - {id: 6, cat: PC/Mac, desc: "Apps: MacOS"}
+    - {id: 4, cat: PC/0day, desc: "Apps: Windows"}
+    - {id: 22, cat: Books, desc: "Books"}
+    - {id: 27, cat: Books/Comics, desc: "Books: Comics"}
+    - {id: 114, cat: Audio/Audiobook, desc: "Books: Foreign Audio Books"}
+    - {id: 23, cat: Books/EBook, desc: "Books: Foreign Books"}
+    - {id: 69, cat: Audio/Audiobook, desc: "Books: Greek Audio Books"}
+    - {id: 24, cat: Books/EBook, desc: "Books: Greek Books"}
     - {id: 73, cat: Console, desc: "Games"}
-    - {id: 74, cat: PC/Games, desc: "PC Games"}
-    - {id: 88, cat: Movies/HD, desc: "Greek Movies HD"}
-    - {id: 89, cat: Movies/BluRay, desc: "Greek Movies BluRay"}
-    - {id: 94, cat: Movies/DVD, desc: "Greek Movies DvDRiP"}
-    - {id: 90, cat: Movies/SD, desc: "Greek Movies Remux"}
-    - {id: 91, cat: Movies/WEB-DL, desc: "Greek Movies WEB-DL"}
-    - {id: 93, cat: TV/HD, desc: "Greek TV HD"}
-    - {id: 97, cat: TV/Anime, desc: "Greek Anime HD"}
-    - {id: 98, cat: TV/Documentary, desc: "Greek Documentaries HD"}
-    - {id: 95, cat: TV/HD, desc: "Greek TV BluRay HD"}
-    - {id: 96, cat: TV/WEB-DL, desc: "Greek TV WEB-DL HD"}
+    - {id: 74, cat: PC/Games, desc: "Games: PC Games"}
     - {id: 15, cat: Movies/SD, desc: "Movies"}
-    - {id: 105, cat: Movies, desc: "Movies Animation"}
-    - {id: 103, cat: Movies/BluRay, desc: "Movies BluRay"}
-    - {id: 101, cat: Movies/BluRay, desc: "Movies BRRip"}
-    - {id: 106, cat: Movies, desc: "Movies Cartoons"}
-    - {id: 99, cat: Movies/DVD, desc: "Movies DVDRip"}
-    - {id: 20, cat: Movies/SD, desc: "Filmographies"}
-    - {id: 107, cat: Movies, desc: "Greek Animation"}
-    - {id: 81, cat: Movies/BluRay, desc: "Greek BRRip"}
-    - {id: 108, cat: Movies, desc: "Greek Cartoons"}
-    - {id: 82, cat: Movies/DVD, desc: "Greek DVDRip"}
-    - {id: 16, cat: Movies/SD, desc: "DVDRip-WEBRip-BRRip"}
-    - {id: 21, cat: Movies/SD, desc: "Greek Filmographies"}
-    - {id: 17, cat: Movies/SD, desc: "Greek Movies"}
-    - {id: 19, cat: Audio/Video, desc: "Greek Music Videos"}
-    - {id: 80, cat: Movies/SD, desc: "Greek WEBRip"}
-    - {id: 102, cat: Movies/SD, desc: "Movies"}
-    - {id: 18, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 104, cat: Movies/SD, desc: "Movies Remux"}
-    - {id: 100, cat: Movies/SD, desc: "Movies WEBRip"}
+    - {id: 105, cat: Movies, desc: "Movies: Animation"}
+    - {id: 106, cat: Movies, desc: "Movies: Cartoons"}
+    - {id: 20, cat: Movies/SD, desc: "Movies: Filmographies"}
+    - {id: 16, cat: Movies/SD, desc: "Movies: Foreign Movies Non HD"}
+    - {id: 119, cat: Movies/SD, desc: "Movies: Greek Movies Non HD"}
+    - {id: 122, cat: Movies/HD, desc: "Movies: MicroHD"}
+    - {id: 112, cat: Movies/HD, desc: "Movies: Movie Packs"}
     - {id: 41, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 50, cat: Movies/HD, desc: "BluRay / 1080p"}
-    - {id: 51, cat: Movies/UHD, desc: "BluRay / 4K (UHD)"}
-    - {id: 49, cat: Movies/HD, desc: "BluRay / 720p"}
-    - {id: 45, cat: Movies/BluRay, desc: "BluRay Disk / 1080p"}
-    - {id: 66, cat: Movies/BluRay, desc: "BluRay Disk / 4K (UHD)"}
-    - {id: 110, cat: Movies/HD, desc: "Bluray MicroHD"}
-    - {id: 42, cat: Movies/HD, desc: "Remux / 1080p"}
-    - {id: 46, cat: Movies/UHD, desc: "Remux / 4K (UHD)"}
-    - {id: 47, cat: Movies/WEB-DL, desc: "WEB-DL / 1080p"}
-    - {id: 48, cat: Movies/UHD, desc: "WEB-DL / 4K (UHD)"}
-    - {id: 43, cat: Movies/WEB-DL, desc: "WEB-DL / 720p"}
+    - {id: 50, cat: Movies/HD, desc: "Movies HD: BluRay / 1080p"}
+    - {id: 51, cat: Movies/UHD, desc: "Movies HD: BluRay / 4K (UHD)"}
+    - {id: 49, cat: Movies/HD, desc: "Movies HD: BluRay / 720p"}
+    - {id: 45, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 1080p"}
+    - {id: 66, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 4K (UHD)"}
+    - {id: 42, cat: Movies/HD, desc: "Movies HD: Remux / 1080p"}
+    - {id: 46, cat: Movies/UHD, desc: "Movies HD: Remux / 4K (UHD)"}
+    - {id: 47, cat: Movies/WEB-DL, desc: "Movies HD: WEB-DL / 1080p"}
+    - {id: 48, cat: Movies/UHD, desc: "Movies HD: WEB-DL / 4K (UHD)"}
+    - {id: 43, cat: Movies/WEB-DL, desc: "Movies HD: WEB-DL / 720p"}
     - {id: 8, cat: Audio, desc: "Music"}
-    - {id: 71, cat: Audio, desc: "Collections"}
-    - {id: 87, cat: Audio, desc: "Collections Greek"}
-    - {id: 68, cat: Audio, desc: "Discographies"}
-    - {id: 86, cat: Audio, desc: "Greek Discographies"}
-    - {id: 10, cat: Audio/Lossless, desc: "Greek Music FLAC"}
-    - {id: 9, cat: Audio/MP3, desc: "Greek Music MP3"}
-    - {id: 92, cat: Audio/Other, desc: "Greek Soundtracks"}
-    - {id: 12, cat: Audio/Lossless, desc: "Music FLAC"}
-    - {id: 11, cat: Audio/MP3, desc: "Music MP3"}
-    - {id: 72, cat: Audio/Other, desc: "Soundtracks"}
-    - {id: 28, cat: TV/SD, desc: "TV"}
-    - {id: 29, cat: TV/Anime, desc: "Anime"}
-    - {id: 85, cat: TV/Other, desc: "BRRip TV"}
-    - {id: 31, cat: TV/Other, desc: "Cartoons"}
-    - {id: 37, cat: TV/Documentary, desc: "Documentaries"}
-    - {id: 83, cat: TV/Other, desc: "DVDRip Tv"}
-    - {id: 70, cat: TV/SD, desc: "DVDRip-WEBRip-BRRip"}
-    - {id: 30, cat: TV/Anime, desc: "Greek Anime"}
-    - {id: 32, cat: TV/Other, desc: "Greek Cartoon"}
-    - {id: 79, cat: TV/Documentary, desc: "Greek Documentaries"}
-    - {id: 36, cat: TV/SD, desc: "Greek TV Packs"}
-    - {id: 35, cat: TV/SD, desc: "Greek TV Series"}
-    - {id: 40, cat: TV/SD, desc: "Greek TV Shows"}
-    - {id: 39, cat: TV/SD, desc: "Shows"}
-    - {id: 67, cat: TV/Sport, desc: "Sports"}
-    - {id: 77, cat: TV/SD, desc: "TV Packs"}
-    - {id: 75, cat: TV/SD, desc: "TV Series"}
-    - {id: 76, cat: TV/SD, desc: "TV Shows"}
-    - {id: 78, cat: TV/Sport, desc: "TV Sports"}
-    - {id: 84, cat: TV/SD, desc: "WEBRip TV"}
-    - {id: 54, cat: TV/HD, desc: "TV HD"}
-    - {id: 56, cat: TV/HD, desc: "BluRay / 1080p"}
-    - {id: 57, cat: TV/UHD, desc: "BluRay / 4K (UHD)"}
-    - {id: 55, cat: TV/HD, desc: "BluRay / 720p"}
-    - {id: 63, cat: TV/HD, desc: "BluRay Disk / 1080p"}
-    - {id: 65, cat: TV/UHD, desc: "BluRay Disk / 4K (UHD)"}
-    - {id: 61, cat: TV/HD, desc: "Remux / 1080p"}
-    - {id: 62, cat: TV/UHD, desc: "Remux / 4K (UHD)"}
-    - {id: 59, cat: TV/WEB-DL, desc: "WEB-DL / 1080p"}
-    - {id: 60, cat: TV/UHD, desc: "WEB-DL / 4K (UHD)"}
-    - {id: 58, cat: TV/WEB-DL, desc: "WEB-DL / 720p"}
+    - {id: 71, cat: Audio, desc: "Music: Collections"}
+    - {id: 68, cat: Audio, desc: "Music:Discographies"}
+    - {id: 12, cat: Audio/Lossless, desc: "Music: Foreign FLAC"}
+    - {id: 11, cat: Audio/MP3, desc: "Music: Foreign MP3"}
+    - {id: 115, cat: Audio/Video, desc: "Music: Foreign Music Videos"}
+    - {id: 72, cat: Audio/Other, desc: "Music: Foreign Soundtracks"}
+    - {id: 87, cat: Audio, desc: "Music: Greek Collections"}
+    - {id: 86, cat: Audio, desc: "Music: Greek Discographies"}
+    - {id: 10, cat: Audio/Lossless, desc: "Music: Greek FLAC"}
+    - {id: 9, cat: Audio/MP3, desc: "Music: Greek MP3"}
+    - {id: 116, cat: Audio/Video, desc: "Music: Greek Music Videos"}
+    - {id: 92, cat: Audio/Other, desc: "Music: Greek Soundtracks"}
+    - {id: 28, cat: TV, desc: "TV"}
+    - {id: 29, cat: TV/Anime, desc: "TV: Animation"}
+    - {id: 31, cat: TV/Other, desc: "TV: Cartoons"}
+    - {id: 79, cat: TV/Documentary, desc: "TV: Documentaries"}
+    - {id: 77, cat: TV, desc: "TV: Foreign TV Packs"}
+    - {id: 75, cat: TV, desc: "TV: Foreign TV Series"}
+    - {id: 76, cat: TV, desc: "TV: Foreign TV Shows"}
+    - {id: 36, cat: TV, desc: "TV: Greek TV Packs"}
+    - {id: 35, cat: TV, desc: "TV: Greek TV Series"}
+    - {id: 40, cat: TV, desc: "TV: Greek TV Shows"}
+    - {id: 67, cat: TV/Sport, desc: "TV: Sports"}
 
   modes:
     search: [q]
