@@ -14,12 +14,13 @@ caps:
     - {id: 2, cat: XXX/WEB-DL, desc: "Fansly"}
     - {id: 3, cat: XXX/WEB-DL, desc: "ManyVids"}
     - {id: 4, cat: XXX/WEB-DL, desc: "Clips4Sale"}
-    - {id: 5, cat: XXX/WEB-DL, desc: "JustForFans"}
+    - {id: 15, cat: XXX/WEB-DL, desc: "iWantClips"}
     - {id: 6, cat: XXX/WEB-DL, desc: "Privacy"}
     - {id: 10, cat: XXX/WEB-DL, desc: "Chaturbate"}
     - {id: 11, cat: XXX/WEB-DL, desc: "LoyalFans"}
     - {id: 12, cat: XXX/WEB-DL, desc: "CamSoda"}
     - {id: 8, cat: XXX/WEB-DL, desc: "MyDirtyHobby"}
+    - {id: 5, cat: XXX/WEB-DL, desc: "JustForFans"}
     - {id: 14, cat: XXX/WEB-DL, desc: "Other"}
 
   modes:
