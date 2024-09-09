@@ -82,16 +82,14 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     date:
-      selector: div.sbar > span:contains("添加时间:")
+      selector: div.sbar > span:contains("添加时间:") > b
       filters:
-        - name: replace
-          args: ["添加时间:", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("大小:")
+      selector: div.sbar > span:contains("大小:") > b
     seeders:
       text: 1
     leechers:
