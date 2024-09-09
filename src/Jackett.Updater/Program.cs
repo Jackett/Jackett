@@ -623,6 +623,7 @@ namespace Jackett.Updater
                 "Definitions/sharkpt.yml",
                 "Definitions/shokweb.yml",
                 "Definitions/skipthecommercials.yml", // switch to *-API #8682
+                "Definitions/skipthecommercials-api.yml",
                 "Definitions/skipthetrailers.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrents-to.yml",
