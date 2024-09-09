@@ -491,6 +491,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * PotUK
  * Pretome
  * PrivateHD (PHD)
+ * PrivateSilverScreen (PSS)
  * ProAudioTorrents (PAT)
  * PT GTK
  * PT分享站 (itzmx)
