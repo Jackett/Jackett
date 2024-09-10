@@ -69,9 +69,12 @@ search:
     details:
       selector: a[href^="/hash/"]
       attribute: href
-    magnet:
+    infohash:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     date:
       selector: div.sbar > span:contains("Date added:") > b
       filters:
