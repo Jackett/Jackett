@@ -6,9 +6,10 @@ language: ro-RO
 type: private
 encoding: UTF-8
 links:
-  - https://www.seedfile.ro/
+  - https://seedfile.io/
 legacylinks:
   - https://www.seedfile.io/
+  - https://www.seedfile.ro/
 
 caps:
   categorymappings:
@@ -74,7 +75,7 @@ login:
     - selector: div.recover-error2
   test:
     path: home
-    selector: a[href^="logout.php"]
+    selector: a[href^="/logout.php?id="]
 
 download:
   selectors:
