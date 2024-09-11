@@ -18,7 +18,7 @@ caps:
     - {id: 114, cat: Movies/UHD, desc: "Filme UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "Filme BluRay"}
     - {id: 28, cat: Movies/SD, desc: "Filme SD"}
-    - {id: 145, cat: Movies/SD, desc: "Filme -SD"}
+    - {id: 145, cat: Movies/SD, desc: "Filme all SD"}
     - {id: 138, cat: Movies, desc: "Filme Pack's"}
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
