@@ -29,7 +29,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "audiobookbay";
         public override string Name => "AudioBook Bay";
         public override string Description => "AudioBook Bay (ABB) is a public Torrent Tracker for AUDIOBOOKS";
-        public override string SiteLink { get; protected set; } = "https://audiobookbay.is/";
+        public override string SiteLink { get; protected set; } = "https://audiobookbay.lu/";
+        public override string[] AlternativeSiteLinks => new[]
+        {
+            "https://audiobookbay.lu/",
+            "https://audiobookbay.is/",
+        };
         public override string[] LegacySiteLinks => new[]
         {
             "https://audiobookbay.la/",

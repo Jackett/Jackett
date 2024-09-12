@@ -1,22 +1,24 @@
 ---
-id: skipthecommercials-api
-name: SkipTheCommercials (API)
-description: "SkipTheCommercials (STC) is a Private Torrent Tracker for TV"
+id: privatesilverscreen-api
+name: PrivateSilverScreen (API)
+description: "PrivateSilverScreen (PSS) is a Private tracker for MOVIES / TV / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://skipthecommericals.xyz/
+  - https://privatesilverscreen.cc/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV Show"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
@@ -25,7 +27,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://skipthecommericals.xyz/\" target=\"_blank\">SkipTheCommercials</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://privatesilverscreen.cc/\" target=\"_blank\">PrivateSilverScreen</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -50,10 +52,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "You must be seeding at least 1 torrent or login once every 90 days to not get pruned. Once pruned, you will get additional 30 days to reactivate your account by logging in."
 
 login:
   path: /api/torrents
@@ -153,7 +151,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -163,13 +166,17 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
       # api returns False, True
       selector: double_upload
       case:
         False: 1 # normal
         True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.1.3
+# json UNIT3D 8.2.0

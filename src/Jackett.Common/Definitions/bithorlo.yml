@@ -4,7 +4,7 @@ name: Bithorlo
 description: "Bithorlo (BHO) is a HUNGARIAN Private Torrent Tracker for MOVIES / GENERAL"
 language: hu-HU
 type: private
-encoding: ISO-8859-2
+encoding: UTF-8
 links:
   - https://www.bithorlo.info/
 
@@ -15,40 +15,40 @@ caps:
     - {id: 19, cat: Books, desc: "E-book/Hun"}
     # Játék
     - {id: 38, cat: Console, desc: "Játék/Consol"}
-    - {id: 15, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 37, cat: PC/Games, desc: "Játék/Rip"}
+    - {id: 15, cat: PC/Games, desc: "Játék/ISO"}
     # Filmek
+    - {id: 2, cat: Movies/DVD, desc: "DVD/Eng"}
     - {id: 51, cat: Movies/SD, desc: "Cam/Eng"}
     - {id: 50, cat: Movies/SD, desc: "Cam/Hun"}
-    - {id: 2, cat: Movies/DVD, desc: "DVD/Eng"}
-    - {id: 1, cat: Movies/DVD, desc: "DVD/Hun"}
     - {id: 42, cat: Movies/DVD, desc: "Dvd9/Eng"}
     - {id: 41, cat: Movies/DVD, desc: "Dvd9/Hun"}
+    - {id: 33, cat: TV, desc: "Sorozat/Eng"}
     - {id: 29, cat: Movies/HD, desc: "HD/Eng"}
     - {id: 28, cat: Movies/HD, desc: "HD/Hun"}
-    - {id: 33, cat: TV, desc: "Sorozat/Eng"}
-    - {id: 5, cat: TV, desc: "Sorozat/Hun"}
     - {id: 52, cat: TV/HD, desc: "Sorozat/Eng/HD"}
     - {id: 53, cat: TV/HD, desc: "Sorozat/Hun/HD"}
+    - {id: 1, cat: Movies/DVD, desc: "DVD/Hun"}
+    - {id: 5, cat: TV, desc: "Sorozat/Hun"}
     - {id: 4, cat: Movies/SD, desc: "Xvid/Eng"}
     - {id: 3, cat: Movies/SD, desc: "Xvid/Hun"}
     # Zene
-    - {id: 12, cat: Audio, desc: "Zene/Eng"}
     - {id: 13, cat: Audio, desc: "Zene/Hun"}
+    - {id: 12, cat: Audio, desc: "Zene/Eng"}
     # Egyéb
-    - {id: 20, cat: Other, desc: "Képek"}
     - {id: 21, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 20, cat: Other, desc: "Képek"}
     # Program
     - {id: 54, cat: PC/0day, desc: "Win/Program/ISO"}
     - {id: 23, cat: PC/0day, desc: "Win/Program/Rip"}
     # Felnőtt tartalom
-    - {id: 9, cat: XXX, desc: "XXX/Film"}
     - {id: 10, cat: XXX, desc: "XXX/Kép"}
+    - {id: 9, cat: XXX, desc: "XXX/Film"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -67,22 +67,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: sort
+  - name: sortBy
     type: select
-    label: Sort requested from site
-    default: 4
+    label: SortBy requested from site
+    default: 2
     options:
-      4: created
-      7: seeders
-      5: size
+      2: created
+      5: seeders
+      3: size
       1: title
-  - name: type
+  - name: orderBy
     type: select
-    label: Order requested from site
-    default: desc
+    label: OrderBy requested from site
+    default: 0
     options:
-      desc: desc
-      asc: asc
+      0: desc
+      1: asc
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -93,80 +93,83 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
-    selector: a[href="logout.php"]
+    path: index/
+    selector: a[href="/logout/"]
 
 search:
   paths:
-    - path: browse.php
+    # https://www.bithorlo.info/torrents/?action=search&categories[]=29&categories[]=4&search_text=&incldead=1&torrent_tags=
+    - path: torrents/
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    action: search
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    search_text: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 5 waiting for seed, 6 multiple upload
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    sort: "{{ .Config.sortBy }}"
+    order_by: "{{ .Config.orderBy }}"
 
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: tr[class^="browse"]
+    selector: table#TorrentTable > tbody > tr
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: td.fixed-width-category > a
       attribute: href
       filters:
         - name: querystring
-          args: cat
-        - name: trim # some torrents have an extra space
+          args: categories[]
     title:
-      selector: a[href^="torrent.php?id="]
-      attribute: title
+      selector: a.torrent-name
     details:
-      selector: a[href^="torrent.php?id="]
+      selector: a.torrent-name
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="/download/"]
       attribute: href
     poster:
-      selector: a[href^="torrent.php?id="][onmouseover]
-      attribute: onmouseover
+      selector: span.custom-popover
+      attribute: data-bs-content
       filters:
         - name: regexp
-          args: ", '(.*)'"
-    size:
-      selector: td:nth-child(4)
-    grabs:
-      selector: td:nth-child(5)
-    seeders:
-      selector: td:nth-child(6)
-    leechers:
-      selector: td:nth-child(7)
+          args: \"(.+?)\"
     date:
-      selector: "a[style=\"font-size: 8pt;cursor: pointer;\"][title]"
+      selector: span.bg-green
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
+    size:
+      selector: td.fixed-width-size > span
+    grabs:
+      selector: td.fixed-width-completed
+    seeders:
+      selector: td.fixed-width-seeders
+    leechers:
+      selector: td.fixed-width-leechers
     description:
       case:
         img[src="./themes/Born/nemlatta.png"]: Unverified
         "*": Verified
     downloadvolumefactor:
       case:
-        img[title="Ingyenes letöltés"]: 0
+        "span:contains(\"FREE\")": 0
         "*": 1
     uploadvolumefactor:
-      selector: span:contains("Feltöltési szorzó")
-      filters:
-        - name: replace
-          args: ["Feltöltési szorzó × ", ""]
+      case:
+        "span:contains(\"2x\")": 2
+        "span:contains(\"3x\")": 3
+        "span:contains(\"4x\")": 4
+        "span:contains(\"5x\")": 5
+        "span:contains(\"6x\")": 6
+        "span:contains(\"7x\")": 7
+        "span:contains(\"8x\")": 8
+        "span:contains(\"9x\")": 9
+        "*": 1
     minimumratio:
       text: 1.0
-    minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
 # engine n/a

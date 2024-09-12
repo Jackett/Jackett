@@ -1,0 +1,126 @@
+---
+id: blueroms
+name: BlueRoms
+description: "BlueRoms is a Public Torrent Tracker for ROMS"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.blueroms.ws/
+
+caps:
+  categorymappings:
+    - {id: "/3ds", cat: Console/3DS, desc: "3DS"}
+    - {id: "/arcade", cat: Console/Other, desc: "Arcade"}
+    - {id: "/dreamcast", cat: Console/Other, desc: "Dreamcast"}
+    - {id: "/nds", cat: Console/Other, desc: "DS"}
+    - {id: "/gba", cat: Console/Other, desc: "Game Boy Advance"}
+    - {id: "/gamecube", cat: Console/Other, desc: "GameCube"}
+    - {id: "/genesis", cat: Console/Other, desc: "Mega Drive - Genesis"}
+    - {id: "/neogeo", cat: Console/Other, desc: "Neo Geo"}
+    - {id: "/n64", cat: Console/NDS, desc: "Nintendo 64"}
+    - {id: "/switch", cat: Console/NDS, desc: "Nintendo Switch"}
+    - {id: "/ps1", cat: Console/PS3, desc: "PlayStation"}
+    - {id: "/ps2", cat: Console/PS3, desc: "PlayStation 2"}
+    - {id: "/ps3", cat: Console/PS3, desc: "PlayStation 3"}
+    - {id: "psp", cat: Console/PSP, desc: "PlayStation Portable"}
+    - {id: "/saturn", cat: Console/Other, desc: "Saturn"}
+    - {id: "/snes", cat: Console/NDS, desc: "Super Nintendo"}
+    - {id: "/wii", cat: Console/Wii, desc: "Wii"}
+    - {id: "/xbox", cat: Console/XBox, desc: "Xbox"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    # https://www.blueroms.ws/search?page=1&q=&g=0&p=0&ord=desc&at=date
+    - path: search
+  allowEmptyInputs: true
+  inputs:
+    page: 1
+    q: "{{ .Keywords }}"
+    # genre: 0 all, 200 action, 207 adventure, etc
+    g: 0
+    # categories does not support multi selection so defaulting to all
+    p: 0
+    ord: "{{ .Config.type }}"
+    at: "{{ .Config.sort }}"
+
+  rows:
+    selector: table.table-striped > tbody > tr
+
+  fields:
+    category:
+      selector: td:nth-child(1) a
+      attribute: href
+    _platform:
+      selector: td:nth-child(1)
+    title:
+      selector: td:nth-child(2)
+      filters:
+        - name: append
+          args: " - {{ .Result._platform }}"
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(3) a
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+    date_year:
+      selector: td:nth-child(5):not(:contains("-"))
+      optional: true
+      filters:
+        - name: dateparse
+          args: "yyyy"
+    date_month:
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2})
+        - name: dateparse
+          args: "yyyy-MM"
+    date_day:
+      selector: td:nth-child(5):contains("-")
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d{4}-\d{2}-\d{2})
+        - name: dateparse
+          args: "yyyy-MM-dd"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day .Result.date_month }}{{ or .Result.date_year .Result.date_day .Result.date_month }}{{ else }}now{{ end }}"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

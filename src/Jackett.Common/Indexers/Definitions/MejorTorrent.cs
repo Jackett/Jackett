@@ -28,12 +28,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "mejortorrent";
         public override string Name => "MejorTorrent";
         public override string Description => "MejorTorrent - Hay veces que un torrent viene mejor! :)";
-        public override string SiteLink { get; protected set; } = "https://www20.mejortorrent.zip/";
+        public override string SiteLink { get; protected set; } = "https://www21.mejortorrent.zip/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://mejortorrent.unblockit.rsvp/",
             "https://mejortorrent.unblockit.vegas/",
-            "https://www5.mejortorrent.rip/",
             "https://mejortorrent.unblockit.esq/",
             "https://www6.mejortorrent.rip/",
             "https://mejortorrent.unblockit.zip/",
@@ -51,6 +50,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://www17.mejortorrent.zip/",
             "https://www18.mejortorrent.zip/",
             "https://www19.mejortorrent.zip/",
+            "https://www20.mejortorrent.zip/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -154,7 +154,16 @@ namespace Jackett.Common.Indexers.Definitions
             var url = SiteLink + NewTorrentsUrl;
             var result = await RequestWithCookiesAsync(url);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    throw new ExceptionWithConfigData("HTTP 500 Internal Server Error", configData);
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
             try
             {
                 var searchResultParser = new HtmlParser();
@@ -208,7 +217,14 @@ namespace Jackett.Common.Indexers.Definitions
                 var url = SiteLink + SearchUrl + i + "?" + qc.GetQueryString();
                 var result = await RequestWithCookiesAsync(url);
                 if (result.Status != HttpStatusCode.OK)
-                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                    if (result.Status == HttpStatusCode.InternalServerError)
+                    {
+                        throw new ExceptionWithConfigData("HTTP 500 Internal Server Error", configData);
+                    }
+                    else
+                    {
+                        throw new ExceptionWithConfigData(result.ContentString, configData);
+                    }
                 try
                 {
                     var searchResultParser = new HtmlParser();

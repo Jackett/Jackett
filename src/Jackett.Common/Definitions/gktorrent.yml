@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
-  - https://www.gktorrent.sk/
+  - https://www.gktorrent.uno/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -15,8 +15,6 @@ legacylinks:
   - https://www.protege-torrent.com/
   - https://gktorrent.news/
   # actual legacylinks
-  - https://gktorrent.nocensor.click/
-  - https://www.gktorrent.ph/
   - https://www.gktorrent.vc/
   - https://www.gktorrent.mx/
   - https://www.gktorrent.fi/
@@ -32,6 +30,7 @@ legacylinks:
   - https://www.gktorrent.pm/
   - https://www.gktorrent.tw/
   - https://www.gktorrent.in/
+  - https://www.gktorrent.sk/
 
 caps:
   categorymappings:

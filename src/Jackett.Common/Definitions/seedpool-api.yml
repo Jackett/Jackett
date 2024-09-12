@@ -1,20 +1,36 @@
 ---
-id: kimoji
-name: KIMOJI
-description: "KIMOJI is a CHINESE Private Torrent Tracker for MUSIC"
+id: seedpool-api
+name: seedpool (API)
+description: "seedpool is a Private Torrent Tracker for 0-day MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://kimoji.club/
+  - https://seedpool.org/
 
 caps:
   categorymappings:
-    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 2, cat: TV, desc: "TV Show"}
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 10, cat: Movies/UHD, desc: "4K Movie"}
+    - {id: 3, cat: PC/Games, desc: "PC Game"}
+    - {id: 8, cat: TV/Sport, desc: "Sports"}
+    - {id: 12, cat: PC/Games, desc: "Linux Game"}
+    - {id: 4, cat: Console/Other, desc: "NSW Game"}
+    - {id: 5, cat: Audio/Lossless, desc: "Music"}
+    - {id: 6, cat: TV/Anime, desc: "Anime"}
+    - {id: 7, cat: Books/EBook, desc: "E-Books"}
+    - {id: 13, cat: Movies, desc: "BoxSet"}
+    - {id: 14, cat: Console/PS4, desc: "PS4"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 11, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -23,11 +39,15 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://kimoji.club/\" target=\"_blank\">KIMOJI</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://seedpool.org/\" target=\"_blank\">seedpool</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -69,6 +89,11 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -83,12 +108,17 @@ search:
     attribute: attributes
 
   fields:
-    _id:
-      selector: ..id
     category:
       selector: category_id
-    title:
+    title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -96,20 +126,27 @@ search:
     infohash:
       selector: info_hash
     poster:
-      text: "{{ .Config.sitelink }}files/img/torrent-cover_{{ .Result._id }}.jpg"
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
     genre:
-      selector: distributor
+      selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Hard Rock)", "Hard_Rock"]
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
-          args: ["(?i)(World Music)", "World_Music"]
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
-          args: ["/", "_"]
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
     seeders:
       selector: seeders
     leechers:
@@ -126,7 +163,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -136,16 +178,20 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
       # api returns False, True
       selector: double_upload
       case:
         False: 1 # normal
         True: 2 # double
-# global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 1.0 but torrents must be seeded for 10 days regardless of ratio
 #    minimumratio:
 #      text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 7.1.3 (custom)
+      # 10 days (as seconds = 10 x 24 x 60 x 60)
+      text: 864000
+# json UNIT3D 8.2.0

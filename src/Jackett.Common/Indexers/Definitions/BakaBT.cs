@@ -17,6 +17,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -52,8 +53,9 @@ namespace Jackett.Common.Indexers.Definitions
                    logger: l,
                    p: ps,
                    cacheManager: cm,
-                   configData: new ConfigurationDataBakaBT("To prevent 0-results-error, Enable the Show-Adult-Content option in your BakaBT account Settings."))
+                   configData: new ConfigurationDataBakaBT("To show more results and prevent a 0 results error, go to your BakaBT account settings and in the 'Browse' section enable the 'Show Adult Content' option and change 'Torrents per page' to '100'."))
         {
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Accounts are pruned after 11 months of disuse (i.e. not logging into the tracker account). Accounts with 0 download and 0 upload are pruned earlier. Donator accounts (people who've donated to BakaBT and received a donator status) have the option of disabling inactivity pruning, and safeguarding their account for as long as they choose."));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -238,8 +240,7 @@ namespace Jackett.Common.Indexers.Definitions
                         release.Seeders = int.Parse(row.QuerySelectorAll(".peers a")[0].TextContent);
                         release.Peers = release.Seeders + int.Parse(row.QuerySelectorAll(".peers a")[1].TextContent);
 
-                        release.MinimumRatio = 1;
-                        release.MinimumSeedTime = 172800; // 48 hours
+                        release.MinimumRatio = 0.5;
 
                         var size = row.QuerySelector(".size").TextContent;
                         release.Size = ParseUtil.GetBytes(size);

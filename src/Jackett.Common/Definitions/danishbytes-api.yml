@@ -2,7 +2,7 @@
 id: danishbytes-api
 name: DanishBytes (API)
 description: "DanishBytes is a Private Danish Tracker"
-language: en-US
+language: da-DK
 type: private
 encoding: UTF-8
 links:

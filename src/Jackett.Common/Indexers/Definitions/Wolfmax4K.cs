@@ -397,7 +397,7 @@ namespace Jackett.Common.Indexers.Definitions
                 result += "S" + matchSeason.Groups[1].Value.PadLeft(2, '0');
             }
 
-            var matchEpisode = new Regex(@"/capitulo-(\d+)(-al-(\d+))?/").Match(guid);
+            var matchEpisode = new Regex(@"/capitulo-(\d+)(-al-(\d+))?").Match(guid);
             if (matchSeason.Success && matchEpisode.Success)
             {
                 result += "E" + matchEpisode.Groups[1].Value.PadLeft(2, '0');

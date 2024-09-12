@@ -94,6 +94,7 @@ login:
     logout: ""
   error:
     - selector: table.message:contains("Error")
+    - selector: body:contains("Error 403")
   test:
     path: index.php
     selector: a[href="account-logout.php"]

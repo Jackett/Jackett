@@ -91,9 +91,10 @@ search:
       inputs:
         # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
         incldead: 0
-    - path: browse_xxx.php
+    - path: browse.php
       categories: [33, 66, 89]
       inputs:
+        xxx: 1
         # 0 active, 1 all, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
         incldead: 1
   inputs:
@@ -105,7 +106,7 @@ search:
     # can support genre searching but you need to know the id, eg &genre23=1 for Comedy (id is 23)
 
   rows:
-    selector: "tr[class^=\"toriadatok\"]{{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: "tr[class^=\"toriadatok\"]:has(i.status-yes){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
 
   fields:
     categorydesc:
@@ -115,19 +116,12 @@ search:
         - name: replace
           args: ["catpic_", ""]
     title:
-      selector: font[class="tori"], a.preview
+      selector: span.torrent-title
     _id:
-      selector: td.tori_infok
-      attribute: id
-      optional: true
-      filters:
-        - name: regexp
-          args: (\d+)
+      selector: tr[data-torrent-id]
+      attribute: data-torrent-id
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
-      optional: true
-      default: "details.php?id={{ .Result._id }}#adatlap"
+      text: "details.php?id={{ .Result._id }}#adatlap"
     download:
       text: "download.php?torrent={{ .Result._id }}"
     poster:
@@ -137,14 +131,14 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: td[id^="tsize"]
+      selector: span.torrent-size
     date:
       # 36 perce
       # 13 órája  és 59 perce
       # 2 napja  és 10 órája
       # 1 hete  és 1 napja
       # 1 éve  és 30 hete
-      selector: span.ellenorzes
+      selector: span.uploader
       filters:
         - name: replace
           args: ["és ", " "]
@@ -159,20 +153,20 @@ search:
         - name: replace
           args: ["éve", "year"]
         - name: timeago
-    grabs:
-      selector: td.letoltok
-      optional: true
-      default: 0
     seeders:
-      selector: td.seeders
+      selector: td:nth-child(5)
       optional: true
       default: 0
     leechers:
-      selector: td.leechers
+      selector: td:nth-child(6)
+      optional: true
+      default: 0
+    grabs:
+      selector: td:nth-child(7)
       optional: true
       default: 0
     genre:
-      selector: span[style="font-size:small;"]
+      selector: span.torrent-genre
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:

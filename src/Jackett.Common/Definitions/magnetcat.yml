@@ -1,19 +1,12 @@
 ---
-id: 52bt
-name: 52BT
-description: "52BT is a CHINESE Public tracker for TV / MOVIES / MUSIC / GENERAL"
-language: zh-CN
+id: magnetcat
+name: Magnet Cat
+description: "Magnet Cat is a Public Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: public
 encoding: UTF-8
 links:
-  # Send any content to 52btbtbt@gmail.com to get the latest address. or visit https://521.52btbt.cyou/
-  - https://www.529053.xyz/
-  - https://www.529055.xyz/
-legacylinks:
-  - https://529050.xyz/
-  - https://529048.xyz/
-  - https://529049.xyz/
-  - https://www.529052.xyz/
+  - https://magnetcatcat.com/
 
 caps:
   categorymappings:
@@ -40,12 +33,12 @@ settings:
     default: 0
     options:
       0: All categories
-      1: Film and Television
+      1: Movies and TV shows
       2: Music
       3: Images
-      4: Books
-      5: Zip Files
-      6: Software
+      4: Documents and books
+      5: Compressed files
+      6: Installer packages
       7: Other
   - name: sort
     type: select
@@ -55,8 +48,6 @@ settings:
       2: created
       1: size
       0: relevance
-  - name: info_flaresolverr
-    type: info_flaresolverr
 
 search:
   paths:
@@ -85,14 +76,14 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("添加时间:") > b
+      selector: div.sbar > span:contains("Date added:") > b
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("大小:") > b
+      selector: div.sbar > span:contains("Size:") > b
     seeders:
       text: 1
     leechers:

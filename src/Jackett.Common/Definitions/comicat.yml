@@ -1,15 +1,13 @@
 ---
 id: comicat
 name: comicat
-description: "comicat is a CHINESE Public tracker for Anime / Hentai / Manga"
+description: "comicat is a CHINESE Semi-Private tracker for Anime / Hentai / Manga"
 language: zh-CN
-type: public
+type: semi-private
 encoding: UTF-8
 requestDelay: 2
 links:
   - https://www.comicat.org/
-
-settings: []
 
 caps:
   categorymappings:
@@ -26,6 +24,15 @@ caps:
     movie-search: [q]
     music-search: [q]
     book-search: [q]
+
+settings: []
+
+login:
+  path: addon.php?r=document/view&page=visitor-test
+  method: form
+  form: form#visitor-test-form
+  inputs:
+    visitor_test: human
 
 search:
   paths:
@@ -58,8 +65,6 @@ search:
           args: "-(\\w+).html"
     size:
       selector: td:nth-child(4)
-    grabs:
-      selector: td:nth-child(7) span
     date_year:
       selector: td:nth-child(1):contains("/")
       optional: true
@@ -95,9 +100,9 @@ search:
     date:
       text: "{{ if or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ or .Result.date_year .Result.date_today .Result.date_yday .Result.date_ago }}{{ else }}now{{ end }}"
     seeders:
-      selector: td:nth-child(5) span
+      text: 1
     leechers:
-      selector: td:nth-child(6) span
+      text: 1
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
