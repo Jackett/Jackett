@@ -68,6 +68,7 @@ caps:
     - {id: 35, cat: TV, desc: "TV: Greek TV Series"}
     - {id: 40, cat: TV, desc: "TV: Greek TV Shows"}
     - {id: 67, cat: TV/Sport, desc: "TV: Sports"}
+    - {id: 127, cat: TV/Other, desc: "TV: Tutorials"}
 
   modes:
     search: [q]
