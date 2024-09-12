@@ -82,7 +82,7 @@ namespace Jackett.Server.Services
                 logger.Info($"Environment version: {Environment.Version} ({runtimedir})");
                 logger.Info($"OS version: {Environment.OSVersion}" +
                     (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") +
-                    (Environment.Is64BitProcess ? " (64bit process)" : ""));
+                    (Environment.Is64BitProcess ? " (64bit process)" : " (32bit process)"));
                 var variants = new Variants();
                 var variant = variants.GetVariant();
                 logger.Info($"Jackett variant: {variant}");

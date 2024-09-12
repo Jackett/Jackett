@@ -24,11 +24,13 @@
   <Choose>
     <When Condition="'$(TargetFramework)' != 'net462' and $(RuntimeIdentifier.Contains('win')) == 'false'">
       <PropertyGroup>
+        <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>jackett</AssemblyName>
       </PropertyGroup>
     </When>
     <Otherwise>
       <PropertyGroup>
+        <PlatformTarget>AnyCPU</PlatformTarget>
         <AssemblyName>JackettConsole</AssemblyName>
       </PropertyGroup>
     </Otherwise>

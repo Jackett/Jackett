@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -13,6 +14,7 @@ using Jackett.Common.Services.Interfaces;
 using Microsoft.Data.Sqlite;
 using Newtonsoft.Json;
 using NLog;
+using SQLitePCL;
 
 namespace Jackett.Common.Services.Cache
 {
@@ -29,16 +31,98 @@ namespace Jackett.Common.Services.Cache
             _logger = logger;
             _cacheconnectionString = cacheconnectionString;
             _serverConfig = serverConfig;
+            Initialize();
         }
 
         public void Initialize()
         {
             try
             {
-                //TODO My test for MONO :(
-                //SQLitePCL.Batteries_V2.Init();
-                //SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+                //TODO After abandoning version .NET 462, you can uninstall
+                //TODO Mono in Linux does not work with cross-platform libraries on .net462
+#if NET8_0_OR_GREATER
                 SQLitePCL.Batteries_V2.Init();
+#elif NET462
+                if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                {
+                    if (Environment.Is64BitOperatingSystem)
+                    {
+                        _logger.Debug("Running on Windows x64");
+
+                        string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "win-x64", "native", "e_sqlite3.dll");
+
+                        string destFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "e_sqlite3.dll");
+
+                        try
+                        {
+                            File.Copy(sourceFile, destFile, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("File copy error: {0}", ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        _logger.Debug("Running on Windows x86");
+
+                        string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "win-x86", "native", "e_sqlite3.dll");
+
+                        string destFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "e_sqlite3.dll");
+
+                        try
+                        {
+                            File.Copy(sourceFile, destFile, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("File copy error: {0}", ex.Message);
+                        }
+                    }
+                }
+                else if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                {
+                    if (Environment.Is64BitOperatingSystem)
+                    {
+                        _logger.Debug("Running on Linux x64");
+
+                        string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "linux-x64", "native", "libe_sqlite3.so");
+
+                        string destFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "libe_sqlite3.so");
+
+                        try
+                        {
+                            File.Copy(sourceFile, destFile, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("File copy error: {0}", ex.Message);
+                        }
+                    }
+                    else
+                    {
+                        _logger.Debug("Running on Linux x86");
+
+                        string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "linux-x86", "native", "libe_sqlite3.so");
+
+                        string destFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "libe_sqlite3.so");
+
+                        try
+                        {
+                            File.Copy(sourceFile, destFile, true);
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Error("File copy error: {0}", ex.Message);
+                        }
+                    }
+                }
+                else
+                {
+                    _logger.Info("Cache SQLite - Unknown OS or architecture");
+                }
+                SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
+#endif
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
                     connection.Open();
@@ -112,7 +196,8 @@ namespace Jackett.Common.Services.Cache
             }
             catch (Exception e)
             {
-                _logger.Info("Cache SQLite Initialize error: {0}", e.Message);
+                _logger.Error("Cache SQLite Initialize error: {0}", e.Message);
+                throw new Exception("Failed Initialization SQLite Cache");
             }
         }
 
@@ -528,7 +613,6 @@ namespace Jackett.Common.Services.Cache
                     throw new Exception("Cache Connection String: Is Empty or Bad name. Example: cache.db");
 
                 _cacheconnectionString = cacheconnectionString;
-                Initialize();
             }
 
         }

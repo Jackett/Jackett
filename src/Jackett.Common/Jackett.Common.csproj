@@ -19,26 +19,32 @@
     <WarningsAsErrors />
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(TargetFramework)' == 'net462'">
+    <SQLitePCLRawLibESQLite3x64Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x64\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x64Path>
+    <SQLitePCLRawLibESQLite3x86Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x86\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x86Path>
+  </PropertyGroup>
+
+  <Target Name="CopySQLiteLib" AfterTargets="Build;Test" Condition="'$(TargetFramework)' == 'net462'">
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x64Path)" DestinationFolder="$(OutDir)runtimes/linux-x64/native/" />
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x86Path)" DestinationFolder="$(OutDir)runtimes/linux-x86/native/" />
+  </Target>
+
   <!-- Conditionally obtain references for the .NET 8.0 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.9" />
-    <!--<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.9" />-->
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
-    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.9" />
   </ItemGroup>
 
   <!-- Conditionally obtain references for the .NET462 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
-    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
-    <PackageReference Include="SQLitePCLRaw.core" Version="2.1.9" />
-    <!--<PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.9" />-->
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.9" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.9" />
-    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
     <Reference Include="System.Web" />
   </ItemGroup>
   
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
+    <PackageReference Include="SQLitePCLRaw.Core" Version="2.1.9" />
     <PackageReference Include="AngleSharp" Version="1.1.2" />
     <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
