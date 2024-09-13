@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Dapper;
@@ -12,6 +13,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Server.Controllers;
 using Jackett.Test.TestHelpers;
+using Microsoft.Data.Sqlite;
 using NLog;
 using NUnit.Framework;
 using YamlDotNet.Serialization;
@@ -41,7 +43,9 @@ namespace Jackett.Test.Common.Indexers
             builder.RegisterType<CacheManager>().AsSelf().SingleInstance();
             builder.RegisterType<ServerConfigurationController>().AsSelf().InstancePerDependency();
             builder.RegisterType<ServerConfig>().AsSelf().SingleInstance();
-            var testbase = Path.Combine(Directory.GetCurrentDirectory(), "testjson.db");
+
+            var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+            var testbase = Path.Combine(Path.Combine(Path.Combine(applicationFolder, "Resources"), "testjson.db"));
             _serverConfig =
                 new ServerConfig(new RuntimeSettings()) { CacheType = CacheType.SqLite, CacheConnectionString = testbase };
             builder.Register(ctx =>
@@ -64,14 +68,12 @@ namespace Jackett.Test.Common.Indexers
             _container = builder.Build();
         }
 
-
         [Test]
         public async Task TestCardigannJsonWithSQLiteCacheAsync()
         {
             var cacheServiceFactory = _container.Resolve<CacheServiceFactory>();
-            DeleteTestBaseFile();
-
             var cacheManager = new CacheManager(cacheServiceFactory, _serverConfig);
+            DeleteTestTablesFromFile();
 
             _webClient.RegisterRequestCallback("https://jsondefinition1.com/api/torrents/filter?api_token=&name=1080p&sortField=created_at&sortDirection=desc&perPage=100&page=1",
                                                "json-response1.json");
@@ -130,21 +132,28 @@ namespace Jackett.Test.Common.Indexers
                                .Build();
             return deserializer.Deserialize<IndexerDefinition>(definitionString);
         }
-
-        private void DeleteTestBaseFile()
+        private void DeleteTestTablesFromFile()
         {
             try
             {
-                var cacheconnectionString = _serverConfig.CacheConnectionString;
-                if (!Path.IsPathRooted(cacheconnectionString))
+                var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+                var testbase = Path.Combine(Path.Combine(applicationFolder, "Resources"), "testjson.db");
+
+                using (var connection = new SqliteConnection("Data Source=" + testbase))
                 {
-                    cacheconnectionString = Path.Combine(_serverConfig.RuntimeSettings.DataFolder, cacheconnectionString);
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"
+                                DELETE FROM TrackerCacheQueryReleaseInfos;
+                                DELETE FROM TrackerCacheQueries;
+                                DELETE FROM TrackerCaches;                                
+                                DELETE FROM ReleaseInfos;";
+                    command.ExecuteNonQuery();
                 }
-                File.Delete(cacheconnectionString);
             }
-            catch
+            catch (Exception e)
             {
-                // ignored
+                throw new Exception(e.Message);
             }
         }
     }

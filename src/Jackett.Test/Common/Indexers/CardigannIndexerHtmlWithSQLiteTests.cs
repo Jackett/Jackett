@@ -1,6 +1,7 @@
 using System;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Threading.Tasks;
 using Autofac;
 using Dapper;
@@ -11,6 +12,7 @@ using Jackett.Common.Services.Cache;
 using Jackett.Common.Utils;
 using Jackett.Server.Controllers;
 using Jackett.Test.TestHelpers;
+using Microsoft.Data.Sqlite;
 using NLog;
 using NUnit.Framework;
 using YamlDotNet.Serialization;
@@ -42,7 +44,9 @@ namespace Jackett.Test.Common.Indexers
             builder.RegisterType<CacheManager>().AsSelf().SingleInstance();
             builder.RegisterType<ServerConfigurationController>().AsSelf().InstancePerDependency();
             builder.RegisterType<ServerConfig>().AsSelf().SingleInstance();
-            var testbase = Path.Combine(Directory.GetCurrentDirectory(), "testhtml.db");
+
+            var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+            var testbase = Path.Combine(Path.Combine(Path.Combine(applicationFolder, "Resources"), "testhtml.db"));
             _serverConfig =
                 new ServerConfig(new RuntimeSettings()) { CacheType = CacheType.SqLite, CacheConnectionString = testbase };
             builder.Register(ctx =>
@@ -69,9 +73,8 @@ namespace Jackett.Test.Common.Indexers
         public async Task TestCardigannHtmlWithSQLiteCacheAsync()
         {
             var cacheServiceFactory = _container.Resolve<CacheServiceFactory>();
-            DeleteTestBaseFile();
-
             var cacheManager = new CacheManager(cacheServiceFactory, _serverConfig);
+            DeleteTestTablesFromFile();
 
             _webClient.RegisterRequestCallback("https://www.testdefinition1.cc/search?query=ubuntu&sort=created", "html-response1.html");
             var definition = LoadTestDefinition("html-definition1.yml");
@@ -121,20 +124,28 @@ namespace Jackett.Test.Common.Indexers
             return deserializer.Deserialize<IndexerDefinition>(definitionString);
         }
 
-        private void DeleteTestBaseFile()
+        private void DeleteTestTablesFromFile()
         {
             try
             {
-                var cacheconnectionString = _serverConfig.CacheConnectionString;
-                if (!Path.IsPathRooted(cacheconnectionString))
+                var applicationFolder = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location) ?? "";
+                var testbase = Path.Combine(Path.Combine(applicationFolder, "Resources"), "testhtml.db");
+
+                using (var connection = new SqliteConnection("Data Source=" + testbase))
                 {
-                    cacheconnectionString = Path.Combine(_serverConfig.RuntimeSettings.DataFolder, cacheconnectionString);
+                    connection.Open();
+                    var command = connection.CreateCommand();
+                    command.CommandText = @"
+                                DELETE FROM TrackerCacheQueryReleaseInfos;
+                                DELETE FROM TrackerCacheQueries;
+                                DELETE FROM TrackerCaches;                                
+                                DELETE FROM ReleaseInfos;";
+                    command.ExecuteNonQuery();
                 }
-                File.Delete(cacheconnectionString);
             }
-            catch
+            catch (Exception e)
             {
-                // ignored
+                throw new Exception(e.Message);
             }
         }
     }

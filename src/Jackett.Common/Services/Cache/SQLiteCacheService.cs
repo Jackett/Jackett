@@ -42,7 +42,7 @@ namespace Jackett.Common.Services.Cache
                 //TODO Mono in Linux does not work with cross-platform libraries on .net462
 #if NET8_0_OR_GREATER
                 SQLitePCL.Batteries_V2.Init();
-#elif NET462
+#elif NETSTANDARD2_0
                 if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                 {
                     if (Environment.Is64BitOperatingSystem)
@@ -55,7 +55,10 @@ namespace Jackett.Common.Services.Cache
 
                         try
                         {
-                            File.Copy(sourceFile, destFile, true);
+                            if (!File.Exists(destFile))
+                            {
+                                File.Copy(sourceFile, destFile, true);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -72,7 +75,10 @@ namespace Jackett.Common.Services.Cache
 
                         try
                         {
-                            File.Copy(sourceFile, destFile, true);
+                            if (!File.Exists(destFile))
+                            {
+                                File.Copy(sourceFile, destFile, true);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -92,7 +98,10 @@ namespace Jackett.Common.Services.Cache
 
                         try
                         {
-                            File.Copy(sourceFile, destFile, true);
+                            if (!File.Exists(destFile))
+                            {
+                                File.Copy(sourceFile, destFile, true);
+                            }
                         }
                         catch (Exception ex)
                         {
@@ -109,7 +118,10 @@ namespace Jackett.Common.Services.Cache
 
                         try
                         {
-                            File.Copy(sourceFile, destFile, true);
+                            if (!File.Exists(destFile))
+                            {
+                                File.Copy(sourceFile, destFile, true);
+                            }
                         }
                         catch (Exception ex)
                         {
