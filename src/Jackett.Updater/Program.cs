@@ -495,6 +495,7 @@ namespace Jackett.Updater
                 "Definitions/lemencili.yml",
                 "Definitions/lemonhd.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/lightning-tor.yml",
