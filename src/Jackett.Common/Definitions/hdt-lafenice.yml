@@ -102,7 +102,7 @@ search:
     - selector: div.error:not(:contains("There are no results found."))
 
   rows:
-    selector: "div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
+    selector: "div.torrent-box[id^=\"torrent_\"]{{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}, tr:has(a[href*=\"?p=torrents\"][href*=\"&action=details\"]){{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
 
   fields:
     category:
