@@ -9,7 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Torrent9
 links:
-  - https://www.torrent9.gl/
+  - https://www.torrent9.cyou/
 legacylinks:
   - https://www.protege-liens.net/
   # latest domains list
@@ -35,6 +35,7 @@ legacylinks:
   - https://www.torrent9.lc/
   - https://www.torrent9-p2p.com/
   - https://www.torrent9.pe/
+  - https://www.torrent9.gl/
 
 caps:
   categorymappings:
