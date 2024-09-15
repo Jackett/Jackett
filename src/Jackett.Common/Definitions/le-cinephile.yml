@@ -163,7 +163,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: "div.selection_wrap"
+    selector: div.selection_wrap
 
   fields:
     category_p1:
