@@ -202,6 +202,11 @@ search:
     uploadvolumefactor:
       text: 1
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
+      case:
+        # 2.5 days (as seconds = 2.5 x 24 x 60 x 60)
+        ":root:has(div.onlyup)": 216000 # GLobal Freeleech event
+        # 2 days (as seconds = 2 x 24 x 60 x 60)
+        "*": 172800
+    minimumratio:
+      text: 0.8
 # 3xT
