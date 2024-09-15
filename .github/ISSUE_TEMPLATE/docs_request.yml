@@ -1,0 +1,35 @@
+name: Documentation request
+description: Suggest a new Readme or Wiki section, or ammendment to an existing section, for this project
+title: "[docs]: "
+body:
+- type: checkboxes
+  attributes:
+    label: Have you read our current Readme and Wiki?
+    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/README.md">Readme</a> and <a href="https://github.com/Jackett/Jackett/wiki">Wiki</a> before submitting your request.
+    options:
+      - label: I have read the Wiki
+        required: true
+- type: checkboxes
+  attributes:
+    label: Is there already a request for this change?
+    description: Please make sure you are not creating an already submitted <a href="https://github.com/Jackett/Jackett/issues">request</a>. Check closed issues as well, because your request may have already been added or rejected.
+    options:
+      - label: I have checked older issues, open and closed
+        required: true
+- type: dropdown
+  id: type
+  attributes:
+    label: Readme or Wiki?
+    description: Please select which you are requesting be changed
+    options:
+    - Readme
+    - Wiki
+  validations:
+    required: true
+- type: textarea
+  attributes:
+    label: Details
+    description: Please provide the details of your request
+    render: markdown
+  validations:
+    required: true
