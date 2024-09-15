@@ -158,7 +158,7 @@ search:
         - name: querystring
           args: id
     download:
-      text:  "download.php?torrent={{ .Result._id }}"
+      text: "download.php?torrent={{ .Result._id }}"
     poster:
       selector: div[id^="details"] img
       attribute: src
