@@ -10,45 +10,56 @@ links:
 
 caps:
   categorymappings:
-    - {id: 119, cat: Other, desc: "Bilder"}
-    - {id: 139, cat: TV/Documentary, desc: "Doku - HD"}
-    - {id: 141, cat: TV/Documentary, desc: "Doku - Pack"}
-    - {id: 140, cat: TV/Documentary, desc: "Doku - SD"}
-    - {id: 142, cat: TV, desc: "Doku - Sonstige"}
-    - {id: 120, cat: Books, desc: "Ebook"}
-    - {id: 131, cat: TV/Anime, desc: "Filme - Anime"}
-    - {id: 101, cat: Movies/BluRay, desc: "Filme - Blue Ray"}
-    - {id: 102, cat: Movies/Other, desc: "Filme - Bollywood"}
-    - {id: 103, cat: Movies/DVD, desc: "Filme - DVD"}
-    - {id: 104, cat: Movies/DVD, desc: "Filme - DVD-R"}
-    - {id: 135, cat: Movies/HD, desc: "Filme - HD"}
-    - {id: 130, cat: Movies, desc: "Filme - Klassiker"}
-    - {id: 134, cat: Movies/SD, desc: "Filme - SD"}
-    - {id: 136, cat: Movies/UHD, desc: "Filme - UHD"}
-    - {id: 105, cat: Movies, desc: "Filme - x264/x265"}
-    - {id: 106, cat: Movies/SD, desc: "Filme - XviD / DivX"}
-    - {id: 127, cat: Other, desc: "Für Unsere kleinsten"}
-    - {id: 121, cat: Other, desc: "Handy Stuff"}
-    - {id: 124, cat: Audio, desc: "Musik - Alben"}
-    - {id: 123, cat: Audio, desc: "Musik - Discography"}
-    - {id: 122, cat: Audio/Audiobook, desc: "Musik - Hörbuch"}
-    - {id: 133, cat: Audio/MP3, desc: "Musik - MP3/Mp4"}
-    - {id: 125, cat: Audio/Video, desc: "Musik - Video"}
-    - {id: 113, cat: PC, desc: "Programme - Linux"}
-    - {id: 114, cat: PC/Mac, desc: "Programme - Mac"}
-    - {id: 115, cat: PC/0day, desc: "Programme - Windows"}
-    - {id: 137, cat: TV/HD, desc: "Serien - HD"}
-    - {id: 116, cat: TV, desc: "Serien - Pack"}
-    - {id: 138, cat: TV/SD, desc: "Serien - SD"}
-    - {id: 143, cat: TV/Other, desc: "Serien - Sonstige"}
-    - {id: 144, cat: TV/UHD, desc: "Serien - UHD"}
-    - {id: 129, cat: Other, desc: "Sonstiges"}
-    - {id: 109, cat: PC/Mobile-Other, desc: "Spiele - Handy"}
-    - {id: 112, cat: Console, desc: "Spiele - Konsolen"}
-    - {id: 111, cat: PC/Games, desc: "Spiele - Mac / Linux"}
-    - {id: 110, cat: PC/Games, desc: "Spiele - PC"}
-    - {id: 118, cat: TV/Sport, desc: "WWE - Sport"}
-    - {id: 69, cat: XXX, desc: "XXX"}
+    - {id: 125, cat: Movies, desc: "Movie Anime"}
+    - {id: 134, cat: Movies/UHD, desc: "Movie Pack/4K/UHD"}
+    - {id: 118, cat: Movies/HD, desc: "Movie Pack HD"}
+    - {id: 132, cat: Movies/SD, desc: "Movie Pack SD"}
+    - {id: 133, cat: Movies/UHD, desc: "Movie 4K/UHD"}
+    - {id: 32, cat: Movies/HD, desc: "Movie HD"}
+    - {id: 28, cat: Movies/SD, desc: "Movie SD"}
+    - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
+    - {id: 136, cat: Movies/DVD, desc: "Movie DVD"}
+    - {id: 121, cat: TV/UHD, desc: "Serien Pack/4K/UHD"}
+    - {id: 119, cat: TV/HD, desc: "Serien Pack HD"}
+    - {id: 59, cat: TV/SD, desc: "Serien Pack SD"}
+    - {id: 122, cat: TV/UHD, desc: "Serien 4K/UHD"}
+    - {id: 57, cat: TV/HD, desc: "Serien HD"}
+    - {id: 60, cat: TV/SD, desc: "Serien SD"}
+    - {id: 126, cat: TV/Anime, desc: "Serien Anime"}
+    - {id: 145, cat: Audio, desc: "Music Soundtrack"}
+    - {id: 52, cat: Audio, desc: "Music Pack"}
+    - {id: 48, cat: Audio, desc: "Music Album"}
+    - {id: 49, cat: Audio, desc: "Music Charts"}
+    - {id: 54, cat: Audio, desc: "Music Single"}
+    - {id: 110, cat: Audio/MP3, desc: "Music Mp3"}
+    - {id: 120, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 123, cat: Audio/Audiobook, desc: "Music Hörbücher"}
+    - {id: 109, cat: Audio/Video, desc: "Music Video"}
+    - {id: 140, cat: Other, desc: "Kids Anime"}
+    - {id: 143, cat: Other, desc: "Kids Pack HD"}
+    - {id: 142, cat: Other, desc: "Kids HD"}
+    - {id: 144, cat: Other, desc: "Kids Pack SD"}
+    - {id: 141, cat: Other, desc: "Kids SD"}
+    - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
+    - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
+    - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
+    - {id: 139, cat: XXX, desc: "XXX Anime"}
+    - {id: 75, cat: XXX, desc: "XXX Pack"}
+    - {id: 73, cat: XXX, desc: "XXX HD"}
+    - {id: 76, cat: XXX, desc: "XXX SD"}
+    - {id: 74, cat: XXX, desc: "XXX Other"}
+    - {id: 127, cat: TV/Documentary, desc: "Doku Pack HD"}
+    - {id: 128, cat: TV/Documentary, desc: "Doku Pack SD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
+    - {id: 12, cat: PC/0day, desc: "App Win"}
+    - {id: 10, cat: PC/Mac, desc: "App Mac/Linux"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "App Handy"}
+    - {id: 17, cat: PC/Games, desc: "Game PC"}
+    - {id: 129, cat: Console, desc: "Game Konsole"}
+    - {id: 131, cat: PC/Mobile-Other, desc: "Game Handy"}
+    - {id: 117, cat: TV/Sport, desc: "Sport SD"}
+    - {id: 137, cat: TV/Sport, desc: "Sport HD"}
 
   modes:
     search: [q]
@@ -67,10 +78,6 @@ settings:
   - name: pin
     type: text
     label: Pin
-  - name: onlyupload
-    type: checkbox
-    label: Filter OnlyUpload only
-    default: false
   - name: info_free
     type: info
     label: About OnlyUpload at The Paradiese
@@ -94,7 +101,7 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>60</b> on your Control Panel. The default is <i>15</i>.
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -107,78 +114,99 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    secure_pin: "{{ .Config.pin }}"
-    returnto: /
+    pin: "{{ .Config.pin }}"
   error:
-    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
+    - selector: div#login_error
   test:
     path: index.php
     selector: a[href="logout.php"]
 
 search:
   paths:
-    - path: browse.php
+    - path: selection.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    showsearch: 1
-    # 0 active, 1 all, 2 dead
-    incldead: 1
+    # 0 name, 1 descr, 2 both
+    blah: 0
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
     # site does not support imdbid searching or display imdb links in results.
 
   rows:
-    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"0\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
-    filters:
-      - name: andmatch
+    selector: div.selection_wrap
 
   fields:
-    category_optional:
-      selector: a[href^="browse.php?cat="]
+    category_p1:
+      selector: div.kat_cat_pic_name
+    category_p2:
+      selector: div.kat_cat_pic_name_b
+    categorydesc:
+      text: "{{ .Result.category_p1 }} {{ .Result.category_p2 }}"
+    title:
+      selector: a.selection_a
+      filters:
+        - name: re_replace
+          args: ["^\\[[\\w ]*\\]\\s?", ""]
+    details:
+      selector: a.selection_a
       attribute: href
-      optional: true
+    _id:
+      selector: a.selection_a
+      attribute: href
       filters:
         - name: querystring
-          args: cat
-    category:
-      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}129{{ end }}"
-    title:
-      selector: a[href^="details.php?id="]:has(b)
-    details:
-      selector: a[href^="details.php?id="]:has(b)
-      attribute: href
+          args: id
     download:
-      selector: a[href^="download.php?torrent="]
-      attribute: href
+      text: "download.php?torrent={{ .Result._id }}"
+    poster:
+      selector: div[id^="details"] img
+      attribute: src
     size:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+      selector: div.selection_unter_ad
     grabs:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(3) > b
-    files:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
-    seeders:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
-    leechers:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
-    date:
-      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(5)
+      selector: div.selection_unter_ae
+    date_day:
+      # Heute 13:30:04
+      # Gestern 09:10:10
+      selector: div.selection_unter_ab:not(:contains("."))
+      optional: true
       filters:
         - name: replace
-          args: ["\u00a0", " "]
+          args: ["Heute", "Today"]
+        - name: replace
+          args: ["Gestern", "Yesterday"]
+        - name: append
+          args: " +01:00" # CET
+    date_year:
+      # 30.02.2018 um 23:12:50
+      selector: div.selection_unter_ab:contains(".")
+      optional: true
+      filters:
+        - name: replace
+          args: [" um", ""]
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "dd.MM.yyyy HH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+    seeders:
+      selector: div.selection_unter_aa
+    leechers:
+      selector: div.selection_unter_aaa
     downloadvolumefactor:
       case:
-        img[src="pic/oupic.gif"]: 0 # only upload is counted
+        ":root:has(div.onlyup)": 0 # GLobal Freeleech event
         "*": 1
     uploadvolumefactor:
-      case:
-        img[src="pic/freeleech.gif"]: 0 # nothing is counted
-        "*": 1
+      text: 1
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# NetVision
+      case:
+        # 2.5 days (as seconds = 2.5 x 24 x 60 x 60)
+        ":root:has(div.onlyup)": 216000 # GLobal Freeleech event
+        # 2 days (as seconds = 2 x 24 x 60 x 60)
+        "*": 172800
+    minimumratio:
+      text: 0.8
+# 3xT

@@ -495,6 +495,7 @@ namespace Jackett.Updater
                 "Definitions/lemencili.yml",
                 "Definitions/lemonhd.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/lightning-tor.yml",
@@ -710,7 +711,6 @@ namespace Jackett.Updater
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
-                "Definitions/turknova.yml",
                 "Definitions/turkseed.yml",
                 "Definitions/turktracker.yml",
                 "Definitions/tvroad.yml",

@@ -90,10 +90,6 @@ settings:
   - name: pin
     type: text
     label: Pin
-  - name: freeleech
-    type: checkbox
-    label: Filter freeleech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -142,8 +138,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: "div.selection_wrap:has(a[href^=\"download_ssl.php?torrent=\"]){{ if .Config.freeleech }}:has(:root:has(div.onlyup)){{ else }}{{ end }}"
-
+    selector: div.selection_wrap
   fields:
     category_p1:
       selector: div.kat_cat_pic_name

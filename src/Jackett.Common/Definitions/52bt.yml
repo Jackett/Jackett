@@ -5,6 +5,7 @@ description: "52BT is a CHINESE Public tracker for TV / MOVIES / MUSIC / GENERAL
 language: zh-CN
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   # Send any content to 52btbtbt@gmail.com to get the latest address. or visit https://521.52btbt.cyou/
   - https://www.529053.xyz/
@@ -61,6 +62,7 @@ settings:
 search:
   paths:
     - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-1.html"
+    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-2.html"
   error:
     - selector: :root:contains("Internal Server Error")
 
