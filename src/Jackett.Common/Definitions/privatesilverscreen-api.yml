@@ -52,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All members must be active within the community. Members must log into the site at minimum every 90 days or their account will be disabled for inactivity. (The only exceptions are if you're an active donor or if you are actively seeding)."
 
 login:
   path: /api/torrents
