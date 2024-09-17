@@ -81,12 +81,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
   - name: passkey
     type: text
     label: PassKey
@@ -104,27 +98,12 @@ settings:
     default: "Accounts inactive for more than 45 days are automatically deleted."
 
 login:
-  path: login.php
-  method: form
-  form: form[action="login.php"]
-  captcha:
-    type: image
-    selector: img[src="captcha.php?ext=.gif"]
-    input: input[type="text"][size="6"]
+  path: api.php
+  method: get
   inputs:
-    input[name="username"]: "{{ .Config.username }}"
-    input[name="password"]: "{{ .Config.password }}"
-  selectors: true
+    passkey: "{{ .Config.passkey }}"
   error:
-    - selector: td.embedded:contains("Access Denied")
-  test:
-    path: /
-    selector: a[href="account-logout.php"]
-
-download:
-  selectors:
-    - selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
-      attribute: href
+    - selector: ":root:contains(\"Bad passkey\")"
 
 search:
   paths:
@@ -133,6 +112,7 @@ search:
         type: json
 
   inputs:
+    # API documentation is at https://hellashut.net/getapi.php
     # https://hellashut.net/api.php?passkey=1234567890abcdef&search=&incldead=1&freeleech=0&c[]=85
     passkey: "{{ .Config.passkey }}"
     $raw: "{{ range .Categories }}&c[]={{.}}{{end}}"
@@ -148,16 +128,17 @@ search:
       selector: results
 
   fields:
-    _id:
-      selector: id
     category:
       selector: category
     title:
       selector: name
     details:
-      text: "torrents-details.php?id={{ .Result._id }}"
+      selector: details
     download:
-      text: "{{ .Result.details }}"
+      selector: dl
+      filters:
+        - name: append
+          args: "&passkey={{ .Config.passkey }}"
     imdbid:
       selector: imdb
     files:
@@ -186,4 +167,4 @@ search:
     minimumseedtime:
       # 10 day (as seconds = 10 x 24 x 60 x 60)
       text: 864000
-# JSON honAPI v2.2.4
+# JSON honAPI v2.2.6
