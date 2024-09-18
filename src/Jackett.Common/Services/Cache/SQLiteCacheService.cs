@@ -39,7 +39,7 @@ namespace Jackett.Common.Services.Cache
             try
             {
                 //TODO After abandoning version .NET 462, you can uninstall
-                //TODO Mono in Linux does not work with cross-platform libraries on .net462
+                //TODO Mono in Linux does not work with cross-platform libraries on net462
 #if NET8_0_OR_GREATER
                 SQLitePCL.Batteries_V2.Init();
 #elif NETSTANDARD2_0
