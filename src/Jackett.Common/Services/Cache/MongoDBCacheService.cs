@@ -117,7 +117,8 @@ namespace Jackett.Common.Services.Cache
                         };
                         releaseInfosCollection.InsertOne(document);
                     }
-                    _logger.Debug("CACHE CacheResults / Indexer: {0} / Added: {1} releases", indexer.Id, releases.Count);
+                    if (_logger.IsDebugEnabled)
+                        _logger.Debug("CACHE CacheResults / Indexer: {0} / Added: {1} releases", indexer.Id, releases.Count);
 
                     PruneCacheByMaxResultsPerIndexer(indexer.Id); // remove old results if we exceed the maximum limit
                 }
@@ -178,7 +179,9 @@ namespace Jackett.Common.Services.Cache
                                       .ToList();
             if (results.Count > 0)
             {
-                _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", indexer.Id, results.Count);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", indexer.Id, results.Count);
+
                 return results.Select(ConvertBsonToReleaseInfo).ToList();
             }
             return null;
@@ -246,7 +249,9 @@ namespace Jackett.Common.Services.Cache
                                       .Lookup("TrackerCaches", "TrackerCacheQuery.TrackerCacheId", "_id", "TrackerCache")
                                       .Unwind("TrackerCache").SortByDescending(doc => doc["PublishDate"]).Limit(_serverConfig.CacheMaxResultsPerIndexer)
                                       .ToList();
-            _logger.Debug("CACHE GetCachedResults / Results: {0} (cache may contain more results)", results.Count);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("CACHE GetCachedResults / Results: {0} (cache may contain more results)", results.Count);
+
             PrintCacheStatus();
 
             return results.Select(doc =>
@@ -309,7 +314,9 @@ namespace Jackett.Common.Services.Cache
         {
             if (indexer == null)
             {
-                _logger.Debug("Indexer is null, skipping cache cleaning.");
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("Indexer is null, skipping cache cleaning.");
+
                 return;
             }
 
@@ -322,7 +329,9 @@ namespace Jackett.Common.Services.Cache
 
             if (!trackerCachesDocs.Any())
             {
-                _logger.Debug("No TrackerCaches documents found for indexer {0}, skipping cache cleaning.", indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("No TrackerCaches documents found for indexer {0}, skipping cache cleaning.", indexer.Id);
+
                 return;
             }
 
@@ -335,16 +344,21 @@ namespace Jackett.Common.Services.Cache
                 var trackerCacheQueryIds = trackerCacheQueriesDocs.Select(doc => doc["_id"].AsObjectId).ToList();
                 var releaseInfosFilter = Builders<BsonDocument>.Filter.In("TrackerCacheQueryId", trackerCacheQueryIds);
                 var deleteReleaseInfosResult = releaseInfosCollection.DeleteMany(releaseInfosFilter);
-                _logger.Debug("Deleted {0} documents from ReleaseInfos for indexer {1}", deleteReleaseInfosResult.DeletedCount, indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("Deleted {0} documents from ReleaseInfos for indexer {1}", deleteReleaseInfosResult.DeletedCount, indexer.Id);
+
                 var deleteTrackerCacheQueriesResult = trackerCacheQueriesCollection.DeleteMany(trackerCacheQueriesFilter);
-                _logger.Debug("Deleted {0} documents from TrackerCacheQueries for indexer {1}", deleteTrackerCacheQueriesResult.DeletedCount, indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("Deleted {0} documents from TrackerCacheQueries for indexer {1}", deleteTrackerCacheQueriesResult.DeletedCount, indexer.Id);
             }
             else
             {
-                _logger.Debug("No TrackerCacheQueries documents found for TrackerCaches of indexer {0}", indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("No TrackerCacheQueries documents found for TrackerCaches of indexer {0}", indexer.Id);
             }
             var deleteTrackerCachesResult = trackerCachesCollection.DeleteMany(trackerCachesFilter);
-            _logger.Debug("Deleted {0} documents from TrackerCaches for indexer {1}", deleteTrackerCachesResult.DeletedCount, indexer.Id);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Deleted {0} documents from TrackerCaches for indexer {1}", deleteTrackerCachesResult.DeletedCount, indexer.Id);
         }
 
         public void CleanCache()
@@ -395,7 +409,9 @@ namespace Jackett.Common.Services.Cache
         {
             if (_serverConfig.CacheTtl <= 0)
             {
-                _logger.Debug("Cache TTL is disabled or set to a non-positive value, skipping pruning.");
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("Cache TTL is disabled or set to a non-positive value, skipping pruning.");
+
                 return;
             }
 
@@ -412,7 +428,9 @@ namespace Jackett.Common.Services.Cache
 
                 if (!expiredTrackerCacheQueryDocs.Any())
                 {
-                    _logger.Debug("No expired documents found in TrackerCacheQueries for pruning.");
+                    if (_logger.IsDebugEnabled)
+                        _logger.Debug("No expired documents found in TrackerCacheQueries for pruning.");
+
                     return;
                 }
                 var expiredTrackerCacheQueryIds = expiredTrackerCacheQueryDocs.Select(doc => doc["_id"].AsObjectId).ToList();
@@ -443,7 +461,9 @@ namespace Jackett.Common.Services.Cache
 
             if (!trackerCaches.Any())
             {
-                _logger.Debug("No TrackerCaches documents found for tracker {0}", trackerId);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("No TrackerCaches documents found for tracker {0}", trackerId);
+
                 return;
             }
             var trackerCacheIds = trackerCaches.Select(tc => tc["_id"].AsObjectId).ToList();
@@ -452,7 +472,9 @@ namespace Jackett.Common.Services.Cache
 
             if (!trackerCacheQueries.Any())
             {
-                _logger.Debug("No TrackerCacheQueries documents found for TrackerId {0}", trackerId);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("No TrackerCacheQueries documents found for TrackerId {0}", trackerId);
+
                 return;
             }
             var trackerCacheQueryIds = trackerCacheQueries.Select(tcq => tcq["_id"].AsObjectId).ToList();
@@ -463,7 +485,9 @@ namespace Jackett.Common.Services.Cache
 
             if (totalResultsCount <= _serverConfig.CacheMaxResultsPerIndexer)
             {
-                _logger.Debug("Total results count {0} is within the limit {1}", totalResultsCount, _serverConfig.CacheMaxResultsPerIndexer);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("Total results count {0} is within the limit {1}", totalResultsCount, _serverConfig.CacheMaxResultsPerIndexer);
+
                 return;
             }
             var prunedCounter = 0;

@@ -83,7 +83,8 @@ namespace Jackett.Common.Services.Cache
                 else
                     trackerCache.Queries.Add(queryHash, trackerCacheQuery);
 
-                _logger.Debug("CACHE CacheResults / Indexer: {0} / Added: {1} releases", trackerCache.TrackerId, releases.Count);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE CacheResults / Indexer: {0} / Added: {1} releases", trackerCache.TrackerId, releases.Count);
 
                 PruneCacheByMaxResultsPerIndexer(trackerCache); // remove old results if we exceed the maximum limit
             }
@@ -112,7 +113,8 @@ namespace Jackett.Common.Services.Cache
                     return null;
 
                 var releases = trackerCache.Queries[queryHash].Results;
-                _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", trackerCache.TrackerId, releases.Count);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", trackerCache.TrackerId, releases.Count);
 
                 return releases;
             }
@@ -144,8 +146,9 @@ namespace Jackett.Common.Services.Cache
                                                                    .Take(300))
                                    .OrderByDescending(i => i.PublishDate)
                                    .Take(3000).ToList();
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE GetCachedResults / Results: {0} (cache may contain more results)", result.Count);
 
-                _logger.Debug("CACHE GetCachedResults / Results: {0} (cache may contain more results)", result.Count);
                 PrintCacheStatus();
 
                 return result;
@@ -161,8 +164,8 @@ namespace Jackett.Common.Services.Cache
 
                 if (_cache.ContainsKey(indexer.Id))
                     _cache.Remove(indexer.Id);
-
-                _logger.Debug("CACHE CleanIndexerCache / Indexer: {0}", indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE CleanIndexerCache / Indexer: {0}", indexer.Id);
 
                 PruneCacheByTtl(); // remove expired results
             }
@@ -176,7 +179,8 @@ namespace Jackett.Common.Services.Cache
                     return;
 
                 _cache.Clear();
-                _logger.Debug("CACHE CleanCache");
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE CleanCache");
             }
         }
 
@@ -195,7 +199,8 @@ namespace Jackett.Common.Services.Cache
             {
                 // remove cached results just in case user disabled cache recently
                 _cache.Clear();
-                _logger.Debug("CACHE IsCacheEnabled => false");
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE IsCacheEnabled => false");
             }
             return true;
         }

@@ -47,7 +47,8 @@ namespace Jackett.Common.Services.Cache
                 {
                     if (Environment.Is64BitOperatingSystem)
                     {
-                        _logger.Debug("Running on Windows x64");
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("Running on Windows x64");
 
                         string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "win-x64", "native", "e_sqlite3.dll");
 
@@ -67,7 +68,8 @@ namespace Jackett.Common.Services.Cache
                     }
                     else
                     {
-                        _logger.Debug("Running on Windows x86");
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("Running on Windows x86");
 
                         string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "win-x86", "native", "e_sqlite3.dll");
 
@@ -90,7 +92,8 @@ namespace Jackett.Common.Services.Cache
                 {
                     if (Environment.Is64BitOperatingSystem)
                     {
-                        _logger.Debug("Running on Linux x64");
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("Running on Linux x64");
 
                         string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "linux-x64", "native", "libe_sqlite3.so");
 
@@ -110,7 +113,8 @@ namespace Jackett.Common.Services.Cache
                     }
                     else
                     {
-                        _logger.Debug("Running on Linux x86");
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("Running on Linux x86");
 
                         string sourceFile = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "runtimes", "linux-x86", "native", "libe_sqlite3.so");
 
@@ -342,7 +346,9 @@ namespace Jackett.Common.Services.Cache
 
                 if (results.Count > 0)
                 {
-                    _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", indexer.Id, results.Count);
+                    if (_logger.IsDebugEnabled)
+                        _logger.Debug("CACHE Search Hit / Indexer: {0} / Found: {1} releases", indexer.Id, results.Count);
+
                     return results;
                 }
             }
@@ -441,8 +447,8 @@ namespace Jackett.Common.Services.Cache
                         transaction.Commit();
                     }
                 }
-
-                _logger.Debug("CACHE CleanIndexerCache / Indexer: {0}", indexer.Id);
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE CleanIndexerCache / Indexer: {0}", indexer.Id);
 
                 PruneCacheByTtl(); // remove expired results
             }
@@ -483,8 +489,9 @@ namespace Jackett.Common.Services.Cache
                         transaction.Commit();
                     }
                 }
+                if (_logger.IsDebugEnabled)
+                    _logger.Debug("CACHE CleanCache");
 
-                _logger.Debug("CACHE CleanCache");
                 PrintCacheStatus();
             }
         }
@@ -529,7 +536,9 @@ namespace Jackett.Common.Services.Cache
                         transaction.Commit();
 
                         var totalPruned = prunedCounterIntermediate + prunedCounterQueries + prunedCounterReleaseInfos;
-                        _logger.Debug("CACHE PruneCacheByTtl / Pruned queries: {0}", totalPruned);
+                        if (_logger.IsDebugEnabled)
+                            _logger.Debug("CACHE PruneCacheByTtl / Pruned queries: {0}", totalPruned);
+
                         PrintCacheStatus();
                     }
                 }
@@ -624,7 +633,11 @@ namespace Jackett.Common.Services.Cache
                 if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^.+\.db$"))
                     throw new Exception("Cache Connection String: Is Empty or Bad name. Example: cache.db");
 
-                _cacheconnectionString = cacheconnectionString;
+                if (_cacheconnectionString != cacheconnectionString)
+                {
+                    _cacheconnectionString = cacheconnectionString;
+                    Initialize();
+                }
             }
 
         }

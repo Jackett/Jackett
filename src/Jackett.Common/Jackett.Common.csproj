@@ -39,7 +39,6 @@
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
     <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.9" />
     <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.9" />
-    <!--<Reference Include="System.Web" />-->
   </ItemGroup>
   
   <ItemGroup>

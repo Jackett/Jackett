@@ -46,13 +46,17 @@ namespace Jackett.Common.Utils
 
         public override void SetValue(IDbDataParameter parameter, T value)
         {
-            _logger.Debug("Setting value for type: {0}", typeof(T).Name);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for type: {0}", typeof(T).Name);
+
             parameter.Value = FormatValueForDb(value);
         }
 
         public override T Parse(object value)
         {
-            _logger.Debug("Parsing value for type: {0}, Value: {1}", typeof(T).Name, value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for type: {0}, Value: {1}", typeof(T).Name, value);
+
             return ParseValueFromDb(value);
         }
     }
@@ -62,13 +66,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, Uri value)
         {
-            _logger.Debug("Setting value for Uri: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for Uri: {0}", value);
+
             parameter.Value = value?.ToString();
         }
 
         protected override Uri ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for Uri: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for Uri: {0}", value);
+
             return new Uri((string)value);
         }
 
@@ -83,13 +91,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, ICollection<int> value)
         {
-            _logger.Debug("Setting value for ICollection<int>: {0}", string.Join(", ", value));
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for ICollection<int>: {0}", string.Join(", ", value));
+
             parameter.Value = string.Join(",", value);
         }
 
         protected override ICollection<int> ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for ICollection<int>: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for ICollection<int>: {0}", value);
+
             return ((string)value).Split(',').Select(int.Parse).ToList();
         }
 
@@ -104,13 +116,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, ICollection<string> value)
         {
-            _logger.Debug("Setting value for ICollection<string>: {0}", string.Join(", ", value));
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for ICollection<string>: {0}", string.Join(", ", value));
+
             parameter.Value = string.Join(",", value);
         }
 
         protected override ICollection<string> ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for ICollection<string>: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for ICollection<string>: {0}", value);
+
             return ((string)value).Split(',').ToList();
         }
 
@@ -124,13 +140,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, string value)
         {
-            _logger.Debug("Setting value for string: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for string: {0}", value);
+
             parameter.Value = string.IsNullOrEmpty(value) ? string.Empty : value;
         }
 
         protected override string ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for string: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for string: {0}", value);
+
             return value as string ?? string.Empty;
         }
 
@@ -145,13 +165,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, double value)
         {
-            _logger.Debug("Setting value for double: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for double: {0}", value);
+
             parameter.Value = value;
         }
 
         protected override double ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for double: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for double: {0}", value);
+
             return Convert.ToDouble(value);
         }
 
@@ -166,13 +190,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, float value)
         {
-            _logger.Debug("Setting value for float: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for float: {0}", value);
+
             parameter.Value = value;
         }
 
         protected override float ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for float: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for float: {0}", value);
+
             return Convert.ToSingle(value);
         }
 
@@ -187,13 +215,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, long value)
         {
-            _logger.Debug("Setting value for long: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for long: {0}", value);
+
             parameter.Value = value;
         }
 
         protected override long ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for long: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for long: {0}", value);
+
             return Convert.ToInt64(value);
         }
 
@@ -208,13 +240,17 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, DateTime value)
         {
-            _logger.Debug("Setting value for DateTime: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for DateTime: {0}", value);
+
             parameter.Value = value;//.ToString("O");
         }
 
         protected override DateTime ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for DateTime: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for DateTime: {0}", value);
+
             return DateTime.Parse((string)value);
         }
 
@@ -229,7 +265,9 @@ namespace Jackett.Common.Utils
         private readonly Logger _logger;
         public override void SetValue(IDbDataParameter parameter, DateTime? value)
         {
-            _logger.Debug("Setting value for DateTime: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Setting value for DateTime: {0}", value);
+
             if (value == null)
             {
                 parameter.Value = DBNull.Value;
@@ -242,7 +280,9 @@ namespace Jackett.Common.Utils
 
         protected override DateTime? ParseValueFromDb(object value)
         {
-            _logger.Debug("Parsing value for DateTime: {0}", value);
+            if (_logger.IsDebugEnabled)
+                _logger.Debug("Parsing value for DateTime: {0}", value);
+
             return DateTime.Parse((string)value);
         }
 
