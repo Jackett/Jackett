@@ -30,7 +30,7 @@ caps:
     - {id: 80, cat: PC, desc: "Emulation Media"}
     - {id: 61, cat: Console, desc: "emuxtras"}
     - {id: 69, cat: TV, desc: "Entertainment"}
-    - {id: 77, cat: PC, desc: "Hyperspin"}
+    - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 43, cat: Console, desc: "LB No Intro"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
