@@ -137,8 +137,8 @@ download:
 
 search:
   paths:
-    # https://hellashut.de/torrents-search.php?c52=1&search=&cat=0&incldead=1&advanced=1&lang=0&blah=0&freeleech=0&sort=id&order=desc
-    - path: torrents-search.php
+   # https://hellashut.net/browse.php?search=&incldead=1&freeleech=0&lang=0&blah=0&team=0
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
