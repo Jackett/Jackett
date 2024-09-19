@@ -116,9 +116,16 @@ namespace Jackett.Server.Controllers
             var cacheType = config.cache_type;
             var cacheConString = config.cache_connection_string;
 
-            if (cacheType == CacheType.SqLite || cacheType == CacheType.MongoDb)
+            if (cacheType == CacheType.SqLite)
             {
                 if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"^.+\.db$"))
+                {
+                    throw new Exception("Cache Connection String: Is Empty or Bad name");
+                }
+            }
+            if (cacheType == CacheType.MongoDb)
+            {
+                if (string.IsNullOrEmpty(cacheConString))
                 {
                     throw new Exception("Cache Connection String: Is Empty or Bad name");
                 }

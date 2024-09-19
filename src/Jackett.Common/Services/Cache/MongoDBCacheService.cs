@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using MongoDB.Bson;
 using MongoDB.Driver;
+using MongoDB.Driver.Core.Configuration;
 using Newtonsoft.Json;
 using NLog;
 
@@ -28,30 +30,13 @@ namespace Jackett.Common.Services.Cache
             _logger = logger;
             _cacheconnectionString = cacheconnectionString;
             _serverConfig = serverConfig;
-        }
-
-        public void UpdateConnectionString(string connectionString)
-        {
-            try
-            {
-                lock (_dbLock)
-                {
-                    _cacheconnectionString = connectionString;
-                    var client = new MongoClient("mongodb://" + _cacheconnectionString);
-                    _database = client.GetDatabase("CacheDatabase");
-                }
-
-                Initialize();
-            }
-            catch (Exception e)
-            {
-                _logger.Error(e, "Failed UpdateConnectionString MongoDB");
-            }
-
+            Initialize();
         }
 
         public void Initialize()
         {
+            var client = new MongoClient("mongodb://" + _cacheconnectionString);
+            _database = client.GetDatabase("CacheDatabase");
             var trackerCaches = _database.GetCollection<BsonDocument>("TrackerCaches");
             var trackerCacheQueries = _database.GetCollection<BsonDocument>("TrackerCacheQueries");
             var releaseInfos = _database.GetCollection<BsonDocument>("ReleaseInfos");
@@ -77,16 +62,16 @@ namespace Jackett.Common.Services.Cache
                         var document = new BsonDocument
                         {
                             { "TrackerCacheQueryId", trackerCacheQueryId },
-                            { "Title", release.Title },
-                            { "Guid", release.Guid?.ToString() },
-                            { "Link", release.Link?.ToString() },
-                            { "Details", release.Details?.ToString() },
-                            { "PublishDate", release.PublishDate },
-                            { "Category", new BsonArray(release.Category) },
-                            { "Size", release.Size },
+                            { "Title", (BsonValue)release.Title ?? BsonString.Empty },
+                            { "Guid", (BsonValue)release.Guid?.ToString() ?? BsonNull.Value },
+                            { "Link", (BsonValue)release.Link?.ToString() ?? BsonNull.Value },
+                            { "Details", (BsonValue)release.Details?.ToString()  ?? BsonNull.Value},
+                            { "PublishDate", (BsonValue)release.PublishDate ?? BsonNull.Value },
+                            { "Category", new BsonArray(release.Category ?? new List<int>()) },
+                            { "Size", (BsonValue)release.Size ?? BsonNull.Value },
                             { "Files", (BsonValue)release.Files ?? BsonNull.Value },
                             { "Grabs", (BsonValue)release.Grabs ?? BsonNull.Value },
-                            { "Description", release.Description },
+                            { "Description", (BsonValue)release.Description ?? BsonString.Empty},
                             { "RageID", (BsonValue)release.RageID ?? BsonNull.Value },
                             { "TVDBId", (BsonValue)release.TVDBId ?? BsonNull.Value },
                             { "Imdb", (BsonValue)release.Imdb ?? BsonNull.Value },
@@ -98,17 +83,17 @@ namespace Jackett.Common.Services.Cache
                             { "Languages", new BsonArray(release.Languages ?? new List<string>()) },
                             { "Subs", new BsonArray(release.Subs ?? new List<string>()) },
                             { "Year", (BsonValue)release.Year ?? BsonNull.Value },
-                            { "Author", (BsonValue)release.Author ?? BsonNull.Value },
-                            { "BookTitle", (BsonValue)release.BookTitle ?? BsonNull.Value },
-                            { "Publisher", (BsonValue)release.Publisher ?? BsonNull.Value },
-                            { "Artist", (BsonValue)release.Artist ?? BsonNull.Value },
-                            { "Album", (BsonValue)release.Album ?? BsonNull.Value },
-                            { "Label", (BsonValue)release.Label ?? BsonNull.Value },
-                            { "Track", (BsonValue)release.Track ?? BsonNull.Value },
+                            { "Author", (BsonValue)release.Author ?? BsonString.Empty },
+                            { "BookTitle", (BsonValue)release.BookTitle ?? BsonString.Empty },
+                            { "Publisher", (BsonValue)release.Publisher ?? BsonString.Empty },
+                            { "Artist", (BsonValue)release.Artist ?? BsonString.Empty },
+                            { "Album", (BsonValue)release.Album ?? BsonString.Empty },
+                            { "Label", (BsonValue)release.Label ?? BsonString.Empty },
+                            { "Track", (BsonValue)release.Track ?? BsonString.Empty },
                             { "Seeders", (BsonValue)release.Seeders ?? BsonNull.Value },
                             { "Peers", (BsonValue)release.Peers ?? BsonNull.Value },
                             { "Poster", (BsonValue)release.Poster?.ToString() ?? BsonNull.Value },
-                            { "InfoHash", (BsonValue)release.InfoHash ?? BsonNull.Value },
+                            { "InfoHash", (BsonValue)release.InfoHash ?? BsonString.Empty },
                             { "MagnetUri", (BsonValue)release.MagnetUri?.ToString() ?? BsonNull.Value },
                             { "MinimumRatio", (BsonValue)release.MinimumRatio ?? BsonNull.Value },
                             { "MinimumSeedTime", (BsonValue)release.MinimumSeedTime ?? BsonNull.Value },
@@ -191,10 +176,10 @@ namespace Jackett.Common.Services.Cache
         {
             return new ReleaseInfo
             {
-                Title = doc["Title"].AsString,
-                Guid = new Uri(doc["Guid"].AsString),
-                Link = new Uri(doc["Link"].AsString),
-                Details = new Uri(doc["Details"].AsString),
+                Title = doc["Title"].IsBsonNull ? null : doc["Title"].AsString,
+                Guid = new Uri((doc["Guid"].IsBsonNull ? null : doc["Guid"].AsString) ?? string.Empty),
+                Link = new Uri((doc["Link"].IsBsonNull ? null : doc["Link"].AsString) ?? string.Empty),
+                Details = new Uri((doc["Details"].IsBsonNull ? null : doc["Details"].AsString) ?? string.Empty),
                 PublishDate = doc["PublishDate"].ToLocalTime(),
                 Category = doc["Category"].AsBsonArray.Select(c => c.AsInt32).ToList(),
                 Size = doc["Size"].IsInt64 ? doc["Size"].AsInt64 : (long?)null,
@@ -221,16 +206,17 @@ namespace Jackett.Common.Services.Cache
                 Track = doc["Track"].IsBsonNull ? null : doc["Track"].AsString,
                 Seeders = doc["Seeders"].IsInt64 ? doc["Seeders"].AsInt64 : (long?)null,
                 Peers = doc["Peers"].IsInt64 ? doc["Peers"].AsInt64 : (long?)null,
-                Poster = doc["Poster"].IsBsonNull ? null : new Uri(doc["Poster"].AsString),
+                //Poster = doc["Poster"].IsBsonNull ? null : new Uri(doc["Poster"].AsString),
+                Poster = new Uri((doc["Poster"].IsBsonNull ? null : doc["Poster"].AsString) ?? string.Empty),
                 InfoHash = doc["InfoHash"].IsBsonNull ? null : doc["InfoHash"].AsString,
-                MagnetUri = doc["MagnetUri"].IsBsonNull ? null : new Uri(doc["MagnetUri"].AsString),
+                MagnetUri = new Uri((doc["MagnetUri"].IsBsonNull ? null : doc["MagnetUri"].AsString) ?? string.Empty),
                 MinimumRatio = doc["MinimumRatio"].IsDouble ? doc["MinimumRatio"].AsDouble : (double?)null,
                 MinimumSeedTime = doc["MinimumSeedTime"].IsInt64 ? doc["MinimumSeedTime"].AsInt64 : (long?)null,
                 DownloadVolumeFactor =
-                    doc["DownloadVolumeFactor"].IsDouble ? doc["DownloadVolumeFactor"].AsDouble : (double?)null,
+                                      doc["DownloadVolumeFactor"].IsDouble ? doc["DownloadVolumeFactor"].AsDouble : (double?)null,
                 UploadVolumeFactor = doc["UploadVolumeFactor"].IsDouble
-                    ? doc["UploadVolumeFactor"].AsDouble
-                    : (double?)null
+                                      ? doc["UploadVolumeFactor"].AsDouble
+                                      : (double?)null
             };
         }
 
@@ -379,18 +365,20 @@ namespace Jackett.Common.Services.Cache
             {
                 lock (_dbLock)
                 {
-                    _cacheconnectionString = cacheconnectionString;
-                    var client = new MongoClient("mongodb://" + _cacheconnectionString);
-                    _database = client.GetDatabase("CacheDatabase");
+                    if (_cacheconnectionString != cacheconnectionString)
+                    {
+                        _cacheconnectionString = cacheconnectionString;
+                        var client = new MongoClient("mongodb://" + _cacheconnectionString);
+                        _database = client.GetDatabase("CacheDatabase");
+                        Initialize();
+                    }
                 }
-
-                Initialize();
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Failed UpdateCacheConnectionString MongoDB");
+                _logger.Error(e, "Failed UpdateConnectionString MongoDB");
+                throw new Exception("Failed UpdateConnectionString MongoDB");
             }
-
         }
 
         private string GetQueryHash(TorznabQuery query)
@@ -514,6 +502,10 @@ namespace Jackett.Common.Services.Cache
             var releaseInfosCollection = _database.GetCollection<BsonDocument>("ReleaseInfos");
             var releaseInfosCount = releaseInfosCollection.CountDocuments(Builders<BsonDocument>.Filter.Empty);
             _logger.Info("CACHE Status / Total cached results: {0} documents", releaseInfosCount);
+        }
+        public void ClearCacheConnectionString()
+        {
+            _cacheconnectionString = string.Empty;
         }
     }
 }

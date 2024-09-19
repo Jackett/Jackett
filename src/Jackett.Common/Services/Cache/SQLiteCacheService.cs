@@ -675,5 +675,9 @@ namespace Jackett.Common.Services.Cache
             }
             return cacheconnectionString;
         }
+        public void ClearCacheConnectionString()
+        {
+            _cacheconnectionString = string.Empty;
+        }
     }
 }

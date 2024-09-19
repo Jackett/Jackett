@@ -30,5 +30,9 @@ namespace Jackett.Test.TestHelpers
         {
 
         }
+        public void ClearCacheConnectionString()
+        {
+
+        }
     }
 }

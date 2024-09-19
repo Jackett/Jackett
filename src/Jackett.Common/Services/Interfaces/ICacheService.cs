@@ -14,5 +14,6 @@ namespace Jackett.Common.Services.Interfaces
         void CleanCache();
         TimeSpan CacheTTL { get; }
         void UpdateCacheConnectionString(string cacheconnectionString);
+        void ClearCacheConnectionString();
     }
 }

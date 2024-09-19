@@ -35,6 +35,7 @@ namespace Jackett.Common.Services.Cache
                 CurrentCacheService.CleanCache();
             }
 
+            CurrentCacheService.ClearCacheConnectionString();
             _cacheService = _factory.CreateCacheService(newCacheType, str);
         }
 

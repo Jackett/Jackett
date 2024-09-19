@@ -47,5 +47,9 @@ namespace Jackett.Common.Services.Cache
         {
             _logger.Info("Cache Disabled");
         }
+        public void ClearCacheConnectionString()
+        {
+
+        }
     }
 }

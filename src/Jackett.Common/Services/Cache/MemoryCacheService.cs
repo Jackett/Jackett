@@ -276,5 +276,9 @@ namespace Jackett.Common.Services.Cache
         {
             _logger.Debug("CACHE Status / Total cached results: {0}", _cache.Values.SelectMany(tc => tc.Queries).Select(q => q.Value.Results.Count).Sum());
         }
+        public void ClearCacheConnectionString()
+        {
+
+        }
     }
 }
