@@ -87,7 +87,7 @@ caps:
     - {id: 22, cat: Other, desc: "Sports/Exercise/Outdoors"}
     - {id: 24, cat: Other, desc: "Stock Media"}
     - {id: 33, cat: Other, desc: "Style & Fashion"}
-    - {id: 73, cat: Other, desc: "Docu : Survivalism"}    
+    - {id: 73, cat: Other, desc: "Docu : Survivalism"}
     - {id: 60, cat: Other, desc: "Docu : The Arts: Acting/ Filmmaking"}
     - {id: 217, cat: Other, desc: "Docu : The Arts: Dance/Singing/Voice"}
     - {id: 26, cat: Other, desc: "Docu : The Arts: Music History/Theory"}
