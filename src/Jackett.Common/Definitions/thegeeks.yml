@@ -80,7 +80,7 @@ caps:
     - {id: 77, cat: Other, desc: "Science: Chemistry"}
     - {id: 12, cat: Other, desc: "Science: Math/Statistics"}
     - {id: 10, cat: Other, desc: "Science: Medicine/Health "}
-    - {id: 29, cat: Other, desc: "Science: Philosophy"}   
+    - {id: 29, cat: Other, desc: "Science: Philosophy"}
     - {id: 76, cat: Other, desc: "Science: Physics"}
     - {id: 14, cat: Other, desc: "Science: Psych/Sociolgy"}
     - {id: 215, cat: Other, desc: "Sexuality/Seductn/Body Img"}
