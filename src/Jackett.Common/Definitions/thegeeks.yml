@@ -72,7 +72,6 @@ caps:
     - {id: 201, cat: Other, desc: "Occultism: Academic / Referenc"}
     - {id: 210, cat: Other, desc: "Occultism: Bashar"}
     - {id: 202, cat: Other, desc: "Occultism: Mythology Folklore"}
-    - {id: 202, cat: Other, desc: "Occultism: Mythology Folklore"}
     - {id: 203, cat: Other, desc: "Paranormal"}
     - {id: 204, cat: Other, desc: "Parapsychology"}
     - {id: 11, cat: Other, desc: "Political Studies"}
