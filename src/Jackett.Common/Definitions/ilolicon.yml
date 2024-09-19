@@ -19,6 +19,7 @@ caps:
     - {id: 412, cat: Console, desc: "游戏 (Game)"}
     - {id: 413, cat: PC, desc: "软件 (Software)"}
     - {id: 411, cat: Other, desc: "漫画/图集/绘本/写真 (Photo)"}
+    - {id: 418, cat: Other, desc: "三次元图集/写真/Cosplay套图"}
 
   modes:
     search: [q]
