@@ -7,9 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://www.torrentdownload.info/
-  - https://torrentdownload.unblockit.download/
 legacylinks:
-  - https://torrentdownload.unblockit.rsvp/
   - https://torrentdownload.unblockit.vegas/
   - https://torrentdownload.unblockit.esq/
   - https://torrentdownload.unblockit.zip/
@@ -25,6 +23,7 @@ legacylinks:
   - https://torrentdownload.unblockit.ong/
   - https://torrentdownload.unblockit.black/
   - https://torrentdownload.unblockit.meme/
+  - https://torrentdownload.unblockit.download/
 
 caps:
   categorymappings:
