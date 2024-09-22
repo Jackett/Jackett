@@ -98,6 +98,8 @@ search:
   rows:
     selector: "div#content > div.poststuff:has(~ div.entry a.download), div#content > div.poststuff ~ div.entry:has(a.download)"
     after: 1
+    filters:
+      - name: andmatch
 
   fields:
     category:
