@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var searchString = query.GetQueryString().Trim();
                 if (!string.IsNullOrWhiteSpace(searchString))
                 {
-                    searchString = Regex.Replace(searchString, @"[\W]+", " ").Trim();
+                    searchString = Regex.Replace(searchString, @"[\W]+", " ").Trim().ToLower();
                     parameters.Set("s", searchString);
                     parameters.Set("tt", "1");
                 }
