@@ -18,8 +18,9 @@ caps:
     - {id: 406, cat: Audio/Video, desc: "MV"}
     - {id: 403, cat: Movies, desc: "综艺 / TV Shows"}
     - {id: 407, cat: TV/Sport, desc: "体育竞技 / Sports"}
-    - {id: 409, cat: Other, desc: "其他 / Other"}
     - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary"}
+    - {id: 409, cat: Other, desc: "其他 / Other"}
+    - {id: 415, cat: Books/Comics, desc: "漫画 / Cartoon"}
 
   modes:
     search: [q]
