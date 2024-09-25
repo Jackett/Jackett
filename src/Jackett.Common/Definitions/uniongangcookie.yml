@@ -1,64 +1,43 @@
 ---
-id: rudub
-replaces:
-  - baibako
-name: RUDUB
-description: "RUDUB (ex-BaibaKoTV) is a RUSSIAN Semi-Private Torrent Tracker for TV"
+id: uniongangcookie
+name: UnionGangCookie
+description: "UnionGang is a RUSSIAN Private Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses cookie login."
 language: ru-RU
-type: semi-private
-encoding: windows-1251
-followredirect: true
+type: private
+encoding: UTF-8
 links:
-  - https://26september.rudub.online/
+  - https://uniongang.net/
 legacylinks:
-  - https://rudub.online/
-  - https://27august.rudub.online/
-  - https://28august.rudub.online/
-  - https://29august.rudub.online/
-  - https://30august.rudub.online/
-  - https://31august.rudub.online/
-  - https://01september.rudub.online/
-  - https://02september.rudub.online/
-  - https://03september.rudub.online/
-  - https://04september.rudub.online/
-  - https://05september.rudub.online/
-  - https://06september.rudub.online/
-  - https://07september.rudub.online/
-  - https://08september.rudub.online/
-  - https://09september.rudub.online/
-  - https://10september.rudub.online/
-  - https://11september.rudub.online/
-  - https://12september.rudub.online/
-  - https://13september.rudub.online/
-  - https://14september.rudub.online/
-  - https://15september.rudub.online/
-  - https://16september.rudub.online/
-  - https://17september.rudub.online/
-  - https://18september.rudub.online/
-  - https://19september.rudub.online/
-  - https://20september.rudub.online/
-  - https://21september.rudub.online/
-  - https://22september.rudub.online/
-  - https://23september.rudub.online/
-  - https://24september.rudub.online/
-  - https://25september.rudub.online/
+  - http://www.uniongang.net/
+  - https://www.uniongang.net/
 
 caps:
   categorymappings:
-    - {id: 1, cat: TV, desc: "TV"}
+    - {id: 1, cat: Movies, desc: "Movies / HDRip / BDRip"}
+    - {id: 21, cat: Movies/WEB-DL, desc: "Movies WEB-DL / WEB-DLRip"}
+    - {id: 2, cat: Movies/HD, desc: "Movies x264"}
+    - {id: 5, cat: Movies/HD, desc: "Movies BDRemux / BDRip1080p"}
+    - {id: 6, cat: TV, desc: "TV Сериал"}
+    - {id: 7, cat: TV/Documentary, desc: "TV Документальный"}
+    - {id: 9, cat: TV, desc: "Мультфильм"}
+    - {id: 10, cat: TV, desc: "ТВ / Выпуски / Шоу"}
+    - {id: 11, cat: PC, desc: "Игра / PC"}
+    - {id: 13, cat: Audio, desc: "Музыка / Русская"}
+    - {id: 14, cat: Audio, desc: "Музыка / Зарубежная"}
+    - {id: 23, cat: Movies/UHD, desc: "Movies / 4K"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
-  allowrawsearch: true
+    movie-search: [q]
+    music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -87,29 +66,31 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "<ul><li>A parked account is deleted after 175 days (six months), for experienced users and regular users.</li><li>A disabled account is deleted after 2 months (increased to 93 days) , for experienced users and regular users.</li></ul>"
 
 login:
-  path: takelogin.php
-  method: post
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.login2
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
-    selector: a[href="logout.php"]
+    path: /
+    selector: a[href="/logout.php"]
 
 search:
   paths:
-    # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
     - path: browse.php
   inputs:
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 incldead, 1 active, 2 onlydead, 3 gold, 4 seedfree
+    shw_incl_cats: 0
+    #  0 default, 1 active, 1 inactive,  3 gold, 4 important, 5 unverified,  6 banned, 7 no tags, 8 my torrents, 9-31 lots of other choices
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    # site does not support imdbid search or provide imdb links in results
 
   keywordsfilters:
     # strip season and/or ep
@@ -117,11 +98,16 @@ search:
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
   rows:
-    selector: div.card__torlist__browse_2
+    selector: table.brws.main > tbody > tr[class^="torcont"]
+    after: 1
 
   fields:
     category:
-      text: 1
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href^="details.php?id="]
       filters:
@@ -157,6 +143,12 @@ search:
         - name: re_replace
           args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1"]
         - name: re_replace
+          args: ["(?i)\\bР(\\d)?\\b", "P$1"]
+        - name: re_replace
+          args: ["(?i)\\sот\\s([\\w\\p{P}\\p{S}]+)\\s\\|(.+)", "$2-$1"]
+        - name: re_replace
+          args: ["\\s\\|\\s(\\w{4,})$", "-$1"]
+        - name: re_replace
           args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
         - name: re_replace
           args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
@@ -168,66 +160,57 @@ search:
           args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
         - name: re_replace
           args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
-        - name: replace
-          args: ["BD720p", "BD 720p"]
-        - name: replace
-          args: ["HD720p", "HD 720p"]
-        - name: replace
-          args: ["HDR720p", "HDR 720p"]
-        - name: replace
-          args: ["BD1080p", "BD 1080p"]
-        - name: replace
-          args: ["HD1080p", "HD 1080p"]
-        - name: replace
-          args: ["HDR1080p", "HDR 1080p"]
-        - name: replace
-          args: [" (Золото)", ""] # remove gold tag
         - name: re_replace
           args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
         - name: re_replace
           args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
-        - name: re_replace
-          args: ["^\\((.+?)\\s?\\)", "$1 "]
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
       attribute: href
-    date:
-      # 2022-03-28 01:28:07
-      selector: li[title="Дата"]
-      filters:
-        - name: append
-          args: " +03:00" # MSK
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    files:
-      selector: li[title="Файлов"]
     size:
-      selector: li[title="Размер"]
+      selector: a[href^="download.php?id="], a[href^="magnet:?xt="]
     seeders:
-      selector: li[title="Активность"]
+      selector: td:nth-last-child(3)
       filters:
-        - name: regexp
-          args: (\d+)\s+\d+
+        - name: split
+          args: ["|", 0]
     leechers:
-      selector: li[title="Активность"]
+      selector: td:nth-last-child(3)
       filters:
-        - name: regexp
-          args: \d+\s+(\d+)
-    grabs:
-      selector: li[title="Завершено"]
+        - name: split
+          args: ["|", 1]
+    date:
+      selector: td:has(a[href^="userdetails.php?id="]) ~ td, td:has(a[href^="browse.php?gr="]) ~ td
+      remove: a
+      filters:
+        - name: re_replace
+          args: ["(?i)(назад)", "ago"]
+        - name: re_replace
+          args: ["(?i)(секунду|секунды|секунд)", "seconds"]
+        - name: re_replace
+          args: ["(?i)(минуты|минуту|минут)", "minutes"]
+        - name: re_replace
+          args: ["(?i)(часов|часа|час)", "hours"]
+        - name: re_replace
+          args: ["(?i)(день|дней|дня)", "days"]
+        - name: re_replace
+          args: ["(?i)(неделю|недели|недель)", "weeks"]
+        - name: re_replace
+          args: ["(?i)(месяц|месяца|месяцев)", "months"]
+        - name: re_replace
+          args: ["(?i)(года|год|лет)", "years"]
+        - name: timeago
     downloadvolumefactor:
       case:
-        "a[href^=\"details.php?id=\"]:contains(\"(Золото)\")": 0
+        img[src="/pic/freedownload.gif"]: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 0.3
-    description:
-      selector: a[href^="details.php?id="]
-# engine n/a
+# Engine n/a

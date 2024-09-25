@@ -174,62 +174,61 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             var bhdResponse = await GetBHDResponse(apiUrl, postData);
-            var releaseInfos = bhdResponse.results.Select(MapToReleaseInfo);
 
-            return releaseInfos;
+            var results = bhdResponse.Results
+                                     .Where(r => r.DownloadUrl.IsNotNullOrWhiteSpace() && r.InfoUrl.IsNotNullOrWhiteSpace())
+                                     .ToList();
+
+            return results.Select(MapToReleaseInfo).ToList();
         }
 
         private ReleaseInfo MapToReleaseInfo(BHDResult bhdResult)
         {
-            var downloadUri = new Uri(bhdResult.download_url);
-
-            var title = GetReleaseTitle(bhdResult);
-
             var releaseInfo = new ReleaseInfo
             {
-                Title = title,
-                Seeders = bhdResult.seeders,
-                Guid = new Uri(bhdResult.url),
-                Details = new Uri(bhdResult.url),
-                Link = downloadUri,
-                InfoHash = bhdResult.info_hash,
-                Peers = bhdResult.leechers + bhdResult.seeders,
-                Grabs = bhdResult.times_completed,
-                PublishDate = bhdResult.created_at,
-                Size = bhdResult.size,
-                Category = MapTrackerCatDescToNewznab(bhdResult.category)
+                Guid = new Uri(bhdResult.InfoUrl),
+                Details = new Uri(bhdResult.InfoUrl),
+                Link = new Uri(bhdResult.DownloadUrl),
+                Title = GetReleaseTitle(bhdResult),
+                Category = MapTrackerCatDescToNewznab(bhdResult.Category),
+                InfoHash = bhdResult.InfoHash,
+                Grabs = bhdResult.Grabs,
+                Size = bhdResult.Size,
+                Seeders = bhdResult.Seeders,
+                Peers = bhdResult.Leechers + bhdResult.Seeders,
+                PublishDate = bhdResult.CreatedAt
             };
 
-            if (bhdResult.imdb_id.IsNotNullOrWhiteSpace())
+            if (bhdResult.ImdbId.IsNotNullOrWhiteSpace())
             {
-                releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.imdb_id);
+                releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.ImdbId);
             }
 
-            if (bhdResult.tmdb_id.IsNotNullOrWhiteSpace())
+            if (bhdResult.TmdbId.IsNotNullOrWhiteSpace())
             {
-                var tmdbId = bhdResult.tmdb_id.Split('/').ElementAtOrDefault(1);
+                var tmdbId = bhdResult.TmdbId.Split('/').ElementAtOrDefault(1);
                 releaseInfo.TMDb = tmdbId != null && ParseUtil.TryCoerceInt(tmdbId, out var tmdbResult) ? tmdbResult : 0;
             }
 
             releaseInfo.DownloadVolumeFactor = 1;
             releaseInfo.UploadVolumeFactor = 1;
 
-            if (bhdResult.freeleech == 1 || bhdResult.limited == 1)
+            if (bhdResult.Freeleech == 1 || bhdResult.Limited == 1)
             {
                 releaseInfo.DownloadVolumeFactor = 0;
             }
 
-            if (bhdResult.promo25 == 1)
+            if (bhdResult.Promo25 == 1)
             {
                 releaseInfo.DownloadVolumeFactor = .75;
             }
 
-            if (bhdResult.promo50 == 1)
+            if (bhdResult.Promo50 == 1)
             {
                 releaseInfo.DownloadVolumeFactor = .50;
             }
 
-            if (bhdResult.promo75 == 1)
+            if (bhdResult.Promo75 == 1)
             {
                 releaseInfo.DownloadVolumeFactor = .25;
             }
@@ -239,7 +238,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string GetReleaseTitle(BHDResult bhdResult)
         {
-            var title = bhdResult.name.Trim();
+            var title = bhdResult.Name.Trim();
 
             if (!configData.AddHybridFeaturesToTitle.Value)
             {
@@ -248,22 +247,22 @@ namespace Jackett.Common.Indexers.Definitions
 
             var features = new List<string>();
 
-            if (bhdResult.dv == 1)
+            if (bhdResult.DolbyVision == 1)
             {
                 features.Add("Dolby Vision");
             }
 
-            if (bhdResult.hdr10 == 1)
+            if (bhdResult.Hdr10 == 1)
             {
                 features.Add("HDR10");
             }
 
-            if (bhdResult.hdr10plus == 1)
+            if (bhdResult.Hdr10Plus == 1)
             {
                 features.Add("HDR10+");
             }
 
-            if (bhdResult.hlg == 1)
+            if (bhdResult.Hlg == 1)
             {
                 features.Add("HLG");
             }
@@ -376,46 +375,66 @@ namespace Jackett.Common.Indexers.Definitions
             public int total_pages { get; set; } // int The total number of pages of results matching your query.
             public int total_results { get; set; } // The total number of results matching your query.
             public bool success { get; set; } // The status of the call. (True = Success, False = Error)
-            public BHDResult[] results { get; set; } // The results that match your query.
+            public IReadOnlyCollection<BHDResult> Results { get; set; } // The results that match your query.
         }
 
         class BHDResult
         {
-            public int id { get; set; }
-            public string name { get; set; }
-            public string folder_name { get; set; }
-            public string info_hash { get; set; }
-            public long size { get; set; }
-            public string uploaded_by { get; set; }
-            public string category { get; set; }
-            public string type { get; set; }
-            public int seeders { get; set; }
-            public int leechers { get; set; }
-            public int times_completed { get; set; }
-            public string imdb_id { get; set; }
-            public string tmdb_id { get; set; }
+            public int Id { get; set; }
+            public string Name { get; set; }
+
+            [JsonProperty("folder_name")]
+            public string FolderName { get; set; }
+
+            [JsonProperty("info_hash")]
+            public string InfoHash { get; set; }
+
+            public long Size { get; set; }
+            public string Category { get; set; }
+            public string Type { get; set; }
+            public int Seeders { get; set; }
+            public int Leechers { get; set; }
+
+            [JsonProperty("times_completed")]
+            public int Grabs { get; set; }
+
+            [JsonProperty("imdb_id")]
+            public string ImdbId { get; set; }
+
+            [JsonProperty("tmdb_id")]
+            public string TmdbId { get; set; }
+
             public decimal bhd_rating { get; set; }
             public decimal tmdb_rating { get; set; }
             public decimal imdb_rating { get; set; }
             public int tv_pack { get; set; }
-            public int promo25 { get; set; }
-            public int promo50 { get; set; }
-            public int promo75 { get; set; }
-            public int freeleech { get; set; }
-            public int rewind { get; set; }
-            public int refund { get; set; }
-            public int limited { get; set; }
-            public int rescue { get; set; }
-            public DateTime bumped_at { get; set; }
-            public DateTime created_at { get; set; }
-            public string url { get; set; }
-            public string download_url { get; set; }
-            public int dv { get; set; }
-            public int hdr10 { get; set; }
+            public int Promo25 { get; set; }
+            public int Promo50 { get; set; }
+            public int Promo75 { get; set; }
+            public int Freeleech { get; set; }
+            public int Rewind { get; set; }
+            public int Refund { get; set; }
+            public int Limited { get; set; }
+            public int Rescue { get; set; }
+
+            [JsonProperty("created_at")]
+            public DateTime CreatedAt { get; set; }
+
+            [JsonProperty("url")]
+            public string InfoUrl { get; set; }
+
+            [JsonProperty("download_url")]
+            public string DownloadUrl { get; set; }
+
+            [JsonProperty("dv")]
+            public int DolbyVision { get; set; }
+
+            public int Hdr10 { get; set; }
+
             [JsonProperty("hdr10+")]
-            public int hdr10plus { get; set; }
-            public int hlg { get; set; }
-            public int commentary { get; set; }
+            public int Hdr10Plus { get; set; }
+
+            public int Hlg { get; set; }
         }
     }
 }

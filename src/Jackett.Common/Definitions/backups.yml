@@ -27,8 +27,10 @@ caps:
     - {id: 16, cat: TV/Documentary, desc: "Docu"}
     - {id: 41, cat: Console, desc: "Dragon"}
     - {id: 5, cat: Books, desc: "EBooks"}
+    - {id: 80, cat: PC, desc: "Emulation Media"}
     - {id: 61, cat: Console, desc: "emuxtras"}
     - {id: 69, cat: TV, desc: "Entertainment"}
+    - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 43, cat: Console, desc: "LB No Intro"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
@@ -42,16 +44,20 @@ caps:
     - {id: 30, cat: Console, desc: "Playstation"}
     - {id: 62, cat: Console, desc: "RaspberryPi"}
     - {id: 56, cat: Console, desc: "Retro Minis"}
+    - {id: 81, cat: PC, desc: "Retro Scene Releases"}
     - {id: 67, cat: Console, desc: "Retrobat"}
+    - {id: 79, cat: PC, desc: "RGB-Pi"}
     - {id: 76, cat: Console, desc: "RGS"}
     - {id: 27, cat: Console, desc: "Roms and Emulators"}
     - {id: 68, cat: Console, desc: "Schmoomer's"}
     - {id: 57, cat: Console, desc: "Sega"}
+    - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 40, cat: TV, desc: "Soaps"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
     - {id: 9, cat: TV, desc: "TV-Boxsets"}
     - {id: 11, cat: TV, desc: "TV/x264"}
     - {id: 10, cat: TV, desc: "TV/Xvid"}
+    - {id: 75, cat: Audio, desc: "Video Game Music"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
     - {id: 14, cat: TV/Sport, desc: "WWE"}
     - {id: 26, cat: Console, desc: "Xbox"}
