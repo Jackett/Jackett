@@ -204,7 +204,20 @@ namespace Jackett.Common.Services.Cache
             ReleaseInfoId INTEGER,
             FOREIGN KEY(TrackerCacheQueryId) REFERENCES TrackerCacheQueries(Id),
             FOREIGN KEY(ReleaseInfoId) REFERENCES ReleaseInfos(Id)
-        );";
+        );
+            CREATE INDEX IF NOT EXISTS idx_TrackerCaches_TrackerId ON TrackerCaches(TrackerId);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueries_TrackerCacheId_QueryHash ON TrackerCacheQueries(TrackerCacheId, QueryHash);
+            CREATE INDEX IF NOT EXISTS idx_ReleaseInfos_Id ON ReleaseInfos(Id);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueryReleaseInfos_ReleaseInfoId_TrackerCacheQueryId ON TrackerCacheQueryReleaseInfos(ReleaseInfoId, TrackerCacheQueryId);
+
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueries_Created ON TrackerCacheQueries(Created);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueryReleaseInfos_TrackerCacheQueryId ON TrackerCacheQueryReleaseInfos(TrackerCacheQueryId);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueryReleaseInfos_ReleaseInfoId ON TrackerCacheQueryReleaseInfos(ReleaseInfoId);
+
+            CREATE INDEX IF NOT EXISTS idx_ReleaseInfos_PublishDate ON ReleaseInfos(PublishDate);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueries_Id ON TrackerCacheQueries(Id);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCacheQueries_TrackerCacheId ON TrackerCacheQueries(TrackerCacheId);
+            CREATE INDEX IF NOT EXISTS idx_TrackerCaches_Id ON TrackerCaches(Id);";
 
                     command.ExecuteNonQuery();
                 }
@@ -222,7 +235,7 @@ namespace Jackett.Common.Services.Cache
             if (query.IsTest)
                 return;
 
-            lock (_dbLock)
+            //lock (_dbLock)
             {
                 try
                 {
@@ -234,7 +247,6 @@ namespace Jackett.Common.Services.Cache
                             var trackerCacheId = GetOrAddTrackerCache(connection, indexer);
                             var trackerCacheQueryId = AddTrackerCacheQuery(connection, trackerCacheId, query);
 
-                            // Вставка релизов в ReleaseInfos
                             var sqlInsertReleaseInfos = @"
                         INSERT INTO ReleaseInfos 
                         (
@@ -280,14 +292,13 @@ namespace Jackett.Common.Services.Cache
                 catch (Exception e)
                 {
                     _logger.Error("CacheResults adds parameter to the collections, {0}", e.Message);
-                    _logger.Error("CacheResults adds parameter to the collections, {0}", e.InnerException);
+                    throw;
                 }
             }
         }
 
         private int GetOrAddTrackerCache(SqliteConnection connection, IIndexer indexer)
         {
-            // Получить или добавить TrackerCache и вернуть его ID
             var sql = @"
         INSERT INTO TrackerCaches (TrackerId, TrackerName, TrackerType)
         VALUES (@TrackerId, @TrackerName, @TrackerType)
@@ -307,7 +318,6 @@ namespace Jackett.Common.Services.Cache
 
         private int AddTrackerCacheQuery(SqliteConnection connection, int trackerCacheId, TorznabQuery query)
         {
-            // Добавить TrackerCacheQuery и вернуть его ID
             var sql = @"
         INSERT INTO TrackerCacheQueries (TrackerCacheId, QueryHash, Created)
         VALUES (@TrackerCacheId, @QueryHash, @Created);
@@ -328,9 +338,7 @@ namespace Jackett.Common.Services.Cache
                 return null;
 
             PruneCacheByTtl();
-
             var queryHash = GetQueryHash(query);
-
             using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
             {
                 connection.Open();
@@ -358,7 +366,7 @@ namespace Jackett.Common.Services.Cache
 
         public IReadOnlyList<TrackerCacheResult> GetCachedResults()
         {
-            lock (_dbLock)
+            //lock (_dbLock)
             {
                 if (_serverConfig.CacheType == CacheType.Disabled)
                     return Array.Empty<TrackerCacheResult>();
@@ -401,14 +409,13 @@ namespace Jackett.Common.Services.Cache
             if (_serverConfig.CacheType == CacheType.Disabled)
                 return;
 
-            lock (_dbLock)
+            //lock (_dbLock)
             {
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
                     connection.Open();
                     using (var transaction = connection.BeginTransaction())
                     {
-                        // Удаление записей из промежуточной таблицы
                         var deleteIntermediateCommand = connection.CreateCommand();
                         deleteIntermediateCommand.CommandText = @"
                 DELETE FROM TrackerCacheQueryReleaseInfos WHERE TrackerCacheQueryId IN (
@@ -419,7 +426,6 @@ namespace Jackett.Common.Services.Cache
                         deleteIntermediateCommand.Parameters.AddWithValue("$trackerId", indexer.Id);
                         deleteIntermediateCommand.ExecuteNonQuery();
 
-                        // Удаление запросов из TrackerCacheQueries
                         var deleteQueryCommand = connection.CreateCommand();
                         deleteQueryCommand.CommandText = @"
                 DELETE FROM TrackerCacheQueries WHERE TrackerCacheId = (
@@ -428,7 +434,6 @@ namespace Jackett.Common.Services.Cache
                         deleteQueryCommand.Parameters.AddWithValue("$trackerId", indexer.Id);
                         deleteQueryCommand.ExecuteNonQuery();
 
-                        // Удаление записей из ReleaseInfos, которые больше не связаны с TrackerCacheQueryReleaseInfos
                         var deleteOrphanedReleaseInfosCommand = connection.CreateCommand();
                         deleteOrphanedReleaseInfosCommand.CommandText = @"
                 DELETE FROM ReleaseInfos
@@ -437,7 +442,6 @@ namespace Jackett.Common.Services.Cache
                 );";
                         deleteOrphanedReleaseInfosCommand.ExecuteNonQuery();
 
-                        // Удаление трекеров из TrackerCaches
                         var deleteCacheCommand = connection.CreateCommand();
                         deleteCacheCommand.CommandText = @"
                 DELETE FROM TrackerCaches WHERE TrackerId = $trackerId;";
@@ -459,29 +463,25 @@ namespace Jackett.Common.Services.Cache
             if (_serverConfig.CacheType == CacheType.Disabled)
                 return;
 
-            lock (_dbLock)
+            //lock (_dbLock)
             {
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
                     connection.Open();
                     using (var transaction = connection.BeginTransaction())
                     {
-                        // Удаление всех записей из промежуточной таблицы
                         var deleteIntermediateCommand = connection.CreateCommand();
                         deleteIntermediateCommand.CommandText = "DELETE FROM TrackerCacheQueryReleaseInfos;";
                         deleteIntermediateCommand.ExecuteNonQuery();
 
-                        // Удаление всех запросов из TrackerCacheQueries
                         var deleteQueryCommand = connection.CreateCommand();
                         deleteQueryCommand.CommandText = "DELETE FROM TrackerCacheQueries;";
                         deleteQueryCommand.ExecuteNonQuery();
 
-                        // Удаление всех записей из ReleaseInfos
                         var deleteReleaseInfosCommand = connection.CreateCommand();
                         deleteReleaseInfosCommand.CommandText = "DELETE FROM ReleaseInfos;";
                         deleteReleaseInfosCommand.ExecuteNonQuery();
 
-                        // Удаление всех трекеров из TrackerCaches
                         var deleteCacheCommand = connection.CreateCommand();
                         deleteCacheCommand.CommandText = "DELETE FROM TrackerCaches;";
                         deleteCacheCommand.ExecuteNonQuery();
@@ -498,7 +498,7 @@ namespace Jackett.Common.Services.Cache
 
         private void PruneCacheByTtl()
         {
-            lock (_dbLock)
+            //lock (_dbLock)
             {
                 using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
                 {
@@ -507,7 +507,6 @@ namespace Jackett.Common.Services.Cache
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        // Удаление записей из промежуточной таблицы для устаревших запросов
                         var sqlDeleteFromIntermediateTable = @"
                     DELETE FROM TrackerCacheQueryReleaseInfos
                     WHERE TrackerCacheQueryId IN (
@@ -517,14 +516,12 @@ namespace Jackett.Common.Services.Cache
 
                         var prunedCounterIntermediate = connection.Execute(sqlDeleteFromIntermediateTable, new { ExpirationDate = expirationDate }, transaction);
 
-                        // Удаление устаревших запросов
                         var sqlDeleteExpiredQueries = @"
                     DELETE FROM TrackerCacheQueries
                     WHERE Created < @ExpirationDate;";
 
                         var prunedCounterQueries = connection.Execute(sqlDeleteExpiredQueries, new { ExpirationDate = expirationDate }, transaction);
 
-                        // Удаление "осиротевших" записей из ReleaseInfos
                         var sqlDeleteOrphanedReleaseInfos = @"
                     DELETE FROM ReleaseInfos
                     WHERE Id NOT IN (
@@ -587,21 +584,18 @@ namespace Jackett.Common.Services.Cache
 
                     using (var transaction = connection.BeginTransaction())
                     {
-                        // Удаление из промежуточной таблицы
                         var deleteIntermediateCommand = connection.CreateCommand();
                         deleteIntermediateCommand.CommandText = @"
                 DELETE FROM TrackerCacheQueryReleaseInfos WHERE TrackerCacheQueryId = $queryId;";
                         deleteIntermediateCommand.Parameters.AddWithValue("$queryId", queryIdToRemove);
                         deleteIntermediateCommand.ExecuteNonQuery();
 
-                        // Удаление из TrackerCacheQueries
                         var deleteQueryCommand = connection.CreateCommand();
                         deleteQueryCommand.CommandText = @"
                 DELETE FROM TrackerCacheQueries WHERE Id = $queryId;";
                         deleteQueryCommand.Parameters.AddWithValue("$queryId", queryIdToRemove);
                         deleteQueryCommand.ExecuteNonQuery();
 
-                        // Удаление осиротевших записей из ReleaseInfos
                         var deleteOrphanedReleaseInfosCommand = connection.CreateCommand();
                         deleteOrphanedReleaseInfosCommand.CommandText = @"
                 DELETE FROM ReleaseInfos

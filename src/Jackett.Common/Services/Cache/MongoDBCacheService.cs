@@ -40,6 +40,27 @@ namespace Jackett.Common.Services.Cache
             var trackerCaches = _database.GetCollection<BsonDocument>("TrackerCaches");
             var trackerCacheQueries = _database.GetCollection<BsonDocument>("TrackerCacheQueries");
             var releaseInfos = _database.GetCollection<BsonDocument>("ReleaseInfos");
+
+            var releaseInfosindexModel = new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("TrackerCacheQueryId"));
+            releaseInfos.Indexes.CreateOne(releaseInfosindexModel);
+
+            var trackerCacheQueriesIndexes = Builders<BsonDocument>.IndexKeys
+                                                                   .Ascending("QueryHash")
+                                                                   .Ascending("TrackerCacheId");
+
+            var trackerCacheQueriesIndexModel = new CreateIndexModel<BsonDocument>(trackerCacheQueriesIndexes);
+            trackerCacheQueries.Indexes.CreateOne(trackerCacheQueriesIndexModel);
+
+            var indextrackerCacheQueries = new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("QueryHash"));
+            trackerCacheQueries.Indexes.CreateOne(indextrackerCacheQueries);
+            indextrackerCacheQueries = new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("TrackerCacheId"));
+            trackerCacheQueries.Indexes.CreateOne(indextrackerCacheQueries);
+
+            var trackerCachesIndexes = new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("TrackerId"));
+            trackerCaches.Indexes.CreateOne(trackerCachesIndexes);
+            trackerCachesIndexes = new CreateIndexModel<BsonDocument>(Builders<BsonDocument>.IndexKeys.Ascending("TrackerCacheId"));
+            trackerCaches.Indexes.CreateOne(trackerCachesIndexes);
+
             _logger.Info("Cache MongoDB Initialized");
         }
 
@@ -48,7 +69,7 @@ namespace Jackett.Common.Services.Cache
             if (query.IsTest)
                 return;
 
-            lock (_dbLock)
+            //lock (_dbLock)TODO not needs
             {
                 try
                 {
@@ -151,17 +172,27 @@ namespace Jackett.Common.Services.Cache
             PruneCacheByTtl();
 
             var queryHash = GetQueryHash(query);
-            var releaseInfos = _database.GetCollection<BsonDocument>("ReleaseInfos");
 
-            var results = releaseInfos.Aggregate()
-                                      .Lookup("TrackerCacheQueries", "TrackerCacheQueryId", "_id", "TrackerCacheQuery")
-                                      .Unwind("TrackerCacheQuery")
-                                      .Lookup("TrackerCaches", "TrackerCacheQuery.TrackerCacheId", "_id", "TrackerCache")
-                                      .Unwind("TrackerCache").Match(
-                                          Builders<BsonDocument>.Filter.And(
-                                              Builders<BsonDocument>.Filter.Eq("TrackerCache.TrackerId", indexer.Id),
-                                              Builders<BsonDocument>.Filter.Eq("TrackerCacheQuery.QueryHash", queryHash)))
-                                      .ToList();
+            var trackerCaches = _database.GetCollection<BsonDocument>("TrackerCaches")
+                                         .Find(Builders<BsonDocument>.Filter.Eq("TrackerId", indexer.Id))
+                                         .ToList();
+
+            var trackerCacheIds = trackerCaches.Select(doc => doc.GetValue("_id").AsObjectId).ToList();
+
+            var trackerCacheQueries = _database.GetCollection<BsonDocument>("TrackerCacheQueries")
+                                               .Find(Builders<BsonDocument>.Filter.And(
+                                                         Builders<BsonDocument>.Filter.Eq("QueryHash", queryHash),
+                                                         Builders<BsonDocument>.Filter.In("TrackerCacheId", trackerCacheIds)
+                                                         ))
+                                               .ToList();
+
+            var trackerCacheQueryIds = trackerCacheQueries.Select(q => q["_id"].AsObjectId).ToList();
+
+            var results = _database.GetCollection<BsonDocument>("ReleaseInfos")
+                                   .Find(Builders<BsonDocument>.Filter.And(
+                                             Builders<BsonDocument>.Filter.In("TrackerCacheQueryId", trackerCacheQueryIds)))
+                                   .ToList();
+
             if (results.Count > 0)
             {
                 if (_logger.IsDebugEnabled)
@@ -177,9 +208,9 @@ namespace Jackett.Common.Services.Cache
             return new ReleaseInfo
             {
                 Title = doc["Title"].IsBsonNull ? null : doc["Title"].AsString,
-                Guid = new Uri((doc["Guid"].IsBsonNull ? null : doc["Guid"].AsString) ?? string.Empty),
-                Link = new Uri((doc["Link"].IsBsonNull ? null : doc["Link"].AsString) ?? string.Empty),
-                Details = new Uri((doc["Details"].IsBsonNull ? null : doc["Details"].AsString) ?? string.Empty),
+                Guid = doc["Guid"].IsBsonNull || !doc["Guid"].IsString ? null : new Uri(doc["Guid"].AsString),
+                Link = doc["Link"].IsBsonNull || !doc["Link"].IsString ? null : new Uri(doc["Link"].AsString),
+                Details = doc["Details"].IsBsonNull || !doc["Details"].IsString ? null : new Uri(doc["Details"].AsString),
                 PublishDate = doc["PublishDate"].ToLocalTime(),
                 Category = doc["Category"].AsBsonArray.Select(c => c.AsInt32).ToList(),
                 Size = doc["Size"].IsInt64 ? doc["Size"].AsInt64 : (long?)null,
@@ -206,10 +237,9 @@ namespace Jackett.Common.Services.Cache
                 Track = doc["Track"].IsBsonNull ? null : doc["Track"].AsString,
                 Seeders = doc["Seeders"].IsInt64 ? doc["Seeders"].AsInt64 : (long?)null,
                 Peers = doc["Peers"].IsInt64 ? doc["Peers"].AsInt64 : (long?)null,
-                //Poster = doc["Poster"].IsBsonNull ? null : new Uri(doc["Poster"].AsString),
-                Poster = new Uri((doc["Poster"].IsBsonNull ? null : doc["Poster"].AsString) ?? string.Empty),
+                Poster = doc["Poster"].IsBsonNull || !doc["Poster"].IsString ? null : new Uri(doc["Poster"].AsString),
                 InfoHash = doc["InfoHash"].IsBsonNull ? null : doc["InfoHash"].AsString,
-                MagnetUri = new Uri((doc["MagnetUri"].IsBsonNull ? null : doc["MagnetUri"].AsString) ?? string.Empty),
+                MagnetUri = doc["MagnetUri"].IsBsonNull || !doc["MagnetUri"].IsString ? null : new Uri(doc["MagnetUri"].AsString),
                 MinimumRatio = doc["MinimumRatio"].IsDouble ? doc["MinimumRatio"].AsDouble : (double?)null,
                 MinimumSeedTime = doc["MinimumSeedTime"].IsInt64 ? doc["MinimumSeedTime"].AsInt64 : (long?)null,
                 DownloadVolumeFactor =
@@ -349,7 +379,7 @@ namespace Jackett.Common.Services.Cache
 
         public void CleanCache()
         {
-            lock (_dbLock)
+            //lock (_dbLock)TODO not needs
             {
                 _database.DropCollection("ReleaseInfos");
                 _database.DropCollection("TrackerCaches");
@@ -365,11 +395,13 @@ namespace Jackett.Common.Services.Cache
             {
                 lock (_dbLock)
                 {
+                    if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString,
+                            @"(?:(?<username>[^:@\/]+):(?<password>[^@\/]+)@)?(?<hosts>(?:[a-zA-Z0-9.-]+(?::\d{2,5})?(?:,)?)+)(?:\/(?<database>[a-zA-Z0-9_-]+))?(?:\?(?<options>.*))?$"))
+                        throw new Exception("Cache Connection String: Is Empty or Bad name. Example: localhost:27017");
+
                     if (_cacheconnectionString != cacheconnectionString)
                     {
                         _cacheconnectionString = cacheconnectionString;
-                        var client = new MongoClient("mongodb://" + _cacheconnectionString);
-                        _database = client.GetDatabase("CacheDatabase");
                         Initialize();
                     }
                 }
@@ -403,7 +435,7 @@ namespace Jackett.Common.Services.Cache
                 return;
             }
 
-            lock (_dbLock)
+            //lock (_dbLock)TODO not needs
             {
                 var expirationDate = DateTime.Now.AddSeconds(-_serverConfig.CacheTtl);
 
