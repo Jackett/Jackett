@@ -7,9 +7,9 @@ type: semi-private
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://newstudio.tv/
-legacylinks:
   - http://newstudio.tv/
+legacylinks:
+  - https://newstudio.tv/ # ERR_CONNECTION_REFUSED
 
 caps:
   categorymappings:
