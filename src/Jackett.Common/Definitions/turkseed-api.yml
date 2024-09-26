@@ -10,19 +10,12 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 6, cat: TV, desc: "Dizi Show"}
+    - {id: 1, cat: Movies/Foreign, desc: "Yabancı Film"}
     - {id: 2, cat: Movies, desc: "Yerli Film"}
-    - {id: 5, cat: TV/Foreign, desc: "Yabanci Dizi"}
-    - {id: 3, cat: Console, desc: "Oyunlar"}
-    - {id: 13, cat: TV, desc: "AMAZON"}
-    - {id: 14, cat: TV, desc: "NETFLİX DIZI"}
-    - {id: 15, cat: TV, desc: "DİSNEY+ MOVIE"}
-    - {id: 16, cat: TV, desc: "TODD"}
-    - {id: 17, cat: TV, desc: "TV+"}
-    - {id: 18, cat: TV, desc: "BLUTV"}
-    - {id: 19, cat: TV, desc: "EXXEN"}
-    - {id: 20, cat: TV, desc: "NETFLIX BELGESEL"}
+    - {id: 24, cat: Movies, desc: "Film (Boxet)"}
+    - {id: 6, cat: TV, desc: "Dizi / Show (Yerli)"}
+    - {id: 5, cat: TV/Foreign, desc: "Dizi / Show (Yabancı)"}
+    - {id: 18, cat: TV, desc: "Dizi (Boxet)"}
 
   modes:
     search: [q]
