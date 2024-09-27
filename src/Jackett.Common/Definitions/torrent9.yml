@@ -92,8 +92,12 @@ settings:
 
 download:
   selectors:
-    - selector: a:has(i.fa-magnet)
+    - selector: a[href^="magnet:?"]
       attribute: href
+    - selector: script:contains("magnet:?")
+      filters:
+        - name: regexp
+          args: "\\s'(magnet:\\?.+?)';"
 
 search:
   paths:

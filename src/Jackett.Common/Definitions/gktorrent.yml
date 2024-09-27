@@ -135,7 +135,7 @@ search:
       attribute: href
       filters:
         - name: regexp
-          args: (/?torrent/\d+)
+          args: (/?detail/\d+)
     download:
       text: "{{ .Result.details }}"
     size:
