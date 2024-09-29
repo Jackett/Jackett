@@ -16,6 +16,7 @@ caps:
     - {id: 6, cat: TV, desc: "Dizi / Show (Yerli)"}
     - {id: 5, cat: TV/Foreign, desc: "Dizi / Show (Yabancı)"}
     - {id: 18, cat: TV, desc: "Dizi (Boxet)"}
+    - {id: 25, cat: TV/Documentary, desc: "Belgesel"}
 
   modes:
     search: [q]
