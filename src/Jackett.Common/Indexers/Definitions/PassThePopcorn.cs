@@ -128,6 +128,11 @@ namespace Jackett.Common.Indexers.Definitions
                 queryCollection.Set("freetorrent", "1");
             }
 
+            if (configGoldenPopcornOnly)
+            {
+                queryCollection.Set("scene", "2");
+            }
+
             var searchQuery = query.ImdbID.IsNotNullOrWhiteSpace() ? query.ImdbID : query.GetQueryString();
 
             if (searchQuery.IsNotNullOrWhiteSpace())
