@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Zetorrents
 links:
-  - https://www.zetorrents.vg/
+  - https://www.zetorrents.vc/
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
@@ -34,6 +34,7 @@ legacylinks:
   - https://www.zetorrents.pw/
   - https://www.zetorrents.tw/
   - https://www.zetorrents.in/
+  - https://www.zetorrents.vg/
 
 caps:
   categories:
@@ -69,18 +70,9 @@ settings:
     default: false
 
 download:
-  infohash:
-    hash:
-      selector: a[href^="/download/"]
+  selectors:
+    - selector: a[href^="magnet:?"]
       attribute: href
-      filters:
-        - name: regexp
-          args: ([A-F|a-f|0-9]{40})
-    title:
-      selector: div.tabs-title
-      filters:
-        - name: trim
-        - name: validfilename
 
 search:
   paths:
@@ -93,13 +85,13 @@ search:
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
-    selector: table.table > tbody > tr:has(a[href^="/torrent/"])
+    selector: table.table > tbody > tr:has(a[href^="/detail/"])
 
   fields:
     category:
       text: Other
     title_phase1:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/detail/"]
       filters:
         - name: replace
           args: ["WEBRIP", "WEBDL"]
@@ -120,10 +112,10 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/detail/"]
       attribute: href
     download:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/detail/"]
       attribute: href
     date:
       text: now
