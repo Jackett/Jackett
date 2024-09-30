@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Data.Common;
 using System.IO;
 using System.Linq;
 using System.Runtime.InteropServices;
@@ -139,7 +140,11 @@ namespace Jackett.Common.Services.Cache
                 }
                 SQLitePCL.raw.SetProvider(new SQLitePCL.SQLite3Provider_e_sqlite3());
 #endif
-                using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                var connectionStringBuilder = new SqliteConnectionStringBuilder
+                {
+                    DataSource = GetConnectionString(_cacheconnectionString)
+                };
+                using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                 {
                     connection.Open();
                     var command = connection.CreateCommand();
@@ -239,7 +244,11 @@ namespace Jackett.Common.Services.Cache
             {
                 try
                 {
-                    using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                    var connectionStringBuilder = new SqliteConnectionStringBuilder
+                    {
+                        DataSource = GetConnectionString(_cacheconnectionString)
+                    };
+                    using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                     {
                         connection.Open();
                         using (var transaction = connection.BeginTransaction())
@@ -339,7 +348,11 @@ namespace Jackett.Common.Services.Cache
 
             PruneCacheByTtl();
             var queryHash = GetQueryHash(query);
-            using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+            var connectionStringBuilder = new SqliteConnectionStringBuilder
+            {
+                DataSource = GetConnectionString(_cacheconnectionString)
+            };
+            using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
             {
                 connection.Open();
                 var sql = @"
@@ -373,7 +386,11 @@ namespace Jackett.Common.Services.Cache
 
                 PruneCacheByTtl(); // remove expired results
 
-                using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                var connectionStringBuilder = new SqliteConnectionStringBuilder
+                {
+                    DataSource = GetConnectionString(_cacheconnectionString)
+                };
+                using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                 {
                     connection.Open();
 
@@ -411,7 +428,11 @@ namespace Jackett.Common.Services.Cache
 
             //lock (_dbLock)
             {
-                using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                var connectionStringBuilder = new SqliteConnectionStringBuilder
+                {
+                    DataSource = GetConnectionString(_cacheconnectionString)
+                };
+                using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                 {
                     connection.Open();
                     using (var transaction = connection.BeginTransaction())
@@ -465,7 +486,11 @@ namespace Jackett.Common.Services.Cache
 
             //lock (_dbLock)
             {
-                using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                var connectionStringBuilder = new SqliteConnectionStringBuilder
+                {
+                    DataSource = GetConnectionString(_cacheconnectionString)
+                };
+                using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                 {
                     connection.Open();
                     using (var transaction = connection.BeginTransaction())
@@ -500,7 +525,11 @@ namespace Jackett.Common.Services.Cache
         {
             //lock (_dbLock)
             {
-                using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+                var connectionStringBuilder = new SqliteConnectionStringBuilder
+                {
+                    DataSource = GetConnectionString(_cacheconnectionString)
+                };
+                using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
                 {
                     connection.Open();
                     var expirationDate = DateTime.Now.AddSeconds(-_serverConfig.CacheTtl);
@@ -544,7 +573,11 @@ namespace Jackett.Common.Services.Cache
 
         private void PruneCacheByMaxResultsPerIndexer(string trackerId)
         {
-            using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+            var connectionStringBuilder = new SqliteConnectionStringBuilder
+            {
+                DataSource = GetConnectionString(_cacheconnectionString)
+            };
+            using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
             {
                 connection.Open();
 
@@ -624,8 +657,8 @@ namespace Jackett.Common.Services.Cache
         {
             lock (_dbLock)
             {
-                if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^.+\.db$"))
-                    throw new Exception("Cache Connection String: Is Empty or Bad name. Example: cache.db");
+                if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
+                    cacheconnectionString = "cache.db";
 
                 if (_cacheconnectionString != cacheconnectionString)
                 {
@@ -633,7 +666,6 @@ namespace Jackett.Common.Services.Cache
                     Initialize();
                 }
             }
-
         }
         private string GetQueryHash(TorznabQuery query)
         {
@@ -651,7 +683,11 @@ namespace Jackett.Common.Services.Cache
 
         private void PrintCacheStatus()
         {
-            using (var connection = new SqliteConnection("Data Source=" + GetConnectionString(_cacheconnectionString)))
+            var connectionStringBuilder = new SqliteConnectionStringBuilder
+            {
+                DataSource = GetConnectionString(_cacheconnectionString)
+            };
+            using (var connection = new SqliteConnection(connectionStringBuilder.ToString()))
             {
                 connection.Open();
                 var command = connection.CreateCommand();
@@ -663,6 +699,9 @@ namespace Jackett.Common.Services.Cache
 
         private string GetConnectionString(string cacheconnectionString)
         {
+            if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
+                cacheconnectionString = "cache.db";
+
             if (!Path.IsPathRooted(cacheconnectionString))
             {
                 cacheconnectionString = Path.Combine(_serverConfig.RuntimeSettings.DataFolder, cacheconnectionString);

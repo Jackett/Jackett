@@ -118,14 +118,14 @@ namespace Jackett.Server.Controllers
 
             if (cacheType == CacheType.SqLite)
             {
-                if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"^.+\.db$"))
+                if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
                 {
                     throw new Exception("Cache Connection String: Is Empty or Bad name");
                 }
             }
             if (cacheType == CacheType.MongoDb)
             {
-                if (string.IsNullOrEmpty(cacheConString))
+                if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"(?:(?<username>[^:@\/]+):(?<password>[^@\/]+)@)?(?<hosts>(?:[a-zA-Z0-9.-]+(?::\d{2,5})?(?:,)?)+)(?:\/(?<database>[a-zA-Z0-9_-]+))?(?:\?(?<options>.*))?$"))
                 {
                     throw new Exception("Cache Connection String: Is Empty or Bad name");
                 }

@@ -137,23 +137,34 @@ function loadJackettSettings() {
         var queryField = document.getElementById("jackett-cache-type");
         queryField.addEventListener("change", function (event) {
             var selectedValue = this.value;
+            var elementinput = document.getElementById("input-header-jackett-cache-connection-string");
             var element = document.getElementById("jackett-cache-connection-string");
             if (selectedValue === "0" || selectedValue === "1") {
+                if (elementinput) {                    
+                    elementinput.style.display = "none";
+                }
                 if (element) {                    
-                    element.setAttribute("placeholder", "Blank for default if Disabled or Memory");
-                    element.value = "";
+                    element.style.display = "none";
                 }
             }
             else {
                 if (selectedValue === "2") {
+                    if (elementinput) {
+                        elementinput.style.display = "inline-block";
+                    }
                     if (element) {
+                        element.style.display = "inline-block";
                         element.setAttribute("placeholder", "for example base.db");
-                        element.value = "";                        
+                        element.value = "cache.db";                        
                     }
                 }
                 else {
                     if (selectedValue === "3") {
+                        if (elementinput) {
+                            elementinput.style.display = "inline-block";
+                        }
                         if (element) {
+                            element.style.display = "inline-block";
                             element.setAttribute("placeholder", "for example localhost:27017");
                             element.value = "";                            
                         }

@@ -30,12 +30,19 @@ namespace Jackett.Common.Services.Cache
 
         public void ChangeCacheType(CacheType newCacheType, string str)
         {
-            if (CurrentCacheService is MemoryCacheService && newCacheType != CacheType.Memory)
+            //if (CurrentCacheService is MemoryCacheService && newCacheType != CacheType.Memory)
+            //{
+            //    CurrentCacheService.CleanCache();
+            //}
+
+            if ((CurrentCacheService is MemoryCacheService && newCacheType != CacheType.Memory) ||
+                (CurrentCacheService is SQLiteCacheService && newCacheType != CacheType.SqLite) ||
+                (CurrentCacheService is MongoDBCacheService && newCacheType != CacheType.MongoDb) ||
+                (CurrentCacheService is NoCacheService && newCacheType != CacheType.Disabled))
             {
                 CurrentCacheService.CleanCache();
+                CurrentCacheService.ClearCacheConnectionString();
             }
-
-            CurrentCacheService.ClearCacheConnectionString();
             _cacheService = _factory.CreateCacheService(newCacheType, str);
         }
 
