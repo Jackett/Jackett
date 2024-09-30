@@ -112,6 +112,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(25, TorznabCatType.Movies3D, "Filme 3D");
             caps.Categories.AddCategoryMapping(26, TorznabCatType.MoviesBluRay, "Filme 4K Blu-Ray");
             caps.Categories.AddCategoryMapping(27, TorznabCatType.TVUHD, "Seriale 4K");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesForeign, "RO Dubbed");
+            caps.Categories.AddCategoryMapping(28, TorznabCatType.TVForeign, "RO Dubbed");
 
             return caps;
         }
@@ -213,7 +215,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var queryCollection = new NameValueCollection
             {
-                {"category", string.Join(",", MapTorznabCapsToTrackers(query))}
+                { "category", string.Join(",", MapTorznabCapsToTrackers(query).Distinct().ToList()) }
             };
 
             if (configData.Freeleech.Value)

@@ -136,14 +136,14 @@ search:
       optional: true
       filters:
         - name: regexp
-          args: (/?torrent/\d+)
+          args: (/?detail/\d+)
     details_onclick:
       selector: td:nth-child(1) a[onclick]
       attribute: onclick
       optional: true
       filters:
         - name: regexp
-          args: (/?torrent/\d+)
+          args: (/?detail/\d+)
     details:
       text: "{{ or .Result.details_href .Result.details_onclick }}"
     download:

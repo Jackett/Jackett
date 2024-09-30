@@ -2,7 +2,7 @@
 id: lat-team-api
 name: Lat-Team (API)
 description: "Lat-Team is a SPANISH Private Torrent Tracker for MOVIES / TV"
-language: es-ES
+language: es-MX
 type: private
 encoding: UTF-8
 links:

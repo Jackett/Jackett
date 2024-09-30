@@ -214,7 +214,13 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            var queryCats = MapTorznabCapsToTrackers(query);
+            var queryCats = MapTorznabCapsToTrackers(query).Distinct().ToList();
+
+            if (queryCats.Any() && query.IsTVSearch && query.Season is > 0)
+            {
+                // Avoid searching for specials if it's a non-zero season search
+                queryCats.RemoveAll(cat => cat is "anime[tv_special]" or "anime[ova]" or "anime[ona]" or "anime[dvd_special]" or "anime[bd_special]");
+            }
 
             if (queryCats.Any())
             {

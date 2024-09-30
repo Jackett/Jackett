@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Gktorrent
 links:
-  - https://www.gktorrent.uno/
+  - https://www.gktorrent.gy/
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
@@ -35,6 +35,7 @@ legacylinks:
   - https://www.gktorrent.tw/
   - https://www.gktorrent.in/
   - https://www.gktorrent.sk/
+  - https://www.gktorrent.uno/
 
 caps:
   categorymappings:
@@ -134,7 +135,7 @@ search:
       attribute: href
       filters:
         - name: regexp
-          args: (/?torrent/\d+)
+          args: (/?detail/\d+)
     download:
       text: "{{ .Result.details }}"
     size:
