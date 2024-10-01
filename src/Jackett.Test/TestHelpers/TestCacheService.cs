@@ -34,5 +34,7 @@ namespace Jackett.Test.TestHelpers
         {
 
         }
+
+        public string GetCacheConnectionString { get; }
     }
 }

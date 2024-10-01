@@ -30,10 +30,6 @@ namespace Jackett.Common.Services.Cache
 
         public void ChangeCacheType(CacheType newCacheType, string str)
         {
-            //if (CurrentCacheService is MemoryCacheService && newCacheType != CacheType.Memory)
-            //{
-            //    CurrentCacheService.CleanCache();
-            //}
 
             if ((CurrentCacheService is MemoryCacheService && newCacheType != CacheType.Memory) ||
                 (CurrentCacheService is SQLiteCacheService && newCacheType != CacheType.SqLite) ||
