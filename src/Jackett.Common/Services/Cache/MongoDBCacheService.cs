@@ -539,5 +539,7 @@ namespace Jackett.Common.Services.Cache
         {
             _cacheconnectionString = string.Empty;
         }
+
+        public string GetCacheConnectionString { get => _cacheconnectionString; }
     }
 }

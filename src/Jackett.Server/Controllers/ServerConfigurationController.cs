@@ -113,24 +113,6 @@ namespace Jackett.Server.Controllers
                 configService.SaveConfig(serverConfig);
             }
 
-            var cacheType = config.cache_type;
-            var cacheConString = config.cache_connection_string;
-
-            if (cacheType == CacheType.SqLite)
-            {
-                if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
-                {
-                    throw new Exception("Cache Connection String: Is Empty or Bad name");
-                }
-            }
-            if (cacheType == CacheType.MongoDb)
-            {
-                if (string.IsNullOrEmpty(cacheConString) || !Regex.IsMatch(cacheConString, @"(?:(?<username>[^:@\/]+):(?<password>[^@\/]+)@)?(?<hosts>(?:[a-zA-Z0-9.-]+(?::\d{2,5})?(?:,)?)+)(?:\/(?<database>[a-zA-Z0-9_-]+))?(?:\?(?<options>.*))?$"))
-                {
-                    throw new Exception("Cache Connection String: Is Empty or Bad name");
-                }
-            }
-
             var cacheTtl = config.cache_ttl;
             var cacheMaxResultsPerIndexer = config.cache_max_results_per_indexer;
             var omdbApiKey = config.omdbkey;
@@ -148,12 +130,15 @@ namespace Jackett.Server.Controllers
             serverConfig.BasePathOverride = basePathOverride;
             serverConfig.BaseUrlOverride = baseUrlOverride;
 
-            serverConfig.CacheConnectionString = cacheConString;
-            serverConfig.CacheType = cacheType;
+            var cacheType = config.cache_type;
+            var cacheConString = config.cache_connection_string;
+
             serverConfig.CacheTtl = cacheTtl;
             serverConfig.CacheMaxResultsPerIndexer = cacheMaxResultsPerIndexer;
 
-            _cacheManager.ChangeCacheType(serverConfig.CacheType, serverConfig.CacheConnectionString);
+            _cacheManager.ChangeCacheType(cacheType, cacheConString);
+            serverConfig.CacheConnectionString = _cacheManager.GetCacheConnectionString();
+            serverConfig.CacheType = cacheType;
 
             serverConfig.RuntimeSettings.BasePath = serverService.BasePath();
             configService.SaveConfig(serverConfig);

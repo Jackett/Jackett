@@ -70,5 +70,10 @@ namespace Jackett.Common.Services.Cache
         {
             _cacheService.CleanCache();
         }
+
+        public string GetCacheConnectionString()
+        {
+            return _cacheService.GetCacheConnectionString;
+        }
     }
 }

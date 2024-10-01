@@ -657,7 +657,7 @@ namespace Jackett.Common.Services.Cache
         {
             lock (_dbLock)
             {
-                if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
+                if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, RegexPatternForOsPlatform()))
                     cacheconnectionString = "cache.db";
 
                 if (_cacheconnectionString != cacheconnectionString)
@@ -699,7 +699,7 @@ namespace Jackett.Common.Services.Cache
 
         private string GetConnectionString(string cacheconnectionString)
         {
-            if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, @"^(?i)(?:[a-z0-9_-]+\/)*[a-z0-9_-]+\.db$"))
+            if (string.IsNullOrEmpty(cacheconnectionString) || !Regex.IsMatch(cacheconnectionString, RegexPatternForOsPlatform()))
                 cacheconnectionString = "cache.db";
 
             if (!Path.IsPathRooted(cacheconnectionString))
@@ -711,6 +711,19 @@ namespace Jackett.Common.Services.Cache
         public void ClearCacheConnectionString()
         {
             _cacheconnectionString = string.Empty;
+        }
+
+        public string GetCacheConnectionString => _cacheconnectionString;
+
+        private string RegexPatternForOsPlatform()
+        {
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+                return @"^(?i)(?:[a-z]:\\{1,2}|\\{1,2}[a-z0-9_.$-]+\\[a-z0-9_.$-]+\\)?(?:[a-z0-9_ .-]+\\{1,2})*[a-z0-9_ -]+(?<![ .])\.db$";
+
+            if (RuntimeInformation.IsOSPlatform(OSPlatform.Linux))
+                return @"^(?:\/|\.{1,2}\/|~\/)?(?:[a-zA-Z0-9_\-\.]+\/)*[a-zA-Z0-9_\-]+\.db$";
+
+            return @"[a-zA-Z0-9_\-]+\.db$";
         }
     }
 }

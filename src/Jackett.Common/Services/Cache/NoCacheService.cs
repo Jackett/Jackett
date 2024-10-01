@@ -51,5 +51,7 @@ namespace Jackett.Common.Services.Cache
         {
 
         }
+
+        public string GetCacheConnectionString { get; }
     }
 }
