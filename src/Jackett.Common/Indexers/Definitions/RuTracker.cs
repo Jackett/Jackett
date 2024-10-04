@@ -1540,7 +1540,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (query.Season is > 0)
                 {
-                    searchString += " Сезон: " + query.Season;
+                    searchString += " ТВ | Сезон: " + query.Season;
                 }
 
                 if (query.Episode.IsNotNullOrWhiteSpace())
@@ -1676,8 +1676,10 @@ namespace Jackett.Common.Indexers.Definitions
             private readonly Regex _tvTitleRusSeasonEpisodeOfRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleRusSeasonEpisodeRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleRusSeasonRegex = new Regex(@"Сезон\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusSeasonAnimeRegex = new Regex(@"ТВ[-]*(?:(\d+))", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleRusEpisodeOfRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)\s*из\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleRusEpisodeRegex = new Regex(@"(?:Серии|Эпизод|Выпуски)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleRusEpisodeAnimeOfRegex = new Regex(@"\[(\d+(\+\d+)?)\s+из\s+(\d+(\+\d+)?)\]", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             public string Parse(string title,
                                 ICollection<int> category,
@@ -1700,8 +1702,10 @@ namespace Jackett.Common.Indexers.Definitions
                     title = _tvTitleRusSeasonEpisodeOfRegex.Replace(title, "S$1E$2 of $3");
                     title = _tvTitleRusSeasonEpisodeRegex.Replace(title, "S$1E$2");
                     title = _tvTitleRusSeasonRegex.Replace(title, "S$1");
+                    title = _tvTitleRusSeasonAnimeRegex.Replace(title, "S$1");
                     title = _tvTitleRusEpisodeOfRegex.Replace(title, "E$1 of $2");
                     title = _tvTitleRusEpisodeRegex.Replace(title, "E$1");
+                    title = _tvTitleRusEpisodeAnimeOfRegex.Replace(title, "E$1 of $3");
                 }
                 else if (IsAnyMovieCategory(category))
                 {
