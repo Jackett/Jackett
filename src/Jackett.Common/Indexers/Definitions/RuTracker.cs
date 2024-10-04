@@ -1705,7 +1705,7 @@ namespace Jackett.Common.Indexers.Definitions
                     title = _tvTitleRusSeasonAnimeRegex.Replace(title, "S$1");
                     title = _tvTitleRusEpisodeOfRegex.Replace(title, "E$1 of $2");
                     title = _tvTitleRusEpisodeRegex.Replace(title, "E$1");
-                    title = _tvTitleRusEpisodeAnimeOfRegex.Replace(title, "E$1 of $3");
+                    title = _tvTitleRusEpisodeAnimeOfRegex.Replace(title, "[E$1 of $3]");
                 }
                 else if (IsAnyMovieCategory(category))
                 {
