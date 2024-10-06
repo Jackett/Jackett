@@ -10,7 +10,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Oxtorrent
 links:
-  - https://www.oxtorrent.gl/
+  - https://www.oxtorrent.gy/
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
@@ -34,6 +34,7 @@ legacylinks:
   - https://www.oxtorrent.la/
   - https://www.oxtorrent.uno/
   - https://www.oxtorrent.st/
+  - https://www.oxtorrent.gl/
 
 caps:
   categorymappings:
