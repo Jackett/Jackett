@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
@@ -29,7 +30,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private readonly string APIBASE = "https://beyond-hd.me/api/torrents/";
+        protected virtual int ApiKeyLength => 32;
+        protected virtual int RSSKeyLength => 32;
 
         private new ConfigurationDataBeyondHDApi configData
         {
@@ -69,8 +71,17 @@ namespace Jackett.Common.Indexers.Definitions
 
             return caps;
         }
-        protected virtual int ApiKeyLength => 32;
-        protected virtual int RSSKeyLength => 32;
+
+        public override IIndexerRequestGenerator GetRequestGenerator()
+        {
+            return new BeyondHDAPIRequestGenerator(configData, TorznabCaps);
+        }
+
+        public override IParseIndexerResponse GetParser()
+        {
+            return new BeyondHDAPIParser(configData, TorznabCaps.Categories, logger);
+        }
+
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -112,45 +123,58 @@ namespace Jackett.Common.Indexers.Definitions
 
             return IndexerConfigurationStatus.Completed;
         }
+    }
 
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+    public class BeyondHDAPIRequestGenerator : IIndexerRequestGenerator
+    {
+        private readonly ConfigurationDataBeyondHDApi _configData;
+        private readonly TorznabCapabilities _capabilities;
+
+        private const string ApiBase = "https://beyond-hd.me/api/torrents/";
+
+        public BeyondHDAPIRequestGenerator(ConfigurationDataBeyondHDApi configData, TorznabCapabilities capabilities)
         {
-            var apiKey = configData.ApiKey.Value;
-            var apiUrl = $"{APIBASE}{apiKey}";
+            _configData = configData;
+            _capabilities = capabilities;
+        }
+
+        public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
+        {
+            var pageableRequests = new IndexerPageableRequestChain();
 
             var postData = new Dictionary<string, object>
             {
                 { BHDParams.action, "search" },
-                { BHDParams.rsskey, configData.RSSKey.Value },
+                { BHDParams.rsskey, _configData.RSSKey.Value },
                 { BHDParams.search, query.GetQueryString() },
             };
 
-            if (configData.FilterFreeleech.Value)
+            if (_configData.FilterFreeleech.Value)
             {
                 postData.Add(BHDParams.freeleech, 1);
             }
 
-            if (configData.FilterLimited.Value)
+            if (_configData.FilterLimited.Value)
             {
                 postData.Add(BHDParams.limited, 1);
             }
 
-            if (configData.FilterRefund.Value)
+            if (_configData.FilterRefund.Value)
             {
                 postData.Add(BHDParams.refund, 1);
             }
 
-            if (configData.FilterRewind.Value)
+            if (_configData.FilterRewind.Value)
             {
                 postData.Add(BHDParams.rewind, 1);
             }
 
-            if (configData.SearchTypes.Values.Any())
+            if (_configData.SearchTypes.Values.Any())
             {
-                postData.Add(BHDParams.types, configData.SearchTypes.Values.ToArray());
+                postData.Add(BHDParams.types, _configData.SearchTypes.Values.ToArray());
             }
 
-            var categories = MapTorznabCapsToTrackers(query);
+            var categories = _capabilities.Categories.MapTorznabCapsToTrackers(query);
 
             if (categories.Any())
             {
@@ -172,110 +196,16 @@ namespace Jackett.Common.Indexers.Definitions
                 postData.Add("page", page.ToString());
             }
 
-            var bhdResponse = await GetBHDResponse(apiUrl, postData);
+            pageableRequests.Add(GetPagedRequests(postData));
 
-            var results = bhdResponse.Results
-                                     .Where(r => r.DownloadUrl.IsNotNullOrWhiteSpace() && r.InfoUrl.IsNotNullOrWhiteSpace())
-                                     .ToList();
-
-            return results.Select(MapToReleaseInfo).ToList();
+            return pageableRequests;
         }
 
-        private ReleaseInfo MapToReleaseInfo(BHDResult bhdResult)
+        private IEnumerable<IndexerRequest> GetPagedRequests(Dictionary<string, object> postData)
         {
-            var releaseInfo = new ReleaseInfo
-            {
-                Guid = new Uri(bhdResult.InfoUrl),
-                Details = new Uri(bhdResult.InfoUrl),
-                Link = new Uri(bhdResult.DownloadUrl),
-                Title = GetReleaseTitle(bhdResult),
-                Category = MapTrackerCatDescToNewznab(bhdResult.Category),
-                InfoHash = bhdResult.InfoHash,
-                Grabs = bhdResult.Grabs,
-                Size = bhdResult.Size,
-                Seeders = bhdResult.Seeders,
-                Peers = bhdResult.Leechers + bhdResult.Seeders,
-                PublishDate = bhdResult.CreatedAt
-            };
+            var apiKey = _configData.ApiKey.Value;
+            var apiUrl = $"{ApiBase}{apiKey}";
 
-            if (bhdResult.ImdbId.IsNotNullOrWhiteSpace())
-            {
-                releaseInfo.Imdb = ParseUtil.GetImdbId(bhdResult.ImdbId);
-            }
-
-            if (bhdResult.TmdbId.IsNotNullOrWhiteSpace())
-            {
-                var tmdbId = bhdResult.TmdbId.Split('/').ElementAtOrDefault(1);
-                releaseInfo.TMDb = tmdbId != null && ParseUtil.TryCoerceInt(tmdbId, out var tmdbResult) ? tmdbResult : 0;
-            }
-
-            releaseInfo.DownloadVolumeFactor = 1;
-            releaseInfo.UploadVolumeFactor = 1;
-
-            if (bhdResult.Freeleech == 1 || bhdResult.Limited == 1)
-            {
-                releaseInfo.DownloadVolumeFactor = 0;
-            }
-
-            if (bhdResult.Promo25 == 1)
-            {
-                releaseInfo.DownloadVolumeFactor = .75;
-            }
-
-            if (bhdResult.Promo50 == 1)
-            {
-                releaseInfo.DownloadVolumeFactor = .50;
-            }
-
-            if (bhdResult.Promo75 == 1)
-            {
-                releaseInfo.DownloadVolumeFactor = .25;
-            }
-
-            return releaseInfo;
-        }
-
-        private string GetReleaseTitle(BHDResult bhdResult)
-        {
-            var title = bhdResult.Name.Trim();
-
-            if (!configData.AddHybridFeaturesToTitle.Value)
-            {
-                return title;
-            }
-
-            var features = new List<string>();
-
-            if (bhdResult.DolbyVision == 1)
-            {
-                features.Add("Dolby Vision");
-            }
-
-            if (bhdResult.Hdr10 == 1)
-            {
-                features.Add("HDR10");
-            }
-
-            if (bhdResult.Hdr10Plus == 1)
-            {
-                features.Add("HDR10+");
-            }
-
-            if (bhdResult.Hlg == 1)
-            {
-                features.Add("HLG");
-            }
-
-            if (features.Count > 1)
-            {
-                title += $" ({string.Join(" / ", features)})";
-            }
-
-            return title;
-        }
-
-        private async Task<BHDResponse> GetBHDResponse(string apiUrl, Dictionary<string, object> postData)
-        {
             var request = new WebRequest
             {
                 Url = apiUrl,
@@ -288,152 +218,288 @@ namespace Jackett.Common.Indexers.Definitions
                 RawBody = JsonConvert.SerializeObject(postData)
             };
 
-            var response = await webclient.GetResultAsync(request);
-            if (response != null && response.ContentString.StartsWith("<"))
+            yield return new IndexerRequest(request);
+        }
+    }
+
+    public class BeyondHDAPIParser : IParseIndexerResponse
+    {
+        private readonly ConfigurationDataBeyondHDApi _configData;
+        private readonly TorznabCapabilitiesCategories _categories;
+        private readonly Logger _logger;
+
+        public BeyondHDAPIParser(ConfigurationDataBeyondHDApi configData, TorznabCapabilitiesCategories categories, Logger logger)
+        {
+            _configData = configData;
+            _categories = categories;
+            _logger = logger;
+        }
+
+        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
+            var releases = new List<ReleaseInfo>();
+
+            if (indexerResponse.Content.StartsWith("<"))
             {
-                // the response was not JSON, likely a HTML page for a server outage
-                logger.Warn(response.ContentString);
+                // The response was not JSON, likely a HTML page for a server outage
+                _logger.Warn("The response was not JSON: {0}", indexerResponse.Content);
+
                 throw new Exception("The response was not JSON");
             }
 
-            var bhdresponse = JsonConvert.DeserializeObject<BHDResponse>(response.ContentString);
-
-            if (bhdresponse.status_code == 0)
+            if (indexerResponse.Content.ContainsIgnoreCase("Invalid API Key"))
             {
-                throw new Exception(bhdresponse.status_message);
+                throw new Exception("API Key invalid or not authorized");
             }
 
-            return bhdresponse;
+            var jsonResponse = JsonConvert.DeserializeObject<BHDResponse>(indexerResponse.Content);
+
+            if (jsonResponse.StatusCode == 0)
+            {
+                throw new Exception($"Indexer Error: {jsonResponse.StatusMessage}");
+            }
+
+            foreach (var row in jsonResponse.Results)
+            {
+                if (row.DownloadUrl.IsNullOrWhiteSpace() || row.InfoUrl.IsNullOrWhiteSpace())
+                {
+                    _logger.Warn("Missing download or info url for release with the Id {0}, skipping.", row.Id);
+                    continue;
+                }
+
+                // Skip invalid results when freeleech or limited filtering is set
+                if ((_configData.FilterFreeleech.Value && row.Freeleech == 0) || (_configData.FilterLimited.Value && row.Limited == 0))
+                {
+                    continue;
+                }
+
+                var releaseInfo = new ReleaseInfo
+                {
+                    Guid = new Uri(row.InfoUrl),
+                    Details = new Uri(row.InfoUrl),
+                    Link = new Uri(row.DownloadUrl),
+                    Title = GetReleaseTitle(row),
+                    Category = _categories.MapTrackerCatDescToNewznab(row.Category),
+                    InfoHash = row.InfoHash,
+                    Grabs = row.Grabs,
+                    Size = row.Size,
+                    Seeders = row.Seeders,
+                    Peers = row.Leechers + row.Seeders,
+                    PublishDate = DateTime.Parse(row.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
+                };
+
+                if (row.ImdbId.IsNotNullOrWhiteSpace())
+                {
+                    releaseInfo.Imdb = ParseUtil.GetImdbId(row.ImdbId);
+                }
+
+                if (row.TmdbId.IsNotNullOrWhiteSpace())
+                {
+                    var tmdbId = row.TmdbId.Split('/').ElementAtOrDefault(1);
+                    releaseInfo.TMDb = tmdbId != null && ParseUtil.TryCoerceInt(tmdbId, out var tmdbResult) ? tmdbResult : 0;
+                }
+
+                releaseInfo.DownloadVolumeFactor = 1;
+                releaseInfo.UploadVolumeFactor = 1;
+
+                if (row.Freeleech == 1 || row.Limited == 1)
+                {
+                    releaseInfo.DownloadVolumeFactor = 0;
+                }
+
+                if (row.Promo25 == 1)
+                {
+                    releaseInfo.DownloadVolumeFactor = .75;
+                }
+
+                if (row.Promo50 == 1)
+                {
+                    releaseInfo.DownloadVolumeFactor = .50;
+                }
+
+                if (row.Promo75 == 1)
+                {
+                    releaseInfo.DownloadVolumeFactor = .25;
+                }
+
+                releases.Add(releaseInfo);
+            }
+
+            return releases;
         }
 
-        internal class BHDParams
+        private string GetReleaseTitle(BHDResult row)
         {
-            internal const string action = "action"; // string - The torrents endpoint action you wish to perform. (search)
-            internal const string rsskey = "rsskey"; // string - Your personal RSS key (RID) if you wish for results to include the uploaded_by and download_url fields
-            internal const string page = "page"; // int - The page number of the results. Only if the result set has more than 100 total matches.
+            var title = row.Name.Trim();
 
-            internal const string search = "search"; // string - The torrent name. It does support !negative searching. Example: Christmas Movie
-            internal const string info_hash = "info_hash"; // string - The torrent info_hash. This is an exact match.
-            internal const string folder_name = "folder_name"; // string - The torrent folder name. This is an exact match.file_name string The torrent included file names. This is an exact match.
-            internal const string size = "size"; // int - The torrent size. This is an exact match.
-            internal const string uploaded_by = "uploaded_by"; // string - The uploaders username. Only non anonymous results will be returned.
-            internal const string imdb_id = "imdb_id"; // int - The ID of the matching IMDB page.
-            internal const string tmdb_id = "tmdb_id"; // int - The ID of the matching TMDB page.
-            internal const string categories = "categories"; // string - Any categories separated by comma(s). TV, Movies)
-            internal const string types = "types"; // string - Any types separated by comma(s). BD Remux, 1080p, etc.)
-            internal const string sources = "sources"; // string - Any sources separated by comma(s). Blu-ray, WEB, DVD, etc.)
-            internal const string genres = "genres"; // string - Any genres separated by comma(s). Action, Anime, StandUp, Western, etc.)
-            internal const string groups = "groups"; // string - Any internal release groups separated by comma(s).FraMeSToR, BHDStudio, BeyondHD, RPG, iROBOT, iFT, ZR, MKVULTRA
-            internal const string freeleech = "freeleech"; // int - The torrent freeleech status. 1 = Must match.
-            internal const string limited = "limited"; // int - The torrent limited UL promo. 1 = Must match.
-            internal const string promo25 = "promo25"; // int - The torrent 25% promo. 1 = Must match.
-            internal const string promo50 = "promo50"; // int - The torrent 50% promo. 1 = Must match.
-            internal const string promo75 = "promo75"; // int - The torrent 75% promo. 1 = Must match.
-            internal const string refund = "refund"; // int - The torrent refund promo. 1 = Must match.
-            internal const string rescue = "rescue"; // int - The torrent rescue promo. 1 = Must match.
-            internal const string rewind = "rewind"; // int - The torrent rewind promo. 1 = Must match.
-            internal const string stream = "stream"; // int - The torrent Stream Optimized flag. 1 = Must match.
-            internal const string sd = "sd"; // int - The torrent SD flag. 1 = Must match.
-            internal const string pack = "pack"; // int - The torrent TV pack flag. 1 = Must match.
-            internal const string h264 = "h264"; // int - The torrent x264/h264 codec flag. 1 = Must match.
-            internal const string h265 = "h265"; // int - The torrent x265/h265 codec flag. 1 = Must match.
-            internal const string alive = "alive"; // int - The torrent has at least 1 seeder. 1 = Must match.
-            internal const string dying = "dying"; // int - The torrent has less than 3 seeders. 1 = Must match.
-            internal const string dead = "dead"; // int - The torrent has no seeders. 1 = Must match.
-            internal const string reseed = "reseed"; // int - The torrent has no seeders and an active reseed request. 1 = Must match.
-            internal const string seeding = "seeding"; // int - The torrent is seeded by you. 1 = Must match.
-            internal const string leeching = "leeching"; // int - The torrent is being leeched by you. 1 = Must match.
-            internal const string completed = "completed"; // int - The torrent has been completed by you. 1 = Must match.
-            internal const string incomplete = "incomplete"; // int - The torrent has not been completed by you. 1 = Must match.
-            internal const string notdownloaded = "notdownloaded"; // int - The torrent has not been downloaded you. 1 = Must match.
-            internal const string min_bhd = "min_bhd"; // int - The minimum BHD rating.
-            internal const string vote_bhd = "vote_bhd"; // int - The minimum number of BHD votes.
-            internal const string min_imdb = "min_imdb"; // int - The minimum IMDb rating.
-            internal const string vote_imdb = "vote_imdb"; // int - The minimum number of IMDb votes.
-            internal const string min_tmdb = "min_tmdb"; // int - The minimum TMDb rating.
-            internal const string vote_tmdb = "vote_tmdb"; // int - The minimum number of TDMb votes.
-            internal const string min_year = "min_year"; // int - The earliest release year.
-            internal const string max_year = "max_year"; // int - The latest release year.
-            internal const string sort = "sort"; // string - Field to sort results by. (bumped_at, created_at, seeders, leechers, times_completed, size, name, imdb_rating, tmdb_rating, bhd_rating). Default is bumped_at
-            internal const string order = "order"; // string - The direction of the sort of results. (asc, desc). Default is desc
+            if (!_configData.AddHybridFeaturesToTitle.Value)
+            {
+                return title;
+            }
 
-            // Most of the comma separated fields are OR searches.
-            internal const string features = "features"; // string - Any features separated by comma(s). DV, HDR10, HDR10P, Commentary)
-            internal const string countries = "countries"; // string - Any production countries separated by comma(s). France, Japan, etc.)
-            internal const string languages = "languages"; // string - Any spoken languages separated by comma(s). French, English, etc.)
-            internal const string audios = "audios"; // string - Any audio tracks separated by comma(s). English, Japanese,etc.)
-            internal const string subtitles = "subtitles"; // string - Any subtitles separated by comma(s). Dutch, Finnish, Swedish, etc.)
+            var features = new HashSet<string>();
 
+            if (row.DolbyVision == 1)
+            {
+                features.Add("Dolby Vision");
+            }
+
+            if (row.Hdr10 == 1)
+            {
+                features.Add("HDR10");
+            }
+
+            if (row.Hdr10Plus == 1)
+            {
+                features.Add("HDR10+");
+            }
+
+            if (row.Hlg == 1)
+            {
+                features.Add("HLG");
+            }
+
+            if (features.Any())
+            {
+                title += $" ({string.Join(" / ", features)})";
+            }
+
+            return title;
         }
+    }
 
-        class BHDResponse
-        {
-            public int status_code { get; set; } // The status code of the post request. (0 = Failed and 1 = Success)
-            public string status_message { get; set; } // If status code=0 then there will be an explanation
-            public int page { get; set; } // The current page of results that you're on.
-            public int total_pages { get; set; } // int The total number of pages of results matching your query.
-            public int total_results { get; set; } // The total number of results matching your query.
-            public bool success { get; set; } // The status of the call. (True = Success, False = Error)
-            public IReadOnlyCollection<BHDResult> Results { get; set; } // The results that match your query.
-        }
+    internal class BHDParams
+    {
+        internal const string action = "action"; // string - The torrents endpoint action you wish to perform. (search)
+        internal const string rsskey = "rsskey"; // string - Your personal RSS key (RID) if you wish for results to include the uploaded_by and download_url fields
+        internal const string page = "page"; // int - The page number of the results. Only if the result set has more than 100 total matches.
 
-        class BHDResult
-        {
-            public int Id { get; set; }
-            public string Name { get; set; }
+        internal const string search = "search"; // string - The torrent name. It does support !negative searching. Example: Christmas Movie
+        internal const string info_hash = "info_hash"; // string - The torrent info_hash. This is an exact match.
+        internal const string folder_name = "folder_name"; // string - The torrent folder name. This is an exact match.file_name string The torrent included file names. This is an exact match.
+        internal const string size = "size"; // int - The torrent size. This is an exact match.
+        internal const string uploaded_by = "uploaded_by"; // string - The uploaders username. Only non anonymous results will be returned.
+        internal const string imdb_id = "imdb_id"; // int - The ID of the matching IMDB page.
+        internal const string tmdb_id = "tmdb_id"; // int - The ID of the matching TMDB page.
+        internal const string categories = "categories"; // string - Any categories separated by comma(s). TV, Movies)
+        internal const string types = "types"; // string - Any types separated by comma(s). BD Remux, 1080p, etc.)
+        internal const string sources = "sources"; // string - Any sources separated by comma(s). Blu-ray, WEB, DVD, etc.)
+        internal const string genres = "genres"; // string - Any genres separated by comma(s). Action, Anime, StandUp, Western, etc.)
+        internal const string groups = "groups"; // string - Any internal release groups separated by comma(s).FraMeSToR, BHDStudio, BeyondHD, RPG, iROBOT, iFT, ZR, MKVULTRA
+        internal const string freeleech = "freeleech"; // int - The torrent freeleech status. 1 = Must match.
+        internal const string limited = "limited"; // int - The torrent limited UL promo. 1 = Must match.
+        internal const string promo25 = "promo25"; // int - The torrent 25% promo. 1 = Must match.
+        internal const string promo50 = "promo50"; // int - The torrent 50% promo. 1 = Must match.
+        internal const string promo75 = "promo75"; // int - The torrent 75% promo. 1 = Must match.
+        internal const string refund = "refund"; // int - The torrent refund promo. 1 = Must match.
+        internal const string rescue = "rescue"; // int - The torrent rescue promo. 1 = Must match.
+        internal const string rewind = "rewind"; // int - The torrent rewind promo. 1 = Must match.
+        internal const string stream = "stream"; // int - The torrent Stream Optimized flag. 1 = Must match.
+        internal const string sd = "sd"; // int - The torrent SD flag. 1 = Must match.
+        internal const string pack = "pack"; // int - The torrent TV pack flag. 1 = Must match.
+        internal const string h264 = "h264"; // int - The torrent x264/h264 codec flag. 1 = Must match.
+        internal const string h265 = "h265"; // int - The torrent x265/h265 codec flag. 1 = Must match.
+        internal const string alive = "alive"; // int - The torrent has at least 1 seeder. 1 = Must match.
+        internal const string dying = "dying"; // int - The torrent has less than 3 seeders. 1 = Must match.
+        internal const string dead = "dead"; // int - The torrent has no seeders. 1 = Must match.
+        internal const string reseed = "reseed"; // int - The torrent has no seeders and an active reseed request. 1 = Must match.
+        internal const string seeding = "seeding"; // int - The torrent is seeded by you. 1 = Must match.
+        internal const string leeching = "leeching"; // int - The torrent is being leeched by you. 1 = Must match.
+        internal const string completed = "completed"; // int - The torrent has been completed by you. 1 = Must match.
+        internal const string incomplete = "incomplete"; // int - The torrent has not been completed by you. 1 = Must match.
+        internal const string notdownloaded = "notdownloaded"; // int - The torrent has not been downloaded you. 1 = Must match.
+        internal const string min_bhd = "min_bhd"; // int - The minimum BHD rating.
+        internal const string vote_bhd = "vote_bhd"; // int - The minimum number of BHD votes.
+        internal const string min_imdb = "min_imdb"; // int - The minimum IMDb rating.
+        internal const string vote_imdb = "vote_imdb"; // int - The minimum number of IMDb votes.
+        internal const string min_tmdb = "min_tmdb"; // int - The minimum TMDb rating.
+        internal const string vote_tmdb = "vote_tmdb"; // int - The minimum number of TDMb votes.
+        internal const string min_year = "min_year"; // int - The earliest release year.
+        internal const string max_year = "max_year"; // int - The latest release year.
+        internal const string sort = "sort"; // string - Field to sort results by. (bumped_at, created_at, seeders, leechers, times_completed, size, name, imdb_rating, tmdb_rating, bhd_rating). Default is bumped_at
+        internal const string order = "order"; // string - The direction of the sort of results. (asc, desc). Default is desc
 
-            [JsonProperty("folder_name")]
-            public string FolderName { get; set; }
+        // Most of the comma separated fields are OR searches.
+        internal const string features = "features"; // string - Any features separated by comma(s). DV, HDR10, HDR10P, Commentary)
+        internal const string countries = "countries"; // string - Any production countries separated by comma(s). France, Japan, etc.)
+        internal const string languages = "languages"; // string - Any spoken languages separated by comma(s). French, English, etc.)
+        internal const string audios = "audios"; // string - Any audio tracks separated by comma(s). English, Japanese,etc.)
+        internal const string subtitles = "subtitles"; // string - Any subtitles separated by comma(s). Dutch, Finnish, Swedish, etc.)
 
-            [JsonProperty("info_hash")]
-            public string InfoHash { get; set; }
+    }
 
-            public long Size { get; set; }
-            public string Category { get; set; }
-            public string Type { get; set; }
-            public int Seeders { get; set; }
-            public int Leechers { get; set; }
+    class BHDResponse
+    {
+        [JsonProperty("status_code")]
+        public int StatusCode { get; set; } // The status code of the post request. (0 = Failed and 1 = Success)
 
-            [JsonProperty("times_completed")]
-            public int Grabs { get; set; }
+        [JsonProperty("status_message")]
+        public string StatusMessage { get; set; } // If status code=0 then there will be an explanation
 
-            [JsonProperty("imdb_id")]
-            public string ImdbId { get; set; }
+        public IReadOnlyCollection<BHDResult> Results { get; set; } // The results that match your query.
 
-            [JsonProperty("tmdb_id")]
-            public string TmdbId { get; set; }
+        public int page { get; set; } // The current page of results that you're on.
+        public int total_pages { get; set; } // int The total number of pages of results matching your query.
+        public int total_results { get; set; } // The total number of results matching your query.
+        public bool success { get; set; } // The status of the call. (True = Success, False = Error)
+    }
 
-            public decimal bhd_rating { get; set; }
-            public decimal tmdb_rating { get; set; }
-            public decimal imdb_rating { get; set; }
-            public int tv_pack { get; set; }
-            public int Promo25 { get; set; }
-            public int Promo50 { get; set; }
-            public int Promo75 { get; set; }
-            public int Freeleech { get; set; }
-            public int Rewind { get; set; }
-            public int Refund { get; set; }
-            public int Limited { get; set; }
-            public int Rescue { get; set; }
+    class BHDResult
+    {
+        public int Id { get; set; }
+        public string Name { get; set; }
 
-            [JsonProperty("created_at")]
-            public DateTime CreatedAt { get; set; }
+        [JsonProperty("folder_name")]
+        public string FolderName { get; set; }
 
-            [JsonProperty("url")]
-            public string InfoUrl { get; set; }
+        [JsonProperty("info_hash")]
+        public string InfoHash { get; set; }
 
-            [JsonProperty("download_url")]
-            public string DownloadUrl { get; set; }
+        public long Size { get; set; }
+        public string Category { get; set; }
+        public string Type { get; set; }
+        public int Seeders { get; set; }
+        public int Leechers { get; set; }
 
-            [JsonProperty("dv")]
-            public int DolbyVision { get; set; }
+        [JsonProperty("times_completed")]
+        public int Grabs { get; set; }
 
-            public int Hdr10 { get; set; }
+        [JsonProperty("imdb_id")]
+        public string ImdbId { get; set; }
 
-            [JsonProperty("hdr10+")]
-            public int Hdr10Plus { get; set; }
+        [JsonProperty("tmdb_id")]
+        public string TmdbId { get; set; }
 
-            public int Hlg { get; set; }
-        }
+        public decimal bhd_rating { get; set; }
+        public decimal tmdb_rating { get; set; }
+        public decimal imdb_rating { get; set; }
+        public int tv_pack { get; set; }
+        public int Promo25 { get; set; }
+        public int Promo50 { get; set; }
+        public int Promo75 { get; set; }
+        public int Freeleech { get; set; }
+        public int Rewind { get; set; }
+        public int Refund { get; set; }
+        public int Limited { get; set; }
+        public int Rescue { get; set; }
+
+        [JsonProperty("created_at")]
+        public string CreatedAt { get; set; }
+
+        [JsonProperty("url")]
+        public string InfoUrl { get; set; }
+
+        [JsonProperty("download_url")]
+        public string DownloadUrl { get; set; }
+
+        [JsonProperty("dv")]
+        public int DolbyVision { get; set; }
+
+        public int Hdr10 { get; set; }
+
+        [JsonProperty("hdr10+")]
+        public int Hdr10Plus { get; set; }
+
+        public int Hlg { get; set; }
     }
 }

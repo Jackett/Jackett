@@ -5,7 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
     [ExcludeFromCodeCoverage]
-    internal class ConfigurationDataBeyondHDApi : ConfigurationData
+    public class ConfigurationDataBeyondHDApi : ConfigurationData
     {
         public StringConfigurationItem ApiKey { get; private set; }
         public StringConfigurationItem RSSKey { get; private set; }
