@@ -13,16 +13,17 @@ caps:
     - {id: 2, cat: TV, desc: "TV Show"}
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 10, cat: Movies/UHD, desc: "4K Movie"}
+    - {id: 13, cat: Movies, desc: "BoxSet"}
     - {id: 3, cat: PC/Games, desc: "PC Game"}
-    - {id: 8, cat: TV/Sport, desc: "Sports"}
     - {id: 12, cat: PC/Games, desc: "Linux Game"}
     - {id: 4, cat: Console/Other, desc: "NSW Game"}
     - {id: 5, cat: Audio/Lossless, desc: "Music"}
     - {id: 6, cat: TV/Anime, desc: "Anime"}
+    - {id: 8, cat: TV/Sport, desc: "Sports"}
     - {id: 7, cat: Books/EBook, desc: "E-Books"}
-    - {id: 13, cat: Movies, desc: "BoxSet"}
-    - {id: 14, cat: Console/PS4, desc: "PS4"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 15, cat: Other, desc: "Education"}
+    - {id: 14, cat: Console/PS4, desc: "PS4"}
     - {id: 11, cat: Other, desc: "Other"}
 
   modes:
