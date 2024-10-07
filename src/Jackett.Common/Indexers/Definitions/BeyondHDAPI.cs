@@ -268,7 +268,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 // Skip invalid results when freeleech or limited filtering is set
-                if ((_configData.FilterFreeleech.Value && row.Freeleech == 0) || (_configData.FilterLimited.Value && row.Limited == 0))
+                if ((_configData.FilterFreeleech.Value && !row.Freeleech) || (_configData.FilterLimited.Value && !row.Limited))
                 {
                     continue;
                 }
@@ -302,22 +302,22 @@ namespace Jackett.Common.Indexers.Definitions
                 releaseInfo.DownloadVolumeFactor = 1;
                 releaseInfo.UploadVolumeFactor = 1;
 
-                if (row.Freeleech == 1 || row.Limited == 1)
+                if (row.Freeleech || row.Limited)
                 {
                     releaseInfo.DownloadVolumeFactor = 0;
                 }
 
-                if (row.Promo25 == 1)
+                if (row.Promo25)
                 {
                     releaseInfo.DownloadVolumeFactor = .75;
                 }
 
-                if (row.Promo50 == 1)
+                if (row.Promo50)
                 {
                     releaseInfo.DownloadVolumeFactor = .50;
                 }
 
-                if (row.Promo75 == 1)
+                if (row.Promo75)
                 {
                     releaseInfo.DownloadVolumeFactor = .25;
                 }
@@ -339,27 +339,27 @@ namespace Jackett.Common.Indexers.Definitions
 
             var features = new HashSet<string>();
 
-            if (row.DolbyVision == 1)
+            if (row.DolbyVision)
             {
                 features.Add("Dolby Vision");
             }
 
-            if (row.Hdr10 == 1)
+            if (row.Hdr10)
             {
                 features.Add("HDR10");
             }
 
-            if (row.Hdr10Plus == 1)
+            if (row.Hdr10Plus)
             {
                 features.Add("HDR10+");
             }
 
-            if (row.Hlg == 1)
+            if (row.Hlg)
             {
                 features.Add("HLG");
             }
 
-            if (features.Any())
+            if (features.Count > 1)
             {
                 title += $" ({string.Join(" / ", features)})";
             }
@@ -473,15 +473,15 @@ namespace Jackett.Common.Indexers.Definitions
         public decimal bhd_rating { get; set; }
         public decimal tmdb_rating { get; set; }
         public decimal imdb_rating { get; set; }
-        public int tv_pack { get; set; }
-        public int Promo25 { get; set; }
-        public int Promo50 { get; set; }
-        public int Promo75 { get; set; }
-        public int Freeleech { get; set; }
-        public int Rewind { get; set; }
-        public int Refund { get; set; }
-        public int Limited { get; set; }
-        public int Rescue { get; set; }
+        public bool tv_pack { get; set; }
+        public bool Promo25 { get; set; }
+        public bool Promo50 { get; set; }
+        public bool Promo75 { get; set; }
+        public bool Freeleech { get; set; }
+        public bool Rewind { get; set; }
+        public bool Refund { get; set; }
+        public bool Limited { get; set; }
+        public bool Rescue { get; set; }
 
         [JsonProperty("created_at")]
         public string CreatedAt { get; set; }
@@ -493,13 +493,13 @@ namespace Jackett.Common.Indexers.Definitions
         public string DownloadUrl { get; set; }
 
         [JsonProperty("dv")]
-        public int DolbyVision { get; set; }
+        public bool DolbyVision { get; set; }
 
-        public int Hdr10 { get; set; }
+        public bool Hdr10 { get; set; }
 
         [JsonProperty("hdr10+")]
-        public int Hdr10Plus { get; set; }
+        public bool Hdr10Plus { get; set; }
 
-        public int Hlg { get; set; }
+        public bool Hlg { get; set; }
     }
 }
