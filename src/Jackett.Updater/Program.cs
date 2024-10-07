@@ -577,6 +577,7 @@ namespace Jackett.Updater
                 "Definitions/pornoslab.yml",
                 "Definitions/pornotor.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
+                "Definitions/potuk.yml",
                 "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
