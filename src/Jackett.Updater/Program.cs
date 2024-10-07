@@ -622,6 +622,7 @@ namespace Jackett.Updater
                 "Definitions/shareisland.yml", // switch to *-API #8682
                 "Definitions/sharespacedb.yml",
                 "Definitions/shareuniversity.yml",
+                "Definitions/sharewood.yml", // switch to *-API #10269
                 "Definitions/sharingue.yml",
                 "Definitions/shellife.yml",
                 "Definitions/sharkpt.yml",
