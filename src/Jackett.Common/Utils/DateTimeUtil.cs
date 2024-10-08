@@ -50,7 +50,9 @@ namespace Jackett.Common.Utils
             var now = relativeFrom ?? DateTime.Now;
 
             if (str.Contains("now"))
+            {
                 return DateTime.SpecifyKind(now, DateTimeKind.Local);
+            }
 
             str = str.Replace(",", "");
             str = str.Replace("ago", "");
@@ -67,21 +69,42 @@ namespace Jackett.Common.Utils
                 timeAgoMatches = timeAgoMatches.NextMatch();
 
                 if (unit.Contains("sec") || unit == "s")
+                {
                     timeAgo += TimeSpan.FromSeconds(val);
+                }
                 else if (unit.Contains("min") || unit == "m")
+                {
                     timeAgo += TimeSpan.FromMinutes(val);
+                }
                 else if (unit.Contains("hour") || unit.Contains("hr") || unit == "h")
+                {
                     timeAgo += TimeSpan.FromHours(val);
+                }
                 else if (unit.Contains("day") || unit == "d")
+                {
                     timeAgo += TimeSpan.FromDays(val);
+                }
                 else if (unit.Contains("week") || unit.Contains("wk") || unit == "w")
+                {
                     timeAgo += TimeSpan.FromDays(val * 7);
+                }
                 else if (unit.Contains("month") || unit == "mo")
+                {
                     timeAgo += TimeSpan.FromDays(val * 30);
+                }
                 else if (unit.Contains("year") || unit == "y")
+                {
                     timeAgo += TimeSpan.FromDays(val * 365);
+                }
                 else
+                {
                     throw new Exception("TimeAgo parsing failed, unknown unit: " + unit);
+                }
+            }
+
+            if (timeAgo is { TotalDays: > 0, Hours: 0, Minutes: 0, Seconds: 0, Milliseconds: 0 })
+            {
+                now = new DateTime(now.Year, now.Month, now.Day);
             }
 
             return DateTime.SpecifyKind(now - timeAgo, DateTimeKind.Local);
