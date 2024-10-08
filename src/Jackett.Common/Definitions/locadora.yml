@@ -1,7 +1,7 @@
 ---
 id: locadora
 name: Locadora
-description: "Locadora is a BRAZILIAN Private Tracker for MOVIES and TV"
+description: "Locadora is a BRAZILIAN Private Tracker for MOVIES, TV and ANIME"
 language: pt-BR
 type: private
 encoding: UTF-8
@@ -38,7 +38,7 @@ settings:
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
-    default: true
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
