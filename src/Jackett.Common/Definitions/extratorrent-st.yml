@@ -48,12 +48,12 @@ caps:
     - {id: Music videos, cat: Audio/Video, desc: Music Videos}
     - {id: Other Music, cat: Audio/Other, desc: Music Other}
     - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
-    - {id: Video, cat: XXX, desc: Adult / Porn}
-    - {id: "Adult / Porn", cat: XXX, desc: Adult / Porn}
-    - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
-    - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
-    - {id: Games, cat: XXX/Other, desc: Adult Games}
-    - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
+    - {id: Video, cat: XXX, desc: Adult / Porn}
+    - {id: "Adult / Porn", cat: XXX, desc: Adult / Porn}
+    - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
+    - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
+    - {id: Games, cat: XXX/Other, desc: Adult Games}
+    - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Windows, cat: PC, desc: Software Windows}
     - {id: Android, cat: PC/Mobile-Android, desc: Software Android}
     - {id: Mac, cat: PC/Mac, desc: Software Mac}
