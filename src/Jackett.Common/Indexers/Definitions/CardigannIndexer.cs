@@ -566,7 +566,8 @@ namespace Jackett.Common.Indexers.Definitions
             if (Login == null)
                 return true;
 
-            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
+            var variables = GetBaseTemplateVariables();
+            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, variables);
 
             if (Login.Method == "post")
             {
@@ -581,20 +582,20 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                 }
 
-                var LoginUrl = resolvePath(Login.Path).ToString();
+                var loginUrl = resolvePath(applyGoTemplateText(Login.Path, variables)).ToString();
 
                 configData.CookieHeader.Value = null;
                 if (Login.Cookies != null)
                     configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
 
-                var loginResult = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, SiteLink, true, headers);
+                var loginResult = await RequestLoginAndFollowRedirect(loginUrl, pairs, null, true, null, SiteLink, true, headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
 
                 checkForError(loginResult, Definition.Login.Error);
             }
             else if (Login.Method == "form")
             {
-                var LoginUrl = resolvePath(Login.Path).ToString();
+                var loginUrl = resolvePath(applyGoTemplateText(Login.Path, variables)).ToString();
 
                 var queryCollection = new NameValueCollection();
                 var pairs = new Dictionary<string, string>();
@@ -614,13 +615,13 @@ namespace Jackett.Common.Indexers.Definitions
                 var form = landingResultDocument.QuerySelector(FormSelector);
                 if (form == null)
                 {
-                    throw new ExceptionWithConfigData(string.Format("Login failed: No form found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
+                    throw new ExceptionWithConfigData(string.Format("Login failed: No form found on {0} using form selector {1}", loginUrl, FormSelector), configData);
                 }
 
                 var inputs = form.QuerySelectorAll("input");
                 if (inputs == null)
                 {
-                    throw new ExceptionWithConfigData(string.Format("Login failed: No inputs found on {0} using form selector {1}", LoginUrl, FormSelector), configData);
+                    throw new ExceptionWithConfigData(string.Format("Login failed: No inputs found on {0} using form selector {1}", loginUrl, FormSelector), configData);
                 }
 
                 var submitUrlstr = form.GetAttribute("action");
@@ -718,14 +719,14 @@ namespace Jackett.Common.Indexers.Definitions
                 }
                 if (queryCollection.Count > 0)
                     submitUrlstr += "?" + queryCollection.GetQueryString();
-                var submitUrl = resolvePath(submitUrlstr, new Uri(LoginUrl));
+                var submitUrl = resolvePath(submitUrlstr, new Uri(loginUrl));
 
                 // automatically solve simpleCaptchas, if used
                 var simpleCaptchaPresent = landingResultDocument.QuerySelector("script[src*=\"simpleCaptcha\"]");
                 if (simpleCaptchaPresent != null)
                 {
                     var captchaUrl = resolvePath("simpleCaptcha.php?numImages=1");
-                    var simpleCaptchaResult = await RequestWithCookiesAsync(captchaUrl.ToString(), referer: LoginUrl, headers: headers);
+                    var simpleCaptchaResult = await RequestWithCookiesAsync(captchaUrl.ToString(), referer: loginUrl, headers: headers);
                     var simpleCaptchaJSON = JObject.Parse(simpleCaptchaResult.ContentString);
                     var captchaSelection = simpleCaptchaJSON["images"][0]["hash"].ToString();
                     pairs["captchaSelection"] = captchaSelection;
@@ -798,7 +799,7 @@ namespace Jackett.Common.Indexers.Definitions
                         body);
                 }
                 else
-                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, LoginUrl, true, headers);
+                    loginResult = await RequestLoginAndFollowRedirect(submitUrl.ToString(), pairs, configData.CookieHeader.Value, true, null, loginUrl, true, headers);
 
                 configData.CookieHeader.Value = loginResult.Cookies;
 
@@ -821,7 +822,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                 }
 
-                var loginUrl = resolvePath(Login.Path + "?" + queryCollection.GetQueryString()).ToString();
+                var loginUrl = resolvePath(applyGoTemplateText(Login.Path, variables) + "?" + queryCollection.GetQueryString()).ToString();
                 configData.CookieHeader.Value = null;
                 var loginResult = await RequestWithCookiesAsync(loginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
@@ -831,7 +832,7 @@ namespace Jackett.Common.Indexers.Definitions
             else if (Login.Method == "oneurl")
             {
                 var OneUrl = applyGoTemplateText(Definition.Login.Inputs["oneurl"]);
-                var LoginUrl = resolvePath(Login.Path + OneUrl).ToString();
+                var LoginUrl = resolvePath(applyGoTemplateText(Login.Path, variables) + OneUrl).ToString();
                 configData.CookieHeader.Value = null;
                 var loginResult = await RequestWithCookiesAsync(LoginUrl, referer: SiteLink, headers: headers);
                 configData.CookieHeader.Value = loginResult.Cookies;
@@ -980,19 +981,21 @@ namespace Jackett.Common.Indexers.Definitions
             if (Login == null || Login.Method != "form")
                 return configData;
 
-            var LoginUrl = resolvePath(Login.Path);
-            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
+            var variables = GetBaseTemplateVariables();
+            var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, variables);
+
+            var loginUrl = resolvePath(applyGoTemplateText(Login.Path, variables));
 
             configData.CookieHeader.Value = null;
             if (Login.Cookies != null)
                 configData.CookieHeader.Value = string.Join("; ", Login.Cookies);
 
-            landingResult = await RequestWithCookiesAsync(LoginUrl.AbsoluteUri, cookies, referer: SiteLink, headers: headers);
+            landingResult = await RequestWithCookiesAsync(loginUrl.AbsoluteUri, cookies, referer: SiteLink, headers: headers);
 
             // Some sites have a temporary redirect before the login page, we need to process it.
             if (Definition.Followredirect)
             {
-                landingResult = await FollowIfRedirect(landingResult, LoginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
+                landingResult = await FollowIfRedirect(landingResult, loginUrl.AbsoluteUri, overrideCookies: landingResult.Cookies, accumulateCookies: true);
             }
 
             var hasCaptcha = false;
@@ -1009,9 +1012,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         hasCaptcha = true;
 
-                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), LoginUrl);
+                        var CaptchaUrl = resolvePath(captchaElement.GetAttribute("src"), loginUrl);
                         var captchaImageData = await RequestWithCookiesAsync(
-                            CaptchaUrl.ToString(), landingResult.Cookies, referer: LoginUrl.AbsoluteUri, headers: headers);
+                            CaptchaUrl.ToString(), landingResult.Cookies, referer: loginUrl.AbsoluteUri, headers: headers);
                         var CaptchaImage = new DisplayImageConfigurationItem("Captcha Image");
                         var CaptchaText = new StringConfigurationItem("Captcha Text");
 
