@@ -16,16 +16,17 @@ caps:
     search: [q]
     music-search: [q, artist]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    submit: Вход
-  error:
-    - selector: td.embedded > div.error
+    cookie: "{{ .Config.cookie }}"
   test:
     path: browse.php
     selector: span.bar_user_welcome
