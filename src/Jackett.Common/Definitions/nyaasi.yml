@@ -197,7 +197,7 @@ search:
       text: "{{ or (.Result.title_phase1) (.Result.title_default) }}"
       filters:
         - name: re_replace
-          args: ["^(\\[.+?\\] ?)?(\\[.+?\\] ?)?(.+?)(\\[)", "$1$2$3{{ if .Config.radarr_compatibility }} {{ .Result.title_keyword_year }} $4{{ else }}$4{{ end }}"]
+          args: ["^(\\[.+?\\] ?)?(\\[.+?\\] ?)?(.+?)(\\[)", "$1$2$3{{ if and (.Config.radarr_compatibility) (.Result.title_keyword_year) }} {{ .Result.title_keyword_year }} $4{{ else }}$4{{ end }}"]
     title_phase3:
       text: "{{ .Result.title_phase2 }}"
       filters:
@@ -229,6 +229,9 @@ search:
           args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "$0 S$1"]
         - name: re_replace
           args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "$0 S01E$1"]
+        - name: re_replace
+          args: ["\\s+", " "]
+        - name: trim
     title_has_season:
       text: "{{ .Result.title_phase3 }}"
       filters:

@@ -86,6 +86,7 @@ search:
     - path: "/api/torrents/filter"
       response:
         type: json
+        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
@@ -94,8 +95,8 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    seasonNumber: "{{ .Query.Season }}"
-    episodeNumber: "{{ .Query.Ep }}"
+    # seasonNumber: "{{ .Query.Season }}" # disabled due to Prowlarr/Indexers#486
+    # episodeNumber: "{{ .Query.Ep }}" # disabled due to Prowlarr/Indexers#486
     # imdbId: "{{ .Query.IMDBIDShort }}" # disabled due to #14776
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"

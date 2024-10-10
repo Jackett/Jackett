@@ -321,18 +321,28 @@ namespace Jackett.Common.Indexers
             if (query.HasSpecifiedCategories)
             {
                 var supportedCats = TorznabCaps.Categories.SupportedCategories(query.Categories);
+
                 if (supportedCats.Length == 0)
                 {
                     if (!isMetaIndexer)
+                    {
                         logger.Error($"All categories provided are unsupported in {Name}: {string.Join(",", query.Categories)}");
+                    }
+
                     return false;
                 }
+
                 if (supportedCats.Length != query.Categories.Length && !isMetaIndexer)
                 {
-                    var unsupportedCats = query.Categories.Except(supportedCats);
-                    logger.Warn($"Some of the categories provided are unsupported in {Name}: {string.Join(",", unsupportedCats)}");
+                    var unsupportedCats = query.Categories.Except(supportedCats).ToList();
+
+                    if (unsupportedCats.Any())
+                    {
+                        logger.Warn($"Some of the categories provided are unsupported in {Name}: {string.Join(",", unsupportedCats)}");
+                    }
                 }
             }
+
             return true;
         }
 

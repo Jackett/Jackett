@@ -251,8 +251,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             var headers = apiKey != null ? new Dictionary<string, string> { [AuthorizationName] = string.Format(AuthorizationFormat, apiKey.Value) } : null;
 
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, headers: headers);
+
             // we get a redirect in html pages and an error message in json response (api)
-            if (response.IsRedirect && !useApiKey)
+            if (response.IsRedirect && !useApiKey && configData.CookieItem.Value.IsNullOrWhiteSpace())
             {
                 // re-login only if API key is not in use.
                 await ApplyConfiguration(null);

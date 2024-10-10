@@ -18,6 +18,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "体育Sports"}
     - {id: 404, cat: TV/Documentary, desc: "纪录片Documentaries"}
     - {id: 406, cat: Audio/Video, desc: "音乐视频Music Videos"}
+    - {id: 408, cat: PC, desc: "软件Appz"}
     - {id: 410, cat: PC/Games, desc: "游戏Game"}
     - {id: 411, cat: Other, desc: "学习Study"}
     - {id: 409, cat: Other, desc: "其他Misc"}

@@ -133,7 +133,7 @@ search:
       attribute: onclick
       filters:
         - name: re_replace
-          args: ["^return downloadTorrent\\('([^']+)', '([^']+)', ''\\);$", "download.php/$1/$2.torrent"]
+          args: ["^return downloadTorrent\\('([^']+)', '([^']+)', '[^']*'\\);$", "download.php/$1/$2.torrent"]
     genre:
       selector: div.span_title span div
     _language:

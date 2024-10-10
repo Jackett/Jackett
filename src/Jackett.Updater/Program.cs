@@ -577,6 +577,7 @@ namespace Jackett.Updater
                 "Definitions/pornoslab.yml",
                 "Definitions/pornotor.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
+                "Definitions/potuk.yml",
                 "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
@@ -621,6 +622,7 @@ namespace Jackett.Updater
                 "Definitions/shareisland.yml", // switch to *-API #8682
                 "Definitions/sharespacedb.yml",
                 "Definitions/shareuniversity.yml",
+                "Definitions/sharewood.yml", // switch to *-API #10269
                 "Definitions/sharingue.yml",
                 "Definitions/shellife.yml",
                 "Definitions/sharkpt.yml",

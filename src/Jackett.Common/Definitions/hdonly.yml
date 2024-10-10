@@ -54,6 +54,9 @@ settings:
     type: checkbox
     label: Include DV/HDR10 in filename when a release has multiple HDR formats.
     default: false
+  - name: add_version_francophone_to_title
+    type: checkbox
+    label: Append Version Francophone flags to titles if available (VFF, VFQ, VFI, VF)
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -251,6 +254,14 @@ search:
           args: "{{ if or (eq .Result._vff \"True\") (eq .Result._vfq \"True\") }}.MULTI{{ else }}{{ end }}{{ if or (eq .Result._vfi \"True\") (eq .Result._vf \"True\") }}.MULTI{{ else }}{{ end }}"
         - name: replace
           args: [".MULTI.MULTI", ".MULTI"]
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vff \"True\") }}.VFF{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vfq \"True\") }}.VFQ{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vfi \"True\") }}.VFI{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vf \"True\") }}.VF{{ else }}{{ end }}"
         - name: append
           args: "{{ if eq .Result._vof \"True\" }}.FRENCH{{ else }}{{ end }}"
         - name: re_replace
