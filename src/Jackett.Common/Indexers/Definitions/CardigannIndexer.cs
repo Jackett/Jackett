@@ -18,6 +18,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -72,12 +73,12 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex _JsonSelectorRegex = new Regex(@"\:(?<filter>.+?)\((?<key>.+?)\)(?=:|\z)", RegexOptions.Compiled);
 
         public CardigannIndexer(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-                                IProtectionService ps, ICacheService cs, IndexerDefinition Definition)
+                                IProtectionService ps, CacheManager cm, IndexerDefinition Definition)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs
+                   cacheManager: cm
                    )
         {
             this.Definition = Definition;

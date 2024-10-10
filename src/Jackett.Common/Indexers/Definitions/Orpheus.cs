@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -31,12 +32,12 @@ namespace Jackett.Common.Indexers.Definitions
         protected override int ApiKeyLengthLegacy => 118;
         protected override string FlipOptionalTokenString(string requestLink) => requestLink.Replace("&usetoken=1", "");
         public Orpheus(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    supportsFreeleechTokens: true,
                    has2Fa: false,
                    useApiKey: true,

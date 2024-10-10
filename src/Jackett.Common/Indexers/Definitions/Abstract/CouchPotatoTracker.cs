@@ -5,6 +5,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -26,12 +27,12 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         }
 
         protected CouchPotatoTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                     IProtectionService p, ICacheService cs, ConfigurationData configData, string endpoint)
+                                     IProtectionService p, CacheManager cm, ConfigurationData configData, string endpoint)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: configData)
         {
             this.endpoint = endpoint;
