@@ -1,9 +1,9 @@
 ---
 id: losslessclub
 name: LosslessClub
-description: "LosslessClub is a RUSSIAN Private site for High Quality Music"
+description: "LosslessClub is a RUSSIAN Semi-Private site for High Quality Music"
 language: ru-RU
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://losslessclub.com/
@@ -85,4 +85,4 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
-# engine tbd
+# Кinokрk releaser v. 2.40.473
