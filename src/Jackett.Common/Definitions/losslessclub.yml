@@ -17,13 +17,11 @@ caps:
     music-search: [q, artist]
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  path: takelogin.php
+  method: post
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    submit: Вход
   error:
     - selector: td.embedded > div.error
   test:
