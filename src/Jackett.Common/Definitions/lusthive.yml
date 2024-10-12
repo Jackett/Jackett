@@ -176,5 +176,5 @@ search:
         "img[alt=\"DoubleSeed\"]": 2
         "*": 1
     minimumratio:
-      text: 0.2
+      text: 0.5
 # Luminance
