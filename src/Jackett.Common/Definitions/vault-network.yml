@@ -27,7 +27,7 @@ caps:
     - {id: 25, cat: Books/Mags, desc: "Books Magazines"}
     - {id: 37, cat: Other, desc: "Christmas"}
     - {id: 38, cat: Audio, desc: "Christmas Audio"}
-    - {id: 39, cat: Movie, desc: "Christmas Movie"}
+    - {id: 39, cat: Movies, desc: "Christmas Movie"}
     - {id: 40, cat: TV, desc: "Christmas TV"}
     - {id: 29, cat: Console, desc: "Games / All"}
     - {id: 28, cat: Audio, desc: "Karaoke"}
