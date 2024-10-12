@@ -115,9 +115,6 @@ search:
       selector: num_file
     title:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-      filters:
-        - name: re_replace
-          args: ["\\.", " "]
     details:
       selector: details_link
     download:
@@ -190,4 +187,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.2.0
+# json UNIT3D 8.3.1
