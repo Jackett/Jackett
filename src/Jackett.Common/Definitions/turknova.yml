@@ -16,15 +16,16 @@ caps:
     - {id: 40, cat: Movies/HD, desc: "1080p / 720p / BDRip"}
     - {id: 68, cat: Movies/HD, desc: "mRIP"}
     - {id: 71, cat: Movies/HD, desc: "H265"}
-    - {id: 73, cat: Movies/DVD, desc: "DVD Disc"}
     - {id: 39, cat: Movies, desc: "BOXSET"}
     - {id: 43, cat: Movies/HD, desc: "NETFLIX"}
     - {id: 84, cat: TV, desc: "DSNP"}
     - {id: 85, cat: TV, desc: "AMZN PRIME"}
-    - {id: 54, cat: TV, desc: "BLUTV"}
+    - {id: 92, cat: TV, desc: "DISCOVERY+"}
+    - {id: 88, cat: TV, desc: "BLUTV"}
     - {id: 74, cat: TV, desc: "EXXEN"}
     - {id: 77, cat: TV, desc: "GAIN"}
     - {id: 87, cat: TV, desc: "TOD"}
+    - {id: 91, cat: TV, desc: "TABII"}
     - {id: 59, cat: Movies/WEB-DL, desc: "WEB-DL / WEBRip"}
     - {id: 34, cat: TV/Documentary, desc: "Belgesel"}
     - {id: 60, cat: TV/Foreign, desc: "Yabancı Dizi"}
@@ -34,7 +35,6 @@ caps:
     - {id: 46, cat: Other, desc: "Eğitim"}
     - {id: 53, cat: Other, desc: "Resim"}
     - {id: 50, cat: Audio, desc: "Müzik"}
-    - {id: 51, cat: PC/Games, desc: "Oyun"}
     - {id: 52, cat: PC, desc: "Program"}
     - {id: 62, cat: PC, desc: "İşletim Sistemi"}
 
