@@ -74,6 +74,7 @@ namespace Jackett.Common.Utils.Clients
                                   Status == HttpStatusCode.RedirectKeepVerb ||
                                   Status == HttpStatusCode.RedirectMethod ||
                                   Status == HttpStatusCode.Found ||
-                                  Status == HttpStatusCode.MovedPermanently;
+                                  Status == HttpStatusCode.MovedPermanently ||
+                                  Headers.ContainsKey("Refresh");
     }
 }

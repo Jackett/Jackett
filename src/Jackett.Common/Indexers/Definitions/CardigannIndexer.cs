@@ -867,17 +867,21 @@ namespace Jackett.Common.Indexers.Definitions
             var Login = Definition.Login;
 
             if (Login == null || Login.Test == null)
+            {
                 return false;
+            }
 
             // test if login was successful
-            var LoginTestUrl = resolvePath(Login.Test.Path).ToString();
+            var loginTestUrl = resolvePath(Login.Test.Path).ToString();
             var headers = ParseCustomHeaders(Definition.Login?.Headers ?? Definition.Search?.Headers, GetBaseTemplateVariables());
-            var testResult = await RequestWithCookiesAsync(LoginTestUrl, headers: headers);
+            var testResult = await RequestWithCookiesAsync(loginTestUrl, headers: headers);
 
             // Follow the redirect on login if the domain doesn't change
             if (testResult.IsRedirect && GetRedirectDomainHint(testResult) == null)
             {
-                testResult = await FollowIfRedirect(testResult, LoginTestUrl, overrideCookies: testResult.Cookies, accumulateCookies: true, maxRedirects: 1);
+                logger.Warn("Redirected to {0} from test login request", testResult.RedirectingTo);
+
+                testResult = await FollowIfRedirect(testResult, loginTestUrl, overrideCookies: testResult.Cookies, accumulateCookies: true, maxRedirects: 1);
             }
 
             if (testResult.IsRedirect)
@@ -888,6 +892,7 @@ namespace Jackett.Common.Indexers.Definitions
                 if (domainHint != null)
                 {
                     errormessage += " Try changing the indexer URL to " + domainHint + ".";
+
                     if (Definition.Followredirect)
                     {
                         configData.SiteLink.Value = domainHint;
@@ -896,6 +901,7 @@ namespace Jackett.Common.Indexers.Definitions
                         errormessage += " Updated site link, please try again.";
                     }
                 }
+
                 throw new ExceptionWithConfigData(errormessage, configData);
             }
 
@@ -903,12 +909,15 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var testResultParser = new HtmlParser();
                 using var testResultDocument = testResultParser.ParseDocument(testResult.ContentString);
+
                 var selection = testResultDocument.QuerySelectorAll(Login.Test.Selector);
+
                 if (selection.Length == 0)
                 {
                     throw new ExceptionWithConfigData(string.Format("Login failed: Selector \"{0}\" didn't match", Login.Test.Selector), configData);
                 }
             }
+
             return true;
         }
 
