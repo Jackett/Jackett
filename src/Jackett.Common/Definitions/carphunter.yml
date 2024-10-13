@@ -81,6 +81,7 @@ settings:
     default: This indexer only supports the details link option.<br>Navigate to the web site account <b>Beállítások (Settings)</b>, change the <b>Letöltések (Download)</b> option to <b>Link a részletekhez (Link to Details)</b>, and click <b>Mentés (Save)</b>. Selecting <i>Lenyíló menü (Dropdown Menu)</i> will return no results.
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

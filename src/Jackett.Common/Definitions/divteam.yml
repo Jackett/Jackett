@@ -90,6 +90,7 @@ settings:
     default: "In principle, the STAFF reserves the right to delete any user who has not accessed the tracker in 90 days or has not downloaded/uploaded any contribution in the last 180 days, if you are going to be away for a while, park the account from your panel."
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

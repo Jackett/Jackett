@@ -100,6 +100,7 @@ settings:
     default: "If your account is inactive (you do not sign in) for more than 60 days, your account is disabled. Park your account if you are going away for more than 60 days."
 
 login:
+  # using cookie method because login page is dynamically generated using JS
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
