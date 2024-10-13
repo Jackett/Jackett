@@ -274,7 +274,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: regexp
-          args: "Partagé Voilà : </b>(.*?)<br"
+          args: "Partagé Le : </b>(.*?)<br"
         - name: dateparse
           args: "MM-dd-yyyy"
     downloadvolumefactor:
