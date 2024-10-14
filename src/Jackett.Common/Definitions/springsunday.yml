@@ -58,6 +58,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
+  # switched from the form method to the cookie method due to #8911
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
