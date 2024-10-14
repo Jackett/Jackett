@@ -65,6 +65,7 @@ caps:
     book-search: [q]
 
 settings:
+  # using cookie method because I could not get the form method to work when converting broken C# indexer to yaml #15527
   - name: cookie
     type: text
     label: Cookie

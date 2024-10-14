@@ -78,6 +78,7 @@ settings:
     default: For best results, change the <b>Tоренти на страница:</b> setting to <b>100</b> on your account profile. The default is <i>20</i>.
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

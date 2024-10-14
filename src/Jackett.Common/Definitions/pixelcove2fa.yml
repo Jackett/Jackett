@@ -64,6 +64,7 @@ caps:
     book-search: [q]
 
 settings:
+  # using cookie method because login page can present second page for 2FA when enabled
   - name: cookie
     type: text
     label: Cookie

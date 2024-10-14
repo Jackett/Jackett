@@ -72,6 +72,7 @@ settings:
     default: "Users who have been inactive for more than 25 weeks are automatically deleted."
 
 login:
+  # using cookie method because login page is using some some hidden security check
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
