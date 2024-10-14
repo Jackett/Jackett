@@ -26,6 +26,7 @@ caps:
     - {id: 77, cat: TV, desc: "GAIN"}
     - {id: 87, cat: TV, desc: "TOD"}
     - {id: 91, cat: TV, desc: "TABII"}
+    - {id: 94, cat: TV, desc: "MUBI"}
     - {id: 59, cat: Movies/WEB-DL, desc: "WEB-DL / WEBRip"}
     - {id: 34, cat: TV/Documentary, desc: "Belgesel"}
     - {id: 60, cat: TV/Foreign, desc: "Yabancı Dizi"}
