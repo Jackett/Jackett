@@ -82,6 +82,7 @@ settings:
     default: "Park your account to protect it against deletion due to the fact that you have not logged in at least once every 3 months."
 
 login:
+  # using the cookie method because the site expects a single session only, so using browser and Jackett can cause a lockout
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

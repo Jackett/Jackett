@@ -64,6 +64,7 @@ settings:
     default: "Account retention rules:<ol><li>Dou Sheng users and above will be retained forever</li><li>Dou Huang and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 180 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 45 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will be banned if they do not log in for 7 consecutive days.</li></ol>"
 
 login:
+  # using cookie method because site regularly disables login page for certain events during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

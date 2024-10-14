@@ -82,6 +82,7 @@ settings:
     default: For best results, change the <b>Torrentek száma egy oldalon</b> setting to <b>100</b> on your account profile.
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

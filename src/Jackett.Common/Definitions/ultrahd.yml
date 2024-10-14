@@ -60,6 +60,7 @@ settings:
     default: "Inactive accounts (i.e. not logged in for a long time) are automatically deleted."
 
 login:
+  # using cookie method because site regularly disables login page for certain events during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

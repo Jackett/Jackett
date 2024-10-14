@@ -98,6 +98,7 @@ settings:
     type: info_cookie
 
 login:
+  # using cookie method because login page can present second page for 2FA when enabled
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

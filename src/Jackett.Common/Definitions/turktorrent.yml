@@ -110,6 +110,7 @@ settings:
       asc: asc
 
 login:
+  # using cookie method because login page has embedded hCaptcha
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

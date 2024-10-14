@@ -170,6 +170,7 @@ settings:
     type: info_flaresolverr
 
 login:
+  # using cookie method as an alternative when regular login for some users does not work
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
