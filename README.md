@@ -67,6 +67,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * GloDLS
  * GTorrent.pro
  * Idope
+ * Il Corsaro Nero
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
