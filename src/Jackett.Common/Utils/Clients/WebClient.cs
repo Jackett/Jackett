@@ -286,7 +286,7 @@ namespace Jackett.Common.Utils.Clients
 
                 if (match.Success)
                 {
-                    return new Uri(response.RequestMessage.RequestUri, match.Groups[2].Value);
+                    return new Uri(response.RequestMessage.RequestUri, new Uri(match.Groups[2].Value, UriKind.RelativeOrAbsolute));
                 }
 
                 return null;
