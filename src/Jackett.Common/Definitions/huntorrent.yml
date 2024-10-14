@@ -82,6 +82,7 @@ settings:
 
 login:
   method: cookie
+  # using cookie method because login page has embedded Google reCAPTCHA
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
