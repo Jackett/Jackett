@@ -50,6 +50,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
+  # using cookie method because login page can present second page for 2FA when enabled
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

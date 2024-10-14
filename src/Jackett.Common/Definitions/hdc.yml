@@ -33,6 +33,8 @@ caps:
     music-search: [q]
 
 settings:
+  # not entirely sure why cookie method is being used. while the login page uses non-standard field names, the form seems regular enough.
+  # but since none of the team have an account we cannot switch to using form method without having any testing validation.
   - name: cookie
     type: text
     label: Cookie

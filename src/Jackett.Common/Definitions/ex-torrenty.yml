@@ -68,6 +68,7 @@ settings:
       MULTi POLISH: MULTIi POLISH
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
