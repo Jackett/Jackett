@@ -271,9 +271,11 @@ namespace Jackett.Common.Utils.Clients
         {
             var newUri = response.Headers.Location;
 
-            if (newUri == null && response.Headers.TryGetValues("Refresh", out var refreshHeaders))
+            if (newUri == null)
             {
-                var refreshHeader = refreshHeaders.FirstOrDefault();
+                var refreshHeader = response.Headers.TryGetValues("Refresh", out var refreshHeaders)
+                    ? refreshHeaders.FirstOrDefault()
+                    : null;
 
                 if (refreshHeader == null)
                 {
@@ -290,7 +292,7 @@ namespace Jackett.Common.Utils.Clients
                 return null;
             }
 
-            return newUri;
+            return new Uri(response.RequestMessage.RequestUri, newUri);
         }
     }
 }
