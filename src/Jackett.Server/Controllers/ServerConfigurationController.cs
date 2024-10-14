@@ -13,6 +13,7 @@ using NLog;
 
 namespace Jackett.Server.Controllers
 {
+    [ApiController]
     [Route("api/v2.0/server/[action]")]
     [ResponseCache(Location = ResponseCacheLocation.None, NoStore = true)]
     public class ServerConfigurationController : Controller
@@ -170,7 +171,9 @@ namespace Jackett.Server.Controllers
                 config.proxy_password != serverConfig.ProxyPassword)
             {
                 if (config.proxy_port < 1 || config.proxy_port > 65535)
-                    throw new Exception("The port you have selected is invalid, it must be below 65535.");
+                {
+                    throw new Exception("The port you have selected is invalid, it must be between 1 and 65535.");
+                }
 
                 serverConfig.ProxyType = string.IsNullOrWhiteSpace(config.proxy_url) ? ProxyType.Disabled : config.proxy_type;
                 serverConfig.ProxyUrl = config.proxy_url;
@@ -187,10 +190,14 @@ namespace Jackett.Server.Controllers
             if (port != serverConfig.Port || external != serverConfig.AllowExternal || local_bind_address != serverConfig.LocalBindAddress)
             {
                 if (ServerUtil.RestrictedPorts.Contains(port))
+                {
                     throw new Exception("The port you have selected is restricted, try a different one.");
+                }
 
                 if (port < 1 || port > 65535)
-                    throw new Exception("The port you have selected is invalid, it must be below 65535.");
+                {
+                    throw new Exception("The port you have selected is invalid, it must be between 1 and 65535.");
+                }
 
                 if (string.IsNullOrWhiteSpace(local_bind_address))
                 {
