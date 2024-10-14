@@ -61,6 +61,7 @@ settings:
     default: "Accounts inactive (i.e. not logged in for a long time) are automatically deleted."
 
 login:
+  # switched from form method to cookie method when it was restored the second time #15071 reason was not recorded
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

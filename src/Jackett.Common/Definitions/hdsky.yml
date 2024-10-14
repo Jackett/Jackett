@@ -33,6 +33,7 @@ caps:
     music-search: [q]
 
 settings:
+  # was switched from form method to cookie method on March 2019, reason was not recorded
   - name: cookie
     type: text
     label: Cookie

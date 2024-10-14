@@ -100,6 +100,7 @@ settings:
     default: false
 
 login:
+  # switched from the form method to the cookie method due to #9270
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
