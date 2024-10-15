@@ -133,7 +133,7 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["[\\s\\:\\-\\/\\|\\(\\).,]+", " "]
+      args: ["[^\\w]+", " "]
 
   rows:
     selector: $
