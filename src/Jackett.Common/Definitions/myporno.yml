@@ -1,0 +1,70 @@
+---
+id: myporno
+name: Myporno
+description: "Myporno is a RUSSIAN Public tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - https://myporno.top/
+
+caps:
+  categorymappings:
+    - {id: XXX, cat: XXX, desc: XXX}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: div#download > a[href^="magnet:"]
+      attribute: href
+    - selector: div#download > a[href$=".torrent"]
+      attribute: href
+
+search:
+  paths:
+    # https://myporno.top//index.php?do=search&subaction=search&story=blonde&submit=search+by+name
+    - path: index.php
+  inputs:
+    do: search
+    subaction: search
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    submit: "search by name"
+
+  rows:
+    selector: tr.gai
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: td:nth-child(2) > a:last-of-type
+    details:
+      selector: td:nth-child(2) > a:last-of-type
+      attribute: href
+    download:
+      selector: td:nth-child(2) > a:last-of-type
+      attribute: href
+    date:
+      selector: td:first-child
+      filters:
+        - name: regexp
+          args: "(\\d{1,2}-\\d{2}-\\d{4})"
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "d-MM-yyyy zzz"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
