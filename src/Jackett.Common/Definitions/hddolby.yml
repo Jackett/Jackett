@@ -66,7 +66,7 @@ settings:
     default: "Account retention rules:<ol><li>(Division Commander) Extreme User and above will be retained forever</li><li>(Brigadier Commander) Veteran Users and above will not be deleted after their account has been parked (in the Control Panel)</li><li>Users who have parked their accounts will be disabled if they do not log in for 180 consecutive days</li><li>Users with a non-parked account will have their account disabled if they do not log in for 90 consecutive days</li><li>Newly registered users who do not have traffic (i.e., upload and download data is 0) and do not log in for 5 consecutive days will be disabld.</li></ol>"
 
 login:
-  # was converted to cookie method after it was restored the second time with #15321. But the login page looks like the standard nexus so maybe this could be restored to form method
+  # using cookie method because login page can present second page for 2FA when enabled
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
