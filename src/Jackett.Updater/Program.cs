@@ -423,6 +423,7 @@ namespace Jackett.Updater
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
+                "Definitions/goodtracker.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/greekdiamond.yml",
                 "Definitions/greeklegends.yml",
