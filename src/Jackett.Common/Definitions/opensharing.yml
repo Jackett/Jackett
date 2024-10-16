@@ -1,0 +1,217 @@
+---
+id: opensharing
+name: OpenSharing
+description: "OpenSharing is a RUSSIAN Public Torrent Tracker for 3X"
+language: ru-RU
+type: public
+encoding: UTF-8
+links:
+  - https://opensharing.org/
+
+caps:
+  categorymappings:
+    - {id: 6, cat: XXX, desc: "Полнометражные XXX фильмы / Full Length Movies"}
+    - {id: 7, cat: XXX, desc: "  Классика / Classic (Полнометражные фильмы снятые до 2000 года)"}
+    - {id: 8, cat: XXX, desc: "  Фильмы с сюжетом / Feature Vignettes"}
+    - {id: 9, cat: XXX, desc: "  Порно-пародия / Parody"}
+    - {id: 11, cat: XXX, desc: "  Компиляции и фильмы без сюжета / Movies without a story"}
+    - {id: 36, cat: XXX, desc: "  Фильмы с Русским переводом"}
+    - {id: 37, cat: XXX, desc: "  Эротические фильмы / Erotic Movies"}
+    - {id: 38, cat: XXX, desc: "  Документальные фильмы 18+ / Documentary 18+"}
+    - {id: 39, cat: XXX, desc: "  Паки полнометражных фильмов / Full Length Movies Packs"}
+    - {id: 12, cat: XXX, desc: "Русское порно / Russian - Фильмы и ролики"}
+    - {id: 13, cat: XXX, desc: "  Порнофильмы с Русскими актрисами / Movies with Russian actresses"}
+    - {id: 14, cat: XXX, desc: "  Сцены и ролики с Русскими актрисами / Russian Movie Scenes & SiteRip's"}
+    - {id: 15, cat: XXX, desc: "  Паки видео с Русскими актрисами / Russian Video Packs"}
+    - {id: 28, cat: XXX, desc: "Зарубежные ролики по жанрам / Foreign videos by genre"}
+    - {id: 27, cat: XXX, desc: "  Сцены из фильмов / Movie Scenes"}
+    - {id: 26, cat: XXX, desc: "  Порно-кастинги / Casting"}
+    - {id: 19, cat: XXX, desc: "  Family Roleplay, Incest & Taboo"}
+    - {id: 21, cat: XXX, desc: "  Public & Reality, Sex In Car, Outdoors"}
+    - {id: 20, cat: XXX, desc: "  Анал и ДП / Anal & DP"}
+    - {id: 29, cat: XXX, desc: "  Секс втроём / Threesomes"}
+    - {id: 30, cat: XXX, desc: "  Группавуха / Group & Gangbang"}
+    - {id: 35, cat: XXX, desc: "  Молоденькие / Legal Teens"}
+    - {id: 32, cat: XXX, desc: "  Мамочки / MILF & Mature"}
+    - {id: 33, cat: XXX, desc: "  Бабушки / Grannies"}
+    - {id: 40, cat: XXX, desc: "  Pornstars & Other"}
+    - {id: 34, cat: XXX, desc: "  Паки порнороликов / Video Packs"}
+    - {id: 64, cat: XXX, desc: "Этническое порно / Ethnic Porn - Фильмы и ролики"}
+    - {id: 65, cat: XXX, desc: "  Межрасовый секс / Interracial - Сцены и ролики"}
+    - {id: 68, cat: XXX, desc: "  Негритянки и Темнокожие / Ebony & Arab - Сцены и ролики"}
+    - {id: 66, cat: XXX, desc: "  Азиатки / Asian - Сцены и ролики"}
+    - {id: 67, cat: XXX, desc: "  Латинки / Latin - Сцены и ролики"}
+    - {id: 83, cat: XXX, desc: "  Полнометражные азиатские и этнические фильмы / Full-length ethnic films"}
+    - {id: 105, cat: XXX, desc: "  Этническое порно / Ethnic Porn - Паки роликов и фильмов"}
+    - {id: 84, cat: XXX, desc: "Оральный секс / Blowjob & Deep Throat, Licking - Фильмы и ролики"}
+    - {id: 86, cat: XXX, desc: "  Оральный секс / Blowjob & Deep Throat, Licking - Сцены и ролики"}
+    - {id: 87, cat: XXX, desc: "  Групповой оральный секс / Blowbang & Bukkake - Сцены и ролики"}
+    - {id: 85, cat: XXX, desc: "  Оральный секс / Blowjob & Deep Throat, Licking - Полнометражные фильмы"}
+    - {id: 61, cat: XXX, desc: "Masturbation, Solo & Posing - Фильмы и ролики"}
+    - {id: 62, cat: XXX, desc: "  Мастурбация / Masturbation"}
+    - {id: 63, cat: XXX, desc: "  Posing & Striptease"}
+    - {id: 2, cat: XXX, desc: "Любительское порно / Amateur & Homemade"}
+    - {id: 3, cat: XXX, desc: "  Русское любительское XXX видео / Russian Amateur"}
+    - {id: 18, cat: XXX, desc: "  Зарубежное любительское порно / Foreign amateur"}
+    - {id: 4, cat: XXX, desc: "  Порно чаты / WEBCam"}
+    - {id: 10, cat: XXX, desc: "  Скрытые камеры / Spycam"}
+    - {id: 5, cat: XXX, desc: "  Паки любительского порно / Amateur porn packs"}
+    - {id: 110, cat: XXX, desc: "Только для зарегистрированных / For Registered Members Only"}
+    - {id: 112, cat: XXX, desc: "  Полнометражные фильмы / Full-length Movies"}
+    - {id: 113, cat: XXX, desc: "  Сцены и ролики / Scenes & Videos"}
+    - {id: 114, cat: XXX, desc: "  Анимация 18+ / Animation 18+"}
+    - {id: 116, cat: XXX, desc: "  Игры для взрослых / Porn games"}
+    - {id: 115, cat: XXX, desc: "  Фото, Обои, Картинки / Photos, Wallpapers & Pictures"}
+    - {id: 117, cat: XXX, desc: "  Видео паки / Video Packs"}
+    - {id: 16, cat: XXX, desc: "Фетиш и Нетрадиционное порно / Special Interest Movies & Clips"}
+    - {id: 43, cat: XXX, desc: "Rough Sex & BDSM - Фильмы и ролики"}
+    - {id: 17, cat: XXX, desc: "  Rough Sex, BDSM & Bondage - Полнометражные фильмы"}
+    - {id: 46, cat: XXX, desc: "  Постановочные изнасилования / Pseudo-Rape - Сцены и ролики"}
+    - {id: 41, cat: XXX, desc: "  Rough Sex, BDSM & Bondage - Сцены и ролики"}
+    - {id: 45, cat: XXX, desc: "  Ролики и фильмы от &quot;LegalPorno &quot;"}
+    - {id: 44, cat: XXX, desc: "  Fisting & Dildo - Сцены и ролики"}
+    - {id: 47, cat: XXX, desc: "Фетиш / Fetish - Фильмы и ролики"}
+    - {id: 49, cat: XXX, desc: "  Фетиш / Fetish - Полнометражные фильмы"}
+    - {id: 109, cat: XXX, desc: "  Cuckold / Cheating - Сцены и ролики"}
+    - {id: 99, cat: XXX, desc: "  Alt-Porn / Alt Girls - Сцены и ролики"}
+    - {id: 106, cat: XXX, desc: "  Cosplay - Сцены и ролики"}
+    - {id: 53, cat: XXX, desc: "  Fetish Wear / Latex, Uniform, Panties, Lingerie, Stockings - Сцены и ролики"}
+    - {id: 54, cat: XXX, desc: "  Большие сиськи и жопы / Big Boobs & Big Ass - Сцены и ролики"}
+    - {id: 48, cat: XXX, desc: "  Foot Fetish, Footjob & Feet - Сцены и ролики"}
+    - {id: 55, cat: XXX, desc: "  Толстушки / BBW & Plump Woman - Сцены и ролики"}
+    - {id: 56, cat: XXX, desc: "  Худенькие и Миниатюрные / Skinny & Petite - Сцены и ролики"}
+    - {id: 60, cat: XXX, desc: "  Массаж / Massage - Сцены и ролики"}
+    - {id: 98, cat: XXX, desc: "  Wet & Oiled - Сцены и ролики"}
+    - {id: 51, cat: XXX, desc: "  Femdom & Domination - Сцены и ролики"}
+    - {id: 50, cat: XXX, desc: "  Мохнатки / Hairy Pussy & Bush - Сцены и ролики"}
+    - {id: 57, cat: XXX, desc: "  Squirting / Pissing & Pee - Сцены и ролики"}
+    - {id: 52, cat: XXX, desc: "  Glory Hole - Сцены и ролики"}
+    - {id: 107, cat: XXX, desc: "  Medical Fetish - Сцены и ролики"}
+    - {id: 58, cat: XXX, desc: "  Беременные / Pregnant - Сцены и ролики"}
+    - {id: 104, cat: XXX, desc: "  Пьяные и Спящие / Drunk & Sleeping - Сцены и ролики"}
+    - {id: 59, cat: XXX, desc: "  Карлики / Midgets - Сцены и ролики"}
+    - {id: 108, cat: XXX, desc: "  Разное / Various Fetishes - Сцены и ролики"}
+    - {id: 69, cat: XXX, desc: "Лесбиянки / Lesbians - Фильмы и ролики"}
+    - {id: 70, cat: XXX, desc: "  Полнометражные лесби-фильмы / Full length lesbian movies"}
+    - {id: 71, cat: XXX, desc: "  Лесбиянки / Lesbians - Сцены и ролики"}
+    - {id: 72, cat: XXX, desc: "  Лесбийский страпон / Lesbian Strap-on - Сцены и ролики"}
+    - {id: 73, cat: XXX, desc: "  All Girl / Lesbians - Video Pack"}
+    - {id: 42, cat: XXX, desc: "Fetish, Rough Sex & BDSM - Video Pack"}
+    - {id: 24, cat: XXX, desc: "Анимация, игры, фото и картинки"}
+    - {id: 23, cat: XXX, desc: "Анимация 18+ / Animation 18+"}
+    - {id: 74, cat: XXX, desc: "  Мультфильмы18+ / Cartoons 18+"}
+    - {id: 75, cat: XXX, desc: "  Хентай 18+ / Hentai 18+"}
+    - {id: 76, cat: XXX, desc: "  Паки мультфильмов 18+ / Animation packs 18+"}
+    - {id: 77, cat: XXX, desc: "Фото, Обои и Картинки / Photos, Wallpapers & Pictures"}
+    - {id: 79, cat: XXX, desc: "  Любительское фото / Amateur photo"}
+    - {id: 80, cat: XXX, desc: "  Подборки сетов / Picture Sets Packs"}
+    - {id: 81, cat: XXX, desc: "  Подборки по актрисам / Actresses Picture Packs"}
+    - {id: 82, cat: XXX, desc: "  Сборники фото и обоев, разное / Collections of Photos & Wallpapers"}
+    - {id: 78, cat: XXX, desc: "Игры 18+ / Porn games"}
+    - {id: 102, cat: XXX, desc: "  Визуальные новеллы / Visual Novels"}
+    - {id: 103, cat: XXX, desc: "  Ролевые / Role-Playing"}
+    - {id: 88, cat: XXX, desc: "Общий форум"}
+    - {id: 100, cat: XXX, desc: "Правила & FAQ"}
+    - {id: 89, cat: XXX, desc: "Новости и объявления"}
+    - {id: 90, cat: XXX, desc: "Тех. раздел"}
+    - {id: 91, cat: XXX, desc: "Стол заказов"}
+    - {id: 92, cat: XXX, desc: "Помогите опознать!"}
+    - {id: 93, cat: XXX, desc: "Свободное общение"}
+    - {id: 94, cat: XXX, desc: "Форум релизёров"}
+    - {id: 95, cat: XXX, desc: "  Скриншоты"}
+    - {id: 96, cat: XXX, desc: "  MediaInfo"}
+    - {id: 97, cat: XXX, desc: "  Разное"}
+    - {id: 101, cat: XXX, desc: "Архив"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: t
+    options:
+      t: created
+      ts: seeders
+      sz: size
+      i: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: d
+    options:
+      d: desc
+      a: asc
+
+search:
+  paths:
+    # https://opensharing.org/search.php?tracker_search=torrent&keywords=2024&terms=all&author=&fid[]=3&fid[]=18&sc=1&sf=titleonly&sk=t&sd=d&sr=topics&st=0&ch=300&t=0&submit=Поиск
+    - path: search.php
+  inputs:
+    tracker_search: torrent
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    terms: all
+    author: ""
+    sc: 1
+    sf: titleonly
+    sr: topics
+    sk: "{{ .Config.sort }}"
+    sd: "{{ .Config.type }}"
+    st: 0
+    ch: 300
+    t: 0
+    submit: Поиск
+    $raw: "{{ range .Categories }}&fid[]={{.}}{{end}}"
+
+  rows:
+    selector: table.tablebg > tbody > tr:has(a[href^="./download/file.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="./viewtopic.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.topictitle
+    details:
+      selector: a.topictitle
+      attribute: href
+    download:
+      selector: a[href^="./download/file.php?id="]
+      attribute: href
+    size:
+      selector: p.gensmall > b
+      filters:
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: span.seed
+    leechers:
+      selector: span.leech
+    grabs:
+      selector: span.complet
+    date:
+      # (09.03.2020)
+      selector: a.topictitle
+      optional: true
+      default: now
+      # do not append TZ else text {{if}} will not work if date not found
+      filters:
+        - name: regexp
+          args: (\d{2}\.\d{2}\.\d{4})
+        - name: dateparse
+          args: "dd.MM.yyyy"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# phpBB

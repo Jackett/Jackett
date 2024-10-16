@@ -553,7 +553,6 @@ namespace Jackett.Updater
                 "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
-                "Definitions/opensharing.yml",
                 "Definitions/oxtorrent.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/partis.yml",
