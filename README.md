@@ -464,7 +464,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
  * NorBits
- * NORDiCHD
  * Ntelogo
  * OKPT
  * Old Greek Tracker
