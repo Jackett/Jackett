@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -61,14 +62,15 @@ namespace Jackett.Server.Controllers
         public IIndexer CurrentIndexer { get; set; }
         private readonly Logger logger;
         private readonly IServerService serverService;
-        private readonly ICacheService cacheService;
+        private readonly CacheManager _cacheManager;
 
-        public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, ICacheService c, Logger logger)
+
+        public IndexerApiController(IIndexerManagerService indexerManagerService, IServerService ss, Logger logger, CacheManager cacheManager)
         {
             IndexerService = indexerManagerService;
             serverService = ss;
-            cacheService = c;
             this.logger = logger;
+            _cacheManager = cacheManager;
         }
 
         [HttpGet]
@@ -86,7 +88,7 @@ namespace Jackett.Server.Controllers
         public async Task<IActionResult> UpdateConfig([FromBody] Common.Models.DTO.ConfigItem[] config)
         {
             // invalidate cache for this indexer
-            cacheService.CleanIndexerCache(CurrentIndexer);
+            _cacheManager.CleanIndexerCache(CurrentIndexer);
 
             try
             {
@@ -157,7 +159,7 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public IReadOnlyList<TrackerCacheResult> Cache()
         {
-            var results = cacheService.GetCachedResults();
+            var results = _cacheManager.GetCachedResults();
             ConfigureCacheResults(results);
             return results;
         }
