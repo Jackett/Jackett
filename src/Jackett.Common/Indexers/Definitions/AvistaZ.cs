@@ -3,6 +3,7 @@ using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -22,12 +23,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public AvistaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                       ICacheService cs)
+                       CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs)
+                   cm: cm)
         {
         }
 
