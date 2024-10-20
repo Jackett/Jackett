@@ -161,7 +161,7 @@ search:
       selector: a.selection_a
       attribute: href
     download:
-      selector: a[href^="download_ssl.php?torrent="]
+      selector: a[href^="download_ssl.php?torrent="], a[href^="download.php?torrent="]
       attribute: href
     poster:
       selector: div[id^="details"] img
