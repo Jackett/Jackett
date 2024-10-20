@@ -13,12 +13,11 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 64, cat: Movies/UHD, desc: "4K - UHD"}
-    - {id: 40, cat: Movies/HD, desc: "1080p / 720p / BDRip"}
-    - {id: 68, cat: Movies/HD, desc: "mRIP"}
-    - {id: 71, cat: Movies/HD, desc: "H265"}
+    - {id: 40, cat: Movies/HD, desc: "1080p - 720p - BDRip - mRip"}
+    - {id: 71, cat: Movies/HD, desc: "H265 - HECV"}
     - {id: 39, cat: Movies, desc: "BOXSET"}
     - {id: 43, cat: Movies/HD, desc: "NETFLIX"}
-    - {id: 84, cat: TV, desc: "DSNP"}
+    - {id: 84, cat: TV, desc: "DISNEY+"}
     - {id: 85, cat: TV, desc: "AMZN PRIME"}
     - {id: 92, cat: TV, desc: "DISCOVERY+"}
     - {id: 88, cat: TV, desc: "BLUTV"}
@@ -33,6 +32,7 @@ caps:
     - {id: 72, cat: TV/Anime, desc: "Animasyon"}
     - {id: 48, cat: TV/HD, desc: "HDTV - Rip"}
     - {id: 55, cat: TV, desc: "Türk Filmi"}
+    - {id: 95, cat: Other, desc: "Yeşilçam"}
     - {id: 46, cat: Other, desc: "Eğitim"}
     - {id: 53, cat: Other, desc: "Resim"}
     - {id: 50, cat: Audio, desc: "Müzik"}
