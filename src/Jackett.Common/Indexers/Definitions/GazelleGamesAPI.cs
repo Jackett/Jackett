@@ -11,6 +11,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -42,12 +43,12 @@ namespace Jackett.Common.Indexers.Definitions
         private static Regex YearRegex => new Regex(@"\b(?:19|20|21)\d{2}\b", RegexOptions.Compiled);
 
         public GazelleGamesApi(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    supportsFreeleechTokens: true,
                    supportsFreeleechOnly: true,
                    has2Fa: false,

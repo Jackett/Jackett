@@ -5,6 +5,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -20,12 +21,12 @@ namespace Jackett.Common.Indexers.Meta
         protected BaseMetaIndexer(IFallbackStrategyProvider fallbackStrategyProvider,
                                   IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
                                   WebClient client, Logger logger, ConfigurationData configData, IProtectionService ps,
-                                  ICacheService cs, Func<IIndexer, bool> filter)
+                                  CacheManager cm, Func<IIndexer, bool> filter)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: configData)
         {
             filterFunc = filter;
