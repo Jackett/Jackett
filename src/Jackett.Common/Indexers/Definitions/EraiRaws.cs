@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers.Definitions
                 result = await FollowIfRedirect(result);
             if (result.ContentString.Contains("403 Forbidden"))
             {
-                logger.Error("[EraiRaws]" + result.ContentString);
+                logger.Error("[EraiRaws] 403 Forbidden");
                 throw new Exception("The RSSkey may need to be replaced as EraiRaws returned 403 Forbidden.");
             }
 
