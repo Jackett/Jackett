@@ -1,11 +1,10 @@
 ---
 id: ilcorsaronero
-name: Il Corsaro Nero
-description: "Il Corsaro Nero is an ITALIAN Public site for TV / MOVIES / GENERAL"
+name: ilCorSaRoNeRo
+description: "ilCorSaRoNeRo is an ITALIAN Public site for TV / MOVIES / GENERAL"
 language: it-IT
 type: public
-encoding: Windows-1252
-requestDelay: 2
+encoding: UTF-8
 links:
   - https://ilcorsaronero.link/
   - https://ilcorsaronero.torrentbay.st/
@@ -27,22 +26,32 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies/HD, desc: "Movies BDRiP", default: true}
-    - {id: 2, cat: Audio, desc: "Music", default: true}
-    - {id: 3, cat: PC/Games, desc: "Games PC", default: true}
-    - {id: 4, cat: Other, desc: "Other", default: true}
-    - {id: 5, cat: TV/Anime, desc: "Anime", default: true}
-    - {id: 6, cat: Books/EBook, desc: "Ebooks", default: true}
-    - {id: 7, cat: PC/0day, desc: "App Windows", default: true}
-    - {id: 8, cat: PC, desc: "App Linux", default: true}
-    - {id: 9, cat: PC/Mac, desc: "App Mac", default: true}
-    - {id: 13, cat: Console/PSP, desc: "Games Playstation", default: true}
-    - {id: 14, cat: Console/XBox, desc: "Games Xbox", default: true}
-    - {id: 15, cat: TV, desc: "TV Series", default: true}
-    - {id: 16, cat: Other, desc: "Other", default: true}
-    - {id: 18, cat: Audio/Audiobook, desc: "Audio Book", default: true}
-    - {id: 19, cat: Movies/SD, desc: "Movies Screener", default: true}
-    - {id: 20, cat: Movies/DVD, desc: "Movies DVD", default: true}
+    - {id: film, cat: Movies, desc: "Film"}
+    - {id: serie-tv, cat: TV, desc: "Serie TV"}
+    - {id: animazione, cat: TV/Anime, desc: "Animazione"}
+    - {id: animazione-film, cat: TV/Anime, desc: "Animazione - Film"}
+    - {id: animazione-serie, cat: TV/Anime, desc: "Animazione - Serie"}
+    - {id: musica, cat: Audio, desc: "Musica"}
+    - {id: musica-audio, cat: Audio, desc: "Musica - Audio"}
+    - {id: musica-video, cat: Audio/Video, desc: "Musica - Video Musicali"}
+    - {id: libri, cat: Books, desc: "Libri"}
+    - {id: libri-ebook, cat: Books/EBook, desc: "Libri - eBook"}
+    - {id: libri-audio, cat: Audio/Audiobook, desc: "Libri - Audiolibri"}
+    - {id: libri-fumetti, cat: Books/Comics, desc: "Libri - Fumetti"}
+    - {id: libri-edicola, cat: Books/Mags, desc: "Libri - Edicola"}
+    - {id: giochi, cat: PC/Games, desc: "Giochi"}
+    - {id: giochi-pc, cat: PC/Games, desc: "Giochi - PC"}
+    - {id: giochi-console, cat: PC/Games, desc: "Giochi - Console"}
+    - {id: software, cat: PC, desc: "Software"}
+    - {id: software-windows, cat: PC/0day, desc: "Software - Windows"}
+    - {id: software-macos, cat: PC/Mac, desc: "Software - macOS"}
+    - {id: software-linux, cat: PC, desc: "Software - Linux"}
+    - {id: software-mobile, cat: PC/Mobile-Other, desc: "Software - Mobile"}
+    - {id: altro, cat: Other, desc: "Altro"}
+    - {id: altro-docu, cat: Other, desc: "Altro - Documentari"}
+    - {id: altro-tv, cat: Other, desc: "Altro - Programmi TV"}
+    - {id: altro-corsi, cat: Other, desc: "Altro - Videocorsi"}
+    - {id: altro-altro, cat: Other, desc: "Altro - Altro"}
 
   modes:
     search: [q]
@@ -52,38 +61,53 @@ caps:
     book-search: [q]
 
 settings:
-  - name: itorrents-links
-    type: checkbox
-    label: Add download links via itorrents.org
+  - name: category-id
+    type: select
+    label: Category (for Keyword search)
+    default: all
+    options:
+      all: "All categories"
+      film: "Film"
+      serie-tv: "Serie TV"
+      animazione: "Animazione"
+      musica: "Musica"
+      libri: "Libri"
+      giochi: "Giochi"
+      software: "Software"
+      altro: "Altro"
+  - name: dl_type
+    type: select
+    label: Download type
+    default: Magnet
+    options:
+      Magnet: "magnet"
+      Torrent: "torrent"
+
+download:
+  selectors:
+    - selector: a:has(span:contains("{{ .Config.dl_type }}"))
+      attribute: href
 
 search:
   paths:
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=0{{ else }}/browse/0{{ end }}"
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=1{{ else }}/browse/1{{ end }}"
-    - path: "{{ if .Keywords }}advsearch.php?&category={{ range .Categories }}{{.}};{{end}}&search={{ .Keywords }}&order=data&by=DESC&page=2{{ else }}/browse/2{{ end }}"
+    - path: "{{ if .Keywords }}search{{ else }}{{ end }}"
+  inputs:
+    q: "{{ .Keywords }}"
+    cat: "{{ if .Keywords }}{{ re_replace .Config.category-id \"all\" \"\" }}{{ else }}{{ end }}"
 
   rows:
-    selector: "tr.odd,tr.odd2"
+    selector: table > tbody > tr
     filters:
       - name: andmatch
 
   fields:
-    category:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: split
-          args: ["/", -1]
+    categorydesc:
+      selector: td:nth-child(1)
     title:
-      selector: td:nth-child(2) a.tab
-      attribute: href
+      selector: a[href^="/torrent/"]
       filters:
-        - name: split
-          args: ["/", -1]
-        - name: replace # replace underscore with " " (space)
-          args: ["_", " "]
-        - name: re_replace # replace multiple spaces
-          args: ["[ ]{2,}", " "]
+        - name: re_replace
+          args: ["\\.", " "]
         # normalize to SXXEYY format
         - name: re_replace # S01 E01 to S01E01
           args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
@@ -118,49 +142,22 @@ search:
           args: ["(?i)WEB\\sDL", "WEB-DL"]
         - name: re_replace
           args: ["(?i)HDTVRIP", "HDTV"]
-    description:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: split
-          args: ["/", -1]
-        - name: prepend
-          args: "cat="
     details:
-      selector: td:nth-child(4) a
+      selector: a[href^="/torrent/"]
       attribute: href
-    download_itorrents:
-      selector: input.downarrow
-      attribute: value
-      filters:
-        - name: prepend
-          args: "http://itorrents.org/torrent/"
-        - name: append
-          args: ".torrent"
     download:
-      text: "{{ if .Config.itorrents-links }}{{ .Result.download_itorrents }}{{ else }}{{ end }}"
-    infohash:
-      selector: input.downarrow
-      attribute: value
-    size:
-      selector: td:nth-child(3) font
-    date:
-      selector: td:nth-child(5) font
-      filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "dd.MM.yy zzz"
+      selector: a[href^="/torrent/"]
+      attribute: href
     seeders:
-      selector: td:nth-child(6) font
-      filters:
-        - name: replace
-          args: ["n/a", "0"]
+      selector: td:nth-child(3)
     leechers:
-      selector: td:nth-child(7) font
-      filters:
-        - name: replace
-          args: ["n/a", "0"]
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(5)
+    date:
+      # unix
+      selector: td:nth-child(6)
+      attribute: data-timestamp
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
