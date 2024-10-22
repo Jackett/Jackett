@@ -15,10 +15,9 @@ caps:
     - {id: 45, cat: Movies/SD, desc: "Film-Cam/Hun"}
     - {id: 58, cat: Movies/DVD, desc: "Film-DVD/Eng"}
     - {id: 59, cat: Movies/DVD, desc: "Film-DVD/Hun"}
+    - {id: 64, cat: Movies/HD, desc: "Film-HD"}
     - {id: 60, cat: Movies/SD, desc: "Film-Xvid/Eng"}
     - {id: 62, cat: Movies/SD, desc: "Film-Xvid/Hun"}
-    - {id: 12, cat: Movies/HD, desc: " Film/HD/Eng"}
-    - {id: 11, cat: Movies/HD, desc: " Film/HD/Hun"}
     - {id: 53, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 51, cat: Other, desc: "Hátterek-Képek"}
     - {id: 55, cat: PC/Games, desc: "JJáték-ISO"}
