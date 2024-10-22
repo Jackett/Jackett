@@ -85,6 +85,7 @@ settings:
     default: "Failure to use an account for a period of 180 days will result in the removal of the account from the CMS_ZT community."
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

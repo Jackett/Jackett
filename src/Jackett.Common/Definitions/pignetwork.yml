@@ -77,6 +77,7 @@ settings:
     default: "Account retention rules:<ul><li>Nexus Master users and above will be retained forever</li><li>Elite User users and above will not have their accounts deleted after parking their accounts (in the control panel)</li><li>Users who have parked their accounts will be deleted if they do not log in for 180 consecutive days</li><li>Users whose accounts have not been parked will have their accounts deleted if they do not log in for 90 consecutive days</li><li>Users who have no traffic for 7 consecutive days or who have not logged in for 30 consecutive days (that is, the upload/download data are both 0) will be automatically banned by the system.</li></ul>"
 
 login:
+  # using cookie method because site regularly disables login page for certain events during the year #14310
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

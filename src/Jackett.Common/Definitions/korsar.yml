@@ -460,6 +460,7 @@ settings:
       a: asc
 
 login:
+  # using cookie method because I could not get the form method to work when I first created the indexer, some hidden security check
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

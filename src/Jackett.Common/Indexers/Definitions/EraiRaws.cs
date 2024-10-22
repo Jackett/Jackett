@@ -123,6 +123,11 @@ namespace Jackett.Common.Indexers.Definitions
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
             if (result.IsRedirect)
                 result = await FollowIfRedirect(result);
+            if (result.ContentString.Contains("403 Forbidden"))
+            {
+                logger.Error("[EraiRaws] 403 Forbidden");
+                throw new Exception("The RSSkey may need to be replaced as EraiRaws returned 403 Forbidden.");
+            }
 
             // Parse as XML document
             var xmlDocument = new XmlDocument();

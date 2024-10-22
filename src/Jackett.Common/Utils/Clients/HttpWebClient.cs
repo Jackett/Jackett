@@ -194,10 +194,14 @@ namespace Jackett.Common.Utils.Clients
                                         }
                                     }
                                 }
-                                if (response.Headers.Location != null)
+
+                                var redirectUri = RedirectUri(response);
+
+                                if (redirectUri != null)
                                 {
-                                    result.RedirectingTo = response.Headers.Location.ToString();
+                                    result.RedirectingTo = redirectUri.AbsoluteUri;
                                 }
+
                                 // Mono won't add the baseurl to relative redirects.
                                 // e.g. a "Location: /index.php" header will result in the Uri "file:///index.php"
                                 // See issue #1200

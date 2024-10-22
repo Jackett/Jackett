@@ -114,6 +114,7 @@ settings:
       a: asc
 
 login:
+  # switched from the form method to the cookie method in Nov 2020, reason not provided
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

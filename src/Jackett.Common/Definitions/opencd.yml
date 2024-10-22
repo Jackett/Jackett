@@ -64,6 +64,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is 50.
 
 login:
+  # switched from the form method to the cookie method due to https://github.com/Prowlarr/Prowlarr/issues/792
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

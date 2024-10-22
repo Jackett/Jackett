@@ -70,6 +70,7 @@ settings:
     default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted. updated @ 2020.03.19</li><li>Insane User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be disabled if users have not logged in for more than 365 days in a row. updated @ 2020.09.20</li><li>Un-parked accounts would be disabled if users have not logged in for more than 90 days in a row. updated @ 2020.09.20</li><li>Accounts with both uploaded and downloaded amount being 0 would be disabled if users have not logged in for more than 30 days in a row.</li></ol>"
 
 login:
+  # switched from the form method to the cookie method due to #9577
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

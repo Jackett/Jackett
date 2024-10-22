@@ -20,6 +20,7 @@ caps:
     - {id: 265, cat: Movies/HD, desc: "Filmy x265 HEVC"}
     - {id: 12, cat: Movies/3D, desc: "Filmy 3D"}
     - {id: 530, cat: Movies/SD, desc: "Filmy TS/CAM"}
+    - {id: 826, cat: Movies/HD, desc: "REMUX / Complete"}
     - {id: 9, cat: PC, desc: "Programy"}
     - {id: 7, cat: Console, desc: "Konsole"}
     - {id: 6, cat: PC/Games, desc: "Gry"}
@@ -44,12 +45,16 @@ caps:
     book-search: [q]
 
 settings:
-  - name: email
+  - name: cookie
     type: text
-    label: Email
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -63,13 +68,10 @@ settings:
       MULTi POLISH: MULTIi POLISH
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Google reCAPTCHA
+  method: cookie
   inputs:
-    username: "{{ .Config.email }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: table.main:contains("Logowanie nie udane")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href^="/logout.php"]
@@ -83,6 +85,9 @@ search:
     cat: 0
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
     # does not support imdbid searching, or have imdb in results
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table[width="100%"] > tbody > tr:has(a[href*="torrent/"])
@@ -101,6 +106,7 @@ search:
         ":contains(\"x265 HEVC\")": 265
         ":contains(\"3D\")": 12
         ":contains(\"TS/CAM\")": 530
+        ":contains(\"REMUX\")": 826
         ":contains(\"Programy\")": 9
         ":contains(\"Konsole\")": 7
         ":contains(\"Gry\")": 6

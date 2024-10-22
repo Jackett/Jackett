@@ -39,28 +39,12 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://audiobookbay.la/",
             "http://audiobookbay.net/",
-            "https://audiobookbay.unblockit.tv/",
             "http://audiobookbay.nl/",
             "http://audiobookbay.ws/",
-            "https://audiobookbay.unblockit.how/",
-            "https://audiobookbay.unblockit.cam/",
-            "https://audiobookbay.unblockit.biz/",
-            "https://audiobookbay.unblockit.day/",
-            "https://audiobookbay.unblockit.llc/",
-            "https://audiobookbay.unblockit.blue/",
-            "https://audiobookbay.unblockit.name/",
             "http://audiobookbay.fi/",
             "http://audiobookbay.se/",
             "http://audiobookbayabb.com/",
-            "https://audiobookbay.unblockit.ist/",
-            "https://audiobookbay.unblockit.bet/",
-            "https://audiobookbay.unblockit.cat/",
-            "https://audiobookbay.unblockit.nz/",
             "https://audiobookbay.fi/",
-            "https://audiobookbay.unblockit.page/",
-            "https://audiobookbay.unblockit.pet/",
-            "https://audiobookbay.unblockit.ink/",
-            "https://audiobookbay.unblockit.bio/", // error 502
             "https://audiobookbay.li/",
             "https://audiobookbay.se/" // redirects to .is but has invalid CA
         };

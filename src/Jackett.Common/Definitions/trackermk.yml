@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 75, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 49, cat: Movies/DVD, desc: "Movies DVD-R"}
     - {id: 68, cat: PC/Mobile-Android, desc: "Андроид (Android)"}
     - {id: 72, cat: PC/Mobile-Android, desc: "Андроид - Апликации (Android)"}
@@ -34,6 +35,7 @@ caps:
     - {id: 50, cat: Audio/MP3, desc: "Mp3"}
     - {id: 56, cat: Movies/SD, desc: "Movies Xvid"}
     - {id: 59, cat: XXX, desc: "XXX"}
+    - {id: 74, cat: XXX, desc: "XXX 4K"}
 
   modes:
     search: [q]

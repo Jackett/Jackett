@@ -156,6 +156,7 @@ settings:
       asc: asc
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -274,7 +275,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: regexp
-          args: "Partagé Voilà : </b>(.*?)<br"
+          args: "Partagé Le : </b>(.*?)<br"
         - name: dateparse
           args: "MM-dd-yyyy"
     downloadvolumefactor:

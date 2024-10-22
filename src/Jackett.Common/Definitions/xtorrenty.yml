@@ -1,9 +1,9 @@
 ---
 id: xtorrenty
 name: xTorrenty
-description: "xTorrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "xTorrenty is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-PL
-type: semi-private
+type: private
 encoding: UTF-8
 links:
   - https://xtorrenty.org/

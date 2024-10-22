@@ -132,6 +132,7 @@ settings:
     default: "Unparked accounts that haven't visited (read: browsed) the site for 38 days (and are over 28 days old) are pruned. Parked accounts are pruned when 112 days have elapsed since the last recorded activity (read: browsed). Seeding activity does NOT count, you must BROWSE the site. Donators with a star (and ONLY donators with a star) are immune to auto-pruning. Power Users and above are also immune. We regularly clean out accounts with very low share ratios that are subject to the Ratio Watch system."
 
 login:
+  # using cookie method because login page has embedded hCaptcha
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

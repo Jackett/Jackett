@@ -16,17 +16,14 @@ caps:
     search: [q]
     music-search: [q, artist]
 
-settings:
-  - name: cookie
-    type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
-
 login:
-  method: cookie
+  path: takelogin.php
+  method: post
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded > div.error
   test:
     path: browse.php
     selector: span.bar_user_welcome
@@ -88,4 +85,4 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
-# engine tbd
+# Кinokрk releaser v. 2.40.473

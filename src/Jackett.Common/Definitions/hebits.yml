@@ -64,6 +64,7 @@ settings:
     default: "If you are getting the error <b>Login failed: Selector \"a[href*=\"/logout.php?auth=\"]\" didn't match</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
 
 login:
+  # using cookie method because login page has a custom captcha with multiple possible answers on individual radio buttons not supported via yaml
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

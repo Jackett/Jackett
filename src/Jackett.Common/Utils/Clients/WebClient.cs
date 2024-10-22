@@ -5,6 +5,7 @@ using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using com.LandonKey.SocksWebProxy;
@@ -17,6 +18,8 @@ namespace Jackett.Common.Utils.Clients
 {
     public abstract class WebClient : IObserver<ServerConfig>
     {
+        private static readonly Regex _RefreshHeaderRegex = new Regex("^(.*?url)=(.*?)(?:;|$)", RegexOptions.Compiled);
+
         protected IDisposable ServerConfigUnsubscriber;
         protected Logger logger;
         protected IConfigurationService configService;
@@ -262,6 +265,34 @@ namespace Jackett.Common.Utils.Clients
             var content = new ByteArrayContent(data);
             content.Headers.ContentType = new MediaTypeHeaderValue("application/x-www-form-urlencoded");
             return content;
+        }
+
+        protected static Uri RedirectUri(HttpResponseMessage response)
+        {
+            var newUri = response.Headers.Location;
+
+            if (newUri == null)
+            {
+                var refreshHeader = response.Headers.TryGetValues("Refresh", out var refreshHeaders)
+                    ? refreshHeaders.FirstOrDefault()
+                    : null;
+
+                if (refreshHeader == null)
+                {
+                    return null;
+                }
+
+                var match = _RefreshHeaderRegex.Match(refreshHeader);
+
+                if (match.Success)
+                {
+                    return new Uri(response.RequestMessage.RequestUri, new Uri(match.Groups[2].Value, UriKind.RelativeOrAbsolute));
+                }
+
+                return null;
+            }
+
+            return new Uri(response.RequestMessage.RequestUri, newUri);
         }
     }
 }

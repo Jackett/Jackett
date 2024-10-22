@@ -104,6 +104,7 @@ caps:
     book-search: [q]
 
 settings:
+  # using cookie method because login page is dynamically generated using JS #5572
   - name: cookie
     type: text
     label: Cookie

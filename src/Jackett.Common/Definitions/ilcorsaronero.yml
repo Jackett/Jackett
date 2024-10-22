@@ -1,0 +1,165 @@
+---
+id: ilcorsaronero
+name: ilCorSaRoNeRo
+description: "ilCorSaRoNeRo is an ITALIAN Public site for TV / MOVIES / GENERAL"
+language: it-IT
+type: public
+encoding: UTF-8
+links:
+  - https://ilcorsaronero.link/
+  - https://ilcorsaronero.torrentbay.st/
+legacylinks:
+  - https://ilcorsaronero.live/
+  - https://ilcorsaronero.vip/
+  - https://ilcorsaronero.info/
+  - https://ilcorsaronero.ch/
+  - https://ilcorsaronero.cc/
+  - https://ilcorsaronero.pizza/
+  - https://ilcorsaronero.pw/
+  - https://ilcorsaronero.xyz/
+  - https://ilcorsaronero.torrentbay.to/
+  - https://ilcorsaronero.fun/
+  - https://ilcorsaronero.pro/
+  - https://ilcorsaronero.torrentbay.net/
+  - https://ilcorsaronero.mrunblock.bond/
+  - https://ilcorsaronero.nocensor.cloud/
+
+caps:
+  categorymappings:
+    - {id: film, cat: Movies, desc: "Film"}
+    - {id: serie-tv, cat: TV, desc: "Serie TV"}
+    - {id: animazione, cat: TV/Anime, desc: "Animazione"}
+    - {id: animazione-film, cat: TV/Anime, desc: "Animazione - Film"}
+    - {id: animazione-serie, cat: TV/Anime, desc: "Animazione - Serie"}
+    - {id: musica, cat: Audio, desc: "Musica"}
+    - {id: musica-audio, cat: Audio, desc: "Musica - Audio"}
+    - {id: musica-video, cat: Audio/Video, desc: "Musica - Video Musicali"}
+    - {id: libri, cat: Books, desc: "Libri"}
+    - {id: libri-ebook, cat: Books/EBook, desc: "Libri - eBook"}
+    - {id: libri-audio, cat: Audio/Audiobook, desc: "Libri - Audiolibri"}
+    - {id: libri-fumetti, cat: Books/Comics, desc: "Libri - Fumetti"}
+    - {id: libri-edicola, cat: Books/Mags, desc: "Libri - Edicola"}
+    - {id: giochi, cat: PC/Games, desc: "Giochi"}
+    - {id: giochi-pc, cat: PC/Games, desc: "Giochi - PC"}
+    - {id: giochi-console, cat: PC/Games, desc: "Giochi - Console"}
+    - {id: software, cat: PC, desc: "Software"}
+    - {id: software-windows, cat: PC/0day, desc: "Software - Windows"}
+    - {id: software-macos, cat: PC/Mac, desc: "Software - macOS"}
+    - {id: software-linux, cat: PC, desc: "Software - Linux"}
+    - {id: software-mobile, cat: PC/Mobile-Other, desc: "Software - Mobile"}
+    - {id: altro, cat: Other, desc: "Altro"}
+    - {id: altro-docu, cat: Other, desc: "Altro - Documentari"}
+    - {id: altro-tv, cat: Other, desc: "Altro - Programmi TV"}
+    - {id: altro-corsi, cat: Other, desc: "Altro - Videocorsi"}
+    - {id: altro-altro, cat: Other, desc: "Altro - Altro"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: category-id
+    type: select
+    label: Category (for Keyword search)
+    default: all
+    options:
+      all: "All categories"
+      film: "Film"
+      serie-tv: "Serie TV"
+      animazione: "Animazione"
+      musica: "Musica"
+      libri: "Libri"
+      giochi: "Giochi"
+      software: "Software"
+      altro: "Altro"
+  - name: dl_type
+    type: select
+    label: Download type
+    default: Magnet
+    options:
+      Magnet: "magnet"
+      Torrent: "torrent"
+
+download:
+  selectors:
+    - selector: a:has(span:contains("{{ .Config.dl_type }}"))
+      attribute: href
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search{{ else }}{{ end }}"
+  inputs:
+    q: "{{ .Keywords }}"
+    cat: "{{ if .Keywords }}{{ re_replace .Config.category-id \"all\" \"\" }}{{ else }}{{ end }}"
+
+  rows:
+    selector: table > tbody > tr
+    filters:
+      - name: andmatch
+
+  fields:
+    categorydesc:
+      selector: td:nth-child(1)
+    title:
+      selector: a[href^="/torrent/"]
+      filters:
+        - name: re_replace
+          args: ["\\.", " "]
+        # normalize to SXXEYY format
+        - name: re_replace # S01 E01 to S01E01
+          args: ["(?i)\\bS(\\d+)\\sE(\\d+)\\b", "S$1E$2"]
+        - name: re_replace # 01x01 to S01E01
+          args: ["(?i)(\\d{2})x(\\d+)", "S$1E$2"]
+        - name: re_replace # 1x01 to S01E01
+          args: ["(?i)\\b(\\d{1})x(\\d+)", "S0$1E$2"]
+        - name: re_replace # Stagione X --> S0X
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{1})\\b|\\bSeason'?s?\\s?(\\d{1})\\b", "S0$1$2"]
+        - name: re_replace # Stagione XX --> SXX
+          args: ["(?i)\\bStagion[ei]\\s?(\\d{2,})\\b|\\bSeason'?s?\\s?(\\d{2,})\\b", "S$1$2"]
+        - name: re_replace # Episodio 4 to E4
+          args: ["(?i)\\b(?:[\\/\\|]?Episodio\\s?(\\d+)|Puntata\\s?(\\d+))", "E$1$2"]
+        - name: re_replace # Episodi 4 5 to E04-05
+          args: ["(?i)\\b(?:Puntate\\s*)(\\d+)\\s?(\\d+)", "E0$1-0$2"]
+        - name: re_replace # rimozioni varie
+          args: ["(?i)(Serie completa|Completat?a?|in pausa)", ""]
+        # cleanup for Sonarr
+        - name: re_replace # EP 3 4 to E3-4
+          args: ["(?i)\\sEP\\s(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " E$1-$2 "]
+        - name: re_replace # S02E04 05 to S02E04-05
+          args: ["(?i)\\sS(\\d{1,2})\\s?E\\s?(\\d{1,2})\\s(E?\\s?\\d{1,2})\\s", " S$1E$2-$3 "]
+        - name: re_replace
+          args: ["(?i)AC3\\s?(\\d)\\s(\\d)", "AC3 $1.$2"]
+        - name: re_replace
+          args: ["(?i) DD\\s?(\\d)\\s(\\d)", " DD $1.$2"]
+        - name: re_replace
+          args: ["(?i) DDP\\s?(\\d)\\s(\\d)", " DDP $1.$2"]
+        - name: re_replace
+          args: ["(?i)\\sE\\s?AC3", " EAC3"]
+        - name: re_replace
+          args: ["(?i)WEB\\sDL", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)HDTVRIP", "HDTV"]
+    details:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    download:
+      selector: a[href^="/torrent/"]
+      attribute: href
+    seeders:
+      selector: td:nth-child(3)
+    leechers:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(5)
+    date:
+      # unix
+      selector: td:nth-child(6)
+      attribute: data-timestamp
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

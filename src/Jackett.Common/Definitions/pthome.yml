@@ -47,6 +47,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
+  # using cookie method because I could not get the form method to work when I first created the indexer, some hidden security check
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

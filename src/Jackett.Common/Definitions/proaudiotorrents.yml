@@ -67,6 +67,7 @@ settings:
     default: "12 weeks exactly. You will need to log in before that amount of time has elapsed to keep your account active."
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

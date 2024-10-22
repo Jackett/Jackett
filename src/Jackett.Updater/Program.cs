@@ -313,6 +313,7 @@ namespace Jackett.Updater
                 "Definitions/blubits.yml",
                 "Definitions/bluesbrothers.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
+                "Definitions/bolly-api.yml",
                 "Definitions/brasiltracker.yml", // migrated to C#
                 "Definitions/breizhpeers.yml",
                 "Definitions/broadcity.yml",
@@ -423,6 +424,7 @@ namespace Jackett.Updater
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
                 "Definitions/gods.yml",
+                "Definitions/goodtracker.yml",
                 "Definitions/gormogon.yml",
                 "Definitions/greekdiamond.yml",
                 "Definitions/greeklegends.yml",
@@ -469,7 +471,6 @@ namespace Jackett.Updater
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
-                "Definitions/ilcorsaronero.yml",
                 "Definitions/ilcorsaroverde.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
@@ -542,6 +543,7 @@ namespace Jackett.Updater
                 "Definitions/nforce.yml",
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
+                "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/nyaa-pantsu.yml",
@@ -554,7 +556,6 @@ namespace Jackett.Updater
                 "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
-                "Definitions/opensharing.yml",
                 "Definitions/oxtorrent.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/partis.yml",
@@ -708,6 +709,7 @@ namespace Jackett.Updater
                 "Definitions/torrentz2k.yml",
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
+                "Definitions/tosky.yml",
                 "Definitions/totallykids.yml",
                 "Definitions/totheglorycookie.yml", // renamed totheglory2fa
                 "Definitions/trackeros-api.yml",

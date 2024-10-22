@@ -74,6 +74,7 @@ settings:
     default: "Account Retention Rules:<ol><li>Veteran Users and above will be retained forever</li><li> Insane User and above will not be deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 60 consecutive days.</li><li> Newly registered users who have no traffic for 7 days (i.e., upload/download data is 0) will be deleted.</li></ol>"
 
 login:
+  # switched from the form method to the cookie method due to #9577
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

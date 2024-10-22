@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.protege-torrent.com/Zetorrents
 links:
-  - https://www.zetorrents.vc/
+  - https://www.zetorrents.sk/
 legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
@@ -18,7 +18,6 @@ legacylinks:
   - https://www.torrent.ws/
   - https://www.torrent.onl/
   # actual legacylinks
-  - https://vww.zetorrents.io/
   - https://wwv.zetorrents.io/
   - https://ww1.zetorrents.io/
   - https://www.zetorrents.org/
@@ -35,6 +34,7 @@ legacylinks:
   - https://www.zetorrents.tw/
   - https://www.zetorrents.in/
   - https://www.zetorrents.vg/
+  - https://www.zetorrents.vc/
 
 caps:
   categories:

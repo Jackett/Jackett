@@ -76,6 +76,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
+  # using the cookie method because the site expects a single session only, so using browser and Jackett can cause a lockout
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

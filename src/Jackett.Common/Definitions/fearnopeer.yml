@@ -186,4 +186,4 @@ search:
 # Maintain global ratio above 0.7 or downloads will get disabled. No MST.
     minimumratio:
       text: 0.71
-# json UNIT3D 8.1.3
+# json UNIT3D 8.3.0
