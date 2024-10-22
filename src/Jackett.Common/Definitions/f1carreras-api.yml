@@ -80,8 +80,9 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    seasonNumber: "{{ .Query.Season }}"
-    episodeNumber: "{{ .Query.Ep }}"
+    # disabled due to not being properly mapped
+    # seasonNumber: "{{ .Query.Season }}"
+    # episodeNumber: "{{ .Query.Ep }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
@@ -93,6 +94,9 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
+    - name: re_replace # S2024 to 2024 and S2024E97 to 2024 97
+      args: ["\\b(?:S(\\d{2,4}))(?:E(\\d{2,4}))?\\b", "$1 $2"]
+    - name: trim
 
   rows:
     selector: data
