@@ -708,6 +708,7 @@ namespace Jackett.Updater
                 "Definitions/torrentz2k.yml",
                 "Definitions/torrof.yml",
                 "Definitions/torviet.yml",
+                "Definitions/tosky.yml",
                 "Definitions/totallykids.yml",
                 "Definitions/totheglorycookie.yml", // renamed totheglory2fa
                 "Definitions/trackeros-api.yml",
