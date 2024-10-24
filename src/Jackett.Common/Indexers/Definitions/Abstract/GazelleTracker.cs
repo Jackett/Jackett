@@ -11,6 +11,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -49,7 +50,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         }
 
         protected GazelleTracker(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 IProtectionService p, ICacheService cs,
+                                 IProtectionService p, CacheManager cm,
                                  bool supportsFreeleechTokens = false, bool supportsFreeleechOnly = false, bool supportsFreeloadOnly = false,
                                  bool imdbInTags = false, bool has2Fa = false, bool useApiKey = false,
                                  bool usePassKey = false, bool useAuthKey = false, string instructionMessageOptional = null)
@@ -57,7 +58,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                    client: client,
                    logger: logger,
                    p: p,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataGazelleTracker(has2Fa, supportsFreeleechTokens, supportsFreeleechOnly, supportsFreeloadOnly, useApiKey, usePassKey, useAuthKey, instructionMessageOptional))
         {
             this.imdbInTags = imdbInTags;
