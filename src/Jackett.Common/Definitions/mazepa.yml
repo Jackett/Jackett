@@ -314,9 +314,9 @@ search:
       selector: td:last-child
       filters:
         - name: regexp
-          args: (\d{2}:\d{2}\s\d{1,2}-\D{3}-\d{2})
+          args: (\d{2}:\d{2}\s+\d{1,2}-\D{3}-\d{2})
         - name: re_replace
-          args: ["\\s", " "]
+          args: ["\\s", ""]
         - name: re_replace
           args: ["(?i)Січ", "Jan"]
         - name: re_replace
@@ -344,7 +344,7 @@ search:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
-          args: "HH:mm d-MMM-yy zzz"
+          args: "HH:mmd-MMM-yy zzz"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
