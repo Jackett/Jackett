@@ -47,6 +47,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: novip
+    type: checkbox
+    label: Hide VIP releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -105,7 +109,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: "table.torrents > tbody > tr:has(table.torrentname){{ if .Config.novip }}:not(:has(img[src=\"pic/ico_exclu.gif\"])){{ else }}{{ end }}"
 
   fields:
     category:
@@ -116,11 +120,16 @@ search:
           args: cat
     title_default:
       selector: a[href^="details.php?id="]
-    title:
+    title_title:
       selector: a[title][href^="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
+    _isvip:
+      selector: table.torrentname:has(img[src="pic/ico_exclu.gif"])
+      optional: true
+    title:
+      text: "{{ .Result.title_title }}{{ if .Result._isvip }} [VIP]{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -159,12 +168,12 @@ search:
     downloadvolumefactor:
       case:
         img[src="pic/ico_free.gif"]: 0
-        img[src="/pic/ico_half.gif"]: 0.5
-        img[src="/pic/ico_third.gif"]: 0.3
+        img[src="pic/ico_half.gif"]: 0.5
+        img[src="pic/ico_third.gif"]: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        img[src="/pic/2x.gif"]: 2
+        img[src="pic/2x.gif"]: 2
         "*": 1
     minimumratio:
       text: 1.0
