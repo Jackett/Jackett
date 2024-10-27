@@ -61,7 +61,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             };
 
-            caps.Categories.AddCategoryMapping(1000000, TorznabCatType.Audio,"Audio");
+            caps.Categories.AddCategoryMapping(1000000, TorznabCatType.Audio, "Audio");
             caps.Categories.AddCategoryMapping(1001000, TorznabCatType.AudioMP3, "MP3");
             caps.Categories.AddCategoryMapping(1002000, TorznabCatType.AudioLossless, "Lossless");
             caps.Categories.AddCategoryMapping(1003000, TorznabCatType.AudioAudiobook, "Audiobook");
@@ -255,8 +255,8 @@ namespace Jackett.Common.Indexers.Definitions
                     Guid = new Uri(row.InfoUrl),
                     Title = row.Title,
                     Details = new Uri(row.InfoUrl),
-                    Link = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl,  UriKind.Absolute, out var downloadUrl) ? downloadUrl : null,
-                    MagnetUri = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl,  UriKind.Absolute, out var magnetUrl) ? magnetUrl : null,
+                    Link = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl, UriKind.Absolute, out var downloadUrl) ? downloadUrl : null,
+                    MagnetUri = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl, UriKind.Absolute, out var magnetUrl) ? magnetUrl : null,
                     Category = row.CategoryIds.SelectMany(cat => _categories.MapTrackerCatToNewznab(cat.ToString())).Distinct().ToList(),
                     InfoHash = row.InfoHash,
                     Size = row.Size,
