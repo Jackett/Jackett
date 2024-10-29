@@ -25,6 +25,7 @@ caps:
     - {id: 16, cat: TV, desc: "Boxsets"}
     - {id: 18, cat: Audio, desc: "Music"}
     - {id: 19, cat: Movies, desc: "Film"}
+    - {id: 20, cat: Movies, desc: "VIP"}
 
   modes:
     search: [q]
@@ -43,6 +44,10 @@ settings:
     type: checkbox
     label: Filter freeleech only
     default: false
+  - name: novip
+    type: checkbox
+    label: Hide VIP releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -84,8 +89,7 @@ search:
     page: torrents
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
-    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze, 8-17 upload multiplier 1x-10x
-    # note the options are exclusive, so searching for gold means the search keywords are ignored
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders
     options: 0
     # 0 all, 1 active only, 2 dead only
     active: 0
@@ -98,7 +102,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"])){{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}, able.lista > tbody > tr:has(a[href^=\"download.php?id=\"]):not(:has(a[href^=\"index.php?page=userdetails\"])){{ if .Config.freeleech }}:has(img[src$=\"freeleech.gif\"]){{ else }}{{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.novip }}:not(:has(a[href$=\"category=20\"])){{ else }}{{ end }}{{ if .Config.freeleech }}:has(img[src$=\"gold.gif\"]){{ else }}{{ end }}, table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.novip }}:not(:has(a[href$=\"category=20\"])){{ else }}{{ end }}{{ if .Config.freeleech }}:has(img[src$=\"freeleech.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -134,20 +138,27 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    size:
+      # Size:  &nbsp; 2.00 GB
+      selector: td:has(a[href^="download.php?id="]) p:contains("Size:")
+      filters:
+        - name: regexp
+          args: (\d.+[B]$)
     date:
-      selector: td:has(a[href^="download.php?id="]) ~ td ~ td
+      # AddDate: &nbsp; 12:54:01 24/10/2024
+      selector: td:has(a[href^="download.php?id="]) p:contains("AddDate:")
       # auto adjusted by site account profile
       filters:
+        - name: regexp
+          args: (\d{2}:\d{2}:\d{2}\s\d{1,2}\/\d{2}\/\d{4})
         - name: dateparse
-          args: "dd/MM/yyyy"
+          args: "HH:mm:ss d/MM/yyyy"
     seeders:
-      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td
+      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a
     leechers:
-      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td
+      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a:nth-child(2)
     grabs:
-      selector: td:has(a[href^="download.php?id="]) ~ td ~ td ~ td ~ td ~ td
-    size:
-      selector: "td:has(a[href^=\"download.php?id=\"]) ~ td ~ td ~ td ~ td ~ td ~ td"
+      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a:nth-child(3)
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
@@ -172,4 +183,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 259200
-#  xbtitFM v4.1.28
+#  xbtitFM v4.1.31
