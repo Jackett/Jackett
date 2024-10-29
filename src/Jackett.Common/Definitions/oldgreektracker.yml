@@ -33,6 +33,8 @@ caps:
     - {id: 119, cat: Movies/SD, desc: "Movies: Greek Movies Non HD"}
     - {id: 122, cat: Movies/HD, desc: "Movies: MicroHD"}
     - {id: 112, cat: Movies/HD, desc: "Movies: Movie Packs"}
+    - {id: 130, cat: Movies/WEB-DL, desc: "Movies: WEBRip / 1080p"}
+    - {id: 129, cat: Movies/WEB-DL, desc: "Movies: WEBRip / 720p"}
     - {id: 41, cat: Movies/HD, desc: "Movies HD"}
     - {id: 50, cat: Movies/HD, desc: "Movies HD: BluRay / 1080p"}
     - {id: 51, cat: Movies/UHD, desc: "Movies HD: BluRay / 4K (UHD)"}
