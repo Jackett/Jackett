@@ -113,7 +113,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(table.torrentname):has(a[href^="download.php?id="])
 
   fields:
     category:
