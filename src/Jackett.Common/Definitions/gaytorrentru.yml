@@ -111,6 +111,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+  error:
+    - selector: div.panel:has(h3:contains("Login failed"))
   test:
     path: browse.php
     selector: a[href$="/logout.php"]
