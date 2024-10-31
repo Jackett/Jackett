@@ -72,6 +72,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+  error:
+    - selector: table.main:contains("Sikertelen bejelentkezés")
   test:
     path: index.php
     selector: a[href^="logout.php"]

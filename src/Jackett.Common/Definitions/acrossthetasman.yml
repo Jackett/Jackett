@@ -47,6 +47,8 @@ login:
     vb_login_password: "{{ .Config.password }}"
     cookieuser: 1
     do: login
+  error:
+    - selector: div.restore:contains("invalid username or password")
   test:
     path: torrents.php
     selector: a[href*="logout.php"]

@@ -106,6 +106,8 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+  error:
+    - selector: :root:contains("Sikertelen bejelentkezés")
   test:
     path: index.php
     selector: a[href^="logout.php?c="]

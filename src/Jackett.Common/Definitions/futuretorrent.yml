@@ -114,6 +114,16 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+  error:
+    - selector: table:has(a[href*="login.php?error=1"])
+      message:
+        text: "ERROR: Incorrect username!"
+    - selector: table:has(a[href*="login.php?error=4"])
+      message:
+        text: "ERROR: Incorrect password!"
+    - selector: table:has(a[href*="login.php?error="])
+      message:
+        text: "ERROR: Something went wrong during login!"
   test:
     path: index.php
     selector: a[href*="/logout.php"]
