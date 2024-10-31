@@ -74,7 +74,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Note your account will be DISABLED for the reason below:<ol><li>NOT log in your account in 30 days in a row. Except! VIP and VVIP users.</li><li>Park account or NO new download or other activity on the site in 152 days. Except! VIP and VVIP users.</li></ol>"
+    default: "Note your account will be DISABLED for the reason below:<ol><li>NOT log in your account in 365 days in a row. Except! VIP and VVIP users.</li><li>Park account or NO new download or other activity on the site in 365 days. Except! VIP and VVIP users.</li></ol>"
 
 login:
   path: takelogin.php
