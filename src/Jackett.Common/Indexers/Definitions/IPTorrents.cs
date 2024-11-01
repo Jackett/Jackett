@@ -291,6 +291,9 @@ namespace Jackett.Common.Indexers.Definitions
             if (query.IsImdbQuery)
             {
                 searchQuery.Add($"+({query.ImdbID})");
+
+                // search in description
+                qc.Set("qf", "all");
             }
             else if (query.IsGenreQuery)
             {
