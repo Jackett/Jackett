@@ -9,10 +9,9 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://01november.rudub.online/
+  - https://02november.rudub.online/
 legacylinks:
   - https://rudub.online/
-  - https://02october.rudub.online/
   - https://03october.rudub.online/
   - https://04october.rudub.online/
   - https://05october.rudub.online/
@@ -42,6 +41,7 @@ legacylinks:
   - https://29october.rudub.online/
   - https://30october.rudub.online/
   - https://31october.rudub.online/
+  - https://01november.rudub.online/
 
 caps:
   categorymappings:
