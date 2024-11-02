@@ -337,7 +337,7 @@ search:
 
   keywordsfilters:
     - name: re_replace # 1234 > E1234
-      args: ["\\b(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
+      args: ["\\b(?<!\\()(\\d{4})(?!\\))\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
     - name: re_replace # 123 > E123
       args: ["\\b(\\d{2,3})\\b", "{{ if .Config.enhancedAnime }}E$1{{ else }}$1{{ end }}"]
     # fix date search and workaround for internal YGG issues
@@ -416,7 +416,7 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
       filters:
         - name: re_replace
-          args: ["\\b(\\d{4})\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
+          args: ["\\b(?<!\\()(\\d{4})(?!\\))\\b", "{{ if .Config.enhancedAnime4 }}E$1{{ else }}$1{{ end }}"]
         - name: re_replace
           args: ["\\b(\\d{2,3})\\b", "{{ if .Config.enhancedAnime }}E$1{{ else }}$1{{ end }}"]
     details:
