@@ -111,6 +111,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             // XXX
             caps.Categories.AddCategoryMapping("58", TorznabCatType.XXX, "XXX/Blu-ray");
+            caps.Categories.AddCategoryMapping("78", TorznabCatType.XXX, "XXX/Remux");
             caps.Categories.AddCategoryMapping("74", TorznabCatType.XXX, "XXX/UHD/Blu-ray");
             caps.Categories.AddCategoryMapping("48", TorznabCatType.XXX, "XXX/1080p/i");
             caps.Categories.AddCategoryMapping("47", TorznabCatType.XXX, "XXX/720p");
