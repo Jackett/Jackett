@@ -375,7 +375,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
  * HD-Space (HDS)
- * HD-Torrents (HDT) [![(invite needed)][inviteneeded]](#)
+ * HD-Torrents (HDT)
  * HD-UNiT3D
  * HD4FANS [![(invite needed)][inviteneeded]](#)
  * HDArea (HDA)
