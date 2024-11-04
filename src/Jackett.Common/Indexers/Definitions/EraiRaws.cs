@@ -265,6 +265,10 @@ namespace Jackett.Common.Indexers.Definitions
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
                 var subs = rssItem.SelectSingleNode("erai:subtitles", nsm)?.InnerText;
+                if (string.IsNullOrEmpty(subs))
+                {
+                    subs = "[]";
+                }
 
                 item = new RssFeedItem
                 {
