@@ -62,6 +62,8 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     keeplogged: 1
+  error:
+    - selector: table.main:contains("Login failed")
   test:
     path: index.php
     selector: a[href^="logout.php"]

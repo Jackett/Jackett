@@ -27,6 +27,7 @@ caps:
     - {id: 17, cat: PC, desc: "Linux"}
     - {id: 18, cat: PC/Mac, desc: "macOS"}
     - {id: 14, cat: Console/PS4, desc: "PS4"}
+    - {id: 19, cat: Console/XBox, desc: "Xbox"}
     - {id: 11, cat: Other, desc: "Other"}
 
   modes:

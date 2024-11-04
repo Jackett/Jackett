@@ -17,6 +17,9 @@ caps:
     - {id: 5, cat: TV/Foreign, desc: "Dizi / Show (Yabancı)"}
     - {id: 18, cat: TV, desc: "Dizi (Boxet)"}
     - {id: 25, cat: TV/Documentary, desc: "Belgesel"}
+    - {id: 28, cat: Console, desc: "GAME - OYUN"}
+    - {id: 26, cat: Other, desc: "Other"}
+    - {id: 27, cat: PC, desc: "PROGRAM"}
 
   modes:
     search: [q]
@@ -192,4 +195,4 @@ search:
     minimumseedtime:
       # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
       text: 129600
-# json UNIT3D 8.1.3
+# json UNIT3D 8.3.2

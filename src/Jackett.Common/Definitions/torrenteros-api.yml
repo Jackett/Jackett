@@ -144,7 +144,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " +00:00" # GMT
+          args: " -03:00" # BRT
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
@@ -180,4 +180,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json UNIT3D 8.2.0
+# json UNIT3D 8.3.2 (custom)

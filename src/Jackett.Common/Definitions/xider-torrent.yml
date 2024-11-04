@@ -20,15 +20,15 @@ caps:
     - {id: 62, cat: Movies/SD, desc: "Film-Xvid/Hun"}
     - {id: 53, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 51, cat: Other, desc: "Hátterek-Képek"}
-    - {id: 55, cat: PC/Games, desc: "JJáték-ISO"}
+    - {id: 55, cat: PC/Games, desc: "Játék-ISO"}
     - {id: 54, cat: PC/Games, desc: "Játék-RIP"}
     - {id: 43, cat: Books, desc: "Könyvek"}
     - {id: 50, cat: TV/Anime, desc: "Mesefilm"}
     - {id: 42, cat: PC/Mobile-Other, desc: "Mobilok"}
     - {id: 39, cat: PC, desc: "Program"}
     - {id: 57, cat: Audio/MP3, desc: "Zene-MP3"}
-    - {id: 25, cat: XXX, desc: "XXX/Film"}
-    - {id: 26, cat: XXX/ImageSet, desc: "XXX/Kép"}
+    - {id: 72, cat: XXX, desc: "XXX-Film"}
+    - {id: 71, cat: XXX/ImageSet, desc: "XXX-Kép"}
 
   modes:
     search: [q]

@@ -487,6 +487,7 @@ namespace Jackett.Updater
                 "Definitions/kikibt.yml",
                 "Definitions/kinonavse100.yml",
                 "Definitions/kisssub.yml",
+                "Definitions/knaben.yml", // migrated to C# API
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lat-team.yml", // switch to *-API #8682
                 "Definitions/latinop2p.yml",
@@ -568,6 +569,7 @@ namespace Jackett.Updater
                 "Definitions/pixelados.yml",
                 "Definitions/pixelados-html.yml",
                 "Definitions/pleasuredome.yml",
+                "Definitions/plusteca.yml",
                 "Definitions/polishsource.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
@@ -749,6 +751,7 @@ namespace Jackett.Updater
                 "Definitions/xbytes2.yml",
                 "Definitions/xfsub.yml",
                 "Definitions/xktorrent.yml",
+                "Definitions/xperiencebytes-api.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/xxxtorrents.yml",

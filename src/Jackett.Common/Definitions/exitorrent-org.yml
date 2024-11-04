@@ -95,7 +95,7 @@ search:
     # 0 all, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 polish, 5 dubbed, 6 subs, 2 non-polish, 3 freeleech, 4 highlighted
-    polish: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    polish: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 

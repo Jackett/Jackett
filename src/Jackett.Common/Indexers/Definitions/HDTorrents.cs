@@ -63,6 +63,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationDataBasicLogin("For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile."))
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
+            configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -112,6 +113,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             // XXX
             caps.Categories.AddCategoryMapping("58", TorznabCatType.XXX, "XXX/Blu-ray");
+            caps.Categories.AddCategoryMapping("78", TorznabCatType.XXX, "XXX/Remux");
             caps.Categories.AddCategoryMapping("74", TorznabCatType.XXX, "XXX/UHD/Blu-ray");
             caps.Categories.AddCategoryMapping("48", TorznabCatType.XXX, "XXX/1080p/i");
             caps.Categories.AddCategoryMapping("47", TorznabCatType.XXX, "XXX/720p");

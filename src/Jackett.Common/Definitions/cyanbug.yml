@@ -113,7 +113,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(table.torrentname):has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -171,10 +171,16 @@ search:
       selector: td:nth-child(5)
     seeders:
       selector: td:nth-child(6)
+      optional: true
+      default: 1
     leechers:
       selector: td:nth-child(7)
+      optional: true
+      default: 1
     grabs:
       selector: td:nth-child(8)
+      optional: true
+      default: 1
     downloadvolumefactor:
       case:
         img.pro_free: 0

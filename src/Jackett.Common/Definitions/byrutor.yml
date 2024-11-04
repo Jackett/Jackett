@@ -356,44 +356,32 @@ search:
 
   rows:
     # results without sizes are just pre-release announcements
-    selector: div.short_search:has(div.shor_subtitles span:nth-child(2):contains(" "))
+    selector: a.search_res:has(div.search_res_sub span:nth-child(2):contains(" "))
 
   fields:
     category:
       text: 1
     year:
-      selector: div.shor_subtitles span
+      selector: div.search_res_sub span
       filters:
         - name: regexp
           args: (\d+)
     title:
-      selector: div.short_titles > a
+      selector: a.search_res
       filters:
         - name: append
           args: " [{{ .Result.year }}]"
     details:
-      selector: div.short_titles > a
+      selector: a.search_res
       attribute: href
     download:
-      selector: div.short_titles > a
+      selector: a.search_res
       attribute: href
     poster:
       selector: img
       attribute: src
-    date:
-      selector: img
-      attribute: src
-      filters:
-        - name: regexp
-          args: ".*/(\\d{4}-\\d{2})/.*"
-        - name: dateparse
-          args: "yyyy-MM"
-    seeders:
-      text: 1
-    leechers:
-      text: 1
     size_rus:
-      selector: div.shor_subtitles span:nth-child(2):contains("Б")
+      selector: div.search_res_sub span:nth-child(2):contains("Б")
       optional: true
       default: "0 B"
       filters:
@@ -406,9 +394,15 @@ search:
         - name: replace
           args: ["КБ", "KB"]
     size:
-      selector: div.shor_subtitles span:nth-child(2):contains("B")
+      selector: div.search_res_sub span:nth-child(2):contains("B")
       optional: true
       default: "{{ .Result.size_rus }}"
+    date:
+      text: now
+    seeders:
+      text: 1
+    leechers:
+      text: 1
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

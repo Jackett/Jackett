@@ -7,6 +7,7 @@ type: private
 encoding: UTF-8
 links:
   - https://superbits.org/
+  - https://superbits.cc/
 
 caps:
   categorymappings:
@@ -151,7 +152,7 @@ search:
       selector: added
       filters:
         - name: append
-          args: " +02:00" # CEST
+          args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
