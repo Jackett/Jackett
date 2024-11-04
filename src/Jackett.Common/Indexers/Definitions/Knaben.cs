@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        public Knaben(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm))
+        public Knaben(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
