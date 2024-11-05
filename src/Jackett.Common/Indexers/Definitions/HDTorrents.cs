@@ -63,6 +63,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
+            configData.AddDynamic("accountinactivity", new DisplayInfoConfigurationItem("Account Inactivity", "If you do not log in for 50 days, your account will be disabled for inactivity. If you are VIP you won't be disabled until the VIP period is over."));
         }
 
         private TorznabCapabilities SetCapabilities()
