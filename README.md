@@ -358,7 +358,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)
- * Generation-Free
+ * Generation-Free [![(invite needed)][inviteneeded]](#)
  * GigaTorrents
  * GimmePeers (formerly ILT)
  * GiroTorrent
