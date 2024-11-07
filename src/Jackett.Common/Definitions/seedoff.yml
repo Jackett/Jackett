@@ -216,6 +216,9 @@ search:
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
+  error:
+    - selector: td.lista:contains("Поиск временно не работает")
+
   rows:
     selector: table.lista tbody tr:has(a[href^="/torrent/"])
 
