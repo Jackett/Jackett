@@ -626,7 +626,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Xider-Torrent
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
- * xTorrenty
+ * xTorrenty [![(invite needed)][inviteneeded]](#)
  * XtremeBytes
  * XWT-Classics
  * XWTorrents (XWT)
