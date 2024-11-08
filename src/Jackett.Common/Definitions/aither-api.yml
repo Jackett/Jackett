@@ -152,7 +152,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " -01:00" # EGT
+          args: " +00:00" # UTC - DOES NOT OBSERVE DST
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
