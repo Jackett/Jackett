@@ -224,13 +224,13 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var prevCook = CookieHeader + "";
-
             var categoryMapping = MapTorznabCapsToTrackers(query).Distinct().ToList();
+            var queryCat = categoryMapping.FirstIfSingleOrDefault("0");
 
             var searchParams = new Dictionary<string, string>
             {
                 { "do", "search" },
-                { "category", categoryMapping.FirstIfSingleOrDefault("0") }, // multi category search not supported
+                { "category", queryCat }, // multi category search not supported
                 { "include_dead_torrents", "yes" }
             };
 
@@ -310,10 +310,18 @@ namespace Jackett.Common.Indexers.Definitions
                     var qPoster = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
                     if (qPoster != null)
                         release.Poster = new Uri(qPoster.GetAttribute("src"));
-
-                    var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
-                    var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
-                    release.Category = MapTrackerCatToNewznab(cat);
+                    // for keywordless searches with a category query return the category query instead of the row category
+                    // to prevent no results
+                    if (string.IsNullOrWhiteSpace(searchString) && !queryCat.Equals("0"))
+                    {
+                        release.Category = MapTrackerCatToNewznab(queryCat);
+                    }
+                    else
+                    {
+                        var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
+                        var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
+                        release.Category = MapTrackerCatToNewznab(cat);
+                    }
 
                     var grabs = row.QuerySelector("td:nth-child(6)").TextContent;
                     release.Grabs = ParseUtil.CoerceInt(grabs);
