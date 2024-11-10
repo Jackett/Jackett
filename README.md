@@ -295,7 +295,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * CapybaraBR
  * Carp-Hunter
  * Carpathians
- * CarPT
+ * CarPT [![(invite needed)][inviteneeded]](#)
  * Cathode-Ray.Tube (CRT)
  * CD File
  * CeskeForum
