@@ -103,6 +103,7 @@ login:
 search:
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
+    Referer: ["{{ .Config.sitelink }}index.php?initK&all"]
 
   paths:
     - path: ajgettorrents.php
