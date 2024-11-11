@@ -275,7 +275,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Bitpalace
  * BitPorn
  * Bitspyder
- * BitStream
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
