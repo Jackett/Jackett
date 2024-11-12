@@ -600,7 +600,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TranceTraffic
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
- * TurkNova
  * TurkSeed
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)

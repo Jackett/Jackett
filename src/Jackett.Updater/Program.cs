@@ -720,6 +720,7 @@ namespace Jackett.Updater
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
+                "Definitions/turknova.yml",
                 "Definitions/turkseed.yml",
                 "Definitions/turktracker.yml",
                 "Definitions/tvroad.yml",
