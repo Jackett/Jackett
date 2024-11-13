@@ -53,26 +53,15 @@ settings:
       MULTi.ENGLISH: MULTi.ENGLISH
       VOSTFR: VOSTFR
       MULTi.VOSTFR: MULTi.VOSTFR
-  - name: default_movie_query
-    type: text
-    default: Serenity
-  - name: default_tv_query
-    type: text
-    default: House of the Dragon
-  - name: default_anime_query
-    type: text
-    default: One Piece
 search:
   paths:
-    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_movie_query }}{{ end }}
+    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
         &category_id=2183&category_id=2184&order_by={{ .Config.sort
         }}&per_page=100
       method: get
       response:
         type: json
-    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_tv_query }}{{ end }}
+    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
         &category_id=2184&category_id=2179&order_by={{ .Config.sort
         }}&per_page=100
       method: get
@@ -80,8 +69,7 @@ search:
         - 2184
       response:
         type: json
-    - path: /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_tv_query }}{{ end }}
+    - path: torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }{{ end }}
         &category_id=2184&category_id=2179&order_by={{ .Config.sort
         }}&per_page=100
       method: get
@@ -89,8 +77,7 @@ search:
         - 2184
       response:
         type: json
-    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_movie_query }}{{ end }}
+    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
         &category_id=2183&category_id=2178&order_by={{ .Config.sort
         }}&per_page=100
       method: get
@@ -98,8 +85,7 @@ search:
         - 2183
       response:
         type: json
-    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_anime_query }}{{ end }}
+    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
         &category_id=2179&category_id=2178&order_by={{ .Config.sort
         }}&per_page=100
       method: get
@@ -108,8 +94,7 @@ search:
         - 2178
       response:
         type: json
-    - path: /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
-        .Config.default_anime_query }}{{ end }}
+    - path: torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
         &category_id=2179&category_id=2178&order_by={{ .Config.sort
         }}&per_page=100
       method: get
