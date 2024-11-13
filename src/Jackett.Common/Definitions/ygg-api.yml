@@ -161,6 +161,6 @@ search:
           
           
     downloadvolumefactor:
-      text: "1"
+      text: 1
     uploadvolumefactor:
       text: "1"
