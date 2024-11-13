@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://yggapi.eu
+  - https://yggapi.eu/
 caps:
   categories:
     "2178": TV/Anime
@@ -164,11 +164,6 @@ search:
           args: /download?passkey={{ .Config.passkey }}
     size:
       selector: size
-    _quality:
-      selector: title
-      filters:
-        - name: regexp
-          args: \b(2160p|1080p|720p|480p)\b
     seeders:
       selector: seeders
     leechers:
