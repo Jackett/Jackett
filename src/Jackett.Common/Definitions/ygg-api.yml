@@ -82,7 +82,7 @@ search:
       text: "{{ .Result.title_normal }}"
       filters:
         - name: re_replace
-          args: ["(?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", "{{ .Config.multilanguage }}"]
+          args: ["(?i)[\\.](MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))[\\.]", ".{{ .Config.multilanguage }}."]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_normal }}{{ end }}"
     _id:
