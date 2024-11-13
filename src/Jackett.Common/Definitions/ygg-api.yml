@@ -177,7 +177,9 @@ search:
       selector: uploaded_at
       filters:
         - name: dateparse
-          args: 2006-01-02T15:04:05-07:00
+          args: "yyyy-MMM-dd HH:mm:sszzz"
+          
+          
     downloadvolumefactor:
       text: "1"
     uploadvolumefactor:
