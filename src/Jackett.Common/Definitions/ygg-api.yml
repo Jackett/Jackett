@@ -1,35 +1,35 @@
 ---
-id: yggapi
+id: ygg-api
 name: Ygg API
-description: Indexeur non officiel pour ygg.re
+description: Indexeur non officiel pour ygg.re MOVIES / TV
 language: fr-FR
 type: private
 encoding: UTF-8
-followredirect: true
 testlinktorrent: false
 links:
   - https://yggapi.eu/
+
 caps:
-  categories:
-    "2178": TV/Anime
-    "2179": TV/Anime
-    "2183": Movies
-    "2184": TV
+  categorymappings:
+    - {id: 2178, cat: Movies/Other, desc: "Film/Vidéo : Animation"}
+    - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
+    - {id: 2183, cat: Movies, desc: "Film/Vidéo : Film"}
+    - {id: 2184, cat: TV, desc: "Film/Vidéo : Série TV"}
+
   modes:
-    search:
-      - q
-    movie-search:
-      - q
-      - year
-    tv-search:
-      - q
-      - season
-      - ep
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, year]
   allowrawsearch: true
+
 settings:
   - name: passkey
     type: password
     label: Passkey
+  - name: info_key
+    type: info
+    label: About your passkey
+    default: "You will find your passkey on the <a href=\"https://www.ygg.re/user/account\" target=\"_blank\">YGG</a> account page."
   - name: sort
     type: select
     label: Sort requested from site
@@ -37,7 +37,6 @@ settings:
     options:
       uploaded_at: publish_date
       seed: seeders
-      downloads: downloads
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -53,114 +52,65 @@ settings:
       MULTi.ENGLISH: MULTi.ENGLISH
       VOSTFR: VOSTFR
       MULTi.VOSTFR: MULTi.VOSTFR
+  - name: info_downloads
+    type: info
+    label: About missing Downloads
+    default: "If the torrent has no seeder and no leecher then the torrent file may be missing and may download will fail."
+
 search:
   paths:
-    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
-        &category_id=2183&category_id=2184&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
+    - path: torrents
       response:
         type: json
-    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
-        &category_id=2184&category_id=2179&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
-      categories:
-        - 2184
-      response:
-        type: json
-    - path: torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }{{ end }}
-        &category_id=2184&category_id=2179&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
-      categories:
-        - 2184
-      response:
-        type: json
-    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
-        &category_id=2183&category_id=2178&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
-      categories:
-        - 2183
-      response:
-        type: json
-    - path: torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
-        &category_id=2179&category_id=2178&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
-      categories:
-        - 2179
-        - 2178
-      response:
-        type: json
-    - path: torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}
-        &category_id=2179&category_id=2178&order_by={{ .Config.sort
-        }}&per_page=100
-      method: get
-      categories:
-        - 2179
-        - 2178
-      response:
-        type: json
-  keywordsfilters:
-    - name: re_replace
-      args:
-        - "[\\[\\]()]"
-        - ""
+  inputs:
+    $raw: "{{ range .Categories }}&category_id={{.}}{{end}}"
+    q: "{{ .Keywords }}"
+    page: 1
+    per_page: 100
+    order_by: "{{ .Config.sort }}"
+
   rows:
     selector: $
     missingAttributeEqualsNoResults: true
+
   fields:
+    category:
+      selector: category_id
     title_normal:
       selector: title
     title_multilang:
       text: "{{ .Result.title_normal }}"
       filters:
         - name: re_replace
-          args:
-            - (?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b
-            - "{{ .Config.multilanguage }}"
+          args: ["(?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{
-        .Result.title_normal }}{{ end }}"
-    category:
-      selector: category_id
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_normal }}{{ end }}"
+    _id:
+      selector: id
+    details:
+      text: "torrent/{{ .Result._id }}"
+    download:
+      text: "torrent/{{ .Result._id }}/download?passkey={{ .Config.passkey }}"
     year:
       selector: title
       filters:
         - name: regexp
           args: (\b(19|20)\d{2}\b)
-    grabs:
-      selector: downloads
-      optional: true
-      default: 0
-    details:
-      selector: id
-      filters:
-        - name: prepend
-          args: https://yggapi.eu/torrent/
-    download:
-      selector: id
-      filters:
-        - name: prepend
-          args: https://yggapi.eu/torrent/
-        - name: append
-          args: /download?passkey={{ .Config.passkey }}
     size:
       selector: size
     seeders:
       selector: seeders
     leechers:
       selector: leechers
+    grabs:
+      selector: downloads
+      optional: true
+      default: 0
     date:
+      # unix
       selector: uploaded_at
-      filters:
-        - name: dateparse
-          args: "yyyy-MMM-dd HH:mm:sszzz"
-
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
-      text: "1"
-# engine n/a
+      text: 1
+# JSON 1.0.0
