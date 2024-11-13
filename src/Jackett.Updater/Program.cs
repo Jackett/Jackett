@@ -603,7 +603,6 @@ namespace Jackett.Updater
                 "Definitions/rgu.yml",
                 "Definitions/rmhd.yml",
                 "Definitions/rns.yml", // site merged with audiobooktorrents
-                "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
                 "Definitions/rodvd.yml",
                 "Definitions/rofd.yml",
