@@ -1,6 +1,7 @@
+---
 id: yggapi
 name: Ygg API
-description: "Indexeur non officiel pour ygg.re"
+description: Indexeur non officiel pour ygg.re
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -8,19 +9,23 @@ followredirect: true
 testlinktorrent: false
 links:
   - https://yggapi.eu
-
 caps:
   categories:
-    2178: TV/Anime # Films d’animation
-    2179: TV/Anime # Séries d’animation / Mangas
-    2183: Movies
-    2184: TV
+    "2178": TV/Anime
+    "2179": TV/Anime
+    "2183": Movies
+    "2184": TV
   modes:
-    search: [q]
-    movie-search: [q, year]
-    tv-search: [q, season, ep]
+    search:
+      - q
+    movie-search:
+      - q
+      - year
+    tv-search:
+      - q
+      - season
+      - ep
   allowrawsearch: true
-
 settings:
   - name: passkey
     type: password
@@ -50,89 +55,97 @@ settings:
       MULTi.VOSTFR: MULTi.VOSTFR
   - name: default_movie_query
     type: text
-    default: "Serenity"
+    default: Serenity
   - name: default_tv_query
     type: text
-    default: "House of the Dragon"
+    default: House of the Dragon
   - name: default_anime_query
     type: text
-    default: "One Piece"
-
+    default: One Piece
 search:
   paths:
-    # Default : 1 call
-    - path: >-
-        /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_movie_query }}{{ end }}
-        &category_id=2183&category_id=2184&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_movie_query }}{{ end }}
+        &category_id=2183&category_id=2184&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
       response:
         type: json
-    # TV : 2 call
-    - path: >-
-        /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_tv_query }}{{ end }}
-        &category_id=2184&category_id=2179&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_tv_query }}{{ end }}
+        &category_id=2184&category_id=2179&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
-      categories: [2184]
+      categories:
+        - 2184
       response:
         type: json
-    - path: >-
-        /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_tv_query }}{{ end }}
-        &category_id=2184&category_id=2179&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_tv_query }}{{ end }}
+        &category_id=2184&category_id=2179&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
-      categories: [2184]
+      categories:
+        - 2184
       response:
         type: json
-    # Movies
-    - path: >-
-        /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_movie_query }}{{ end }}
-        &category_id=2183&category_id=2178&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_movie_query }}{{ end }}
+        &category_id=2183&category_id=2178&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
-      categories: [2183]
+      categories:
+        - 2183
       response:
         type: json
-    # Séries et Films d’animation / Mangas : 2 call
-    - path: >-
-        /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_anime_query }}{{ end }}
-        &category_id=2179&category_id=2178&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=1&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_anime_query }}{{ end }}
+        &category_id=2179&category_id=2178&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
-      categories: [2179, 2178]
+      categories:
+        - 2179
+        - 2178
       response:
         type: json
-    - path: >-
-        /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Config.default_anime_query }}{{ end }}
-        &category_id=2179&category_id=2178&order_by={{ .Config.sort }}&per_page=100
+    - path: /torrents?page=2&q={{ if .Keywords }}{{ .Keywords }}{{ else }}{{
+        .Config.default_anime_query }}{{ end }}
+        &category_id=2179&category_id=2178&order_by={{ .Config.sort
+        }}&per_page=100
       method: get
-      categories: [2179, 2178]
+      categories:
+        - 2179
+        - 2178
       response:
         type: json
-
-
   keywordsfilters:
     - name: re_replace
-      args: ["[\\[\\]()]", ""] # Remove brackets
-
+      args:
+        - "[\\[\\]()]"
+        - ""
   rows:
     selector: $
     missingAttributeEqualsNoResults: true
-
   fields:
     title_normal:
       selector: title
-      
     title_multilang:
       text: "{{ .Result.title_normal }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+          args:
+            - (?i)\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b
+            - "{{ .Config.multilanguage }}"
     title:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_normal }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{
+        .Result.title_normal }}{{ end }}"
     category:
       selector: category_id
     year:
       selector: title
       filters:
         - name: regexp
-          args: "(\\b(19|20)\\d{2}\\b)"
+          args: (\b(19|20)\d{2}\b)
     grabs:
       selector: downloads
       optional: true
@@ -141,21 +154,21 @@ search:
       selector: id
       filters:
         - name: prepend
-          args: "https://yggapi.eu/torrent/"
+          args: https://yggapi.eu/torrent/
     download:
       selector: id
       filters:
         - name: prepend
-          args: "https://yggapi.eu/torrent/"
+          args: https://yggapi.eu/torrent/
         - name: append
-          args: "/download?passkey={{ .Config.passkey }}"
+          args: /download?passkey={{ .Config.passkey }}
     size:
       selector: size
     quality:
       selector: title
       filters:
         - name: regexp
-          args: "\\b(2160p|1080p|720p|480p)\\b"
+          args: \b(2160p|1080p|720p|480p)\b
     seeders:
       selector: seeders
     leechers:
@@ -164,7 +177,7 @@ search:
       selector: uploaded_at
       filters:
         - name: dateparse
-          args: "2006-01-02T15:04:05-07:00"
+          args: 2006-01-02T15:04:05-07:00
     downloadvolumefactor:
       text: "1"
     uploadvolumefactor:
