@@ -164,7 +164,7 @@ search:
           args: /download?passkey={{ .Config.passkey }}
     size:
       selector: size
-    quality:
+    _quality:
       selector: title
       filters:
         - name: regexp
