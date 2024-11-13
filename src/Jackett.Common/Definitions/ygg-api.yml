@@ -55,7 +55,7 @@ settings:
   - name: info_downloads
     type: info
     label: About missing Downloads
-    default: "If the torrent has no seeder and no leecher then the torrent file may be missing and may download will fail."
+    default: "If the torrent has no seeder and no leecher then the torrent file may be missing and download may fail."
 
 search:
   paths:
