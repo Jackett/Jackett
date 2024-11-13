@@ -11,10 +11,10 @@ links:
 
 caps:
   categorymappings:
-    - {id: 2178, cat: Movies/Other, desc: "Film/Vidéo : Animation"}
-    - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
-    - {id: 2183, cat: Movies, desc: "Film/Vidéo : Film"}
-    - {id: 2184, cat: TV, desc: "Film/Vidéo : Série TV"}
+    - {id: 2178, cat: Movies/Other, desc: "Films d’animation"}
+    - {id: 2179, cat: TV/Anime, desc: "Séries d’animation / Mangas"}
+    - {id: 2183, cat: Movies, desc: "Films"}
+    - {id: 2184, cat: TV, desc: "Séries"}
 
   modes:
     search: [q]
