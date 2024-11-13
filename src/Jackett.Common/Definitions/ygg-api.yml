@@ -158,8 +158,7 @@ search:
       filters:
         - name: dateparse
           args: "yyyy-MMM-dd HH:mm:sszzz"
-          
-          
+
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
