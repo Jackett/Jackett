@@ -499,7 +499,6 @@ namespace Jackett.Updater
                 "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
-                "Definitions/lemonhd.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
