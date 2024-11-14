@@ -14,23 +14,19 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 411, cat: Audio, desc: "Music/无损音乐"}
     - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐MV"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
     - {id: 402, cat: TV, desc: "TV Series/剧集"}
     - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 406, cat: Audio/Video, desc: "MusicVideo/音乐MV"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/运体"}
-    - {id: 409, cat: Other, desc: "Misc/其他"}
-    - {id: 410, cat: Other, desc: "Opera/戏曲 曲艺"}
-    - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
-    - {id: 411, cat: XXX, desc: "Erotic/情色"}
+    - {id: 410, cat: Movies/3D, desc: "Movies 3D"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
