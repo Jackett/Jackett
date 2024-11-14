@@ -31,6 +31,7 @@ caps:
     - {id: 40, cat: TV, desc: "Christmas TV"}
     - {id: 29, cat: Console, desc: "Games"}
     - {id: 42, cat: PC/Games, desc: "Games PC"}
+    - {id: 43, cat: Console/Wii, desc: "Games Wii"}
     - {id: 28, cat: Audio, desc: "Karaoke"}
     - {id: 7, cat: Movies/HD, desc: "Movie 1080p"}
     - {id: 6, cat: Movies/UHD, desc: "Movie 4K"}
