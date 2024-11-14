@@ -1,0 +1,116 @@
+---
+id: ygg-api
+name: Ygg API
+description: Indexeur non officiel pour ygg.re MOVIES / TV
+language: fr-FR
+type: private
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://yggapi.eu/
+
+caps:
+  categorymappings:
+    - {id: 2178, cat: Movies/Other, desc: "Films d’animation"}
+    - {id: 2179, cat: TV/Anime, desc: "Séries d’animation / Mangas"}
+    - {id: 2183, cat: Movies, desc: "Films"}
+    - {id: 2184, cat: TV, desc: "Séries"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, year]
+  allowrawsearch: true
+
+settings:
+  - name: passkey
+    type: password
+    label: Passkey
+  - name: info_key
+    type: info
+    label: About your passkey
+    default: "You will find your passkey on the <a href=\"https://www.ygg.re/user/account\" target=\"_blank\">YGG</a> account page."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: uploaded_at
+    options:
+      uploaded_at: publish_date
+      seed: seeders
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: info_downloads
+    type: info
+    label: About missing Downloads
+    default: "If the torrent has no seeder and no leecher then the torrent file may be missing and download may fail."
+
+search:
+  paths:
+    - path: torrents
+      response:
+        type: json
+  inputs:
+    $raw: "{{ range .Categories }}&category_id={{.}}{{end}}"
+    q: "{{ .Keywords }}"
+    page: 1
+    per_page: 100
+    order_by: "{{ .Config.sort }}"
+
+  rows:
+    selector: $
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    category:
+      selector: category_id
+    title_normal:
+      selector: title
+    title_multilang:
+      text: "{{ .Result.title_normal }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)[\\.](MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))[\\.]", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_normal }}{{ end }}"
+    _id:
+      selector: id
+    details:
+      text: "torrent/{{ .Result._id }}"
+    download:
+      text: "torrent/{{ .Result._id }}/download?passkey={{ .Config.passkey }}"
+    year:
+      selector: title
+      filters:
+        - name: regexp
+          args: (\b(19|20)\d{2}\b)
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: downloads
+      optional: true
+      default: 0
+    date:
+      # unix
+      selector: uploaded_at
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# JSON 1.0.0
