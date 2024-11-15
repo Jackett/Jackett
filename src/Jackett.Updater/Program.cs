@@ -705,6 +705,7 @@ namespace Jackett.Updater
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwal.yml",
+                "Definitions/torrentwhiz.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/torrentz2.yml",
                 "Definitions/torrentz2eu.yml",
