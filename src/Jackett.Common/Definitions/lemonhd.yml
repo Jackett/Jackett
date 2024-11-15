@@ -113,7 +113,7 @@ search:
       selector: a[href*="details.php?id="] > b[title]
       attribute: title
     details:
-      selector: a[title][href*="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
       selector: a[href*="download.php?id="]
