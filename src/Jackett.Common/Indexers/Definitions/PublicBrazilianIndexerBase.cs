@@ -52,6 +52,43 @@ namespace Jackett.Common.Indexers.Definitions
             await ConfigureIfOK(string.Empty, true, () => throw new Exception("Could not find releases from this URL"));
             return IndexerConfigurationStatus.Completed;
         }
+        public class FileInfo
+        {
+            public string[] Genres { get; set; }
+            public string[] Audio { get; set; }
+            public string Subtitle { get; set; }
+            public string Format { get; set; }
+            public string Quality { get; set; }
+            public string Size { get; set; }
+            public string ReleaseYear { get; set; }
+            public string Duration { get; set; }
+            public string AudioQuality { get; set; }
+            public string VideoQuality { get; set; }
+            public string TitleTranslated { get; set; }
+            public string TitleOriginal { get; set; }
+            public string IMDb { get; set; }
+
+            public static FileInfo FromDictionary(Dictionary<string, string> dict)
+            {
+                return new FileInfo
+                {
+                    Genres = dict.TryGetValue("Gênero", out var genres) ? genres?.Split(',').Select(g => g.Trim()).ToArray() : null,
+                    Audio = dict.TryGetValue("Áudio", out var audio) ? audio?.Split(',').Select(a => a.Trim()).ToArray() : (
+                        dict.TryGetValue("Idioma", out var lang) ? new []{ lang } : null),
+                    Subtitle = dict.TryGetValue("Legenda", out var subtitle) ? subtitle : null,
+                    Format = dict.TryGetValue("Formato", out var format) ? format : null,
+                    Quality = dict.TryGetValue("Qualidade", out var quality) ? quality : null,
+                    Size = dict.TryGetValue("Tamanho", out var size) ? size : null,
+                    ReleaseYear = dict.TryGetValue("Ano de Lançamento", out var releaseYear) ? releaseYear : (dict.TryGetValue("Lançamento", out var year) ? year : null),
+                    Duration = dict.TryGetValue("Duração", out var duration) ? duration : null,
+                    AudioQuality = dict.TryGetValue("Qualidade de Áudio", out var audioQuality) ? audioQuality : null,
+                    VideoQuality = dict.TryGetValue("Qualidade de Vídeo", out var videoQuality) ? videoQuality : null,
+                    TitleTranslated = dict.TryGetValue("Título Traduzido", out var titleTr) ? titleTr : null,
+                    TitleOriginal = dict.TryGetValue("Título Original", out var titleOr) ? titleOr : (dict.TryGetValue("Título", out var title) ? title : null),
+                    IMDb = dict.TryGetValue("IMDb", out var imdb) ? imdb : null
+                };
+            }
+        }
     }
 
     public class SimpleRequestGenerator : IIndexerRequestGenerator
@@ -232,6 +269,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             // Remove source info
             title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay|Torrent)\b", "", RegexOptions.IgnoreCase);
+
+            // Remove language info
+            title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub)\b", "", RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);

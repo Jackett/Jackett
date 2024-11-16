@@ -1,19 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
-using System.Net;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using AngleSharp.Dom;
 using static System.Linq.Enumerable;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
@@ -33,47 +27,6 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public override IParseIndexerResponse GetParser() => new LAPUMiAParser(webclient, Name);
-
-        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
-        {
-            LoadValuesFromJson(configJson);
-
-            await ConfigureIfOK(string.Empty, true, () =>
-                throw new Exception("Could not find releases from this URL"));
-
-            return IndexerConfigurationStatus.Completed;
-        }
-    }
-
-    public class FileInfo
-    {
-        public string[] Genres { get; set; }
-        public string[] Audio { get; set; }
-        public string Subtitle { get; set; }
-        public string Format { get; set; }
-        public string Quality { get; set; }
-        public string Size { get; set; }
-        public string ReleaseYear { get; set; }
-        public string Duration { get; set; }
-        public string AudioQuality { get; set; }
-        public string VideoQuality { get; set; }
-
-        public static FileInfo FromDictionary(Dictionary<string, string> dict)
-        {
-            return new FileInfo
-            {
-                Genres = dict.TryGetValue("Gênero", out var genres) ? genres?.Split(',').Select(g => g.Trim()).ToArray() : null,
-                Audio = dict.TryGetValue("Áudio", out var audio) ? audio?.Split(',').Select(a => a.Trim()).ToArray() : null,
-                Subtitle = dict.TryGetValue("Legenda", out var subtitle) ? subtitle : null,
-                Format = dict.TryGetValue("Formato", out var format) ? format : null,
-                Quality = dict.TryGetValue("Qualidade", out var quality) ? quality : null,
-                Size = dict.TryGetValue("Tamanho", out var size) ? size : null,
-                ReleaseYear = dict.TryGetValue("Ano de Lançamento", out var releaseYear) ? releaseYear : null,
-                Duration = dict.TryGetValue("Duração", out var duration) ? duration : null,
-                AudioQuality = dict.TryGetValue("Qualidade de Áudio", out var audioQuality) ? audioQuality : null,
-                VideoQuality = dict.TryGetValue("Qualidade de Vídeo", out var videoQuality) ? videoQuality : null
-            };
-        }
     }
 
     public class LAPUMiAParser : PublicBrazilianParser
@@ -134,7 +87,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
                     var fileInfoDict = ExtractFileInfo(detailsDom);
-                    var fileInfo = FileInfo.FromDictionary(fileInfoDict);
+                    var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
