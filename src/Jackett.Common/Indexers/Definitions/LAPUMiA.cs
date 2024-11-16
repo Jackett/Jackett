@@ -1,0 +1,166 @@
+using System;
+using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
+using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
+using AngleSharp.Dom;
+using static System.Linq.Enumerable;
+using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
+using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Newtonsoft.Json.Linq;
+using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
+
+namespace Jackett.Common.Indexers.Definitions
+{
+    [ExcludeFromCodeCoverage]
+    public class LAPUMiA : PublicBrazilianIndexerBase
+    {
+        public override string Id => "lapumia";
+        public override string Name => "LAPUMiA";
+        public override string SiteLink { get; protected set; } = "https://lapumia.net/";
+
+        public LAPUMiA(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService: configService, wc, l, ps, cs)
+        {
+        }
+
+        public override IParseIndexerResponse GetParser() => new LAPUMiAParser(webclient, Name);
+
+        public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
+        {
+            LoadValuesFromJson(configJson);
+
+            await ConfigureIfOK(string.Empty, true, () =>
+                throw new Exception("Could not find releases from this URL"));
+
+            return IndexerConfigurationStatus.Completed;
+        }
+    }
+
+    public class FileInfo
+    {
+        public string[] Genres { get; set; }
+        public string[] Audio { get; set; }
+        public string Subtitle { get; set; }
+        public string Format { get; set; }
+        public string Quality { get; set; }
+        public string Size { get; set; }
+        public string ReleaseYear { get; set; }
+        public string Duration { get; set; }
+        public string AudioQuality { get; set; }
+        public string VideoQuality { get; set; }
+
+        public static FileInfo FromDictionary(Dictionary<string, string> dict)
+        {
+            return new FileInfo
+            {
+                Genres = dict.TryGetValue("Gênero", out var genres) ? genres?.Split(',').Select(g => g.Trim()).ToArray() : null,
+                Audio = dict.TryGetValue("Áudio", out var audio) ? audio?.Split(',').Select(a => a.Trim()).ToArray() : null,
+                Subtitle = dict.TryGetValue("Legenda", out var subtitle) ? subtitle : null,
+                Format = dict.TryGetValue("Formato", out var format) ? format : null,
+                Quality = dict.TryGetValue("Qualidade", out var quality) ? quality : null,
+                Size = dict.TryGetValue("Tamanho", out var size) ? size : null,
+                ReleaseYear = dict.TryGetValue("Ano de Lançamento", out var releaseYear) ? releaseYear : null,
+                Duration = dict.TryGetValue("Duração", out var duration) ? duration : null,
+                AudioQuality = dict.TryGetValue("Qualidade de Áudio", out var audioQuality) ? audioQuality : null,
+                VideoQuality = dict.TryGetValue("Qualidade de Vídeo", out var videoQuality) ? videoQuality : null
+            };
+        }
+    }
+
+    public class LAPUMiAParser : PublicBrazilianParser
+    {
+        private WebClient _webclient;
+
+        public LAPUMiAParser(WebClient webclient, string name) : base(name)
+        {
+            _webclient = webclient;
+        }
+
+        private Dictionary<string, string> ExtractFileInfo(IDocument detailsDom)
+        {
+            var fileInfo = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
+            var infoItems = detailsDom.QuerySelectorAll("div.info li");
+
+            foreach (var item in infoItems)
+            {
+                var text = item.TextContent.Trim();
+                var parts = text.Split(new[] { ':' }, 2);
+                if (parts.Length == 2)
+                {
+                    var key = parts[0].Trim();
+                    var value = parts[1].Trim();
+                    fileInfo[key] = value;
+                }
+            }
+
+            return fileInfo;
+        }
+
+        public override IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
+            var releases = new List<ReleaseInfo>();
+
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(indexerResponse.Content);
+            var rows = dom.QuerySelectorAll("div.item");
+
+            foreach (var row in rows)
+            {
+                // Get the details page to extract the magnet link
+                var detailsParser = new HtmlParser();
+                var detailAnchor = row.QuerySelector("a[title]");
+                var detailUrl = new Uri(detailAnchor?.GetAttribute("href"));
+                var releaseCommonInfo = new ReleaseInfo
+                {
+                    Title = detailAnchor.GetAttribute("title"),
+                    Details = detailUrl,
+                    Guid = detailUrl,
+                    Category = row.ExtractCategory(),
+                    PublishDate = row.ExtractReleaseDate()
+                };
+                var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
+                var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
+                foreach (var downloadButton in detailsDom.QuerySelectorAll("ul.buttons a[href^=\"magnet:?xt\"]"))
+                {
+                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
+                    var fileInfoDict = ExtractFileInfo(detailsDom);
+                    var fileInfo = FileInfo.FromDictionary(fileInfoDict);
+                    release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
+                    release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
+                    release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
+                    release.Size = string.IsNullOrEmpty(fileInfo.Size) ? release.Size : ParseUtil.GetBytes(fileInfo.Size);
+                    var magnet = downloadButton.ExtractMagnet();
+                    release.Link = release.Guid = release.MagnetUri = magnet;
+                    release.DownloadVolumeFactor = 0; // Free
+                    release.UploadVolumeFactor = 1;
+
+                    if (release.Title.IsNotNullOrWhiteSpace())
+                        releases.Add(release);
+                }
+            }
+
+            return releases;
+        }
+
+        protected override INode GetTitleElementOrNull(IElement downloadButton)
+        {
+            var description = downloadButton.PreviousSibling;
+            while (description != null && description.NodeType != NodeType.Text)
+            {
+                description = description.PreviousSibling;
+            }
+
+            return description;
+        }
+    }
+}
