@@ -17,7 +17,6 @@ caps:
     - {id: 11, cat: Console/XBox, desc: "JOGO-XBOX"}
     - {id: 5, cat: PC/Games, desc: "JOGO-PC"}
     - {id: 33, cat: Console/NDS, desc: "JOGO-ND"}
-
     - {id: 38, cat: Movies/Other, desc: "CAM TS"}
     - {id: 23, cat: Movies, desc: "FILME-PACK"}
     - {id: 53, cat: Movies/SD, desc: "FILME-SD"}
@@ -26,14 +25,11 @@ caps:
     - {id: 32, cat: Movies/BluRay, desc: "FILME-BRAY"}
     - {id: 3, cat: Movies/DVD, desc: "FILME-DVD"}
     - {id: 42, cat: Movies/WEB-DL, desc: "FILME-WEB"}
-
     - {id: 9, cat: Audio, desc: "ALBUNS"}
     - {id: 14, cat: Audio/Video, desc: "MUSIC-VID"}
-
     - {id: 1, cat: PC, desc: "APPS"}
     - {id: 21, cat: PC/Mac, desc: "MAC"}
     - {id: 36, cat: PC/Mobile-Android, desc: "ANDROID"}
-
     - {id: 4, cat: TV/SD, desc: "TV-SD"}
     - {id: 17, cat: TV/HD, desc: "TV-HD"}
     - {id: 48, cat: TV/UHD, desc: "TV-4K"}
@@ -41,23 +37,18 @@ caps:
     - {id: 16, cat: TV/Sport, desc: "WWE"}
     - {id: 44, cat: TV/Sport, desc: "SPORTS"}
     - {id: 13, cat: TV/Documentary, desc: "DOC"}
-    
     - {id: 49, cat: TV/Anime, desc: "ANIME-4K"}
     - {id: 20, cat: TV/Anime, desc: "ANIME-DVD"}
     - {id: 35, cat: TV/Anime, desc: "ANIME-HD"}
     - {id: 50, cat: TV/Anime, desc: "ANIME-PACK"}
     - {id: 8, cat: TV/Anime, desc: "ANIME-SD"}
     - {id: 51, cat: TV/Anime, desc: "ANIME-WEB"}
-
     - {id: 7, cat: XXX, desc: "XXX"}
-
     - {id: 43, cat: Books/EBook, desc: "EBOOK"}
     - {id: 52, cat: Books/Other, desc: "CURSOS"}
-
     - {id: 31, cat: Other, desc: "OFF"}
     - {id: 10, cat: Other, desc: "OUTROS"}
     - {id: 39, cat: Other, desc: "GPS"}
-
 
   modes:
     search: [q]
