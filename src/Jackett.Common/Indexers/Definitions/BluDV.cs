@@ -48,26 +48,27 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 // Get the details page to extract the magnet link
                 var detailsParser = new HtmlParser();
-                var detailUrl = new Uri(row.QuerySelector("a.more-link")?.GetAttribute("href"));
-                var detailTitle = row.QuerySelector("div.title > a")?.TextContent.Trim();
-                var releaseCommonInfo = new ReleaseInfo {
+                var detailAnchor = row.QuerySelector("a.more-link");
+                var detailUrl = new Uri(detailAnchor?.GetAttribute("href") ?? string.Empty);
+                var releaseCommonInfo = new ReleaseInfo
+                {
+                    Title = row.QuerySelector("div.title > a")?.TextContent.Trim(),
                     Genres = row.ExtractGenres(),
-                    Category = row.ExtractCategory(),
-                    PublishDate = row.ExtractReleaseDate(),
                     Subs = row.ExtractSubtitles(),
                     Size = row.ExtractSize(),
                     Languages = row.ExtractLanguages(),
                     Details = detailUrl,
-                    Guid = detailUrl
+                    Guid = detailUrl,
+                    Category = row.ExtractCategory(),
+                    PublishDate = row.ExtractReleaseDate()
                 };
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
                 var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
                 foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
                 {
-                    var title = ExtractTitleOrDefault(downloadButton, detailTitle);
                     var magnet = downloadButton.ExtractMagnet();
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                    release.Title = title;
+                    release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
                     release.Languages =  row.ExtractLanguages();
                     release.Link = release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
