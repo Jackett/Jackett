@@ -6,6 +6,7 @@ using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using static System.Linq.Enumerable;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
@@ -62,15 +63,9 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
-        public override IIndexerRequestGenerator GetRequestGenerator()
-        {
-            return new BluDVRequestGenerator(SiteLink);
-        }
+        public override IIndexerRequestGenerator GetRequestGenerator() => new BluDVRequestGenerator(SiteLink);
 
-        public override IParseIndexerResponse GetParser()
-        {
-            return new BluDVParser(SiteLink, webclient);
-        }
+        public override IParseIndexerResponse GetParser() => new BluDVParser(SiteLink, webclient);
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -162,128 +157,29 @@ namespace Jackett.Common.Indexers.Definitions
                 // Get the details page to extract the magnet link
                 var detailsParser = new HtmlParser();
                 var detailUrl = new Uri(row.QuerySelector("a.more-link")?.GetAttribute("href"));
+                var detailTitle = row.QuerySelector("div.title > a")?.TextContent.Trim();
+                var releaseCommonInfo = new ReleaseInfo{
+                    Genres = ExtractGenres(row),
+                    Category = ExtractCategory(row),
+                    PublishDate = ExtractReleaseDate(row),
+                    Subs = ExtractSubtitles(row),
+                    Size = ExtractSize(row),
+                    Languages = ExtractLanguages(row),
+                    Details = detailUrl,
+                    Guid = detailUrl
+                };
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
                 var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
                 foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
                 {
-                    var release = new ReleaseInfo
-                    {
-                        Title = row.QuerySelector("div.title > a")?.TextContent.Trim(),
-                        Details = detailUrl,
-                        Guid = detailUrl,
-                        Link = null // Will be set after getting magnet link
-                    };
-                    var description = downloadButton.PreviousSibling;
-                    while (description != null && description.NodeType == NodeType.Element && ((Element) description).TagName != "SPAN")
-                    {
-                        description = description.PreviousSibling;
-                    }
+                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    var title = ExtractTitle(downloadButton, detailTitle);
+                    release.Title = title;
+                    release.Languages =  ExtractLanguages(row);
 
-                    if (description != null)
-                    {
-                        var descriptionText = description.TextContent;
-                        var resolution = Regex.Match(descriptionText, @"(\d{3,4}p)");
-                        if (resolution.Success)
-                        {
-                            release.Title = "[BluDV] " + CleanTitle(release.Title) + resolution.Value;
-                        }
-                    }
-                    var genreElement = row.QuerySelector("span:contains(\"Gênero:\")");
-                    if (genreElement != null)
-                    {
-                        var genreText = genreElement.TextContent;
-                        var genreMatch = Regex.Match(genreText, @"Gênero:\s*(.+)");
-                        if (genreMatch.Success)
-                        {
-                            var genre = genreMatch.Groups[1].Value.Trim();
-                            release.Genres = new List<string>();
-                            foreach (var token  in genre.Split('|'))
-                            {
-                                release.Genres.Add(token.Trim());
-                            }
-                        }
-                    }
-                    var categoryElement = dom.QuerySelector("div.title > a");
-                    if (categoryElement != null)
-                    {
-                        var categoryText = categoryElement.TextContent;
-                        if (categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0)
-                            release.Category = new List<int> { TorznabCatType.TV.ID };
-                        else
-                            release.Category = new List<int> { TorznabCatType.Movies.ID };
-                    }
-
-                    var releaseDateElement = dom.QuerySelector("span:contains(\"Lançamento:\")");
-                    if (releaseDateElement != null)
-                    {
-                        var releaseDateText = releaseDateElement.TextContent;
-                        var releaseDateMatch = Regex.Match(releaseDateText, @"Lançamento:\s*(\d{4})");
-                        if (releaseDateMatch.Success)
-                        {
-                            if(DateTime.TryParseExact(
-                                releaseDateMatch.Groups[1].Value.Trim(),
-                                "yyyy",
-                                CultureInfo.InvariantCulture,
-                                DateTimeStyles.None,
-                                out var date
-                                ))
-                                release.PublishDate = date;
-                        }
-                    }
-
-                    var subtitleElement = dom.QuerySelector("span:contains(\"Legenda:\")");
-                    if (subtitleElement != null)
-                    {
-                        var subtitleText = subtitleElement.TextContent;
-                        var subtitleMatch = Regex.Match(subtitleText, @"Legenda:\s*(.+)");
-                        if (subtitleMatch.Success)
-                        {
-                            var subtitle = subtitleMatch.Groups[1].Value.Trim();
-                            release.Subs = new [] { subtitle };
-                        }
-                    }
-
-                    var sizeElement = dom.QuerySelector("span:contains(\"Tamanho:\")");
-                    if (sizeElement != null)
-                    {
-                        var sizeText = sizeElement.TextContent;
-                        var sizeMatch = Regex.Match(sizeText, @"Tamanho:\s*(.+)");
-                        if (sizeMatch.Success)
-                        {
-                            var size = sizeMatch.Groups[1].Value.Trim();
-
-                            release.Size = ParseUtil.GetBytes(size);
-                        }
-                    }
-
-                    var audioElement = dom.QuerySelector("span:contains(\"Áudio:\")");
-                    if (audioElement != null)
-                    {
-                        var audioText = audioElement.TextContent;
-                        var audioMatch = Regex.Match(audioText, @"Áudio:\s*(.+)");
-                        if (audioMatch.Success)
-                        {
-                            var audio = audioMatch.Groups[1].Value.Trim();
-                            release.Languages = new List<string>();
-                            foreach (var token in audio.Split('|'))
-                            {
-                                release.Languages.Add(token.Trim());
-                            }
-                        }
-                    }
-
-                    var magnetLink = downloadButton?.GetAttribute("href");
-                    if (!string.IsNullOrEmpty(magnetLink))
-                    {
-                        release.MagnetUri = new Uri(magnetLink);
-                        release.Guid = release.MagnetUri;
-                    }
-
-                    // Set category based on title
-                    if (release.Title.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0)
-                        release.Category = new List<int> { TorznabCatType.TV.ID };
-                    else
-                        release.Category = new List<int> { TorznabCatType.Movies.ID };
+                    var magnetLink = downloadButton.GetAttribute("href");
+                    var magnet = string.IsNullOrEmpty(magnetLink) ? null : new Uri(magnetLink);
+                    release.Link = release.Guid = release.MagnetUri = magnet;
 
                     release.DownloadVolumeFactor = 0; // Free
                     release.UploadVolumeFactor = 1;
@@ -295,5 +191,131 @@ namespace Jackett.Common.Indexers.Definitions
 
             return releases;
         }
+
+        private static List<string> ExtractLanguages(IElement row)
+        {
+            var languages = new List<string>();
+            ExtractFromRow(row, "span:contains(\"Áudio:\")", audioText =>
+            {
+                ExtractPattern(audioText, @"Áudio:\s*(.+)", audio =>
+                {
+                    languages = audio.Split('|').Select(token => token.Trim()).ToList();
+                });
+            });
+            return languages;
+        }
+
+        private static long? ExtractSize(IElement row)
+        {
+            long? result = null;
+            ExtractFromRow(row, "span:contains(\"Tamanho:\")", sizeText =>
+            {
+                ExtractPattern(sizeText, @"Tamanho:\s*(.+)", size =>
+                {
+                    result = ParseUtil.GetBytes(size);
+                });
+            });
+            return result;
+        }
+
+        private static List<string> ExtractSubtitles(IElement row)
+        {
+            var subtitles = new List<string>();
+            ExtractFromRow(row, "span:contains(\"Legenda:\")", subtitleText =>
+            {
+                ExtractPattern(subtitleText, @"Legenda:\s*(.+)", subtitle =>
+                {
+                    subtitles.Add(subtitle);
+                });
+            });
+            return subtitles;
+        }
+
+        private static List<string> ExtractGenres(IElement row)
+        {
+            var genres = new List<string>();
+            ExtractFromRow(
+                row,
+                "span:contains(\"Gênero:\")",
+                genreText =>
+                {
+                    ExtractPattern(genreText, @"Gênero:\s*(.+)", genre =>
+                    {
+                        genres = genre.Split('|').Select(token => token.Trim()).ToList();
+                    });
+                });
+            return genres;
+        }
+
+        private static DateTime ExtractReleaseDate(IElement row)
+        {
+            var result = DateTime.MinValue;
+            ExtractFromRow(row, "span:contains(\"Lançamento:\")", releaseDateText =>
+            {
+                ExtractPattern(releaseDateText, @"Lançamento:\s*(.+)", releaseDate =>
+                {
+                    DateTime.TryParseExact(
+                        releaseDate, "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                        out result);
+                });
+            });
+            return result;
+        }
+
+        private static void ExtractPattern(string text, string pattern, Action<string> extraction)
+        {
+            var match = Regex.Match(text, pattern);
+            if (match.Success)
+            {
+                extraction(match.Groups[1].Value.Trim());
+            }
+        }
+
+        private static List<int> ExtractCategory(IElement row)
+        {
+            var releaseCategory = new List<int>();
+            ExtractFromRow(row, "div.title > a", categoryText =>
+            {
+                var hasSeasonInfo = categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
+                releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
+            });
+            return releaseCategory;
+        }
+
+        private static void ExtractFromRow(IElement row, string selector, Action<string> extraction)
+        {
+            var genreElement = row.QuerySelector(selector);
+            if (genreElement != null)
+            {
+                extraction(genreElement.TextContent);
+            }
+        }
+
+        private string ExtractTitle(IElement downloadButton, string title)
+        {
+            var description = GetSpanTagOrNull(downloadButton);
+            if (description != null)
+            {
+                var descriptionText = description.TextContent;
+                ExtractPattern(descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
+                {
+                    title = "[BluDV] " + CleanTitle(title) + resolution;
+                });
+            }
+            return title;
+        }
+
+        private static INode GetSpanTagOrNull(IElement downloadButton)
+        {
+            var description = downloadButton.PreviousSibling;
+            while (description != null && NotSpanTag(description))
+            {
+                description = description.PreviousSibling;
+            }
+
+            return description;
+        }
+
+        private static bool NotSpanTag(INode description) => (description.NodeType != NodeType.Element || ((Element)description).TagName != "SPAN");
     }
 }
