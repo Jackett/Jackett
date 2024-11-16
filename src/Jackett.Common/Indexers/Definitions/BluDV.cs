@@ -112,7 +112,55 @@ namespace Jackett.Common.Indexers.Definitions
             _siteLink = siteLink;
         }
 
-        private string CleanTitle(string title)
+        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        {
+            var releases = new List<ReleaseInfo>();
+
+            var parser = new HtmlParser();
+            var dom = parser.ParseDocument(indexerResponse.Content);
+            var rows = dom.QuerySelectorAll("div.post");
+
+            foreach (var row in rows)
+            {
+                // Get the details page to extract the magnet link
+                var detailsParser = new HtmlParser();
+                var detailUrl = new Uri(row.QuerySelector("a.more-link")?.GetAttribute("href"));
+                var detailTitle = row.QuerySelector("div.title > a")?.TextContent.Trim();
+                var releaseCommonInfo = new ReleaseInfo {
+                    Genres = row.ExtractGenres(),
+                    Category = row.ExtractCategory(),
+                    PublishDate = row.ExtractReleaseDate(),
+                    Subs = row.ExtractSubtitles(),
+                    Size = row.ExtractSize(),
+                    Languages = row.ExtractLanguages(),
+                    Details = detailUrl,
+                    Guid = detailUrl
+                };
+                var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
+                var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
+                foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
+                {
+                    var title = downloadButton.ExtractTitleOrDefault(detailTitle);
+                    var magnet = downloadButton.ExtractMagnet();
+                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    release.Title = title;
+                    release.Languages =  row.ExtractLanguages();
+                    release.Link = release.Guid = release.MagnetUri = magnet;
+                    release.DownloadVolumeFactor = 0; // Free
+                    release.UploadVolumeFactor = 1;
+
+                    if (release.Title.IsNotNullOrWhiteSpace())
+                        releases.Add(release);
+                }
+            }
+
+            return releases;
+        }
+    }
+
+    public static class RowParsingExtensions
+    {
+        private static string CleanTitle(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
                 return null;
@@ -143,166 +191,14 @@ namespace Jackett.Common.Indexers.Definitions
 
             return title;
         }
+        private static bool NotSpanTag(INode description) => (description.NodeType != NodeType.Element || ((Element)description).TagName != "SPAN");
 
-        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+
+        public static Uri ExtractMagnet(this IElement downloadButton)
         {
-            var releases = new List<ReleaseInfo>();
-
-            var parser = new HtmlParser();
-            var dom = parser.ParseDocument(indexerResponse.Content);
-            var rows = dom.QuerySelectorAll("div.post");
-
-            foreach (var row in rows)
-            {
-                // Get the details page to extract the magnet link
-                var detailsParser = new HtmlParser();
-                var detailUrl = new Uri(row.QuerySelector("a.more-link")?.GetAttribute("href"));
-                var detailTitle = row.QuerySelector("div.title > a")?.TextContent.Trim();
-                var releaseCommonInfo = new ReleaseInfo{
-                    Genres = ExtractGenres(row),
-                    Category = ExtractCategory(row),
-                    PublishDate = ExtractReleaseDate(row),
-                    Subs = ExtractSubtitles(row),
-                    Size = ExtractSize(row),
-                    Languages = ExtractLanguages(row),
-                    Details = detailUrl,
-                    Guid = detailUrl
-                };
-                var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
-                var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
-                foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
-                {
-                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                    var title = ExtractTitle(downloadButton, detailTitle);
-                    release.Title = title;
-                    release.Languages =  ExtractLanguages(row);
-
-                    var magnetLink = downloadButton.GetAttribute("href");
-                    var magnet = string.IsNullOrEmpty(magnetLink) ? null : new Uri(magnetLink);
-                    release.Link = release.Guid = release.MagnetUri = magnet;
-
-                    release.DownloadVolumeFactor = 0; // Free
-                    release.UploadVolumeFactor = 1;
-
-                    if (release.Title.IsNotNullOrWhiteSpace())
-                        releases.Add(release);
-                }
-            }
-
-            return releases;
-        }
-
-        private static List<string> ExtractLanguages(IElement row)
-        {
-            var languages = new List<string>();
-            ExtractFromRow(row, "span:contains(\"Áudio:\")", audioText =>
-            {
-                ExtractPattern(audioText, @"Áudio:\s*(.+)", audio =>
-                {
-                    languages = audio.Split('|').Select(token => token.Trim()).ToList();
-                });
-            });
-            return languages;
-        }
-
-        private static long? ExtractSize(IElement row)
-        {
-            long? result = null;
-            ExtractFromRow(row, "span:contains(\"Tamanho:\")", sizeText =>
-            {
-                ExtractPattern(sizeText, @"Tamanho:\s*(.+)", size =>
-                {
-                    result = ParseUtil.GetBytes(size);
-                });
-            });
-            return result;
-        }
-
-        private static List<string> ExtractSubtitles(IElement row)
-        {
-            var subtitles = new List<string>();
-            ExtractFromRow(row, "span:contains(\"Legenda:\")", subtitleText =>
-            {
-                ExtractPattern(subtitleText, @"Legenda:\s*(.+)", subtitle =>
-                {
-                    subtitles.Add(subtitle);
-                });
-            });
-            return subtitles;
-        }
-
-        private static List<string> ExtractGenres(IElement row)
-        {
-            var genres = new List<string>();
-            ExtractFromRow(
-                row,
-                "span:contains(\"Gênero:\")",
-                genreText =>
-                {
-                    ExtractPattern(genreText, @"Gênero:\s*(.+)", genre =>
-                    {
-                        genres = genre.Split('|').Select(token => token.Trim()).ToList();
-                    });
-                });
-            return genres;
-        }
-
-        private static DateTime ExtractReleaseDate(IElement row)
-        {
-            var result = DateTime.MinValue;
-            ExtractFromRow(row, "span:contains(\"Lançamento:\")", releaseDateText =>
-            {
-                ExtractPattern(releaseDateText, @"Lançamento:\s*(.+)", releaseDate =>
-                {
-                    DateTime.TryParseExact(
-                        releaseDate, "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
-                        out result);
-                });
-            });
-            return result;
-        }
-
-        private static void ExtractPattern(string text, string pattern, Action<string> extraction)
-        {
-            var match = Regex.Match(text, pattern);
-            if (match.Success)
-            {
-                extraction(match.Groups[1].Value.Trim());
-            }
-        }
-
-        private static List<int> ExtractCategory(IElement row)
-        {
-            var releaseCategory = new List<int>();
-            ExtractFromRow(row, "div.title > a", categoryText =>
-            {
-                var hasSeasonInfo = categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
-                releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
-            });
-            return releaseCategory;
-        }
-
-        private static void ExtractFromRow(IElement row, string selector, Action<string> extraction)
-        {
-            var genreElement = row.QuerySelector(selector);
-            if (genreElement != null)
-            {
-                extraction(genreElement.TextContent);
-            }
-        }
-
-        private string ExtractTitle(IElement downloadButton, string title)
-        {
-            var description = GetSpanTagOrNull(downloadButton);
-            if (description != null)
-            {
-                var descriptionText = description.TextContent;
-                ExtractPattern(descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
-                {
-                    title = "[BluDV] " + CleanTitle(title) + resolution;
-                });
-            }
-            return title;
+            var magnetLink = downloadButton.GetAttribute("href");
+            var magnet = string.IsNullOrEmpty(magnetLink) ? null : new Uri(magnetLink);
+            return magnet;
         }
 
         private static INode GetSpanTagOrNull(IElement downloadButton)
@@ -316,6 +212,115 @@ namespace Jackett.Common.Indexers.Definitions
             return description;
         }
 
-        private static bool NotSpanTag(INode description) => (description.NodeType != NodeType.Element || ((Element)description).TagName != "SPAN");
+
+        public static string ExtractTitleOrDefault(this IElement downloadButton, string title)
+        {
+            var description = GetSpanTagOrNull(downloadButton);
+            if (description != null)
+            {
+                var descriptionText = description.TextContent;
+                ExtractPattern(descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
+                {
+                    title = "[BluDV] " + CleanTitle(title) + resolution;
+                });
+            }
+            return title;
+        }
+
+        public static List<string> ExtractGenres(this IElement row)
+        {
+            var genres = new List<string>();
+            row.ExtractFromRow("span:contains(\"Gênero:\")", genreText =>
+            {
+                ExtractPattern(genreText, @"Gênero:\s*(.+)", genre =>
+                {
+                    genres = genre.Split('|').Select(token => token.Trim()).ToList();
+                });
+            });
+            return genres;
+        }
+
+        public static List<int> ExtractCategory(this IElement row)
+        {
+            var releaseCategory = new List<int>();
+            row.ExtractFromRow("div.title > a", categoryText =>
+            {
+                var hasSeasonInfo = categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
+                releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
+            });
+            return releaseCategory;
+        }
+
+        public static DateTime ExtractReleaseDate(this IElement row)
+        {
+            var result = DateTime.MinValue;
+            row.ExtractFromRow("span:contains(\"Lançamento:\")", releaseDateText =>
+            {
+                ExtractPattern(releaseDateText, @"Lançamento:\s*(.+)", releaseDate =>
+                {
+                    DateTime.TryParseExact(
+                        releaseDate, "yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None,
+                        out result);
+                });
+            });
+            return result;
+        }
+
+        public static List<string> ExtractSubtitles(this IElement row)
+        {
+            var subtitles = new List<string>();
+            row.ExtractFromRow("span:contains(\"Legenda:\")", subtitleText =>
+            {
+                ExtractPattern(subtitleText, @"Legenda:\s*(.+)", subtitle =>
+                {
+                    subtitles.Add(subtitle);
+                });
+            });
+            return subtitles;
+        }
+
+        public static long? ExtractSize(this IElement row)
+        {
+            long? result = null;
+            row.ExtractFromRow("span:contains(\"Tamanho:\")", sizeText =>
+            {
+                ExtractPattern(sizeText, @"Tamanho:\s*(.+)", size =>
+                {
+                    result = ParseUtil.GetBytes(size);
+                });
+            });
+            return result;
+        }
+
+        public static List<string> ExtractLanguages(this IElement row)
+        {
+            var languages = new List<string>();
+            row.ExtractFromRow("span:contains(\"Áudio:\")", audioText =>
+            {
+                ExtractPattern(audioText, @"Áudio:\s*(.+)", audio =>
+                {
+                    languages = audio.Split('|').Select(token => token.Trim()).ToList();
+                });
+            });
+            return languages;
+        }
+
+        public static void ExtractFromRow(this IElement row, string selector, Action<string> extraction)
+        {
+            var element = row.QuerySelector(selector);
+            if (element != null)
+            {
+                extraction(element.TextContent);
+            }
+        }
+
+        private static void ExtractPattern(string text, string pattern, Action<string> extraction)
+        {
+            var match = Regex.Match(text, pattern);
+            if (match.Success)
+            {
+                extraction(match.Groups[1].Value.Trim());
+            }
+        }
     }
 }
