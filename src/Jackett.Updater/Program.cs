@@ -487,6 +487,7 @@ namespace Jackett.Updater
                 "Definitions/kickasstorrent-kathow.yml", // renamed to kickasstorrents-ws
                 "Definitions/kickasstorrent.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/kimoji.yml",
                 "Definitions/kinonavse100.yml",
                 "Definitions/kisssub.yml",
                 "Definitions/knaben.yml", // migrated to C# API

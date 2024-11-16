@@ -418,7 +418,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Karagarga [![(invite needed)][inviteneeded]](#)
  * Keep Friends [![(invite needed)][inviteneeded]](#)
  * Kelu
- * KIMOJI
  * Korsar [![(invite needed)][inviteneeded]](#)
  * KrazyZone
  * Kufei (库非)
