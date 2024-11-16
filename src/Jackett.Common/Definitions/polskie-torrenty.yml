@@ -1,0 +1,213 @@
+---
+id: polskie-torrenty
+name: Polskie-Torrenty
+description: "Polskie-Torrenty is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: semi-private
+encoding: UTF-8
+links:
+  - https://polskie-torrenty.eu/
+
+caps:
+  categorymappings:
+    # Filmy
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD"}
+    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 72, cat: Movies/HD, desc: "Filmy x264/1080p"}
+    - {id: 73, cat: Movies/HD, desc: "Filmy x264/720p"}
+    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 75, cat: Movies/HD, desc: "Filmy x264/h264"}
+    - {id: 76, cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
+    - {id: 77, cat: Movies/UHD, desc: "Filmy 4K UHD"}
+    - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
+    - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM"}
+    - {id: 88, cat: Movies/HD, desc: "Filmy x265/1080p"}
+    - {id: 89, cat: Movies/HD, desc: "Filmy x265/720p"}
+    # Seriale
+    - {id: 25, cat: TV, desc: "Seriale Polskie"}
+    - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
+    # Dla Dzieci
+    - {id: 32, cat: Movies, desc: "Filmy/Bajki"}
+    - {id: 111, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 112, cat: Console, desc: "Gry"}
+    - {id: 113, cat: Other, desc: "Inne"}
+    - {id: 114, cat: Books, desc: "Kolorowanki"}
+    - {id: 115, cat: Books, desc: "Książki"}
+    - {id: 116, cat: Audio, desc: "Muzyka"}
+    - {id: 117, cat: PC, desc: "Programy"}
+    - {id: 118, cat: Audio/Video, desc: "Teledyski"}
+    # Gry
+    - {id: 34, cat: PC/Games, desc: "Gry PC"}
+    - {id: 35, cat: Console/PSP, desc: "PS2/PS3/PS4/PSP/PS VITA"}
+    - {id: 36, cat: Console/XBox, desc: "Xbox One/XBOX 360/Xbox"}
+    - {id: 37, cat: Console/NDS, desc: "NINTENDO / WII / DS"}
+    # Muzyka
+    - {id: 38, cat: Audio/Foreign, desc: "Muzyka Zagraniczna"}
+    - {id: 39, cat: Audio, desc: "Soundtracki"}
+    - {id: 40, cat: Audio/Video, desc: "Teledyski"}
+    - {id: 80, cat: Audio, desc: "Muzyka Polska"}
+    - {id: 81, cat: Audio/Video, desc: "Koncerty"}
+    # GSM/PDA
+    - {id: 42, cat: PC/Mobile-Other, desc: "Tapety GSM/PDA"}
+    - {id: 43, cat: PC/Mobile-Other, desc: "Programy GSM/PDA"}
+    - {id: 44, cat: PC/Mobile-Other, desc: "Filmy GSM/PDA"}
+    - {id: 45, cat: PC/Mobile-Other, desc: "Dzwonki GSM/PDA"}
+    - {id: 46, cat: PC/Mobile-Other, desc: "Gry GSM/PDA"}
+    # Ksiazki
+    - {id: 47, cat: Books/EBook, desc: "E-Booki"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Audio-Booki"}
+    - {id: 49, cat: Books/Mags, desc: "Czasopisma"}
+    - {id: 50, cat: Books/Comics, desc: "Komiksy"}
+    # Programy
+    - {id: 51, cat: PC/0day, desc: "Windows"}
+    - {id: 52, cat: PC, desc: "Linux"}
+    - {id: 53, cat: PC/Mac, desc: "Macintosh"}
+    # Erotyka
+    - {id: 58, cat: XXX/Other, desc: "Czasopisma"}
+    - {id: 59, cat: XXX/ImageSet, desc: "Zdjęcia"}
+    - {id: 60, cat: XXX/x264, desc: "Filmy"}
+    - {id: 61, cat: XXX/Other, desc: "Gry"}
+    - {id: 63, cat: XXX/Other, desc: "Hentai+18"}
+    # Anime
+    - {id: 69, cat: TV/Anime, desc: "Anime"}
+    - {id: 70, cat: XXX/Other, desc: "Hentai"}
+    - {id: 121, cat: Books/Comics, desc: "Manga"}
+    # Inne
+    - {id: 55, cat: Other, desc: "Tapety"}
+    - {id: 57, cat: Other, desc: "Pozostale"}
+    - {id: 86, cat: Other, desc: "Śmieszne"}
+    - {id: 105, cat: Other, desc: "Design www"}
+    - {id: 106, cat: Other, desc: "Filmy (S)VCD"}
+    - {id: 107, cat: Other, desc: "Flash/Shockwave"}
+    - {id: 108, cat: Other, desc: "Fotografia"}
+    - {id: 109, cat: Other, desc: "Kursy"}
+    - {id: 110, cat: Other, desc: "Modelarstwo"}
+    # Sport
+    - {id: 92, cat: TV/Sport, desc: "Boks"}
+    - {id: 93, cat: TV/Sport, desc: "Hokej"}
+    - {id: 94, cat: TV/Sport, desc: "Koszykówka"}
+    - {id: 95, cat: TV/Sport, desc: "Kulturystyka i fitness"}
+    - {id: 96, cat: TV/Sport, desc: "MMA"}
+    - {id: 97, cat: TV/Sport, desc: "Motorowe"}
+    - {id: 98, cat: TV/Sport, desc: "Piłka nożna"}
+    - {id: 99, cat: TV/Sport, desc: "Rowerowe"}
+    - {id: 100, cat: TV/Sport, desc: "Siatkówka"}
+    - {id: 101, cat: TV/Sport, desc: "Wodne"}
+    - {id: 102, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 103, cat: TV/Sport, desc: "Zapasy"}
+    - {id: 104, cat: TV/Sport, desc: "Zimowe"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: POLISH
+    options:
+      POLISH: POLISH
+      MULTi POLISH: MULTi POLISH
+
+login:
+  path: login.php
+  method: form
+  form: form[name="login"]
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: font[color="#FF0000"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://polskie-torrenty.eu/torrents.php?c115=1&c116=1&c117=1&c118=1&search=
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # does not support sorting results, or imdbid searching, or have imdb in results
+
+  rows:
+    selector: div.boxcontent > table > tbody > tr:has(a.link1)
+
+  fields:
+    categorydesc:
+      selector: div.link1 > font
+    title_phase1:
+      selector: a.link1
+      attribute: href
+      filters:
+        - name: regexp
+          args: f=(.+?)\.torrent
+        - name: urldecode
+        - name: htmldecode
+    title_multilang:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
+        - name: re_replace
+          args: ["(?i)\\b(pl)\\b", "POLISH"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a.link1
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      selector: td.pole
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4})"
+        - name: dateparse
+          args: "dd-MM-yyyy"
+    size:
+      selector: td.pole
+      filters:
+        - name: regexp
+          args: "Rozmiar: (\\d+\\.\\d+ [T|G|M|K|k]B)"
+    seeders:
+      selector: td.pole
+      filters:
+        - name: regexp
+          args: "Seedów: (\\d+)"
+    leechers:
+      selector: td.pole
+      filters:
+        - name: regexp
+          args: "Peerów: (\\d+)"
+    grabs:
+      selector: td.pole
+      filters:
+        - name: regexp
+          args: "Pobrano: (\\d+)"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
