@@ -19,94 +19,92 @@ caps:
 
 download:
   selectors:
-    - selector: a[href^="magnet:?xt="]
+    - selector: a.customButton[href^="magnet:"]
       attribute: href
-      filters:
-        - name: re_replace
-          args: ["\\s+", " "]
 
 search:
   paths:
     - path: "/?s={{ if .Keywords }}{{ re_replace .Keywords \"\\s+\" \"+\" }}{{ else }}{{ end }}"
 
   rows:
-    selector: article.post
+    selector: div.post
 
   fields:
     details:
       selector: a.more-link
       attribute: href
     title:
-      selector: h2.entry-title
+      selector: div.title>a
 
     download:
       selector: a.more-link
       attribute: href
-      filters:
-        - name: fuzzyyear
-        - name: append
-          args: "[DUB]"
-        - name: re_replace
-          args: ["(?i)\\s+dublado\\s*", " "]
-        - name: followredirect
-        - name: urljoin
-        - name: regexp
-          args: "href=\"(magnet:\\?xt=.+?)\""
 
+    genre:
+      selector: span:contains("Gênero:")
+      filters:
+        - name: regexp
+          args: "Gênero:\\s*(.+)"
     category:
-      selector: span
+      selector: div.title>a
       filters:
-        - name: contains
-          args: "Gênero:"
+        - name: re_replace
+          args: ["(?i).*temporada.*", "series"]
+        - name: re_replace
+          args: ["^(?!series$).*$", "filmes"]
     duration:
-      selector: span
+      selector: span:contains("Duração:")
       filters:
-        - name: contains
-          args: "Duração:"
+        - name: regexp
+          args: "Duração:\\s*(.+)"
     date:
-      selector: span
+      selector: span:contains("Lançamento:")
       filters:
-        - name: contains
-          args: "Lançamento:"
+        - name: regexp
+          args: "Lançamento:\\s*(\\d{4})"
+        - name: dateparse
+          args: "yyyy"
     quality:
-      selector: span
+      selector: span:contains("Qualidade:")
       filters:
-        - name: contains
-          args: "Qualidade:"
+        - name: regexp
+          args: "Qualidade:\\s*(.+)"
     format:
-      selector: span
+      selector: span:contains("Formato:")
       filters:
-        - name: contains
-          args: "Formato:"
+        - name: regexp
+          args: "Formato:\\s*(.+)"
     audio:
-      selector: span
+      selector: span:contains("Áudio:")
       filters:
-        - name: contains
-          args: "Áudio:"
+        - name: regexp
+          args: "Áudio:\\s*(.+)"
     subtitle:
-      selector: span
+      selector: span:contains("Legenda:")
       filters:
-        - name: contains
-          args: "Legenda:"
+        - name: regexp
+          args: "Legenda:\\s*(.+)"
     audio_quality:
-      selector: span
+      selector: span:contains("Qualidade de Áudio:")
       filters:
-        - name: contains
-          args: "Qualidade de Áudio:"
+        - name: regexp
+          args: "Qualidade de Áudio:\\s*(.+)"
     video_quality:
-      selector: span
+      selector: span:contains("Qualidade de Vídeo:")
       filters:
-        - name: contains
-          args: "Qualidade de Vídeo:"
+        - name: regexp
+          args: "Qualidade de Vídeo:\\s*(.+)"
     size:
-      selector: span
+      selector: span:contains("Tamanho:")
       filters:
-        - name: contains
-          args: "Tamanho:"
+        - name: regexp
+          args: "Tamanho:\\s*(.+)"
     imdb_rating:
-      selector: span
+      selector: span:contains("IMDb:")
       filters:
-        - name: contains
-          args: "IMDb:"
+        - name: regexp
+          args: "IMDb:\\s*(.+)"
+    imdb_url:
+      selector: a[href^="https://www.imdb.com/title/tt"]
       attribute: href
 # engine n/a
