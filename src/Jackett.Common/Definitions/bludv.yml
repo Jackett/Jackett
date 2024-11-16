@@ -1,0 +1,110 @@
+---
+id: bludv2
+name: BluDV2
+description: "BluDV is a Public Torrent Tracker for Movies and TV Shows dubbed in Portuguese"
+language: pt-BR
+type: public
+encoding: UTF-8
+links:
+  - https://bludv.xyz/
+
+caps:
+  categorymappings:
+    - {id: filmes, cat: Movies, desc: "Movies"}
+    - {id: series, cat: TV, desc: "TV"}
+
+  modes:
+    search: [q]
+
+
+download:
+  selectors:
+    - selector: a.customButton[href^="magnet:"]
+      attribute: href
+
+search:
+  paths:
+    - path: "/?s={{ if .Keywords }}{{ re_replace .Keywords \"\\s+\" \"+\" }}{{ else }}{{ end }}"
+
+  rows:
+    selector: div.post
+
+  fields:
+    details:
+      selector: a.more-link
+      attribute: href
+    title:
+      selector: div.title>a
+
+    download:
+      selector: a.more-link
+      attribute: href
+
+    genre:
+      selector: span:contains("Gênero:")
+      filters:
+        - name: regexp
+          args: "Gênero:\\s*(.+)"
+    category:
+      selector: div.title>a
+      filters:
+        - name: re_replace
+          args: ["(?i).*temporada.*", "series"]
+        - name: re_replace
+          args: ["^(?!series$).*$", "filmes"]
+    duration:
+      selector: span:contains("Duração:")
+      filters:
+        - name: regexp
+          args: "Duração:\\s*(.+)"
+    date:
+      selector: span:contains("Lançamento:")
+      filters:
+        - name: regexp
+          args: "Lançamento:\\s*(\\d{4})"
+        - name: dateparse
+          args: "yyyy"
+    quality:
+      selector: span:contains("Qualidade:")
+      filters:
+        - name: regexp
+          args: "Qualidade:\\s*(.+)"
+    format:
+      selector: span:contains("Formato:")
+      filters:
+        - name: regexp
+          args: "Formato:\\s*(.+)"
+    audio:
+      selector: span:contains("Áudio:")
+      filters:
+        - name: regexp
+          args: "Áudio:\\s*(.+)"
+    subtitle:
+      selector: span:contains("Legenda:")
+      filters:
+        - name: regexp
+          args: "Legenda:\\s*(.+)"
+    audio_quality:
+      selector: span:contains("Qualidade de Áudio:")
+      filters:
+        - name: regexp
+          args: "Qualidade de Áudio:\\s*(.+)"
+    video_quality:
+      selector: span:contains("Qualidade de Vídeo:")
+      filters:
+        - name: regexp
+          args: "Qualidade de Vídeo:\\s*(.+)"
+    size:
+      selector: span:contains("Tamanho:")
+      filters:
+        - name: regexp
+          args: "Tamanho:\\s*(.+)"
+    imdb_rating:
+      selector: span:contains("IMDb:")
+      filters:
+        - name: regexp
+          args: "IMDb:\\s*(.+)"
+    imdb_url:
+      selector: a[href^="https://www.imdb.com/title/tt"]
+      attribute: href
+# engine n/a
