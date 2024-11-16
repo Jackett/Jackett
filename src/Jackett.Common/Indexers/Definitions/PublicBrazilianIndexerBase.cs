@@ -210,9 +210,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var descriptionText = description.TextContent;
                 RowParsingExtensions.ExtractPattern(
-                    descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
+                    descriptionText, @"\b(\d{3,4}p)\b", resolution =>
                     {
-                        title = $"[{_name}] " + CleanTitle(title) + resolution;
+                        title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
                     });
             }
 
@@ -231,7 +231,7 @@ namespace Jackett.Common.Indexers.Definitions
             title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
 
             // Remove source info
-            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay)\b", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay|Torrent)\b", "", RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
