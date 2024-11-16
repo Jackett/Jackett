@@ -95,7 +95,7 @@ settings:
     default: POLISH
     options:
       POLISH: POLISH
-      MULTi POLISH: MULTIi POLISH
+      MULTi POLISH: MULTi POLISH
   - name: info_tpp
     type: info
     label: Results Per Page
