@@ -65,7 +65,7 @@ settings:
     default: POLISH
     options:
       POLISH: POLISH
-      MULTi POLISH: MULTIi POLISH
+      MULTi POLISH: MULTi POLISH
 
 login:
   # using cookie method because login page has embedded Google reCAPTCHA
