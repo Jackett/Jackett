@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -23,21 +24,19 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        public override IParseIndexerResponse GetParser() => new BluDVParser(SiteLink, webclient);
+        public override IParseIndexerResponse GetParser() => new BluDVParser(webclient, Name);
     }
 
-    public class BluDVParser : IParseIndexerResponse
+    public class BluDVParser : PublicBrazilianParser
     {
-        private readonly string _siteLink;
-        private WebClient _webclient;
+        private readonly WebClient _webclient;
 
-        public BluDVParser(string siteLink, WebClient webclient)
+        public BluDVParser(WebClient webclient, string name) : base(name)
         {
             _webclient = webclient;
-            _siteLink = siteLink;
         }
 
-        public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
+        public override IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
             var releases = new List<ReleaseInfo>();
 
@@ -65,7 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
                 foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
                 {
-                    var title = downloadButton.ExtractTitleOrDefault(detailTitle);
+                    var title = ExtractTitleOrDefault(downloadButton, detailTitle);
                     var magnet = downloadButton.ExtractMagnet();
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = title;
@@ -81,6 +80,18 @@ namespace Jackett.Common.Indexers.Definitions
 
             return releases;
         }
+
+        protected override INode GetTitleElementOrNull(IElement downloadButton)
+        {
+            var description = downloadButton.PreviousSibling;
+            while (description != null && NotSpanTag(description))
+            {
+                description = description.PreviousSibling;
+            }
+
+            return description;
+        }
     }
+
 
 }

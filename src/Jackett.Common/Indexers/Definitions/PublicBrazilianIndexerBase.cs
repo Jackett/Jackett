@@ -11,7 +11,6 @@ using static System.Linq.Enumerable;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
-using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
@@ -80,72 +79,11 @@ namespace Jackett.Common.Indexers.Definitions
 
     public static class RowParsingExtensions
     {
-        private static string CleanTitle(string title)
-        {
-            if (string.IsNullOrWhiteSpace(title))
-                return null;
-
-            // Remove size info in parentheses
-            title = Regex.Replace(title, @"\(\d+(?:\.\d+)?\s*(?:GB|MB)\)", "", RegexOptions.IgnoreCase);
-
-            // Remove quality info
-            title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
-
-            // Remove source info
-            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay)\b", "", RegexOptions.IgnoreCase);
-
-            // Remove brackets/parentheses content
-            title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
-
-            // Remove dangling punctuation and separators
-            title = Regex.Replace(title, @"[\\/,|~_-]+\s*|\s*[\\/,|~_-]+", " ", RegexOptions.IgnoreCase);
-
-            // Clean up multiple spaces
-            title = Regex.Replace(title, @"\s+", " ");
-
-            // Remove dots between words but keep dots in version numbers
-            title = Regex.Replace(title, @"(?<!\d)\.(?!\d)", " ", RegexOptions.IgnoreCase);
-
-            // Remove any remaining punctuation at start/end
-            title = title.Trim(' ', '.', ',', '-', '_', '~', '/', '\\', '|');
-            return title;
-        }
-
-        private static bool NotSpanTag(INode description) =>
-            (description.NodeType != NodeType.Element || ((Element)description).TagName != "SPAN");
-
         public static Uri ExtractMagnet(this IElement downloadButton)
         {
             var magnetLink = downloadButton.GetAttribute("href");
             var magnet = string.IsNullOrEmpty(magnetLink) ? null : new Uri(magnetLink);
             return magnet;
-        }
-
-        private static INode GetSpanTagOrNull(IElement downloadButton)
-        {
-            var description = downloadButton.PreviousSibling;
-            while (description != null && NotSpanTag(description))
-            {
-                description = description.PreviousSibling;
-            }
-
-            return description;
-        }
-
-        public static string ExtractTitleOrDefault(this IElement downloadButton, string title)
-        {
-            var description = GetSpanTagOrNull(downloadButton);
-            if (description != null)
-            {
-                var descriptionText = description.TextContent;
-                ExtractPattern(
-                    descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
-                    {
-                        title = "[BluDV] " + CleanTitle(title) + resolution;
-                    });
-            }
-
-            return title;
         }
 
         public static List<string> ExtractGenres(this IElement row)
@@ -245,7 +183,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
         }
 
-        private static void ExtractPattern(string text, string pattern, Action<string> extraction)
+        public static void ExtractPattern(string text, string pattern, Action<string> extraction)
         {
             var match = Regex.Match(text, pattern);
             if (match.Success)
@@ -253,5 +191,68 @@ namespace Jackett.Common.Indexers.Definitions
                 extraction(match.Groups[1].Value.Trim());
             }
         }
+    }
+    public abstract class PublicBrazilianParser : IParseIndexerResponse
+    {
+        protected string _name;
+
+        protected PublicBrazilianParser(string name)
+        {
+            _name = name;
+        }
+
+        public abstract IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse);
+
+        public string ExtractTitleOrDefault(IElement downloadButton, string title)
+        {
+            var description = GetTitleElementOrNull(downloadButton);
+            if (description != null)
+            {
+                var descriptionText = description.TextContent;
+                RowParsingExtensions.ExtractPattern(
+                    descriptionText, @"(.+?)\s*\d{3,4}p", resolution =>
+                    {
+                        title = $"[{_name}] " + CleanTitle(title) + resolution;
+                    });
+            }
+
+            return title;
+        }
+
+        protected static string CleanTitle(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+                return null;
+
+            // Remove size info in parentheses
+            title = Regex.Replace(title, @"\(\d+(?:\.\d+)?\s*(?:GB|MB)\)", "", RegexOptions.IgnoreCase);
+
+            // Remove quality info
+            title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
+
+            // Remove source info
+            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay)\b", "", RegexOptions.IgnoreCase);
+
+            // Remove brackets/parentheses content
+            title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
+
+            // Remove dangling punctuation and separators
+            title = Regex.Replace(title, @"[\\/,|~_-]+\s*|\s*[\\/,|~_-]+", " ", RegexOptions.IgnoreCase);
+
+            // Clean up multiple spaces
+            title = Regex.Replace(title, @"\s+", " ");
+
+            // Remove dots between words but keep dots in version numbers
+            title = Regex.Replace(title, @"(?<!\d)\.(?!\d)", " ", RegexOptions.IgnoreCase);
+
+            // Remove any remaining punctuation at start/end
+            title = title.Trim(' ', '.', ',', '-', '_', '~', '/', '\\', '|');
+            return title;
+        }
+
+        protected abstract INode GetTitleElementOrNull(IElement downloadButton);
+
+        protected static bool NotSpanTag(INode description) =>
+            (description.NodeType != NodeType.Element || ((Element)description).TagName != "SPAN");
     }
 }
