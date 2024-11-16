@@ -268,10 +268,10 @@ namespace Jackett.Common.Indexers.Definitions
             title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
 
             // Remove source info
-            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay|Torrent)\b", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay|Torrent|Download)\b", "", RegexOptions.IgnoreCase);
 
             // Remove language info
-            title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub)\b", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub|[AÁ]udio)\b", "", RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
