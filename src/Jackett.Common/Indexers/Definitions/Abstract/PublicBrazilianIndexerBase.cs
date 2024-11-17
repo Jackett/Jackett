@@ -14,7 +14,7 @@ using Jackett.Common.Services.Interfaces;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
-namespace Jackett.Common.Indexers.Definitions
+namespace Jackett.Common.Indexers.Definitions.Abstract
 {
     public abstract class PublicBrazilianIndexerBase : IndexerBase
     {

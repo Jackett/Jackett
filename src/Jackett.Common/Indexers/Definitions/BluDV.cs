@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
+using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using NLog;
