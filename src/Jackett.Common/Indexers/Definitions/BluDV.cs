@@ -72,6 +72,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var magnet = downloadButton.ExtractMagnet();
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
+                    release.Size ??= ExtractSizeByResolution(release.Title);
                     release.Languages = row.ExtractLanguages();
                     release.Link = release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
