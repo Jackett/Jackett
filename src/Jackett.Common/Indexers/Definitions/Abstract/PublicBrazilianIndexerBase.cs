@@ -264,11 +264,39 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 RowParsingExtensions.ExtractPattern(
                     descriptionText, @"\b(\d{3,4}p)\b", resolution =>
                     {
+                        title = $"[{_name}] " + CleanTitle(descriptionText) + $" {resolution}";
+                    });
+            }
+            else
+            {
+                RowParsingExtensions.ExtractPattern(
+                    title, @"\b(\d{3,4}p)\b", resolution =>
+                    {
                         title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
                     });
             }
 
             return title;
+        }
+
+        public long ExtractSizeByResolution(string title)
+        {
+            var resolution = "Other";
+            RowParsingExtensions.ExtractPattern(
+                title, @"\b(\d{3,4}p)\b", res =>
+                {
+                    resolution = res;
+                });
+
+            var size = resolution switch
+            {
+                "720p" => "1GB",
+                "1080p" => "2.5GB",
+                "2160p" => "5GB",
+                _ => "512MB"
+            };
+
+            return ParseUtil.GetBytes(size);
         }
 
         protected static string CleanTitle(string title)

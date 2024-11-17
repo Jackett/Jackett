@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers.Definitions
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
-                    release.Size = string.IsNullOrEmpty(fileInfo.Size) ? release.Size : ParseUtil.GetBytes(fileInfo.Size);
+                    release.Size = !string.IsNullOrEmpty(fileInfo.Size) ? ParseUtil.GetBytes(fileInfo.Size) : ExtractSizeByResolution(release.Title);
 
                     if (release.Title.IsNotNullOrWhiteSpace())
                         releases.Add(release);
