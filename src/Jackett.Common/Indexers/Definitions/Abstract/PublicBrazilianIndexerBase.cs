@@ -75,7 +75,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 {
                     Genres = dict.TryGetValue("Gênero", out var genres) ? genres?.Split(',').Select(g => g.Trim()).ToArray() : null,
                     Audio = dict.TryGetValue("Áudio", out var audio) ? audio?.Split(',').Select(a => a.Trim()).ToArray() : (
-                        dict.TryGetValue("Idioma", out var lang) ? new []{ lang } : null),
+                        dict.TryGetValue("Idioma", out var lang) ? new[] { lang } : null),
                     Subtitle = dict.TryGetValue("Legenda", out var subtitle) ? subtitle : null,
                     Format = dict.TryGetValue("Formato", out var format) ? format : null,
                     Quality = dict.TryGetValue("Qualidade", out var quality) ? quality : null,
@@ -109,7 +109,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 searchUrl += WebUtility.UrlEncode(query.SearchTerm.Replace(" ", "+"));
 
-            pageableRequests.Add(new [] {new IndexerRequest(searchUrl)});
+            pageableRequests.Add(new[] { new IndexerRequest(searchUrl) });
 
             return pageableRequests;
         }
