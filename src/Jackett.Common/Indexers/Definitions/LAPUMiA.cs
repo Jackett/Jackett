@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using AngleSharp.Dom;
-using static System.Linq.Enumerable;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
@@ -10,6 +9,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
+using static System.Linq.Enumerable;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
@@ -22,8 +22,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "LAPUMiA";
         public override string SiteLink { get; protected set; } = "https://lapumia.net/";
 
-        public LAPUMiA(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(configService: configService, wc, l, ps, cs)
+        public LAPUMiA(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+                       ICacheService cs) : base(configService: configService, wc, l, ps, cs)
         {
         }
 
@@ -43,11 +43,14 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var fileInfo = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
             var infoItems = detailsDom.QuerySelectorAll("div.info li");
-
             foreach (var item in infoItems)
             {
                 var text = item.TextContent.Trim();
-                var parts = text.Split(new[] { ':' }, 2);
+                var parts = text.Split(
+                    new[]
+                    {
+                        ':'
+                    }, 2);
                 if (parts.Length == 2)
                 {
                     var key = parts[0].Trim();
@@ -62,11 +65,9 @@ namespace Jackett.Common.Indexers.Definitions
         public override IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
             var releases = new List<ReleaseInfo>();
-
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(indexerResponse.Content);
             var rows = dom.QuerySelectorAll("div.item");
-
             foreach (var row in rows)
             {
                 // Get the details page to extract the magnet link
@@ -91,13 +92,17 @@ namespace Jackett.Common.Indexers.Definitions
                     var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
-                    release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
+                    release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle)
+                        ? release.Subs
+                        : new[]
+                        {
+                            fileInfo.Subtitle
+                        };
                     release.Size = string.IsNullOrEmpty(fileInfo.Size) ? release.Size : ParseUtil.GetBytes(fileInfo.Size);
                     var magnet = downloadButton.ExtractMagnet();
                     release.Link = release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
                     release.UploadVolumeFactor = 1;
-
                     if (release.Title.IsNotNullOrWhiteSpace())
                         releases.Add(release);
                 }
