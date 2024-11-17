@@ -98,7 +98,6 @@ namespace Jackett.Common.Indexers.Definitions
                         value = value switch
                         {
                             var v when v.Contains("Dual Áudio") => v.Replace("Dual Áudio", "Dual"),
-                            var v when v.Contains("Dual Audio") => v.Replace("Dual Audio", "Dual"),
                             var v when v.Contains("Full HD") => v.Replace("Full HD", "1080p"),
                             var v when v.Contains("4K") => v.Replace("4K", "2160p"),
                             var v when v.Contains("SD") => v.Replace("SD", "480p"),
