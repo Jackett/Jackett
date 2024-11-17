@@ -153,7 +153,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public static DateTime ExtractReleaseDate(this IElement row)
         {
-            var result = DateTime.MinValue;
+            var result = DateTime.Today;
             row.ExtractFromRow(
                 "span:contains(\"Lançamento:\")", releaseDateText =>
                 {
