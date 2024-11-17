@@ -14,23 +14,15 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions
 {
-    public class BaixarFilmesTorrents : FilmesHdTorrent
-    {
-        public override string Id => "baixarfilmestorrents";
-
-        public override string Name => "BaixarFilmesTorrents";
-
-        public override string SiteLink { get; protected set; } = "https://baixarfilmestorrents.net/";
-
-        public BaixarFilmesTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
-        {
-        }
-    }
-    public class FilmesHdTorrent : ComandoFilmes
+    public class FilmesHdTorrent : PublicBrazilianIndexerBase
     {
         public override string Id => "filmeshdtorrent";
         public override string Name => "Filmes HD Torrent";
         public override string SiteLink { get; protected set; } = "https://www.filmeshdtorrent.vip/";
+
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://baixarfilmestorrents.net/"
+        };
 
         public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
         {
