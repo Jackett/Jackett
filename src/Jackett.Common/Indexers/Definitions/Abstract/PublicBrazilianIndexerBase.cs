@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
             configData: new ConfigurationData())
         {
+            webclient.requestDelay = .5;
         }
 
         public override string Description =>
