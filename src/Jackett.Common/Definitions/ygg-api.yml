@@ -36,7 +36,8 @@ settings:
     default: uploaded_at
     options:
       uploaded_at: publish_date
-      seed: seeders
+      seeders: seeders
+      downloads: downloads
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
