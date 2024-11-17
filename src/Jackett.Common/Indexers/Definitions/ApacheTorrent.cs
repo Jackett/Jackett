@@ -108,7 +108,8 @@ namespace Jackett.Common.Indexers.Definitions
                     Title = CleanTitle(title),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(title)
+                    Category = row.ExtractCategory(title),
+                    Seeders = 1
                 };
 
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
