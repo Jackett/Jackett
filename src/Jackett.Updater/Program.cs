@@ -487,6 +487,7 @@ namespace Jackett.Updater
                 "Definitions/kickasstorrent-kathow.yml", // renamed to kickasstorrents-ws
                 "Definitions/kickasstorrent.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/kimoji.yml",
                 "Definitions/kinonavse100.yml",
                 "Definitions/kisssub.yml",
                 "Definitions/knaben.yml", // migrated to C# API
@@ -499,7 +500,6 @@ namespace Jackett.Updater
                 "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
-                "Definitions/lemonhd.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
@@ -706,6 +706,7 @@ namespace Jackett.Updater
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwal.yml",
+                "Definitions/torrentwhiz.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/torrentz2.yml",
                 "Definitions/torrentz2eu.yml",

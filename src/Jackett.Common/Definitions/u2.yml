@@ -15,15 +15,14 @@ caps:
     - {id: 413, cat: TV/Anime, desc: "Web"}
     - {id: 12, cat: TV/Anime, desc: "BDRip"}
     - {id: 13, cat: TV/Anime, desc: "DVDRip"}
-    - {id: 14, cat: TV/Anime, desc: "HDTVRip"}
+    - {id: 14, cat: TV/Anime, desc: "HDTV"}
     - {id: 15, cat: TV/Anime, desc: "DVDISO"}
     - {id: 16, cat: TV/Anime, desc: "BDMV"}
     - {id: 17, cat: TV/Anime, desc: "LQRip"}
     - {id: 410, cat: TV/Anime, desc: "外挂结构 (TV Series)"}
     - {id: 412, cat: TV/Anime, desc: "加流重灌 (Modded Blu-rays)"}
-    - {id: 21, cat: Books, desc: "Raw Books"}
-    - {id: 22, cat: Books, desc: "港译漫画 (HK Books)"}
-    - {id: 23, cat: Books, desc: "台译漫画 (TW Books)"}
+    - {id: 21, cat: Books, desc: "原版漫画 (Raw Books)"}
+    - {id: 22, cat: Books, desc: "翻译漫画 (Translated Books)"}
     - {id: 30, cat: Audio, desc: "Lossless Music"}
     - {id: 40, cat: Other, desc: "Others"}
     # Anime as Movies (Radarr uses t=movie):
@@ -32,7 +31,7 @@ caps:
     - {id: 413, cat: Movies/Other, desc: "Web"}
     - {id: 12, cat: Movies/HD, desc: "BDRip"}
     - {id: 13, cat: Movies/Other, desc: "DVDRip"}
-    - {id: 14, cat: Movies/Other, desc: "HDTVRip"}
+    - {id: 14, cat: Movies/Other, desc: "HDTV"}
     - {id: 15, cat: Movies/Other, desc: "DVDISO"}
     - {id: 16, cat: Movies/BluRay, desc: "BDMV"}
     - {id: 17, cat: Movies/Other, desc: "LQRip"}
@@ -85,6 +84,11 @@ login:
     path: index.php
     selector: a[href^="logout.php?key="]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     - path: torrents.php
@@ -93,7 +97,7 @@ search:
     search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 all promotions
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 custom promotion
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 AniDB, 5 infohash
     search_area: 0
@@ -113,22 +117,17 @@ search:
       filters:
         - name: querystring
           args: cat
-    title_default:
-      selector: a[href^="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="details.php?id="]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > time[title]
+      selector: td.rowfollow:nth-child(3) > time[title]
       attribute: title
       optional: true
       filters:
@@ -138,7 +137,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(time[title]) > time
+      selector: td.rowfollow:nth-child(3):not(time[title])
       optional: true
       filters:
         - name: append
@@ -148,13 +147,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(4)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(6)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(7)
     downloadvolumefactor_custom:
       selector: td.embedded > img.arrowdown + b
       optional: true
@@ -169,19 +168,19 @@ search:
           args: (.*)X
     downloadvolumefactor:
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_custom: "{{ .Result.downloadvolumefactor_custom }}"
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
+        span.free: 0
+        span.twoupfree: 0
+        span.custompromotion: "{{ .Result.downloadvolumefactor_custom }}"
+        span.halfdown: 0.5
+        span.twouphalfdown: 0.5
+        span.thirtypercent: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
-        img.pro_custom: "{{ .Result.uploadvolumefactor_custom }}"
+        span.twouphalfdown: 2
+        span.twoupfree: 2
+        span.twoup: 2
+        span.custompromotion: "{{ .Result.uploadvolumefactor_custom }}"
         "*": 1
     description:
       selector: td:nth-child(2)

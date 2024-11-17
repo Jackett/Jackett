@@ -96,8 +96,15 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(112, TorznabCatType.MoviesOther, "Anime Movies");
             caps.Categories.AddCategoryMapping(111, TorznabCatType.MoviesOther, "Anime TV");
             caps.Categories.AddCategoryMapping(150, TorznabCatType.PC, "Apps");
-            caps.Categories.AddCategoryMapping(80, TorznabCatType.AudioAudiobook, "Audiobooks");
-            caps.Categories.AddCategoryMapping(48, TorznabCatType.Books, "Books Magazines");
+            caps.Categories.AddCategoryMapping(156, TorznabCatType.TV, "AV1");
+            caps.Categories.AddCategoryMapping(156, TorznabCatType.Movies, "AV1");
+            caps.Categories.AddCategoryMapping(159, TorznabCatType.Movies, "Movie Boxsets AV1");
+            caps.Categories.AddCategoryMapping(158, TorznabCatType.Movies, "Movies AV1");
+            caps.Categories.AddCategoryMapping(157, TorznabCatType.TV, "TV AV1");
+            caps.Categories.AddCategoryMapping(160, TorznabCatType.TV, "TV Boxsets AV1");
+            caps.Categories.AddCategoryMapping(153, TorznabCatType.Books, "Books");
+            caps.Categories.AddCategoryMapping(154, TorznabCatType.AudioAudiobook, "Audiobooks");
+            caps.Categories.AddCategoryMapping(155, TorznabCatType.Books, "Books & Magazines");
             caps.Categories.AddCategoryMapping(68, TorznabCatType.MoviesOther, "Cams/TS");
             caps.Categories.AddCategoryMapping(140, TorznabCatType.TVDocumentary, "Documentary");
             caps.Categories.AddCategoryMapping(10, TorznabCatType.MoviesDVD, "DVDR");
@@ -129,6 +136,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(146, TorznabCatType.MoviesSD, "Movies SD");
             caps.Categories.AddCategoryMapping(13, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(135, TorznabCatType.AudioLossless, "Music/FLAC");
+            caps.Categories.AddCategoryMapping(151, TorznabCatType.Audio, "Karaoke");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.Audio, "Music Boxset");
             caps.Categories.AddCategoryMapping(148, TorznabCatType.AudioVideo, "Music Videos");
             caps.Categories.AddCategoryMapping(9, TorznabCatType.Other, "Other");
