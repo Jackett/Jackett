@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return genres;
         }
 
-        public static List<int> ExtractCategory(this IElement row, string title=null)
+        public static List<int> ExtractCategory(this IElement row, string title = null)
         {
             var releaseCategory = new List<int>();
             var found = false;
