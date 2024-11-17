@@ -101,14 +101,14 @@ namespace Jackett.Common.Indexers.Definitions
                     continue;
 
                 var detailUrl = new Uri(detailAnchor.GetAttribute("href") ?? string.Empty);
-                var title = CleanTitle(detailAnchor.GetAttribute("title")?.Trim() ?? string.Empty);
+                var title = detailAnchor.GetAttribute("title")?.Trim() ?? string.Empty;
 
                 var releaseCommonInfo = new ReleaseInfo
                 {
-                    Title = title,
+                    Title = CleanTitle(title),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory()
+                    Category = row.ExtractCategory(title)
                 };
 
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var fileInfoDict = ExtractFileInfo(detailsDom);
                 var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
-                releaseCommonInfo.PublishDate = fileInfo.ReleaseYear != null ? DateTime.ParseExact(fileInfo.ReleaseYear, "yyyy", null) : DateTime.MinValue;
+                releaseCommonInfo.PublishDate = fileInfo.ReleaseYear != null ? DateTime.ParseExact(fileInfo.ReleaseYear, "yyyy", null) : DateTime.Today;
 
                 var magnetLinks = detailsDom.QuerySelectorAll("a.btn[href^=\"magnet:?xt\"]");
                 foreach (var magnetLink in magnetLinks)

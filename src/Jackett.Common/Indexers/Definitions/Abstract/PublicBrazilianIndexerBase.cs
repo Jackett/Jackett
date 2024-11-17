@@ -139,15 +139,29 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return genres;
         }
 
-        public static List<int> ExtractCategory(this IElement row)
+        public static List<int> ExtractCategory(this IElement row, string title=null)
         {
             var releaseCategory = new List<int>();
+            var found = false;
             row.ExtractFromRow(
                 "div.title > a", categoryText =>
                 {
+                    found = true;
                     var hasSeasonInfo = categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
                     releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
                 });
+            if (!found)
+            {
+                if (!string.IsNullOrWhiteSpace(title))
+                {
+                    var hasSeasonInfo = title.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
+                    releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
+                }
+                else
+                {
+                    releaseCategory.Add(TorznabCatType.Movies.ID);
+                }
+            }
             return releaseCategory;
         }
 
