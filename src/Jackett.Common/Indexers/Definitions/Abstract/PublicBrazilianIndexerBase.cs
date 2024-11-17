@@ -1,17 +1,17 @@
 using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
-using System.Text.RegularExpressions;
 using System.Globalization;
 using System.Net;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using AngleSharp.Dom;
-using Jackett.Common.Utils;
-using Newtonsoft.Json.Linq;
-using static System.Linq.Enumerable;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Newtonsoft.Json.Linq;
 using NLog;
+using static System.Linq.Enumerable;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions.Abstract
