@@ -76,12 +76,13 @@ namespace Jackett.Common.Indexers.Definitions
                 var detailsParser = new HtmlParser();
                 var detailAnchor = row.QuerySelector("div.title a[title]");
                 var detailUrl = new Uri(detailAnchor?.GetAttribute("href") ?? string.Empty);
+                var title = detailAnchor?.TextContent.Trim() ?? string.Empty;
                 var releaseCommonInfo = new ReleaseInfo
                 {
-                    Title = CleanTitle(detailAnchor?.TextContent.Trim() ?? string.Empty),
+                    Title = CleanTitle(title),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(),
+                    Category = row.ExtractCategory(title),
                     PublishDate = row.ExtractReleaseDate()
                 };
 

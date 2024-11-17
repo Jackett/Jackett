@@ -51,16 +51,17 @@ namespace Jackett.Common.Indexers.Definitions
                 var detailsParser = new HtmlParser();
                 var detailAnchor = row.QuerySelector("a.more-link");
                 var detailUrl = new Uri(detailAnchor?.GetAttribute("href") ?? string.Empty);
+                var title = row.QuerySelector("div.title > a")?.TextContent.Trim();
                 var releaseCommonInfo = new ReleaseInfo
                 {
-                    Title = row.QuerySelector("div.title > a")?.TextContent.Trim(),
+                    Title = CleanTitle(title),
                     Genres = row.ExtractGenres(),
                     Subs = row.ExtractSubtitles(),
                     Size = row.ExtractSize(),
                     Languages = row.ExtractLanguages(),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(),
+                    Category = row.ExtractCategory(title),
                     PublishDate = row.ExtractReleaseDate()
                 };
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
