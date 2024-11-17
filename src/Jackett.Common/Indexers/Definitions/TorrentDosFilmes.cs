@@ -16,21 +16,15 @@ using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 namespace Jackett.Common.Indexers.Definitions
 {
     [ExcludeFromCodeCoverage]
-    public class ComandoFilmes : TorrentDosFilmes
-    {
-        public override string Id => "comandofilmes";
-        public override string Name => "ComandoFilmes";
-        public override string SiteLink { get; protected set; } = "https://ComandoFilmes.xyz/";
-        public ComandoFilmes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
-        {
-        }
-    }
-    [ExcludeFromCodeCoverage]
     public class TorrentDosFilmes : PublicBrazilianIndexerBase
     {
         public override string Id => "torrentdosfilmes";
         public override string Name => "TorrentDosFilmes";
         public override string SiteLink { get; protected set; } = "https://torrentdosfilmes.site/";
+
+        public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://ComandoFilmes.xyz/"
+        };
 
         public TorrentDosFilmes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                                 ICacheService cs) : base(configService, wc, l, ps, cs)
