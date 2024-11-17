@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
         {
+            webclient.requestDelay = 1.5;
         }
 
         public override IParseIndexerResponse GetParser() => new FilmesHdTorrentParser(webclient, Name);
