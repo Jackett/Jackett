@@ -5,6 +5,7 @@ using AngleSharp.Dom;
 using static System.Linq.Enumerable;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
+using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
