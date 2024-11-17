@@ -108,9 +108,10 @@ namespace Jackett.Common.Indexers.Definitions
                 var releaseCommonInfo = new ReleaseInfo
                 {
                     Title = CleanTitle(title),
-                   Details = detailUrl,
-                   Guid = detailUrl,
-                   Category = row.ExtractCategory(title)
+                    Details = detailUrl,
+                    Guid = detailUrl,
+                    Category = row.ExtractCategory(title),
+                    Seeders = 1
                 };
 
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
