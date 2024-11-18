@@ -28,6 +28,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IParseIndexerResponse GetParser() =>
             new ApacheTorrentParser(webclient, Name);
+
+        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey:"index.php?s=");
     }
 
     public class ApacheTorrentParser : PublicBrazilianParser
