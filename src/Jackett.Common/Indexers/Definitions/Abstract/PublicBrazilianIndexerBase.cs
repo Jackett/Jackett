@@ -108,7 +108,13 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             var pageableRequests = new IndexerPageableRequestChain();
             var searchUrl = $"{_siteLink}{SearchQueryParamsKey}";
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
+            {
                 searchUrl += WebUtility.UrlEncode(query.SearchTerm.Replace(" ", "+"));
+            }
+            else
+            {
+                searchUrl = _siteLink;
+            }
 
             pageableRequests.Add(new[] { new IndexerRequest(searchUrl) });
 
