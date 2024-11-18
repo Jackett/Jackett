@@ -95,17 +95,18 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
     public class SimpleRequestGenerator : IIndexerRequestGenerator
     {
         private readonly string _siteLink;
+        private string SearchQueryParamsKey { get; }
 
-        public SimpleRequestGenerator(string siteLink)
+        public SimpleRequestGenerator(string siteLink, string searchQueryParamsKey = "?s=")
         {
             _siteLink = siteLink;
+            SearchQueryParamsKey = searchQueryParamsKey;
         }
 
         public IndexerPageableRequestChain GetSearchRequests(TorznabQuery query)
         {
             var pageableRequests = new IndexerPageableRequestChain();
-
-            var searchUrl = $"{_siteLink}?s=";
+            var searchUrl = $"{_siteLink}{SearchQueryParamsKey}";
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
                 searchUrl += WebUtility.UrlEncode(query.SearchTerm.Replace(" ", "+"));
 
