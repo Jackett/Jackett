@@ -23,6 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://torrentdosfilmes.site/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://torrentdosfilmes.site/",
             "https://ComandoFilmes.xyz/"
         };
 

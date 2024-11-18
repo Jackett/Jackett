@@ -21,6 +21,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://www.filmeshdtorrent.vip/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
+            "https://www.filmeshdtorrent.vip/",
             "https://baixarfilmestorrents.net/"
         };
 
