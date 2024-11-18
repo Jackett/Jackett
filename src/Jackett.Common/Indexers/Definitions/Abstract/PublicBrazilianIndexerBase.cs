@@ -149,27 +149,26 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         public static List<int> ExtractCategory(this IElement row, string title = null)
         {
             var releaseCategory = new List<int>();
+            var category = TorznabCatType.Movies;
             var found = false;
             row.ExtractFromRow(
                 "div.title > a", categoryText =>
                 {
-                    found = true;
-                    var hasSeasonInfo = categoryText.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
-                    releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
+                    category = ExtractCategory(categoryText);
                 });
-            if (!found)
+            if (!category.Equals(TorznabCatType.TV) && !string.IsNullOrWhiteSpace(title))
             {
-                if (!string.IsNullOrWhiteSpace(title))
-                {
-                    var hasSeasonInfo = title.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
-                    releaseCategory.Add(hasSeasonInfo ? TorznabCatType.TV.ID : TorznabCatType.Movies.ID);
-                }
-                else
-                {
-                    releaseCategory.Add(TorznabCatType.Movies.ID);
-                }
+                category = ExtractCategory(title);
             }
+            releaseCategory.Add(category.ID);
             return releaseCategory;
+        }
+
+        private static TorznabCategory ExtractCategory(string text)
+        {
+            var hasSeasonInfo = text.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0;
+            var category = hasSeasonInfo ? TorznabCatType.TV : TorznabCatType.Movies;
+            return category;
         }
 
         public static DateTime ExtractReleaseDate(this IElement row)
