@@ -25,7 +25,6 @@ namespace Jackett.Common.Indexers.Definitions
         public RedeTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService, wc, l, ps, cs)
         {
-            // Parser = new RedeTorrentParser(wc, Name, MapTrackerCatToNewznab);
         }
 
         public override IParseIndexerResponse GetParser() => new RedeTorrentParser(webclient, Name);
