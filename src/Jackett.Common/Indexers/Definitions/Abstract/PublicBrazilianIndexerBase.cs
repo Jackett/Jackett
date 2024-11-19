@@ -168,7 +168,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         {
             var hasSeasonInfo = text.IndexOf("temporada", StringComparison.OrdinalIgnoreCase) >= 0 ||
                                 text.IndexOf("season", StringComparison.OrdinalIgnoreCase) >= 0 ||
-                                Regex.IsMatch(text, @"\bS\d{1,2}E\d{1,2}\b", RegexOptions.IgnoreCase);
+                                Regex.IsMatch(text, @"\bS\d{1,2}(?:E\d{1,2})?\b", RegexOptions.IgnoreCase);
             var category = hasSeasonInfo ? TorznabCatType.TV : TorznabCatType.Movies;
             return category;
         }
