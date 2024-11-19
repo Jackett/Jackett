@@ -202,9 +202,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return subtitles;
         }
 
-        public static long? ExtractSize(this IElement row)
+        public static long ExtractSize(this IElement row)
         {
-            long? result = null;
+            long result = 0;
             row.ExtractFromRow(
                 "span:contains(\"Tamanho:\")", sizeText =>
                 {
