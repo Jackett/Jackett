@@ -263,8 +263,14 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public abstract IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse);
 
-        public string ExtractTitleOrDefault(IElement downloadButton, string title)
+        public string ExtractTitleOrDefault(IElement downloadButton, string defaultTitle)
         {
+            var title = "";
+            Regex.Match(downloadButton?.GetAttribute("href") ?? "", @"&dn=(.+?)&", RegexOptions.IgnoreCase);
+            RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"), @"&dn=(.+?)&", magnetTitle =>
+            {
+                title = magnetTitle;
+            });
             var description = GetTitleElementOrNull(downloadButton);
             if (description != null)
             {
@@ -277,14 +283,25 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             }
             else
             {
-                RowParsingExtensions.ExtractPattern(
-                    title, @"\b(\d{3,4}p)\b", resolution =>
-                    {
-                        title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
-                    });
+                if (string.IsNullOrWhiteSpace(title))
+                {
+                    RowParsingExtensions.ExtractPattern(
+                        defaultTitle, @"\b(\d{3,4}p)\b", resolution =>
+                        {
+                            title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {resolution}";
+                        });
+                }
+                else
+                {
+                    RowParsingExtensions.ExtractPattern(
+                        title, @"\b(\d{3,4}p)\b", resolution =>
+                        {
+                            title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
+                        });
+                }
             }
 
-            return title;
+            return string.IsNullOrWhiteSpace(title) ? defaultTitle : title;
         }
 
         public long ExtractSizeByResolution(string title)
