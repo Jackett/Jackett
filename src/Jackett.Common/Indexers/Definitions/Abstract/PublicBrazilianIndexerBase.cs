@@ -289,7 +289,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                                                 @"&dn=(.+?)&|&dn=(.+?)$",
                                                 mt => magnetTitle = HttpUtility.UrlDecode(mt));
             if (!string.IsNullOrWhiteSpace(magnetTitle))
-                return FormatTitle(magnetTitle);
+                return FormatTitle(CleanTitle(magnetTitle), ExtractResolution(magnetTitle));
             var description = GetTitleElementOrNull(downloadButton);
             var resolution = description?.TextContent switch
             {
