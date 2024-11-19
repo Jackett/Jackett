@@ -299,8 +299,8 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         private string FormatTitle(string title, string resolution = null)
         {
             return string.IsNullOrWhiteSpace(resolution)
-                ? $"[{_name}] {title}"
-                : $"[{_name}] {title} {resolution}";
+                ? $"{title}"
+                : $"{title} {resolution}";
         }
 
         public long ExtractSizeByResolution(string title)
