@@ -100,7 +100,8 @@ namespace Jackett.Common.Indexers.Definitions
                         {
                             fileInfo.Subtitle
                         };
-                    release.Size = !string.IsNullOrEmpty(fileInfo.Size) ? ParseUtil.GetBytes(fileInfo.Size) : ExtractSizeByResolution(release.Title);
+                    var size = ParseUtil.GetBytes(fileInfo.Size ?? string.Empty);
+                    release.Size = size > 0 ? size : ExtractSizeByResolution(release.Title);
                     var magnet = downloadButton.ExtractMagnet();
                     release.Link = release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
