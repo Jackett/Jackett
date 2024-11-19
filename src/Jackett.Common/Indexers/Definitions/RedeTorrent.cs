@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IParseIndexerResponse GetParser() => new RedeTorrentParser(webclient, Name);
 
-        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey:"index.php?s=");
+        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?s=");
     }
 
     public class RedeTorrentParser : PublicBrazilianParser
