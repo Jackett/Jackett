@@ -102,7 +102,7 @@ namespace Jackett.Common.Indexers.Definitions
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
-                    var size = ParseUtil.GetBytes(fileInfo.Size ?? string.Empty);
+                    var size = RowParsingExtensions.GetBytes(fileInfo.Size ?? string.Empty);
                     release.Size = size > 0 ? size : ExtractSizeByResolution(release.Title);
                     release.Link = release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0;
