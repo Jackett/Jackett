@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var resolution = fileInfo.Quality ?? fileInfo.VideoQuality ?? string.Empty;
 
                     // Format the title
-                    release.Title = $"[{Tracker}] {release.Title} {resolution}".Trim();
+                    release.Title = $"{release.Title} {resolution}".Trim();
                     release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
                     release.Category = magnetLink.ExtractCategory(release.Title);
 
