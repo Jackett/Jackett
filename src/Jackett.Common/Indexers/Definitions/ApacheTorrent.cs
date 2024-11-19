@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override IParseIndexerResponse GetParser() =>
             new ApacheTorrentParser(webclient, Name);
 
-        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey:"index.php?s=");
+        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?s=");
     }
 
     public class ApacheTorrentParser : PublicBrazilianParser
@@ -126,8 +126,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var magnet = magnetLink.GetAttribute("href");
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                    release.MagnetUri = new Uri(magnet);
-                    release.Link = new Uri(magnet);
+                    release.Link = release.MagnetUri = new Uri(magnet ?? "");
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 
@@ -143,7 +142,7 @@ namespace Jackett.Common.Indexers.Definitions
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
                     release.Size = !string.IsNullOrEmpty(fileInfo.Size) ? ParseUtil.GetBytes(fileInfo.Size) : ExtractSizeByResolution(release.Title);
 
-                    if (release.Title.IsNotNullOrWhiteSpace())
+                    if (!string.IsNullOrWhiteSpace(release.Title))
                         releases.Add(release);
                 }
             }
