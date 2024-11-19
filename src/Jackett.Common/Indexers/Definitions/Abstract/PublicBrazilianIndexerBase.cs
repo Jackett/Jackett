@@ -356,6 +356,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             // Remove language info
             title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub|[AÁ]udio)\b", "", RegexOptions.IgnoreCase);
 
+            // Clean up torrent group names
+            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO|VEMTORRENT\.COM|VACATORRENT\.COM", "", RegexOptions.IgnoreCase);
+
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
 
@@ -364,9 +367,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
             // Clean up multiple spaces
             title = Regex.Replace(title, @"\s+", " ");
-
-            // Clean up torrent group names
-            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO", "", RegexOptions.IgnoreCase);
 
             // Remove file extension from the beginning of title
             title = Regex.Replace(title, @"MKV|MP4", "", RegexOptions.IgnoreCase);
