@@ -266,63 +266,46 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public string ExtractTitleOrDefault(IElement downloadButton, string defaultTitle)
         {
-            var title = "";
+            var magnetTitle = ExtractMagnetTitle(downloadButton);
+            var description = GetTitleElementOrNull(downloadButton);
+            var resolution = (magnetTitle, description?.TextContent) switch
+            {
+                (string magTitle, _) when !string.IsNullOrWhiteSpace(magTitle) => ExtractResolution(magTitle),
+                (_, string text) when !string.IsNullOrWhiteSpace(text) => ExtractResolution(text),
+                _ => ExtractResolution(defaultTitle)
+            };
+            var title = (defaultTitle, magnetTitle, description?.TextContent) switch
+            {
+                (string defTitle, _, _) when !string.IsNullOrWhiteSpace(defTitle) => CleanTitle(defTitle),
+                (_, string magTitle, _) when !string.IsNullOrWhiteSpace(magTitle) => CleanTitle(magTitle),
+                (_, _, string text) when !string.IsNullOrWhiteSpace(text) => CleanTitle(text),
+                _ => defaultTitle
+            };
+            return FormatTitle(title, resolution);
+        }
+
+        private string ExtractResolution(string text)
+        {
             var resolution = "";
+            RowParsingExtensions.ExtractPattern(text, @"\b(\d{3,4}p)\b", res => resolution = res);
+            return resolution;
+        }
+
+        private string FormatTitle(string title, string resolution = null)
+        {
+            return string.IsNullOrWhiteSpace(resolution)
+                ? $"[{_name}] {title}"
+                : $"[{_name}] {title} {resolution}";
+        }
+
+        private static string ExtractMagnetTitle(IElement downloadButton)
+        {
+            var title = "";
             RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"), @"&dn=(.+?)&|&dn=(.+?)$", magnetTitle =>
             {
                 title = HttpUtility.UrlDecode(magnetTitle);
             });
-            var description = GetTitleElementOrNull(downloadButton);
-            if (description != null)
-            {
-                var descriptionText = description.TextContent;
-                RowParsingExtensions.ExtractPattern(
-                    descriptionText, @"\b(\d{3,4}p)\b", res =>
-                    {
-                        resolution = res;
-                        if (string.IsNullOrWhiteSpace(title))
-                        {
-                            RowParsingExtensions.ExtractPattern(
-                                defaultTitle, @"(.)", _ =>
-                                {
-                                    title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {resolution}";
-                                });
-                        }
-                        else
-                        {
-                            RowParsingExtensions.ExtractPattern(
-                                title, @"(.)", _ =>
-                                {
-                                    title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
-                                });
-                        }
-                    });
-                if (string.IsNullOrWhiteSpace(resolution))
-                {
-                    title = $"[{_name}] " + CleanTitle(title);
-                }
-            }
-            else
-            {
-                if (string.IsNullOrWhiteSpace(title))
-                {
-                    RowParsingExtensions.ExtractPattern(
-                        defaultTitle, @"\b(\d{3,4}p)\b", res =>
-                        {
-                            title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {res}";
-                        });
-                }
-                else
-                {
-                    RowParsingExtensions.ExtractPattern(
-                        title, @"\b(\d{3,4}p)\b", res =>
-                        {
-                            title = $"[{_name}] " + CleanTitle(title) + $" {res}";
-                        });
-                }
-            }
-
-            return string.IsNullOrWhiteSpace(title) ? defaultTitle : title;
+            return title;
         }
 
         public long ExtractSizeByResolution(string title)
