@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using AngleSharp.Dom;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -266,37 +267,57 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         public string ExtractTitleOrDefault(IElement downloadButton, string defaultTitle)
         {
             var title = "";
-            Regex.Match(downloadButton?.GetAttribute("href") ?? "", @"&dn=(.+?)&", RegexOptions.IgnoreCase);
-            RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"), @"&dn=(.+?)&", magnetTitle =>
+            var resolution = "";
+            RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"), @"&dn=(.+?)&|&dn=(.+?)$", magnetTitle =>
             {
-                title = magnetTitle;
+                title = HttpUtility.UrlDecode(magnetTitle);
             });
             var description = GetTitleElementOrNull(downloadButton);
             if (description != null)
             {
                 var descriptionText = description.TextContent;
                 RowParsingExtensions.ExtractPattern(
-                    descriptionText, @"\b(\d{3,4}p)\b", resolution =>
+                    descriptionText, @"\b(\d{3,4}p)\b", res =>
                     {
-                        title = $"[{_name}] " + CleanTitle(descriptionText) + $" {resolution}";
+                        resolution = res;
+                        if (string.IsNullOrWhiteSpace(title))
+                        {
+                            RowParsingExtensions.ExtractPattern(
+                                defaultTitle, @"(.)", _ =>
+                                {
+                                    title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {resolution}";
+                                });
+                        }
+                        else
+                        {
+                            RowParsingExtensions.ExtractPattern(
+                                title, @"(.)", _ =>
+                                {
+                                    title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
+                                });
+                        }
                     });
+                if (string.IsNullOrWhiteSpace(resolution))
+                {
+                    title = $"[{_name}] " + CleanTitle(title);
+                }
             }
             else
             {
                 if (string.IsNullOrWhiteSpace(title))
                 {
                     RowParsingExtensions.ExtractPattern(
-                        defaultTitle, @"\b(\d{3,4}p)\b", resolution =>
+                        defaultTitle, @"\b(\d{3,4}p)\b", res =>
                         {
-                            title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {resolution}";
+                            title = $"[{_name}] " + CleanTitle(defaultTitle) + $" {res}";
                         });
                 }
                 else
                 {
                     RowParsingExtensions.ExtractPattern(
-                        title, @"\b(\d{3,4}p)\b", resolution =>
+                        title, @"\b(\d{3,4}p)\b", res =>
                         {
-                            title = $"[{_name}] " + CleanTitle(title) + $" {resolution}";
+                            title = $"[{_name}] " + CleanTitle(title) + $" {res}";
                         });
                 }
             }
