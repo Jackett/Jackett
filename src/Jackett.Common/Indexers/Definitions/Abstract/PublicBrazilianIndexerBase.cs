@@ -364,6 +364,10 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             // Clean up multiple spaces
             title = Regex.Replace(title, @"\s+", " ");
 
+            // Clean up torrent group names
+
+            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO", "", RegexOptions.IgnoreCase);
+
             // Remove dots between words but keep dots in version numbers
             title = Regex.Replace(title, @"(?<!\d)\.(?!\d)", " ", RegexOptions.IgnoreCase);
 
