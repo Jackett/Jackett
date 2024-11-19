@@ -5,8 +5,15 @@ description: "Magnet Cat is a Public Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
+# current domain finder https://魔法猫咪.lol/ or https://哆啦a猫.com/
 links:
   - https://magnetcatcat.com/
+  - https://clmclm.com/
+  - https://www.clm446.buzz/
+  - https://www.clm447.buzz/
+  - https://www.clm448.buzz/
+  - https://www.clm449.buzz/
+  - https://www.clm450.buzz/
 
 caps:
   categorymappings:
@@ -76,14 +83,14 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("Date added:") > b
+      selector: div.sbar > span:contains("Date added:") > b, div.sbar > span:contains("添加时间:") > b
       filters:
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("Size:") > b
+      selector: div.sbar > span:contains("Size:") > b, div.sbar > span:contains("大小:") > b
     seeders:
       text: 1
     leechers:

@@ -119,6 +119,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and read any mandatory notices that the site presents. You cannot browse torrents with unread notices outstanding."
 
 login:
   method: cookie

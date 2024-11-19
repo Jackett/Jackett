@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        const string RSS_PATH = "feed/?type=magnet";
+        const string RSS_PATH = "feed/?type=magnet&token=";
 
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, CacheManager cm)
@@ -92,7 +92,7 @@ namespace Jackett.Common.Indexers.Definitions
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
         private bool IsSubsEnabled => ((BoolConfigurationItem)configData.GetDynamic("include-subs")).Value;
 
-        public string RssFeedUri => SiteLink + RSS_PATH + "&" + RSSKey;
+        public string RssFeedUri => SiteLink + RSS_PATH + RSSKey;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers.Definitions
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
             if (result.IsRedirect)
                 result = await FollowIfRedirect(result);
-            if (result.ContentString.Contains("403 Forbidden"))
+            if (result.ContentString.Contains("<status>403</status>"))
             {
                 logger.Error("[EraiRaws] 403 Forbidden");
                 throw new Exception("The RSSkey may need to be replaced as EraiRaws returned 403 Forbidden.");
@@ -266,6 +266,10 @@ namespace Jackett.Common.Indexers.Definitions
                 var description = rssItem.SelectSingleNode("description")?.InnerText;
                 var quality = rssItem.SelectSingleNode("erai:resolution", nsm)?.InnerText;
                 var subs = rssItem.SelectSingleNode("erai:subtitles", nsm)?.InnerText;
+                if (string.IsNullOrEmpty(subs))
+                {
+                    subs = "[]";
+                }
 
                 item = new RssFeedItem
                 {

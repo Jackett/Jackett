@@ -309,10 +309,12 @@ namespace Jackett.Updater
                 "Definitions/bitnova.yml",
                 "Definitions/bitofvalor.yml",
                 "Definitions/bitsexy.yml",
+                "Definitions/bitstream.yml",
                 "Definitions/bittorrentam.yml",
                 "Definitions/blubits.yml",
                 "Definitions/bluesbrothers.yml",
                 "Definitions/blutopia.yml", // switch to *-API #8682
+                "Definitions/blutopia-api.yml",
                 "Definitions/bolly-api.yml",
                 "Definitions/brasiltracker.yml", // migrated to C#
                 "Definitions/breizhpeers.yml",
@@ -485,6 +487,7 @@ namespace Jackett.Updater
                 "Definitions/kickasstorrent-kathow.yml", // renamed to kickasstorrents-ws
                 "Definitions/kickasstorrent.yml",
                 "Definitions/kikibt.yml",
+                "Definitions/kimoji.yml",
                 "Definitions/kinonavse100.yml",
                 "Definitions/kisssub.yml",
                 "Definitions/knaben.yml", // migrated to C# API
@@ -497,7 +500,6 @@ namespace Jackett.Updater
                 "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
-                "Definitions/lemonhd.yml",
                 "Definitions/leparadisdunet.yml",
                 "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
@@ -601,7 +603,6 @@ namespace Jackett.Updater
                 "Definitions/rgu.yml",
                 "Definitions/rmhd.yml",
                 "Definitions/rns.yml", // site merged with audiobooktorrents
-                "Definitions/rockethd.yml",
                 "Definitions/rockhardlossless.yml",
                 "Definitions/rodvd.yml",
                 "Definitions/rofd.yml",
@@ -705,6 +706,7 @@ namespace Jackett.Updater
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
                 "Definitions/torrentwal.yml",
+                "Definitions/torrentwhiz.yml",
                 "Definitions/torrentwtf.yml",
                 "Definitions/torrentz2.yml",
                 "Definitions/torrentz2eu.yml",
@@ -719,6 +721,7 @@ namespace Jackett.Updater
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
+                "Definitions/turknova.yml",
                 "Definitions/turkseed.yml",
                 "Definitions/turktracker.yml",
                 "Definitions/tvroad.yml",

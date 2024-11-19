@@ -6,7 +6,7 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 certificates:
-  - abea2b6915578cf69e6270980e75b518abb5af73 # expired 4th August 2024
+  - 314a854715f68440d92c14d2414065410785cf26  # expired 9th November 2024
 links:
   - https://torrents-local.xyz/
 

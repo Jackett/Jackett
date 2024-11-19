@@ -13,44 +13,42 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: PC, desc: "Apps"}
-    - {id: 2, cat: Movies, desc: "XVID"}
-    - {id: 3, cat: Movies/DVD, desc: "DVD"}
-    - {id: 4, cat: TV, desc: "TV XVID"}
-    - {id: 5, cat: PC/Games, desc: "PC Games"}
-    - {id: 6, cat: Movies/HD, desc: "HD"}
-    - {id: 7, cat: XXX, desc: "XXX"}
-    - {id: 8, cat: TV/Anime, desc: "Anime"}
-    - {id: 9, cat: Audio, desc: "Audio"}
-    - {id: 10, cat: Other, desc: "Other"}
-    - {id: 11, cat: Console/XBox 360, desc: "XBOX 360"}
-    - {id: 12, cat: Console/PSP, desc: "PSP"}
-    - {id: 13, cat: TV/Documentary, desc: "Doc"}
-    - {id: 14, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 15, cat: Console, desc: "PS2"}
-    - {id: 16, cat: TV/Sport, desc: "TV WWE"}
-    - {id: 17, cat: TV/HD, desc: "TV X264"}
-    - {id: 18, cat: TV, desc: "TV DVD"}
-    - {id: 19, cat: XXX/DVD, desc: "XXX DVD"}
-    - {id: 20, cat: TV/Anime, desc: "Anime DVD"}
-    - {id: 21, cat: PC/Mac, desc: "Mac"}
-    - {id: 23, cat: Movies, desc: "Boxset"}
-    - {id: 31, cat: Other, desc: "OFF"}
-    - {id: 32, cat: Movies/BluRay, desc: "BluRay"}
-    - {id: 33, cat: Console/Wii, desc: "WII"}
-    - {id: 34, cat: Console/PS3, desc: "PS3"}
-    - {id: 35, cat: TV/Anime, desc: "Anime HD"}
-    - {id: 36, cat: PC/Mobile-Android, desc: "Android"}
-    - {id: 37, cat: Movies/DVD, desc: "Custom DVDR"}
+    - {id: 15, cat: Console/PS3, desc: "JOGO-PS"}
+    - {id: 11, cat: Console/XBox, desc: "JOGO-XBOX"}
+    - {id: 5, cat: PC/Games, desc: "JOGO-PC"}
+    - {id: 33, cat: Console/NDS, desc: "JOGO-ND"}
     - {id: 38, cat: Movies/Other, desc: "CAM TS"}
+    - {id: 23, cat: Movies, desc: "FILME-PACK"}
+    - {id: 53, cat: Movies/SD, desc: "FILME-SD"}
+    - {id: 6, cat: Movies/HD, desc: "FILME-HD"}
+    - {id: 46, cat: Movies/UHD, desc: "FILME-4K"}
+    - {id: 32, cat: Movies/BluRay, desc: "FILME-BRAY"}
+    - {id: 3, cat: Movies/DVD, desc: "FILME-DVD"}
+    - {id: 42, cat: Movies/WEB-DL, desc: "FILME-WEB"}
+    - {id: 9, cat: Audio, desc: "ALBUNS"}
+    - {id: 14, cat: Audio/Video, desc: "MUSIC-VID"}
+    - {id: 1, cat: PC, desc: "APPS"}
+    - {id: 21, cat: PC/Mac, desc: "MAC"}
+    - {id: 36, cat: PC/Mobile-Android, desc: "ANDROID"}
+    - {id: 4, cat: TV/SD, desc: "TV-SD"}
+    - {id: 17, cat: TV/HD, desc: "TV-HD"}
+    - {id: 48, cat: TV/UHD, desc: "TV-4K"}
+    - {id: 47, cat: TV/Other, desc: "TV-PACK"}
+    - {id: 16, cat: TV/Sport, desc: "WWE"}
+    - {id: 44, cat: TV/Sport, desc: "SPORTS"}
+    - {id: 13, cat: TV/Documentary, desc: "DOC"}
+    - {id: 49, cat: TV/Anime, desc: "ANIME-4K"}
+    - {id: 20, cat: TV/Anime, desc: "ANIME-DVD"}
+    - {id: 35, cat: TV/Anime, desc: "ANIME-HD"}
+    - {id: 50, cat: TV/Anime, desc: "ANIME-PACK"}
+    - {id: 8, cat: TV/Anime, desc: "ANIME-SD"}
+    - {id: 51, cat: TV/Anime, desc: "ANIME-WEB"}
+    - {id: 7, cat: XXX, desc: "XXX"}
+    - {id: 43, cat: Books/EBook, desc: "EBOOK"}
+    - {id: 52, cat: Books/Other, desc: "CURSOS"}
+    - {id: 31, cat: Other, desc: "OFF"}
+    - {id: 10, cat: Other, desc: "OUTROS"}
     - {id: 39, cat: Other, desc: "GPS"}
-    - {id: 40, cat: Console/PS4, desc: "PS4"}
-    - {id: 41, cat: Movies/BluRay, desc: "BDRIP"}
-    - {id: 42, cat: Movies/WEB-DL, desc: "WEB DL"}
-    - {id: 43, cat: Books, desc: "Ebook"}
-    - {id: 44, cat: TV/Sport, desc: "Sports"}
-    - {id: 46, cat: Movies/UHD, desc: "4K"}
-    - {id: 47, cat: TV/HD, desc: "TV X265"}
 
   modes:
     search: [q]
@@ -125,44 +123,42 @@ search:
     category:
       selector: td:first-of-type
       case:
-        div.cat-4k: 46
+        div.cat-filme-4k: 46
         div.cat-albuns: 9
         div.cat-android: 36
         div.cat-anime: 8
-        div.cat-anime-dvdr: 20
+        div.cat-anime-dvd: 20
         div.cat-anime-hd: 35
+        div.cat-anime-pack: 50
+        div.cat-anime-web: 51
+        div.cat-anime-4k: 49
         div.cat-apps: 1
-        div.cat-brip: 41
-        div.cat-blu-ray: 32
-        div.cat-boxset: 23
         div.cat-cam-ts: 38
-        div.cat-dvd-custom: 37
-        div.cat-sports: 44
+        div.cat-cursos: 52
         div.cat-doc: 13
-        div.cat-dvdr: 3
-        div.cat-e-book: 43
+        div.cat-ebook: 43
+        div.cat-filme-bray: 32
+        div.cat-filme-dvd: 3
+        div.cat-filme-hd: 6
+        div.cat-filme-pack: 23
+        div.cat-filme-sd: 53
+        div.cat-filme-web: 42
         div.cat-gps: 39
-        div.cat-hd: 6
-        div.cat-games: 5
-        div.cat-ps2: 15
-        div.cat-ps3: 34
-        div.cat-ps4: 40
-        div.cat-psp: 12
-        div.cat-wii: 33
-        div.cat-mdvdr: 14
+        div.cat-jogo-nd: 33
+        div.cat-jogo-pc: 5
+        div.cat-jogo-ps: 15
+        div.cat-jogo-xbox: 11
         div.cat-mac: 21
+        div.cat-music-vid: 14
         div.cat-off: 31
-        div.cat-other: 10
-        div.cat-series: 4
-        div.cat-series-dvdr: 18
-        div.cat-series-x264: 17
-        div.cat-series-x265: 47
-        div.cat-web-dl: 42
+        div.cat-outros: 10
+        div.cat-sports: 44
+        div.cat-tv-4k: 48
+        div.cat-tv-hd: 17
+        div.cat-tv-pack: 47
+        div.cat-tv-sd: 4
         div.cat-wwe: 16
-        div.cat-xbox360: 11
-        div.cat-xvid: 2
         div.cat-xxx: 7
-        div.cat-xxx-dvdr: 19
     _audiopt:
       selector: i.fg-audiopt
       attribute: title

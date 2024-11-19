@@ -126,6 +126,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download_ssl.php?torrent="]
+      attribute: href
+
 search:
   paths:
     - path: selection.php
@@ -155,7 +160,7 @@ search:
       selector: a.selection_a
       attribute: href
     download:
-      selector: a[href^="download_ssl.php?torrent="]
+      selector: a.selection_a
       attribute: href
     poster:
       selector: div[id^="details"] img
