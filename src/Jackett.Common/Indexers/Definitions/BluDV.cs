@@ -61,7 +61,6 @@ namespace Jackett.Common.Indexers.Definitions
                     Languages = row.ExtractLanguages(),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(title),
                     PublishDate = row.ExtractReleaseDate(),
                     Seeders = 1
                 };
@@ -72,6 +71,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var magnet = downloadButton.ExtractMagnet();
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
+                    release.Category = downloadButton.ExtractCategory(release.Title);
                     release.Size = release.Size > 0 ? release.Size : ExtractSizeByResolution(release.Title);
                     release.Languages = row.ExtractLanguages();
                     release.Link = release.Guid = release.MagnetUri = magnet;
