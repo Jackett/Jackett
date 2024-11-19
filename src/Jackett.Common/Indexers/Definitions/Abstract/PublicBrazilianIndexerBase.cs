@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AngleSharp.Dom;
+using CommandLine;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -365,8 +366,10 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             title = Regex.Replace(title, @"\s+", " ");
 
             // Clean up torrent group names
-
             title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO", "", RegexOptions.IgnoreCase);
+
+            // Remove file extension from the beginning of title
+            title = Regex.Replace(title, @"MKV|MP4", "", RegexOptions.IgnoreCase);
 
             // Remove dots between words but keep dots in version numbers
             title = Regex.Replace(title, @"(?<!\d)\.(?!\d)", " ", RegexOptions.IgnoreCase);
