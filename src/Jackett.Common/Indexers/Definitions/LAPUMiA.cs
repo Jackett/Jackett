@@ -80,7 +80,6 @@ namespace Jackett.Common.Indexers.Definitions
                     Title = CleanTitle(title),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(title),
                     PublishDate = row.ExtractReleaseDate(),
                     Seeders = 1
                 };
@@ -90,6 +89,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
+                    release.Category = downloadButton.ExtractCategory(release.Title);
                     var fileInfoDict = ExtractFileInfo(detailsDom);
                     var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;

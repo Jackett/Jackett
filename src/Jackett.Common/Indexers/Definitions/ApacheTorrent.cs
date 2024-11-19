@@ -110,7 +110,6 @@ namespace Jackett.Common.Indexers.Definitions
                     Title = CleanTitle(title),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(title),
                     Seeders = 1
                 };
 
@@ -135,6 +134,8 @@ namespace Jackett.Common.Indexers.Definitions
 
                     // Format the title
                     release.Title = $"[{Tracker}] {release.Title} {resolution}".Trim();
+                    release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
+                    release.Category = magnetLink.ExtractCategory(release.Title);
 
                     // Additional metadata
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;

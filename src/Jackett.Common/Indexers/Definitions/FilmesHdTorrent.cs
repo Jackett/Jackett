@@ -90,7 +90,6 @@ namespace Jackett.Common.Indexers.Definitions
                     Title = CleanTitle(row.QuerySelector("div.titulo span")?.TextContent.Trim() ?? detailAnchor?.GetAttribute("title")?.Trim() ?? string.Empty),
                     Details = detailUrl,
                     Guid = detailUrl,
-                    Category = row.ExtractCategory(),
                     PublishDate = row.ExtractReleaseDate(),
                     Seeders = 1
                 };
@@ -106,6 +105,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var magnet = downloadButton.ExtractMagnet();
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
+                    release.Category = downloadButton.ExtractCategory(release.Title);
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
