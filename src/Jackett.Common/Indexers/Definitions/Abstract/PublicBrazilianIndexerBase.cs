@@ -264,21 +264,26 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public abstract IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse);
 
+
+
         public string ExtractTitleOrDefault(IElement downloadButton, string defaultTitle)
         {
-            var magnetTitle = ExtractMagnetTitle(downloadButton);
+            var magnetTitle = "";
+            RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"),
+                                                @"&dn=(.+?)&|&dn=(.+?)$",
+                                                mt => magnetTitle = HttpUtility.UrlDecode(mt));
+            if (!string.IsNullOrWhiteSpace(magnetTitle))
+                return FormatTitle(magnetTitle);
             var description = GetTitleElementOrNull(downloadButton);
-            var resolution = (magnetTitle, description?.TextContent) switch
+            var resolution = description?.TextContent switch
             {
-                (string magTitle, _) when !string.IsNullOrWhiteSpace(magTitle) => ExtractResolution(magTitle),
-                (_, string text) when !string.IsNullOrWhiteSpace(text) => ExtractResolution(text),
+                string text when !string.IsNullOrWhiteSpace(text) => ExtractResolution(text),
                 _ => ExtractResolution(defaultTitle)
             };
-            var title = (defaultTitle, magnetTitle, description?.TextContent) switch
+            var title = (defaultTitle, description?.TextContent) switch
             {
-                (string defTitle, _, _) when !string.IsNullOrWhiteSpace(defTitle) => CleanTitle(defTitle),
-                (_, string magTitle, _) when !string.IsNullOrWhiteSpace(magTitle) => CleanTitle(magTitle),
-                (_, _, string text) when !string.IsNullOrWhiteSpace(text) => CleanTitle(text),
+                (string defTitle, _) when !string.IsNullOrWhiteSpace(defTitle) => CleanTitle(defTitle),
+                (_, string text) when !string.IsNullOrWhiteSpace(text) => CleanTitle(text),
                 _ => defaultTitle
             };
             return FormatTitle(title, resolution);
@@ -296,16 +301,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return string.IsNullOrWhiteSpace(resolution)
                 ? $"[{_name}] {title}"
                 : $"[{_name}] {title} {resolution}";
-        }
-
-        private static string ExtractMagnetTitle(IElement downloadButton)
-        {
-            var title = "";
-            RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"), @"&dn=(.+?)&|&dn=(.+?)$", magnetTitle =>
-            {
-                title = HttpUtility.UrlDecode(magnetTitle);
-            });
-            return title;
         }
 
         public long ExtractSizeByResolution(string title)
