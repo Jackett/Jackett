@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AngleSharp.Dom;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -214,10 +215,24 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                     ExtractPattern(
                         sizeText, @"Tamanho:\s*(.+)", size =>
                         {
-                            result = ParseUtil.GetBytes(size);
+                            result = GetBytes(size);
                         });
                 });
             return result;
+        }
+
+        public static long GetBytes(string text)
+        {
+            if (Regex.Matches(text, @"\b[GTKP]?B\b", RegexOptions.IgnoreCase).Count > 1)
+            {
+                var match = Regex.Match(text, @"[GTKP]?B([.,| \d]+[GTKP]?B)", RegexOptions.RightToLeft);
+                if (match.Success)
+                {
+                    text = match.Groups[1].Value;
+                }
+            }
+
+            return ParseUtil.GetBytes(text);
         }
 
         public static List<string> ExtractLanguages(this IElement row)
@@ -320,7 +335,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 _ => "512MB"
             };
 
-            return ParseUtil.GetBytes(size);
+            return RowParsingExtensions.GetBytes(size);
         }
 
         protected static string CleanTitle(string title)
