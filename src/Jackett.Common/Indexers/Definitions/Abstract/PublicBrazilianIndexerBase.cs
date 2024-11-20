@@ -271,13 +271,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
     }
     public abstract class PublicBrazilianParser : IParseIndexerResponse
     {
-        protected string _name;
-
-        protected PublicBrazilianParser(string name)
-        {
-            _name = name;
-        }
-
         public abstract IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse);
 
 

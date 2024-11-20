@@ -27,14 +27,14 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        public override IParseIndexerResponse GetParser() => new LAPUMiAParser(webclient, Name);
+        public override IParseIndexerResponse GetParser() => new LAPUMiAParser(webclient);
     }
 
     public class LAPUMiAParser : PublicBrazilianParser
     {
         private WebClient _webclient;
 
-        public LAPUMiAParser(WebClient webclient, string name) : base(name)
+        public LAPUMiAParser(WebClient webclient)
         {
             _webclient = webclient;
         }

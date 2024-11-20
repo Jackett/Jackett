@@ -32,14 +32,14 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        public override IParseIndexerResponse GetParser() => new TorrentDosFilmesParser(webclient, Name);
+        public override IParseIndexerResponse GetParser() => new TorrentDosFilmesParser(webclient);
     }
 
     public class TorrentDosFilmesParser : PublicBrazilianParser
     {
         private readonly WebClient _webclient;
 
-        public TorrentDosFilmesParser(WebClient webclient, string name) : base(name)
+        public TorrentDosFilmesParser(WebClient webclient)
         {
             _webclient = webclient;
         }

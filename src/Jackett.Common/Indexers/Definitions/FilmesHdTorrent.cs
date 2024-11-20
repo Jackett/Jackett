@@ -29,13 +29,13 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        public override IParseIndexerResponse GetParser() => new FilmesHdTorrentParser(webclient, Name);
+        public override IParseIndexerResponse GetParser() => new FilmesHdTorrentParser(webclient);
     }
     public class FilmesHdTorrentParser : PublicBrazilianParser
     {
         private readonly WebClient _webclient;
 
-        public FilmesHdTorrentParser(WebClient webclient, string name) : base(name)
+        public FilmesHdTorrentParser(WebClient webclient)
         {
             _webclient = webclient;
         }

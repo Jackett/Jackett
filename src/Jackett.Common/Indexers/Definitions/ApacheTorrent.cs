@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public override IParseIndexerResponse GetParser() =>
-            new ApacheTorrentParser(webclient, Name);
+            new ApacheTorrentParser(webclient);
 
         public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?s=");
     }
@@ -37,7 +37,7 @@ namespace Jackett.Common.Indexers.Definitions
         private readonly WebClient _webclient;
         public string Tracker { get; }
 
-        public ApacheTorrentParser(WebClient webclient, string name) : base(name)
+        public ApacheTorrentParser(WebClient webclient)
         {
             _webclient = webclient;
             Tracker = "ApacheTorrent";
