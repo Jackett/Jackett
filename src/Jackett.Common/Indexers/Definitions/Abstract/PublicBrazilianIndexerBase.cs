@@ -112,7 +112,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             var searchUrl = $"{_siteLink}{SearchQueryParamsKey}";
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
-                searchUrl += WebUtility.UrlEncode(query.SearchTerm.Replace(" ", "+"));
+                searchUrl += WebUtility.UrlEncode(query.SearchTerm);
             }
             else
             {
