@@ -25,14 +25,14 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        public override IParseIndexerResponse GetParser() => new BluDVParser(webclient, Name);
+        public override IParseIndexerResponse GetParser() => new BluDVParser(webclient);
     }
 
     public class BluDVParser : PublicBrazilianParser
     {
         private readonly WebClient _webclient;
 
-        public BluDVParser(WebClient webclient, string name) : base(name)
+        public BluDVParser(WebClient webclient)
         {
             _webclient = webclient;
         }
