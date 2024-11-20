@@ -362,6 +362,7 @@ namespace Jackett.Updater
                 "Definitions/datatalli.yml",
                 "Definitions/demonoid.yml",
                 "Definitions/demonsite.yml",
+                "Definitions/denofsimps-api.yml",
                 "Definitions/desireleasers.yml",
                 "Definitions/desitorrents.yml", // switch to *-API #8682
                 "Definitions/devils-playground.yml",
