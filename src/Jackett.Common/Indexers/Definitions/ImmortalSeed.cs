@@ -203,7 +203,7 @@ namespace Jackett.Common.Indexers.Definitions
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
-            if (results.ContentString.Contains("You do not have permission to access this page."))
+            if (!results.ContentString.Contains("logout.php"))
             {
                 await ApplyConfiguration(null);
                 results = await RequestWithCookiesAndRetryAsync(searchUrl);
