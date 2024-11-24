@@ -619,7 +619,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * White Angel
  * WinterSakura
  * World-In-HD [![(invite needed)][inviteneeded]](#)
- * World-of-Tomorrow
+ * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * Wukong (悟空问道)
  * x-ite.me (XM)
  * Xider-Torrent
