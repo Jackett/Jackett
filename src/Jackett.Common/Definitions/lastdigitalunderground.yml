@@ -49,7 +49,7 @@ caps:
     - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
     - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
     - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
-    - {id: 44, cat:  XXX/Other, desc: "Mature: Audio"}
+    - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
     - {id: 43, cat: Other, desc: "Internal Testing"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
 
