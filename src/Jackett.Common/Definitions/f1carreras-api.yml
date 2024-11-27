@@ -22,6 +22,7 @@ caps:
     - {id: 10, cat: TV/Sport, desc: "DTM"}
     - {id: 11, cat: TV/Sport, desc: "Rally"}
     - {id: 12, cat: TV/Sport, desc: "WEC"}
+    - {id: 13, cat: TV/Sport, desc: "Other Series"}
 
   modes:
     search: [q]
