@@ -71,6 +71,9 @@ search:
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}4/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}5/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
 
+  error:
+    - selector: h1:contains("403 Forbidden")
+
   rows:
     selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])
     filters:
