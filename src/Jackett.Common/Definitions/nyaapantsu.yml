@@ -135,7 +135,7 @@ search:
       selector: td.date-full
       filters:
         - name: replace
-          args: ["UTC+0" ,"+00:00"]
+          args: ["UTC+0", "+00:00"]
         - name: dateparse
           args: "MM/d/yyyy, h:mm:ss tt zzz"
     seeders:
