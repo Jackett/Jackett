@@ -15,6 +15,12 @@ caps:
     - {id: 3_5, cat: TV/Anime, desc: "Anime - English-translated"}
     - {id: 3_13, cat: TV/Anime, desc: "Anime - Non-English-translated"}
     - {id: 3_6, cat: TV/Anime, desc: "Anime - Raw"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 3_, cat: Movies/Other, desc: "Anime"}
+    - {id: 3_12, cat: Movies/Other, desc: "Anime - Anime Music Video"}
+    - {id: 3_5, cat: Movies/Other, desc: "Anime - English-translated"}
+    - {id: 3_13, cat: Movies/Other, desc: "Anime - Non-English-translated"}
+    - {id: 3_6, cat: Movies/Other, desc: "Anime - Raw"}
     - {id: 2_, cat: Audio, desc: "Audio"}
     - {id: 2_3, cat: Audio, desc: "Audio - Lossless"}
     - {id: 2_4, cat: Audio, desc: "Audio - Lossy"}
@@ -37,6 +43,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
