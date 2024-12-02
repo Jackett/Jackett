@@ -35,7 +35,7 @@ caps:
     # Anime as Movies (Radarr uses t=movie):
     - {id: 1_0, cat: Movies/Other, desc: "Anime"}
     - {id: 1_1, cat: Movies/Other, desc: "Anime - Anime Music Video"}
-    - {id: 1_2, cat: Movies/Other, desc: "Anime - English-translated""}
+    - {id: 1_2, cat: Movies/Other, desc: "Anime - English-translated"}
     - {id: 1_3, cat: Movies/Other, desc: "Anime - Non-English-translated"}
     - {id: 1_4, cat: Movies/Other, desc: "Anime - Raw"}
     - {id: 2_0, cat: Audio, desc: "Audio"}
