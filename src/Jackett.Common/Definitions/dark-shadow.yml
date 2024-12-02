@@ -75,7 +75,7 @@ settings:
   - name: info_password
     type: info
     label: About Password Expiry
-    default: "Dark Shadow has an <b>8 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login to the WEB site, and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
+    default: "Dark Shadow has an <b>8 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://dark-shadow.me/login.php\" target=\"_blank\">Dark-Shadow</a>,  and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
   - name: username
     type: text
     label: Username
