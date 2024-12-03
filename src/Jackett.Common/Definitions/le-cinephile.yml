@@ -46,6 +46,10 @@ caps:
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
     - {id: 110, cat: TV, desc: "SERIE Nouveautés 2024"}
+    # ANIMEE
+    - {id: 113, cat: TV/Anime, desc: "ANIMEE Nouveautées 2024"}
+    - {id: 114, cat: Movies/Other, desc: "ANIMEE Fim"}
+    - {id: 115, cat: TV/Anime, desc: "ANIMEE Serie"}
     # LOGICIELS
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
@@ -58,6 +62,7 @@ caps:
     # MUSIC
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
     - {id: 109, cat: Audio/Video, desc: "MUSIC Spectacles.Theatre"}
+    - {id: 112, cat: Audio/Video, desc: "MUSIC Concert filmé"}
     # JEUX
     - {id: 96, cat: PC/Games, desc: "JEUX Apple"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
