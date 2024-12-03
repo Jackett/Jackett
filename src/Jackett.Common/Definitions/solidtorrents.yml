@@ -39,6 +39,7 @@ caps:
     "Other/Source Code": PC
     "Other/Video": TV
     Softwares: PC/0day
+    "Softwares/Mac": PC/Mac
     "Softwares/Windows": PC/0day
     TV: TV
     Unknown: Other
