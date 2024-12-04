@@ -148,7 +148,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " -03:00" # BRT
+          args: " +00:00" # GMT
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
