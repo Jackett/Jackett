@@ -143,7 +143,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " -11:00" # SST
+          args: " -10:00" # HAST
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
