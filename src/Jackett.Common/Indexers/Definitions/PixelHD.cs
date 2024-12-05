@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -40,11 +41,11 @@ namespace Jackett.Common.Indexers.Definitions
         private string input_username = null;
         private string input_password = null;
 
-        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService ps, ICacheService cs)
+        public PixelHD(IIndexerConfigurationService configService, WebClient webClient, Logger logger, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    logger: logger,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    client: webClient,
                    configData: new ConfigurationDataCaptchaLogin())
         {

@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -28,12 +29,12 @@ namespace Jackett.Common.Indexers.Definitions
         protected override int MinimumSeedTime => 432000; // 120h
 
         public RetroFlix(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs)
+                   cm: cm)
         {
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;
