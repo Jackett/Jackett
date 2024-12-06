@@ -596,6 +596,7 @@ namespace Jackett.Updater
                 "Definitions/rapidetracker.yml",
                 "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/redbits.yml", // switch to *-API #11540 #8682
+                "Definitions/redbits-api.yml",
                 "Definitions/redtopia.yml",
                 "Definitions/reelflix.yml", // switch to *-API #8682
                 "Definitions/renegade.yml",

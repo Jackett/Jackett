@@ -517,7 +517,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
- * RedBits
  * ReelFlix
  * Resurrect The Net [![(invite needed)][inviteneeded]](#)
  * RetroFlix
