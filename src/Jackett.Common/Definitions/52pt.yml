@@ -173,7 +173,7 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumratio:
-      text: 1
+      text: 1.1
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
