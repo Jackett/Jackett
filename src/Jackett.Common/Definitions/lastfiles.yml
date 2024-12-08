@@ -147,7 +147,7 @@ search:
         img[src$="/soft.png"]: 26
         img[src$="/xxx.png"]: 27
         img[src$="/music.png"]: 28
-        img[src$="/pciso"]: 30
+        img[src$="/pciso.png"]: 30
         img[src$="/4k.png"]: 31
         img[src$="/4kRO.png"]: 32
         img[src$="/packs.png"]: 33
@@ -163,7 +163,7 @@ search:
         img[src$="/doc-ro.png"]: 57
         img[src$="/imagesxxx.png"]: 60
         img[src$="/x265ro.png"]: 81
-        img[src$="/x265"]: 82
+        img[src$="/x265.png"]: 82
     title:
       selector: a.torrent-name
     details:
