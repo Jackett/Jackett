@@ -8,10 +8,10 @@ encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
+  - https://last-torrents.org/
   - https://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
-  - https://last-torrents.org/
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/
   - http://www.last-torrents.org/
@@ -85,7 +85,8 @@ settings:
 
 login:
   path: login
-  method: post
+  method: form
+  form: form[action$="/login"]
   inputs:
     name: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
