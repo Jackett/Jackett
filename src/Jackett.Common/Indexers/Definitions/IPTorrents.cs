@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -69,12 +70,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
         public IPTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataCookieUA("In the website Settings:<ul><li>change the <b>Torrents per page</b> option to <b>100</b></li><li><b>Tick</b> the <b>Torrents - Show files count</b> checkbox</li><li>Set the <b>torrents category column</b> to <b>Icons</b></li></ul>Otherwise the indexer may not return results."))
         {
             var sort = new SingleSelectConfigurationItem("Sort requested from site", new Dictionary<string, string>
