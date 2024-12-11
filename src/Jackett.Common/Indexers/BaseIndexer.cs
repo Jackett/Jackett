@@ -381,6 +381,7 @@ namespace Jackett.Common.Indexers
 
                 results = FilterResults(queryCopy, results).ToList();
                 results = FixResults(queryCopy, results).ToList();
+                results = results.GroupBy(r => r.ToString()).Select(g => g.First());
                 cacheService.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
