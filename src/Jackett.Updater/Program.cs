@@ -670,6 +670,7 @@ namespace Jackett.Updater
                 "Definitions/themoviecave.yml",
                 "Definitions/therebels-api.yml",
                 "Definitions/theresurrection.yml",
+                "Definitions/thesceneplace.yml",
                 "Definitions/theshinning.yml", // switch to *-API #13751
                 "Definitions/thespit.yml",
                 "Definitions/thetorrents.yml",
