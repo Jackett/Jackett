@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
@@ -52,20 +53,17 @@ namespace Jackett.Common.Indexers.Definitions
             if (content == null)
                 return fileInfo;
 
-            var infoParagraph = content.QuerySelector("p");
-            if (infoParagraph == null)
-                return fileInfo;
-
-            var lines = infoParagraph.InnerHtml.Split(new[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries);
+            var lines = content.InnerHtml.Split(new[] { "<br>" }, StringSplitOptions.RemoveEmptyEntries);
             foreach (var line in lines)
             {
                 if (line.Contains("<strong>") && line.Contains("</strong>") && line.Contains(":"))
                 {
-                    var parts = line.Split(new[] { ':' }, 2);
+                    var cleanLine = Regex.Replace(line, @"<[^>]+>", ""); // Remove HTML tags
+                    var parts = cleanLine.Split(new[] { ':' }, 2);
                     if (parts.Length == 2)
                     {
-                        var key = parts[0].Replace("<strong>", "").Replace("</strong>", "").Trim();
-                        var value = parts[1].Replace("<strong>", "").Replace("</strong>", "").Replace("<span style=\"12px arial,verdana,tahoma;\">", "").Replace("</span>", "").Replace("<span class=\"entry-date\">", "").Trim();
+                        var key = parts[0].Trim();
+                        var value = parts[1].Trim();
                         if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
                         {
                             fileInfo[key] = value;
