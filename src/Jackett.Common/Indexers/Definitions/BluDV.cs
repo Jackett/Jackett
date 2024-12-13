@@ -6,6 +6,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -23,6 +24,10 @@ namespace Jackett.Common.Indexers.Definitions
         public BluDV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService, wc, l, ps, cs)
         {
+            configData.AddDynamic(
+                "flaresolverr",
+                new ConfigurationData.DisplayInfoConfigurationItem("FlareSolverr",
+                                                                   "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
         }
 
         public override IParseIndexerResponse GetParser() => new BluDVParser(webclient);
