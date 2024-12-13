@@ -135,7 +135,7 @@ search:
       text: "{{ if .Config.usetoken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
     title_phase1:
       selector: div.group_info
-      remove: span:nth-child(1), div.tags
+      remove: :scope > span, div.tags
       filters:
         - name: replace
           args: ["\n", ""]
