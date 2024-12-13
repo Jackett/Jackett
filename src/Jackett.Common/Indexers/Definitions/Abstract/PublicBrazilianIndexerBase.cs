@@ -139,10 +139,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 "span:contains(\"Gênero:\")", genreText =>
                 {
                     ExtractPattern(
-                        genreText, @"Gênero:\s*(.+)", genre =>
-                        {
-                            genres = genre.Split('|').Select(token => token.Trim()).ToList();
-                        });
+                        genreText, @"Gênero:\s*(.+)", genre => ExtractMultiValuesFromField(values: out genres, field: genre));
                 });
             return genres;
         }
@@ -196,10 +193,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 "span:contains(\"Legenda:\")", subtitleText =>
                 {
                     ExtractPattern(
-                        subtitleText, @"Legenda:\s*(.+)", subtitle =>
-                        {
-                            subtitles.Add(subtitle);
-                        });
+                        subtitleText, @"Legenda:\s*(.+)", subtitle => ExtractMultiValuesFromField(values: out subtitles, field: subtitle));
                 });
             return subtitles;
         }
@@ -240,12 +234,24 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 "span:contains(\"Áudio:\")", audioText =>
                 {
                     ExtractPattern(
-                        audioText, @"Áudio:\s*(.+)", audio =>
-                        {
-                            languages = audio.Split('|').Select(token => token.Trim()).ToList();
-                        });
+                        audioText, @"Áudio:\s*(.+)", language => ExtractMultiValuesFromField(values: out languages, field: language));
                 });
             return languages;
+        }
+        private static void ExtractMultiValuesFromField(out List<string> values, in string field)
+        {
+            if (field.Contains("|"))
+            {
+                values = field.Split('|').Select(token => token.Trim()).ToList();
+            }
+            else if (field.Contains(","))
+            {
+                values = field.Split(',').Select(token => token.Trim()).ToList();
+            }
+            else
+            {
+                values = new List<string> { field };
+            }
         }
 
         public static void ExtractFromRow(this IElement row, string selector, Action<string> extraction)
