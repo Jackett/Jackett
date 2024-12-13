@@ -133,16 +133,19 @@ search:
           args: "&usetoken=1"
     download:
       text: "{{ if .Config.usetoken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
+    _release_group:
+      selector: span.team_name
+      optional: true
+      filters:
+        - name: trim
     title_phase1:
       selector: div.group_info
-      remove: :scope > span, div.tags
+      remove: :scope > span.team_name, :scope > span:nth-child(2), div.tags, div.vote_controls, .add_bookmark, img
       filters:
         - name: replace
-          args: ["\n", ""]
+          args: ["\n", " "]
         - name: re_replace
-          args: ["^(.+)                                                                            (.+)", "$2-$1"]
-        - name: replace
-          args: ["                         ", " "]
+          args: ["\\s+", " "]
         - name: replace
           args: ["Blu-Ray Original", "Complete.BluRay"]
         - name: replace
@@ -236,6 +239,8 @@ search:
           args: [".VOF", ".FRENCH"]
         - name: replace
           args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: append
+          args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
