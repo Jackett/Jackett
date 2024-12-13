@@ -121,7 +121,7 @@ search:
 
   fields:
     category:
-      selector: img[src^="images/categories/"]
+      selector: img[src*="images/categories/"], img[src*="images/categoriesNORMALE/"]
       attribute: src
       case:
         # not all categories are available at the moment, so some are deduced and unconfirmed
@@ -153,7 +153,7 @@ search:
         img[src$="/packs.png"]: 33
         img[src$="/xxxpacks.png"]: 34
         img[src$="/sport.png"]: 42
-        img[src$="/documents.png"]: 43
+        img[src$="/docs.png"]: 43
         img[src$="/images.png"]: 44
         img[src$="/misc.png"]: 49
         img[src$="/android.png"]: 51
