@@ -6,8 +6,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Web;
 using AngleSharp.Dom;
-using CommandLine;
-using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -153,7 +151,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         {
             var releaseCategory = new List<int>();
             var category = TorznabCatType.Movies;
-            var found = false;
             row.ExtractFromRow(
                 "div.title > a", categoryText =>
                 {
