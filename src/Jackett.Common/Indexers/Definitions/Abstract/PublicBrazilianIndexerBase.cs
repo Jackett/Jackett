@@ -111,6 +111,10 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             if (!string.IsNullOrWhiteSpace(query.SearchTerm))
             {
                 searchUrl += WebUtility.UrlEncode(query.SearchTerm);
+                if (query.Season is { } value)
+                {
+                    searchUrl += WebUtility.UrlEncode($" {value}");
+                }
             }
             else
             {
