@@ -236,6 +236,15 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                     ExtractPattern(
                         audioText, @"Áudio:\s*(.+)", language => ExtractMultiValuesFromField(values: out languages, field: language));
                 });
+            if (languages.Count == 0)
+            {
+                row.ExtractFromRow(
+                    "span:contains(\"Idioma:\")", languageText =>
+                    {
+                        ExtractPattern(
+                            languageText, @"Idioma:\s*(.+)", language => ExtractMultiValuesFromField(values: out languages, field: language));
+                    });
+            }
             return languages;
         }
         private static void ExtractMultiValuesFromField(out List<string> values, in string field)
