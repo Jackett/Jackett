@@ -115,7 +115,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table tbody#torrent_background tr:has(a.index)
+    selector: table tbody#torrent_background tr:has(a.index):has(span.icon_check_alt)
     filters:
       - name: andmatch
 
