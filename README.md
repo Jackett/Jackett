@@ -370,7 +370,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HD Dolby
  * HD Zero
  * HD-Club [![(invite needed)][inviteneeded]](#)
- * HD-Forever (HDF) [![(invite needed)][inviteneeded]](#)
+ * HD-Forever (HDF)
  * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
  * HD-Space (HDS)
