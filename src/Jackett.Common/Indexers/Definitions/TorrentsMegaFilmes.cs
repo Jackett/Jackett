@@ -40,36 +40,41 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(indexerResponse.Content);
-            var detailAnchor = dom.QuerySelector("div.title > a");
-            var detailUrl = new Uri(detailAnchor?.GetAttribute("href") ?? string.Empty);
-            var title = detailAnchor?.TextContent.Trim();
-            var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
-            var detailsDom = parser.ParseDocument(detailsPage.ContentString);
-            var detailsInfo = detailsDom.QuerySelector("div.info");
-            var releaseCommonInfo = new ReleaseInfo
+            var detailAnchors = dom.QuerySelectorAll("div.title > a");
+            foreach (var detailAnchor in detailAnchors)
             {
-                Title = CleanTitle(title),
-                Genres = detailsInfo.ExtractGenres(),
-                Subs = detailsInfo.ExtractSubtitles(),
-                Size = detailsInfo.ExtractSize(),
-                Languages = detailsInfo.ExtractLanguages(),
-                Details = detailUrl,
-                Guid = detailUrl,
-                PublishDate = detailsInfo.ExtractReleaseDate(),
-                Seeders = 1
-            };
-            foreach (var downloadButton in detailsDom.QuerySelectorAll("ul.buttons a[href]"))
-            {
-                var magnet = downloadButton.ExtractMagnet();
-                var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                release.Link = release.Guid = release.MagnetUri = magnet;
-                release.Title = ExtractTitleOrDefault(downloadButton, release.Title + " " + downloadButton.TextContent);
-                release.Category = downloadButton.ExtractCategory(release.Title);
-                release.DownloadVolumeFactor = 0; // Free
-                release.UploadVolumeFactor = 1;
+                var detailUrl = new Uri(detailAnchor?.GetAttribute("href") ?? string.Empty);
+                var title = detailAnchor?.TextContent.Trim();
+                var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
+                var detailsDom = parser.ParseDocument(detailsPage.ContentString);
+                var detailsInfo = detailsDom.QuerySelector("div.info");
+                var releaseCommonInfo = new ReleaseInfo
+                {
+                    Title = CleanTitle(title),
+                    Genres = detailsInfo.ExtractGenres(),
+                    Subs = detailsInfo.ExtractSubtitles(),
+                    Size = detailsInfo.ExtractSize(),
+                    Languages = detailsInfo.ExtractLanguages(),
+                    Details = detailUrl,
+                    Guid = detailUrl,
+                    PublishDate = detailsInfo.ExtractReleaseDate(),
+                    Seeders = 1
+                };
+                foreach (var downloadButton in detailsDom.QuerySelectorAll("ul.buttons a[href]"))
+                {
+                    var magnet = downloadButton.ExtractMagnet();
+                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    release.Link = release.Guid = release.MagnetUri = magnet;
+                    release.Title = ExtractTitleOrDefault(downloadButton, release.Title + " " + downloadButton.TextContent);
+                    release.Category = downloadButton.ExtractCategory(release.Title);
+                    release.DownloadVolumeFactor = 0; // Free
+                    release.UploadVolumeFactor = 1;
 
-                if (release.Title.IsNotNullOrWhiteSpace())
-                    releases.Add(release);
+                    if (release.Title.IsNotNullOrWhiteSpace())
+                    {
+                        releases.Add(release);
+                    }
+                }
             }
             return releases;
         }
