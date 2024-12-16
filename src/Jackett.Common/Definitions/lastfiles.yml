@@ -117,7 +117,7 @@ search:
     # has sort for size and seeders but not for title or date
 
   rows:
-    selector: table.table-responsive > tbody > tr
+    selector: table.table-striped > tbody > tr
 
   fields:
     category:
@@ -190,10 +190,10 @@ search:
       selector: a[href*="/download/"]
       attribute: href
     date:
-      selector: td:nth-of-type(4)
+      selector: td:nth-of-type(4) div[title]
+      attribute: title
       filters:
-        - name: dateparse
-          args: "dd-MMM-yyyy"
+        - name: timeago
     size:
       selector: td:nth-of-type(5)
     grabs:
