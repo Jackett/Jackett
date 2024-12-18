@@ -7,6 +7,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using NLog;
@@ -34,6 +35,10 @@ namespace Jackett.Common.Indexers.Definitions
         public TorrentDosFilmes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                                 ICacheService cs) : base(configService, wc, l, ps, cs)
         {
+            configData.AddDynamic(
+                "flaresolverr",
+                new ConfigurationData.DisplayInfoConfigurationItem("FlareSolverr",
+                                                                   "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
         }
 
         public override IParseIndexerResponse GetParser() => new TorrentDosFilmesParser(webclient);
