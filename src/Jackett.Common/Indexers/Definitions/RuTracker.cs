@@ -1230,7 +1230,6 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(650, TorznabCatType.PCMobileOther, "Игры для мобильных устройств");
             caps.Categories.AddCategoryMapping(2149, TorznabCatType.PCMobileAndroid, "|- Игры для Android");
             caps.Categories.AddCategoryMapping(2420, TorznabCatType.ConsoleOther, "|- Игры для Oculus Quest");
-            caps.Categories.AddCategoryMapping(1001, TorznabCatType.PC, "|- Игры для Java");
             caps.Categories.AddCategoryMapping(1004, TorznabCatType.PCMobileOther, "|- Игры для Symbian");
             caps.Categories.AddCategoryMapping(1002, TorznabCatType.PCMobileOther, "|- Игры для Windows Mobile");
             caps.Categories.AddCategoryMapping(240, TorznabCatType.OtherMisc, "Игровое видео");
@@ -1246,7 +1245,6 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1379, TorznabCatType.PC, "|- Операционные системы (Linux, Unix)");
             caps.Categories.AddCategoryMapping(1381, TorznabCatType.PC, "|- Программное обеспечение (Linux, Unix)");
             caps.Categories.AddCategoryMapping(1473, TorznabCatType.PC, "|- Другие ОС и ПО под них");
-            caps.Categories.AddCategoryMapping(1195, TorznabCatType.PC, "Тестовые диски для настройки аудио/видео аппаратуры");
             caps.Categories.AddCategoryMapping(1013, TorznabCatType.PC, "Системные программы");
             caps.Categories.AddCategoryMapping(1028, TorznabCatType.PC, "|- Работа с жёстким диском");
             caps.Categories.AddCategoryMapping(1029, TorznabCatType.PC, "|- Резервное копирование");
@@ -1288,6 +1286,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1018, TorznabCatType.PC, "|- Шаблоны для сайтов и CMS");
             caps.Categories.AddCategoryMapping(1058, TorznabCatType.PC, "|- Разное (Веб-разработка и программирование)");
             caps.Categories.AddCategoryMapping(1016, TorznabCatType.PC, "Программы для работы с мультимедиа и 3D");
+            caps.Categories.AddCategoryMapping(1195, TorznabCatType.PC, "|- Тестовые диски для настройки аудио/видео аппаратуры");
             caps.Categories.AddCategoryMapping(1079, TorznabCatType.PC, "|- Программные комплекты");
             caps.Categories.AddCategoryMapping(1080, TorznabCatType.PC, "|- Плагины для программ компании Adobe");
             caps.Categories.AddCategoryMapping(1081, TorznabCatType.PC, "|- Графические редакторы");
