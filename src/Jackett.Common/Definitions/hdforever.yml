@@ -109,7 +109,7 @@ search:
     # site does not support imdbid search or display imdb links in results
 
   rows:
-    selector: table#torrent_table > tbody > tr.torrent
+    selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&"])
 
   fields:
     category:
@@ -140,7 +140,7 @@ search:
         - name: trim
     title_phase1:
       selector: div.group_info
-      remove: :scope > span.team_name, :scope > span:nth-child(2), div.tags, div.vote_controls, .add_bookmark, img
+      remove: span.team_name, span:nth-child(2), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img
       filters:
         - name: replace
           args: ["\n", " "]
