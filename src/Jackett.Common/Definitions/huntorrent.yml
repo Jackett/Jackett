@@ -64,10 +64,10 @@ settings:
     label: Sort requested from site
     default: 4
     options:
-      1: name
       4: created
       7: seeders
       5: size
+      1: title
   - name: type
     type: select
     label: Order requested from site
