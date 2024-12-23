@@ -83,6 +83,7 @@ search:
     order: "{{ .Config.type }}"
     limit: 100
     page: 1
+  allowEmptyInputs: true
 
   rows:
     selector: li.search-result:has(a[class="dl-torrent"])
