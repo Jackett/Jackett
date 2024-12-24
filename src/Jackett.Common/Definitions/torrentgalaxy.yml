@@ -86,10 +86,51 @@ settings:
       asc: asc
 
 search:
-  # https://torrentgalaxy.org/torrents.php?c41=1&search=mercedes+s02e04&lang=0&sort=id&order=desc
-  path: torrents.php
+  # https://torrentgalaxy.org/torrents.php?parent_cat=TV&search=mercedes+s02e04&lang=0&sort=id&order=desc
+  paths:
+    - path: torrents.php
+      categories: ["!", 28, 20, 21, 18, 13, 19, 12, 14, 15, 9, 43, 10, 3, 46, 45, 42, 4, 1, 22, 26, 23, 25, 24, 17, 40, 37, 33, 41, 5, 11, 6, 7, 35, 47, 34, 48]
+    - path: torrents.php
+      categories: [28]
+      inputs:
+        parent_cat: Anime
+    - path: torrents.php
+      categories: [20, 21, 18]
+      inputs:
+        parent_cat: Apps
+    - path: torrents.php
+      categories: [13, 19, 12, 14, 15]
+      inputs:
+        parent_cat: Books
+    - path: torrents.php
+      categories: [9]
+      inputs:
+        parent_cat: Docus
+    - path: torrents.php
+      categories: [43, 10]
+      inputs:
+        parent_cat: Games
+    - path: torrents.php
+      categories: [3, 46, 45, 42, 4, 1]
+      inputs:
+        parent_cat: Movies
+    - path: torrents.php
+      categories: [22, 26, 23, 25, 24]
+      inputs:
+        parent_cat: Music
+    - path: torrents.php
+      categories: [17, 40, 37, 33]
+      inputs:
+        parent_cat: Other
+    - path: torrents.php
+      categories: [41, 5, 11, 6, 7]
+      inputs:
+        parent_cat: TV
+    - path: torrents.php
+      categories: [35, 47, 34, 48]
+      inputs:
+        parent_cat: XXX
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     lang: 0
     sort: "{{ .Config.sort }}"
