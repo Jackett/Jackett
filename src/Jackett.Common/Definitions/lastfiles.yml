@@ -165,18 +165,18 @@ search:
         img[src$="/x265ro.png"]: 81
         img[src$="/x265.png"]: 82
     title:
-      selector: a.torrent-name
+      selector: a[href*="/torrents/"]
     details:
-      selector: a.torrent-name
+      selector: a[href*="/torrents/"]
       attribute: href
     poster:
-      selector: a.torrent-name
+      selector: a[href*="/torrents/"]
       attribute: data-bs-title
       filters:
         - name: regexp
           args: "src='(.+?)'"
     genre:
-      selector: i:has(a[href$="searchin=genre"]), font[size]
+      selector: div.torrent-genres
       filters:
         - name: replace
           args: [" & ", "_&_"]
