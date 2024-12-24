@@ -96,7 +96,7 @@ search:
     cat: "{{ if .Keywords }}{{ re_replace .Config.category-id \"all\" \"\" }}{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:has(a[href^="/torrent/"])
     filters:
       - name: andmatch
 
