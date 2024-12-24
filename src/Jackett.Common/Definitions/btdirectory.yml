@@ -50,8 +50,11 @@ search:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: article.item
-      attribute: data-key
+      selector: a[href^="/hash/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     date:
       selector: p
       filters:
