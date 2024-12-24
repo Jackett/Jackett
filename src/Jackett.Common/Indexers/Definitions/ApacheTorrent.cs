@@ -125,7 +125,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var magnet = magnetLink.GetAttribute("href");
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                    release.Link = release.MagnetUri = new Uri(magnet ?? "");
+                    release.MagnetUri = new Uri(magnet ?? "");
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;
 

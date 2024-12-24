@@ -103,7 +103,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var size = RowParsingExtensions.GetBytes(fileInfo.Size ?? string.Empty);
                     release.Size = size > 0 ? size : ExtractSizeByResolution(release.Title);
                     var magnet = downloadButton.ExtractMagnet();
-                    release.Link = release.Guid = release.MagnetUri = magnet;
+                    release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
                     release.UploadVolumeFactor = 1;
                     if (release.Title.IsNotNullOrWhiteSpace())

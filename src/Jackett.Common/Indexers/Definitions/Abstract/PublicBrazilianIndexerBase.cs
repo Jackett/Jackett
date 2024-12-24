@@ -385,7 +385,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
             // Remove any remaining punctuation at start/end
             title = title.Trim(' ', '.', ',', '-', '_', '~', '/', '\\', '|');
-            return title;
+            return title.Trim();
         }
 
         protected abstract INode GetTitleElementOrNull(IElement downloadButton);

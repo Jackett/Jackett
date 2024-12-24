@@ -79,7 +79,7 @@ namespace Jackett.Common.Indexers.Definitions
                     release.Category = downloadButton.ExtractCategory(release.Title);
                     release.Size = release.Size > 0 ? release.Size : ExtractSizeByResolution(release.Title);
                     release.Languages = row.ExtractLanguages();
-                    release.Link = release.Guid = release.MagnetUri = magnet;
+                    release.Guid = release.MagnetUri = magnet;
                     release.DownloadVolumeFactor = 0; // Free
                     release.UploadVolumeFactor = 1;
 
