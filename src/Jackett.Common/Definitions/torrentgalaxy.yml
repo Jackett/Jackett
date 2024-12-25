@@ -7,6 +7,7 @@ description: "TorrentGalaxy (TGx) is a Public site for TV / MOVIES / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 # https://proxygalaxy.me/ for health status and alternate domains
 links:
   - https://torrentgalaxy.to/
