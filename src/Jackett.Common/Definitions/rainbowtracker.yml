@@ -193,7 +193,7 @@ search:
         - name: querystring
           args: f
     title:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -245,7 +245,7 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
       attribute: href
     download:
       selector: a[href^="./download.php?id="]
@@ -311,5 +311,5 @@ search:
     minimumratio:
       text: 0.3
     description:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
 # TorrentPier
