@@ -94,7 +94,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>Your account must be at least 90 days old to be subject to deactivation.</li><li>Last Login: You must be inactive for at least 90 days for your account to be deactivated.</li><li>Soft deletion of accounts: Deactivated user accounts will be soft deleted 120 days after deactivation.</li><li>User Groups: Accounts belonging to the following user groups may be automatically deactivated: Leech, User, PowerUser and SuperUser.</li><li>Please do not disregard the above information and log in to your account regularly to avoid deactivation.</li></ul>"
+    default: "Accounts that are inactive for 3 months will be moved to the "Disabled" group. Strict restrictions are imposed on this group. If the account is still inactive after being moved to this group, it will be permanently blocked without the possibility of unblocking. Simply logging in and browsing the site does not count as an active account. Required activity: downloading/uploading torrents, possibly activity on the forum."
 
 login:
   path: /api/torrents
@@ -228,7 +228,9 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+    minimumratio:
+      text: 1.0
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # json UNIT3D 8.3.4 (custom)
