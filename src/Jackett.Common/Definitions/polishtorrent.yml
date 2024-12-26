@@ -94,7 +94,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts that are inactive for 3 months will be moved to the "Disabled" group. Strict restrictions are imposed on this group. If the account is still inactive after being moved to this group, it will be permanently blocked without the possibility of unblocking. Simply logging in and browsing the site does not count as an active account. Required activity: downloading/uploading torrents, possibly activity on the forum."
+    default: "Accounts that are inactive for 3 months will be moved to the 'Disabled' group. Strict restrictions are imposed on this group. If the account is still inactive after being moved to this group, it will be permanently blocked without the possibility of unblocking. Simply logging in and browsing the site does not count as an active account. Required activity: downloading/uploading torrents, possibly activity on the forum."
 
 login:
   path: /api/torrents
