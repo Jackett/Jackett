@@ -23,7 +23,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "knaben";
         public override string Name => "Knaben";
         public override string Description => "Knaben is a Public torrent meta-search engine";
-        public override string SiteLink { get; protected set; } = "https://knaben.eu/";
+        public override string SiteLink { get; protected set; } = "https://knaben.org/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://knaben.eu/",
+        };
         public override string Language => "en-US";
         public override string Type => "public";
 
@@ -207,7 +211,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var request = new WebRequest
             {
-                Url = "https://api.knaben.eu/v1",
+                Url = "https://api.knaben.org/v1",
                 Type = RequestType.POST,
                 Headers = new Dictionary<string, string>
                 {
