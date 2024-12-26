@@ -104,9 +104,9 @@ search:
     ajax: true
     search: "{{ .Keywords }}"
     page: 1
-    # visible: all active+inactive, yes active, no inactive
-    # visible: all (the default is all which ajax simply drops the parm)
-    # free: all all+onlyup, yes onlyup, no without onlyup the default is all which ajax simply drops the parm)
+    # all=active+inactive, yes=active, no=inactive (the default is all, which ajax simply drops the parm)
+    # visible: all
+    # all=all+onlyup, yes=onlyup, no=without onlyup (the default is all, which ajax simply drops the parm)
     free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
 
@@ -148,7 +148,8 @@ search:
     leechers:
       selector: leechers
     _onlyup:
-      selector: free_button
+      selector: free_button:contains(Only Upload)
+      optional: true
     downloadvolumefactor:
       text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
     uploadvolumefactor:
