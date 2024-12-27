@@ -159,4 +159,4 @@ search:
     minimumseedtime:
       # 36 hours (as seconds = 36 x 60 x 60)
       text: 129600
-# JSON
+# 3xT JSON
