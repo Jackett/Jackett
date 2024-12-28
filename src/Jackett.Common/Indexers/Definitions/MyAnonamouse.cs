@@ -273,6 +273,11 @@ namespace Jackett.Common.Indexers.Definitions
                     return releases;
                 }
 
+                if (jsonResponse.Data == null)
+                {
+                    throw new Exception($"Unexpected response content from indexer request: {jsonResponse.Message ?? "Check the logs for more information."}");
+                }
+
                 foreach (var item in jsonResponse.Data)
                 {
                     var id = item.Id;
@@ -361,7 +366,8 @@ namespace Jackett.Common.Indexers.Definitions
     public class MyAnonamouseResponse
     {
         public string Error { get; set; }
-        public List<MyAnonamouseTorrent> Data { get; set; }
+        public IReadOnlyCollection<MyAnonamouseTorrent> Data { get; set; }
+        public string Message { get; set; }
     }
 
     public class MyAnonamouseTorrent
