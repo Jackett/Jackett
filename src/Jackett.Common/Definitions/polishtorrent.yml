@@ -10,11 +10,12 @@ links:
 
 caps:
   categorymappings:
+    - {id: 33, cat: Movies, desc: "iNTERNAL"}
     - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
     - {id: 4, cat: Movies, desc: "Bajki"}
-    - {id: 31, cat: TV/Anime, desc: "Anime"}
-    - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
+    - {id: 31, cat: TV/Anime, desc: "Anime/Seriale"}
     - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
+    - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
     - {id: 12, cat: Movies/BluRay, desc: "BD25/50_5/9"}
     - {id: 14, cat: Movies/3D, desc: "Filmy 3D"}
