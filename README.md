@@ -571,7 +571,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * The Old School
  * The Paradiese
  * The Place [![(invite needed)][inviteneeded]](#)
- * The Shinning (TsH)
  * The Show
  * The Vault [![(invite needed)][inviteneeded]](#)
  * The-New-Fun

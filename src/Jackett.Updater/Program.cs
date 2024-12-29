@@ -672,6 +672,7 @@ namespace Jackett.Updater
                 "Definitions/theresurrection.yml",
                 "Definitions/thesceneplace.yml",
                 "Definitions/theshinning.yml", // switch to *-API #13751
+                "Definitions/theshinning-api.yml",
                 "Definitions/thespit.yml",
                 "Definitions/thetorrents.yml",
                 "Definitions/theunknown.yml", // became 3evils #9678
