@@ -108,6 +108,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             return caps;
         }
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "BF2968F052B36973DBBF12616E0655D4683A0040"); // invalid CN=www.marcianotorrent.net
+        }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
