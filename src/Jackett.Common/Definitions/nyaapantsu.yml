@@ -97,6 +97,8 @@ settings:
     options:
       false: desc
       true: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 search:
   paths:
