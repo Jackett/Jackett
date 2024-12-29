@@ -41,6 +41,9 @@ search:
     - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}home{{ end }}"
 
   keywordsfilters:
+    - name: re_replace
+      args: ["\\bS\\d{2,3}\\b", ""] # remove season tag without episode (search doesn't support it)
+    - name: trim
     # fixes for site search issues - Prowlarr #1094
     - name: replace
       args: ["-", ""]
