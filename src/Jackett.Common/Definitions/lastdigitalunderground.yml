@@ -95,7 +95,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You are required to log in once per month. We will be purging user accounts via automated script set at an undisclosed interval."
+    default: "You must log in once every 60 days.You must download at least 1 item within your first month."
 
 login:
   path: /api/torrents

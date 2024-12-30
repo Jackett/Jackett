@@ -59,6 +59,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You are required to login to the site at least once every 90 days."
 
 login:
   path: login

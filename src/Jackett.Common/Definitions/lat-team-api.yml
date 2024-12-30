@@ -67,6 +67,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must log in once every 90 days or seed at least 5 torrents to avoid having your account deactivated."
 
 login:
   path: /api/torrents
