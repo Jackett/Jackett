@@ -37,7 +37,7 @@ caps:
     - {id: 154, cat: Audio/Lossless, desc: "Audio > Pack FLAC"}
     - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
     - {id: 162, cat: Audio/Audiobook, desc: "Audio > ABooks"}
-    - {id: 12, cat: PC/0day, desc: "Software Windows"}
+    - {id: 12, cat: PC/0day, desc: "Software > Windows"}
     - {id: 125, cat: PC/Mac, desc: "Software > Mac-OSX"}
     - {id: 11, cat: PC/Mobile-Other, desc: "Software > Mobil"}
     - {id: 141, cat: PC/Mobile-Other, desc: "Software > Other"}
