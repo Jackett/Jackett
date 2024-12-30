@@ -8,13 +8,14 @@ encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
-  - https://last-torrents.org/
+  - https://lastfiles.ro/
   - https://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/
   - http://www.last-torrents.org/
+  - https://last-torrents.org/
 
 caps:
   categorymappings:
@@ -150,7 +151,7 @@ search:
         img[src$="/pciso.png"]: 30
         img[src$="/4k.png"]: 31
         img[src$="/4kRO.png"]: 32
-        img[src$="/packs.png"]: 33
+        img[src$="/gpack.png"]: 33
         img[src$="/xxxpacks.png"]: 34
         img[src$="/sport.png"]: 42
         img[src$="/docs.png"]: 43
