@@ -29,14 +29,14 @@ caps:
     - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
     - {id: 23, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
     - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
-    - {id: 73, cat: Books, desc: "Cursos: Video Aula"}
-    - {id: 72, cat: Books, desc: "Cursos: Apostila"}
-    - {id: 71, cat: Books, desc: "Cursos: Cursos"}
-    - {id: 67, cat: Books, desc: "Ebook: Livros"}
-    - {id: 112, cat: Books, desc: "Ebook: HQs"}
-    - {id: 147, cat: Books, desc: "Ebook: Mangas"}
+    - {id: 73, cat: Other, desc: "Cursos: Video Aula"}
+    - {id: 72, cat: Other, desc: "Cursos: Apostila"}
+    - {id: 71, cat: Other, desc: "Cursos: Cursos"}
+    - {id: 67, cat: Books/EBook, desc: "Ebook: Livros"}
+    - {id: 112, cat: Books/Comics, desc: "Ebook: HQs"}
+    - {id: 147, cat: Books/Comics, desc: "Ebook: Mangas"}
     - {id: 121, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
-    - {id: 68, cat: Books, desc: "Ebook: Revistas"}
+    - {id: 68, cat: Books/Mags, desc: "Ebook: Revistas"}
     - {id: 119, cat: Movies, desc: "Filmes:"}
     - {id: 70, cat: XXX, desc: "Fotos: Revistas, Livros e Fotos"}
     - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
