@@ -7,11 +7,12 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://nyaa.si/
+  - https://nyaa.mom/
   - https://nyaa.iss.ink/
   - https://nyaa.land/
   - https://nyaa.unblockninja.com/ # for magnets only
 legacylinks:
+  - https://nyaa.si/
   - https://nyaa.black-mirror.xyz/
   - https://nyaa.unblocked.casa/
   - https://nyaa.proxyportal.fun/
