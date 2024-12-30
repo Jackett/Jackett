@@ -19,6 +19,7 @@ caps:
     - {id: 8, cat: XXX, desc: "XXX"}
     - {id: 9, cat: Books/EBook, desc: "Ebook/Manga"}
     - {id: 10, cat: Other, desc: "Education"}
+    - {id: 11, cat: Movies/Other, desc: "FANRES"}
 
   modes:
     search: [q]
