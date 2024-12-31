@@ -747,7 +747,7 @@ namespace Jackett.Common.Indexers.Definitions
         public int FileCount { get; set; }
 
         [JsonPropertyName("FileList")]
-        public IReadOnlyCollection<AnimeBytesFile> Files  { get; set; }
+        public IReadOnlyCollection<AnimeBytesFile> Files { get; set; }
 
         [JsonPropertyName("UploadTime")]
         public string UploadTime { get; set; }
