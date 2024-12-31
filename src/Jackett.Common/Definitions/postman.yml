@@ -5,6 +5,7 @@ description: Postman is a Public I2P Torrent Tracker for MOVIES / TV / GENERAL
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 4
 links:
   - http://tracker2.postman.i2p/
 
@@ -49,6 +50,13 @@ settings:
       1: created
       5: seeders
       7: size
+
+login:
+  path: index.php?view=Main
+  selectorinputs:
+    formtoken:
+      selector: input[name="formtoken"]
+      attribute: value
 
 search:
   paths:
