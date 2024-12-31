@@ -26,7 +26,7 @@ caps:
     - {id: 24, cat: Audio, desc: "Karaoke: All Karaoke"}
     - {id: 78, cat: Audio, desc: "Dj-Only: Dj-Music"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies: Bluray-HD"}
-    - {id: 28, cat: Movies, desc: "Movies: 2024"}
+    - {id: 28, cat: Movies, desc: "Movies: 2025"}
     - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Web-DL"}
     - {id: 52, cat: Movies, desc: "Classic Movies: Pre90s"}
     - {id: 48, cat: Movies/SD, desc: "Movies: AVI-XVID-Dvdrip"}
