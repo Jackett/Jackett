@@ -110,6 +110,11 @@ search:
     type: "{{ .Config.type }}"
     notnewword: 1
 
+  keywordsfilters:
+    # strip episode
+    - name: re_replace
+      args: ["\\b(S\\d{2,})?(?:E\\d{2,})\\b", "$1"]
+
   rows:
     selector: div.w-full:has(a[href^="details.php?id="])
 
