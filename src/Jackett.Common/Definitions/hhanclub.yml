@@ -114,6 +114,12 @@ search:
     selector: div.w-full:has(a[href^="details.php?id="])
 
   fields:
+    _episode_number:
+      selector: div.torrent-title > div > div
+      optional: true
+      filters:
+        - name: regexp
+          args: "第(\\d+(?:-\\d+)?)集"
     category:
       selector: a[href^="?cat[]="]
       attribute: href
@@ -122,6 +128,9 @@ search:
           args: cat[]
     title:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["\\b(S\\d+)\\b", "{{ if .Result._episode_number }}$1E{{ .Result._episode_number }}{{ else }}$1{{ end }}"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
