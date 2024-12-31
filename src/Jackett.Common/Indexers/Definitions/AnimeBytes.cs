@@ -278,7 +278,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var categoryName = group.Value<string>("CategoryName");
                     var description = group.Value<string>("Description");
-                    var year = group.Value<int>("Year");
+                    var year = group.Value<int?>("Year");
                     var posterStr = group.Value<string>("Image");
                     var poster = posterStr.IsNotNullOrWhiteSpace() ? new Uri(posterStr) : null;
                     var groupName = group.Value<string>("GroupName");
@@ -573,11 +573,13 @@ namespace Jackett.Common.Indexers.Definitions
 
                         var infoString = properties.Select(p => "[" + p + "]").Join(string.Empty);
 
+                        var useYearInTitle = year is > 0 && torrent.Value<JToken>("FileList").Any(f => f.Value<string>("filename").Contains(year.Value.ToString()));
+
                         foreach (var title in synonyms)
                         {
                             var releaseTitle = groupName is "Movie" or "Live Action Movie" ?
                                 $"{releaseGroup}{title} {year} {infoString}" :
-                                $"{releaseGroup}{title} {releaseInfo} {infoString}";
+                                $"{releaseGroup}{title}{(useYearInTitle ? $" {year}" : string.Empty)} {releaseInfo} {infoString}";
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(title));
 
@@ -677,7 +679,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var advancedSeasonRegex = new Regex(@"\b(?:(?<season>\d+)(?:st|nd|rd|th) Season|Season (?<season>\d+))\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
-            var seasonNumberRegex = new Regex(@"\b(?<!Part[- ._])(?:S)?(?<season>[2-9])$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"\b(?<!Part[- ._])(?<!\d+[/])(?:S)?(?<season>[2-9])$", RegexOptions.Compiled);
 
             foreach (var title in titles)
             {
