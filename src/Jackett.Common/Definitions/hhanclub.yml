@@ -95,6 +95,8 @@ login:
 search:
   paths:
     - path: torrents.php
+      # required to bypass validation check
+      followredirect: true
   inputs:
     $raw: "{{ range .Categories }}cat[]{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
