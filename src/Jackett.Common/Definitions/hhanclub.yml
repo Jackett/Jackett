@@ -99,7 +99,7 @@ search:
       # required to bypass validation check
       followredirect: true
   inputs:
-    $raw: "{{ range .Categories }}cat[]{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
