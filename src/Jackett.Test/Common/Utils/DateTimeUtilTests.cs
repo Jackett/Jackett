@@ -159,7 +159,7 @@ namespace Jackett.Test.Common.Utils
                 DateTimeUtil.ParseDateTimeGoLang("21-06-2010 04:20:19 -04:00", "02-01-2006 15:04:05 -07:00"));
             Assert.AreEqual(new DateTimeOffset(2010, 6, 21, 0, 0, 0, new TimeSpan(-5, -30, 0)).ToLocalTime().DateTime,
                 DateTimeUtil.ParseDateTimeGoLang("2010-06-21 -05:30", "2006-01-02 -07:00"));
-            var refDate = new DateTime(2024, 03, 12, 12, 00, 00, DateTimeKind.Local);
+            var refDate = new DateTime(2025, 03, 12, 12, 00, 00, DateTimeKind.Local);
             Assert.AreEqual(new DateTime(refDate.Year - 1, 9, 14, 7, 0, 0),
                             DateTimeUtil.ParseDateTimeGoLang("7am Sep. 14", "3pm Jan. 2", relativeFrom: refDate));
 
