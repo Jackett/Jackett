@@ -192,11 +192,12 @@ search:
         span.promotion-tag-free2up: 2
         span.promotion-tag-2up: 2
         "*": 1
-    minimumratio:
-      text: 1.0
+# global MR is 0.8 but torrents must be seeded for 2 days regardless of ratio
+#    minimumratio:
+#      text: 0.8
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: div.torrent-title > div > div
 # NexusPHP v1.8.6 2023-08-15 (customised)
