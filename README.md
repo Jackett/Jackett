@@ -585,7 +585,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Tornado
  * Torrent Heaven (Dutch)
  * Torrent Network (TN)
- * Torrent Sector Crew (TSC)
  * Torrent Trader [![(invite needed)][inviteneeded]](#)
  * Torrent-Explosiv
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
