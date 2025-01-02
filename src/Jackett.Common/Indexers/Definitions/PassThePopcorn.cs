@@ -54,7 +54,7 @@ namespace Jackett.Common.Indexers.Definitions
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))
         {
-            webclient.requestDelay = 2;
+            webclient.requestDelay = 4;
         }
 
         private TorznabCapabilities SetCapabilities()
