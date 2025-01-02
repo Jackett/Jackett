@@ -114,7 +114,7 @@ search:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: table#TorrentTable > tbody > tr
+    selector: table#torrenttable > tbody > tr
 
   fields:
     category:
