@@ -727,12 +727,12 @@ Using the "all" indexer has no advantages (besides reduced management overhead),
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the "all" indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
 
 ## Installation on Windows
-We recommend you install Jackett as a Windows service using the supplied installer. You may also download the zipped version if you would like to configure everything manually.
+We recommend you install Jackett as a Windows service using the supplied [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe). You may also download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.zip) if you would like to configure everything manually.
 
 To get started with using the installer for Jackett, follow the steps below:
 
 1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net80#dependencies
-2. Download the latest version of the Windows installer, "Jackett.Installer.Windows.exe" from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
+2. Download the latest version of the [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe)
 3. Run the Jackett.Installer.Windows.exe program.
 4. When prompted if you would like this app to make changes to your computer, select "yes".
 5. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
