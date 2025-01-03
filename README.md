@@ -727,7 +727,7 @@ Using the "all" indexer has no advantages (besides reduced management overhead),
 To get all Jackett indexers including their capabilities you can use `t=indexers` on the "all" indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
 
 ## Installation on Windows
-We recommend you install Jackett as a Windows service using the supplied [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe). You may also download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.zip) if you would like to configure everything manually.
+We recommend you install Jackett as a Windows service using the supplied [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe). You may also download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.Windows.zip) if you would like to configure everything manually.
 
 To get started with using the installer for Jackett, follow the steps below:
 
