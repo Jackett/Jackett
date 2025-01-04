@@ -109,14 +109,14 @@ login:
 
 search:
   # https://dasunerwartete.biz/torrents_search.php?ajax=true&search=&page=1&c28=1
-  paths: 
-    - path: "torrents_search.php" 
+  paths:
+    - path: "torrents_search.php"
       inputs:
         ajax: "true"
       response:
         type: json
         noResultsMessage: "Ausloggen"
-        
+
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}{{ if .Config.onlyupload }}free=yes&{{ end }}"
     search: "{{ .Keywords }}"
@@ -142,8 +142,6 @@ search:
       text: "{{ .Config.sitelink }}{{ .Result._download }}"
     size:
       selector: size
-    #grabs:
-    #  selector: div.selection_unter_ae
     seeders:
       selector: seeders
     leechers:
