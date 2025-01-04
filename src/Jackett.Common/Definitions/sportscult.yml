@@ -40,7 +40,7 @@ caps:
     - {id: 15, cat: TV/Sport, desc: "MotorSport"}
     - {id: 24, cat: TV/Sport, desc: "MLB/Baseball"}
     - {id: 28, cat: TV/Sport, desc: "MMA"}
-    - {id: 11, cat: TV/Sport, desc: "NBA/WNBA"}
+    - {id: 11, cat: TV/Sport, desc: "NBA"}
     - {id: 3, cat: TV/Sport, desc: "NCAA Basket/Football"}
     - {id: 5, cat: TV/Sport, desc: "NFL"}
     - {id: 27, cat: TV/Sport, desc: "NHL"}
@@ -79,7 +79,7 @@ caps:
     - {id: 80, cat: TV/Sport, desc: "CrossFit"}
     - {id: 81, cat: TV/Sport, desc: "DutchEredivisie"}
     - {id: 82, cat: TV/Sport, desc: "IndyCar"}
-    - {id: 83, cat: TV/Sport, desc: "NbaGLeague"}
+    - {id: 83, cat: TV/Sport, desc: "GLeagueNBA"}
     - {id: 84, cat: TV/Sport, desc: "NCAABasketball"}
     - {id: 85, cat: TV/Sport, desc: "NCAAFootball"}
     - {id: 86, cat: TV/Sport, desc: "Sailing"}
@@ -96,6 +96,7 @@ caps:
     - {id: 97, cat: TV/Sport, desc: "CFL"}
     - {id: 98, cat: TV/Sport, desc: "PrimeiraPortugal"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
+    - {id: 99, cat: TV/Sport, desc: "Darts"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
     - {id: 52, cat: TV/Sport, desc: "Field Hockey"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
