@@ -254,7 +254,7 @@ namespace Jackett.Common.Indexers.Definitions
                 [".Config.sitelink"] = SiteLink,
                 [".True"] = "True",
                 [".False"] = null,
-                [".Today.Year"] = DateTime.Today.Year.ToString()
+                [".Today.Year"] = DateTime.Today.Month > 1 ? DateTime.Today.Year.ToString() : (DateTime.Today.Year - 1).ToString()
             };
 
             foreach (var setting in Definition.Settings)
