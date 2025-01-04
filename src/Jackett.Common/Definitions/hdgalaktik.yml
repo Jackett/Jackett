@@ -5,6 +5,8 @@ description: "HDGalaKtik is a RUSSIAN Semi-Private tracker for MOVIES / TV / GEN
 language: ru-RU
 type: semi-private
 encoding: UTF-8
+certificates:
+  - 04ff5035de8f99f809173ec55bf3814693a0fd94  # CN=mail.trackerpmr.com
 links:
   - https://www.trackerpmr.com/
   - https://freetmd.com/
