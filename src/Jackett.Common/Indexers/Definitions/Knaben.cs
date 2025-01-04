@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
@@ -14,6 +15,7 @@ using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -149,7 +151,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IParseIndexerResponse GetParser()
         {
-            return new KnabenParser(TorznabCaps.Categories);
+            return new KnabenParser(TorznabCaps.Categories, logger);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -228,16 +230,28 @@ namespace Jackett.Common.Indexers.Definitions
     public class KnabenParser : IParseIndexerResponse
     {
         private readonly TorznabCapabilitiesCategories _categories;
+        private readonly Logger _logger;
 
-        private static readonly Regex DateTimezoneRegex = new Regex(@"[+-]\d{2}:\d{2}$", RegexOptions.Compiled);
+        private static readonly Regex _DateTimezoneRegex = new Regex(@"[+-]\d{2}:\d{2}$", RegexOptions.Compiled);
 
-        public KnabenParser(TorznabCapabilitiesCategories categories)
+        public KnabenParser(TorznabCapabilitiesCategories categories, Logger logger)
         {
             _categories = categories;
+            _logger = logger;
         }
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
+            {
+                if (indexerResponse.WebResponse.IsRedirect)
+                {
+                    _logger.Warn("Redirected to {0} from indexer request", indexerResponse.WebResponse.RedirectingTo);
+                }
+
+                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request");
+            }
+
             var releases = new List<ReleaseInfo>();
 
             var jsonResponse = JsonConvert.DeserializeObject<KnabenResponse>(indexerResponse.Content);
@@ -252,7 +266,7 @@ namespace Jackett.Common.Indexers.Definitions
             foreach (var row in rows)
             {
                 // Not all entries have the TZ in the "date" field
-                var publishDate = row.Date.IsNotNullOrWhiteSpace() && !DateTimezoneRegex.IsMatch(row.Date) ? $"{row.Date}+01:00" : row.Date;
+                var publishDate = row.Date.IsNotNullOrWhiteSpace() && !_DateTimezoneRegex.IsMatch(row.Date) ? $"{row.Date}+01:00" : row.Date;
 
                 var releaseInfo = new ReleaseInfo
                 {
