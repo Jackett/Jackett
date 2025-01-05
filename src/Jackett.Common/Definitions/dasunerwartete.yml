@@ -78,7 +78,7 @@ settings:
     label: Password
   - name: onlyupload
     type: checkbox
-    label: Filter OnlyUpload only
+    label: Search OnlyUpload only
     default: false
   - name: info_free
     type: info
@@ -108,19 +108,17 @@ login:
     selector: a[href="logout.php"]
 
 search:
-  # https://dasunerwartete.biz/torrents_search.php?ajax=true&search=&page=1&c28=1
+  # https://dasunerwartete.biz/torrents_search.php?ajax=true&search=1080p&page=1&imdb=1034320&free=yes&c32=1
   paths:
-    - path: "torrents_search.php"
-      inputs:
-        ajax: "true"
+    - path: torrents_search.php
       response:
         type: json
-        noResultsMessage: "Ausloggen"
-
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}{{ if .Config.onlyupload }}free=yes&{{ end }}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    ajax: true
     search: "{{ .Keywords }}"
     imdb: "{{ .Query.IMDBIDShort }}"
+    free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
 
   rows:
     selector: $
@@ -134,24 +132,22 @@ search:
     _id:
       selector: id
     details:
-      # https://dasunerwartete.biz/details.php?id=
       text: "{{ .Config.sitelink }}details.php?id={{ .Result._id }}"
-    _download:
-      selector: download_link
     download:
-      text: "{{ .Config.sitelink }}{{ .Result._download }}"
+      text: "{{ .Config.sitelink }}download.php?torrent={{ .Result._id }}"
     size:
       selector: size
     seeders:
       selector: seeders
     leechers:
       selector: leechers
-    # "added": "03.01.2025 06:49",
     date:
       selector: added
       filters:
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "dd.MM.yyyy HH:mm"
+          args: "dd.MM.yyyy HH:mm zzz"
     downloadvolumefactor:
       selector: free_button
       case:
@@ -162,6 +158,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
+      text: 129600
 # THX custom
