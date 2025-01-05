@@ -76,7 +76,7 @@ search:
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
+    selector: table#torrent_table > tbody > tr[class^="torrent shaded_row"]:has(a[href*="action=download"])
 
   fields:
     category:
