@@ -10,52 +10,42 @@ links:
 
 caps:
   categorymappings:
-    # Filme
     - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
     - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
     - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
     - {id: 143, cat: TV/Anime, desc: "Filme > Anime"}
     - {id: 138, cat: Movies, desc: "Filme > Packs"}
-    # Serien
     - {id: 60, cat: TV/SD, desc: "Serien > SD"}
     - {id: 57, cat: TV/HD, desc: "Serien > HD"}
     - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
     - {id: 144, cat: TV/Anime, desc: "Serien > Anime"}
     - {id: 59, cat: TV, desc: "Serien > Packs"}
-    # Audio
     - {id: 110, cat: Audio/MP3, desc: "Audio > MP3"}
     - {id: 48, cat: Audio/Lossless, desc: "Audio > Flac"}
     - {id: 52, cat: Audio, desc: "Audio > Pack"}
     - {id: 63, cat: Audio/Audiobook, desc: "Audio > Hörbuch"}
     - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
-    # Apps
     - {id: 12, cat: PC/0day, desc: "Apps > Windows"}
     - {id: 125, cat: PC/Mac, desc: "Apps > Mac-OSX"}
     - {id: 11, cat: PC/Mobile-Other, desc: "Apps > Mobil"}
     - {id: 141, cat: PC, desc: "Apps > Other"}
-    # Doku
     - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
     - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
     - {id: 123, cat: TV/Documentary, desc: "Doku > Reihe"}
-    # Spiel
     - {id: 126, cat: PC/Mobile-Other, desc: "Spiel > Mobil"}
     - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
     - {id: 24, cat: Console, desc: "Spiel > Konsole"}
     - {id: 121, cat: Console, desc: "Spiel > Wimmelbild"}
-    # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
-    # ePaper
     - {id: 96, cat: Books/Mags, desc: "ePaper > Zeitungen"}
     - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
     - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
-    # XXX
     - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
     - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
-    # Internal
     - {id: 129, cat: Movies/SD, desc: "Internal > Film SD"}
     - {id: 128, cat: Movies/HD, desc: "Internal > Film HD"}
     - {id: 131, cat: TV/SD, desc: "Internal > Serie SD"}
@@ -70,6 +60,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_password
+    type: info
+    label: About Password Expiry
+    default: "D-U has an <b>20 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://dasunerwartete.biz/login.php\" target=\"_blank\">Das Unerwartete</a>, and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
   - name: username
     type: text
     label: Username
@@ -78,12 +72,12 @@ settings:
     label: Password
   - name: onlyupload
     type: checkbox
-    label: Search OnlyUpload only
+    label: Search OnlyUpload
     default: false
   - name: info_free
     type: info
     label: About OnlyUpload at D-U
-    default: "<ul><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li></ul>"
+    default: "OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech)."
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -108,21 +102,25 @@ login:
     selector: a[href="logout.php"]
 
 search:
-  # https://dasunerwartete.biz/torrents_search.php?ajax=true&search=1080p&page=1&imdb=1034320&free=yes&c32=1
   paths:
+    # https://dasunerwartete.biz/torrents_search.php?ajax=true&search=1080p&page=1&imdb=1034320&free=yes&c32=1
     - path: torrents_search.php
       response:
         type: json
+
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     ajax: true
     search: "{{ .Keywords }}"
+    page: 1
     imdb: "{{ .Query.IMDBIDShort }}"
+    # all=active+inactive, yes=active, no=inactive (the default is all, which ajax simply drops the parm)
+    # visible: all
+    # all=all+onlyup, yes=onlyup, no=without onlyup (the default is all, which ajax simply drops the parm)
     free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
 
   rows:
     selector: $
-    missingAttributeEqualsNoResults: true
 
   fields:
     categorydesc:
@@ -134,32 +132,30 @@ search:
     _id:
       selector: id
     details:
-      text: "{{ .Config.sitelink }}details.php?id={{ .Result._id }}"
+      text: "details.php?id={{ .Result._id }}"
     download:
-      text: "{{ .Config.sitelink }}download.php?torrent={{ .Result._id }}"
+      selector: download_link
     poster:
       selector: cover
-      filters:
-        - name: prepend
-          args: "{{ .Config.sitelink }}"
     size:
       selector: size
-    seeders:
-      selector: seeders
-    leechers:
-      selector: leechers
     date:
+      # 25.12.2024 16:02
       selector: added
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "dd.MM.yyyy HH:mm zzz"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    _onlyup:
+      selector: free_button:contains(Only Upload)
+      optional: true
     downloadvolumefactor:
-      selector: free_button
-      case:
-        "<button style='background-color: green; color: white; border: none; padding: 5px 10px; border-radius: 5px; cursor: default;'>Only Upload<\/button>": 0
-        "*": 1
+      text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
     uploadvolumefactor:
       text: 1
     minimumratio:
@@ -167,4 +163,4 @@ search:
     minimumseedtime:
       # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
       text: 129600
-# THX custom
+# THX JSON (custom)
