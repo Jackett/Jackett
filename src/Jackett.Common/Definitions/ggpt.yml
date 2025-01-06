@@ -11,7 +11,7 @@ links:
 caps:
   categorymappings:
     - {id: 401, cat: PC/Games, desc: "PC游戏(PC Games)", default: true}
-    - {id: 404, cat: Console/PS4, desc: "索尼主机游戏(Sony console games)", default: true}
+    - {id: 404, cat: Console/PS4, desc: "索尼主机游戏(Sony console games)", default: true}
     - {id: 405, cat: Console/XBox, desc: "微软主机游戏(Microsoft console games)", default: true}
     - {id: 406, cat: Console/NDS, desc: "任天堂主机游戏(Nintendo console games)", default: true}
     - {id: 407, cat: PC/Mac, desc: "苹果游戏(Apple Games)", default: true}
