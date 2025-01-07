@@ -568,12 +568,12 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * The Falling Angels (TFA)
  * The Geeks
  * The New Retro
- * The Occult [![(invite needed)][inviteneeded]](#)
+ * The Occult
  * The Old School
  * The Paradiese
  * The Place [![(invite needed)][inviteneeded]](#)
  * The Show
- * The Vault [![(invite needed)][inviteneeded]](#)
+ * The Vault
  * The-New-Fun
  * TheEmpire (TE)
  * TheLeachZone (TLZ)
