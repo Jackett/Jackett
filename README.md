@@ -400,7 +400,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDTorrents.it [PAY2DL]
  * HDTurk
  * HDU
- * HDVIDEO [![(invite needed)][inviteneeded]](#)
+ * HDVIDEO
  * Hebits
  * HellasHut
  * HHanClub
