@@ -34,6 +34,7 @@ caps:
     - {id: 24, cat: TV, desc: "Series / TV Episodes"}
     - {id: 25, cat: TV, desc: "Series / TV Boxset"}
     - {id: 26, cat: TV/HD, desc: "Series / TV Boxset HD"}
+    - {id: 60, cat: TV/UHD, desc: "Series / 4K"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 27, cat: Audio/MP3, desc: "Music / MP3"}
     - {id: 28, cat: Audio/Video, desc: "Music / Video"}
