@@ -981,5 +981,3 @@ dotnet publish Jackett.Server -f net8.0 --self-contained -r linux-x64 -c Debug #
 ![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot3.png)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
-
-test
