@@ -6,8 +6,9 @@ language: pt-PT
 type: private
 encoding: UTF-8
 links:
-  - https://tocashare.com/
-  - https://tocashare.biz/
+  - https://tocashare.biz/ # due to expired 31 Mar 2025, new domain tba
+legacylinks:
+  - https://tocashare.com/ # expired 2nd Jan 2025
 
 caps:
   categorymappings:
