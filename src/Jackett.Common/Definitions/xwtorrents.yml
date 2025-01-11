@@ -31,6 +31,8 @@ caps:
     - {id: 23, cat: TV/Sport, desc: "Misc"}
     - {id: 24, cat: TV/Sport, desc: "MMA"}
     - {id: 59, cat: TV/Sport, desc: "MMA HD"}
+    - {id: 86, cat: TV/Sport, desc: "Netflix"}
+    - {id: 87, cat: TV/Sport, desc: "Netflix HD"}
     - {id: 30, cat: TV/Sport, desc: "Packs"}
     - {id: 68, cat: TV/Sport, desc: "Podcasts"}
     - {id: 29, cat: TV/Sport, desc: "Puro"}
