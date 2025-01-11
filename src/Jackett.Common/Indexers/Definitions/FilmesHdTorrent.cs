@@ -23,12 +23,13 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.filmeshdtorrent.vip/",
-            "https://torrentalerta.net/",
+            "https://filmetorrent.org/baixar/",
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://baixarfilmestorrents.net/",
-            "https://comandofilmes.life/"
+            "https://comandofilmes.life/",
+            "https://torrentalerta.net/"
         };
 
         public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
