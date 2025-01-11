@@ -23,12 +23,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.erai-raws.info/",
-            "https://beta.erai-raws.info/"
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://erairaws.mrunblock.bond/",
-            "https://erairaws.nocensor.cloud/"
+            "https://erairaws.nocensor.cloud/",
+            "https://beta.erai-raws.info/"
         };
         public override string Language => "en-US";
         public override string Type => "semi-private";
