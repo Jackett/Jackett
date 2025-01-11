@@ -126,7 +126,7 @@ search:
         div.cat-filme-4k: 46
         div.cat-albuns: 9
         div.cat-android: 36
-        div.cat-anime: 8
+        div.cat-anime-sd: 8
         div.cat-anime-dvd: 20
         div.cat-anime-hd: 35
         div.cat-anime-pack: 50
@@ -136,7 +136,7 @@ search:
         div.cat-cam-ts: 38
         div.cat-cursos: 52
         div.cat-doc: 13
-        div.cat-ebook: 43
+        div.cat-e-book: 43
         div.cat-filme-bray: 32
         div.cat-filme-dvd: 3
         div.cat-filme-hd: 6
@@ -149,9 +149,9 @@ search:
         div.cat-jogo-ps: 15
         div.cat-jogo-xbox: 11
         div.cat-mac: 21
-        div.cat-music-vid: 14
+        div.cat-music-video: 14
         div.cat-off: 31
-        div.cat-outros: 10
+        div.cat-other: 10
         div.cat-sports: 44
         div.cat-tv-4k: 48
         div.cat-tv-hd: 17
