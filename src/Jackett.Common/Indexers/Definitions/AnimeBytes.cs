@@ -348,29 +348,38 @@ namespace Jackett.Common.Indexers.Definitions
                              .ToList();
 
                         propertyList.RemoveAll(p => _ExcludedProperties.Any(p.ContainsIgnoreCase));
-                        var properties = new HashSet<string>(propertyList);
+                        var properties = propertyList.ToHashSet();
 
-                        if (torrent.Files.Any(f => f.FileName.ContainsIgnoreCase("Remux")))
-                        {
-                            var resolutionProperty = properties.FirstOrDefault(_RemuxResolutions.ContainsIgnoreCase);
-
-                            if (resolutionProperty.IsNotNullOrWhiteSpace())
-                            {
-                                properties.Add($"{resolutionProperty} Remux");
-                            }
-                        }
-
-                        if (properties.Any(p => p.StartsWithIgnoreCase("M2TS")))
+                        if (properties.Any(p => p.ContainsIgnoreCase("M2TS")))
                         {
                             properties.Add("BR-DISK");
                         }
 
-                        if (!AllowRaws &&
-                            categoryName == "Anime" &&
-                            properties.Any(p => p.StartsWithIgnoreCase("RAW") || p.Contains("BR-DISK")))
+                        var isBluRayDisk = properties.Any(p => p.ContainsIgnoreCase("RAW") || p.ContainsIgnoreCase("M2TS") || p.ContainsIgnoreCase("ISO"));
+
+                        if (!AllowRaws && categoryName == "Anime" && isBluRayDisk)
                         {
                             continue;
                         }
+
+                        properties = properties
+                             .Select(property =>
+                             {
+                                 if (isBluRayDisk)
+                                 {
+                                     property = Regex.Replace(property, @"\b(H\.?265)\b", "HEVC", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                     property = Regex.Replace(property, @"\b(H\.?264)\b", "AVC", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                 }
+
+                                 if (torrent.Files.Any(f => f.FileName.ContainsIgnoreCase("Remux"))
+                                     && _RemuxResolutions.ContainsIgnoreCase(property))
+                                 {
+                                     property += " Remux";
+                                 }
+
+                                 return property;
+                             })
+                             .ToHashSet();
 
                         int? season = null;
                         int? episode = null;
