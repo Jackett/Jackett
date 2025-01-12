@@ -37,6 +37,7 @@ caps:
     - {id: 11, cat: XXX, desc: "Kép"}
     - {id: 48, cat: XXX, desc: "Latina"}
     - {id: 16, cat: XXX, desc: "Lesbian"}
+    - {id: 56, cat: Books/Mags, desc: "Magazines"}
     - {id: 6, cat: XXX, desc: "Magyar"}
     - {id: 15, cat: XXX, desc: "Masturbation"}
     - {id: 14, cat: XXX, desc: "Mature"}
@@ -53,6 +54,7 @@ caps:
     - {id: 43, cat: XXX, desc: "Porn Music Videos"}
     - {id: 54, cat: XXX, desc: "Pov"}
     - {id: 45, cat: XXX, desc: "Pregnant / Preggo"}
+    - {id: 57, cat: XXX, desc: "Scat/Puke"}
     - {id: 10, cat: XXX, desc: "Shemale / TS"}
     - {id: 51, cat: XXX, desc: "Siterip"}
     - {id: 52, cat: XXX, desc: "Softcore"}
@@ -64,6 +66,7 @@ caps:
 
   modes:
     search: [q]
+    book-search: [q]
 
 settings:
   - name: username
