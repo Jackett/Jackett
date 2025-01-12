@@ -29,7 +29,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://baixarfilmestorrents.net/",
             "https://comandofilmes.life/",
-            "https://torrentalerta.net/"
+            "https://torrentalerta.net/",
             "https://filmetorrent.org/baixar/",
         };
 
