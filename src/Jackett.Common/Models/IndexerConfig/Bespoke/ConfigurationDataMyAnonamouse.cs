@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 
@@ -102,7 +103,10 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
                     { "15", "Urdu" },
                     { "13", "Vietnamese" },
                     { "47", "Other" }
-                });
+                })
+                {
+                    Values = Array.Empty<string>()
+                };
 
             AccountActivity = new DisplayInfoConfigurationItem("Account Inactivity", "To prevent your account from being disabled for inactivity, you must log in on a regular basis. You must also use your account - if you do not, your account will be disabled. If you know that you will not be able to login for an extended period of time, you can park your account in your preferences and it will not be disabled.");
         }

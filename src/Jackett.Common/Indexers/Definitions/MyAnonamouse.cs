@@ -230,7 +230,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (configData.SearchLanguages.Values is { Length: > 0 })
             {
-                foreach (var (language, index) in configData.SearchLanguages.Values.Select((value, index) => (value, index)))
+                var searchLanguages = configData.SearchLanguages.Values.Where(l => l != null);
+
+                foreach (var (language, index) in searchLanguages.Select((value, index) => (value, index)))
                 {
                     parameters.Set($"tor[browse_lang][{index}]", language);
                 }
