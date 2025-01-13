@@ -7,11 +7,12 @@ type: private
 encoding: tis-620
 requestDelay: 2
 links:
-  - https://bearbit.co/
+  - https://bearbit.org/
 legacylinks:
   - https://www.siambit.me/
   - https://siambit.io/
   - https://thaibit.net/
+  - https://bearbit.co/
 
 caps:
   categorymappings:
