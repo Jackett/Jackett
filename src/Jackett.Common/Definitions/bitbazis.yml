@@ -82,7 +82,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: li[onclick^="window.open('logout.php?k="]
+    selector: i.fa-arrow-right-from-bracket[title="Kilépés"] 
 
 search:
   paths:
