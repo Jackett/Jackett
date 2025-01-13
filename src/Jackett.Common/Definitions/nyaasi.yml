@@ -200,9 +200,9 @@ search:
         - name: re_replace
           args: ["(?i)\\b((?:S|Seasons?|EP?|Episodes?)\\s?)(\\d+)(?:\\-|[\\s~\\+àa&]+)(\\d+)\\b", "$1$2-$3"]
         - name: re_replace
-          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)[\\s\\-]+(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b", "$0 S$1E$2"]
+          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)[\\s\\-]+(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b", "S$1E$2"]
         - name: re_replace
-          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)(?:.+?)(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?E\\d+(?:-\\d+)?)", "$0 S$1E$2"]
+          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)(?:.+?)(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?E\\d+(?:-\\d+)?)", "S$1E$2"]
         - name: re_replace
           args: ["\\b (II) - (\\d+)[\\s\\-~\\+àa&]+(\\d+)", " $1 S02 - $2-$3"]
         - name: re_replace
@@ -222,9 +222,9 @@ search:
         - name: re_replace
           args: ["(?i)\\b(S\\d+(?:-\\d+)?) - (\\d+)\\b", "$1E$2"]
         - name: re_replace
-          args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "$0 S$1"]
+          args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "S$1"]
         - name: re_replace
-          args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "$0 S01E$1"]
+          args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "S01E$1"]
         - name: re_replace
           args: ["\\s+", " "]
         - name: trim
