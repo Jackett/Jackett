@@ -106,6 +106,8 @@ settings:
 login:
   # using cookie method because login page simplecaptcha generates Exception: Cannot access child value on Newtonsoft.Json.Linq.JValue.
   method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href*="logout.php?hash_please="]

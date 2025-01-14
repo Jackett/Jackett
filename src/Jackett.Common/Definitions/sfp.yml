@@ -105,6 +105,8 @@ settings:
 
 login:
   method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]
