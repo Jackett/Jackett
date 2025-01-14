@@ -28,12 +28,11 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -68,16 +67,10 @@ settings:
     default: "Account retention rules:<ol><li>Newly registered users who have not generated any traffic within 14 days (that is, the upload/download data are both 0) will be deleted</li><li>Users with a user level of Peasant that have failed to successfully improve their sharing rate within 14 days will be deleted.</li></ol>"
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  # using cookie method because login page is dynamically generated with JS
+  method: cookie
   inputs:
-    logintype: username
-    userinput: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    autologin: yes
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href^="logout.php?key="]
