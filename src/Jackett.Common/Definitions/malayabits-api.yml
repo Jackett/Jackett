@@ -73,7 +73,6 @@ search:
     - path: "/api/torrents/filter"
       response:
         type: json
-        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
@@ -183,4 +182,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 1 x 24 x 60 x 60)
       text: 86400
-# json UNIT3D 8.3.0
+# json UNIT3D 8.3.6
