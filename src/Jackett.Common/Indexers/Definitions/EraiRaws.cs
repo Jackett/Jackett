@@ -276,7 +276,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Link = link,
                     InfoHash = infoHash,
                     PublishDate = publishDate,
-                    Size = size,
+                    Size = string.IsNullOrWhiteSpace(size) ? "512MB" : size,
                     Description = description,
                     Quality = quality,
                     SubTitles = subs
