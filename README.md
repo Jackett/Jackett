@@ -470,6 +470,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
+ * Nirvana [![(invite needed)][inviteneeded]](#)
  * NorBits
  * Ntelogo
  * Nusanta(RA.RE)
