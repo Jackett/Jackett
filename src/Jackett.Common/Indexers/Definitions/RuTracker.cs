@@ -871,6 +871,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1224, TorznabCatType.AudioLossless, "|- Авторская песня (lossless)");
             caps.Categories.AddCategoryMapping(1225, TorznabCatType.AudioMP3, "|- Авторская песня (lossy)");
             caps.Categories.AddCategoryMapping(1226, TorznabCatType.Audio, "|- Менестрели и ролевики (lossy и lossless)");
+            caps.Categories.AddCategoryMapping(782, TorznabCatType.Audio, "Лейбл- и сцен-паки. Неофициальные сборники и ремастеринги. AI-музыка");
+            caps.Categories.AddCategoryMapping(577, TorznabCatType.Audio, "|- AI-Music - музыка ИИ, нейросетей (lossy и lossless)");
             caps.Categories.AddCategoryMapping(1842, TorznabCatType.AudioLossless, "Label Packs (lossless)");
             caps.Categories.AddCategoryMapping(1648, TorznabCatType.AudioMP3, "Label packs, Scene packs (lossy)");
             caps.Categories.AddCategoryMapping(134, TorznabCatType.AudioLossless, "|- Неофициальные сборники и ремастеринги (lossless)");
