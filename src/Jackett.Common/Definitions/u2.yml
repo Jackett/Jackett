@@ -97,7 +97,7 @@ search:
     search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 custom promotion
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 AniDB, 5 infohash
     search_area: 0
@@ -127,7 +127,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(3) > time[title]
+      selector: td.rowfollow:nth-child(4) > time[title]
       attribute: title
       optional: true
       filters:
@@ -137,7 +137,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(3):not(time[title])
+      selector: td.rowfollow:nth-child(4):not(time[title])
       optional: true
       filters:
         - name: append
@@ -147,42 +147,28 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(4)
-    seeders:
       selector: td.rowfollow:nth-child(5)
-    leechers:
+    seeders:
       selector: td.rowfollow:nth-child(6)
-    grabs:
+    leechers:
       selector: td.rowfollow:nth-child(7)
-    downloadvolumefactor_custom:
-      selector: td.embedded > img.arrowdown + b
-      optional: true
-      filters:
-        - name: regexp
-          args: (.*)X
-    uploadvolumefactor_custom:
-      selector: td.embedded > img.arrowup + b
-      optional: true
-      filters:
-        - name: regexp
-          args: (.*)X
+    grabs:
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
-        span.free: 0
-        span.twoupfree: 0
-        span.custompromotion: "{{ .Result.downloadvolumefactor_custom }}"
-        span.halfdown: 0.5
-        span.twouphalfdown: 0.5
-        span.thirtypercent: 0.3
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
         "*": 1
     uploadvolumefactor:
       case:
-        span.twouphalfdown: 2
-        span.twoupfree: 2
-        span.twoup: 2
-        span.custompromotion: "{{ .Result.uploadvolumefactor_custom }}"
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
         "*": 1
     description:
       selector: td:nth-child(2)
-      remove: a, b, font, img, span
+      remove: a, b, font, img
 # NexusPHP U2-Revision Standard v1.5 Beta 4
