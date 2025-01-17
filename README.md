@@ -237,7 +237,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * 0day.kiev
  * 1ptbar
  * 2 Fast 4 You [![(invite needed)][inviteneeded]](#)
- * 3ChangTrai (3CT)
+ * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT)
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
@@ -350,7 +350,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * FearNoPeer
  * Femdomcult
  * FileList (FL)
- * FinElite (FE)
+ * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * FinVip
  * Flux-Zone
  * Free Farm (自由农场)
@@ -372,7 +372,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Hǎitáng (海棠PT)
  * HappyFappy
  * Hawke-uno
- * HD Dolby
+ * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD Zero
  * HD-Club [![(invite needed)][inviteneeded]](#)
  * HD-Forever (HDF)
@@ -407,7 +407,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * House of Devil
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
- * ICC2022 (冰淇淋)
+ * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
  * ilolicon PT
  * ImmortalSeed (iS)
  * Immortuos
@@ -599,7 +599,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Torrenting (TT)
  * Torrentland
  * TorrentLeech (TL)
- * TorrentLeech.pl
+ * TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
  * TorrentSeeds (TS)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
@@ -622,7 +622,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Vault network
  * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
- * WinterSakura
+ * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * Wukong (悟空问道)
