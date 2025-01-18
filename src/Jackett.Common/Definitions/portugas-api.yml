@@ -34,11 +34,15 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://portugas.org/\" target=\"_blank\">Portugas</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://portugas.org/\" target=\"_blank\">Portugas</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -89,7 +93,7 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
@@ -107,11 +111,18 @@ search:
       selector: category_id
     _audiopt:
       selector: audio_pt
-    title:
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    title_optional:
       selector: name
-      filters:
-        - name: append
-          args: "{{ if eq .Result._audiopt \"1\" }} Portuguese PT-PT{{ else }}{{ end }}"
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}{{ if .Result._audiopt }} Portuguese PT-PT{{ else }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -142,8 +153,6 @@ search:
           args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
     seeders:
       selector: seeders
     leechers:
@@ -160,7 +169,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -170,15 +184,19 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
-      # api returns 0=false, 1=true
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json UNIT3D 6.3.0 (custom)
+# json UNIT3D 8.3.6 (custom)
