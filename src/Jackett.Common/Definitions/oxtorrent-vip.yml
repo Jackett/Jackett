@@ -10,7 +10,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.oxtorrent.cz/
+  - https://www.oxtorrent.im/
   - https://oxtorrent.proxyninja.org/
 legacylinks:
   # latest domains list
@@ -37,6 +37,7 @@ legacylinks:
   - https://www.oxtorrent.st/
   - https://www.oxtorrent.gl/
   - https://www.oxtorrent.gy/
+  - https://www.oxtorrent.cz/
 
 caps:
   categorymappings:
