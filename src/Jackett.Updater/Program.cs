@@ -666,6 +666,7 @@ namespace Jackett.Updater
                 "Definitions/tellytorrent-api.yml",
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
                 "Definitions/tfile.yml",
+                "Definitions/tgay.yml",
                 "Definitions/theaudioscene.yml",
                 "Definitions/the-crazy-ones.yml",
                 "Definitions/the-devils-lounge.yml",
