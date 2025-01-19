@@ -605,6 +605,7 @@ namespace Jackett.Updater
                 "Definitions/redtopia.yml",
                 "Definitions/reelflix.yml", // switch to *-API #8682
                 "Definitions/renegade.yml",
+                "Definitions/resurrectthenet.yml",
                 "Definitions/retroflix.yml", // migrated to C#
                 "Definitions/rgu.yml",
                 "Definitions/rmhd.yml",
