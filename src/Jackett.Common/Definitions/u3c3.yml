@@ -39,7 +39,7 @@ search:
   paths:
     - path: /
   inputs:
-    search2: "{{ if .Keywords }}eelja3lfea{{ else }}{{ end }}"
+    search2: "{{ if .Keywords }}eelja3lfe1a1{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
 
   rows:
@@ -53,7 +53,6 @@ search:
       attribute: title
     title:
       selector: a[href^="/view?id="]
-      attribute: title
     details:
       selector: a[href^="/view?id="]
       attribute: href
