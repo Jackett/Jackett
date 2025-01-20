@@ -91,6 +91,8 @@ search:
       selector: codec
     _container:
       selector: container
+      filters:
+        - name: toupper
     _media:
       selector: media
       filters:
@@ -122,7 +124,11 @@ search:
       filters:
         - name: htmldecode
         - name: append
-          args: " {{ .Result.year }} {{ .Result._codec }} {{ .Result._container }} {{ .Result._media }} {{ .Result._resolution }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}{{ if and (.Result._releaseGroup) (ne .Result._releaseGroup \"NULL\") }}-{{ .Result._releaseGroup }}{{ else }}{{ end }}"
+          args: " {{ .Result.year }} {{ .Result._resolution }} {{ .Result._media }} {{ .Result._container }} {{ .Result._codec }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}{{ if and (.Result._releaseGroup) (ne .Result._releaseGroup \"NULL\") }}-{{ .Result._releaseGroup }}{{ else }}{{ end }}"
+        - name: replace
+          args: ["M2TS H265", "M2TS HEVC"]
+        - name: replace
+          args: ["M2TS H264", "M2TS AVC"]
     details:
       selector: guid
     download:
