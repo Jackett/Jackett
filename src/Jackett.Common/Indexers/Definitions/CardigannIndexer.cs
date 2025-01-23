@@ -750,7 +750,9 @@ namespace Jackett.Common.Indexers.Definitions
                                 input = inputElement.GetAttribute("name");
                             }
                             pairs[input] = CaptchaText.Value;
-                        } else {
+                        }
+                        else
+                        {
                             throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
                         }
                     }
@@ -768,7 +770,9 @@ namespace Jackett.Common.Indexers.Definitions
                                 input = inputElement.GetAttribute("name");
                             }
                             pairs[input] = CaptchaAnswer.Value;
-                        } else {
+                        }
+                        else
+                        {
                             throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
                         }
                     }
