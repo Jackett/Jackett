@@ -25,6 +25,7 @@ caps:
     - {id: 23, cat: TV, desc: "Action/Adventure"}
     - {id: 24, cat: TV, desc: "Drama"}
     - {id: 25, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 26, cat: TV, desc: "Cartoons/Animation"}
     - {id: 27, cat: TV/Sport, desc: "Sport TV"}
     - {id: 28, cat: TV/Other, desc: "Misc TV"}
     - {id: 29, cat: TV/Other, desc: "TV Shows Requests"}
@@ -65,11 +66,11 @@ caps:
     - {id: 73, cat: PC, desc: "Windows Operating Systems & MS Apps"}
     - {id: 74, cat: PC, desc: "Applications Requests"}
 #    - {id: 78, cat: Other, desc: "Practice Area"}
-    - {id: 89, cat: Other, desc: Test"}
+    - {id: 89, cat: Other, desc: "Test"}
     # undocumented
-    - {id: 100, cat: Books, desc: Comics/Magazines"}
+    - {id: 100, cat: Books, desc: "Comics/Magazines"}
     - {id: 96, cat: Movies, desc: "Animation Releases"}
-    - {id: 26, cat: TV, desc: "Cartoons/Animation"}
+    - {id: 98, cat: Audio/Audiobook, desc: "Audio Books"}
 
   modes:
     search: [q]
