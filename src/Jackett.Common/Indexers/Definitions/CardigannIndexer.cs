@@ -750,6 +750,8 @@ namespace Jackett.Common.Indexers.Definitions
                                 input = inputElement.GetAttribute("name");
                             }
                             pairs[input] = CaptchaText.Value;
+                        } else {
+                            throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
                         }
                     }
                     if (Captcha.Type == "text")
@@ -766,6 +768,8 @@ namespace Jackett.Common.Indexers.Definitions
                                 input = inputElement.GetAttribute("name");
                             }
                             pairs[input] = CaptchaAnswer.Value;
+                        } else {
+                            throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
                         }
                     }
                 }
@@ -1065,6 +1069,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
                 logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
+                landingResultDocument = null;
                 return null;
             }
 
