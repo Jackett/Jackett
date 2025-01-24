@@ -753,7 +753,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         else
                         {
-                            throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
+                            throw new ExceptionWithConfigData("Login failed: No captcha provided", configData);
                         }
                     }
                     if (Captcha.Type == "text")
@@ -773,7 +773,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         else
                         {
-                            throw new ExceptionWithConfigData(string.Format("Login failed: No captcha provided"), configData);
+                            throw new ExceptionWithConfigData("Login failed: No captcha provided", configData);
                         }
                     }
                 }
