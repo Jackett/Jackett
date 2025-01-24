@@ -10,16 +10,16 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Filmes"}
-    - {id: 2, cat: TV, desc: "Séries"}
-    - {id: 3, cat: TV/Anime, desc: "Animes"}
-    - {id: 4, cat: Other, desc: "Cursos"}
-    - {id: 5, cat: Console, desc: "Games"}
-    - {id: 6, cat: Books/EBook, desc: "Livros"}
-    - {id: 7, cat: Books/Comics, desc: "HQs"}
-    - {id: 8, cat: Audio/Audiobook, desc: "AudioBooks"}
-    - {id: 9, cat: PC, desc: "Programas"}
-    - {id: 10, cat: Other, desc: "Materiais de Apoio"}
+    - {id: 1, cat: Movies, desc: "Filmes", default: true}
+    - {id: 2, cat: TV, desc: "Séries", default: true}
+    - {id: 3, cat: TV/Anime, desc: "Animes", default: true}
+    - {id: 4, cat: Other, desc: "Cursos", default: false}
+    - {id: 5, cat: Console, desc: "Games", default: true}
+    - {id: 6, cat: Books/EBook, desc: "Livros", default: true}
+    - {id: 7, cat: Books/Comics, desc: "HQs", default: true}
+    - {id: 8, cat: Audio/Audiobook, desc: "AudioBooks", default: true}
+    - {id: 9, cat: PC, desc: "Programas", default: true}
+    - {id: 10, cat: Other, desc: "Materiais de Apoio", default: true}
 
   modes:
     search: [q]
