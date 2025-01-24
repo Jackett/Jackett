@@ -6,11 +6,12 @@ language: es-ES
 type: public
 encoding: UTF-8
 links:
-  - https://www.gamestorrents.fm/
+  - https://www.gamestorrents.app/
 legacylinks:
   - https://www.gamestorrents.com/
   - https://www.gamestorrents.tv/
   - https://www.gamestorrents.nu/
+  - https://www.gamestorrents.fm/
 
 caps:
   categorymappings:
