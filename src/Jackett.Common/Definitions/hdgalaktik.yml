@@ -6,7 +6,7 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 certificates:
-  - 04ff5035de8f99f809173ec55bf3814693a0fd94  # CN=mail.trackerpmr.com
+  - 53262db5c4e32667ae158fcc90396d5675d4ec3a   # CN=mail.trackerpmr.com
 links:
   - https://www.trackerpmr.com/
   - https://freetmd.com/
