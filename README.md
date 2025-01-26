@@ -561,6 +561,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * The Crazy Ones
  * The Falling Angels (TFA)
  * The Geeks
+ * The Kitchen
  * The New Retro
  * The Occult
  * The Old School
