@@ -33,6 +33,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ACG.RIP
  * Anidex
  * AniLibria
+ * Anime Time
  * Anime Tosho
  * AniRena
  * AniSource
@@ -161,6 +162,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
  * AniDUB
+ * Anime Time (login)
  * AnimeLayer
  * ArenaBG
  * Best-Torrents [PAY2DL]
