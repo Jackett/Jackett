@@ -6,10 +6,9 @@ language: zh-CN
 type: private
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - 354aadd98a20cd4c28c115dae3a4b3f19d528df0 # CN=ptfans.cc (for cusat.win)
 links:
   - https://ptfans.cc/
+legacylinks:
   - https://cusat.win/
 
 caps:
