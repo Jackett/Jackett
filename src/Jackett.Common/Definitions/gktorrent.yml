@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.gktorrent.cz/
+  - https://www.gktorrent.cv/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -20,10 +20,6 @@ legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
   # actual legacylinks
-  - https://www.gktorrent.wf/
-  - https://gktorrent.nocensor.cloud/
-  - https://gktorrent.mrunblock.bond/
-  - https://www.gktorrent.wtf/
   - https://www.gktorrent.vg/
   - https://www.gktorrent.lol/
   - https://www.gktorrent.sh/
@@ -37,6 +33,8 @@ legacylinks:
   - https://www.gktorrent.gy/
   - https://www.gktorrent.si/
   - https://www.gktorrent.my/
+  - https://www.gktorrent.cz/
+  - https://www.gktorrent.ke/
 
 caps:
   categorymappings:
