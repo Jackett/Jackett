@@ -666,17 +666,17 @@ t=book:
 Examples:
 
 ```
-.../api?apikey=APIKEY&t=search&cat=1,3&q=Show+Title+S01E02
+.../api?apikey=APIKEY&t=search&cat=100002,100003&q=Show+Title+S01E02
 
-.../api?apikey=APIKEY&t=tvsearch&cat=1,3&q=Show+Title&season=1&ep=2
-.../api?apikey=APIKEY&t=tvsearch&cat=1,3&genre=comedy&season=2023&ep=02/13
+.../api?apikey=APIKEY&t=tvsearch&cat=5000&q=Show+Title&season=1&ep=2
+.../api?apikey=APIKEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
 
-.../api?apikey=APIKEY&t=movie&cat=2&q=Movie+Title&year=2023
-.../api?apikey=APIKEY&t=movie&cat=2&imdbid=tt1234567
+.../api?apikey=APIKEY&t=movie&cat=100001&q=Movie+Title&year=2023
+.../api?apikey=APIKEY&t=movie&cat=5000&imdbid=tt1234567
 
-.../api?apikey=APIKEY&t=music&cat=4&album=Title&artist=Name
+.../api?apikey=APIKEY&t=music&cat=100004&album=Title&artist=Name
 
-.../api?apikey=APIKEY&t=book&cat=5,6&genre=horror&publisher=Stuff
+.../api?apikey=APIKEY&t=book&cat=100005,100006&genre=horror&publisher=Stuff
 ```
 
 ### Filter indexers
