@@ -47,7 +47,7 @@ caps:
     - {id: "/games//mac/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/movies/", cat: Movies, desc: Movies}
     - {id: "/movies//3d-movies/3d-movies/", cat: Movies/3D, desc: "Movies 3D"}
-    - {id: "/movies//bollywood//bollywood/", cat: Movies, desc: "Movies Bollywood"}
+    - {id: "/movies//bollywood/bollywood/", cat: Movies, desc: "Movies Bollywood"}
     - {id: "/movies//documentary/documentary/", cat: Movies, desc: "Movies Documentary"}
     - {id: "/movies//dubbed-movies/dubbed-movies/", cat: Movies, desc: "Movies Dubbed"}
     - {id: "/movies//dvd/dvd/", cat: Movies/DVD, desc: "Movies DVD"}
