@@ -435,7 +435,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Le-Cinephile
  * LearnBits
  * LearnFlakes
- * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
  * Libble
