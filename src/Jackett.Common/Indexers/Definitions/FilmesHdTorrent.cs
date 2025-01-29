@@ -85,7 +85,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(indexerResponse.Content);
-            var rows = dom.QuerySelectorAll("div.item");
+            var rows = dom.QuerySelectorAll("div.item:has(a[title])");
 
             foreach (var row in rows)
             {
