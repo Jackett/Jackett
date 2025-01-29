@@ -10,6 +10,7 @@ links:
   - https://www.torrentdd.com/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: Other, desc: "พระมหากษัตริย์", default: true}
     - {id: 2, cat: TV/Anime, desc: "การ์ตูน/อนิเมชั่น", default: true}

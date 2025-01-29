@@ -10,6 +10,7 @@ links:
   - https://pt.0ff.cc/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies|电影", default: true}
     - {id: 402, cat: TV, desc: "TV Series|电视剧", default: true}
@@ -20,7 +21,6 @@ caps:
     - {id: 407, cat: Audio/Lossless, desc: "HD Music|无损音乐", default: true}
     - {id: 408, cat: TV/Sport, desc: "Sports|体育", default: true}
     - {id: 428, cat: Other, desc: "Others|其他", default: true}
-    # special
     - {id: 413, cat: Other, desc: "Education|学习教育", default: false}
     - {id: 414, cat: Other, desc: "Course|网络教程", default: false}
     - {id: 415, cat: Books, desc: "book|书籍", default: false}

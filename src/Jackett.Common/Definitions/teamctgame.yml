@@ -17,6 +17,7 @@ legacylinks:
   - https://tctg.in/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 409, cat: Books/Comics, desc: "BD", default: true}
     - {id: 410, cat: Books/Mags, desc: "Ebooks - Presse", default: true}

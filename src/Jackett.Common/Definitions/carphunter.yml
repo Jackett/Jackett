@@ -10,6 +10,7 @@ links:
   - https://carp-hunter.hu/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: Movies/SD, desc: "Film/Cam/Eng", default: true}
     - {id: 2, cat: Movies/SD, desc: "Film/Cam/Hun", default: true}

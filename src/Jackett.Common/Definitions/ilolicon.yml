@@ -10,6 +10,7 @@ links:
   - https://share.ilolicon.com/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "电影 (Movie)", default: true}
     - {id: 402, cat: TV, desc: "电视剧(TV Series)", default: true}

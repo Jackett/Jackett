@@ -10,6 +10,7 @@ links:
   - https://www.pttime.org/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies(电影)", default: true}
     - {id: 402, cat: TV, desc: "TV Series(电视剧)", default: true}
