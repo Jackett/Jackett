@@ -10,6 +10,7 @@ links:
   - https://piggo.me/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies/电影", default: true}
     - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片", default: true}
@@ -20,17 +21,19 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "Sports/体育", default: true}
     - {id: 409, cat: Other, desc: "Misc/其他", default: true}
     - {id: 408, cat: Audio, desc: "Music/音乐", default: true}
-    # kids zone
-    - {id: 908, cat: TV, desc: "TV Series/剧集", default: false}
-    - {id: 909, cat: Movies, desc: "Movies/电影", default: false}
-    - {id: 905, cat: Audio/Video, desc: "MusicVideo/MV", default: false}
-    - {id: 907, cat: Audio, desc: "Music/音乐", default: false}
+    - {id: 909, cat: Movies, desc: "Movies/电  影 🎬", default: false}
+    - {id: 908, cat: TV/Anime, desc: "Animation Series/剧集动画", default: false}
+    - {id: 905, cat: Audio, desc: "Audiobooks/有声读物", default: false}
+    - {id: 910, cat: Books, desc: "Picture Books/读书绘本", default: false}
+    - {id: 907, cat: TV/Documentary, desc: "Documentaries/纪录片🏞️", default: false}
+    - {id: 911, cat: Audio, desc: "Music/音  乐 🎧", default: true}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -90,7 +93,7 @@ search:
     - path: torrents.php
       categories: [401, 402, 403, 404, 405, 406, 407, 408, 409]
     - path: special.php
-      categories: [905, 907, 908, 909]
+      categories: [909, 908, 905, 910, 907, 911]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
