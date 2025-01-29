@@ -17,6 +17,7 @@ caps:
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 71, cat: Console, desc: "Batocera"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
+    - {id: 86, cat: Console, desc: "Chinese Systems"}
     - {id: 22, cat: Console, desc: "CoinOps"}
     - {id: 42, cat: Console, desc: "CoinOPS Official"}
     - {id: 65, cat: Console, desc: "CoinOps Unofficial"}
@@ -34,6 +35,7 @@ caps:
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 43, cat: Console, desc: "LB No Intro"}
+    - {id: 85, cat: Console, desc: "MAME Rom Sets"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
     - {id: 32, cat: Movies, desc: "Movie Pack"}
     - {id: 6, cat: Movies, desc: "Movies/XVID"}
