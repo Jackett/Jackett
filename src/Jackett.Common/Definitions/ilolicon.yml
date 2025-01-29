@@ -5,21 +5,32 @@ description: "ilolicon PT is a CHINESE Private torrent tracker for LOLICON / MOV
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://share.ilolicon.com/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "电影 (Movie)"}
-    - {id: 402, cat: TV, desc: 电视剧/综艺 (TV Series/TV Show)"}
-    - {id: 405, cat: TV/Anime, desc: "动画 (Animation)"}
-    - {id: 408, cat: Audio, desc: "音乐 (Music)"}
-    - {id: 410, cat: Audio/Video, desc: "舞台演出 (Stage Performance)"}
-    - {id: 404, cat: TV/Documentary, desc: "纪录片 (Documentary)"}
-    - {id: 412, cat: Console, desc: "游戏 (Game)"}
-    - {id: 413, cat: PC, desc: "软件 (Software)"}
-    - {id: 411, cat: Other, desc: "漫画/图集/绘本/写真 (Photo)"}
-    - {id: 418, cat: Other, desc: "三次元图集/写真/Cosplay套图"}
+    - {id: 401, cat: Movies, desc: "电影 (Movie)", default: true}
+    - {id: 402, cat: TV, desc: "电视剧(TV Series)", default: true}
+    - {id: 430, cat: TV, desc: "综艺(TV Show)", default: true}
+    - {id: 405, cat: TV/Anime, desc: "动画 (Animation)", default: true}
+    - {id: 408, cat: Audio, desc: "音乐 (Music)", default: true}
+    - {id: 410, cat: Audio/Video, desc: "舞台演出 (Stage Performance)", default: true}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片 (Documentary)", default: true}
+    - {id: 412, cat: Console, desc: "游戏 (Game)", default: true}
+    - {id: 413, cat: PC, desc: "软件 (Software)", default: true}
+    - {id: 411, cat: Other, desc: "漫画/CG杂图/动漫杂志 (Photo)", default: true}
+    - {id: 418, cat: XXX/ImageSet, desc: "写真 (Photography)", default: false}
+    - {id: 429, cat: XXX/Other, desc: "音声 (Audio)", default: false}
+    - {id: 428, cat: XXX/Other, desc: "H-游戏 (H-Games)", default: false}
+    - {id: 427, cat: XXX/ImageSet, desc: "H-CG杂图 (H-CG Miscellaneous Pictures)", default: false}
+    - {id: 426, cat: XXX/Other, desc: "H-3D同人动画 (H-3D Doujin Animation)", default: false}
+    - {id: 425, cat: XXX/Other, desc: "H-2D同人动画 (H-2D Doujin Animation)", default: false}
+    - {id: 424, cat: XXX/Other, desc: "H-漫画 (H-Manga)", default: false}
+    - {id: 423, cat: XXX/Other, desc: "里番 (Riban)", default: false}
+    - {id: 420, cat: XXX, desc: "AV有码 (AV Censored)", default: false}
+    - {id: 419, cat: XXX, desc: "AV无码 (AV uncensored)", default: false}
 
   modes:
     search: [q]
@@ -74,6 +85,9 @@ login:
 search:
   paths:
     - path: torrents.php
+      categories: [401, 402, 430, 405, 408, 410, 404, 412, 413, 411]
+    - path: special.php
+      categories: [418, 429, 428, 427, 426, 425, 424, 423, 422, 420, 419]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
