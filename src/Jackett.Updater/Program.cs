@@ -641,6 +641,7 @@ namespace Jackett.Updater
                 "Definitions/shellife.yml",
                 "Definitions/sharkpt.yml",
                 "Definitions/shokweb.yml",
+                "Definitions/simpleanime.yml",
                 "Definitions/skipthecommercials.yml", // switch to *-API #8682
                 "Definitions/skipthecommercials-api.yml",
                 "Definitions/skipthetrailers.yml",
