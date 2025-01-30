@@ -58,7 +58,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in once every 60 days or seed at least 1 torrent to not get disabled."
+    default: "You must log in once every 30 days or seed at least 1 torrent to not get disabled."
   - name: info_flaresolverr
     type: info_flaresolverr
 
