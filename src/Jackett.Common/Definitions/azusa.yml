@@ -126,11 +126,17 @@ search:
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: a[href$="dllist=1#seeders"]
+      optional: true
+      default: 0
     leechers:
-      selector: td.rowfollow:nth-child(7)
+      selector: a[href$="dllist=1#leechers"]
+      optional: true
+      default: 0
     grabs:
-      selector: td.rowfollow:nth-child(8)
+      selector: a[href=^"viewsnatches.php?id="]
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -148,4 +154,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.7.20 2022-08-05
+# NexusPHP v1.7.20 2022-08-05 (custom)
