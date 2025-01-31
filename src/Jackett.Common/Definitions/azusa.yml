@@ -134,7 +134,7 @@ search:
       optional: true
       default: 0
     grabs:
-      selector: a[href=^"viewsnatches.php?id="]
+      selector: a[href^="viewsnatches.php?id="]
       optional: true
       default: 0
     downloadvolumefactor:
