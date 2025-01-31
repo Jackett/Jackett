@@ -124,6 +124,7 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
+  # using cookie to prevent FlareSolverrSharp invalid-charset-exception after picking up `charset=utf8mb4` #15835
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
