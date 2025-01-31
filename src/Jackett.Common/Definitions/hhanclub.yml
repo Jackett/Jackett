@@ -19,7 +19,7 @@ caps:
     - {id: 405, cat: TV/Anime, desc: "动漫"}
     - {id: 404, cat: TV/Documentary, desc: "纪录片"}
     - {id: 401, cat: Movies, desc: "电影"}
-    - {id: 412, cat: Audio/Video, desc: "短剧"}
+    - {id: 412, cat: TV/Other, desc: "短剧"}
 
   modes:
     search: [q]
