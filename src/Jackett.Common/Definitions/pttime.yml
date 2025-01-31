@@ -22,10 +22,8 @@ caps:
     - {id: 409, cat: Other, desc: "Art(舞蹈、歌剧、戏曲、相声、评书等)", default: true}
     - {id: 411, cat: Other, desc: "Science(科学、知识、技能)", default: true}
     - {id: 412, cat: Other, desc: "School(应试、考级、初中以上教育)", default: true}
-    - {id: 413, cat: Books, desc: "Book(书籍、有声书)", default: true}
     - {id: 420, cat: PC, desc: "Code(IT、编程、大数据、人工智能", default: true}
     - {id: 430, cat: TV/Anime, desc: "Animate(3D动画、2.5次元)", default: true}
-    - {id: 431, cat: TV/Anime, desc: "ACGN(二次元)", default: true}
     - {id: 432, cat: TV/Other, desc: "Baby(婴幼、早教、小学及相关)", default: true}
     - {id: 450, cat: Other, desc: "Resource(资源、素材、模板)", default: true}
     - {id: 451, cat: PC, desc: "Software(软件、系统、 程序、APP等)", default: true}
@@ -38,13 +36,14 @@ caps:
     - {id: 445, cat: XXX, desc: "9kg-H书籍(书籍、有声书)", default: false}
     - {id: 446, cat: XXX, desc: "9kg-H写真(图片、私拍、短视频）", default: false}
     - {id: 447, cat: XXX, desc: "9kg-H音频(ASMR、音乐、音频)", default: false}
+    - {id: 448, cat: XXX, desc: "9kg-H综(综艺、综合、剪辑、其他等)", default: false}
+    - {id: 449, cat: XXX, desc: "9kg-H同(男同、女同、人妖)", default: false}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
