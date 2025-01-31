@@ -20,12 +20,25 @@ caps:
     - {id: 406, cat: Audio/Video, desc: "Music Videos|音乐视频", default: true}
     - {id: 407, cat: Audio/Lossless, desc: "HD Music|无损音乐", default: true}
     - {id: 408, cat: TV/Sport, desc: "Sports|体育", default: true}
+    - {id: 427, cat: Other/Misc, desc: "待定", default: true}
+    - {id: 412, cat: Other/Misc, desc: "待定", default: true}
+    - {id: 411, cat: Other/Misc, desc: "待定", default: true}
+    - {id: 410, cat: Other/Misc, desc: "待定", default: true}
+    - {id: 409, cat: Other/Misc, desc: "待定", default: true}
     - {id: 428, cat: Other, desc: "Others|其他", default: true}
     - {id: 413, cat: Other, desc: "Education|学习教育", default: false}
     - {id: 414, cat: Other, desc: "Course|网络教程", default: false}
     - {id: 415, cat: Books, desc: "book|书籍", default: false}
     - {id: 416, cat: PC/0day, desc: "Resources|网络资源", default: false}
     - {id: 417, cat: PC/Games, desc: "Game|游戏", default: false}
+    - {id: 425, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 424, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 423, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 422, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 421, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 420, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 419, cat: Other/Misc, desc: "待定", default: false}
+    - {id: 418, cat: Other/Misc, desc: "待定", default: false}
     - {id: 426, cat: Other, desc: "Others|其他", default: false}
 
   modes:
@@ -106,9 +119,9 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [401, 402, 403, 404, 405, 406, 407, 408, 428]
+      categories: [401, 402, 403, 404, 405, 406, 407, 408, 427, 412, 411, 410, 409, 428]
     - path: special.php
-      categories: [413, 414, 415, 416, 417, 426]
+      categories: [413, 414, 415, 416, 417, 425, 424, 423, 422, 421, 420, 419, 418, 426]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
