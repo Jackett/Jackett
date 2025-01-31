@@ -5,19 +5,22 @@ description: "HDVIDEO is a CHINESE Private torrent tracker for MOVIES / TV / GEN
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://hdvideo.one/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Anime/动漫"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/演唱会"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 408, cat: Audio, desc: "HQ Audio/音乐"}
+    - {id: 401, cat: Movies, desc: "Movies/电影", default: true}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧", default: true}
+    - {id: 403, cat: TV, desc: "TV Shows/综艺", default: true}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片", default: true}
+    - {id: 405, cat: TV/Anime, desc: "Anime/动漫", default: true}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos/演唱会", default: true}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育", default: true}
+    - {id: 408, cat: Audio, desc: "HQ Audio/音乐", default: true}
+    - {id: 409, cat: PC, desc: "3D模型", default: false}
 
   modes:
     search: [q]
@@ -72,6 +75,9 @@ login:
 search:
   paths:
     - path: torrents.php
+      categories: [401, 402, 403, 404, 405, 406, 407, 408]
+    - path: special.php
+      categories: [409]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
