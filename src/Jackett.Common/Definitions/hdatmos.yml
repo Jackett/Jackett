@@ -19,7 +19,13 @@ caps:
     - {id: 406, cat: Audio/Video, desc: "Music Videos/MV演唱会", default: true}
     - {id: 407, cat: TV/Sport, desc: "Sports/体育", default: true}
     - {id: 408, cat: Audio, desc: "HQ Audio/音乐", default: true}
-    - {id: 409, cat: PC, desc: "3D模型", default: false}
+    - {id: 416, cat: Audio, desc: "洗版区/音乐", default: false}
+    - {id: 415, cat: TV/Sport, desc: "洗版区/体育", default: false}
+    - {id: 414, cat: Audio/Video, desc: "洗版区/MV演唱会", default: false}
+    - {id: 413, cat: TV/Anime, desc: "洗版区/动漫", default: false}
+    - {id: 412, cat: TV, desc: "洗版区/电视剧", default: false}
+    - {id: 411, cat: TV/Documentary, desc: "洗版区/纪录片", default: false}
+    - {id: 410, cat: Movies, desc: "洗版区/电影", default: false}
 
   modes:
     search: [q]
@@ -69,6 +75,10 @@ settings:
     type: info
     label: Account Inactivity
     default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
+  - name: info_special
+    type: info
+    label: Special Categories
+    default: "Only <b>Power User</b> or above can view Special section. Searching for 洗版区 categories by users below this class will result in search errors."
 
 login:
   path: login.php
@@ -100,7 +110,7 @@ search:
     - path: torrents.php
       categories: [401, 404, 405, 402, 406, 407, 408]
     - path: special.php
-      categories: [409]
+      categories: [416, 415, 414, 413, 412, 411, 410]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
