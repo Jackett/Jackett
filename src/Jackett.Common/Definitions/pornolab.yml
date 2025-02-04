@@ -188,17 +188,12 @@ settings:
       1: asc
 
 login:
-  path: forum/login.php
+  path: forum/index.php
   method: form
-  form: form[action="login.php"]
-  captcha:
-    type: image
-    selector: img[src*="/captcha/"]
-    input: input[name^="cap_code_"]
+  form: form[action="/forum/login.php"]
   inputs:
-    input[name="login_username"]: "{{ .Config.username }}"
-    input[name="login_password"]: "{{ .Config.password }}"
-  selectors: true
+    login_username: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
   error:
     - selector: div:contains("Форум временно отключен")
     - selector: h4.warnColor1.tCenter.mrg_16
