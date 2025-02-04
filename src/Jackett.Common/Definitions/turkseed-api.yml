@@ -20,7 +20,7 @@ caps:
     - {id: 28, cat: Console, desc: "GAME - OYUN"}
     - {id: 26, cat: Other, desc: "Other"}
     - {id: 27, cat: PC, desc: "PROGRAM"}
-    - {id: 29, cat: Audio, desc: "Müzik"}
+    - {id: 30, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
