@@ -514,6 +514,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * Rain
  * RareShare2
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
