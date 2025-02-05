@@ -17,7 +17,6 @@ caps:
     - {id: 14, cat: PC/Games, desc: "Игры в разработке и демо-версии"}
     - {id: 9, cat: PC/Games, desc: "Разное (дополнения, патчи, русификаторы)"}
     - {id: 18, cat: PC/Games, desc: "Горячие новинки"}
-    - {id: 808, cat: PC/Games, desc: "Репаки от R.G. Механики"}
     - {id: 809, cat: PC/Games, desc: "Горячие новинки от R.G. Механики"}
     - {id: 810, cat: PC/Games, desc: "Аркады от R.G. Механики"}
     - {id: 811, cat: PC/Games, desc: "Приключения и квесты от R.G. Механики"}
@@ -26,7 +25,6 @@ caps:
     - {id: 814, cat: PC/Games, desc: "Action от R.G. Механики"}
     - {id: 815, cat: PC/Games, desc: "RPG от R.G. Механики"}
     - {id: 903, cat: PC/Games, desc: "jRPG от R.G. Механики"}
-    - {id: 913, cat: PC/Games, desc: "Раздачи от R.G. GOGFAN"}
     - {id: 935, cat: PC/Games, desc: "Ранний доступ от R.G. GOGFAN"}
     - {id: 914, cat: PC/Games, desc: "Аркады от R.G. GOGFAN"}
     - {id: 915, cat: PC/Games, desc: "Приключения и квесты от R.G. GOGFAN"}
@@ -39,11 +37,6 @@ caps:
     - {id: 21, cat: PC/Games, desc: "Аркады (основной)"}
     - {id: 23, cat: PC/Games, desc: "Аркады (коллекции, антологии)"}
     - {id: 29, cat: PC/Games, desc: "Симуляторы"}
-    - {id: 31, cat: PC/Games, desc: "Авиасимуляторы"}
-    - {id: 34, cat: PC/Games, desc: "Спортивные симуляторы"}
-    - {id: 33, cat: PC/Games, desc: "Космические симуляторы"}
-    - {id: 32, cat: PC/Games, desc: "Гоночные симуляторы"}
-    - {id: 30, cat: PC/Games, desc: "Другие симуляторы"}
     - {id: 35, cat: PC/Games, desc: "Экшены"}
     - {id: 40, cat: PC/Games, desc: "Ролевые игры"}
     - {id: 41, cat: PC/Games, desc: "Эротические игры"}
@@ -77,7 +70,6 @@ caps:
     - {id: 105, cat: Console/PSP, desc: "PSP | PSX-PSP"}
     - {id: 690, cat: Console/PS3, desc: "PS3 | Прочее"}
     - {id: 178, cat: Console/PSP, desc: "PSP | Прочее"}
-    - {id: 101, cat: Console/PSP, desc: "Архив (PS)"}
     - {id: 78, cat: Console/NDS, desc: "Nintendo"}
     - {id: 148, cat: Console/NDS, desc: "Архив (Nintendo)"}
     - {id: 116, cat: Console/NDS, desc: "NDS | Игры"}
@@ -118,15 +110,14 @@ caps:
     - {id: 703, cat: Movies, desc: "Новинки | CAMRip, TS, WEBRip(LQ)"}
     - {id: 74, cat: Movies/Foreign, desc: "Зарубежное кино"}
     - {id: 963, cat: Movies/UHD, desc: "Зарубежное кино | UHD 4K"}
-    - {id: 121, cat: Movies/BluRay, desc: "Зарубежное кино | Blu-Ray и BDRemux"}
-    - {id: 122, cat: Movies/HD, desc: "Зарубежное кино | HD Rips"}
-    - {id: 123, cat: Movies/DVD, desc: "Зарубежное кино | DVD"}
+    - {id: 122, cat: Movies/HD, desc: "Зарубежное кино | HD"}
     - {id: 124, cat: Movies/Foreign, desc: "Зарубежное кино | Rips"}
+    - {id: 123, cat: Movies, desc: "Сборники фильмов"}
     - {id: 75, cat: Movies, desc: "Отечественное кино"}
     - {id: 974, cat: Movies/UHD, desc: "Отечественное кино | UHD 4K"}
     - {id: 127, cat: Movies/BluRay, desc: "Отечественное кино | Blu-Ray и BDRemux"}
     - {id: 128, cat: Movies/HD, desc: "Отечественное кино | HD Rips"}
-    - {id: 130, cat: Movies/DVD, desc: "Российское кино | DVD"}
+    - {id: 133, cat: Movies/DVD, desc: "Отечественное кино | DVD"}
     - {id: 131, cat: Movies, desc: "Российское и советское кино | Rips"}
     - {id: 869, cat: Movies/3D, desc: "3D"}
     - {id: 161, cat: TV/Foreign, desc: "Сериалы"}
