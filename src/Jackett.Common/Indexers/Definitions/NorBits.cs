@@ -10,7 +10,6 @@ using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
-using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -288,14 +287,8 @@ namespace Jackett.Common.Indexers.Definitions
                         var title = qDetails?.GetAttribute("title").Trim();
                         var details = new Uri(SiteLink + qDetails?.GetAttribute("href").TrimStart('/'));
 
-                        var mainCategory = row.QuerySelector("td:nth-of-type(1) > div > a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
-                        var secondCategory = row.QuerySelector("td:nth-of-type(1) > div > a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
-                        if (string.IsNullOrWhiteSpace(mainCategory))
-                        {
-                            // some users have a different layout
-                            mainCategory = row.QuerySelector("td:nth-of-type(1) > a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
-                            secondCategory = row.QuerySelector("td:nth-of-type(1) > a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
-                        }
+                        var mainCategory = row.QuerySelector("td:nth-of-type(1) > a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
+                        var secondCategory = row.QuerySelector("td:nth-of-type(1) > a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
 
                         var categoryList = new[] { mainCategory, secondCategory };
                         var cat = string.Join("&", categoryList.Where(c => !string.IsNullOrWhiteSpace(c)));
