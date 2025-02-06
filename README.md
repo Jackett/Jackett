@@ -670,7 +670,7 @@ Examples:
 .../api?apikey=APIKEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
 
 .../api?apikey=APIKEY&t=movie&cat=100001&q=Movie+Title&year=2023
-.../api?apikey=APIKEY&t=movie&cat=5000&imdbid=tt1234567
+.../api?apikey=APIKEY&t=movie&cat=2000&imdbid=tt1234567
 
 .../api?apikey=APIKEY&t=music&cat=100004&album=Title&artist=Name
 
