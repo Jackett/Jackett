@@ -9,6 +9,7 @@ links:
   - https://www.gamegamept.com/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: PC/Games, desc: "PC游戏(PC Games)", default: true}
     - {id: 404, cat: Console/PS4, desc: "索尼主机游戏(Sony console games)", default: true}

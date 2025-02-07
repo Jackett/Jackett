@@ -66,7 +66,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * ExtraTorrent.st
  * EZTV
  * FilmesHdTorrent
- * Frozen Layer
  * GamesTorrents
  * GkTorrent
  * GloDLS
@@ -387,7 +386,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * HDFans
  * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
  * HDKylin (麒麟)
- * HDPT (明教) [![(invite needed)][inviteneeded]](#)
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
  * HDT-LaFenice
@@ -468,6 +466,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * NicePT
  * Nirvana
  * NorBits
+ * NordicQuality
  * Ntelogo
  * Nusanta(RA.RE)
  * OKPT
@@ -515,6 +514,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * Rain
  * RareShare2
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
@@ -670,7 +670,7 @@ Examples:
 .../api?apikey=APIKEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
 
 .../api?apikey=APIKEY&t=movie&cat=100001&q=Movie+Title&year=2023
-.../api?apikey=APIKEY&t=movie&cat=5000&imdbid=tt1234567
+.../api?apikey=APIKEY&t=movie&cat=2000&imdbid=tt1234567
 
 .../api?apikey=APIKEY&t=music&cat=100004&album=Title&artist=Name
 

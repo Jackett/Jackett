@@ -96,6 +96,7 @@ caps:
     - {id: 86, cat: Books/EBook, desc: "Ebooks"}
     - {id: 87, cat: Other, desc: "Wallpapers, Themes & Screensavers"}
     - {id: 89, cat: PC, desc: "Other Releases"}
+    - {id: 102, cat: Other, desc: "Post And Share"}
     - {id: 100, cat: Other, desc: "Tutorials"} # undocumented
     - {id: 103, cat: Other, desc: "Other Topic"} # undocumented
 

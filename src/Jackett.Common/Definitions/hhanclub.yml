@@ -12,10 +12,8 @@ links:
 
 caps:
   categorymappings:
-    - {id: 408, cat: Audio, desc: "HQ Audio"}
     - {id: 409, cat: Other, desc: "其他"}
     - {id: 407, cat: TV/Sport, desc: "Sports"}
-    - {id: 406, cat: Audio/Video, desc: "MV"}
     - {id: 403, cat: TV, desc: "综艺"}
     - {id: 402, cat: TV, desc: "电视剧"}
     - {id: 405, cat: TV/Anime, desc: "动漫"}

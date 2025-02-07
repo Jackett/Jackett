@@ -18,6 +18,7 @@ legacylinks:
   - https://last-torrents.org/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: TV/Anime, desc: "Movies: Anime", default: true}
     - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro", default: true}

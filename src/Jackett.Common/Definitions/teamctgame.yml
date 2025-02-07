@@ -17,6 +17,7 @@ legacylinks:
   - https://tctg.in/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 409, cat: Books/Comics, desc: "BD", default: true}
     - {id: 410, cat: Books/Mags, desc: "Ebooks - Presse", default: true}
@@ -63,6 +64,8 @@ caps:
     - {id: 452, cat: TV/Documentary, desc: "TV - Documentaires", default: true}
     - {id: 453, cat: TV/Sport, desc: "TV - Sports", default: true}
     - {id: 435, cat: XXX, desc: "Films - XXX", default: false}
+    - {id: 456, cat: XXX/Other, desc: "BD - XXX", default: false}
+    - {id: 457, cat: XXX/Other, desc: "ebook - xxx", default: false}
 
   modes:
     search: [q]
@@ -152,7 +155,7 @@ search:
     - path: torrents.php
       categories: [409, 410, 411, 412, 413, 414, 415, 416, 417, 418, 419, 420, 421, 422, 423, 424, 425, 426, 427, 428, 429, 430, 431, 432, 433, 434, 436, 437, 438, 439, 440, 441, 442, 443, 444, 445, 446, 447, 448, 449, 450, 451, 452, 453]
     - path: special.php
-      categories: [435]
+      categories: [435, 456, 457]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"

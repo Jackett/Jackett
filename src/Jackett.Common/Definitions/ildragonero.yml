@@ -139,7 +139,7 @@ search:
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
   inputs:
-    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2025{{ end }}"
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}*{{ end }}"
     # all, any
     terms: all
     # Search in subforums: yes 1, no 0

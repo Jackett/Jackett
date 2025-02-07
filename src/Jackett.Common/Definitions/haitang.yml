@@ -10,6 +10,7 @@ links:
   - https://www.htpt.cc/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: Audio, desc: "相声 Crosstalk", default: true}
     - {id: 4091, cat: Audio, desc: "评书 Storytelling", default: true}

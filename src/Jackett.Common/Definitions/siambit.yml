@@ -15,6 +15,7 @@ legacylinks:
   - https://bearbit.co/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: Other, desc: "@พระมหากษัตริย์ (@King)", default: true}
     - {id: 75, cat: PC/0day, desc: "OS วินโดว์/ออฟฟิศ (OS Windows/Office)", default: true}

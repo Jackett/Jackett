@@ -17,8 +17,11 @@ caps:
     - {id: 5, cat: Console, desc: "Games"}
     - {id: 6, cat: PC, desc: "Apps"}
     - {id: 7, cat: Books/Technical, desc: "Books"}
-    - {id: 8, cat: Books/Comics, desc: "Manga"}
-    - {id: 9, cat: XXX, desc: "XXX"}
+    - {id: 8, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 11, cat: Books/Comics, desc: "Comics"}
+    - {id: 12, cat: Books/Mags, desc: "Magazine"}
+    - {id: 9, cat: Books/Comics, desc: "Manga"}
+    - {id: 10, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]

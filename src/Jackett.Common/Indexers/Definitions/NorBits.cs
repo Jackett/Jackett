@@ -73,16 +73,19 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             };
 
+            caps.Categories.AddCategoryMapping("main_cat[]=1", TorznabCatType.Movies, "Filmer");
             caps.Categories.AddCategoryMapping("main_cat[]=1&sub2_cat[]=49", TorznabCatType.MoviesUHD, "Filmer - UHD-2160p");
             caps.Categories.AddCategoryMapping("main_cat[]=1&sub2_cat[]=19", TorznabCatType.MoviesHD, "Filmer - HD-1080p/i");
             caps.Categories.AddCategoryMapping("main_cat[]=1&sub2_cat[]=20", TorznabCatType.MoviesHD, "Filmer - HD-720p");
             caps.Categories.AddCategoryMapping("main_cat[]=1&sub2_cat[]=22", TorznabCatType.MoviesSD, "Filmer - SD");
+            caps.Categories.AddCategoryMapping("main_cat[]=2", TorznabCatType.TV, "TV");
             caps.Categories.AddCategoryMapping("main_cat[]=2&sub2_cat[]=49", TorznabCatType.TVUHD, "TV - UHD-2160p");
             caps.Categories.AddCategoryMapping("main_cat[]=2&sub2_cat[]=19", TorznabCatType.TVHD, "TV - HD-1080p/i");
             caps.Categories.AddCategoryMapping("main_cat[]=2&sub2_cat[]=20", TorznabCatType.TVHD, "TV - HD-720p");
             caps.Categories.AddCategoryMapping("main_cat[]=2&sub2_cat[]=22", TorznabCatType.TVSD, "TV - SD");
             caps.Categories.AddCategoryMapping("main_cat[]=3", TorznabCatType.PC, "Programmer");
             caps.Categories.AddCategoryMapping("main_cat[]=4", TorznabCatType.Console, "Spill");
+            caps.Categories.AddCategoryMapping("main_cat[]=5", TorznabCatType.Audio, "Musikk");
             caps.Categories.AddCategoryMapping("main_cat[]=5&sub2_cat[]=42", TorznabCatType.AudioMP3, "Musikk - 192");
             caps.Categories.AddCategoryMapping("main_cat[]=5&sub2_cat[]=43", TorznabCatType.AudioMP3, "Musikk - 256");
             caps.Categories.AddCategoryMapping("main_cat[]=5&sub2_cat[]=44", TorznabCatType.AudioMP3, "Musikk - 320");
@@ -90,6 +93,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("main_cat[]=5&sub2_cat[]=46", TorznabCatType.AudioLossless, "Musikk - Lossless");
             caps.Categories.AddCategoryMapping("main_cat[]=6", TorznabCatType.Books, "Tidsskrift");
             caps.Categories.AddCategoryMapping("main_cat[]=7", TorznabCatType.AudioAudiobook, "Lydbøker");
+            caps.Categories.AddCategoryMapping("main_cat[]=8", TorznabCatType.AudioVideo, "Musikkvideoer");
             caps.Categories.AddCategoryMapping("main_cat[]=8&sub2_cat[]=19", TorznabCatType.AudioVideo, "Musikkvideoer - HD-1080p/i");
             caps.Categories.AddCategoryMapping("main_cat[]=8&sub2_cat[]=20", TorznabCatType.AudioVideo, "Musikkvideoer - HD-720p");
             caps.Categories.AddCategoryMapping("main_cat[]=8&sub2_cat[]=22", TorznabCatType.AudioVideo, "Musikkvideoer - SD");
@@ -283,8 +287,8 @@ namespace Jackett.Common.Indexers.Definitions
                         var title = qDetails?.GetAttribute("title").Trim();
                         var details = new Uri(SiteLink + qDetails?.GetAttribute("href").TrimStart('/'));
 
-                        var mainCategory = row.QuerySelector("td:nth-of-type(1) > div > a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
-                        var secondCategory = row.QuerySelector("td:nth-of-type(1) > div > a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
+                        var mainCategory = row.QuerySelector("td:nth-of-type(1) a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
+                        var secondCategory = row.QuerySelector("td:nth-of-type(1) a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
 
                         var categoryList = new[] { mainCategory, secondCategory };
                         var cat = string.Join("&", categoryList.Where(c => !string.IsNullOrWhiteSpace(c)));

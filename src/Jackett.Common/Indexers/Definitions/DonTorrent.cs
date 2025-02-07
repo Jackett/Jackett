@@ -41,8 +41,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.cricket/",
-            "https://dontorrent.earth/",
             "https://dontorrent.date/",
             "https://dontorrent.email/",
             "https://dontorrent.education/",
@@ -56,7 +54,8 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.foundation/",
             "https://dontorrent.co/",
             "https://dontorrent.auction/",
-             "https://dontorrent.wiki/",
+            "https://dontorrent.football/",
+            "https://dontorrent.wiki/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
