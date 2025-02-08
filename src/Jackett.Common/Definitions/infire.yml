@@ -160,6 +160,9 @@ search:
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}torrents.php"]
+
   rows:
     selector: table.mg-b-0 > tbody > tr:has(a[href^="download.php?id="])
 
