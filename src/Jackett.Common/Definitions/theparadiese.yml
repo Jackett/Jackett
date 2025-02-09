@@ -35,7 +35,7 @@ caps:
     - {id: 120, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 123, cat: Audio/Audiobook, desc: "Music Hörbücher"}
     - {id: 109, cat: Audio/Video, desc: "Music Video"}
-    - {id: 147, cat: Other, desc: "Kids 4K/UHD/++"}
+    - {id: 147, cat: Other, desc: "Kids 4K/UHD"}
     - {id: 140, cat: Other, desc: "Kids Ani /Trick"}
     - {id: 143, cat: Other, desc: "Kids Pack HD"}
     - {id: 142, cat: Other, desc: "Kids HD"}
