@@ -104,6 +104,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
+    - name: re_replace # strip season and/or ep when single keyword (needed for mixed usage of S01 and Stagione 1)
+      args: ["^([SE]\\d{1,4}){1,2}$", "{{ if or (.Query.Season) (.Query.Ep) }}{{ else }}$1{{ end }}"]
     - name: re_replace # S01 to Stagione 1
       args: ["(?i)\\bS0*(\\d+)\\b", "Stagione $1"]
 
