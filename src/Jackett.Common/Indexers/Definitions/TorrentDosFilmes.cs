@@ -8,8 +8,8 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
         };
 
         public TorrentDosFilmes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                                ICacheService cs) : base(configService, wc, l, ps, cs)
+                                CacheManager cm) : base(configService, wc, l, ps, cm)
         {
             configData.AddDynamic(
                 "flaresolverr",
