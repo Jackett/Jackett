@@ -236,6 +236,11 @@ namespace Jackett.Common.Indexers.Definitions
                             }
                             yearStr ??= qDetailsLink.NextSibling.TextContent.Trim();
                             category = Regex.Replace(yearStr, @".+ \[(.+)\]", "$1");
+                            if (category == "XXX")
+                            {
+                                // some 3x titles end with [XXX] which needs to be renamed. 
+                                category = category.Replace("XXX", "Filmes XXX");
+                            }
 
                             if (Uri.TryCreate(row.QuerySelector("img[alt=\"Cover\"]")?.GetAttribute("src"),
                                               UriKind.Absolute, out var posterUri))

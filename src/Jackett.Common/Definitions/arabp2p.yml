@@ -52,7 +52,6 @@ caps:
     - {id: 52, cat: TV, desc: "مسرحيات (Plays)"}
     - {id: 71, cat: TV, desc: "مسلسلات مدبلجه عربي (Arabic Dubbed Series)"}
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
-    - {id: 117, cat: TV, desc: "رمضان 2024 (Ramadan)"}
     # المرئيات الاجنبية Foreign Movies
     - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
     - {id: 93, cat: TV/Documentary, desc: "وثائقي (Documentary)"}
@@ -79,6 +78,7 @@ caps:
     - {id: 25, cat: Audio, desc: "القران الكريم (The Holy Quran)"}
     - {id: 27, cat: Audio, desc: "محاضرات (Lectures)"}
     - {id: 26, cat: Audio, desc: "اناشيد (Chants)"}
+    - {id: 118, cat: Audio, desc: "برامج صوتية (Programs)"}
     # برامج  Software
     - {id: 22, cat: PC, desc: "برامج عربية (Arabic Software)"}
     - {id: 23, cat: PC, desc: "برامج عامه (Public Software)"}

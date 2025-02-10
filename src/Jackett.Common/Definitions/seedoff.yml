@@ -7,6 +7,7 @@ type: public
 encoding: UTF-8
 links:
   - https://seedoff.zannn.top/
+legacylinks:
   - https://forum.zannn.top/
 
 caps:
@@ -189,24 +190,24 @@ download:
         - name: validfilename
 
 search:
+  headers:
+    cookie: ["gophp=gop; trololofm=test; bookcontent=0"]
   paths:
-    # https://seedoff.zannn.top/search?page=ajax&search=&active=0&category=0&options=0&recommend=0&have_quality=0&types_search=0&period=0&genres=&order=3&by=2
-    - path: search
+    # https://seedoff.zannn.top/index.php?page=ajax&active=0&options=0&recommend=0&sticky=0&period=0&options=0&order=3&by=2&pages=1
+    - path: index.php
   inputs:
     page: ajax
     search: "{{ .Keywords }}"
     # 0 all, 1 active, 2 dead
     active: 0
-    category: 0
     # 0 name, 1 name & desc
     options: 0
     recommend: 0
-    have_quality: 0
-    # 0 whole word, 1 partial word
-    types_search: 0
+    sticky: 0
     period: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
+    pages: 1
 
   keywordsfilters:
     - name: re_replace # S01 to сезон 1
@@ -331,9 +332,6 @@ search:
       selector: td:nth-last-child(2)
     grabs:
       selector: td:nth-last-child(1)
-      filters:
-        - name: replace
-          args: ["---", "0"]
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

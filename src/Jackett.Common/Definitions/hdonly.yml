@@ -107,7 +107,7 @@ login:
     selector: a[href^="logout.php?auth="]
 
 search:
-  # https://hd-only.org/torrents.php?filelist=blood+2009&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
+  # https://hd-only.org/ajax.php?filelist=blood+2009&action=browse&group_results=0&order_by=time&order_way=desc&freetorrent=1
   paths:
     - path: ajax.php
       response:
@@ -227,6 +227,9 @@ search:
     _vfq:
       selector: vfq
       optional: true
+    _vf2:
+      selector: vf2
+      optional: true
     _vfi:
       selector: vfi
       optional: true
@@ -251,9 +254,11 @@ search:
         - name: append
           args: ".{{ .Result.year }}.{{ .Result._episode_info }}.{{ .Result._format }}.{{ .Result._encoding }}.{{ .Result._media }}{{ if eq .Result._hdr \"True\" }}.HDR{{ else }}{{ end }}.{{ if eq .Result._hdr10plus \"True\" }}.HDR10+{{ else }}{{ end }}.{{ if eq .Result._dovi \"True\" }}.DoVi{{ else }}{{ end }}"
         - name: append
-          args: "{{ if or (eq .Result._vff \"True\") (eq .Result._vfq \"True\") }}.MULTI{{ else }}{{ end }}{{ if or (eq .Result._vfi \"True\") (eq .Result._vf \"True\") }}.MULTI{{ else }}{{ end }}"
-        - name: replace
-          args: [".MULTI.MULTI", ".MULTI"]
+          args: "{{ if or (eq .Result._vf2 \"True\") (or (eq .Result._vff \"True\") (or (eq .Result._vfq \"True\") (or (eq .Result._vfi \"True\")  (eq .Result._vf \"True\")))) }}.MULTI{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["(\\.MULTI)\\1", ".MULTI"]
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vf2 \"True\") }}.VF2{{ else }}{{ end }}"
         - name: append
           args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vff \"True\") }}.VFF{{ else }}{{ end }}"
         - name: append

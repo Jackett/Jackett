@@ -231,9 +231,12 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var filename = (string)item["filename"];
             var name = (string)item["name"];
+            var typeCategory = (int)item["type_category"];
+            var typeMedium = (int)item["type_medium"];
 
-            return configData.UseFilenames.Value && filename.IsNotNullOrWhiteSpace()
-                ? filename.Replace(".torrent", "")
+            // Use release name for XXX content and full discs
+            return typeCategory != 7 && typeMedium != 1 && configData.UseFilenames.Value && filename.IsNotNullOrWhiteSpace()
+                ? filename!.Replace(".torrent", "")
                 : name;
         }
 

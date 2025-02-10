@@ -34,7 +34,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             if (has2Fa)
             {
                 CookieHint = new DisplayInfoConfigurationItem("CookieHint",
-                    @"Use the Cookie field only if 2FA is enabled for your account, leave it empty otherwise.
+                    @"Use the Cookie field only if 2FA is enabled for your account, or the tracker requests your email at login; leave it empty otherwise.
 <ol><li>Login to this tracker with your browser
 <li>Open the <b>DevTools</b> panel by pressing <b>F12</b>
 <li>Select the <b>Network</b> tab

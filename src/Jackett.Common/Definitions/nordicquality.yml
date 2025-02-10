@@ -1,29 +1,34 @@
 ---
-id: redbits-api
-name: RedBits (API)
-description: "RedBits is a SPANISH site for classic content"
-language: es-ES
+id: nordicquality-api
+name: NordicQuality (API)
+description: "NordicQuality is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://redbits.xyz/
+  - https://nordicq.org/
 legacylinks:
-  - https://red-bits.com/
+  - https://nordicq.info/ # 404 Not Found nginx/1.18.0 (Ubuntu)
+  - https://nordicq.cc/ # 404 Not Found nginx/1.18.0 (Ubuntu)
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Películas"}
-    - {id: 2, cat: TV, desc: "Series"}
-    - {id: 10, cat: TV, desc: "Series Completas"}
-    - {id: 6, cat: TV/Documentary, desc: "Documentales"}
-    - {id: 7, cat: TV/Sport, desc: "Deportes"}
-    - {id: 8, cat: Movies, desc: "Hagbard"}
-    - {id: 9, cat: Movies, desc: "Studio Ghibli"}
+    - {id: 8, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 7, cat: Books, desc: "Books"}
+    - {id: 4, cat: Console, desc: "Games"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 9, cat: Audio/Other, desc: "Podcasts"}
+    - {id: 5, cat: PC, desc: "Software"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 12, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -32,11 +37,15 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://redbits.xyz/\" target=\"_blank\">RedBits</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://nordicq.org/\" target=\"_blank\">NordicQuality</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -56,7 +65,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Not entering in a month leads to the account being deactivated or banned. If the account does not register downloads in a month, it will be banned with the User rank, the other ranks will be given a time determined by the staff."
+    default: "Your membership requires that you stay active at NordicQuality. To not get disabled, you are required to login to the site at least once every 90 days."
 
 login:
   path: /api/torrents
@@ -87,7 +96,7 @@ search:
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
-    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
@@ -103,31 +112,15 @@ search:
   fields:
     category:
       selector: category_id
-    title_vose:
-      selector: name:contains(VOSE)
+    title_optional:
+      selector: name
+    title_filename:
+      selector: "files[0].name"
       optional: true
-      filters:
-        - name: append
-          args: " English" # Add english to fix Sonarr/Radarr language
-    title_notvose:
-      selector: name:not(:contains(VOSE))
-      optional: true
-      filters:
-        - name: append
-          args: " Spanish" # Add spanish to fix Sonarr/Radarr language
+    files:
+      selector: num_file
     title:
-      text: "{{ if .Result.title_vose }}{{ .Result.title_vose }}{{ else }}{{ .Result.title_notvose }}{{ end }}"
-      filters:
-        - name: re_replace
-          args: ["(?i)bdfull", "BluRay"] # BDfull  -> BluRay
-        - name: re_replace
-          args: ["(?i)RedBits", ""] # Delete RedBits
-        - name: re_replace
-          args: ["\\[|\\]", " "]
-        - name: re_replace
-          args: ["  ", " "]
-        - name: re_replace
-          args: ["(?i)T(\\d{1,2})\\b", "S$1"]
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -149,17 +142,13 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
-          args: ["(?i)(Película de TV)", "Película_de_TV"]
-        - name: re_replace
-          args: ["(?i)(Ciencia ficción)", "Ciencia_ficción"]
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
     seeders:
       selector: seeders
     leechers:
@@ -176,7 +165,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -186,13 +180,20 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
-      # api returns 0=false, 1=true
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.4 but torrents must be seeded for 3 days or 1:1
+    minimumratio:
+      text: 1.0
     minimumseedtime:
-      # 4 days (as seconds = 4 x 24 x 60 x 60)
-      text: 345600
-# json UNIT3D 6.4.1
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json UNIT3D 8.3.6

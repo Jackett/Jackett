@@ -386,6 +386,10 @@ namespace Jackett.Common.Indexers
 
                 results = FilterResults(queryCopy, results).ToList();
                 results = FixResults(queryCopy, results).ToList();
+
+                // De-dupe releases by Guid so duplicate results aren't returned.
+                results = results.GroupBy(r => r.Guid).Select(g => g.First()).ToList();
+
                 cacheManager.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);

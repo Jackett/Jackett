@@ -10,6 +10,7 @@ links:
   - https://rotorrent.ro/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 18, cat: PC/0day, desc: "Apps: PC", default: true}
     - {id: 55, cat: TV/Documentary, desc: "Docs: Docs", default: true}

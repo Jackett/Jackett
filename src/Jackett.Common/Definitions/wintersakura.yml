@@ -10,8 +10,8 @@ links:
   - https://wintersakura.net/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
-    # torrents.php
     - {id: 409, cat: Other, desc: "Misc其他", default: true}
     - {id: 407, cat: TV/Sport, desc: "Sports体育", default: true}
     - {id: 406, cat: Audio/Video, desc: "Music Videos音乐MV", default: true}
@@ -25,7 +25,6 @@ caps:
     - {id: 422, cat: TV/Anime, desc: "Animation flims动漫电影", default: true}
     - {id: 410, cat: TV/Documentary, desc: "Documentaries纪录片", default: true}
     - {id: 401, cat: Movies, desc: "Movies电影", default: true}
-    # special.php
     - {id: 427, cat: PC, desc: "Software软件/程序/代码", default: false}
     - {id: 426, cat: Books/Technical, desc: "Papers期刊/论文", default: false}
     - {id: 428, cat: Books/EBook, desc: "Books图书", default: false}

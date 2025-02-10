@@ -39,6 +39,10 @@ caps:
     - {id: 59e67c0ed5b6a3e689dd1e1f, cat: Movies/UHD, desc: "Bluray 4K"}
     - {id: 59e488174a23a800358b4567, cat: Movies/UHD, desc: "Bluray Remux 4K"}
     - {id: 5a64af02ee30983a7e596aed, cat: Movies/HD, desc: "WEB-DL"}
+    - {id: 5cd19d6c3fc7af3ea2491037, cat: Movies/UHD, desc: "2160p"}
+    - {id: 5cd1a01f3fc7af3ea2491038, cat: TV/Anime, desc: "2160p"}
+    - {id: 5cd1a0b73fc7af3ea2491039, cat: Movies/Other, desc: "2160p"}
+    - {id: 5cd19f753fc7af3ea249103a, cat: TV/UHD, desc: "2160p"}
 
   modes:
     search: [q]
@@ -92,10 +96,7 @@ login:
 
 search:
   paths:
-    - path: torrent/ajaxfiltertorrent/{{ .Keywords }}
-  keywordsfilters:
-    - name: re_replace
-      args: ["^$", "null"]
+    - path: "torrent/ajaxfiltertorrent/{{ if .Keywords }}{{ .Keywords }}{{ else }}null{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}subcat[]={{.}}&{{end}}"
     exclu: 0
@@ -167,6 +168,10 @@ search:
         ":contains(\"Divers\"):contains(\"Bluray\")": "565af82d1fd35761568b45b7"
         ":contains(\"Divers\"):contains(\"1080p\")": "59591f0807fd301b6eaa7a8f"
         ":contains(\"Divers\"):contains(\"720p\")": "595cd82e07fd301b6eaa7a90"
+        ":contains(\"Films\"):contains(\"2160p\")": "5cd19d6c3fc7af3ea2491037"
+        ":contains(\"Animations\"):contains(\"2160p\")": "5cd1a01f3fc7af3ea2491038"
+        ":contains(\"Divers\"):contains(\"2160p\")": "5cd1a0b73fc7af3ea2491039"
+        ":contains(\"Séries\"):contains(\"2160p\")": "5cd19f753fc7af3ea249103a"
         "*": ""
     size: # actuall size is not provided, use some default values to make clients happy
       selector: div.category
@@ -199,6 +204,10 @@ search:
         ":contains(\"Divers\"):contains(\"Bluray\")": "20GB"
         ":contains(\"Divers\"):contains(\"1080p\")": "5GB"
         ":contains(\"Divers\"):contains(\"720p\")": "4GB"
+        ":contains(\"Films\"):contains(\"2160p\")": "20GB"
+        ":contains(\"Animations\"):contains(\"2160p\")": "20GB"
+        ":contains(\"Divers\"):contains(\"2160p\")": "20GB"
+        ":contains(\"Séries\"):contains(\"2160p\")": "20GB"
         "*": ""
     date:
       text: now

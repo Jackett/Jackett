@@ -8,13 +8,13 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://www.torlock.com/
-  - https://www.torlock2.com/
 legacylinks:
   - https://torlock.com/
   - https://www.torlock.icu/
   - https://torlock.nocensor.cloud/
   - https://torlock.mrunblock.bond/
   - https://torlock.unblockit.download/
+  - https://www.torlock2.com/ # 400 Bad Request No required SSL certificate was sent
 
 caps:
   # dont forget to update the search fields category case block

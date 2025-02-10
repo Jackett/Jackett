@@ -1,13 +1,14 @@
 ---
 id: tocashare
-name: Toca Share
+name: Toca Share (API)
 description: "Toca Share is a PORTUGUESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pt-PT
 type: private
 encoding: UTF-8
 links:
-  - https://tocashare.com/
-  - https://tocashare.biz/
+  - https://tocashare.biz/ # due to expired 31 Mar 2025, new domain tba
+legacylinks:
+  - https://tocashare.com/ # expired 2nd Jan 2025
 
 caps:
   categorymappings:

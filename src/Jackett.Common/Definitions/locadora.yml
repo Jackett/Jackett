@@ -1,6 +1,6 @@
 ---
 id: locadora
-name: Locadora
+name: Locadora (API)
 description: "Locadora is a BRAZILIAN Private Tracker for MOVIES, TV and ANIME"
 language: pt-BR
 type: private
@@ -58,7 +58,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts inactive for 90 days are deactivated."
+    default: "Accounts that are inactive for 90 days are deactivated."
 
 login:
   path: /api/torrents

@@ -286,7 +286,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var groupId = int.Parse(gObj.Key);
                     var group = gObj.Value as JObject;
 
-                    if (group["Torrents"].Type == JTokenType.Array && group["Torrents"] is JArray { Count: 0 })
+                    if (group["Torrents"] is not JObject groupTorrents)
                     {
                         continue;
                     }
@@ -296,7 +296,9 @@ namespace Jackett.Common.Indexers.Definitions
                                      .Distinct()
                                      .ToArray();
 
-                    foreach (var tObj in JObject.FromObject(group["Torrents"]))
+                    var torrents = JObject.FromObject(groupTorrents);
+
+                    foreach (var tObj in torrents)
                     {
                         var torrent = tObj.Value as JObject;
 

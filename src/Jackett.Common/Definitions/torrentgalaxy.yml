@@ -1,0 +1,212 @@
+---
+id: torrentgalaxy
+replaces:
+  - torrentgalaxyorg
+name: TorrentGalaxy
+description: "TorrentGalaxy (TGx) is a Public site for TV / MOVIES / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+requestDelay: 2
+# https://proxygalaxy.me/ for health status and alternate domains
+links:
+  - https://torrentgalaxy.to/
+  - https://torrentgalaxy.mx/
+  - https://tgx.rs/
+legacylinks:
+  - https://torrentgalaxy.org/ # redirects to *.to
+  - https://torrentgalaxy.pw/ # proxy list only
+  - https://tgx.unblocked.monster/
+  - https://torrentgalaxy.su/
+  - https://torrentgalaxy.unblockninja.com/ # breaks on checkpoint
+  - https://tgx.proxyninja.org/ # breaks on checkpoint
+  - https://tgx.sb/
+
+caps:
+  categorymappings:
+    - {id: 28, cat: TV/Anime, desc: "Anime - All"}
+    - {id: 20, cat: PC/Mobile-Other, desc: "Apps - Mobile"}
+    - {id: 21, cat: PC, desc: "Apps - Other"}
+    - {id: 18, cat: PC/0day, desc: "Apps - Windows"}
+    - {id: 13, cat: Audio/Audiobook, desc: "Books - Audiobooks"}
+    - {id: 19, cat: Books/Comics, desc: "Books - Comics"}
+    - {id: 12, cat: Books/EBook, desc: "Books - Ebooks"}
+    - {id: 14, cat: Books/Technical, desc: "Books - Education"}
+    - {id: 15, cat: Books/Mags, desc: "Books - Magazine"}
+    - {id: 9, cat: TV/Documentary, desc: "Documentaries - All"}
+    - {id: 43, cat: PC/Mobile-Other, desc: "Games - Mobile"}
+    - {id: 10, cat: PC/Games, desc: "Games - Windows"}
+    - {id: 3, cat: Movies/UHD, desc: "Movies - 4K UHD"}
+    - {id: 46, cat: Movies/Foreign, desc: "Movies - Bollywood"}
+    - {id: 45, cat: Movies/Other, desc: "Movies - CAM/TS"}
+    - {id: 42, cat: Movies/HD, desc: "Movies - HD"}
+    - {id: 4, cat: Movies, desc: "Movies - Packs"}
+    - {id: 1, cat: Movies/SD, desc: "Movies - SD"}
+    - {id: 22, cat: Audio, desc: "Music - Albums"}
+    - {id: 26, cat: Audio, desc: "Music - Discography"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music - Lossless"}
+    - {id: 25, cat: Audio/Video, desc: "Music - Musicvideo"}
+    - {id: 24, cat: Audio, desc: "Music - Singles"}
+    - {id: 17, cat: Audio/Other, desc: "Audio - Other"}
+    - {id: 40, cat: Other/Misc, desc: "Other - Other"}
+    - {id: 37, cat: Other, desc: "Other - Pictures"}
+    - {id: 33, cat: Other, desc: "Other - Training"}
+    - {id: 41, cat: TV/HD, desc: "TV - Episodes HD"}
+    - {id: 5, cat: TV/SD, desc: "TV - Episodes SD"}
+    - {id: 11, cat: TV/UHD, desc: "TV - Episodes 4K UHD"}
+    - {id: 6, cat: TV/Other, desc: "TV - Packs"}
+    - {id: 7, cat: TV/Sport, desc: "TV - Sports"}
+    - {id: 35, cat: XXX/x264, desc: "XXX - HD"}
+    - {id: 47, cat: XXX/Other, desc: "XXX - Misc"}
+    - {id: 34, cat: XXX/SD, desc: "XXX - SD"}
+    - {id: 48, cat: XXX/UHD, desc: "XXX - 4K UHD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  # https://torrentgalaxy.org/torrents.php?parent_cat=TV&search=mercedes+s02e04&lang=0&sort=id&order=desc
+  paths:
+    - path: torrents.php
+      categories: ["!", 28, 20, 21, 18, 13, 19, 12, 14, 15, 9, 43, 10, 3, 46, 45, 42, 4, 1, 22, 26, 23, 25, 24, 17, 40, 37, 33, 41, 5, 11, 6, 7, 35, 47, 34, 48]
+    - path: torrents.php
+      categories: [28]
+      inputs:
+        parent_cat: Anime
+    - path: torrents.php
+      categories: [20, 21, 18]
+      inputs:
+        parent_cat: Apps
+    - path: torrents.php
+      categories: [13, 19, 12, 14, 15]
+      inputs:
+        parent_cat: Books
+    - path: torrents.php
+      categories: [9]
+      inputs:
+        parent_cat: Docus
+    - path: torrents.php
+      categories: [43, 10]
+      inputs:
+        parent_cat: Games
+    - path: torrents.php
+      categories: [3, 46, 45, 42, 4, 1]
+      inputs:
+        parent_cat: Movies
+    - path: torrents.php
+      categories: [22, 26, 23, 25, 24]
+      inputs:
+        parent_cat: Music
+    - path: torrents.php
+      categories: [17, 40, 37, 33]
+      inputs:
+        parent_cat: Other
+    - path: torrents.php
+      categories: [41, 5, 11, 6, 7]
+      inputs:
+        parent_cat: TV
+    - path: torrents.php
+      categories: [35, 47, 34, 48]
+      inputs:
+        parent_cat: XXX
+  inputs:
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    lang: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: div.tgxtable > div:has(div[class^="tgxtablecell shrink"])
+
+  fields:
+    category:
+      selector: div a[href^="/torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_full:
+      selector: div a[href^="/torrent/"]
+      attribute: title
+    # this title text is abbreviated but may be needed when quotes in full title cause empty title #8585
+    title_text:
+      selector: div a[href^="/torrent/"]
+    # fall back title, use href and clean it up
+    title_href:
+      selector: div a[href^="/torrent/"]
+      attribute: href
+      filters:
+        - name: re_replace
+          args: ["-quot-", " "]
+        - name: re_replace
+          args: ["-", " "]
+    title:
+      text: "{{ if or .Result.title_full .Result.title_text }}{{ or .Result.title_full .Result.title_text }}{{ else }}{{ .Result.href }}{{ end }}"
+    details:
+      selector: div a[href^="/torrent/"]
+      attribute: href
+    magnet:
+      selector: div a[href^="magnet:?"]
+      attribute: href
+    poster:
+      selector: div[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: src=\\'(.+?)\\'
+    imdbid:
+      selector: a[href^="/torrents.php?search=tt"]
+      attribute: href
+    size:
+      selector: div span[style^="border-radius"]
+    seeders:
+      selector: div span[title="Seeders/Leechers"] font b
+    leechers:
+      selector: div span[title="Seeders/Leechers"] font:nth-child(2) b
+    date_ago:
+      # 20Mins ago
+      optional: true
+      selector: div td:last-of-type:contains("ago")
+      filters:
+        - name: timeago
+    date_year:
+      # 24/12/18 13:55
+      optional: true
+      selector: div td:last-of-type small:contains(":")
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "dd/MM/yy HH:mm zzz"
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
+    description:
+      selector: i.fa-exclamation-triangle, i.fa-check
+      attribute: title
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

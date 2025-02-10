@@ -17,6 +17,7 @@ caps:
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 71, cat: Console, desc: "Batocera"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
+    - {id: 86, cat: Console, desc: "Chinese Systems"}
     - {id: 22, cat: Console, desc: "CoinOps"}
     - {id: 42, cat: Console, desc: "CoinOPS Official"}
     - {id: 65, cat: Console, desc: "CoinOps Unofficial"}
@@ -28,12 +29,13 @@ caps:
     - {id: 41, cat: Console, desc: "Dragon"}
     - {id: 5, cat: Books, desc: "EBooks"}
     - {id: 80, cat: PC, desc: "Emulation Media"}
-    - {id: 61, cat: Console, desc: "emuxtras"}
+    - {id: 61, cat: PC, desc: "emuxtras"}
     - {id: 69, cat: TV, desc: "Entertainment"}
     - {id: 84, cat: TV, desc: "GOG DRM FREE"}
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 43, cat: Console, desc: "LB No Intro"}
+    - {id: 85, cat: PC, desc: "MAME Rom Sets"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
     - {id: 32, cat: Movies, desc: "Movie Pack"}
     - {id: 6, cat: Movies, desc: "Movies/XVID"}
@@ -43,16 +45,18 @@ caps:
     - {id: 59, cat: Console, desc: "P-R-U"}
     - {id: 8, cat: PC/Games, desc: "PC Games"}
     - {id: 50, cat: Console, desc: "PlayBox"}
+    - {id: 87, cat: Console, desc: "Playnite"}
     - {id: 30, cat: Console, desc: "Playstation"}
-    - {id: 62, cat: Console, desc: "RaspberryPi"}
-    - {id: 83, cat: Console, desc: "Retro eXo"}
-    - {id: 56, cat: Console, desc: "Retro Minis"}
+    - {id: 62, cat: PC, desc: "RaspberryPi"}
+    - {id: 83, cat: PC, desc: "Retro eXo"}
+    - {id: 56, cat: PC, desc: "Retro Minis"}
     - {id: 81, cat: PC, desc: "Retro Scene Releases"}
-    - {id: 67, cat: Console, desc: "Retrobat"}
+    - {id: 67, cat: PC, desc: "Retrobat"}
+    - {id: 88, cat: PC, desc: "RetroFE"}
     - {id: 79, cat: PC, desc: "RGB-Pi"}
     - {id: 76, cat: Console, desc: "RGS"}
-    - {id: 27, cat: Console, desc: "Roms and Emulators"}
-    - {id: 68, cat: Console, desc: "Schmoomer's"}
+    - {id: 27, cat: PC, desc: "Roms and Emulators"}
+    - {id: 68, cat: PC, desc: "Schmoomer's"}
     - {id: 57, cat: Console, desc: "Sega"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 40, cat: TV, desc: "Soaps"}

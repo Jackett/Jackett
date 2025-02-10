@@ -164,6 +164,9 @@ search:
       case:
         0: 1 # normal
         1: 2 # double
+# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 1 day (as seconds = 1 x 24 x 60 x 60) for Single episodes
       # 3 days (as seconds = 3 x 24 x 60 x 60) for Packs

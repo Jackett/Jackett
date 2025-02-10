@@ -10,30 +10,29 @@ links:
   - https://bitbazis.net/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 85, cat: Movies/SD, desc: "Film-Cam", default: true}
     - {id: 15, cat: Movies/SD, desc: "Film-SD", default: true}
-    - {id: 17, cat: Movies/DVD, desc: "Film-DVD", default: true}
     - {id: 83, cat: Movies/HD, desc: "Film-HD", default: true}
     - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
-    - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
+    - {id: 85, cat: Movies/SD, desc: "Film-Cam", default: true}
     - {id: 22, cat: TV, desc: "Sorozat-Hun", default: true}
-    - {id: 64, cat: Movies, desc: "Film-Pack", default: true}
-    - {id: 24, cat: Audio/Video, desc: "Klip", default: true}
-    - {id: 70, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
-    - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
-    - {id: 69, cat: TV/Anime, desc: "Mese-SD", default: true}
-    - {id: 91, cat: TV/Anime, desc: "Mese-HD", default: true}
     - {id: 25, cat: Audio/MP3, desc: "Mp3-Hun", default: true}
     - {id: 26, cat: Audio/MP3, desc: "Mp3-Eng", default: true}
     - {id: 84, cat: Audio/Lossless, desc: "FLAC-Hun", default: true}
     - {id: 71, cat: Audio/Lossless, desc: "FLAC-Eng", default: true}
-    - {id: 31, cat: PC/Games, desc: "Játék", default: true}
+    - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
     - {id: 81, cat: PC/0day, desc: "Program", default: true}
-    - {id: 14, cat: Other, desc: "Egyéb", default: true}
+    - {id: 31, cat: PC/Games, desc: "Játék", default: true}
+    - {id: 69, cat: TV/Anime, desc: "Mese-SD", default: true}
+    - {id: 91, cat: TV/Anime, desc: "Mese-HD", default: true}
+    - {id: 64, cat: Movies, desc: "Film-Pack", default: true}
+    - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
     - {id: 66, cat: XXX/ImageSet, desc: "XXX", default: false}
     - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
     - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
+    - {id: 24, cat: Audio/Video, desc: "Klip", default: true}
+    - {id: 14, cat: Other, desc: "Egyéb", default: true}
 
   modes:
     search: [q]
@@ -82,12 +81,12 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: li[onclick^="window.open('logout.php?k="]
+    selector: i.fa-arrow-right-from-bracket[title="Kilépés"]
 
 search:
   paths:
     - path: browse.php
-      categories: [85, 86, 15, 16, 17, 19, 83, 82, 94, 95, 92, 93, 22, 58, 64, 24, 70, 27, 50, 69, 68, 91, 25, 26, 84, 71, 31, 54, 81, 67, 49, 14, 65, 97]
+      categories: [15, 83, 94, 85, 22, 25, 26, 84, 71, 27, 81, 31, 69, 91, 64, 92, 24, 14]
       inputs:
         # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
         incldead: 0

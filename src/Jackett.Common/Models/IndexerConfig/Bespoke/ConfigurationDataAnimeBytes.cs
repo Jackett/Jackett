@@ -25,7 +25,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             IncludeRaw = new BoolConfigurationItem("Include RAW in results") { Value = false };
             SearchByYear = new BoolConfigurationItem("Search by year as a different argument in the request") { Value = false };
             //DateWarning = new DisplayItem("This tracker does not supply upload dates so they are based off year of release.") { Name = "DateWarning" };
-            PadEpisode = new BoolConfigurationItem("Pad episode number for Sonarr compatability") { Value = false };
+            PadEpisode = new BoolConfigurationItem("Pad episode number for Sonarr compatibility") { Value = false };
             AddJapaneseTitle = new BoolConfigurationItem("Add releases for Japanese Title") { Value = false };
             AddRomajiTitle = new BoolConfigurationItem("Add releases for Romaji Title") { Value = false };
             AddAlternativeTitles = new BoolConfigurationItem("Add releases for Alternative Title(s)") { Value = false };

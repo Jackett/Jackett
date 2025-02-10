@@ -1,6 +1,6 @@
 ---
 id: hdtorrentsit
-name: HDTorrents.it
+name: HDTorrents.it (API)
 description: "HDTorrents.it is an ITALIAN Private PAY2DL site for TV / MOVIES"
 language: it-IT
 type: private
@@ -188,4 +188,4 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # as a pay site there is no MR or MST
-# json UNIT3D 8.3.3 (custom)
+# json UNIT3D 8.3.5 (custom)

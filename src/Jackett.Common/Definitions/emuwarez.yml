@@ -1,30 +1,22 @@
 ---
-id: denofsimps-api
-name: DenOfSimps (API)
-description: "DenOfSimps (DoS) is a Private Torrent Tracker for 3X Fansite content only"
-language: en-US
+id: emuwarez
+name: eMuwarez (API)
+description: "eMuwarez is a SPANISH Private Torrent Tracker for MOVIES / TV"
+language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://denofsimps.club/
+  - https://emuwarez.it/
 
 caps:
   categorymappings:
-    - {id: 1, cat: XXX/WEB-DL, desc: "OnlyFans"}
-    - {id: 2, cat: XXX/WEB-DL, desc: "Fansly"}
-    - {id: 3, cat: XXX/WEB-DL, desc: "ManyVids"}
-    - {id: 4, cat: XXX/WEB-DL, desc: "Clips4Sale"}
-    - {id: 15, cat: XXX/WEB-DL, desc: "iWantClips"}
-    - {id: 6, cat: XXX/WEB-DL, desc: "Privacy"}
-    - {id: 10, cat: XXX/WEB-DL, desc: "Chaturbate"}
-    - {id: 11, cat: XXX/WEB-DL, desc: "LoyalFans"}
-    - {id: 12, cat: XXX/WEB-DL, desc: "CamSoda"}
-    - {id: 8, cat: XXX/WEB-DL, desc: "MyDirtyHobby"}
-    - {id: 5, cat: XXX/WEB-DL, desc: "JustForFans"}
-    - {id: 14, cat: XXX/WEB-DL, desc: "Other"}
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: TV, desc: "Series"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
   - name: apikey
@@ -33,7 +25,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://denofsimps.club/\" target=\"_blank\">DenOfSimps</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://emuwarez.it/\" target=\"_blank\">eMuwarez</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -58,10 +50,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "Unused accounts may be pruned without warning."
 
 login:
   path: /api/torrents
@@ -84,12 +72,18 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    perPage: 50
+    perPage: 100
 
   keywordsfilters:
     - name: re_replace
@@ -100,8 +94,6 @@ search:
     attribute: attributes
 
   fields:
-    _id:
-      selector: ..id
     category:
       selector: category_id
     title_optional:
@@ -112,7 +104,7 @@ search:
     files:
       selector: num_file
     title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }} Spanish"
     details:
       selector: details_link
     download:
@@ -120,9 +112,25 @@ search:
     infohash:
       selector: info_hash
     poster:
-      text: "{{ .Config.sitelink }}files/img/torrent-cover_{{ .Result._id }}.jpg"
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
     genre:
-      selector: type
+      selector: meta.genres
+      filters:
+        - name: re_replace
+          args: ["(?i)(Ciencia ficción)", "Ciencia_ficción"]
+        - name: re_replace
+          args: ["(?i)(Película de TV)", "Película_de_TV"]
+        - name: replace
+          args: [" & ", "_&_"]
     description:
       text: "{{ .Result.genre }}"
     seeders:
@@ -166,10 +174,9 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 1.0 but torrents must be seeded for 5 days regardless of ratio
-#    minimumratio:
-#      text: 1.0
+    minimumratio:
+      text: 2.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 8.1.3 (custom)
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json UNIT3D 8.2.0

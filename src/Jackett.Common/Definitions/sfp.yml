@@ -15,9 +15,9 @@ caps:
     - {id: 137, cat: TV/Anime, desc: "Anime - Serien"}
     - {id: 170, cat: TV/Anime, desc: "Anime - Serienpacks"}
     - {id: 92, cat: PC, desc: "Apps"}
-    - {id: 136, cat: PC/Mobile-Android, desc: "Apps- Android"}
-    - {id: 122, cat: PC/Mobile-iOS, desc: "Apps- iOS"}
-    - {id: 100, cat: PC, desc: "Apps- Linux"}
+    - {id: 136, cat: PC/Mobile-Android, desc: "Apps - Android"}
+    - {id: 122, cat: PC/Mobile-iOS, desc: "Apps - iOS"}
+    - {id: 100, cat: PC, desc: "Apps - Linux"}
     - {id: 99, cat: PC/0day, desc: "Apps - Windows"}
     - {id: 164, cat: TV/Documentary, desc: "Doku"}
     - {id: 171, cat: TV/Documentary, desc: "Doku - HD"}
@@ -45,7 +45,7 @@ caps:
     - {id: 130, cat: TV/HD, desc: "Serien - HD"}
     - {id: 133, cat: TV/HD, desc: "Serien - Packs HD"}
     - {id: 134, cat: TV/SD, desc: "Serien - Packs SD"}
-    - {id: 163, cat: TV/UHD, desc: "Serien - Packs UHD<"}
+    - {id: 163, cat: TV/UHD, desc: "Serien - Packs UHD"}
     - {id: 131, cat: TV/SD, desc: "Serien - SD"}
     - {id: 162, cat: TV/UHD, desc: "Serien - UHD"}
     - {id: 109, cat: Other, desc: "Sonstiges"}
@@ -58,7 +58,7 @@ caps:
     - {id: 91, cat: Console, desc: "Spiele"}
     - {id: 94, cat: Console/NDS, desc: "Spiele - Nintendo"}
     - {id: 93, cat: PC/Games, desc: "Spiele - PC Games"}
-    - {id: 45, cat: Console/PS3, desc: "Spiele - Playstation"}
+    - {id: 95, cat: Console/PS3, desc: "Spiele - Playstation"}
     - {id: 119, cat: Console/XBox, desc: "Spiele - Xbox"}
 
   modes:
@@ -105,6 +105,8 @@ settings:
 
 login:
   method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href*="/logout.php?logouthash="]

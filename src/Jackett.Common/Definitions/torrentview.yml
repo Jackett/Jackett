@@ -61,7 +61,7 @@ search:
     gr_id: ""
     # search in: title
     sfl: wr_subject
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}2024{{ end }}"
     # search operand: or, and
     sop: and
 

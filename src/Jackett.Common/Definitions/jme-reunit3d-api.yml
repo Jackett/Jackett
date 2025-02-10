@@ -14,13 +14,14 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Console, desc: "Game"}
-    - {id: 5, cat: PC, desc: "Application"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Sport, desc: "Sport"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 5, cat: PC, desc: "Application"}
+    - {id: 4, cat: Console, desc: "Game"}
     - {id: 8, cat: Books, desc: "E-Books"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audio-Books"}
+    - {id: 12, cat: Audio/Video, desc: "Music-Video"}
 
   modes:
     search: [q]
@@ -60,7 +61,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must seed at least 1 torrent or log in every 30 days to avoid being pruned."
+    default: "You must seed at least 1 torrent or log in every 90 days to avoid being pruned."
 
 login:
   path: /api/torrents

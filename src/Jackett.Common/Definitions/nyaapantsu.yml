@@ -1,0 +1,160 @@
+---
+id: nyaapantsu
+name: NyaaPantsu
+description: "NyaaPantsu is a Public site for dedicated to Asian ANIME"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://ouo.si/
+
+caps:
+  categorymappings:
+    - {id: 3_, cat: TV/Anime, desc: "Anime"}
+    - {id: 3_12, cat: TV/Anime, desc: "Anime - Anime Music Video"}
+    - {id: 3_5, cat: TV/Anime, desc: "Anime - English-translated"}
+    - {id: 3_13, cat: TV/Anime, desc: "Anime - Non-English-translated"}
+    - {id: 3_6, cat: TV/Anime, desc: "Anime - Raw"}
+    # Anime as Movies (Radarr uses t=movie):
+    - {id: 3_, cat: Movies/Other, desc: "Anime"}
+    - {id: 3_12, cat: Movies/Other, desc: "Anime - Anime Music Video"}
+    - {id: 3_5, cat: Movies/Other, desc: "Anime - English-translated"}
+    - {id: 3_13, cat: Movies/Other, desc: "Anime - Non-English-translated"}
+    - {id: 3_6, cat: Movies/Other, desc: "Anime - Raw"}
+    - {id: 2_, cat: Audio, desc: "Audio"}
+    - {id: 2_3, cat: Audio, desc: "Audio - Lossless"}
+    - {id: 2_4, cat: Audio, desc: "Audio - Lossy"}
+    - {id: 4_, cat: Books, desc: "Literature"}
+    - {id: 4_7, cat: Books, desc: "Literature - English-translated"}
+    - {id: 4_14, cat: Books, desc: "Literature - Non-English-translated"}
+    - {id: 4_8, cat: Books, desc: "Literature - Raw"}
+    - {id: 5_, cat: TV, desc: "Live Action"}
+    - {id: 5_9, cat: TV, desc: "Live Action - English-translated"}
+    - {id: 5_10, cat: TV, desc: "Live Action - Idol/Promotional Video"}
+    - {id: 5_18, cat: TV, desc: "Live Action - Non-English-translated"}
+    - {id: 5_11, cat: TV, desc: "Live Action - Raw"}
+    - {id: 6_, cat: Other, desc: "Pictures"}
+    - {id: 6_15, cat: Other, desc: "Pictures - Graphics"}
+    - {id: 6_16, cat: Other, desc: "Pictures - Photos"}
+    - {id: 1_, cat: PC, desc: "Software"}
+    - {id: 1_1, cat: PC/ISO, desc: "Software - Applications"}
+    - {id: 1_2, cat: PC/Games, desc: "Software - Games"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: prefer_magnet_links
+    type: checkbox
+    label: Prefer Magnet Links
+    default: true
+  - name: cat-id
+    type: select
+    label: Category
+    default: _
+    options:
+      _: "All categories"
+      3_: "Anime"
+      3_12: "Anime - Anime Music Video"
+      3_5: "Anime - English-translated"
+      3_13: "Anime - Non-English-translated"
+      3_6: "Anime - Raw"
+      2_: "Audio"
+      2_3: "Audio - Lossless"
+      2_4: "Audio - Lossy"
+      4_: "Literature"
+      4_7: "Literature - English-translated"
+      4_14: "Literature - Non-English-translated"
+      4_8: "Literature - Raw"
+      1_: "Software"
+      1_1: "Software - Applications"
+      1_2: "Software - Games"
+      5_: "Live Action"
+      5_10: "Live Action - Trailers"
+      5_9: "Live Action - English subtitled"
+      5_18: "Live Action - Non-English subtitled"
+      5_11: "Live Action - Raw"
+      6_: "Pictures"
+      6_15: "Pictures - Graphics"
+      6_16: "Pictures - Photos"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 2
+    options:
+      2: created
+      5: seeders
+      4: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: false
+    options:
+      false: desc
+      true: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+search:
+  paths:
+    - path: search
+  inputs:
+    q: "{{ .Keywords }}"
+    c: "{{ .Config.cat-id }}"
+    # 0 All, 2 Remakes, 3 uploaded by trusted users, 4 A+
+    s: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    limit: 100
+
+  rows:
+    selector: tr.torrent-info
+
+  fields:
+    category:
+      selector: a[href^="/search?c="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: c
+    title:
+      selector: a[href^="/view/"]
+    details:
+      selector: a[href^="/view/"]
+      attribute: href
+    download_optional:
+      selector: a[href^="/download/"]
+      attribute: href
+      optional: true
+    download:
+      text: "{{ if .Config.prefer_magnet_links }}{{ else }}{{ .Result.download_optional }}{{ end }}"
+      optional: true
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    size:
+      selector: td.tr-size
+    date:
+      # 	Nov 15, 2020
+      selector: td.date-full
+      filters:
+        - name: replace
+          args: ["UTC+0", "+00:00"]
+        - name: dateparse
+          args: "MM/d/yyyy, h:mm:ss tt zzz"
+    seeders:
+      selector: td.tr-se
+    leechers:
+      selector: td.tr-le
+    grabs:
+      selector: td.tr-dl
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

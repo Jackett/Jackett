@@ -82,7 +82,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>Accounts with zero activity (0 bytes download and 0 bytes upload) are automatically deleted after 30 days.</li><li>Inactive VIP and unparked accounts are automatically deleted after 40 days.</li></ul>"
+    default: "<ul><li>Accounts with zero activity (0 bytes download and 0 bytes upload) are automatically deleted after 30 days.</li><li>Inactive account under the rank of VIP that are unparked are automatically deleted after 40 days.</li></ul>"
 
 login:
   path: /api/torrents

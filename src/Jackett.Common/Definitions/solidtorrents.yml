@@ -10,8 +10,8 @@ links:
   - https://solidtorrents.to/
 legacylinks:
   - https://solidtorrents.net/
-  - https://solidtorrents.eu/
   - https://solidtorrents.nocensor.cloud/
+  - https://solidtorrents.eu/
 
 caps:
   categories:
@@ -39,6 +39,7 @@ caps:
     "Other/Source Code": PC
     "Other/Video": TV
     Softwares: PC/0day
+    "Softwares/Mac": PC/Mac
     "Softwares/Windows": PC/0day
     TV: TV
     Unknown: Other
@@ -82,6 +83,7 @@ search:
     order: "{{ .Config.type }}"
     limit: 100
     page: 1
+  allowEmptyInputs: true
 
   rows:
     selector: li.search-result:has(a[class="dl-torrent"])
@@ -90,7 +92,7 @@ search:
     category:
       selector: a.category
     title:
-      selector: h5
+      selector: h5 a
     details:
       selector: h5 a
       attribute: href

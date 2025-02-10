@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
@@ -29,10 +30,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://dontorrent.gallery/";
+        public override string SiteLink { get; protected set; } = "https://dontorrent.games/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.gallery/",
+            "https://dontorrent.games/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -41,13 +42,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.cc/",
-            "https://dontorrent.esq/",
-            "https://dontorrent.city/",
-            "https://dontorrent.cologne/",
-            "https://dontorrent.dance/",
-            "https://dontorrent.cricket/",
-            "https://dontorrent.earth/",
             "https://dontorrent.date/",
             "https://dontorrent.email/",
             "https://dontorrent.education/",
@@ -56,6 +50,13 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.gratis/",
             "https://dontorrent.equipment/",
             "https://dontorrent.fashion/",
+            "https://dontorrent.gallery/",
+            "https://dontorrent.yoga/",
+            "https://dontorrent.foundation/",
+            "https://dontorrent.co/",
+            "https://dontorrent.auction/",
+            "https://dontorrent.football/",
+            "https://dontorrent.wiki/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -170,7 +171,7 @@ namespace Jackett.Common.Indexers.Definitions
             var result = await RequestWithCookiesAsync(downloadUrl);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
-            using var dom = parser.ParseDocument(result.ContentString);
+            using var dom = await parser.ParseDocumentAsync(result.ContentString);
 
             //var info = dom.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
             //var title = info.QuerySelector("h2.descargarTitulo").TextContent;
@@ -187,15 +188,20 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<ReleaseInfo>> PerformQueryNewest(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
+
             var url = SiteLink + NewTorrentsUrl;
+
             var result = await RequestWithCookiesAsync(url);
+
             if (result.Status != HttpStatusCode.OK)
+            {
                 throw new ExceptionWithConfigData(result.ContentString, configData);
-            logger.Debug("\naaa");
+            }
+
             try
             {
                 var searchResultParser = new HtmlParser();
-                using var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
                 var rows = doc.QuerySelector("div.seccion#ultimos_torrents > div.card > div.card-body > div");
 
@@ -239,11 +245,11 @@ namespace Jackett.Common.Indexers.Definitions
 
                     if (row.TagName.Equals("BR"))
                     {
-                        // we add parsed items to rowDetailsLink to avoid duplicates in newest torrents
-                        // list results
+                        // we add parsed items to rowDetailsLink to avoid duplicates in the newest torrents list results
                         if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
                         {
                             var cat = GetCategory(rowTitle, rowDetailsLink);
+
                             switch (cat)
                             {
                                 case "pelicula":
@@ -254,9 +260,8 @@ namespace Jackett.Common.Indexers.Definitions
                                     await ParseRelease(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
                                     parsedDetailsLink.Add(rowDetailsLink);
                                     break;
-                                default:
-                                    break;
                             }
+
                             // clean the current row
                             rowTitle = null;
                             rowDetailsLink = null;
@@ -286,7 +291,7 @@ namespace Jackett.Common.Indexers.Definitions
             try
             {
                 var searchResultParser = new HtmlParser();
-                using var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
                 var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
 
@@ -308,7 +313,6 @@ namespace Jackett.Common.Indexers.Definitions
                         case "pelicula":
                         case "serie":
                             quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
-
                             break;
                     }
 
@@ -320,8 +324,6 @@ namespace Jackett.Common.Indexers.Definitions
                         case "seriehd":
                         case "musica":
                             await ParseRelease(releases, link, title, cat, quality, query, matchWords);
-                            break;
-                        default: //ignore different categories
                             break;
                     }
                 }
@@ -365,8 +367,6 @@ namespace Jackett.Common.Indexers.Definitions
                 case "musica":
                     await ParseMusicRelease(releases, link, query, title);
                     break;
-                default:
-                    break;
             }
         }
 
@@ -377,7 +377,7 @@ namespace Jackett.Common.Indexers.Definitions
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            using var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
             var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
 
@@ -406,7 +406,7 @@ namespace Jackett.Common.Indexers.Definitions
                 throw new ExceptionWithConfigData(result.ContentString, configData);
 
             var searchResultParser = new HtmlParser();
-            using var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
             var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
 
@@ -456,10 +456,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             var result = await RequestWithCookiesAsync(link);
             if (result.Status != HttpStatusCode.OK)
+            {
                 throw new ExceptionWithConfigData(result.ContentString, configData);
+            }
 
             var searchResultParser = new HtmlParser();
-            using var doc = searchResultParser.ParseDocument(result.ContentString);
+            using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
             // parse tags in title, we need to put the year after the real title (before the tags)
             // Harry Potter And The Deathly Hallows: Part 1 [subs. Integrados]
@@ -468,12 +470,20 @@ namespace Jackett.Common.Indexers.Definitions
             foreach (Match m in queryMatches)
             {
                 var tag = m.Groups[1].Value.Trim().ToUpper();
+
                 if (tag.Equals("4K")) // Fix 4K quality. Eg Harry Potter Y La Orden Del Fénix [4k]
+                {
                     quality = "(UHD 4K 2160p)";
+                }
                 else if (tag.Equals("FULLBLURAY")) // Fix 4K quality. Eg Harry Potter Y El Cáliz De Fuego (fullbluray)
+                {
                     quality = "(COMPLETE BLURAY)";
+                }
                 else // Add the tag to the title
+                {
                     tags += " " + tag;
+                }
+
                 title = title.Replace(m.Groups[0].Value, "");
             }
             title = title.Trim();
@@ -488,8 +498,17 @@ namespace Jackett.Common.Indexers.Definitions
                 quality = Regex.Replace(quality, "HDRip", "BDRip", RegexOptions.IgnoreCase); // fix for Radarr
             }
 
+            var releaseYear = doc.QuerySelector("div.d-inline-block.ml-2 > p:contains('Año') > a")?.TextContent.Trim();
+
             // add the year
-            title = query.Year != null ? title + " " + query.Year : title;
+            if (releaseYear.IsNotNullOrWhiteSpace() && Regex.IsMatch(releaseYear!, @"^((?:19|20)\d{2})$"))
+            {
+                title += $" {releaseYear}";
+            }
+            else if (query.Year is > 0)
+            {
+                title += $" {query.Year}";
+            }
 
             // add the tags
             title += tags;
@@ -499,7 +518,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             // add quality
             if (quality != null)
+            {
                 title += " " + quality;
+            }
 
             var info = doc.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
             var moreinfo = info.QuerySelectorAll("div.text-center > div.d-inline-block");
@@ -507,17 +528,28 @@ namespace Jackett.Common.Indexers.Definitions
             // guess size
             long size;
             if (moreinfo.Length == 2)
+            {
                 size = ParseUtil.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
+            }
             else if (title.ToLower().Contains("4k"))
+            {
                 size = 50.Gigabytes();
+            }
             else if (title.ToLower().Contains("1080p"))
+            {
                 size = 4.Gigabytes();
+            }
             else if (title.ToLower().Contains("720p"))
+            {
                 size = 1.Gigabytes();
+            }
             else
+            {
                 size = 512.Megabytes();
+            }
 
             var release = GenerateRelease(title, link, link, GetCategory(title, link), DateTime.Now, size);
+
             releases.Add(release);
         }
 

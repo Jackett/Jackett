@@ -767,6 +767,8 @@ settings:
 
 login:
   method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
   test:
     path: forum/index.php
     selector: table.menutable a.mainmenu:contains("Выход")

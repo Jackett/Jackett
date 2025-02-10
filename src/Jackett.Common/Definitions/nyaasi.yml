@@ -27,46 +27,41 @@ legacylinks:
 
 caps:
   categorymappings:
-    # Anime
     - {id: 1_0, cat: TV/Anime, desc: "Anime"}
-    - {id: 1_1, cat: TV/Anime, desc: "Anime music videos"}
-    - {id: 1_2, cat: TV/Anime, desc: "English subtitled animes"}
-    - {id: 1_3, cat: TV/Anime, desc: "Non-english subtitled animes"}
-    - {id: 1_4, cat: TV/Anime, desc: "Raw animes"}
+    - {id: 1_1, cat: TV/Anime, desc: "Anime - Anime Music Video"}
+    - {id: 1_2, cat: TV/Anime, desc: "Anime - English-translated"}
+    - {id: 1_3, cat: TV/Anime, desc: "Anime - Non-English-translated"}
+    - {id: 1_4, cat: TV/Anime, desc: "Anime - Raw"}
     # Anime as Movies (Radarr uses t=movie):
     - {id: 1_0, cat: Movies/Other, desc: "Anime"}
-    - {id: 1_1, cat: Movies/Other, desc: "Anime music videos"}
-    - {id: 1_2, cat: Movies/Other, desc: "English subtitled animes"}
-    - {id: 1_3, cat: Movies/Other, desc: "Non-english subtitled animes"}
-    - {id: 1_4, cat: Movies/Other, desc: "Raw animes"}
-    # Audio
+    - {id: 1_1, cat: Movies/Other, desc: "Anime - Anime Music Video"}
+    - {id: 1_2, cat: Movies/Other, desc: "Anime - English-translated"}
+    - {id: 1_3, cat: Movies/Other, desc: "Anime - Non-English-translated"}
+    - {id: 1_4, cat: Movies/Other, desc: "Anime - Raw"}
     - {id: 2_0, cat: Audio, desc: "Audio"}
-    - {id: 2_1, cat: Audio, desc: "Lossless audio"}
-    - {id: 2_2, cat: Audio, desc: "Lossy audio"}
-    # Literature
+    - {id: 2_1, cat: Audio, desc: "Audio - Lossless"}
+    - {id: 2_2, cat: Audio, desc: "Audio - Lossy"}
     - {id: 3_0, cat: Books, desc: "Literature"}
-    - {id: 3_1, cat: Books, desc: "Literature english translated"}
-    - {id: 3_2, cat: Books, desc: "Literature non-english translated"}
-    - {id: 3_3, cat: Books, desc: "Raw literature"}
-    # Live
+    - {id: 3_1, cat: Books, desc: "Literature  English-translated"}
+    - {id: 3_2, cat: Books, desc: "Literature - Non-English-translated"}
+    - {id: 3_3, cat: Books, desc: "Literature - Raw"}
     - {id: 4_0, cat: TV, desc: "Live Action"}
-    - {id: 4_1, cat: TV, desc: "Live Action - English"}
-    - {id: 4_2, cat: TV, desc: "Live Action - Idol/PV"}
-    - {id: 4_3, cat: TV, desc: "Live Action - Non-English"}
+    - {id: 4_1, cat: TV, desc: "Live Action - English-translated"}
+    - {id: 4_2, cat: TV, desc: "Live Action - Idol/Promotional Video"}
+    - {id: 4_3, cat: TV, desc: "Live Action - Non-English-translated"}
     - {id: 4_4, cat: TV, desc: "Live Action - Raw"}
-    # Pics
     - {id: 5_0, cat: Other, desc: "Pictures"}
-    - {id: 5_1, cat: Other, desc: "Pictures  - Graphics"}
-    - {id: 5_2, cat: Other, desc: "Pictures  - Photos"}
-    # Software
+    - {id: 5_1, cat: Other, desc: "Pictures - Graphics"}
+    - {id: 5_2, cat: Other, desc: "Pictures - Photos"}
     - {id: 6_0, cat: PC, desc: "Software"}
-    - {id: 6_1, cat: PC/ISO, desc: "Applications"}
-    - {id: 6_2, cat: PC/Games, desc: "Games"}
+    - {id: 6_1, cat: PC/ISO, desc: "Software - Applications"}
+    - {id: 6_2, cat: PC/Games, desc: "Software - Games"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
     book-search: [q]
   allowrawsearch: true
 
@@ -151,6 +146,7 @@ search:
         q: "{{ if .Keywords }}{{ re_replace .Keywords \"\\b0(\\d{1})\\b\" \"$1\" }}{{ else }}{{ end }}"
         p: "{{ if .Keywords }}{{ else }}2{{ end }}"
   inputs:
+    # 0 all, 1 no remakes, 2 trusted only
     f: "{{ .Config.filter-id }}"
     c: "{{ .Config.cat-id }}"
     s: "{{ .Config.sort }}"
@@ -204,9 +200,9 @@ search:
         - name: re_replace
           args: ["(?i)\\b((?:S|Seasons?|EP?|Episodes?)\\s?)(\\d+)(?:\\-|[\\s~\\+àa&]+)(\\d+)\\b", "$1$2-$3"]
         - name: re_replace
-          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)[\\s\\-]+(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b", "$0 S$1E$2"]
+          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)[\\s\\-]+(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b", "S$1E$2"]
         - name: re_replace
-          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)(?:.+?)(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?E\\d+(?:-\\d+)?)", "$0 S$1E$2"]
+          args: ["(?i)\\b(?:S|Seasons?)\\s?(\\d+(?:-\\d+)?)(?:.+?)(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?E\\d+(?:-\\d+)?)", "S$1E$2"]
         - name: re_replace
           args: ["\\b (II) - (\\d+)[\\s\\-~\\+àa&]+(\\d+)", " $1 S02 - $2-$3"]
         - name: re_replace
@@ -226,9 +222,9 @@ search:
         - name: re_replace
           args: ["(?i)\\b(S\\d+(?:-\\d+)?) - (\\d+)\\b", "$1E$2"]
         - name: re_replace
-          args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "$0 S$1"]
+          args: ["(?i)\\b(?:S\\s|Seasons?\\s?)(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\s(?:EP|Episodes?)?\\s?(?:\\d+(?:-\\d+)?)?\\s?S\\d+(?:E\\d+(?:-\\d+)?)?)", "S$1"]
         - name: re_replace
-          args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "$0 S01E$1"]
+          args: ["(?i)\\b(?:EP|Episodes?)\\s?(\\d+(?:-\\d+)?)\\b(?!(?:-\\d+)?\\sS\\d+(?:-\\d+)?(?:E\\d+(?:-\\d+)?)?)", "S01E$1"]
         - name: re_replace
           args: ["\\s+", " "]
         - name: trim

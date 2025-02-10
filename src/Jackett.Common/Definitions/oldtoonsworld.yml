@@ -1,6 +1,6 @@
 ---
 id: oldtoonsworld
-name: Oldtoons
+name: Oldtoons (API)
 description: "Oldtoons is a Private Torrent Tracker for Cartoon MOVIES / TV / GENERAL"
 language: en-US
 type: private
@@ -77,7 +77,6 @@ search:
     - path: "/api/torrents/filter"
       response:
         type: json
-        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
@@ -94,7 +93,7 @@ search:
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    perPage: 75
+    perPage: 100
 
   keywordsfilters:
     - name: re_replace
@@ -191,4 +190,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 8.3.0
+# json UNIT3D 8.3.5

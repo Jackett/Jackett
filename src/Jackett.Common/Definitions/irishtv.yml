@@ -6,6 +6,8 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://irishtv.xyz/
+legacylinks:
   - http://irishtv.xyz/
 
 caps:
@@ -139,26 +141,19 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     size:
-      # Size:  &nbsp; 2.00 GB
-      selector: td:has(a[href^="download.php?id="]) p:contains("Size:")
-      filters:
-        - name: regexp
-          args: (\d.+[B]$)
+      selector: td:nth-last-child(3)
     date:
-      # AddDate: &nbsp; 12:54:01 24/10/2024
-      selector: td:has(a[href^="download.php?id="]) p:contains("AddDate:")
+      selector: td:nth-last-child(7)
       # auto adjusted by site account profile
       filters:
-        - name: regexp
-          args: (\d{2}:\d{2}:\d{2}\s\d{1,2}\/\d{2}\/\d{4})
         - name: dateparse
-          args: "HH:mm:ss d/MM/yyyy"
+          args: dd/MM/yyyy
     seeders:
-      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a
+      selector: td:nth-last-child(6)
     leechers:
-      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a:nth-child(2)
+      selector: td:nth-last-child(5)
     grabs:
-      selector: td:has(a[href^="download.php?id="]) p:contains("Seeds:") > a:nth-child(3)
+      selector: td:nth-last-child(4)
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0

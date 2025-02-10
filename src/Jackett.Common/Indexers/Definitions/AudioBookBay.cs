@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://audiobookbay.lu/",
-            "https://audiobookbay.is/",
+            "http://audiobookbay.is/",
         };
         public override string[] LegacySiteLinks => new[]
         {
@@ -46,7 +46,8 @@ namespace Jackett.Common.Indexers.Definitions
             "http://audiobookbayabb.com/",
             "https://audiobookbay.fi/",
             "https://audiobookbay.li/",
-            "https://audiobookbay.se/" // redirects to .is but has invalid CA
+            "https://audiobookbay.se/", // redirects to .is but has invalid CA
+            "https://audiobookbay.is/"
         };
         public override string Language => "en-US";
         public override string Type => "public";

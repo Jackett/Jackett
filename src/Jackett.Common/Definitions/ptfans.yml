@@ -6,14 +6,13 @@ language: zh-CN
 type: private
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - 6282eb7a515ac89fa22826aca7ace8b150ada2e9 # CN=ptfans.cc (for cusat.win)
-  - e347d5573f7fec43e0aa89d92811b28f9c0410a8 # CN=www.ptfans.cc (for cusat.win)
 links:
   - https://ptfans.cc/
+legacylinks:
   - https://cusat.win/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies/电影", default: true}
     - {id: 404, cat: TV, desc: "TV Series/电视剧", default: true}
@@ -214,8 +213,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span

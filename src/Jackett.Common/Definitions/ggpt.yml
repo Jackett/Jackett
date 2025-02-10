@@ -1,31 +1,29 @@
 ---
-id: haresclub
-name: Hares Club (白兔俱乐部)
-description: "Hares Club (白兔俱乐部) is a CHINESE Private site that focuses on 4K media."
+id: ggpt
+name: GGPT
+description: "GGPT is a CHINESE Private Torrent Tracker for GAMES"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://club.hares.top/
+  - https://www.gamegamept.com/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies | 电影"}
-    - {id: 402, cat: TV, desc: "TV Series | 电视剧"}
-    - {id: 403, cat: TV, desc: "TV Shows | 综艺"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries | 纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Animations | 动漫"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos | 音乐视频"}
-    - {id: 407, cat: TV/Sport, desc: "Sports | 体育"}
-    - {id: 409, cat: Audio/Video, desc: "Concert | 演唱会"}
-    - {id: 416, cat: TV, desc: "Show LIVE | 现场LIVE"}
-    - {id: 415, cat: Other, desc: "Others | 其他"}
+    - {id: 401, cat: PC/Games, desc: "PC游戏(PC Games)", default: true}
+    - {id: 404, cat: Console/PS4, desc: "索尼主机游戏(Sony console games)", default: true}
+    - {id: 405, cat: Console/XBox, desc: "微软主机游戏(Microsoft console games)", default: true}
+    - {id: 406, cat: Console/NDS, desc: "任天堂主机游戏(Nintendo console games)", default: true}
+    - {id: 407, cat: PC/Mac, desc: "苹果游戏(Apple Games)", default: true}
+    - {id: 409, cat: PC/Mobile-Android, desc: "安卓游戏(Android Games)", default: true}
+    - {id: 410, cat: Books/Mags, desc: "游戏书藉(Game Magazines)", default: true}
+    - {id: 412, cat: XXX/Other, desc: "9KG-PC", default: false}
+    - {id: 418, cat: XXX/Other, desc: "9KG-其他", default: false}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, doubanid]
-    movie-search: [q, imdbid, doubanid]
-    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -40,7 +38,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Hares Club Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the GGPT Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -61,10 +59,10 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
+  - name: info_activity
     type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Extreme User and above will be retained forever</li><li>Elite User and above will not have their account deleted within 180 days after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 180 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 180 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 30 consecutive days.</li></ol>"
 
 login:
   path: login.php
@@ -84,66 +82,63 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: script:contains("'失败'")
+    - selector: td.embedded:has(h2:contains("失败"))
       message:
-        text: "图片代码无效！The Image code is invalid. Close the config and start again."
-    - selector: script:contains("'登录失败！'")
-      message:
-        text: "用户名或密码不正确！或者你还没有通过验证。The username or password is incorrect! Close the config and start again."
+        selector: td.text
   test:
     path: index.php
-    selector: a[href*="logout.php"]
+    selector: a[href="logout.php"]
 
 search:
   paths:
     - path: torrents.php
+      categories: [401, 404, 405, 406, 407, 409, 410]
+    - path: special.php
+      categories: [412, 418]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Query.DoubanID }}/{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}1{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
+    search_area: 0
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href*="download.php?id="])
+    selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
     category:
-      selector: a[href*="?cat="]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title_default:
-      selector: a[href*="details.php?id="]
+      selector: a[href^="details.php?id="]
     title:
-      selector: a[title][href*="details.php?id="]
+      selector: a[title][href^="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: div.layui-torrents-Stills > a
-      attribute: rel
-      filters:
-        - name: replace
-          args: ["re.php?cache=", ""]
+      selector: img[data-src]
+      attribute: data-src
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-last-child(6) > span[title]
+      selector: td:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -153,7 +148,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-last-child(6):not(:has(span))
+      selector: td:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -163,13 +158,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-last-child(5)
+      selector: td:nth-child(5)
     seeders:
-      selector: td:nth-last-child(4)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-last-child(3)
+      selector: td:nth-child(7)
     grabs:
-      selector: td:nth-last-child(2)
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -184,12 +179,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    description_text:
+    minimumratio:
+      text: 2.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+    description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-    description:
-      case:
-        i.fa-check: "Verified: {{ .Result.description_text }}"
-        i.fa-question: "Unverified: {{ .Result.description_text }}"
-        i.fa-times: "Banned: {{ .Result.description_text }}"
-# NexusPHP v1.6.2 2022-03-19
+# NexusPHP v1.8.11 2024-03-27

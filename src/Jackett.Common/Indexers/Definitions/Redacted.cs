@@ -22,7 +22,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "Redacted";
         public override string Description => "A music tracker";
         // Status: https://red.trackerstatus.info/
-        public override string SiteLink { get; protected set; } = "https://redacted.ch/";
+        public override string SiteLink { get; protected set; } = "https://redacted.sh/";
+        public override string[] LegacySiteLinks => new[] { "https://redacted.ch/" };
         public override string Language => "en-US";
         public override string Type => "private";
 

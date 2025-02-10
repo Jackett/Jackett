@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers.Definitions
                    logger: l,
                    p: ps,
                    cm: cm,
-                   supportsFreeleechTokens: true)
+                   supportsFreeleechTokens: true,
+                   has2Fa: true)
         {
         }
 

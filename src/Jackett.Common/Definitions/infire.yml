@@ -10,6 +10,7 @@ links:
   - https://infire.si/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     # Filmi
     - {id: 14, cat: Movies/SD, desc: "XviD", default: true}
@@ -85,6 +86,7 @@ caps:
     - {id: 45, cat: PC/Mobile-iOS, desc: "iOS", default: true}
     - {id: 46, cat: PC/Mac, desc: "Mac", default: true}
     - {id: 47, cat: PC/ISO, desc: "Linux", default: true}
+    - {id: 102, cat: Other, desc: "3D STL", default: true}
     # Dokumentarni
     - {id: 95, cat: TV/Documentary, desc: "Dokumentarni Film", default: true}
     - {id: 96, cat: TV/Documentary, desc: "Dokumentarna Serija", default: true}
@@ -145,7 +147,7 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [14, 15, 16, 20, 21, 49, 50, 51, 52, 55, 71, 72, 73, 74, 77, 97, 99, 100, 23, 24, 75, 76, 78, 79, 80, 81, 82, 98, 26, 56, 93, 29, 30, 31, 34, 83, 42, 43, 53, 54, 62, 37, 85, 86, 87, 88, 89, 90, 91, 38, 39, 40, 41, 44, 45, 46, 47, 95, 96]
+      categories: [14, 15, 16, 20, 21, 49, 50, 51, 52, 55, 71, 72, 73, 74, 77, 97, 99, 100, 23, 24, 75, 76, 78, 79, 80, 81, 82, 98, 26, 56, 93, 29, 30, 31, 34, 83, 42, 43, 53, 54, 62, 37, 85, 86, 87, 88, 89, 90, 91, 38, 39, 40, 41, 44, 45, 46, 47, 102, 95, 96]
     - path: xxx.php
       categories: [60, 61, 66, 67, 68, 69, 84]
   inputs:
@@ -157,6 +159,9 @@ search:
     gold: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}torrents.php"]
 
   rows:
     selector: table.mg-b-0 > tbody > tr:has(a[href^="download.php?id="])

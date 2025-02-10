@@ -1,6 +1,6 @@
 ---
 id: capybarabr
-name: CapybaraBR
+name: CapybaraBR (API)
 description: "CapybaraBR is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pt-BR
 type: private
@@ -17,7 +17,7 @@ caps:
     - {id: 6, cat: Movies, desc: "Desenhos Animados"}
     - {id: 5, cat: Console, desc: "Jogos"}
     - {id: 9, cat: PC, desc: "Programas"}
-    - {id: 10, cat: Audio, desc: "HQs"}
+    - {id: 10, cat: Books/Comics, desc: "HQs"}
     - {id: 11, cat: Books/EBook, desc: "Livros"}
     - {id: 12, cat: Other, desc: "Cursos"}
     - {id: 13, cat: Books/Mags, desc: "Revistas"}

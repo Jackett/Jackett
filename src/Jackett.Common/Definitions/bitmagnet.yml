@@ -7,6 +7,7 @@ type: semi-private
 encoding: UTF-8
 links:
   - http://127.0.0.1:3333/
+  - http://bitmagnet:3333/
 
 caps:
   categorymappings:

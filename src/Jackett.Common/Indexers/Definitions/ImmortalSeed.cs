@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers.Definitions
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
 
             // Occasionally the cookies become invalid, login again if that happens
-            if (results.ContentString.Contains("You do not have permission to access this page."))
+            if (!results.ContentString.Contains("logout.php"))
             {
                 await ApplyConfiguration(null);
                 results = await RequestWithCookiesAndRetryAsync(searchUrl);
@@ -253,10 +253,17 @@ namespace Jackett.Common.Indexers.Definitions
 
                     // 2021-03-17 03:39 AM
                     // requests can be 'Pre Release Time: 2013-04-22 02:00 AM Uploaded: 3 Years, 6 Months, 4 Weeks, 2 Days, 16 Hours, 52 Minutes, 41 Seconds after Pre'
-                    var dateMatch = _dateMatchRegex.Match(row.QuerySelector("td:nth-of-type(2) > div:last-child").TextContent.Trim());
-                    if (dateMatch.Success)
-                        release.PublishDate = DateTime.ParseExact(dateMatch.Value, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
-
+                    var qdate = row.QuerySelector("td:nth-of-type(2) > div:last-child")?.TextContent.Trim();
+                    if (!string.IsNullOrEmpty(qdate))
+                    {
+                        var dateMatch = _dateMatchRegex.Match(qdate);
+                        if (dateMatch.Success)
+                            release.PublishDate = DateTime.ParseExact(dateMatch.Value, "yyyy-MM-dd hh:mm tt", CultureInfo.InvariantCulture);
+                    }
+                    else
+                    {
+                        release.PublishDate = DateTime.Now;
+                    }
                     release.Size = ParseUtil.GetBytes(row.QuerySelector("td:nth-of-type(5)").TextContent.Trim());
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent.Trim());
                     release.Peers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim()) + release.Seeders;

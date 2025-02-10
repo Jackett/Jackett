@@ -5,20 +5,21 @@ description: "HHanClub is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-CN
 type: private
 encoding: UTF-8
+followredirect: true
 links:
   - https://hhanclub.top/
+  - https://hhan.club/
 
 caps:
   categorymappings:
-    - {id: 408, cat: Audio, desc: "HQ Audio"}
     - {id: 409, cat: Other, desc: "其他"}
     - {id: 407, cat: TV/Sport, desc: "Sports"}
-    - {id: 406, cat: Audio/Video, desc: "MV"}
     - {id: 403, cat: TV, desc: "综艺"}
     - {id: 402, cat: TV, desc: "电视剧"}
     - {id: 405, cat: TV/Anime, desc: "动漫"}
     - {id: 404, cat: TV/Documentary, desc: "纪录片"}
     - {id: 401, cat: Movies, desc: "电影"}
+    - {id: 412, cat: Audio/Video, desc: "短剧"}
 
   modes:
     search: [q]
@@ -78,7 +79,7 @@ login:
     selector: img[alt="CAPTCHA"]
     input: imagestring
   inputs:
-    secret: <?php echo $secret ?>
+    secret: ""
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     two_step_code: "{{ .Config.2facode }}"
@@ -93,8 +94,10 @@ login:
 search:
   paths:
     - path: torrents.php
+      # required to bypass validation check
+      followredirect: true
   inputs:
-    $raw: "{{ range .Categories }}cat[]{{.}}=1&{{end}}"
+    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
@@ -108,10 +111,21 @@ search:
     type: "{{ .Config.type }}"
     notnewword: 1
 
+  keywordsfilters:
+    # strip episode
+    - name: re_replace
+      args: ["\\b(S\\d{2,})?(?:E\\d{2,})\\b", "$1"]
+
   rows:
     selector: div.w-full:has(a[href^="details.php?id="])
 
   fields:
+    _episode_number:
+      selector: div.torrent-title > div > div
+      optional: true
+      filters:
+        - name: regexp
+          args: "第(\\d+(?:-\\d+)?)集"
     category:
       selector: a[href^="?cat[]="]
       attribute: href
@@ -120,6 +134,9 @@ search:
           args: cat[]
     title:
       selector: a[href^="details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["\\b(S\\d+)\\b", "{{ if .Result._episode_number }}$1E{{ .Result._episode_number }}{{ else }}$1{{ end }}"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -173,11 +190,12 @@ search:
         span.promotion-tag-free2up: 2
         span.promotion-tag-2up: 2
         "*": 1
-    minimumratio:
-      text: 1.0
+# global MR is 0.8 but torrents must be seeded for 2 days regardless of ratio
+#    minimumratio:
+#      text: 0.8
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: div.torrent-title > div > div
 # NexusPHP v1.8.6 2023-08-15 (customised)

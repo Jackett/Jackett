@@ -21,9 +21,9 @@ caps:
     - {id: 508, cat: XXX, desc: "Классические фильмы / Classic"}
     - {id: 555, cat: XXX, desc: "Фильмы с сюжетом / Feature & Vignettes"}
     - {id: 1845, cat: XXX, desc: "Гонзо-фильмы 1991-2010 / Gonzo 1991-2010"}
-    - {id: 1673, cat: XXX, desc: "Гонзо-фильмы 2011-2024 / Gonzo 2011-2024"}
+    - {id: 1673, cat: XXX, desc: "Гонзо-фильмы 2011-2025 / Gonzo 2011-2025"}
     - {id: 1112, cat: XXX, desc: "Фильмы без сюжета 1991-2010 / All Sex & Amateur 1991-2010"}
-    - {id: 1718, cat: XXX, desc: "Фильмы без сюжета 2011-2024 / All Sex & Amateur 2011-2024"}
+    - {id: 1718, cat: XXX, desc: "Фильмы без сюжета 2011-2025 / All Sex & Amateur 2011-2025"}
     - {id: 553, cat: XXX, desc: "Лесбо-фильмы / All Girl & Solo"}
     - {id: 1143, cat: XXX, desc: "Этнические фильмы / Ethnic-Themed"}
     - {id: 1646, cat: XXX, desc: "Видео для телефонов и КПК / Pocket РС & Phone Video"}
@@ -41,8 +41,8 @@ caps:
     - {id: 1675, cat: XXX/Pack, desc: "Паки русских порнороликов / Russian Clips Packs"}
     - {id: 36, cat: XXX, desc: "Сайтрипы с русскими актрисами 1991-2015 / Russian SiteRip's 1991-2015"}
     - {id: 1830, cat: XXX, desc: "Сайтрипы с русскими актрисами 1991-2015 (HD Video) / Russian SiteRip's 1991-2015 (HD Video)"}
-    - {id: 1803, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2024 / Russian SiteRip's 2016-2024"}
-    - {id: 1831, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2024 (HD Video) / Russian SiteRip's 2016-2024 (HD Video)"}
+    - {id: 1803, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2025 / Russian SiteRip's 2016-2025"}
+    - {id: 1831, cat: XXX, desc: "Сайтрипы с русскими актрисами 2016-2025 (HD Video) / Russian SiteRip's 2016-2025 (HD Video)"}
     - {id: 1741, cat: XXX, desc: "Русские Порноролики Разное / Russian Clips (various)"}
     - {id: 1676, cat: XXX, desc: "Русское любительское видео / Russian Amateur Video"}
 
@@ -64,6 +64,7 @@ caps:
     - {id: 1857, cat: XXX, desc: "Сайтрипы 2022 (HD Video) / SiteRip's 2022 (HD Video)"}
     - {id: 1861, cat: XXX, desc: "Сайтрипы 2023 (HD Video) / SiteRip's 2023 (HD Video)"}
     - {id: 1867, cat: XXX, desc: "Сайтрипы 2024 (HD Video) / SiteRip's 2024 (HD Video)"}
+    - {id: 1872, cat: XXX, desc: "Сайтрипы 2025 (HD Video) / SiteRip's 2025 (HD Video)"}
     - {id: 1451, cat: XXX, desc: "Сайтрипы 1991-2010 / SiteRip's 1991-2010"}
     - {id: 1788, cat: XXX, desc: "Сайтрипы 2011-2012 / SiteRip's 2011-2012"}
     - {id: 1789, cat: XXX, desc: "Сайтрипы 2013 / SiteRip's 2013"}
@@ -78,6 +79,7 @@ caps:
     - {id: 1856, cat: XXX, desc: "Сайтрипы 2022 / SiteRip's 2022"}
     - {id: 1862, cat: XXX, desc: "Сайтрипы 2023 / SiteRip's 2023"}
     - {id: 1868, cat: XXX, desc: "Сайтрипы 2024 / SiteRip's 2024"}
+    - {id: 1873, cat: XXX, desc: "Сайтрипы 2025 / SiteRip's 2025"}
     - {id: 1707, cat: XXX, desc: "Сцены из фильмов / Movie Scenes (кроме SiteRip)"}
     - {id: 284, cat: XXX, desc: "Порноролики Разное / Clips (various)"}
     - {id: 1853, cat: XXX, desc: "Компиляции и Музыкальные порно клипы / Compilations & Porn Music Video (PMV)"}
@@ -87,7 +89,7 @@ caps:
     - {id: 1801, cat: XXX/Pack, desc: "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs"}
     - {id: 1719, cat: XXX, desc: "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)"}
     - {id: 997, cat: XXX, desc: "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014"}
-    - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2024 / Japanese Movies & SiteRip's 2015-2024"}
+    - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2025 / Japanese Movies & SiteRip's 2015-2025"}
     - {id: 1849, cat: XXX, desc: "Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movies & SiteRip's (DVD & HD Video)"}
     - {id: 1815, cat: XXX, desc: "Архив (Японское и китайское порно)"}
 
@@ -186,17 +188,12 @@ settings:
       1: asc
 
 login:
-  path: forum/login.php
+  path: forum/index.php
   method: form
-  form: form[action="login.php"]
-  captcha:
-    type: image
-    selector: img[src*="/captcha/"]
-    input: input[name^="cap_code_"]
+  form: form[action="/forum/login.php"]
   inputs:
-    input[name="login_username"]: "{{ .Config.username }}"
-    input[name="login_password"]: "{{ .Config.password }}"
-  selectors: true
+    login_username: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
   error:
     - selector: div:contains("Форум временно отключен")
     - selector: h4.warnColor1.tCenter.mrg_16

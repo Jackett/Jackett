@@ -182,7 +182,6 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# Maintain global ratio above 0.7 or downloads will get disabled. No MST.
     minimumratio:
       text: 0.71
-# json UNIT3D 8.3.3
+# json UNIT3D 8.3.6

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -308,7 +309,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Guid = link,
                     Details = details,
                     Link = link,
-                    Title = btnResult.ReleaseName,
+                    Title = GetTitle(btnResult),
                     Description = string.Join("<br />\n", descriptions),
                     Category = _categories.MapTrackerCatToNewznab(btnResult.Resolution),
                     InfoHash = btnResult.InfoHash,
@@ -347,6 +348,19 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             return releases;
+        }
+
+        private static string GetTitle(BroadcastheNetTorrent torrent)
+        {
+            var releaseName = torrent.ReleaseName.Replace("\\", "");
+
+            if (torrent.Container.ToUpperInvariant() is "M2TS" or "ISO")
+            {
+                releaseName = Regex.Replace(releaseName, @"\b(H\.?265)\b", "HEVC", RegexOptions.Compiled);
+                releaseName = Regex.Replace(releaseName, @"\b(H\.?264)\b", "AVC", RegexOptions.Compiled);
+            }
+
+            return releaseName;
         }
     }
 

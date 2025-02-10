@@ -162,7 +162,8 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 var loginform = loginResultDocument.QuerySelector("#loginform");
                 if (loginform == null)
                 {
-                    throw new ExceptionWithConfigData(response.ContentString, configData);
+                    logger.Error(response.ContentString);
+                    throw new ExceptionWithConfigData("Unexpected response during login, see log for HTML response.", configData);
                 }
 
                 loginform.QuerySelector("table").Remove();

@@ -5,28 +5,21 @@ description: "GkTorrent is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.protege-torrent.com/Gktorrent
+# to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.gktorrent.si/
+  - https://www-gktorrent.com/
 legacylinks:
+  # latest domains list
+  - https://www.rantop.org/
+  - https://gktorrent.news/
+  - https://www.torrent.onl/
+  - https://www.site-torrent.com/
+  # domain lists no longer working
+  - https://www.protege-torrent.com/
+  - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
-  # latest domains list
-  - https://www.protege-torrent.com/
-  - https://www.site-torrent.com/
-  - https://www.rantop.org/
-  - https://www.torrent.ws/
-  - https://www.torrent.onl/
-  - https://gktorrent.news/
   # actual legacylinks
-  - https://www.gktorrent.mx/
-  - https://www.gktorrent.fi/
-  - https://www.gktorrent.wf/
-  - https://gktorrent.nocensor.cloud/
-  - https://gktorrent.mrunblock.bond/
-  - https://www.gktorrent.wtf/
-  - https://www.gktorrent.vg/
-  - https://www.gktorrent.lol/
   - https://www.gktorrent.sh/
   - https://www.gktorrent.eu/
   - https://www.gktorrent.xyz/
@@ -36,6 +29,12 @@ legacylinks:
   - https://www.gktorrent.sk/
   - https://www.gktorrent.uno/
   - https://www.gktorrent.gy/
+  - https://www.gktorrent.si/
+  - https://www.gktorrent.my/
+  - https://www.gktorrent.cz/
+  - https://www.gktorrent.ke/
+  - https://www.gktorrent.cv/
+  - https://wvw-gktorrent.com/
 
 caps:
   categorymappings:
@@ -96,7 +95,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

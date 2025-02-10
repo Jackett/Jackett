@@ -1,6 +1,6 @@
 ---
 id: utopia
-name: UTOPIA
+name: UTOPIA (API)
 description: "UTOPIA is a UKRAINIAN Private Tracker for HD MOVIES and TV"
 language: uk-UA
 type: private
@@ -193,4 +193,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json UNIT3D 8.1.3
+# json UNIT3D 8.3.0

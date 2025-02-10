@@ -451,9 +451,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static string CleanTitle(string title)
         {
-            // drop invalid chars that seems to have cropped up in some titles. #6582
+            // Drop invalid chars that seems to have cropped up in some titles. #6582
             title = Regex.Replace(title, @"[\u0000-\u0008\u000A-\u001F\u0100-\uFFFF]", string.Empty, RegexOptions.Compiled);
             title = Regex.Replace(title, @"[\(\[\{]REQ(UEST(ED)?)?[\)\]\}]", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            // Drop languages between brackets conflicting with anime release group parsing
+            title = Regex.Replace(title, @"^\[[a-z0-9 ._-]+\][-._ ](?<title>.*-[a-z0-9]+)$", "${title}", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             return title.Trim(' ', '-', ':');
         }

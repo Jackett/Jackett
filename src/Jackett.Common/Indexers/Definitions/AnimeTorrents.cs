@@ -84,6 +84,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(17, TorznabCatType.BooksComics, "Doujinshi");
             caps.Categories.AddCategoryMapping(18, TorznabCatType.BooksComics, "Doujinshi 18+");
             caps.Categories.AddCategoryMapping(19, TorznabCatType.Audio, "OST");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.AudioAudiobook, "Audiobooks");
 
             return caps;
         }

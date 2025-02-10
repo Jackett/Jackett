@@ -8,26 +8,26 @@ description: "OxTorrent-vip is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.protege-torrent.com/Oxtorrent
+# to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.oxtorrent.gy/
+  - https://www-oxtorrent.com/
+  - https://www-torrent911.com/
 legacylinks:
+  # latest domains list
+  - https://www.rantop.org/
+  - https://oxtorrent.blog/
+  - https://www.torrent.onl/
+  - https://www.site-torrent.com/
+  # domain lists no longer working
+  - https://www.protege-torrent.com/
+  - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
-  # latest domains list
-  - https://www.protege-torrent.com/
-  - https://www.site-torrent.com/
-  - https://www.rantop.org/
-  - https://www.torrent.ws/
-  - https://www.torrent.onl/
-  - https://oxtorrent.blog/
   # actual legacylinks
-  - https://www.oxtorrent.nl/
   - https://www.oxtorrent.sbs/
   - https://www.oxtorrent.wtf/
   - https://www.oxtorrent.tf/
   - https://www.oxtorrent.day/
-  - https://oxtorrent.proxyninja.org/ # currently proxies protege-torrent page
   - https://www.oxtorrent.zip/
   - https://www.oxtorrent.vip/
   - https://www.oxtorrent.lol/
@@ -35,6 +35,13 @@ legacylinks:
   - https://www.oxtorrent.uno/
   - https://www.oxtorrent.st/
   - https://www.oxtorrent.gl/
+  - https://www.oxtorrent.gy/
+  - https://www.oxtorrent.cz/
+  - https://www.torrent911.lol/
+  - https://www.oxtorrent.im/
+  - https://www.oxtorrent.cv/
+  - https://www.torrent911.ke/
+  - https://oxtorrent.proxyninja.org/
 
 caps:
   categorymappings:

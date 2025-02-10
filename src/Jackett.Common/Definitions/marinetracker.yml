@@ -112,9 +112,13 @@ caps:
     - {id: 212, cat: Books, desc: "Ship's documentation"}
     - {id: 190, cat: Books, desc: "Catalogs"}
     - {id: 191, cat: Books, desc: "Maritime Law"}
-    - {id: 329, cat: Books, desc: "Maritime Law-Lloyd's, ABS, BV, DNV-GL, TÜV, NKK, RMRS and other approvals"}
     - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
+    - {id: 329, cat: Books, desc: "Maritime Law-Lloyd's, ABS, BV, DNV-GL, TÜV, NKK, RMRS and other approvals"}
     - {id: 113, cat: Books, desc: "Medicine"}
+    - {id: 391, cat: Books, desc: "Sailing First Aid"}
+    - {id: 390, cat: Books, desc: "Sailing Infectious Diseases and Viruses"}
+    - {id: 392, cat: Books, desc: "Sailing English for Medical Professionals"}
+    - {id: 393, cat: Books, desc: "Sailing Mental health & Stress"}
     - {id: 299, cat: Books, desc: "Sailing Kitchen"}
     - {id: 11, cat: Books, desc: "Section for cadets"}
     - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
@@ -132,11 +136,8 @@ caps:
     - {id: 340, cat: Books, desc: "Examinations-Text books"}
     - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
-    - {id: 375, cat: Audio, desc: "Audio-Documentary"}
-    - {id: 374, cat: Audio, desc: "Audio-Historical literature"}
-    - {id: 286, cat: Audio, desc: "Audio-Fantastic"}
-    - {id: 373, cat: Audio, desc: "Audio-Fiction"}
     - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
+    - {id: 373, cat: Audio, desc: "Audio-Fiction"}
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
     - {id: 389, cat: Books, desc: "Yachting, sailing, boating-Sailboat terminology"}

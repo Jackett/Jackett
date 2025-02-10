@@ -13,7 +13,6 @@ using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Serializer;
 using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -288,11 +287,6 @@ namespace Jackett.Common.Indexers.Definitions
                     MinimumRatio = 1,
                     MinimumSeedTime = 172800 // 2 days
                 };
-
-                if (torrent.Imdb.IsNotNullOrWhiteSpace())
-                {
-                    release.Imdb = ParseUtil.GetImdbId(torrent.Imdb.TrimEnd('/').Split('/').LastOrDefault()).GetValueOrDefault();
-                }
 
                 if (torrent.Status?.CreatedDate != null &&
                     DateTime.TryParseExact($"{torrent.Status.CreatedDate} +08:00", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var publishDate))

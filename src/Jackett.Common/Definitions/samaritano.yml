@@ -1,20 +1,25 @@
 ---
-id: leech24-api
-name: leech24 (API)
-description: "leech24 is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+id: samaritano
+name: SAMARITANO (API)
+description: "SAMARITANO is a BRAZILIAN Private tracker for MOVIES / TV / GENERAL"
+language: pt-BR
 type: private
 encoding: UTF-8
 links:
-  - https://leech24.net/
+  - https://samaritano.cc/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Console, desc: "Game"}
-    - {id: 4, cat: Audio, desc: "Music"}
-    - {id: 5, cat: Other, desc: "Misc"}
+    - {id: 1, cat: Movies, desc: "Filmes", default: true}
+    - {id: 2, cat: TV, desc: "Séries", default: true}
+    - {id: 3, cat: TV/Anime, desc: "Animes", default: true}
+    - {id: 4, cat: Other, desc: "Cursos", default: false}
+    - {id: 5, cat: Console, desc: "Games", default: true}
+    - {id: 6, cat: Books/EBook, desc: "Livros", default: true}
+    - {id: 7, cat: Books/Comics, desc: "HQs", default: true}
+    - {id: 8, cat: Audio/Audiobook, desc: "AudioBooks", default: true}
+    - {id: 9, cat: PC, desc: "Programas", default: true}
+    - {id: 10, cat: Other, desc: "Materiais de Apoio", default: true}
 
   modes:
     search: [q]
@@ -30,7 +35,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://leech24.net/\" target=\"_blank\">leech24</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://samaritano.cc/\" target=\"_blank\">SAMARITANO</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -38,7 +43,7 @@ settings:
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
-    default: true
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -58,7 +63,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in to the leech24 web site with your browser once every 120 days to prevent your account from getting disabled."
+    default: "Your account will be considered inactive if you have not logged in to the site for more than 90 days. After 30 days of inactivity (i.e. 30 days without logging in), your account will be removed from the tracker. Please note: The groups that suffer from inactivity are: User and Leech."
 
 login:
   path: /api/torrents
@@ -135,9 +140,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+          args: ["(?i)(Cinema TV)", "Cinema_TV"]
         - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
+          args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -183,9 +188,9 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 1.0 but torrents must be seeded for 7 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
-#      text: 1.0
+#      text: 0.4
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800

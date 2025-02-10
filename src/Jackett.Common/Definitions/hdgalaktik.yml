@@ -5,6 +5,8 @@ description: "HDGalaKtik is a RUSSIAN Semi-Private tracker for MOVIES / TV / GEN
 language: ru-RU
 type: semi-private
 encoding: UTF-8
+certificates:
+  - 53262db5c4e32667ae158fcc90396d5675d4ec3a   # CN=mail.trackerpmr.com
 links:
   - https://www.trackerpmr.com/
   - https://freetmd.com/
@@ -127,11 +129,12 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.link-secondary
+      selector: a[href^="details.php?id="]
       attribute: title
       filters:
         - name: regexp
           args: \'>(.+?)</div
+        - name: htmldecode
         # normalize to SXXEYY format
         - name: re_replace
           args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
@@ -190,10 +193,10 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.link-secondary
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a.link-secondary
+      selector: a[href^="details.php?id="]
       attribute: href
       filters:
         - name: replace

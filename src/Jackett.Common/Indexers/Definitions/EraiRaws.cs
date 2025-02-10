@@ -24,12 +24,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.erai-raws.info/",
-            "https://beta.erai-raws.info/"
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://erairaws.mrunblock.bond/",
-            "https://erairaws.nocensor.cloud/"
+            "https://erairaws.nocensor.cloud/",
+            "https://beta.erai-raws.info/"
         };
         public override string Language => "en-US";
         public override string Type => "semi-private";
@@ -277,7 +277,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Link = link,
                     InfoHash = infoHash,
                     PublishDate = publishDate,
-                    Size = size,
+                    Size = string.IsNullOrWhiteSpace(size) ? "512MB" : size,
                     Description = description,
                     Quality = quality,
                     SubTitles = subs
