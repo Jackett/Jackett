@@ -457,7 +457,6 @@ namespace Jackett.Updater
                 "Definitions/hdme.yml",
                 "Definitions/hdmonkey.yml",
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
-                "Definitions/hdonly.yml", // renamed to hdonly-api.yml #15855
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
                 "Definitions/hdspain.yml",

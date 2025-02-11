@@ -1,8 +1,6 @@
 ---
-id: hdonly-api
-replaces:
-  - hdonly
-name: HD-Only (API)
+id: hdonly
+name: HD-Only
 description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV"
 language: fr-FR
 type: private
@@ -35,13 +33,19 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: apikey
+  - name: username
     type: text
-    label: API Key
-  - name: info_key
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2fa_code
+    type: text
+    label: 2FA code
+  - name: info_2fa
     type: info
-    label: About your API Key
-    default: "Find or Generate a new API Key by accessing your <a href=\"https://hd-only.org/\" target=\"_blank\">HD-Only</a> account <i>Access Settings</i> tab and copy the API Key."
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the HD-Only Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -89,15 +93,18 @@ settings:
       asc: asc
 
 login:
-  path: ajax.php
-  method: get
+  path: login.php
+  method: post
   inputs:
-    action: browse
-    apikey: "{{ .Config.apikey }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    twofa: "{{ .Config.2fa_code }}"
+    keeplogged: 1
   error:
-    - selector: a[href*="login.php"]
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: form#loginform > span.warning
+  test:
+    path: torrents.php
+    selector: a[href^="logout.php?auth="]
 
 search:
   # https://hd-only.org/ajax.php?filelist=blood+2009&action=browse&group_results=0&order_by=time&order_way=desc&freetorrent=1
@@ -119,7 +126,6 @@ search:
     # 1 freeleech, 0 normal
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     # site does not support imdbid search or display imdb links in results
-    apikey: "{{ .Config.apikey }}"
 
   keywordsfilters:
     # strip season
