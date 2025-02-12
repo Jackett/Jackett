@@ -94,10 +94,6 @@ login:
   inputs:
     action: browse
     apikey: "{{ .Config.apikey }}"
-  error:
-    - selector: a[href*="login.php"]
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   # https://hd-only.org/ajax.php?filelist=blood+2009&action=browse&group_results=0&order_by=time&order_way=desc&freetorrent=1
