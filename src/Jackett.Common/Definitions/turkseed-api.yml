@@ -5,8 +5,11 @@ description: "TurkSeed is a TURKISH Private Torrent Tracker for MOVIES / TV / GE
 language: tr-TR
 type: private
 encoding: UTF-8
+certificates:
+  - 46b7e86eb8554b8647a15654ba230b64681813e6 # CN=turkseed.net
 links:
   - https://turkseed.com/
+  - https://turkseed.net/
 
 caps:
   categorymappings:
