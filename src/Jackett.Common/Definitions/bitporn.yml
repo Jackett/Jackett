@@ -132,7 +132,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    selector: table.contenttable > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
@@ -208,4 +208,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.5 2023-07-06
+# NexusPHP v1.8.5 2023-07-06 (custom)
