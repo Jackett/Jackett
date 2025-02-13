@@ -6,7 +6,7 @@ language: tr-TR
 type: private
 encoding: UTF-8
 certificates:
-  - 46b7e86eb8554b8647a15654ba230b64681813e6 # CN=turkseed.net
+  - dbb741dab386cdc63ef4ad16bf2bc1ec96f830dc # CN=turkseed.com when using dot net domain
 links:
   - https://turkseed.com/
   - https://turkseed.net/
