@@ -385,6 +385,7 @@ namespace Jackett.Updater
                 "Definitions/elittracker.yml",
                 "Definitions/emmidtracker.yml",
                 "Definitions/emtrek.yml",
+                "Definitions/emuwarez.yml",
                 "Definitions/eotforum.yml",
                 "Definitions/epizod.yml",
                 "Definitions/erzsebet.yml",
