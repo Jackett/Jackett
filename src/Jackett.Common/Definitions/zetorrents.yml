@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.zetorrents.my/
+  - https://www-zetorrents.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -19,8 +19,6 @@ legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
   # actual legacylinks
-  - https://ww1.zetorrents.io/
-  - https://www.zetorrents.org/
   - https://wvw.zetorrents.org/
   - https://www.zetorrents.cc/
   - https://www.zetorrents.tv/
@@ -36,6 +34,8 @@ legacylinks:
   - https://www.zetorrents.vg/
   - https://www.zetorrents.vc/
   - https://www.zetorrents.sk/
+  - https://www.zetorrents.my/
+  - https://wvw-zetorrents.com/
 
 caps:
   categories:
