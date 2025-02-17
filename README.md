@@ -569,6 +569,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * TheEmpire (TE)
  * TheLeachZone (TLZ)
  * ThePiratedShip
+ * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB [![(invite needed)][inviteneeded]](#)
  * Toca Share

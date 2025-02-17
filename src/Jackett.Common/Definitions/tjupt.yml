@@ -1,0 +1,179 @@
+---
+id: tjupt
+name: TJUPT (北洋园PT)
+description: "TJUPT (北洋园PT) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://tjupt.org/
+
+caps:
+  categorymappings:
+    - {id: 401, cat: Movies, desc: "Movies电影"}
+    - {id: 402, cat: TV, desc: "TV Series剧集"}
+    - {id: 403, cat: TV, desc: "TV Shows综艺"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries资料"}
+    - {id: 405, cat: TV/Anime, desc: "Animations动漫"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos音乐"}
+    - {id: 407, cat: TV/Sport, desc: "Sports体育"}
+    - {id: 408, cat: PC, desc: "Software软件"}
+    - {id: 409, cat: Console, desc: "Games游戏"}
+    - {id: 411, cat: Books, desc: "Books纪录片"}
+    - {id: 412, cat: PC/Mobile-Other, desc: "Mobile移动视频"}
+    - {id: 410, cat: Other, desc: "Misc其他"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Banning rules for account inactivity:<ol><li>Within 180 days, an account is considered active if it meets any of the following conditions: has checked in for at least 1 day; has published at least 1 seed, fun box or new forum topic (non-reply); actually uploaded increments > 5TiB and the seeding integral increment is > 30W</li><li>Users of Megatron level and above ignore the inactivity rules and will keep their accounts forever</li><li>Users with Sword Down the Mountain and above will not be disabled due to inactivity after parking their accounts in the control panel</li><li>Un-parked accounts below the level of Megatron will be disabled if they have been 'inactive' for 180 consecutive days (Effective from 2024).</li><li>Accounts parked below the level of Down the Mountain with a Sword will be disabled if they are 'inactive' for 300 consecutive days (Effective from 2024).</li></ol>"
+
+login:
+  # switched from the form method to the cookie method due to #15184
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://tjupt.org/torrents.php?incldead=0&spstate=0&picktype=0&inclbookmarked=0&search=&search_area=0&search_mode=0
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    # currently supports only one query id at one time.
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 popular, 3 classic, 4 recomended, 5 0day, 6 imdb top 250
+    picktype: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 special offer, 9 all promotions
+    spstate: "{{ if .Config.freeleech }}9{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 2 subtitltes, 3 uploader, 4 imdburl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    notnewword: 1
+
+  rows:
+    selector: table.torrents > tbody > tr:has(table.torrentname)
+
+  fields:
+    category:
+      selector: a[href*="cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
+    title:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+      filters:
+        - name: re_replace
+          args: ["^\\[([^\\]]+)\\]\\[([^\\]]+)\\]\\[([^\\]]+)\\](.*)$", "$3 [$1][$2]$4"]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="details.php?id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details", "download"]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      # time added
+      selector: td:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        font.free: 0
+        font.twoupfree: 0
+        font.halfdown: 0.5
+        font.twouphalfdown: 0.5
+        font.thirtypercent: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        font.twouphalfdown: 2
+        font.twoupfree: 2
+        font.twoup: 2
+        "*": 1
+    minimumratio:
+      text: 0.8
+    description:
+      selector: td:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP Standard v1.5 Beta 4 (custom ulvf dlvf)

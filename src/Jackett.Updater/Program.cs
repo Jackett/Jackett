@@ -695,7 +695,6 @@ namespace Jackett.Updater
                 "Definitions/thorsland.yml",
                 "Definitions/tigers-dl.yml",
                 "Definitions/tjangto.yml",
-                "Definitions/tjupt.yml",
                 "Definitions/tntfork.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/toonsforme.yml",
