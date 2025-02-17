@@ -154,18 +154,18 @@ search:
       selector: td a[href^="download.php"]
       attribute: href
     date:
-      selector: td:nth-child(5) span
+      selector: td:nth-child(4) span
       attribute: title
       # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss"
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     size:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         span.free: 0
