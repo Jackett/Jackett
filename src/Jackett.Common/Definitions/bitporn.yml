@@ -208,4 +208,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.5 2023-07-06 (custom)
+# NexusPHP v2.3 (custom)
