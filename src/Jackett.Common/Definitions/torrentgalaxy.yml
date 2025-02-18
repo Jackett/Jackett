@@ -11,7 +11,7 @@ requestDelay: 2
 # https://proxygalaxy.me/ for health status and alternate domains
 links:
   - https://torrentgalaxy.to/
-  - https://tgx.rs/
+  - https://torrentgalaxy.mx/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
@@ -20,7 +20,7 @@ legacylinks:
   - https://torrentgalaxy.unblockninja.com/ # breaks on checkpoint
   - https://tgx.proxyninja.org/ # breaks on checkpoint
   - https://tgx.sb/
-  - https://torrentgalaxy.mx/ # 404 not found, connection refused
+  - https://tgx.rs/ # ERR_CONNECTION_REFUSED
 
 caps:
   categorymappings:
