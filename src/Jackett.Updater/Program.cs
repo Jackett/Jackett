@@ -516,6 +516,7 @@ namespace Jackett.Updater
                 "Definitions/lightning-tor.yml",
                 "Definitions/lilleskyorg.yml",
                 "Definitions/limetorrentsclone.yml",
+                "Definitions/lusthive.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magicheaven.yml",
                 "Definitions/magico.yml", // renamed to trellas

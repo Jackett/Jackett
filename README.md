@@ -439,7 +439,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Locadora
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
- * LustHive
  * M-Team TP (MTTP) [![(invite needed)][inviteneeded]](#)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
