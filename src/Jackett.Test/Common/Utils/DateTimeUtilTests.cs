@@ -34,16 +34,17 @@ namespace Jackett.Test.Common.Utils
         public void FromTimeAgoTest()
         {
             var now = DateTime.Now;
+            var nowDateOnly = new DateTime(now.Year, now.Month, now.Day, 0, 0, 0, 0);
 
             AssertSimilarDates(now, DateTimeUtil.FromTimeAgo("NOW")); // case insensitive
             AssertSimilarDates(now, DateTimeUtil.FromTimeAgo("now"));
             AssertSimilarDates(now.AddSeconds(-1), DateTimeUtil.FromTimeAgo("1 sec"));
             AssertSimilarDates(now.AddMinutes(-12), DateTimeUtil.FromTimeAgo("12 min ago"));
             AssertSimilarDates(now.AddHours(-20), DateTimeUtil.FromTimeAgo("20 h"));
-            AssertSimilarDates(now.AddDays(-3), DateTimeUtil.FromTimeAgo("3 days"));
-            AssertSimilarDates(now.AddDays(-7), DateTimeUtil.FromTimeAgo("1 week"));
-            AssertSimilarDates(now.AddDays(-60), DateTimeUtil.FromTimeAgo("2 month ago"));
-            AssertSimilarDates(now.AddDays(-365), DateTimeUtil.FromTimeAgo("1 year"));
+            AssertSimilarDates(nowDateOnly.AddDays(-3), DateTimeUtil.FromTimeAgo("3 days"));
+            AssertSimilarDates(nowDateOnly.AddDays(-7), DateTimeUtil.FromTimeAgo("1 week"));
+            AssertSimilarDates(nowDateOnly.AddDays(-60), DateTimeUtil.FromTimeAgo("2 month ago"));
+            AssertSimilarDates(nowDateOnly.AddDays(-365), DateTimeUtil.FromTimeAgo("1 year"));
             AssertSimilarDates(now.AddHours(-20).AddMinutes(-15), DateTimeUtil.FromTimeAgo("20 hours and 15 minutes ago"));
             AssertSimilarDates(now, DateTimeUtil.FromTimeAgo(""));
 
