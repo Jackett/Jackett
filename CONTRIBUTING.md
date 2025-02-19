@@ -186,7 +186,7 @@ Here's what you need to do to give your pull request the best chance at a timely
     - Remove dead tracker fff
   - Run `dotnet format` from the Package Manager Console (found in `Tools -> NuGet Package Manager` or `View -> Other Windows`)
   - If your branch falls out of sync and has merge conflicts with the Jackett official `master`
-    [rebase](https://mohitgoyal.co/2018/04/18/working-with-git-and-visual-studio-use-git-rebase-inside-visual-studio/) your fix before submission.
+    [rebase](https://mohitgoyal.co/2018/04/18/working-with-git-and-visual-studio-use-git-rebase-inside-visual-studio.html) your fix before submission.
   - If you deleted, moved, or renamed any files/folders, be sure to add the old file/folder path to the appropriate array in `Jacket.Updater/Program.cs`
   - If you added or renamed a tracker, update the README to include the new name
   - [Squash your local commits](https://github.com/spottedmahn/my-blog/issues/26)
@@ -199,3 +199,7 @@ Here's what you need to do to give your pull request the best chance at a timely
   - Include any open tickets this Pull Request should fix in the description. **Do not** put ticket numbers in the title.
 
 We will be by when we can to review your Pull Request.
+
+## FreeBSD-X64 Binary Releases
+
+We now provide FreeBSD-X64 Binary releases to omit the dependency on mono. This allows you to run Jackett natively on FreeBSD without requiring mono. Follow the instructions in the "Setting up your environment" section to get started with FreeBSD-X64 Binary releases.

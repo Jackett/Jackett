@@ -112,6 +112,13 @@ stages:
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
+            FreeBSD:
+              buildDescription: FreeBSD
+              imageName: freebsd-12
+              framework: $(netCoreFramework)
+              runtime: freebsd-x64
+              archiveType: tar
+              artifactName: Jackett.Binaries.FreeBSD.tar.gz
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -440,6 +447,11 @@ stages:
               imageName: ubuntu-22.04
               framework: net462
               runtime: linux-x64
+            FreeBSD:
+              buildDescription: FreeBSD
+              imageName: freebsd-12
+              framework: $(netCoreFramework)
+              runtime: freebsd-x64
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -537,6 +549,12 @@ stages:
               artifactName: Jackett.Binaries.Mono.tar.gz
               framework: net462
               runtime: linux-x64
+            FreeBSD:
+              buildDescription: FreeBSD
+              imageName: freebsd-12
+              artifactName: Jackett.Binaries.FreeBSD.tar.gz
+              framework: $(netCoreFramework)
+              runtime: freebsd-x64
         pool:
           vmImage: $(imageName)
         displayName: ${{ variables.buildDescription }}
@@ -570,6 +588,7 @@ stages:
                 if [[ "$(artifactName)" == *"Mono"* ]]; then sudo ./install_service_systemd_mono.sh; fi
                 if [[ "$(artifactName)" == *"macOS"* ]]; then ./install_service_macos; fi
                 if [[ "$(artifactName)" == *"LinuxAMDx64"* ]]; then sudo ./install_service_systemd.sh; fi
+                if [[ "$(artifactName)" == *"FreeBSD"* ]]; then sudo ./install_service_systemd.sh; fi
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
