@@ -375,6 +375,7 @@ namespace Jackett.Updater
                 "Definitions/dragonworld.yml",
                 "Definitions/dragonworldreloaded.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/dreamtracker.yml",
                 "Definitions/dxdhd.yml",
                 "Definitions/ebookparadijs.yml",
                 "Definitions/efectodoppler.yml",
