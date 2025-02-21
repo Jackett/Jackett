@@ -1,19 +1,19 @@
 ---
-id: torrent9-tel
+id: nortorrent
 replaces:
   - torrent9clone
-name: Torrent9-tel
-description: "Torrent9-tel is a FRENCH Public tracker for TV / MOVIES / GENERAL"
+  - torrent9-tel
+name: NorTorrent
+description: "NorTorrent is a FRENCH Public tracker for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.org/
+# to fetch current domain use https://www.rantop.my/
 links:
-  - https://www-torrent9.com/
+  - https://www.nortorrent.com/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
-  - https://www.torrent.onl/
+  - https://www.rantop.my/
   - https://torrent9.news/
   - https://www.site-torrent.com/
   # domain lists no longer working
@@ -21,9 +21,9 @@ legacylinks:
   - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
+  - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
-  - https://www.torrent9.tel/
-  - https://torrent9.unblockninja.com/
   - https://www.torrent9.plus/
   - https://www.torrent9.lc/
   - https://www.torrent9-p2p.com/
@@ -38,6 +38,7 @@ legacylinks:
   - https://www.torrent9.gdn/
   - https://www.torrent9.men/
   - https://www.torrent9.icu/
+  - https://www-torrent9.com/
 
 caps:
   categorymappings:

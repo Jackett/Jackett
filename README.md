@@ -95,6 +95,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * Newstudio
  * Nipponsei
  * NoNaMe Club (NNM-Club)
+ * NorTorrent
  * Nyaa.si
  * NyaaPantsu
  * OneJAV
@@ -128,7 +129,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * torrent.by
  * torrent-pirat
  * Torrent9
- * Torrent9-tel
  * TorrentFunk
  * TorrentDosFilmes
  * TorrentDownload
