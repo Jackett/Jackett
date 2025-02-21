@@ -1,26 +1,28 @@
 ---
-id: gktorrent
-name: GkTorrent
-description: "GkTorrent is a French Public site for TV / MOVIES / GENERAL"
+id: zktorrent
+replaces:
+  - gktorrent
+name: ZkTorrent
+description: "ZkTorrent is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.org/
+# to fetch current domain use https://www.rantop.my/
 links:
-  - https://www-gktorrent.com/
+  - https://www.zktorrent.com/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
+  - https://www.rantop.my/
   - https://gktorrent.news/
-  - https://www.torrent.onl/
   - https://www.site-torrent.com/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
+  - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
-  - https://www.gktorrent.sh/
   - https://www.gktorrent.eu/
   - https://www.gktorrent.xyz/
   - https://www.gktorrent.pm/
@@ -35,6 +37,7 @@ legacylinks:
   - https://www.gktorrent.ke/
   - https://www.gktorrent.cv/
   - https://wvw-gktorrent.com/
+  - https://www-gktorrent.com/
 
 caps:
   categorymappings:

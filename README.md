@@ -67,7 +67,6 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * EZTV
  * FilmesHdTorrent
  * GamesTorrents
- * GkTorrent
  * GloDLS
  * GTorrent.pro
  * Idope
@@ -154,6 +153,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
  * YourBittorrent
  * YTS.ag
  * zetorrents
+ * ZkTorrent
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
