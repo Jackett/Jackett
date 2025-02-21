@@ -5,19 +5,20 @@ description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.org/
+# to fetch current domain use https://www.rantop.my/
 links:
   - https://www-zetorrents.com/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
-  - https://www.torrent.onl/
+  - https://www.rantop.my/
   - https://www.site-torrent.com/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
+  - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
   - https://wvw.zetorrents.org/
   - https://www.zetorrents.cc/
