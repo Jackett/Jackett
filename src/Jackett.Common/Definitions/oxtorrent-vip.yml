@@ -8,21 +8,22 @@ description: "OxTorrent-vip is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.org/
+# to fetch current domain use https://www.rantop.my/
 links:
   - https://www.oxtorrent1.com/
   - https://www.zone-torrent.com/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
+  - https://www.rantop.my/
   - https://oxtorrent.blog/
-  - https://www.torrent.onl/
   - https://www.site-torrent.com/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
+  - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
   - https://www.oxtorrent.tf/
   - https://www.oxtorrent.day/
