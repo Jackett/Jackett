@@ -65,6 +65,7 @@ caps:
     - {id: 620, cat: Books/EBook, desc: "[E] Romance"}
     - {id: 630, cat: Books/EBook, desc: "[E] Sci-Fi"}
     - {id: 640, cat: Books/EBook, desc: "[E] Sci-Fi/Apocalyptic"}
+    - {id: 645, cat: Books/EBook, desc: "[E] Science"}
     - {id: 650, cat: Books/EBook, desc: "[E] Self-Help"}
     - {id: 660, cat: Books/EBook, desc: "[E] Sports/Fitness"}
     - {id: 670, cat: Books/EBook, desc: "[E] Travel"}
