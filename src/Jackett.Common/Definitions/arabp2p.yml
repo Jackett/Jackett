@@ -140,19 +140,24 @@ search:
 
   fields:
     category:
-      selector: td a[href^="index.php?page=torrents&category="]
+      selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a[href^="index.php?page=torrent-details"]
     details:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a[href^="index.php?page=torrent-details"]
       attribute: href
     download:
-      selector: td a[href^="download.php"]
+      selector: a[href^="download.php"]
       attribute: href
+      optional: true
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
     date:
       selector: td:nth-child(4) span
       attribute: title
