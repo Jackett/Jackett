@@ -122,7 +122,9 @@ namespace Jackett.Server
                     var applicationFolder = configurationService.GetContentFolder();
                     logger.Debug($"Content root path is: {applicationFolder}");
 
-                    CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
+                    var host = CreateWebHostBuilder(args, url, applicationFolder).Build();
+                    ServiceLocator.Initialize(host.Services);
+                    host.Run();
                 }
                 catch (Exception e)
                 {

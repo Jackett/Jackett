@@ -7,6 +7,7 @@ using System.Xml.Linq;
 using Jackett.Common.Indexers.Feeds;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -25,12 +26,12 @@ namespace Jackett.Common.Indexers.Definitions.Feeds
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
+        public AnimeTosho(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    configData: new ConfigurationData())
         {
         }

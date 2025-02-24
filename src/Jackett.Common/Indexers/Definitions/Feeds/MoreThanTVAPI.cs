@@ -8,6 +8,7 @@ using System.Xml.Linq;
 using Jackett.Common.Indexers.Feeds;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -32,12 +33,12 @@ namespace Jackett.Common.Indexers.Definitions.Feeds
         private new ConfigurationDataAPIKey configData => (ConfigurationDataAPIKey)base.configData;
 
         public MoreThanTVAPI(IIndexerConfigurationService configService, WebClient client, Logger logger,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    configData: new ConfigurationDataAPIKey())
         {
             configData.AddDynamic("keyInfo", new DisplayInfoConfigurationItem(String.Empty, "Find or Generate a new API Key by accessing your <a href=\"https://www.morethantv.me/user/security\" target =_blank>MoreThanTV</a> account <i>User Security</i> page and scrolling to the <b>API Keys</b> section."));
