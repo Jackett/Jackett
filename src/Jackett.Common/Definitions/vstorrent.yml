@@ -15,7 +15,21 @@ caps:
   modes:
     search: [q]
 
-settings: []
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      relevance: relevance
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
 
 download:
   selectors:
@@ -23,10 +37,15 @@ download:
       attribute: href
 
 search:
+  # https://vstorrent.org/?s=&orderby=date&order=DESC&post_type=post
   paths:
     - path: /
+  allowEmptyInputs: true
   inputs:
     s: "{{ .Keywords }}"
+    orderby: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    post_type: post
 
   rows:
     selector: article:has(a)
@@ -58,4 +77,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 6.2.2
+# wordpress 7.2.0
