@@ -13,6 +13,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 6, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
