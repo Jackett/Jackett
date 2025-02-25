@@ -5,7 +5,7 @@ description: "torrentssg (토렌트쓱) is a Public KOREAN tracker for Korean me
 language: ko-KR
 type: public
 encoding: UTF-8
-# to fetch current domain use: https://xn--sm2bw9uj0jb6a.com/
+# to fetch current domain use https://xn--sm2bw9uj0jb6a.com/
 links:
   - https://torrentssg7.com/
 
