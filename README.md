@@ -20,9 +20,11 @@ The software implements the [Torznab](https://torznab.github.io/spec-1.3-draft/i
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
 #### Supported Systems
+The currently supported version of Jackett is 0.22.+, which is compatible with the following OS:
 * Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
 * macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
+Prior versions of Jackett are no longer supported.
 
 #### Supported Trackers
 <details> <summary> <b> Supported Public Trackers </b> </summary>
