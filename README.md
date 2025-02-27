@@ -24,6 +24,7 @@ The currently supported version of Jackett is 0.22.+, which is compatible with t
 * Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
 * macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
+
 Prior versions of Jackett are no longer supported.
 
 #### Supported Trackers
