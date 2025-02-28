@@ -115,7 +115,7 @@ search:
         - name: replace
           args: ["catpic_", ""]
     title:
-      selector: span.torrent-title
+      selector: span.torrent-name
     _id:
       selector: tr[data-torrent-id]
       attribute: data-torrent-id
@@ -130,7 +130,7 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: span.torrent-size
+      selector: td.torrent-size
     date:
       # 36 perce
       # 13 órája  és 59 perce
