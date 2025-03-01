@@ -51,6 +51,7 @@ caps:
     - {id: 89, cat: TV, desc: "مسلسلات عربية كامله (Full Arabic Series)"}
     - {id: 52, cat: TV, desc: "مسرحيات (Plays)"}
     - {id: 71, cat: TV, desc: "مسلسلات مدبلجه عربي (Arabic Dubbed Series)"}
+    - {id: 117, cat: TV, desc: "رمضان 2025 (Ramadan 2025)"}
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
     # المرئيات الاجنبية Foreign Movies
     - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
@@ -82,15 +83,6 @@ caps:
     # برامج  Software
     - {id: 22, cat: PC, desc: "برامج عربية (Arabic Software)"}
     - {id: 23, cat: PC, desc: "برامج عامه (Public Software)"}
-    - {id: 78, cat: PC/Mobile-iOS, desc: "iPad/iPhone"}
-    - {id: 79, cat: PC/Mobile-Android, desc: "android"}
-    # العاب  Games
-    - {id: 30, cat: PC/Games, desc: "PC"}
-    - {id: 31, cat: Console/PS3, desc: "PS2"}
-    - {id: 53, cat: Console/Wii, desc: "wii"}
-    - {id: 55, cat: Console/PSP, desc: "PSP"}
-    - {id: 63, cat: Console/XBox, desc: "XBOX"}
-    - {id: 64, cat: Console/PS3, desc: "PS3"}
     # اخرى Other
     - {id: 17, cat: Books, desc: "كتب (Books)"}
     - {id: 65, cat: Other, desc: "صور (Images)"}
