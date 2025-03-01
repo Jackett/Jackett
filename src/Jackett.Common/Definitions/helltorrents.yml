@@ -24,7 +24,6 @@ caps:
     - {id: 77, cat: Movies/UHD, desc: "Filmy i Seriale 4K UHD"}
     - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
     - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM/IVO/AUDIO KINO"}
-    - {id: 82, cat: Movies, desc: "Teatr"}
     # Seriale
     - {id: 25, cat: TV, desc: "Seriale Polskie"}
     - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
@@ -66,7 +65,7 @@ caps:
     - {id: 59, cat: XXX/ImageSet, desc: "Zdjęcia "}
     - {id: 60, cat: XXX/x264, desc: "Filmy"}
     - {id: 61, cat: XXX/Other, desc: "Gry "}
-    - {id: 63, cat: XXX/Other, desc: "Hentai+18"}
+    - {id: 62, cat: XXX/Other, desc: "Hentai+18"}
     # Anime
     - {id: 69, cat: TV/Anime, desc: "Anime Pl"}
     - {id: 70, cat: TV/Anime, desc: "Anime"}
