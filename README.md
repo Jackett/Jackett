@@ -556,7 +556,6 @@ Prior versions of Jackett are no longer supported.
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
- * teracod (Movie Zone)
  * The Crazy Ones
  * The Falling Angels (TFA)
  * The Geeks

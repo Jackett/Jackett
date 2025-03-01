@@ -677,6 +677,7 @@ namespace Jackett.Updater
                 "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tellytorrent-api.yml",
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
+                "Definitions/teracod.yml", // closed, users can choose to merge with existing huntorrent #9743
                 "Definitions/tfile.yml",
                 "Definitions/tgay.yml",
                 "Definitions/theaudioscene.yml",
