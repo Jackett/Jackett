@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public override bool SupportsPagination => false;
 
-        protected virtual string TimezoneOffset => "-04:00"; // Avistaz does not specify a timezone & returns server time
+        protected virtual string TimezoneOffset => "-05:00"; // Avistaz does not specify a timezone & returns server time
 
         private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
         {
