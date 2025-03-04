@@ -125,11 +125,8 @@ search:
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
     category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: div[data-catid]
+      attribute: data-catid
     title:
       selector: a[href^="details.php?id="]
       remove: span
@@ -163,9 +160,9 @@ search:
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
-      selector: td:nth-last-child(3) div:nth-last-child(2)
+      selector: a[href^="peerlist_xbt.php?id="]
     leechers:
-      selector: td:nth-last-child(3) div:last-child
+      selector: div[title="Leechers"]
     downloadvolumefactor:
       case:
         tr.freeleech_color: 0
