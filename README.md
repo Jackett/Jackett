@@ -449,6 +449,7 @@ Prior versions of Jackett are no longer supported.
  * Making Off
  * Mansão dos Animes (MDAN)
  * Malayabits
+ * Matrix
  * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
