@@ -609,7 +609,6 @@ Prior versions of Jackett are no longer supported.
  * UBits
  * UHDBits
  * UltraHD
- * UnionGang
  * UnlimitZ
  * upload.cx
  * Upscale Vault

@@ -760,6 +760,8 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/underverse.yml",
                 "Definitions/underversel.yml",
+                "Definitions/uniongang.yml",
+                "Definitions/uniongangcookie.yml",
                 "Definitions/uniotaku.yml", // to be migrated to c#
                 "Definitions/universaltorrents.yml",
                 "Definitions/unleashthecartoons.yml",
