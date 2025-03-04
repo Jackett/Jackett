@@ -21,7 +21,7 @@ body:
   id: contributing-guidelines
   attributes:
     label: Have you read our Contributing Guidelines?
-    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md">Contributing Guidelines</a> before submitting your issue to ensure a prompt response to your bug.
+    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md#troubleshooting">Contributing Guidelines (troubleshooting section)</a> before submitting your issue to ensure a prompt response to your bug.
     options:
       - label: I have read the Contributing Guidelines
         required: true
