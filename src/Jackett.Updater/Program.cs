@@ -329,6 +329,7 @@ namespace Jackett.Updater
                 "Definitions/btdb.yml",
                 "Definitions/bteye.yml",
                 "Definitions/btgigs.yml",
+                "Definitions/btmet.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btmirror.yml",
                 "Definitions/btstornet.yml",
