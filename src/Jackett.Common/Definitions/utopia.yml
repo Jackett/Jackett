@@ -75,6 +75,7 @@ search:
     - path: "/api/torrents/filter"
       response:
         type: json
+        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
