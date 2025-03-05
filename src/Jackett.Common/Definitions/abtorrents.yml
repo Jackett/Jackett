@@ -21,7 +21,6 @@ caps:
     - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller/Mystery"}
     - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
     - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
-    - {id: 110, cat: Audio/Audiobook, desc: "Files"}
     - {id: 130, cat: Audio/Audiobook, desc: "General Fiction"}
     - {id: 140, cat: Audio/Audiobook, desc: "Historical Fiction"}
     - {id: 150, cat: Audio/Audiobook, desc: "History"}
@@ -33,23 +32,29 @@ caps:
     - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
     - {id: 215, cat: Audio/Audiobook, desc: "Paranormal Romance"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
+    - {id: 205, cat: Audio/Audiobook, desc: "Reference/Educational"}
+    - {id: 207, cat: Audio/Audiobook, desc: "Religion and Spirituality"}
     - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
     - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
     - {id: 220, cat: Audio/Audiobook, desc: "Science"}
     - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
     - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
+    - {id: 265, cat: Audio/Audiobook, desc: "Sports/Fitness"}
     - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
+    - {id: 285, cat: Audio/Audiobook, desc: "Travel"}
     - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
     - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
     - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
     - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
     - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
+    - {id: 435, cat: Books/EBook, desc: "[E] Business"}
     - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
     - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
     - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller/Mystery"}
     - {id: 480, cat: Books/EBook, desc: "[E] Fantasy"}
+    - {id: 490, cat: Books/EBook, desc: "[E] Fantasy-Youth"}
     - {id: 500, cat: Books/EBook, desc: "[E] General Fiction"}
     - {id: 510, cat: Books/EBook, desc: "[E] Historical Fiction"}
     - {id: 520, cat: Books/EBook, desc: "[E] History/Documentary"}
@@ -68,8 +73,8 @@ caps:
     - {id: 645, cat: Books/EBook, desc: "[E] Science"}
     - {id: 650, cat: Books/EBook, desc: "[E] Self-Help"}
     - {id: 660, cat: Books/EBook, desc: "[E] Sports/Fitness"}
+    - {id: 665, cat: Books/EBook, desc: "[E] Suspense"}
     - {id: 670, cat: Books/EBook, desc: "[E] Travel"}
-    - {id: 680, cat: Books/EBook, desc: "[E] Unsorted"}
     - {id: 690, cat: Books/EBook, desc: "[E] Urban Fantasy/Paranormal"}
     - {id: 700, cat: Books/EBook, desc: "[E] Western"}
     - {id: 710, cat: Books/EBook, desc: "[E] Young Adult"}
@@ -160,9 +165,13 @@ search:
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
-      selector: a[href^="peerlist_xbt.php?id="]
+      selector: a[title="Seeders"]
+      optional: true
+      default: 0
     leechers:
-      selector: div[title="Leechers"]
+      selector: a[title="Leechers"]
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         tr.freeleech_color: 0
