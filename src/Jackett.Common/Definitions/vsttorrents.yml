@@ -50,8 +50,7 @@ search:
     description:
       selector: .entry-excerpt
     date:
-      selector: time
-      attribute: datetime
+      selector: .entry-meta >  a.post-date
     size:
       text: "512 MB"
     seeders:
@@ -62,4 +61,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 6.2.2
+# wordpress 6.7.2
