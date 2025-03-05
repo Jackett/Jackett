@@ -122,14 +122,12 @@ search:
           args: cat
     title:
       selector: a.torrent-link b
-    _id:
-      selector: a[href^="download.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
       attribute: href
       filters:
-        - name: querystring
-          args: id
-    details:
-      text: "details.php?id={{ .Result._id }}"
+        - name: re_replace
+          args: ["&hit=1.+", ""]
     download:
       selector: a[href^="download.php?id="]
       attribute: href
