@@ -90,6 +90,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 30 days are deleted unless you have told staff in advance."
 
 login:
   path: index.php
