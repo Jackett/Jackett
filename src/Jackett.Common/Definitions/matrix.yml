@@ -121,7 +121,14 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.torrent-link b
+      # titles can be abbreviated so using the name from DL
+      selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: name
+        - name: replace
+          args: [".torrent", ""]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
