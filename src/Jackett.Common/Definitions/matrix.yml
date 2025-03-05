@@ -183,7 +183,8 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
-    minimumseedtime:
+# MST only applies when the torrent is not active.
+#    minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
+#      text: 172800
 # TBDev
