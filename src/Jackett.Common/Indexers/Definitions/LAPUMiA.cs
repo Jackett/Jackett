@@ -6,8 +6,8 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using NLog;
 using static System.Linq.Enumerable;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://lapumia.net/";
 
         public LAPUMiA(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                       ICacheService cs) : base(configService: configService, wc, l, ps, cs)
+                       CacheManager cm) : base(configService: configService, wc, l, ps, cm)
         {
         }
 
