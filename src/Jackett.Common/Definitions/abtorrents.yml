@@ -18,7 +18,7 @@ caps:
     - {id: 30, cat: Audio/Audiobook, desc: "Business "}
     - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
     - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
-    - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller/Mystery"}
+    - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller"}
     - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
     - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
     - {id: 130, cat: Audio/Audiobook, desc: "General Fiction"}
@@ -28,7 +28,7 @@ caps:
     - {id: 50, cat: Audio/Audiobook, desc: "Humor (Comedy)"}
     - {id: 170, cat: Audio/Audiobook, desc: "Literature"}
     - {id: 175, cat: Audio/Audiobook, desc: "LitRPG"}
-    - {id: 180, cat: Audio/Audiobook, desc: "Mystery "}
+    - {id: 180, cat: Audio/Audiobook, desc: "Mystery"}
     - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
     - {id: 215, cat: Audio/Audiobook, desc: "Paranormal Romance"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
@@ -43,16 +43,16 @@ caps:
     - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
     - {id: 285, cat: Audio/Audiobook, desc: "Travel"}
-    - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
+    - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy/Paranormal"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
     - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
-    - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
+    - {id: 410, cat: Books/EBook, desc: "[E] Adult/Erotica"}
     - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
     - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
     - {id: 435, cat: Books/EBook, desc: "[E] Business"}
     - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
     - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
-    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller/Mystery"}
+    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller"}
     - {id: 480, cat: Books/EBook, desc: "[E] Fantasy"}
     - {id: 490, cat: Books/EBook, desc: "[E] Fantasy-Youth"}
     - {id: 500, cat: Books/EBook, desc: "[E] General Fiction"}
@@ -62,7 +62,7 @@ caps:
     - {id: 540, cat: Books/EBook, desc: "[E] Humor (Comedy)"}
     - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
     - {id: 565, cat: Books/EBook, desc: "[E] LitRPG"}
-    - {id: 570, cat: Books/EBook, desc: "[E] Magazines - all"}
+    - {id: 570, cat: Books/EBook, desc: "[E] Mystery"}
     - {id: 580, cat: Books/EBook, desc: "[E] Non-Fiction"}
     - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
     - {id: 600, cat: Books/EBook, desc: "[E] Reference/Educational"}
@@ -129,9 +129,9 @@ search:
     selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
-    category:
-      selector: div[data-catid]
-      attribute: data-catid
+    categorydesc:
+      selector: div[data-tid] > img
+      attribute: alt
     title:
       selector: a[href^="details.php?id="]
       remove: span
