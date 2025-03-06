@@ -321,6 +321,7 @@ Prior versions of Jackett are no longer supported.
  * cyanbug (大青虫)
  * DANISH BYTES
  * Dark-Shadow
+ * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
  * DesiTorrents [![(invite needed)][inviteneeded]](#)
