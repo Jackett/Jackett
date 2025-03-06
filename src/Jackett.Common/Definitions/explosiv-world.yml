@@ -1,69 +1,63 @@
 ---
-id: torrent-explosiv
-name: Torrent-Explosiv
-description: "Torrent-Explosiv (T-E) is a German Private Torrent Tracker for TV / MOVIES / GENERAL"
+id: explosiv-world
+replaces:
+  - torrent-explosiv
+name: Explosiv-World
+description: "Explosiv-World (E-W) is a German Private Torrent Tracker for TV / MOVIES / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://torrent-explosiv.me/
+  - https://explosiv-world.biz/
 legacylinks:
   - https://torrent-explosiv.eu/
   - https://torrent-explosiv.hopto.org/
+  - https://torrent-explosiv.me/
 
 caps:
   categorymappings:
     - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}
     - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
     - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
-    - {id: 148, cat: Movies/DVD, desc: "Filme > DVD/HD2DVD"}
-    - {id: 151, cat: Movies/Other, desc: "Filme > Anime"}
-    - {id: 138, cat: Movies/UHD, desc: "Filme > Pack UHD"}
-    - {id: 140, cat: Movies/HD, desc: "Filme > Pack HD"}
-    - {id: 147, cat: Movies/SD, desc: "Filme > Pack SD"}
+    - {id: 145, cat: Movies/UHD, desc: "Filme > Pack UHD"}
+    - {id: 138, cat: Movies/HD, desc: "Filme > Pack HD"}
+    - {id: 140, cat: Movies/SD, desc: "Filme > Pack SD"}
+    - {id: 143, cat: Movies/Other, desc: "Filme > Anime"}
     - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
     - {id: 57, cat: TV/HD, desc: "Serien > HD"}
     - {id: 60, cat: TV/SD, desc: "Serien > SD"}
-    - {id: 152, cat: TV/Anime, desc: "Serien > Anime"}
-    - {id: 59, cat: TV/UHD, desc: "Serien > Pack UHD"}
-    - {id: 149, cat: TV/HD, desc: "Serien > Pack HD"}
-    - {id: 150, cat: TV/SD, desc: "Serien > Pack SD"}
+    - {id: 144, cat: TV/Anime, desc: "Serien > Anime"}
+    - {id: 146, cat: TV/UHD, desc: "Serien > Pack UHD/HD"}
+    - {id: 59, cat: TV/SD, desc: "Serien > Pack SD"}
     - {id: 110, cat: Audio, desc: "Audio > Alben"}
-    - {id: 48, cat: Audio, desc: "Audio > Sampler/OST"}
-    - {id: 155, cat: Audio, desc: "Audio > Mixe"}
-    - {id: 63, cat: Audio, desc: "Audio > Charts/Singles"}
-    - {id: 153, cat: Audio/Lossless, desc: "Audio > FLAC"}
+    - {id: 148, cat: Audio, desc: "Audio > Mixe"}
+    - {id: 149, cat: Audio, desc: "Audio > Sampler/OST"}
+    - {id: 150, cat: Audio, desc: "Audio > Charts/Singles"}
+    - {id: 48, cat: Audio/Lossless, desc: "Audio > Flac"}
     - {id: 52, cat: Audio/MP3, desc: "Audio > Pack mp3"}
-    - {id: 154, cat: Audio/Lossless, desc: "Audio > Pack FLAC"}
+    - {id: 147, cat: Audio/Lossless, desc: "Audio > Pack Flac"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audio > Hörbuch"}
     - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
-    - {id: 162, cat: Audio/Audiobook, desc: "Audio > ABooks"}
-    - {id: 12, cat: PC/0day, desc: "Software > Windows"}
-    - {id: 125, cat: PC/Mac, desc: "Software > Mac-OSX"}
-    - {id: 11, cat: PC/Mobile-Other, desc: "Software > Mobil"}
-    - {id: 141, cat: PC/Mobile-Other, desc: "Software > Other"}
     - {id: 17, cat: PC/Games, desc: "Spiele > PC"}
-    - {id: 24, cat: Console, desc: "Spiele > Konsolen"}
+    - {id: 24, cat: Console, desc: "Spiele > Konsole"}
     - {id: 126, cat: Console/Other, desc: "Spiele > Mobil"}
     - {id: 121, cat: Console, desc: "Spiele > andere"}
-    - {id: 159, cat: TV/Sport, desc: "Sport > UHD"}
-    - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
+    - {id: 12, cat: PC/0day, desc: "Software > Windows"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "Software > Mobil"}
+    - {id: 141, cat: PC/Mobile-Other, desc: "Software > andere"}
+    - {id: 61, cat: TV/Sport, desc: "Sport > UHD/HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
-    - {id: 156, cat: TV/Documentary, desc: "Doku > UHD"}
-    - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku > UHD/HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
-    - {id: 123, cat: TV/Documentary, desc: "Doku > Pack UHD"}
-    - {id: 157, cat: TV/Documentary, desc: "Doku > Pack HD"}
-    - {id: 158, cat: TV/Documentary, desc: "Doku > Pack SD"}
-    - {id: 160, cat: XXX/UHD, desc: "XXX > UHD"}
+    - {id: 123, cat: TV/Documentary, desc: "Doku > Pack UHD/HD"}
+    - {id: 151, cat: TV/Documentary, desc: "Doku > Pack SD"}
+    - {id: 96, cat: Books/Other, desc: "ePaper > Zeitungen"}
+    - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
+    - {id: 137, cat: Books/Mags, desc: "ePaper > Magazine"}
     - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
     - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
-    - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
-    - {id: 161, cat: XXX/Other, desc: "XXX > ePaper"}
-    - {id: 163, cat: Books/Mags, desc: "ePaper > Magazine"}
-    - {id: 96, cat: Books/Other, desc: "ePaper > Zeitungen"}
-    - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
-    - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX > andere"}
 
   modes:
     search: [q]
@@ -76,7 +70,7 @@ settings:
   - name: info_password
     type: info
     label: About Password Expiry
-    default: "T-E has an <b>8 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://torrent-explosiv.me/login.php\" target=\"_blank\">Torrent-Explosiv</a>, and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
+    default: "E-W has an <b>8 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://explosiv-world.biz/login.php\" target=\"_blank\">Explosiv-World</a>, and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
   - name: username
     type: text
     label: Username
@@ -89,7 +83,7 @@ settings:
     default: false
   - name: info_free
     type: info
-    label: About OnlyUpload at T-E
+    label: About OnlyUpload at E-W
     default: "OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech)."
 
 login:
@@ -107,7 +101,7 @@ login:
 
 search:
   paths:
-    # https://torrent-explosiv.me/torrents_search.php?ajax=true&search=&page=1&visible=no&free=no&c114=1&c32=1
+    # https://explosiv-world.biz/torrents_search.php?ajax=true&search=&page=1
     - path: torrents_search.php
       response:
         type: json

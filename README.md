@@ -340,6 +340,7 @@ Prior versions of Jackett are no longer supported.
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
+ * Explosiv-World
  * ExtremeBits
  * F1Carreras
  * FANO.IN [![(invite needed)][inviteneeded]](#)
@@ -579,7 +580,6 @@ Prior versions of Jackett are no longer supported.
  * Torrent Heaven (Dutch)
  * Torrent Network (TN)
  * Torrent Trader [![(invite needed)][inviteneeded]](#)
- * Torrent-Explosiv
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
  * Torrent.LT
