@@ -356,6 +356,7 @@ namespace Jackett.Updater
                 "Definitions/cryptichaven.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
+                "Definitions/dajiao.yml",
                 "Definitions/danishbytes.yml", // migrated to C#
                 "Definitions/dariustracker.yml",
                 "Definitions/darktracker.yml",
