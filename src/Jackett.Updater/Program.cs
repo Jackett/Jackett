@@ -733,6 +733,7 @@ namespace Jackett.Updater
                 "Definitions/torrentsurf.yml", // renamed xtremebytes #9951
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
+                "Definitions/torrentview.yml",
                 "Definitions/torrentwal.yml",
                 "Definitions/torrentwhiz.yml",
                 "Definitions/torrentwtf.yml",
