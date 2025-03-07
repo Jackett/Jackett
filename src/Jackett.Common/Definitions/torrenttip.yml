@@ -1,0 +1,99 @@
+---
+id: torrenttip
+name: Torrenttip
+description: "Torrenttip is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+followredirect: true
+links:
+  - https://Torrenttip166.com/
+legacylinks:
+  - https://Torrenttip165.com/
+
+caps:
+  categorymappings:
+    - {id: "한국영화", cat: Movies, desc: "한국영화 (Korean Movies)"}
+    - {id: "해외영화", cat: Movies/Foreign, desc: "해외영화 (Foreign Movies)"}
+    - {id: "해외드라마", cat: TV, desc: "해외드라마 (Foreign TV)"}
+    - {id: "한국드라마", cat: TV, desc: "한국드라마 (Korean TV)"}
+    - {id: "넷플릭스 영화", cat: Movies, desc: "넷플릭스 영화 (Netflix Movies)"}
+    - {id: "넷플릭스 시리즈", cat: TV, desc: "넷플릭스 시리즈 (Netflix TV)"}
+    - {id: "예능·오락", cat: Audio/Video, desc: "예능·오락 (Entertainment)"}
+    - {id: "다큐·교양", cat: TV/Documentary, desc: "다큐·교양 (Documentary)"}
+    - {id: "스포츠", cat: TV/Sport, desc: "스포츠 (Sport)"}
+    - {id: "음악", cat: Audio, desc: "음악 (Music)"}
+    - {id: "유아·어린이", cat: TV, desc: "유아·어린이 (Children)"}
+    - {id: "유튜브", cat: TV, desc: "유튜브 (Youtube)"}
+    - {id: "애니메이션", cat: TV/Anime, desc: "애니메이션 (Anime)"}
+    - {id: "만화", cat: Books/Comics, desc: "만화 (Manga)"}
+    - {id: "게임", cat: Console, desc: "게임 (Games)"}
+    - {id: "모바일", cat: PC/Mobile-Other, desc: "모바일 (Mobile)"}
+    - {id: "유틸리티", cat: PC, desc: "유틸리티 (Software)"}
+    - {id: "전자북·강좌", cat: Books/EBook, desc: "전자북·강좌 (EBooks)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings: []
+
+download:
+  infohash:
+    hash:
+      selector: div.p-2:has(i.fa-magnet)
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: h1
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # https://torrenttip166.com/search?q=2025&sort=time
+    - path: search
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sort: time
+
+  rows:
+    selector: ul.page-list > li:has(a[href$=".html"][title])
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: div:nth-child(2)
+      filters:
+        - name: regexp
+          args: "\\[ (.+?) \\]"
+    title:
+      selector: a[href$=".html"][title]
+      attribute: title
+    details:
+      selector: a[href$=".html"][title]
+      attribute: href
+    download:
+      selector: a[href$=".html"][title]
+      attribute: href
+    date:
+      selector: div:nth-child(3)
+      filters:
+        - name: dateparse
+          args: "yy/MM/dd"
+    size:
+      text: 512MB
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
