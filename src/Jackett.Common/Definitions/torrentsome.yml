@@ -1,0 +1,93 @@
+---
+id: torrentsome
+name: Torrentsome
+description: "Torrentsome is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+followredirect: true
+# to fetch current domain use https://tzip.top/
+links:
+  - https://torrentsome185.com/
+legacylinks:
+  - https://torrentsome184.com/
+
+caps:
+  categorymappings:
+    - {id: "해외영화", cat: Movies/Foreign, desc: "해외영화 (Foreign Movies)"}
+    - {id: "한국영화", cat: Movies, desc: "한국영화 (Korean Movies)"}
+    - {id: "해외드라마", cat: TV, desc: "해외드라마 (Foreign TV)"}
+    - {id: "한국드라마", cat: TV, desc: "한국드라마 (Korean TV)"}
+    - {id: "예능·오락", cat: Audio/Video, desc: "예능·오락 (Entertainment)"}
+    - {id: "다큐·교양", cat: TV/Documentary, desc: "다큐·교양 (Documentary)"}
+    - {id: "음악", cat: Audio, desc: "음악 (Music)"}
+    - {id: "유아·어린이", cat: TV, desc: "유아·어린이 (Children)"}
+    - {id: "애니메이션", cat: TV/Anime, desc: "애니메이션 (Anime)"}
+    - {id: "만화", cat: Books/Comics, desc: "만화 (Manga)"}
+    - {id: "넷플릭스 영화", cat: Movies, desc: "넷플릭스 영화 (Netflix Movies)"}
+    - {id: "넷플릭스 시리즈", cat: TV, desc: "넷플릭스 시리즈 (Netflix TV)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings: []
+
+download:
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: h1.text-base
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # https://torrentsome185.com/search/index?keywords=2025&search_type=0&order=time
+    - path: search/index
+  inputs:
+    keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search_type: 0
+    order: time
+
+  rows:
+    selector: div.topic-item:not(:has(div:nth-child(3):contains("-")))
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="/v/"] > span
+    title:
+      selector: a[href^="/v/"]
+      attribute: title
+    details:
+      selector: a[href^="/v/"]
+      attribute: href
+    download:
+      selector: a[href^="/v/"]
+      attribute: href
+    size:
+      selector: div:nth-last-child(2)
+    date:
+      selector: div:last-child
+      filters:
+        - name: dateparse
+          args: "MM.dd"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
