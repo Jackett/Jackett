@@ -142,7 +142,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentSir (토렌트썰)
  * Torrentsome (토렌트썸)
  * torrentssg (토렌트쓱)
- * Torrenttip
+ * Torrenttip (토렌트팁)
  * Torrentz2nz
  * TrahT
  * truPornolabs

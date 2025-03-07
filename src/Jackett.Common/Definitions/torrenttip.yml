@@ -1,11 +1,12 @@
 ---
 id: torrenttip
 name: Torrenttip
-description: "Torrenttip is a Public KOREAN tracker for Korean media."
+description: "Torrenttip (토렌트팁) is a Public KOREAN tracker for Korean media."
 language: ko-KR
 type: public
 encoding: UTF-8
 followredirect: true
+# to fetch current domain use https://tzip.top/
 links:
   - https://Torrenttip166.com/
 legacylinks:
