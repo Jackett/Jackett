@@ -6,6 +6,7 @@ language: ko-KR
 type: public
 encoding: UTF-8
 followredirect: true
+requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
   - https://torrentsome185.com/
@@ -53,6 +54,14 @@ search:
   paths:
     # https://torrentsome185.com/search/index?keywords=2025&search_type=0&order=time
     - path: search/index
+      inputs:
+        page: 1
+    - path: search/index
+      inputs:
+        page: 2
+    - path: search/index
+      inputs:
+        page: 3
   inputs:
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     search_type: 0
