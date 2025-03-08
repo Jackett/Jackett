@@ -38,7 +38,7 @@ caps:
     - {id: 147, cat: Audio/Lossless, desc: "Audio > Pack Flac"}
     - {id: 63, cat: Audio/Audiobook, desc: "Audio > Hörbuch"}
     - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
-    - {id: 17, cat: PC/Games, desc: "Spiele > PC"}
+    - {id: 17, cat: PC/Games, desc: "Spiele > Windows"}
     - {id: 24, cat: Console, desc: "Spiele > Konsole"}
     - {id: 126, cat: Console/Other, desc: "Spiele > Mobil"}
     - {id: 121, cat: Console, desc: "Spiele > andere"}
