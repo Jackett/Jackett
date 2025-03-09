@@ -437,6 +437,7 @@ Prior versions of Jackett are no longer supported.
  * Le-Cinephile
  * LearnBits
  * LearnFlakes
+ * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
  * Libble
