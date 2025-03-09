@@ -15,6 +15,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Games"}
     - {id: 5, cat: PC, desc: "Software"}
+    - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
