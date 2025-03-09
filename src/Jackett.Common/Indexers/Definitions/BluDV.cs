@@ -7,6 +7,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -21,8 +22,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "BluDV";
         public override string SiteLink { get; protected set; } = "https://bludv.xyz/";
 
-        public BluDV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
-            : base(configService, wc, l, ps, cs)
+        public BluDV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
+            : base(configService, wc, l, ps, cm)
         {
             configData.AddDynamic(
                 "flaresolverr",
