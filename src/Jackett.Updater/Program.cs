@@ -508,7 +508,6 @@ namespace Jackett.Updater
                 "Definitions/latinop2p.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
-                "Definitions/leech24.yml", // switch to *-API #12553
                 "Definitions/leech24-api.yml",
                 "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
