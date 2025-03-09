@@ -37,7 +37,7 @@ caps:
     - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
     - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
     - {id: 220, cat: Audio/Audiobook, desc: "Science"}
-    - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
+    - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction"}
     - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
     - {id: 265, cat: Audio/Audiobook, desc: "Sports/Fitness"}
     - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
@@ -133,8 +133,7 @@ search:
       selector: div[data-tid] > img
       attribute: alt
     title:
-      selector: a[href^="details.php?id="]
-      remove: span
+      selector: a[href^="details.php?id="] span[id^="torrent_title"]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
