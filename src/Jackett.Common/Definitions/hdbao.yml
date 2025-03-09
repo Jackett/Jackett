@@ -86,7 +86,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:contains("登录失败！")
+    - selector: td.embedded:contains("失败")
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -101,7 +101,7 @@ search:
     incldead: 0
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0: title, 1: description, 3: uploader, 4: imdburl (4 does not appear to work)
-    search_area: "0"
+    search_area: 0
     # 0: AND, 2: exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -182,4 +182,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.9.0 2025-02-06
+# NexusPHP v1.9.0 2025-01-19
