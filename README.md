@@ -534,7 +534,7 @@ Prior versions of Jackett are no longer supported.
  * SAMARITANO
  * SATClubbing
  * SceneHD [![(invite needed)][inviteneeded]](#)
- * SceneRush
+ * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
  * Secret Cinema
  * SeedFile
