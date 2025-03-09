@@ -34,6 +34,8 @@ caps:
     - {id: Other, cat: Other, desc: "Other"}
     - {id: Books, cat: Books, desc: "Books"}
     - {id: XXX, cat: XXX, desc: "XXX"}
+    - {id: TV shows, cat: TV, desc: "TV shows"}
+    - {id: E-books, cat: Books/EBook, desc: "E-books"}
 
   modes:
     search: [q]
