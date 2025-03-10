@@ -1,56 +1,61 @@
 ---
-id: vault-network
-name: Vault network
-description: "Vault network is a Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+id: letseed
+name: LetSeed
+description: "LetSeed is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+# The HTML says `lang="en-US"` but the web UI defaults to Turkish, the categories are
+# always in Turkish, and there are more UI elements when using the Turkish UI:
+language: tr-TR
 type: private
 encoding: UTF-8
 links:
-  - https://vault-network.net/
+  - https://letseed.org/
 
 caps:
   categorymappings:
-    - {id: 5, cat: PC/Mobile-Android, desc: "Apps Android"}
-    - {id: 4, cat: PC/Mac, desc: "Apps Mac"}
-    - {id: 3, cat: PC/0day, desc: "Apps Windows"}
-    - {id: 35, cat: Audio, desc: "Audio Boxsets"}
-    - {id: 33, cat: Audio, desc: "Audio Discography"}
-    - {id: 18, cat: Audio, desc: "Audio DMC"}
-    - {id: 15, cat: Audio/Lossless, desc: "Audio flac"}
-    - {id: 19, cat: Audio, desc: "Audio Mastermix"}
-    - {id: 14, cat: Audio/MP3, desc: "Audio mp3"}
-    - {id: 16, cat: Audio, desc: "Audio Packs / Weekly Packs"}
-    - {id: 17, cat: Audio/Video, desc: "Audio Video"}
-    - {id: 31, cat: Audio/Lossless, desc: "Audio WAV"}
-    - {id: 23, cat: Audio/Audiobook, desc: "Books Audio Books"}
-    - {id: 24, cat: Books/EBook, desc: "Books eBooks"}
-    - {id: 25, cat: Books/Mags, desc: "Books Magazines"}
-    - {id: 37, cat: Other, desc: "Christmas"}
-    - {id: 38, cat: Audio, desc: "Christmas Audio"}
-    - {id: 39, cat: Movies, desc: "Christmas Movie"}
-    - {id: 40, cat: TV, desc: "Christmas TV"}
-    - {id: 29, cat: Console, desc: "Games"}
-    - {id: 42, cat: PC/Games, desc: "Games PC"}
-    - {id: 43, cat: Console/Wii, desc: "Games Wii"}
-    - {id: 28, cat: Audio, desc: "Karaoke"}
-    - {id: 7, cat: Movies/HD, desc: "Movie 1080p"}
-    - {id: 6, cat: Movies/UHD, desc: "Movie 4K"}
-    - {id: 8, cat: Movies/HD, desc: "Movie 720p"}
-    - {id: 11, cat: Movies, desc: "Movie Animated"}
-    - {id: 12, cat: Movies, desc: "Movie Boxsets"}
-    - {id: 10, cat: Movies/SD, desc: "Movie Cam/TS"}
-    - {id: 13, cat: TV/Documentary, desc: "Movie Documentaries"}
-    - {id: 9, cat: Movies/SD, desc: "Movie SD"}
-    - {id: 30, cat: TV/Sport, desc: "Sport"}
-    - {id: 21, cat: TV/Documentary, desc: "TV Documentaries"}
-    - {id: 20, cat: TV, desc: "TV Episodes"}
-    - {id: 22, cat: TV, desc: "TV Packs"}
-    - {id: 27, cat: Other, desc: "VIP"}
+    - {id: 3, cat: TV, desc: "Diziler"}
+    - {id: 5, cat: TV/Foreign, desc: "Yabancı Diziler"}
+    - {id: 6, cat: TV/Other, desc: "Yerli Dizi Boxset"}
+    - {id: 4, cat: TV/Other, desc: "Yerli Diziler"}
+    - {id: 44, cat: Books, desc: "Eğitim"}
+    - {id: 46, cat: Books/EBook, desc: "E-Book"}
+    - {id: 45, cat: Books/Other, desc: "Eğitim"}
+    - {id: 1, cat: Movies, desc: "Filmler"}
+    - {id: 15, cat: Movies/UHD, desc: "4K"}
+    - {id: 2, cat: Movies/Other, desc: "Animasyonlar"}
+    - {id: 16, cat: Movies/Other, desc: "BoxSet"}
+    - {id: 14, cat: Movies/Foreign, desc: "Yabancı Yapımlar"}
+    - {id: 13, cat: Movies/Other, desc: "Yerli Yapımlar"}
+    - {id: 32, cat: Audio, desc: "Müzik"}
+    - {id: 35, cat: Audio/Other, desc: "Diskografi"}
+    - {id: 34, cat: Audio/Foreign, desc: "Yabancı"}
+    - {id: 33, cat: Audio/Other, desc: "Yerli"}
+    - {id: 28, cat: PC/Games, desc: "Oyun"}
+    - {id: 29, cat: PC/Games, desc: "PC"}
+    - {id: 31, cat: Console/PS4, desc: "Playstation"}
+    - {id: 30, cat: Console/XBox, desc: "XBOX"}
+    - {id: 19, cat: Other, desc: "Platform Sunumları"}
+    - {id: 21, cat: Other, desc: "AMZN"}
+    - {id: 23, cat: Other, desc: "BluTv"}
+    - {id: 22, cat: Other, desc: "DSNP"}
+    - {id: 24, cat: Other, desc: "Exxen"}
+    - {id: 26, cat: Other, desc: "GAIN"}
+    - {id: 20, cat: Other, desc: "Netflix"}
+    - {id: 42, cat: Other, desc: "Tabii"}
+    - {id: 25, cat: Other, desc: "TOD"}
+    - {id: 27, cat: Other, desc: "TV+"}
+    - {id: 36, cat: PC, desc: "Program"}
+    - {id: 37, cat: PC, desc: "İşletim Sistemi"}
+    - {id: 38, cat: PC/Mac, desc: "Mac"}
+    - {id: 39, cat: PC, desc: "Windows"}
+    - {id: 40, cat: TV/Sport, desc: "Spor"}
+    - {id: 41, cat: TV/Sport, desc: "Spor Sunumları"}
+    - {id: 17, cat: Other, desc: "VIP Sunumlar"}
+    - {id: 18, cat: Other, desc: "VIP Sunumlar"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -84,17 +89,61 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The default is <i>20</i>.
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The Default is <i>30</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep records updated regularly, all inactive accounts will be deleted after 60 days of inactivity."
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img#regimage
+    input: imagestring
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     logout: ""
   error:
-    - selector: table:contains("error has occured")
+    - selector: >-
+        #main table:has(td:contains("Bir hata oluştu"))
+    # Sometimes the login form POST gets a proper `302.Redirect`, but sometimes it gets
+    # a `http-equiv="refresh"` "redirect" instead:
+    - selector: >-
+        [http-equiv="refresh"][content*="/login.php?error=1"]
+      message:
+        # ERROR: Invalid username or password! Please try again or click here to reset
+        # your password.
+        text: >-
+          HATA: Geçersiz kullanıcı adı veya şifre! Lütfen tekrar eneyin veya
+          buraya tıklayarak şifrenizi sıfırlayınız.
+    - selector: >-
+        [http-equiv="refresh"][content*="/login.php?error=2"]
+      message:
+        # ERROR: The image verification code you entered was not approved.
+        text: >-
+          HATA: Girdiğiniz resim doğrulama kodu onaylanmadı.
+    - selector: >-
+        [http-equiv="refresh"][content*="/login.php?error=3"]
+      message:
+        # ERROR: Please do not leave required fields blank!
+        text: >-
+          HATA: Lütfen gerekli alanları boş bırakmayınız!
+    - selector: >-
+        [http-equiv="refresh"][content*="/login.php?error=4"]
+      message:
+        # ERROR: Username or password is incorrect!
+        text: >-
+          HATA: Kullanıcı adı veya şifre hatalı!
+    - selector: >-
+        [http-equiv="refresh"][content*="/login.php?error="]
+      message:
+        # ERROR: An error occurred!
+        text: >-
+          HATA: Bir hata oluştu!
   test:
     path: browse.php
     selector: a[href*="/logout.php"]
@@ -104,52 +153,60 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
-  selectors:
-    - selector: a[href*="download.php?id="]
-      attribute: href
-
+      torrentid: >-
+        {{ re_replace .DownloadUri.AbsolutePath "/download-torrent-([0-9]+).*" "$1"}}
 search:
   paths:
     - path: browse.php
+      method: post
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "%"]
   inputs:
     do: search
-    keywords: "{{ .Keywords }}"
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: t_name
-    category: 0 # multi cat search not supported
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    # does not support multi category searching so defaulting to all.
+    category: 0
     # yes, no
     include_dead_torrents: yes
     sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
     order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table.sortable tr:has(a[href*=\"/download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="/browse.php?category="]
+      selector: a[href*="/torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: "/torrent-category-([0-9]+)"
     title_default:
-      selector: a[href*="/details.php?id="]
+      # The torrent name is usually abbreviated:
+      selector: a[href*="/torrent-details-"]
     title:
+      # While still abbreviated, is usually longer than the default:
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="/details.php?id="]
+      selector: a[href*="/torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="/details.php?id="]
+      selector: a[href*="/download-torrent-"]
       attribute: href
+    # TODO: The Prowlarr search response JSON includes `fileName:` keys that use elided
+    # titles that end with `....torrent` but I don't see where that's coming from. The
+    # indexer download URL is correct and when I visit that URL in the browser, the
+    # response headers seem more correct and result in a more correct default file name
+    # in the OS save modal dialog:
+    #     content-disposition: attachment;
+    #     filename=foo-movie-1970-bluray-1080p-dts-x264.torrent_[letseed_org].torrent;
     poster:
-      selector: div.tooltip-content > img
+      selector: img[src*="/torrents/images/"]
       attribute: src
     date:
       selector: td:nth-child(2)
@@ -169,15 +226,13 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        img[src$="freedownload.gif"]: 0
-        img[src$="silverdownload.gif"]: 0.5
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
         "*": 1
     uploadvolumefactor:
       case:
-        img[src$="x2.gif"]: 2
+        img[src$="/x2.gif"]: 2
         "*": 1
-    minimumratio:
-      text: 1.0
     minimumseedtime:
       # 1 day (as seconds = 1 x 24 x 60 x 60)
       text: 86400
