@@ -1,0 +1,184 @@
+---
+id: vault-network
+name: Vault network
+description: "Vault network is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://vault-network.net/
+
+caps:
+  categorymappings:
+    - {id: 5, cat: PC/Mobile-Android, desc: "Apps Android"}
+    - {id: 4, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: 3, cat: PC/0day, desc: "Apps Windows"}
+    - {id: 35, cat: Audio, desc: "Audio Boxsets"}
+    - {id: 33, cat: Audio, desc: "Audio Discography"}
+    - {id: 18, cat: Audio, desc: "Audio DMC"}
+    - {id: 15, cat: Audio/Lossless, desc: "Audio flac"}
+    - {id: 19, cat: Audio, desc: "Audio Mastermix"}
+    - {id: 14, cat: Audio/MP3, desc: "Audio mp3"}
+    - {id: 16, cat: Audio, desc: "Audio Packs / Weekly Packs"}
+    - {id: 17, cat: Audio/Video, desc: "Audio Video"}
+    - {id: 31, cat: Audio/Lossless, desc: "Audio WAV"}
+    - {id: 23, cat: Audio/Audiobook, desc: "Books Audio Books"}
+    - {id: 24, cat: Books/EBook, desc: "Books eBooks"}
+    - {id: 25, cat: Books/Mags, desc: "Books Magazines"}
+    - {id: 37, cat: Other, desc: "Christmas"}
+    - {id: 38, cat: Audio, desc: "Christmas Audio"}
+    - {id: 39, cat: Movies, desc: "Christmas Movie"}
+    - {id: 40, cat: TV, desc: "Christmas TV"}
+    - {id: 29, cat: Console, desc: "Games"}
+    - {id: 42, cat: PC/Games, desc: "Games PC"}
+    - {id: 43, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 28, cat: Audio, desc: "Karaoke"}
+    - {id: 7, cat: Movies/HD, desc: "Movie 1080p"}
+    - {id: 6, cat: Movies/UHD, desc: "Movie 4K"}
+    - {id: 8, cat: Movies/HD, desc: "Movie 720p"}
+    - {id: 11, cat: Movies, desc: "Movie Animated"}
+    - {id: 12, cat: Movies, desc: "Movie Boxsets"}
+    - {id: 10, cat: Movies/SD, desc: "Movie Cam/TS"}
+    - {id: 13, cat: TV/Documentary, desc: "Movie Documentaries"}
+    - {id: 9, cat: Movies/SD, desc: "Movie SD"}
+    - {id: 30, cat: TV/Sport, desc: "Sport"}
+    - {id: 21, cat: TV/Documentary, desc: "TV Documentaries"}
+    - {id: 20, cat: TV, desc: "TV Episodes"}
+    - {id: 22, cat: TV, desc: "TV Packs"}
+    - {id: 27, cat: Other, desc: "VIP"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The default is <i>20</i>.
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+  error:
+    - selector: table:contains("error has occured")
+  test:
+    path: browse.php
+    selector: a[href*="/logout.php"]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+  selectors:
+    - selector: a[href*="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "%"]
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: t_name
+    category: 0 # multi cat search not supported
+    # yes, no
+    include_dead_torrents: yes
+    sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
+    order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
+
+  rows:
+    selector: "table.sortable tr:has(a[href*=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href*="/browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      selector: a[href*="/details.php?id="]
+    title:
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    poster:
+      selector: div.tooltip-content > img
+      attribute: src
+    date:
+      selector: td:nth-child(2)
+      # auto adjusted by site account profile
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img[src$="freedownload.gif"]: 0
+        img[src$="silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="x2.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# TS Special Edition v.8.0
