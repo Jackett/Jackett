@@ -108,11 +108,15 @@ login:
     password: "{{ .Config.password }}"
     logout: ""
   error:
-    - selector: '[http-equiv="refresh"][content*="/login.php"]'
-      # TODO: This tracker uses `http-equiv="refresh"` for all login form submissions,
-      # valid or invalid, and uses the `error=#` query parameter to tell the subsequent
-      # login form what error message to display. How should this definition yield a
-      # useful error message?
+    - selector: table:has(a[href*="login.php?error=1"])
+      message:
+        text: "ERROR: Incorrect username!"
+    - selector: table:has(a[href*="login.php?error=4"])
+      message:
+        text: "ERROR: Incorrect password!"
+    - selector: table:has(a[href*="login.php?error="])
+      message:
+        text: "ERROR: Something went wrong during login!"
   test:
     path: browse.php
     selector: a[href*="/logout.php"]
