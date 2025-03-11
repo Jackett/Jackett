@@ -84,15 +84,15 @@ search:
       filters:
         - name: fuzzytime
     date_month:
-      # 7 Jul
-      # 25 Dec
+      # 7 Jul 25
+      # 25 Dec 25
       selector: td:nth-child(2):not(:contains("day"))
       optional: true
       filters:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "d MMM zzz"
+          args: "d MMM yy zzz"
     date:
       text: "{{ if or .Result.date_month .Result.date_day }}{{ or .Result.date_month .Result.date_day }}{{ else }}now{{ end }}"
     size:
