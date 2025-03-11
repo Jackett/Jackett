@@ -118,12 +118,12 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # title, descr
+    # title, descr, series, additional_info, author, author, uploader
     searchin: title
-    # 0 active, 1 incldead, 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead, 3 My Unsatisfied Torrents, 4 My Watch List, 5 My Uploads
     incldead: 1
-    # 1 onlyfree, null all
-    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # 0 All Torrents, 1 Only Free Torrents
+    only_free: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
 
   rows:
     selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
@@ -133,7 +133,7 @@ search:
       selector: div[data-tid] > img
       attribute: alt
     title:
-      selector: a[href^="details.php?id="] span[id^="torrent_title"]
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
