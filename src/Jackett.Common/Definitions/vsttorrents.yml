@@ -47,10 +47,16 @@ search:
     download:
       selector: .entry-title > a
       attribute: href
+    poster:
+      selector: .mg-post-thumb
+      attribute: data-bg-image
+      filters:
+        - name: regexp
+          args: url\('(.+?)'\)
     description:
-      selector: .entry-excerpt
+      selector: .mg-content
     date:
-      selector: .entry-meta >  a.post-date
+      selector: .mg-blog-date
     size:
       text: "512 MB"
     seeders:
