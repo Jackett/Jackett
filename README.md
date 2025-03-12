@@ -406,6 +406,7 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
+ * Phoenix Project [![(invite needed)][inviteneeded]](#)
  * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
  * ilolicon PT
  * ImmortalSeed (iS)
