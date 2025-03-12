@@ -406,7 +406,6 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
- * Phoenix Project [![(invite needed)][inviteneeded]](#)
  * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
  * ilolicon PT
  * ImmortalSeed (iS)
@@ -490,6 +489,7 @@ Prior versions of Jackett are no longer supported.
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
  * Peers.FM
+ * Phoenix Project [![(invite needed)][inviteneeded]](#)
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
