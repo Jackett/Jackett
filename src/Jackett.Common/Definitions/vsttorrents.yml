@@ -48,15 +48,12 @@ search:
       selector: .entry-title > a
       attribute: href
     poster:
-      selector: .mg-post-thumb
-      attribute: data-bg-image
-      filters:
-        - name: regexp
-          args: url\('(.+?)'\)
+      selector: img[data-src]
+      attribute: data-src
     description:
-      selector: .mg-content
+      selector: .entry-excerpt > p
     date:
-      selector: .mg-blog-date
+      selector: .post-date
     size:
       text: "512 MB"
     seeders:
