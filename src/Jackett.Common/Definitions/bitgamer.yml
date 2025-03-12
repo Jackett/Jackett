@@ -1,0 +1,316 @@
+---
+id: kinozal-magnet
+name: Kinozal (M)
+description: "Kinozal is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / MUSIC. This indexer uses magnet links."
+language: ru-RU
+type: semi-private
+encoding: windows-1251
+links:
+  - https://kinozal.tv/
+  - https://kinozal.guru/
+  - https://kinozal-guru.appspot.com/
+legacylinks:
+  - https://kinozal-tv.appspot.com/
+  - http://kinozal.tv/
+
+caps:
+  categorymappings:
+    # TV
+    - {id: 1001, cat: TV, desc: "All TV Shows"}
+    - {id: 45, cat: TV, desc: "TV Series - Russian"}
+    - {id: 46, cat: TV, desc: "TV Series"}
+    # Movies
+    - {id: 1002, cat: Movies, desc: "All Movies"}
+    - {id: 8, cat: Movies, desc: "Movies - Comedy"}
+    - {id: 6, cat: Movies, desc: "Movies - Action / War"}
+    - {id: 15, cat: Movies, desc: "Movies - Thriller / Detective"}
+    - {id: 17, cat: Movies, desc: "Movies - Drama"}
+    - {id: 35, cat: Movies, desc: "Movies - Melodrama"}
+    - {id: 39, cat: Movies, desc: "Movies - Indian"}
+    - {id: 13, cat: Movies, desc: "Movies - Science Fiction"}
+    - {id: 14, cat: Movies, desc: "Movies - Fantasy"}
+    - {id: 24, cat: Movies, desc: "Movies - Horror / Mystery"}
+    - {id: 11, cat: Movies, desc: "Movies - Adventure"}
+    - {id: 10, cat: Movies, desc: "Movies - Russian"}
+    - {id: 9, cat: Movies, desc: "Movies - Historical"}
+    - {id: 47, cat: Movies, desc: "Movies - Asian"}
+    - {id: 18, cat: Movies, desc: "Movies - Documentaries"}
+    - {id: 37, cat: Movies, desc: "Movies - Sport"}
+    - {id: 12, cat: Movies, desc: "Movies - Kids / Family"}
+    - {id: 7, cat: Movies, desc: "Movies - Classic"}
+    - {id: 48, cat: Movies, desc: "Movies - Concerts"}
+    - {id: 49, cat: Movies, desc: "Movies - Shows / TV Shows"}
+    - {id: 50, cat: Movies, desc: "Movies - TV Show Mir"}
+    - {id: 38, cat: Movies, desc: "Movies - Theatre, Opera, Ballet"}
+    - {id: 16, cat: Movies, desc: "Movies - Erotica"}
+    # Cartoons
+    - {id: 1003, cat: TV, desc: "All Cartoons"}
+    - {id: 1003, cat: Movies, desc: "All Cartoons"}
+    - {id: 21, cat: TV, desc: "Cartoons"}
+    - {id: 21, cat: Movies, desc: "Cartoons"}
+    - {id: 22, cat: TV, desc: "Cartoons - Russian"}
+    - {id: 22, cat: Movies, desc: "Cartoons - Russian"}
+    - {id: 20, cat: TV/Anime, desc: "Cartoons - Anime"}
+    - {id: 20, cat: Movies/Other, desc: "Cartoons - Anime"}
+    # Music
+    - {id: 1004, cat: Audio, desc: "All Music"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Audio, desc: "Music - Russian"}
+    - {id: 5, cat: Audio, desc: "Music - Collections"}
+    - {id: 42, cat: Audio, desc: "Music - Classical"}
+    # Other
+    - {id: 1006, cat: TV/Other, desc: "Shows, Concerts, Sports"}
+    - {id: 2, cat: Audio/Audiobook, desc: "Other - AudioBooks"}
+    - {id: 1, cat: Audio/Video, desc: "Other - Music Video's"}
+    - {id: 23, cat: PC/Games, desc: "Other - Games"}
+    - {id: 32, cat: PC, desc: "Other - Programs"}
+    - {id: 40, cat: Other, desc: "Other - Design / Graphics"}
+    - {id: 41, cat: Books, desc: "Other - Library"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: info_sid
+    type: info
+    label: How to get your SID
+    default: "This is only needed when using *.appspot.com mirrors, otherwise just leave blank. Access the tracker's <i>Раздачи</i> page in browser, and in the address bar you will see something like <b>?sid=abC1de2F</b>. Those last 8 characters are your SID."
+  - name: sid
+    type: text
+    label: SID
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: true
+  - name: addrussian
+    type: checkbox
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: true
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 0
+    options:
+      0: created
+      1: seeders
+      3: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 0
+    options:
+      0: desc
+      1: asc
+  - name: info_magnets
+    type: info
+    label: Magnets
+    default: "This tracker limits the number of torrents a user can download each day without paying. This indexer uses <b>magnet links</b> to bypass that limit, however this doesn't include the passkey, so any download/upload is not recorded. To download with torrents, use <b>Kinozal</b>."
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.bx1:has(div.red)
+      message:
+        selector: div.bx1 div.red
+  test:
+    path: my.php
+    selector: a[href*="logout.php?hash4u="]
+
+download:
+  before:
+    path: get_srv_details.php
+    inputs:
+      action: 2
+      id: "{{ .DownloadUri.Query.id }}"
+  infohash:
+    usebeforeresponse: true
+    hash:
+      selector: li:first-child
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: div.b
+      filters:
+        - name: trim
+        - name: validfilename
+
+search:
+  paths:
+    # http://kinozal.tv/browse.php?s=lucifer+2017&g=0&c=0&v=0&d=0&w=0&t=0&f=0
+    - path: browse.php
+      # required for the appspot domain.
+      followredirect: true
+  keywordsfilters:
+#    - name: diacritics # 8686
+#      args: replace
+    - name: re_replace
+      args: ["[^a-zA-Zа-яА-ЯёЁ0-9]+", " "]
+    - name: re_replace # S01 to 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "$1"]
+    - name: re_replace # S01E01 to 1 1
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "$1 $2"]
+  inputs:
+    # multi cat is not supported. so defaulting to ALL
+    c: 0
+    s: "{{ .Keywords }}"
+    # where 0 title, 1 person, 2 genres, 3 regular expression
+    g: 0
+    # format 0 all
+    v: 0
+    # released 0 all
+    d: 0
+    # filter 0 all, 1 today, 2 yesterday, 3 in 3 days, 4 this week, 5 per month, 6-10 size rages, 11 gold, 12 silver
+    w: "{{ if .Config.freeleech }}11{{ else }}0{{ end }}"
+    t: "{{ .Config.sort }}"
+    f: "{{ .Config.type }}"
+    sid: "{{ if .Config.sid }}{{ .Config.sid }}{{ else }}{{ end }}"
+
+  rows:
+    selector: table > tbody > tr:has(td.bt)
+
+  fields:
+    title:
+      selector: td.nam a[href^="/details.php?"]
+      filters:
+        # normalize to SXXEYY format
+        - name: replace
+          args: ["Кураж-Бамбей", "kurazh"]
+        - name: replace
+          args: ["Кубик в Кубе", "Kubik"]
+        - name: replace
+          args: ["Кравец", "Kravec"]
+        - name: replace
+          args: ["Пифагор", "Pifagor"]
+        - name: replace
+          args: ["Невафильм", "Nevafilm"]
+        - name: replace
+          args: ["АП", "AVO"]
+        - name: replace
+          args: ["ЛО", "VO"]
+        - name: replace
+          args: ["ЛД", "DVO"]
+        - name: replace
+          args: ["ЛМ", "MVO"]
+        - name: replace
+          args: ["ПО", "VO"]
+        - name: replace
+          args: ["ПД", "DVO"]
+        - name: replace
+          args: ["ПМ", "MVO"]
+        - name: replace
+          args: ["ДБ", "DUB"]
+        - name: replace
+          args: ["СТ", "Sub"]
+        - name: re_replace
+          args: ["\\((\\d+-*\\d*)\\s+[Сс]езоны?:?\\s+(?:(\\d+-*\\d*)\\s+(?:[Сс]ери[ийя]|выпуски?(?:ов)?)(?:.*\\d+)?)?\\)(.*)\\s+((?:[12][0-9]{3}-?){1,})(.*)", "$3 - S$1E$2 - $4 $5"]
+        - name: re_replace
+          args: ["\\((?:(\\d+-*\\d*)\\s+(?:[Сс]ери[ийя]|выпуски?(?:ов)?)(?:.*\\d+)?)?\\)(.*)\\s+((?:[12][0-9]{3}-?){1,})(.*)", "$2 - E$1 - $3 $4"]
+        - name: re_replace
+          args: ["(\\([А-Яа-яЁё\\W]+\\))|(^[А-Яа-яЁё\\W\\d]+\\/ ((?:[12][0-9]{3}-?){1,}))|(^[А-Яа-яЁё\\W\\d]+\\/ )|([а-яА-ЯЁё \\-]+,+)|([а-яА-ЯЁё]+)", "{{ if .Config.stripcyrillic }}{{ else }}$0{{ end }}"]
+        - name: replace
+          args: [" / ", " "]
+        - name: re_replace
+          args: ["^-\\s+", " "]
+        - name: re_replace
+          args: ["\\((\\d+[pi])\\)", "$1"]
+        - name: re_replace
+          args: ["(.*)(Blu-Ray\\s*(?:Disc|EUR|CEE)?)\\s*(\\d+[pi])", "$1 BR-DISK $3"]
+        - name: append
+          args: "{{ if .Config.addrussian }} - RUSSIAN{{ else }}{{ end }}"
+        - name: replace
+          args: ["-Rip", "Rip"]
+        - name: replace
+          args: ["WEB-DL", "WEBDL"]
+        - name: replace
+          args: ["WEBDLRip", "WEBDL"]
+        - name: replace
+          args: ["HDTVRip", "HDTV"]
+    details:
+      selector: td.nam a[href^="/details.php?"]
+      attribute: href
+    category:
+      selector: td.bt img
+      attribute: onclick
+      filters:
+        - name: re_replace
+          args: ["[^\\d+]", ""]
+    download:
+      selector: td.nam a[href^="/details.php?"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["details", "download"]
+    size:
+      selector: td:nth-child(4)
+      filters:
+        - name: replace
+          args: ["ТБ", "TB"]
+        - name: replace
+          args: ["ГБ", "GB"]
+        - name: replace
+          args: ["МБ", "MB"]
+        - name: replace
+          args: ["КБ", "KB"]
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    # dates come in four flavours:
+    date_day:
+      # now
+      # Today 09:10
+      # Yesterday 13:04
+      selector: td:nth-child(7):not(:contains("."))
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: replace
+          args: [" в", ""]
+        - name: replace
+          args: ["сейчас", "now"]
+        - name: replace
+          args: ["сегодня", "Today"]
+        - name: replace
+          args: ["вчера", "Yesterday"]
+    date_year:
+      # 24.10.2017 at 23:44
+      selector: td:nth-child(7):contains(".")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: replace
+          args: [" в", ""]
+        - name: dateparse
+          args: "dd.MM.yyyy HH:mm"
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      case:
+        a.r1: 0 # gold
+        a.r2: 0.5 # silver
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# engine n/a
