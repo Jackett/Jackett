@@ -111,7 +111,7 @@ login:
 
 search:
   paths:
-    # https://www.arabp2p.com/index.php?page=torrents&search=&category=0&active=0&internel=0
+    # https://www.arabp2p.net/index.php?page=torrents&search=&category=0&active=0&internel=0&order=3&by=2
     - path: index.php
   inputs:
     page: torrents
@@ -126,13 +126,13 @@ search:
     # does not support imdbid search or provide imdb link in results
 
   rows:
-    selector: table.torrent tr.torrent
+    selector: table#torrents_list_p > tbody > tr:has(a[href^="download.php?id="])
     filters:
       - name: andmatch
 
   fields:
     category:
-      selector: a[href^="index.php?page=torrents&category="]
+      selector: a[href^="index.php?page=torrents&category="]:last-child
       attribute: href
       filters:
         - name: querystring
@@ -143,7 +143,7 @@ search:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: href
     download:
-      selector: a[href^="download.php"]
+      selector: a[href^="download.php?id="]
       attribute: href
       optional: true
     magnet:
@@ -151,18 +151,18 @@ search:
       attribute: href
       optional: true
     date:
-      selector: td:nth-child(4) span
+      selector: span.upload-date > span
       attribute: title
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss"
-    seeders:
-      selector: td:nth-child(5)
-    leechers:
-      selector: td:nth-child(6)
+          args: "MM-yy-dd HH:mm:ss tt"
     size:
-      selector: td:nth-child(7)
+      selector: span.size
+    seeders:
+      selector: span[title="Seeders"]
+    leechers:
+      selector: span[title="Leechers"]
     downloadvolumefactor:
       case:
         span.free: 0
