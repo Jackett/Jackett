@@ -53,8 +53,8 @@ login:
     - selector: td.embedded:has(h2:contains("failed"))
     - selector: td.embedded:has(h2:contains("Error"))
   test:
-    selector: a[href^="logout.php"]
     path: browse.php
+    selector: a[href^="logout.php"]
 
 search:
   paths:
