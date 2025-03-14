@@ -2,8 +2,6 @@
 id: letseed
 name: LetSeed
 description: "LetSeed is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-# The HTML says `lang="en-US"` but the web UI defaults to Turkish, the categories are
-# always in Turkish, and there are more UI elements when using the Turkish UI:
 language: tr-TR
 type: private
 encoding: UTF-8
@@ -15,7 +13,7 @@ caps:
     - {id: 3, cat: TV, desc: "Diziler"}
     - {id: 5, cat: TV/Foreign, desc: "Yabancı Diziler"}
     - {id: 6, cat: TV/Other, desc: "Yerli Dizi Boxset"}
-    - {id: 4, cat: TV/Other, desc: "Yerli Diziler"}
+    - {id: 4, cat: TV, desc: "Yerli Diziler"}
     - {id: 44, cat: Books, desc: "Eğitim"}
     - {id: 46, cat: Books/EBook, desc: "E-Book"}
     - {id: 45, cat: Books/Other, desc: "Eğitim"}
@@ -24,33 +22,33 @@ caps:
     - {id: 2, cat: Movies/Other, desc: "Animasyonlar"}
     - {id: 16, cat: Movies/Other, desc: "BoxSet"}
     - {id: 14, cat: Movies/Foreign, desc: "Yabancı Yapımlar"}
-    - {id: 13, cat: Movies/Other, desc: "Yerli Yapımlar"}
+    - {id: 13, cat: Movies, desc: "Yerli Yapımlar"}
     - {id: 32, cat: Audio, desc: "Müzik"}
     - {id: 35, cat: Audio/Other, desc: "Diskografi"}
     - {id: 34, cat: Audio/Foreign, desc: "Yabancı"}
-    - {id: 33, cat: Audio/Other, desc: "Yerli"}
+    - {id: 33, cat: Audio, desc: "Yerli"}
     - {id: 28, cat: PC/Games, desc: "Oyun"}
     - {id: 29, cat: PC/Games, desc: "PC"}
     - {id: 31, cat: Console/PS4, desc: "Playstation"}
     - {id: 30, cat: Console/XBox, desc: "XBOX"}
     - {id: 19, cat: Other, desc: "Platform Sunumları"}
-    - {id: 21, cat: Other, desc: "AMZN"}
-    - {id: 23, cat: Other, desc: "BluTv"}
-    - {id: 22, cat: Other, desc: "DSNP"}
-    - {id: 24, cat: Other, desc: "Exxen"}
-    - {id: 26, cat: Other, desc: "GAIN"}
-    - {id: 20, cat: Other, desc: "Netflix"}
-    - {id: 42, cat: Other, desc: "Tabii"}
-    - {id: 25, cat: Other, desc: "TOD"}
-    - {id: 27, cat: Other, desc: "TV+"}
+    - {id: 21, cat: Movies, desc: "AMZN"}
+    - {id: 23, cat: Movies, desc: "BluTv"}
+    - {id: 22, cat: TV, desc: "DSNP"}
+    - {id: 24, cat: TV, desc: "Exxen"}
+    - {id: 26, cat: TV, desc: "GAIN"}
+    - {id: 20, cat: Movies, desc: "Netflix"}
+    - {id: 42, cat: TV, desc: "Tabii"}
+    - {id: 25, cat: TV, desc: "TOD"}
+    - {id: 27, cat: TV, desc: "TV+"}
     - {id: 36, cat: PC, desc: "Program"}
-    - {id: 37, cat: PC, desc: "İşletim Sistemi"}
+    - {id: 37, cat: PC/ISO, desc: "İşletim Sistemi"}
     - {id: 38, cat: PC/Mac, desc: "Mac"}
-    - {id: 39, cat: PC, desc: "Windows"}
+    - {id: 39, cat: PC/0day, desc: "Windows"}
     - {id: 40, cat: TV/Sport, desc: "Spor"}
     - {id: 41, cat: TV/Sport, desc: "Spor Sunumları"}
-    - {id: 17, cat: Other, desc: "VIP Sunumlar"}
-    - {id: 18, cat: Other, desc: "VIP Sunumlar"}
+    - {id: 17, cat: TV, desc: "VIP Sunumlar"}
+    - {id: 18, cat: TV, desc: "VIP Sunumlar"}
 
   modes:
     search: [q]
@@ -108,42 +106,22 @@ login:
     password: "{{ .Config.password }}"
     logout: ""
   error:
-    - selector: >-
-        #main table:has(td:contains("Bir hata oluştu"))
-    # Sometimes the login form POST gets a proper `302.Redirect`, but sometimes it gets
-    # a `http-equiv="refresh"` "redirect" instead:
-    - selector: >-
-        [http-equiv="refresh"][content*="/login.php?error=1"]
+    - selector: table:has(td:contains("Bir hata oluştu"))
+    - selector: table:has(a[href*="login.php?error=1"])
       message:
-        # ERROR: Invalid username or password! Please try again or click here to reset
-        # your password.
-        text: >-
-          HATA: Geçersiz kullanıcı adı veya şifre! Lütfen tekrar eneyin veya
-          buraya tıklayarak şifrenizi sıfırlayınız.
-    - selector: >-
-        [http-equiv="refresh"][content*="/login.php?error=2"]
+        text: "Incorrect username!"
+    - selector: table:has(a[href*="login.php?error=2"])
       message:
-        # ERROR: The image verification code you entered was not approved.
-        text: >-
-          HATA: Girdiğiniz resim doğrulama kodu onaylanmadı.
-    - selector: >-
-        [http-equiv="refresh"][content*="/login.php?error=3"]
+        text: "The image verification code you entered was not approved."
+    - selector: table:has(a[href*="login.php?error=3"])
       message:
-        # ERROR: Please do not leave required fields blank!
-        text: >-
-          HATA: Lütfen gerekli alanları boş bırakmayınız!
-    - selector: >-
-        [http-equiv="refresh"][content*="/login.php?error=4"]
+        text: "Please do not leave required fields blank!"
+    - selector: table:has(a[href*="login.php?error=4"])
       message:
-        # ERROR: Username or password is incorrect!
-        text: >-
-          HATA: Kullanıcı adı veya şifre hatalı!
-    - selector: >-
-        [http-equiv="refresh"][content*="/login.php?error="]
+        text: "Incorrect password!"
+    - selector: table:has(a[href*="login.php?error="])
       message:
-        # ERROR: An error occurred!
-        text: >-
-          HATA: Bir hata oluştu!
+        text: "Something went wrong during login!"
   test:
     path: browse.php
     selector: a[href*="/logout.php"]
@@ -153,8 +131,8 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: >-
-        {{ re_replace .DownloadUri.AbsolutePath "/download-torrent-([0-9]+).*" "$1"}}
+      torrentid: "{{ re_replace .DownloadUri.AbsolutePath \"/download-torrent-(\\d+).*\" \"$1\"}}"
+
 search:
   paths:
     - path: browse.php
@@ -185,10 +163,10 @@ search:
         - name: regexp
           args: "/torrent-category-([0-9]+)"
     title_default:
-      # The torrent name is usually abbreviated:
+      # is usually abbreaviated
       selector: a[href*="/torrent-details-"]
     title:
-      # While still abbreviated, is usually longer than the default:
+      # while still abbreviated, is usually longer than the default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
@@ -198,13 +176,6 @@ search:
     download:
       selector: a[href*="/download-torrent-"]
       attribute: href
-    # TODO: The Prowlarr search response JSON includes `fileName:` keys that use elided
-    # titles that end with `....torrent` but I don't see where that's coming from. The
-    # indexer download URL is correct and when I visit that URL in the browser, the
-    # response headers seem more correct and result in a more correct default file name
-    # in the OS save modal dialog:
-    #     content-disposition: attachment;
-    #     filename=foo-movie-1970-bluray-1080p-dts-x264.torrent_[letseed_org].torrent;
     poster:
       selector: img[src*="/torrents/images/"]
       attribute: src
