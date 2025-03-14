@@ -279,6 +279,7 @@ Prior versions of Jackett are no longer supported.
  * Bit-Bázis
  * BIT-HDTV
  * Bitded
+ * bitGAMER
  * Bithorlo (BHO)
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * Bitpalace
