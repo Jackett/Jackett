@@ -67,5 +67,16 @@ namespace Jackett.Common.Indexers.Definitions
         {
             return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
         }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                release.MinimumRatio = 0.6;
+                release.MinimumSeedTime = 259200;
+            }
+            return releases;
+        }
     }
 }
