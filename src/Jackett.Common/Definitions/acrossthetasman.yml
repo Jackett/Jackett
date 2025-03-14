@@ -51,7 +51,7 @@ login:
     - selector: div.restore:contains("invalid username or password")
   test:
     path: torrents.php
-    selector: a[href*="logout.php"]
+    selector: a[href*="login.php?do=logout"]
 
 search:
   paths:
