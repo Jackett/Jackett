@@ -11,6 +11,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -46,12 +47,12 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public BakaBT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataBakaBT("To show more results and prevent a 0 results error, go to your BakaBT account settings and in the 'Browse' section enable the 'Show Adult Content' option and change 'Torrents per page' to '100'."))
         {
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Accounts are pruned after 11 months of disuse (i.e. not logging into the tracker account). Accounts with 0 download and 0 upload are pruned earlier. Donator accounts (people who've donated to BakaBT and received a donator status) have the option of disabling inactivity pruning, and safeguarding their account for as long as they choose."));

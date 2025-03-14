@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -25,12 +26,12 @@ namespace Jackett.Common.Indexers.Definitions
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
 
-        public PhoenixProject(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+        public PhoenixProject(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    supportsFreeleechTokens: true,
                    useApiKey: true,
                    instructionMessageOptional: "<ol><li>Go to PhoenixProject's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab use the <b>API Keys: click here to create a new token</b> link.</li><li>Give it a name and click <b>Generate</b>.</li><li>Finally, copy/paste the token to your Jackett config APIKey input box.</li></ol>"
