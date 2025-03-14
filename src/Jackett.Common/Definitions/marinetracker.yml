@@ -75,6 +75,14 @@ caps:
     - {id: 384, cat: PC, desc: "Mobile Apps for Seafarers-Foreign languages learning"}
     - {id: 382, cat: PC, desc: "Mobile Apps for Seafarers-Other mobile Apps"}
     - {id: 8, cat: Movies, desc: "Video for Seamen"}
+    - {id: 400, cat: Movies, desc: "Video for Seamen-Maritime Law & Regulations videos"}
+    - {id: 399, cat: Movies, desc: "Video for Seamen-Maritime Shipping & Cargo Operations videos"}
+    - {id: 398, cat: Movies, desc: "Video for Seamen-Offshore Industry videos"}
+    - {id: 397, cat: Movies, desc: "Video for Seamen-Maritime Safety videos"}
+    - {id: 396, cat: Movies, desc: "Video for Seamen-Maritime History videos"}
+    - {id: 395, cat: Movies, desc: "Video for Seamen-Shipbuilding & Shiprepairing videos"}
+    - {id: 394, cat: Movies, desc: "Video for Seamen-Ship Modeling & RC Boat videos"}
+    - {id: 237, cat: Movies, desc: "Video for Seamen-Yachting, sailing videos"}
     - {id: 377, cat: Movies, desc: "Video for Seamen-Documentary video"}
     - {id: 234, cat: Movies, desc: "Video for Seamen-Video for Deck Officers"}
     - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
@@ -121,6 +129,16 @@ caps:
     - {id: 393, cat: Books, desc: "Sailing Mental health & Stress"}
     - {id: 299, cat: Books, desc: "Sailing Kitchen"}
     - {id: 11, cat: Books, desc: "Section for cadets"}
+    - {id: 403, cat: Books, desc: "Section for cadets-Textbooks and Guides"}
+    - {id: 406, cat: Books, desc: "Section for cadets-Reference Materials"}
+    - {id: 408, cat: Books, desc: "Section for cadets-Practical Training, RB and Reports"}
+    - {id: 402, cat: Books, desc: "Section for cadets-Methodical Materials"}
+    - {id: 404, cat: Books, desc: "Section for cadets-Term Papers"}
+    - {id: 407, cat: Books, desc: "Section for cadets-Laboratory Works"}
+    - {id: 401, cat: Books, desc: "Section for cadets-Lectures and Notes"}
+    - {id: 410, cat: Books, desc: "Section for cadets-Cheat Sheets"}
+    - {id: 405, cat: Books, desc: "Section for cadets-Charts and Atlases"}
+    - {id: 409, cat: Books, desc: "Section for cadets-Young Skipper"}
     - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
     - {id: 330, cat: Books, desc: "Examinations"}
     - {id: 12, cat: Books, desc: "Examinations-Answers to tests"}
@@ -148,7 +166,6 @@ caps:
     - {id: 297, cat: Books, desc: "Yachting, sailing, boating-Weather Sailing"}
     - {id: 296, cat: Books, desc: "Yachting, sailing, boating-How to Buy a Boat?"}
     - {id: 258, cat: Books, desc: "Yachting, sailing, boating-Inflatable boats, boats, kayaks"}
-    - {id: 237, cat: Books, desc: "Yachting, sailing, boating-Yachting, sailing videos"}
     - {id: 257, cat: Books, desc: "Yachting, sailing, boating-Motor Boat & Yachting magazines"}
     - {id: 253, cat: Books, desc: "Yachting, sailing, boating-Seamanship practice"}
     - {id: 254, cat: Books, desc: "Yachting, sailing, boating-Repair and Restoration"}

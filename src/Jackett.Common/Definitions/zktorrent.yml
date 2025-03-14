@@ -1,62 +1,60 @@
 ---
-id: torrent9-tel
+id: zktorrent
 replaces:
-  - torrent9clone
-name: Torrent9-tel
-description: "Torrent9-tel is a FRENCH Public tracker for TV / MOVIES / GENERAL"
+  - gktorrent
+name: ZkTorrent
+description: "ZkTorrent is a French Public site for TV / MOVIES / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.org/
+# to fetch current domain use https://www.rantop.my/
 links:
-  - https://www-torrent9.com/
+  - https://www.zktorrent1.com/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
-  - https://www.torrent.onl/
-  - https://torrent9.news/
+  - https://www.rantop.my/
+  - https://gktorrent.news/
   - https://www.site-torrent.com/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
+  - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
-  - https://www.torrent9.tel/
-  - https://torrent9.unblockninja.com/
-  - https://www.torrent9.plus/
-  - https://www.torrent9.lc/
-  - https://www.torrent9-p2p.com/
-  - https://www.torrent9.pe/
-  - https://www.torrent9.gl/
-  - https://www.torrent9.cyou/
-  - https://www.torrent9.gd/
-  - https://www.torrent9.ing/
-  - https://www.torrent9.run/
-  - https://www.torrent9.cv/
-  - https://www.torrent9.ke/
-  - https://www.torrent9.gdn/
-  - https://www.torrent9.men/
-  - https://www.torrent9.icu/
+  - https://www.gktorrent.xyz/
+  - https://www.gktorrent.pm/
+  - https://www.gktorrent.tw/
+  - https://www.gktorrent.in/
+  - https://www.gktorrent.sk/
+  - https://www.gktorrent.uno/
+  - https://www.gktorrent.gy/
+  - https://www.gktorrent.si/
+  - https://www.gktorrent.my/
+  - https://www.gktorrent.cz/
+  - https://www.gktorrent.ke/
+  - https://www.gktorrent.cv/
+  - https://wvw-gktorrent.com/
+  - https://www-gktorrent.com/
+  - https://www.zktorrent.com/
 
 caps:
   categorymappings:
     - {id: Films, cat: Movies, desc: "Movies"}
+    - {id: Vidéos, cat: Movies, desc: "Vidéos"}
     - {id: Animes, cat: TV/Anime, desc: "Anime"}
-    - {id: Documentaires, cat: TV/Documentary, desc: "Documentaires"}
-    - {id: Séries, cat: TV, desc: "TV"}
+    - {id: Séries, cat: TV, desc: "TV Series"}
+    - {id: Spectacles, cat: TV, desc: "TV Shows"}
+    - {id: Documentaires, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: Sports, cat: TV/Sport, desc: "Sport"}
     - {id: Musiques, cat: Audio, desc: "Music"}
     - {id: Ebooks, cat: Books, desc: "Books"}
-    - {id: Livres, cat: Books, desc: "Livres"}
+    - {id: Livres, cat: Books, desc: "Books"}
     - {id: Logiciels, cat: PC, desc: "Software"}
-    - {id: Applications, cat: PC, desc: "Applications"}
     - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
     - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
-    - {id: Porno, cat: XXX, desc: "Porno"}
-    - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
-    - {id: Sports, cat: TV/Sport, desc: "Sports"}
-    - {id: Formations, cat: Other, desc: "Formations"}
-    - {id: Vidéos, cat: TV, desc: "Vidéos"}
+    - {id: Porno, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
@@ -100,7 +98,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
@@ -109,11 +107,11 @@ search:
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
-    selector: table.table-striped > tbody > tr
+    selector: table.table-hover > tbody > tr:has(td a[href])
 
   fields:
     category:
-      selector: td:nth-child(1) i
+      selector: td:nth-child(1) > i
       attribute: class
     title_phase1:
       selector: td:nth-child(1) a
@@ -134,36 +132,22 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    details_href:
-      selector: td:nth-child(1) a[href]
-      attribute: href
-      optional: true
-      filters:
-        - name: regexp
-          args: (/?detail/\d+)
-    details_onclick:
-      selector: td:nth-child(1) a[onclick]
-      attribute: onclick
-      optional: true
-      filters:
-        - name: regexp
-          args: (/?detail/\d+)
     details:
-      text: "{{ or .Result.details_href .Result.details_onclick }}"
+      selector: td:nth-child(1) a
+      attribute: href
+      filters:
+        - name: regexp
+          args: (/?detail/\d+)
     download:
       text: "{{ .Result.details }}"
-    date:
-      text: now
     size:
       selector: td:nth-child(2)
+    date:
+      text: now
     seeders:
       selector: td:nth-child(3)
-      optional: true
-      default: 0
     leechers:
       selector: td:nth-child(4)
-      optional: true
-      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

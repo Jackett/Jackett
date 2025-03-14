@@ -13,68 +13,68 @@ links:
 caps:
   categorymappings:
     - {id: 10, cat: Audio/Audiobook, desc: "Action/Adventure"}
+    - {id: 80, cat: Audio/Audiobook, desc: "Adult/Erotica"}
     - {id: 20, cat: Audio/Audiobook, desc: "Biography/Memoirs"}
     - {id: 30, cat: Audio/Audiobook, desc: "Business "}
     - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
-    - {id: 50, cat: Audio/Audiobook, desc: "Humor (Comedy)"}
-    - {id: 60, cat: Audio/Audiobook, desc: "Comics"}
     - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
-    - {id: 80, cat: Audio/Audiobook, desc: "Adult/Erotica"}
+    - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller"}
     - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
     - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}
-    - {id: 110, cat: Audio/Audiobook, desc: "Files"}
-    - {id: 120, cat: Audio/Audiobook, desc: "Foreign Language"}
     - {id: 130, cat: Audio/Audiobook, desc: "General Fiction"}
     - {id: 140, cat: Audio/Audiobook, desc: "Historical Fiction"}
     - {id: 150, cat: Audio/Audiobook, desc: "History"}
     - {id: 160, cat: Audio/Audiobook, desc: "Horror"}
+    - {id: 50, cat: Audio/Audiobook, desc: "Humor (Comedy)"}
     - {id: 170, cat: Audio/Audiobook, desc: "Literature"}
     - {id: 175, cat: Audio/Audiobook, desc: "LitRPG"}
-    - {id: 180, cat: Audio/Audiobook, desc: "Mystery "}
+    - {id: 180, cat: Audio/Audiobook, desc: "Mystery"}
     - {id: 190, cat: Audio/Audiobook, desc: "Non-Fiction"}
+    - {id: 215, cat: Audio/Audiobook, desc: "Paranormal Romance"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
+    - {id: 205, cat: Audio/Audiobook, desc: "Reference/Educational"}
+    - {id: 207, cat: Audio/Audiobook, desc: "Religion and Spirituality"}
     - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
-    - {id: 220, cat: Audio/Audiobook, desc: "Science"}
-    - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction "}
     - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
+    - {id: 220, cat: Audio/Audiobook, desc: "Science"}
+    - {id: 230, cat: Audio/Audiobook, desc: "Science Fiction"}
     - {id: 250, cat: Audio/Audiobook, desc: "Self Improvement"}
+    - {id: 265, cat: Audio/Audiobook, desc: "Sports/Fitness"}
     - {id: 270, cat: Audio/Audiobook, desc: "Suspense"}
     - {id: 280, cat: Audio/Audiobook, desc: "Talk Radio"}
-    - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller/Mystery"}
-    - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy"}
+    - {id: 285, cat: Audio/Audiobook, desc: "Travel"}
+    - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy/Paranormal"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
     - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
-    - {id: 410, cat: Books/EBook, desc: "[E] Adult / Erotica"}
+    - {id: 410, cat: Books/EBook, desc: "[E] Adult/Erotica"}
     - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
     - {id: 430, cat: Books/EBook, desc: "[E] Biography/Memoirs"}
-    - {id: 730, cat: Books/EBook, desc: "[E] Collections"}
-    - {id: 440, cat: Books/EBook, desc: "[E] Comic Books"}
+    - {id: 435, cat: Books/EBook, desc: "[E] Business"}
     - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
     - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
-    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller/Mystery"}
+    - {id: 470, cat: Books/EBook, desc: "[E] Crime/Thriller"}
     - {id: 480, cat: Books/EBook, desc: "[E] Fantasy"}
-    - {id: 490, cat: Books/EBook, desc: "[E] Forteana"}
+    - {id: 490, cat: Books/EBook, desc: "[E] Fantasy-Youth"}
     - {id: 500, cat: Books/EBook, desc: "[E] General Fiction"}
     - {id: 510, cat: Books/EBook, desc: "[E] Historical Fiction"}
     - {id: 520, cat: Books/EBook, desc: "[E] History/Documentary"}
     - {id: 530, cat: Books/EBook, desc: "[E] Horror"}
     - {id: 540, cat: Books/EBook, desc: "[E] Humor (Comedy)"}
-    - {id: 550, cat: Books/EBook, desc: "[E] LGBT"}
     - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
     - {id: 565, cat: Books/EBook, desc: "[E] LitRPG"}
-    - {id: 570, cat: Books/EBook, desc: "[E] Magazines - all"}
+    - {id: 570, cat: Books/EBook, desc: "[E] Mystery"}
     - {id: 580, cat: Books/EBook, desc: "[E] Non-Fiction"}
-    - {id: 585, cat: Books/EBook, desc: "[E] Other Languages"}
     - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
     - {id: 600, cat: Books/EBook, desc: "[E] Reference/Educational"}
     - {id: 610, cat: Books/EBook, desc: "[E] Religion and Spirituality"}
     - {id: 620, cat: Books/EBook, desc: "[E] Romance"}
     - {id: 630, cat: Books/EBook, desc: "[E] Sci-Fi"}
     - {id: 640, cat: Books/EBook, desc: "[E] Sci-Fi/Apocalyptic"}
+    - {id: 645, cat: Books/EBook, desc: "[E] Science"}
     - {id: 650, cat: Books/EBook, desc: "[E] Self-Help"}
     - {id: 660, cat: Books/EBook, desc: "[E] Sports/Fitness"}
+    - {id: 665, cat: Books/EBook, desc: "[E] Suspense"}
     - {id: 670, cat: Books/EBook, desc: "[E] Travel"}
-    - {id: 680, cat: Books/EBook, desc: "[E] Unsorted"}
     - {id: 690, cat: Books/EBook, desc: "[E] Urban Fantasy/Paranormal"}
     - {id: 700, cat: Books/EBook, desc: "[E] Western"}
     - {id: 710, cat: Books/EBook, desc: "[E] Young Adult"}
@@ -118,26 +118,22 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # title, descr
+    # title, descr, series, additional_info, author, author, uploader
     searchin: title
-    # 0 active, 1 incldead, 2 onlydead
+    # 0 active, 1 incldead, 2 onlydead, 3 My Unsatisfied Torrents, 4 My Watch List, 5 My Uploads
     incldead: 1
-    # 1 onlyfree, null all
-    only_free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # 0 All Torrents, 1 Only Free Torrents
+    only_free: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
 
   rows:
     selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: div[data-tid] > img
+      attribute: alt
     title:
       selector: a[href^="details.php?id="]
-      remove: span
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -168,9 +164,13 @@ search:
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
-      selector: td:nth-last-child(3) div:nth-last-child(2)
+      selector: a[title="Seeders"]
+      optional: true
+      default: 0
     leechers:
-      selector: td:nth-last-child(3) div:last-child
+      selector: a[title="Leechers"]
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         tr.freeleech_color: 0

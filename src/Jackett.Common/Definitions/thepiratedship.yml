@@ -65,12 +65,14 @@ caps:
     - {id: 72, cat: PC, desc: "Misc Applications"}
     - {id: 73, cat: PC, desc: "Windows Operating Systems & MS Apps"}
     - {id: 74, cat: PC, desc: "Applications Requests"}
+#    - {id: 97, cat: Other, desc: "Comics/Books/eBooks"}
+    - {id: 100, cat: Books/Comics, desc: "Comics/Magazines"}
+    - {id: 99, cat: Books/EBook, desc: "E Books"}
+    - {id: 98, cat: Audio/Audiobook, desc: "Audio Books"}
 #    - {id: 78, cat: Other, desc: "Practice Area"}
     - {id: 89, cat: Other, desc: "Test"}
     # undocumented
-    - {id: 100, cat: Books, desc: "Comics/Magazines"}
     - {id: 96, cat: Movies, desc: "Animation Releases"}
-    - {id: 98, cat: Audio/Audiobook, desc: "Audio Books"}
 
   modes:
     search: [q]
@@ -90,6 +92,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 30 days are deleted unless you have told staff in advance."
 
 login:
   path: index.php

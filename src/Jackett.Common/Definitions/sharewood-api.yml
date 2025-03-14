@@ -8,8 +8,6 @@ language: fr-FR
 type: semi-private
 encoding: UTF-8
 requestDelay: 2.1
-certificates:
-  - 023A091295E81813D040DFA0FA842DF9892BF0F5  # expired 10-March-2024 note: despite a new CA issued this one still pops up occasionally
 links:
   - https://www.sharewood.tv/
 

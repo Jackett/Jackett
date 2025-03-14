@@ -61,7 +61,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must seed at least 1 torrent or log in every 90 days to avoid being pruned."
+    default: "You must seed at least 1 torrent or log in every 30 days to avoid being pruned."
 
 login:
   path: /api/torrents
@@ -160,6 +160,6 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # json UNIT3D 6.0.4

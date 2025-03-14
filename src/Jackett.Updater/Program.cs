@@ -254,6 +254,7 @@ namespace Jackett.Updater
                 "CurlSharp.dll",
                 "CurlSharp.pdb",
                 "Definitions/01torrent.yml",
+                "Definitions/2fast4you.yml",
                 "Definitions/2xfree.yml",
                 "Definitions/24rolika.yml",
                 "Definitions/32pages.yml",
@@ -328,6 +329,7 @@ namespace Jackett.Updater
                 "Definitions/btdb.yml",
                 "Definitions/bteye.yml",
                 "Definitions/btgigs.yml",
+                "Definitions/btmet.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btmirror.yml",
                 "Definitions/btstornet.yml",
@@ -354,6 +356,7 @@ namespace Jackett.Updater
                 "Definitions/cryptichaven.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
+                "Definitions/dajiao.yml",
                 "Definitions/danishbytes.yml", // migrated to C#
                 "Definitions/dariustracker.yml",
                 "Definitions/darktracker.yml",
@@ -374,6 +377,7 @@ namespace Jackett.Updater
                 "Definitions/dragonworld.yml",
                 "Definitions/dragonworldreloaded.yml",
                 "Definitions/dreamteam.yml",
+                "Definitions/dreamtracker.yml",
                 "Definitions/dxdhd.yml",
                 "Definitions/ebookparadijs.yml",
                 "Definitions/efectodoppler.yml",
@@ -428,6 +432,7 @@ namespace Jackett.Updater
                 "Definitions/gdf76.yml",
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
+                "Definitions/gktorrent.yml", // renamed to zktorrent #15399
                 "Definitions/gods.yml",
                 "Definitions/goodtracker.yml",
                 "Definitions/gormogon.yml",
@@ -457,6 +462,7 @@ namespace Jackett.Updater
                 "Definitions/hdme.yml",
                 "Definitions/hdmonkey.yml",
                 "Definitions/hdolimpo.yml", // migrated to UNIT3D API
+                "Definitions/hdonly.yml", // renamed to hdonly-api.yml #15856
                 "Definitions/hdplus.yml",
                 "Definitions/hdreactor.yml", // renamed to hdhouse
                 "Definitions/hdspain.yml",
@@ -502,7 +508,6 @@ namespace Jackett.Updater
                 "Definitions/latinop2p.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/lechaudron.yml",
-                "Definitions/leech24.yml", // switch to *-API #12553
                 "Definitions/leech24-api.yml",
                 "Definitions/legacyhd.yml", // renamed to realflix
                 "Definitions/legittorrents.yml",
@@ -514,6 +519,7 @@ namespace Jackett.Updater
                 "Definitions/lightning-tor.yml",
                 "Definitions/lilleskyorg.yml",
                 "Definitions/limetorrentsclone.yml",
+                "Definitions/lusthive.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magicheaven.yml",
                 "Definitions/magico.yml", // renamed to trellas
@@ -632,6 +638,7 @@ namespace Jackett.Updater
                 "Definitions/sdbits.yml",
                 "Definitions/sdkino.yml",
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
+                "Definitions/seedoff.yml",
                 "Definitions/seedpeer.yml",
                 "Definitions/sexxi.yml",
                 "Definitions/shadowflow.yml",
@@ -671,6 +678,7 @@ namespace Jackett.Updater
                 "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tellytorrent-api.yml",
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
+                "Definitions/teracod.yml", // closed, users can choose to merge with existing huntorrent #9743
                 "Definitions/tfile.yml",
                 "Definitions/tgay.yml",
                 "Definitions/theaudioscene.yml",
@@ -692,13 +700,14 @@ namespace Jackett.Updater
                 "Definitions/thorsland.yml",
                 "Definitions/tigers-dl.yml",
                 "Definitions/tjangto.yml",
-                "Definitions/tjupt.yml",
                 "Definitions/tntfork.yml",
                 "Definitions/tntvillage.yml",
                 "Definitions/toonsforme.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torlook.yml",
                 "Definitions/toros.yml", // renamed to bulltorrent
+                "Definitions/torrent-explosiv.yml", // renamed to explosiv-world #6183
+                "Definitions/torrent9-tel.yml", // renamed to NorTorrent #15217
                 "Definitions/torrent911.yml", // renamed to oxtorrent-vip #15411
                 "Definitions/torrent9clone.yml", // renamed to torrent9-tel #15217
                 "Definitions/torrent-paradise-ml.yml",
@@ -710,6 +719,8 @@ namespace Jackett.Updater
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
                 "Definitions/torrentkim.yml",
+                "Definitions/torrentland.yml",
+                "Definitions/torrentland-api.yml",
                 "Definitions/torrentmax.yml",
                 "Definitions/torrentparadise.yml",
                 "Definitions/torrentproject.yml",
@@ -723,6 +734,7 @@ namespace Jackett.Updater
                 "Definitions/torrentsurf.yml", // renamed xtremebytes #9951
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
+                "Definitions/torrentview.yml",
                 "Definitions/torrentwal.yml",
                 "Definitions/torrentwhiz.yml",
                 "Definitions/torrentwtf.yml",
@@ -753,6 +765,8 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/underverse.yml",
                 "Definitions/underversel.yml",
+                "Definitions/uniongang.yml",
+                "Definitions/uniongangcookie.yml",
                 "Definitions/uniotaku.yml", // to be migrated to c#
                 "Definitions/universaltorrents.yml",
                 "Definitions/unleashthecartoons.yml",

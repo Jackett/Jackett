@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The system bot will prune inactive users after 90 days of no activity. If you wish to keep your account be sure to login."
 
 login:
   path: /api/torrents
@@ -180,4 +184,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.1.3
+# json UNIT3D 8.3.6

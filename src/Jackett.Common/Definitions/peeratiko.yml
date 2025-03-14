@@ -5,8 +5,6 @@ description: "Peeratiko is a GREEK Private Torrent Tracker for MOVIES / TV / GEN
 language: el-GR
 type: private
 encoding: UTF-8
-certificates:
-  - b1e9d7885688c0c4123768c2c091e3c1e0a1aead # Expired 24th Dec 2024
 links:
   - https://peeratiko.org/
 

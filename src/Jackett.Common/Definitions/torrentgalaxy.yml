@@ -12,7 +12,6 @@ requestDelay: 2
 links:
   - https://torrentgalaxy.to/
   - https://torrentgalaxy.mx/
-  - https://tgx.rs/
 legacylinks:
   - https://torrentgalaxy.org/ # redirects to *.to
   - https://torrentgalaxy.pw/ # proxy list only
@@ -21,6 +20,7 @@ legacylinks:
   - https://torrentgalaxy.unblockninja.com/ # breaks on checkpoint
   - https://tgx.proxyninja.org/ # breaks on checkpoint
   - https://tgx.sb/
+  - https://tgx.rs/ # ERR_CONNECTION_REFUSED
 
 caps:
   categorymappings:

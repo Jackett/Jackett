@@ -1,10 +1,8 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Threading.Tasks;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
-using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -13,12 +11,12 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers.Definitions
 {
     [ExcludeFromCodeCoverage]
-    public class iAnon : GazelleTracker
+    public class PhoenixProject : GazelleTracker
     {
-        public override string Id => "ianon";
-        public override string Name => "iAnon";
+        public override string Id => "phoenixproject";
+        public override string Name => "Phoenix Project";
         public override string Description => "MacOS software tracker";
-        public override string SiteLink { get; protected set; } = "https://ianon.app/";
+        public override string SiteLink { get; protected set; } = "https://phoenixproject.app/";
         public override string Language => "en-US";
         public override string Type => "private";
 
@@ -27,15 +25,15 @@ namespace Jackett.Common.Indexers.Definitions
         protected override string AuthorizationFormat => "token {0}";
         protected override int ApiKeyLength => 118;
 
-        public iAnon(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm)
+        public PhoenixProject(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cm: cm,
+                   cs: cs,
                    supportsFreeleechTokens: true,
                    useApiKey: true,
-                   instructionMessageOptional: "<ol><li>Go to iAnon's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab use the <b>API Keys: click here to create a new token</b> link.</li><li>Give it a name and click <b>Generate</b>.</li><li>Finally, copy/paste the token to your Jackett config APIKey input box.</li></ol>"
+                   instructionMessageOptional: "<ol><li>Go to PhoenixProject's site and open your account settings.</li><li>Go to <b>Access Settings</b> tab use the <b>API Keys: click here to create a new token</b> link.</li><li>Give it a name and click <b>Generate</b>.</li><li>Finally, copy/paste the token to your Jackett config APIKey input box.</li></ol>"
                 )
         {
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, sign in and browse the site at least once every 120 days. Seeding torrents does not count as account activity, so in order to remain active you need to sign in and browse the site. Power Users (and above) are immune to the inactivity timer, but logging in regularly is recommended to learn about special events and new features. Donors are exempt from automatic account disabling due to inactivity. If you wish to always maintain an active account consider donating."));
@@ -68,17 +66,6 @@ namespace Jackett.Common.Indexers.Definitions
         protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
         {
             return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
-        }
-        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
-        {
-            var releases = await base.PerformQuery(query);
-            foreach (var release in releases)
-            {
-                // the site has a proportional ratio system calculated using (1) the total amount of data you've downloaded and (2) the total number of torrents you're seeding.
-                // So we are going to default the MR to the maximim ratio required to cover the whole range as we cannot calculate this for each user.
-                release.MinimumRatio = 0.6;
-            }
-            return releases;
         }
     }
 }

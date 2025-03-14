@@ -1,0 +1,128 @@
+---
+id: torrentssg
+name: torrentssg
+description: "torrentssg (토렌트쓱) is a Public KOREAN tracker for Korean media."
+language: ko-KR
+type: public
+encoding: UTF-8
+# to fetch current domain use https://xn--sm2bw9uj0jb6a.com/
+links:
+  - https://torrentssg7.com/
+
+caps:
+  categorymappings:
+    - {id: "st01", cat: Movies, desc: "영화 (Movies)"}
+    - {id: "st02", cat: Movies/Foreign, desc: "해외영화 (Foreign Movies)"}
+    - {id: "st02_n", cat: Other, desc: "개봉예정작 (Upcoming Releases)"}
+    - {id: "st03", cat: XXX, desc: "성인(19+)영화 (Adult Movies)"}
+    - {id: "st04", cat: TV, desc: "드라마 (Drama)"}
+    - {id: "st05", cat: TV/Foreign, desc: "해외드라마 (Foreign Drama)"}
+    - {id: "st06", cat: TV, desc: "드라마완결 (Completed Drama)"}
+    - {id: "st07", cat: TV, desc: "예능·방송 (Entertainment)"}
+    - {id: "st09", cat: TV/Documentary, desc: "시사·다큐·교양 (Documentary)"}
+    - {id: "st10", cat: TV/Sport, desc: "스포츠 (Sport)"}
+    - {id: "st11", cat: TV, desc: "OTT·자막 (OTT-Subtitles)"}
+#    - {id: "st12", cat: Other, desc: "자막 (Subtitles)"} # these are direct text files not torrents
+    - {id: "st13", cat: TV/Anime, desc: "애니·만화 (Animation)"}
+    - {id: "st14", cat: TV/Anime, desc: "애니완결 (Completed Animation)"}
+    - {id: "st15", cat: TV, desc: "극장판 (Theatrical Version)"}
+    - {id: "st16", cat: TV, desc: "키즈 (Kids)"}
+    - {id: "st18", cat: Audio, desc: "음악 (Music)"}
+    - {id: "st19", cat: Console, desc: "게임·유틸 (Games)"}
+    - {id: "st20", cat: PC, desc: "유틸 (Software)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+download:
+  selectors:
+    - selector: a[href*="/bbs/download.php?"]
+      attribute: href
+
+search:
+  paths:
+    # https://torrentssg7.com/bbs/search.php?bo_table=&sca=&sop=and&sfl=wr_subject%7C%7Cwr_content&stx=2025
+    - path: bbs/search.php
+  allowEmptyInputs: true
+  inputs:
+    bo_table: ""
+    sca: ""
+    # or, and
+    sop: and
+    # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
+    sfl: "wr_subject"
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    srows: 100
+    gr_id: ""
+
+  rows:
+    selector: div.search-media div.table-responsive table.table tbody tr:not(:has(a[href*="bo_table=st12"]))
+
+  fields:
+    category:
+      selector: td.list-img a
+      attribute: href
+      filters:
+        - name: querystring
+          args: bo_table
+    title:
+      selector: td.list-subject a
+    details:
+      selector: td.list-subject a
+      attribute: href
+    download:
+      selector: td.list-subject a
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    size:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: B
+    date_ago:
+      # time ago
+      selector: td:last-child:contains("전")
+      optional: true
+      filters:
+        - name: replace
+          args: ["전", " ago"]
+        - name: replace
+          args: ["초", " seconds"]
+        - name: replace
+          args: ["분", " minutes"]
+        - name: replace
+          args: ["시간", " hours"]
+        - name: replace
+          args: ["일", " days"]
+        - name: replace
+          args: ["개월", " months"]
+        - name: replace
+          args: ["년", " years"]
+        - name: timeago
+    date_month:
+      # 02.24
+      selector: td:last-child:not(:contains("전"))
+      optional: true
+      filters:
+        - name: dateparse
+          args: "MM.dd"
+    date:
+      text: "{{ if or .Result.date_ago .Result.date_month }}{{ or .Result.date_ago .Result.date_month }}{{ else }}now{{ end }}"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

@@ -25,15 +25,18 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Clouflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: /
-  error:
-    - selector: div#content:has(h3:contains("Login Failed"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: browse.php
     selector: span.key:contains("Ratio") + span.value

@@ -81,7 +81,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             // results must contain search terms
             releases = releases.Where(release => query.MatchQueryStringAND(release.Title));
-
+            foreach (var release in releases)
+            {
+                // the site has a proportional ratio system calculated using (1) the total amount of data you've downloaded and (2) the total number of torrents you're seeding.
+                // So we are going to default the MR to the maximim ratio required to cover the whole range as we cannot calculate this for each user.
+                release.MinimumRatio = 0.6;
+            }
             return releases;
         }
 

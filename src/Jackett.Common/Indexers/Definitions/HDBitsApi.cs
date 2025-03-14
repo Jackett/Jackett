@@ -120,7 +120,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
                 {
-                    requestData["search"] = showDate.ToString("yyyy-MM-dd");
+                    requestData["search"] = showDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
                 else
                 {

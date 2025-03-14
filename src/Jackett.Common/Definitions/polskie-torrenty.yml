@@ -11,19 +11,19 @@ links:
 caps:
   categorymappings:
     # Filmy
-    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
     - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD"}
-    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
-    - {id: 72, cat: Movies/HD, desc: "Filmy x264/1080p"}
-    - {id: 73, cat: Movies/HD, desc: "Filmy x264/720p"}
-    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 76, cat: Movies/HD, desc: "Filmy BluRay / REMUX"}
+    - {id: 72, cat: Movies/HD, desc: "Filmy x264/h264/1080p"}
+    - {id: 73, cat: Movies/HD, desc: "Filmy x264/h264/720p"}
     - {id: 75, cat: Movies/HD, desc: "Filmy x264/h264"}
-    - {id: 76, cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
     - {id: 77, cat: Movies/UHD, desc: "Filmy 4K UHD"}
-    - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
+    - {id: 88, cat: Movies/HD, desc: "Filmy x265/h265/1080p"}
+    - {id: 89, cat: Movies/HD, desc: "Filmy x265/h265/720p"}
+    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 78, cat: Movies/SD, desc: "Filmy IVO / AI"}
     - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM"}
-    - {id: 88, cat: Movies/HD, desc: "Filmy x265/1080p"}
-    - {id: 89, cat: Movies/HD, desc: "Filmy x265/720p"}
     # Seriale
     - {id: 25, cat: TV, desc: "Seriale Polskie"}
     - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}

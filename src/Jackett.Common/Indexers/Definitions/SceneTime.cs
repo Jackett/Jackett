@@ -199,7 +199,7 @@ namespace Jackett.Common.Indexers.Definitions
                     if (!query.MatchQueryStringAND(title))
                         continue;
 
-                    var details = new Uri(SiteLink + "/" + qLink.GetAttribute("href"));
+                    var details = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
                     var torrentId = ParseUtil.GetArgumentFromQueryString(qLink.GetAttribute("href"), "id");
                     var link = new Uri(string.Format(DownloadUrl, torrentId));
 

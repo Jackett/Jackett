@@ -47,11 +47,16 @@ search:
     download:
       selector: .entry-title > a
       attribute: href
+    poster:
+      selector: .mg-post-thumb
+      attribute: data-bg-image
+      filters:
+        - name: regexp
+          args: \('(.+?)'\)
     description:
-      selector: .entry-excerpt
+      selector: .mg-content
     date:
-      selector: time
-      attribute: datetime
+      selector: .mg-blog-date
     size:
       text: "512 MB"
     seeders:
@@ -62,4 +67,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 6.2.2
+# wordpress 6.7.2

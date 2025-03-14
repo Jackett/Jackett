@@ -110,7 +110,7 @@ search:
 
   rows:
     # for some users (don't know why) the table is called tablethree instead of tortable
-    selector: table#tortable > tbody > tr.rowhead, table#tablethree > tbody > tr.rowhead
+    selector: table#tortable > tbody > tr.rowhead:has(a[href^="dl.php/"]), table#tablethree > tbody > tr.rowhead:has(a[href^="dl.php/"])
 
   fields:
     # column 3 will be the wait time for new users

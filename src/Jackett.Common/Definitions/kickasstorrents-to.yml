@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://kickasstorrents.to/
+  - https://www.kickasstorrents.do/
   - https://kickasstorrent.cr/
   - https://katcr.to/
   - https://kickasstorrents.unblockninja.com/
@@ -19,6 +19,7 @@ links:
 legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
+  - https://kickasstorrents.to/
 
 caps:
   categorymappings:

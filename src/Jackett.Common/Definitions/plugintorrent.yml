@@ -1,12 +1,12 @@
 ---
-id: vstorrent
-name: VSTorrent
-description: "VSTorrent is a Public site for AUDIO apps, plugins and samples"
+id: plugintorrent
+name: plugintorrent
+description: "plugintorrent is a Public site for AUDIO apps, plugins and samples"
 language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://vstorrent.org/
+  - https://plugintorrent.com/
 
 caps:
   categories:
@@ -37,7 +37,7 @@ download:
       attribute: href
 
 search:
-  # https://vstorrent.org/?s=&orderby=date&order=DESC&post_type=post
+  # https://plugintorrent.com/?s=&orderby=date&order=DESC&post_type=post
   paths:
     - path: /
   allowEmptyInputs: true
@@ -77,4 +77,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# wordpress 7.2.0
+# wordpress 6.7.2

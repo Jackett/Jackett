@@ -17,8 +17,8 @@ namespace Jackett.Common.Utils
             {"tr", "udp://open.stealth.si:80/announce"},
             {"tr", "udp://tracker.torrent.eu.org:451/announce"},
             {"tr", "udp://exodus.desync.com:6969/announce"},
-            {"tr", "udp://tracker1.bt.moack.co.kr:80/announce"},
-            {"tr", "udp://tracker.theoks.net:6969/announce"},
+            {"tr", "udp://open.dstud.io:6969/announce"},
+            {"tr", "udp://tracker.ololosh.space:6969/announce"},
             {"tr", "udp://explodie.org:6969/announce"},
             {"tr", "udp://tracker-udp.gbitt.info:80/announce"}
         };

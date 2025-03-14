@@ -143,11 +143,21 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
+            var searchTerm = query.GetQueryString();
+
+            if (query.IsTVSearch &&
+                query.Season is > 0 &&
+                query.Episode.IsNotNullOrWhiteSpace() &&
+                DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
+            {
+                searchTerm = $"{query.SanitizedSearchTerm} {showDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture)}";
+            }
+
             var postData = new Dictionary<string, object>
             {
                 { BHDParams.action, "search" },
                 { BHDParams.rsskey, _configData.RSSKey.Value },
-                { BHDParams.search, query.GetQueryString() },
+                { BHDParams.search, searchTerm.Trim() },
             };
 
             if (_configData.FilterFreeleech.Value)

@@ -21,10 +21,17 @@ body:
   id: contributing-guidelines
   attributes:
     label: Have you read our Contributing Guidelines?
-    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md">Contributing Guidelines</a> before submitting your issue to ensure a prompt response to your bug.
+    description: Please read our <a href="https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md#troubleshooting">Contributing Guidelines (Troubleshooting and Reporting a Bug sections)</a> before submitting your issue to ensure a prompt response to your bug.
     options:
       - label: I have read the Contributing Guidelines
         required: true
+- type: input
+  attributes:
+    label: Have you ACTUALLY checked all these?
+    description: Please do not waste our time and yours; these checks are there for a reason, it is not just so you can tick boxes for fun. If you type <b>YES</b> and it is clear you did not or have put in no effort, your issue will be closed and locked without comment. If you type <b>NO</b> but still open this issue, you will be permanently blocked for timewasting.
+    placeholder: YES or NO
+  validations:
+    required: true
 - type: textarea
   id: environment
   attributes:
