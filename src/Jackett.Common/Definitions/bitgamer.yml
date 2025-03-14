@@ -130,7 +130,7 @@ search:
     download:
       selector: a[href^="download.php"]
       attribute: href
-    date:
+    date_valid:
       # several old torrents with `0000-00-00 00:00:00` dates
       selector: td:nth-child(5):not(:contains("000-00-0000:00:00"))
       filters:
@@ -139,6 +139,8 @@ search:
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
       optional: true
+    date:
+      text: "{{ if .Result.date_valid }}{{ .Result.date_valid }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     seeders:
