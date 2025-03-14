@@ -9,31 +9,7 @@ links:
   - https://bitgamer.ch/
 
 caps:
-  # TODO: Previous feedback indicated that [`Foo/Other` should only be used when the
-  # content in the indexer's version of the category is
-  # distinct](https://github.com/Jackett/Jackett/pull/15892#discussion_r1985900883). On
-  # further thought, given that a system of hierarchical categories is meant to support
-  # refining results beyond the top-level categories, I would think that all items
-  # should be in one of the subcategories, and that subcategory should be `Foo/Other` if
-  # no other subcategory fits. Otherwise, if a user is trying to refine their search and
-  # reduce noise, it's reasonable for them to expect that `Foo/Other` would only
-  # eliminate items in the other subcategories. But if the approach from the previous
-  # feedback is used, then they are unknowingly eliminating items of the kind they want
-  # to find. What are the counter arguments and/or use cases that support the previous
-  # feedback?
-  #
-  # TODO: [How should a contributor approach an indexer like
-  # this](https://discord.com/channels/264387956343570434/1028840523106107394/1349193243182497852)
-  # that has an `Adult Games` category, but neither `PC/*` nor `Console/*` have a
-  # `*/XXX` and `XXX/*` doesn't have a `XXX/PC` or `XXX/Console`. I'm not looking for an
-  # answer to that specific question, I"m looking for how to approach that case *and
-  # other* similarly ambiguous cases. Maybe pick the closest `PC/*` nor `Console/*`
-  # category since the tracker is software-focused and not XXX-focused? What if the
-  # tracker is general and doesn't have a focus either way? Maybe there are some cases
-  # where there's no better option than flipping a coin, but maybe I'm missing a better
-  # way to think about it?
   categorymappings:
-    - {id: 0, cat: Other, desc: "all types"}
     - {id: 1, cat: PC/Games, desc: "Adult Games"}
     - {id: 3, cat: PC, desc: "Burning/Ripping Tools"}
     - {id: 4, cat: Books/Other, desc: "Guides/Game Documents"}
@@ -119,8 +95,7 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
   error:
-    - selector: >-
-        td:has(:contains("Login failed"))
+    - selector: td:has(:contains("Login failed"))
   test:
     path: my.php
     selector: a[href^="logout.php"]
@@ -136,69 +111,50 @@ search:
     # 0: name, 1: descr, 2: both
     blah: 0
     # 0: include dead, 1: alive, 2: dead, 3: freeleech
-    incldead: >-
-      {{ if .Config.freeleech }}3{{ else }}0{{ end }}
-    sort: >-
-      {{ .Config.sort }}
-    type: >-
-      {{ .Config.type }}
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   rows:
-    # The HTML for this indexer's web UI is badly malformed: duplicate opening `<table>`
-    # tags, unclosed elements, etc.. For example, the selector copied from Chrome
-    # developer tools does *not* work but the selector copied from FireFox *does*
-    # work:
-    selector: >-
-      .outer > form > table > tbody > tr:has(a[href^="download.php"])
+    selector: .outer > form > table > tbody > tr:has(a[href^="download.php"])
 
   fields:
     category:
-      selector: >-
-        a[href^="browse.php?cat="]
+      selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: >-
-        a[href^="details.php"][title]
+      selector: a[href^="details.php"][title]
       attribute: title
     details:
-      selector: >-
-        a[href^="details.php"]
+      selector: a[href^="details.php"]
       attribute: href
     download:
-      selector: >-
-        a[href^="download.php"]
+      selector: a[href^="download.php"]
       attribute: href
     date:
-      # Found several examples of old torrents with `0000-00-00 00:00:00` dates but no
-      # examples of pre-times:
-      selector: >-
-        td:nth-child(5):not(:contains("000-00-0000:00:00"))
+      # several old torrents with `0000-00-00 00:00:00` dates
+      selector: td:nth-child(5):not(:contains("000-00-0000:00:00"))
       filters:
         - name: append
-          args: " +00:00" # Etc/UTC
+          args: " +00:00" # GMT
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
       optional: true
     size:
-      selector: >-
-        td:nth-child(6)
+      selector: td:nth-child(6)
     seeders:
-      selector: >-
-        td:nth-child(10)
+      selector: td:nth-child(10)
     leechers:
-      selector: >-
-        td:nth-child(11)
+      selector: td:nth-child(11)
     grabs:
-      selector: >-
-        td:nth-child(7)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         img[src*="/freeleech.png"]: 0
         "*": 1
-    # https://bitgamer.ch/forums.php?action=viewtopic&topicid=52
     minimumratio:
       text: 1.0
     minimumseedtime:
