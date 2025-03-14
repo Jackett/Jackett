@@ -169,6 +169,8 @@ search:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
       selector: td.rowfollow:nth-child(6)
       optional: true
