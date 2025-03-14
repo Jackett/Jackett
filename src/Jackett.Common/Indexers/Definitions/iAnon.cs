@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -66,6 +67,17 @@ namespace Jackett.Common.Indexers.Definitions
         protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
         {
             return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
+        }
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                // the site has a proportional ratio system calculated using (1) the total amount of data you've downloaded and (2) the total number of torrents you're seeding.
+                // So we are going to default the MR to the maximim ratio required to cover the whole range as we cannot calculate this for each user.
+                release.MinimumRatio = 0.6;
+            }
+            return releases;
         }
     }
 }
