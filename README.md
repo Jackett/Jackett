@@ -490,7 +490,7 @@ Prior versions of Jackett are no longer supported.
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
  * Peers.FM
- * Phoenix Project [![(invite needed)][inviteneeded]](#)
+ * Phoenix Project
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
