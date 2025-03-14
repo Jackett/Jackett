@@ -1,7 +1,7 @@
 ---
 id: bitgamer
 name: bitGAMER
-description: "bitGAMER is a Private Torrent Tracker for GAMES."
+description: "bitGAMER is a Private Torrent Tracker for GAMES"
 language: en-US
 type: private
 encoding: UTF-8
@@ -102,8 +102,7 @@ search:
     - path: browse.php
   inputs:
     search: "{{ .Keywords }}"
-    # There are checkboxes for categories but selecting them seems to be overriden by
-    # the `<select name="cat">` dropdown and has no effect:
+    # multi-cat search appears to be broken on site
     category: 0
     # 0: name, 1: descr, 2: both
     blah: 0
