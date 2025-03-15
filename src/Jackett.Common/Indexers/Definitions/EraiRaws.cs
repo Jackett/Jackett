@@ -18,7 +18,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "erai-raws";
         public override string Name => "Erai-Raws";
-        public override string Description => "Erai-Raws is a team release site for Anime subtitles.";
+        public override string Description => "Erai-Raws is a Semi-Private team release site for Anime subtitles.";
         public override string SiteLink { get; protected set; } = "https://www.erai-raws.info/";
         public override string[] AlternativeSiteLinks => new[]
         {

@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "dontorrent";
         public override string[] Replaces => new[] { "todotorrents" };
         public override string Name => "DonTorrent";
-        public override string Description => "DonTorrent is a SPANISH public tracker for MOVIES / TV / GENERAL";
+        public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
         public override string SiteLink { get; protected set; } = "https://dontorrent.schule/";
         public override string[] AlternativeSiteLinks => new[]
