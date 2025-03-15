@@ -1,7 +1,7 @@
 ---
 id: cinematik
 name: Cinematik (API)
-description: "A tracker for full BD and DVD discs of non-mainstream movies, niche cinema and arthouse."
+description: "Cinematik is a Private tracker for full BD and DVD discs of non-mainstream movies, niche cinema and arthouse."
 language: en-US
 type: private
 encoding: UTF-8

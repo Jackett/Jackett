@@ -3,7 +3,7 @@ id: sharewood-api
 replaces:
   - sharewoodapi
 name: Sharewood (API)
-description: "sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL"
+description: "sharewood is a FRENCH Semi-Private Torrent Tracker for GENERAL"
 language: fr-FR
 type: semi-private
 encoding: UTF-8
