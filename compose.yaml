@@ -1,0 +1,54 @@
+# https://github.com/linuxserver/docker-jackett?tab=readme-ov-file#docker-compose-recommended-click-here-for-more-info
+#
+# Override `${...:-...}` variables in `./.env` to customize.
+---
+services:
+
+  flaresolverr:
+    # DockerHub mirror flaresolverr/flaresolverr:latest
+    image: "ghcr.io/flaresolverr/flaresolverr:latest"
+    environment:
+      LOG_LEVEL: "${LOG_LEVEL:-debug}"
+      LOG_HTML: "${LOG_HTML:-false}"
+      CAPTCHA_SOLVER: "${CAPTCHA_SOLVER:-none}"
+      TZ: "${TZ:-Etc/UTC}"
+    ports:
+      - "${FLARESOLVERR_PORT:-127.0.0.1:8191}:8191"
+    restart: "unless-stopped"
+
+  jackett:
+    image: "lscr.io/linuxserver/jackett:latest"
+    depends_on:
+      flaresolverr:
+        condition: "service_started"
+    environment:
+      PUID: "${PUID:-1000}"
+      PGID: "${PGID:-1000}"
+      TZ: "${TZ:-Etc/UTC}"
+    volumes:
+      - "./.compose/jackett/config/:/config/"
+      - "./src/Jackett.Common/Definitions/:/app/Jackett/Definitions/"
+    ports:
+      - "${JACKETT_PORT:-127.0.0.1:9117}:9117"
+    restart: "unless-stopped"
+
+  prowlarr:
+    image: "ghcr.io/hotio/prowlarr:release"
+    depends_on:
+      flaresolverr:
+        condition: "service_started"
+    restart: "unless-stopped"
+    ports:
+      - "${PROWLARR_PORT:-127.0.0.1:9696}:9696"
+    environment:
+      PUID: "${PUID:-1000}"
+      PGID: "${PGID:-1000}"
+      UMASK: "${UMASK:-002}"
+      TZ: "${TZ:-Etc/UTC}"
+    volumes:
+      - "./.compose/prowlarr/config/:/config/"
+      - "./:/config/Jackett/"
+      # To test changes to indexer definitions, symlink them into
+      # `./.compose/prowlarr/config/Definitions/Custom/`:
+      #     $ ln -sv ../../Jackett/src/Jackett.Common/Definitions/foo-indexer.yml \
+      #     ./.compose/prowlarr/config/Definitions/Custom/
