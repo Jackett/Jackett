@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "hdtorrents";
         public override string Name => "HD-Torrents";
-        public override string Description => "HD-Torrents is a Private site with HD torrents and strict rules on their content.";
+        public override string Description => "HD-Torrents (HDT) is a Private Torrent Tracker for HD MOVIES / TV / MUSIC / 3X";
         public override string SiteLink { get; protected set; } = "https://hdts.ru/"; // Domain https://hdts.ru/ seems more reliable
         public override string[] AlternativeSiteLinks => new[]
         {

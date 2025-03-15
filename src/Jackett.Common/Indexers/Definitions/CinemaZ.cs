@@ -13,7 +13,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "cinemaz";
         public override string Name => "CinemaZ";
-        public override string Description => "CinemaZ is a Private site and part of the Avistaz network.";
+        public override string Description => "CinemaZ (EuTorrents) is a Private Torrent Tracker for FOREIGN NON-ASIAN MOVIES";
         public override string SiteLink { get; protected set; } = "https://cinemaz.to/";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
