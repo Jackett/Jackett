@@ -94,7 +94,7 @@ login:
     password: "{{ .Config.password }}"
     logout: ""
   error:
-    - selector: td.embedded:contains("Sikertelen bejelentkezés")
+    - selector: td.embedded:contains("Hiba")
   test:
     path: /
     selector: a[href$="logout.php"]
@@ -186,4 +186,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# TBDev
+# TBDev & XBTT
