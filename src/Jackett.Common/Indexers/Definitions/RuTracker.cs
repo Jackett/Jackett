@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "rutracker";
         public override string Name => "RuTracker.org";
-        public override string Description => "RuTracker.org is a Semi-Private Russian torrent site with a thriving file-sharing community";
+        public override string Description => "RuTracker.org is a RUSSIAN Semi-Private site with a thriving file-sharing community";
         public override string SiteLink { get; protected set; } = "https://rutracker.org/";
         public override string[] AlternativeSiteLinks => new[]
         {

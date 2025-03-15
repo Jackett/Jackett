@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "redacted";
         public override string[] Replaces => new[] { "passtheheadphones" };
         public override string Name => "Redacted";
-        public override string Description => "A music tracker";
+        public override string Description => "Redacted is a Private site for MUSIC";
         // Status: https://red.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://redacted.sh/";
         public override string[] LegacySiteLinks => new[] { "https://redacted.ch/" };

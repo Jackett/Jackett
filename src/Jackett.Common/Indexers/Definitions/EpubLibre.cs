@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "epublibre";
         public override string Name => "EpubLibre";
-        public override string Description => "Más libros, Más libres";
+        public override string Description => "EpubLibre is a Public site. Más libros, Más libres";
         public override string SiteLink { get; protected set; } = "https://www.epublibre.org/";
         public override string[] AlternativeSiteLinks => new[]
         {

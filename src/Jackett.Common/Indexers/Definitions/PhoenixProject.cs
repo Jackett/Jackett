@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "phoenixproject";
         public override string Name => "Phoenix Project";
-        public override string Description => "MacOS software tracker";
+        public override string Description => "Phoenix Project is a Private MacOS software tracker";
         public override string SiteLink { get; protected set; } = "https://phoenixproject.app/";
         public override string Language => "en-US";
         public override string Type => "private";

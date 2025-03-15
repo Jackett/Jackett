@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "myanonamouse";
         public override string Name => "MyAnonamouse";
-        public override string Description => "Friendliness, Warmth and Sharing";
+        public override string Description => "MyAnonamouse is a Private site. Friendliness, Warmth and Sharing";
         public override string SiteLink { get; protected set; } = "https://www.myanonamouse.net/";
         public override string Language => "en-US";
         public override string Type => "private";

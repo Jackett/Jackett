@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "scenetime";
         public override string Name => "SceneTime";
-        public override string Description => "Always on time";
+        public override string Description => "SceneTime is a Private site. Always on time";
         public override string SiteLink { get; protected set; } = "https://www.scenetime.com/";
         public override string Language => "en-US";
         public override string Type => "private";

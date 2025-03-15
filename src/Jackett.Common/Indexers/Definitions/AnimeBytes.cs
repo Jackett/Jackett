@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "animebytes";
         public override string Name => "AnimeBytes";
-        public override string Description => "Powered by Tentacles";
+        public override string Description => "AnimeBytes is a Private site. Powered by Tentacles";
         public override string SiteLink { get; protected set; } = "https://animebytes.tv/";
         public override string Language => "en-US";
         public override string Type => "private";

@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "beyond-hd-api";
         public override string Name => "Beyond-HD (API)";
-        public override string Description => "Without BeyondHD, your HDTV is just a TV";
+        public override string Description => "Beyond-HD is a Private site. Without BeyondHD, your HDTV is just a TV";
         public override string SiteLink { get; protected set; } = "https://beyond-hd.me/";
         public override string Language => "en-US";
         public override string Type => "private";

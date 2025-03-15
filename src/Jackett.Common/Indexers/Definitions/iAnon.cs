@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "ianon";
         public override string Name => "iAnon";
-        public override string Description => "MacOS software tracker";
+        public override string Description => "iAnon is a Private MacOS software tracker";
         public override string SiteLink { get; protected set; } = "https://ianon.app/";
         public override string Language => "en-US";
         public override string Type => "private";

@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "torrentbytes";
         public override string Name => "TorrentBytes";
-        public override string Description => "A decade of TorrentBytes";
+        public override string Description => "TorrentBytes is a Private site. A decade of TorrentBytes";
         public override string SiteLink { get; protected set; } = "https://www.torrentbytes.net/";
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";

@@ -16,7 +16,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "secretcinema";
         public override string Name => "Secret Cinema";
-        public override string Description => "A tracker for rare movies.";
+        public override string Description => "Secret Cinema is a Private ratioless site for rare MOVIES.";
         public override string SiteLink { get; protected set; } = "https://secret-cinema.pw/";
         public override string Language => "en-US";
         public override string Type => "private";

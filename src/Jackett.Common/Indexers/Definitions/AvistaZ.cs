@@ -14,7 +14,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "avistaz";
         public override string Name => "AvistaZ";
-        public override string Description => "Aka AsiaTorrents";
+        public override string Description => "AvistaZ is a Private site. Aka AsiaTorrents";
         public override string SiteLink { get; protected set; } = "https://avistaz.to/";
 
         protected override string TimezoneOffset => "+01:00";
