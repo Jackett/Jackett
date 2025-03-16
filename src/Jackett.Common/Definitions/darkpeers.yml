@@ -12,8 +12,9 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 7, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Console, desc: "Games"}
+    - {id: 3, cat: Audio, desc: "Music"}
     - {id: 5, cat: PC, desc: "Software"}
     - {id: 6, cat: XXX, desc: "XXX"}
 
