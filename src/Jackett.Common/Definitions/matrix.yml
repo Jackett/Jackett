@@ -111,7 +111,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.table-center > tbody > tr:has(a[href*="details.php?id="])
+    selector: table.table-center[width="905"] > tbody > tr:has(a[href*="details.php?id="])
 
   fields:
     categorydesc:
