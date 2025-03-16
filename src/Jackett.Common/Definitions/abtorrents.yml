@@ -134,6 +134,7 @@ search:
       attribute: alt
     title:
       selector: a[href^="details.php?id="]
+      remove: span.has-text-red
     details:
       selector: a[href^="details.php?id="]
       attribute: href
