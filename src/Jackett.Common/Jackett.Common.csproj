@@ -10,20 +10,20 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.1.2" />
+    <PackageReference Include="AngleSharp" Version="1.2.0" />
     <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
     <PackageReference Include="FlareSolverrSharp" Version="3.0.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.2.2" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
-    <PackageReference Include="NLog" Version="5.3.4" />
-    <PackageReference Include="Polly" Version="8.5.0" />
+    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="Polly" Version="8.5.2" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
