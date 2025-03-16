@@ -4,7 +4,7 @@ replaces:
   - tehconnectionme
   - anthelion
 name: Anthelion (API)
-description: "Anthelion is a Private MOVIES tracker"
+description: "Anthelion (ANT) is a Private Torrent Tracker for MOVIES"
 language: en-US
 type: private
 encoding: UTF-8
