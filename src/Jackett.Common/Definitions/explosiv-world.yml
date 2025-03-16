@@ -3,7 +3,7 @@ id: explosiv-world
 replaces:
   - torrent-explosiv
 name: Explosiv-World
-description: "Explosiv-World (E-W) is a GERMAN Private Torrent Tracker for TV / MOVIES / GENERAL"
+description: "Explosiv-World (E-W) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8

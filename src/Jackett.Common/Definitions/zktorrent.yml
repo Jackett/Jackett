@@ -3,7 +3,7 @@ id: zktorrent
 replaces:
   - gktorrent
 name: ZkTorrent
-description: "ZkTorrent is a FRENCH Public site for TV / MOVIES / GENERAL"
+description: "ZkTorrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8

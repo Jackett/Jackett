@@ -3,7 +3,7 @@ id: torrentgalaxy
 replaces:
   - torrentgalaxyorg
 name: TorrentGalaxy
-description: "TorrentGalaxy (TGx) is a Public site for TV / MOVIES / GENERAL"
+description: "TorrentGalaxy (TGx) is a Public site for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8

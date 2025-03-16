@@ -4,7 +4,7 @@ replaces:
   - torrent9clone
   - torrent9-tel
 name: NorTorrent
-description: "NorTorrent is a FRENCH Public tracker for TV / MOVIES / GENERAL"
+description: "NorTorrent is a FRENCH Public tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8

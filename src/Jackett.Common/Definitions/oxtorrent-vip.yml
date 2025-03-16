@@ -4,7 +4,7 @@ replaces:
   - oxtorrent
   - torrent911
 name: OxTorrent-vip
-description: "OxTorrent-vip is a FRENCH Public site for TV / MOVIES / GENERAL"
+description: "OxTorrent-vip is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
