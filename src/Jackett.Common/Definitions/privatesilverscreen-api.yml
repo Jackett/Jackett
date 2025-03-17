@@ -1,7 +1,7 @@
 ---
 id: privatesilverscreen-api
 name: PrivateSilverScreen (API)
-description: "PrivateSilverScreen (PSS) is a Private tracker for MOVIES / TV / MUSIC"
+description: "PrivateSilverScreen (PSS) is a Private Torrent Tracker for MOVIES / TV / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
