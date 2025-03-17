@@ -1,7 +1,7 @@
 ---
 id: torrenteros-api
 name: Torrenteros (API)
-description: "Torrenteros (TTR) is a SPANISH site for MOVIES / TV / GENERAL"
+description: "Torrenteros (TTR) is a SPANISH Torrent Tracker for MOVIES / TV / GENERAL"
 language: es-ES
 type: private
 encoding: UTF-8
