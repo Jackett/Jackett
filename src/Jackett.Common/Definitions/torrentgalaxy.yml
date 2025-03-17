@@ -23,6 +23,7 @@ legacylinks:
   - https://tgx.rs/ # ERR_CONNECTION_REFUSED
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 28, cat: TV/Anime, desc: "Anime - All"}
     - {id: 20, cat: PC/Mobile-Other, desc: "Apps - Mobile"}
