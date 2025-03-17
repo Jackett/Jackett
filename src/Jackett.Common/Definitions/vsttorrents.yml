@@ -48,15 +48,12 @@ search:
       selector: .entry-title > a
       attribute: href
     poster:
-      selector: .mg-post-thumb
-      attribute: data-bg-image
-      filters:
-        - name: regexp
-          args: \('(.+?)'\)
+      selector: .wp-post-image
+      attribute: data-src
     description:
-      selector: .mg-content
+      selector: .entry-summary
     date:
-      selector: .mg-blog-date
+      selector: .published
     size:
       text: "512 MB"
     seeders:
