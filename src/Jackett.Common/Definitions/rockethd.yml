@@ -6,8 +6,9 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://r0k3t.li/
   - https://rocket-hd.cc/
+legacylinks:
+  - https://r0k3t.li/
 
 caps:
   categorymappings:
