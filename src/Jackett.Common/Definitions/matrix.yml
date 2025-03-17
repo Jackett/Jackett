@@ -125,9 +125,6 @@ search:
       filters:
         - name: regexp
           args: toggleRow\((\d+),
-      filters:
-        - name: querystring
-          args: id
     details:
       text: "details.php?id={{ .Result._id }}"
     download:
