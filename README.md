@@ -525,6 +525,7 @@ Prior versions of Jackett are no longer supported.
  * RacingForMe (RFM)
  * Rain
  * RareShare2
+ * Rastastugan
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
