@@ -111,7 +111,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.table-center[width="905"] > tbody > tr:has(a[href*="details.php?id="])
+    selector: table.table-center[width="905"] > tbody > tr:has(a[onclick])
 
   fields:
     categorydesc:
@@ -119,17 +119,19 @@ search:
       attribute: title
     title:
       selector: td:nth-child(2) > div > a
+    _id:
+      selector: a[onclick]
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: toggleRow\((\d+),
+      filters:
+        - name: querystring
+          args: id
     details:
-      selector: a[href*="details.php?id="]
-      attribute: href
-      filters:
-        - name: re_replace
-          args: ["&hit=1.+", ""]
+      text: "details.php?id={{ .Result._id }}"
     download:
-      text: "{{ .Result.details }}"
-      filters:
-        - name: replace
-          args: ["details.php", "download.php"]
+      text: "download.php?id={{ .Result._id }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
