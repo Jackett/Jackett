@@ -194,13 +194,13 @@ search:
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
     grabs:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         div:contains("50% DL"): 0.5
