@@ -27,10 +27,9 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "mejortorrent";
         public override string Name => "MejorTorrent";
         public override string Description => "MejorTorrent is a Public site - Hay veces que un torrent viene mejor! :)";
-        public override string SiteLink { get; protected set; } = "https://www28.mejortorrent.eu/";
+        public override string SiteLink { get; protected set; } = "https://www29.mejortorrent.eu/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www13.mejortorrent.rip/",
             "https://www14.mejortorrent.rip/",
             "https://www15.mejortorrent.rip/",
             "https://www16.mejortorrent.rip/",
@@ -45,6 +44,7 @@ namespace Jackett.Common.Indexers.Definitions
              "https://www25.mejortorrent.zip/",
              "https://www26.mejortorrent.eu/",
              "https://www27.mejortorrent.eu/",
+             "https://www28.mejortorrent.eu/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
