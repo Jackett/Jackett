@@ -10,6 +10,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -255,6 +256,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
 
             var jsonResponse = JsonConvert.DeserializeObject<KnabenResponse>(indexerResponse.Content);
+            _logger.Debug(jsonResponse.ToString());
 
             if (jsonResponse?.Hits == null)
             {
@@ -267,20 +269,33 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 // Not all entries have the TZ in the "date" field
                 var publishDate = row.Date.IsNotNullOrWhiteSpace() && !_DateTimezoneRegex.IsMatch(row.Date) ? $"{row.Date}+01:00" : row.Date;
+                var downloadLink = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl, UriKind.Absolute, out var downloadUrl) ? downloadUrl : null;
+                // ignore .torrent links from LimeTorrents
+                if (row.TrackerId.Contains("limetorrents"))
+                {
+                    downloadLink = null;
+                }
+                var magnetURI = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl, UriKind.Absolute, out var magnetUrl) ? magnetUrl : null;
+                // skip LimeTorrents results without magnets
+                if (row.TrackerId.Contains("limetorrents") && magnetURI == null)
+                {
+                    continue;
+                }
 
                 var releaseInfo = new ReleaseInfo
                 {
                     Guid = new Uri(row.InfoUrl),
                     Title = row.Title,
                     Details = new Uri(row.InfoUrl),
-                    Link = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl, UriKind.Absolute, out var downloadUrl) ? downloadUrl : null,
-                    MagnetUri = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl, UriKind.Absolute, out var magnetUrl) ? magnetUrl : null,
+                    Link = downloadLink,
+                    MagnetUri = magnetURI,
                     Category = row.CategoryIds.SelectMany(cat => _categories.MapTrackerCatToNewznab(cat.ToString())).Distinct().ToList(),
                     InfoHash = row.InfoHash,
                     Size = row.Size,
                     Seeders = row.Seeders,
                     Peers = row.Leechers + row.Seeders,
                     PublishDate = DateTime.Parse(publishDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                    Description = row.Tracker,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 };
@@ -324,5 +339,9 @@ namespace Jackett.Common.Indexers.Definitions
         public int Leechers { get; set; }
 
         public string Date { get; set; }
+
+        public string TrackerId { get; set; }
+
+        public string Tracker { get; set; }
     }
 }
