@@ -573,7 +573,7 @@ Prior versions of Jackett are no longer supported.
  * The Occult
  * The Old School
  * The Paradiese
- * The Place [![(invite needed)][inviteneeded]](#)
+ * The Place
  * The Show
  * The Vault
  * The-New-Fun
