@@ -12,38 +12,20 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 46, cat: Other, desc: "Alpha Male Example Clips"}
-    - {id: 68, cat: Other, desc: "Author: Juggler"}
-    - {id: 69, cat: Other, desc: "Author: Sean Messenger"}
-    - {id: 42, cat: Other, desc: "Food / Drink / Cooking"}
-    - {id: 22, cat: Other, desc: "Seduction: Other"}
-    - {id: 60, cat: Other, desc: "Author: AMP"}
-    - {id: 70, cat: Other, desc: "Author: Michael Hall (NLP)"}
-    - {id: 61, cat: Other, desc: "Author: Style (Neil Strauss)"}
-    - {id: 47, cat: Other, desc: "Health / Fitness / Massage"}
-    - {id: 39, cat: Other, desc: "Seduction: Video"}
-    - {id: 51, cat: Other, desc: "Author: Anthony Robbins"}
-    - {id: 49, cat: Other, desc: "Author: Mystery"}
-    - {id: 66, cat: Other, desc: "Author: Vince Kelvin"}
-    - {id: 43, cat: Other, desc: "Hypnotism / NLP"}
-    - {id: 14, cat: Other, desc: "Seduction: Written"}
-    - {id: 50, cat: Other, desc: "Author: Carlos Xuma"}
-    - {id: 53, cat: Other, desc: "Author: Pickup101"}
     - {id: 41, cat: Other, desc: "Dance / Singing / Voice"}
-    - {id: 44, cat: Other, desc: "Languages / Accents"}
-    - {id: 40, cat: Other, desc: "Sex"}
-    - {id: 48, cat: Other, desc: "Author: David DeAngelo"}
-    - {id: 65, cat: Other, desc: "Author: Richard Bandler (NLP)"}
-    - {id: 57, cat: Other, desc: "Everything Else"}
-    - {id: 45, cat: Other, desc: "Magic / Illusions / Tricks"}
-    - {id: 54, cat: Other, desc: "Author: David Shade"}
-    - {id: 52, cat: Other, desc: "Author: Ross Jeffries"}
-    - {id: 58, cat: Other, desc: "Fashion / Clothing / Grooming"}
-    - {id: 59, cat: Other, desc: "Psychology / Body Language"}
-    - {id: 71, cat: Other, desc: "Author: Jerry Stocking"}
-    - {id: 67, cat: Other, desc: "Author: RSD"}
     - {id: 64, cat: Other, desc: "Fighting / Martial Arts"}
-    - {id: 38, cat: Other, desc: "Seduction: Audio"}
+    - {id: 43, cat: Other, desc: "Hypnosis / NLP"}
+    - {id: 201, cat: Other, desc: "Migrated"}
+    - {id: 39, cat: Other, desc: "Seduction"}
+    - {id: 57, cat: Other, desc: "Everything Else"}
+    - {id: 42, cat: Other, desc: "Food / Drink / Cooking"}
+    - {id: 44, cat: Other, desc: "Languages / Accents"}
+    - {id: 200, cat: Other, desc: "Migration"}
+    - {id: 40, cat: Other, desc: "Sex"}
+    - {id: 58, cat: Other, desc: "Fashion / Clothing / Grooming"}
+    - {id: 47, cat: Other, desc: "Health / Fitness / Massage"}
+    - {id: 45, cat: Other, desc: "Magic / Illusions / Tricks"}
+    - {id: 59, cat: Other, desc: "Psychology / Body Language"}
 
   modes:
     search: [q]
