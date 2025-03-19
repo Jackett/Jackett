@@ -51,12 +51,11 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -87,14 +86,10 @@ settings:
     default: "If you do not log in to the site for 6 months, the system will automatically delete it!"
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Clouflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
-  error:
-    - selector: td.embedded:contains("Hiba")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href*="logout.php?logout="]
