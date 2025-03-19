@@ -106,7 +106,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active only, 1 include dead, 2 only dead, 3 free, 4 double
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -129,6 +129,12 @@ search:
       text: "details.php?id={{ .Result._id }}"
     download:
       text: "download.php?id={{ .Result._id }}"
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: \\\'(.+?)\\
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -147,13 +153,18 @@ search:
       selector: td:nth-child(6)
     leechers:
       selector: td:nth-child(7)
+    _verified:
+      selector: span.torrent-ok, span.torrent-unchecked
+      case:
+        span.torrent-ok: Verified
+        span.torrent-unchecked: Unchecked
     genre:
       selector: td:nth-child(2) > div > i.small
       filters:
         - name: regexp
           args: "\\((.+)\\)"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ .Result._verified }} - {{ .Result.genre }}"
     downloadvolumefactor:
       case:
         span.text-red:contains("[x0]"): 0
