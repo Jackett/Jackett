@@ -101,7 +101,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active only, 1 include dead, 2 only dead, 3 free, 4 double
-    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
