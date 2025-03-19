@@ -108,12 +108,10 @@ search:
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
-    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%, 8 neutral
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 2 smalldesc, 3 uploader, 4 imdburl, 5 doubanurl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
-    # 0 AND, 1 OR, 2 exact
-    search_mode: 0
+    # 1 title&subtitle, 2 titleonly, 3 descr
+    search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}3{{ else }}2{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
@@ -195,4 +193,4 @@ search:
         "*": 1
     description:
       selector: td:nth-child(2) > font:last-child
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP Standard v1.5 Beta 4 (custom)
