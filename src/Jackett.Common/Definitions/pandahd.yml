@@ -14,13 +14,18 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Console, desc: "Game"}
-    - {id: 5, cat: PC, desc: "Application"}
+    - {id: 5, cat: Movies/Other, desc: "Anime Movies"}
+    - {id: 6, cat: TV, desc: "Anime Series"}
+    - {id: 7, cat: Books, desc: "Book"}
+    - {id: 8, cat: TV, desc: "TS Firehose (TV)"}
+    - {id: 9, cat: Movies, desc: "TS Firehose (Movies)"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -139,8 +144,8 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      text: 0.4
+#    minimumseedtime:
+#      # 7 days (as seconds = 7 x 24 x 60 x 60)
+#      text: 604800
 # json UNIT3D 5.3.0
