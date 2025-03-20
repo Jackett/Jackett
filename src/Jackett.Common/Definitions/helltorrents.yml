@@ -1,7 +1,7 @@
 ---
 id: helltorrents
 name: HellTorrents
-description: "HellTorrents is a POLISH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "HellTorrents is a POLISH Semi-Private PAY2DL Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-PL
 type: semi-private
 encoding: ISO-8859-2
@@ -11,35 +11,38 @@ links:
 caps:
   categorymappings:
     # Filmy
-    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
-    - {id: 28, cat: Movies/SD, desc: "Filmy VCD/SVCD"}
     - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD"}
-    - {id: 31, cat: Movies/HD, desc: "Filmy RMVB"}
-    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
     - {id: 72, cat: Movies/BluRay, desc: "Filmy BluRay/HDTV 1080p"}
     - {id: 73, cat: Movies/BluRay, desc: "Filmy BluRay/HDTV 720p"}
     - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
     - {id: 75, cat: Movies/HD, desc: "Filmy x264/h264"}
     - {id: 76, cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
     - {id: 77, cat: Movies/UHD, desc: "Filmy i Seriale 4K UHD"}
+    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 31, cat: Movies/HD, desc: "Filmy RMVB"}
+    - {id: 28, cat: Movies/SD, desc: "Filmy VCD/SVCD"}
     - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
-    - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM/IVO/AUDIO KINO"}
+    - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM"}
     # Seriale
     - {id: 25, cat: TV, desc: "Seriale Polskie"}
     - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
+    # Anime
+    - {id: 69, cat: TV/Anime, desc: "Anime PL"}
+    - {id: 70, cat: TV/Anime, desc: "Anime"}
     # Dla Dzieci
     - {id: 32, cat: Movies, desc: "Bajki Pl/Eng"}
-    # Gry
-    - {id: 34, cat: PC/Games, desc: "Gry PC"}
-    - {id: 35, cat: Console/PSP, desc: "PS2/PS3/PS4/PSP"}
-    - {id: 36, cat: Console/XBox, desc: "Xbox One/XBOX 360/Xbox"}
-    - {id: 37, cat: Console/NDS, desc: "NINTENDO / WII / DS"}
     # Muzyka
+    - {id: 80, cat: Audio, desc: "Muzyka Polska"}
     - {id: 38, cat: Audio/Foreign, desc: "Muzyka Zagraniczna"}
     - {id: 39, cat: Audio, desc: "Soundtracki"}
     - {id: 40, cat: Audio/Video, desc: "Teledyski"}
-    - {id: 80, cat: Audio, desc: "Muzyka Polska"}
     - {id: 81, cat: Audio/Video, desc: "Koncerty"}
+    # Gry
+    - {id: 34, cat: PC/Games, desc: "Gry PC"}
+    - {id: 36, cat: Console/XBox, desc: "Xbox One/XBOX 360/Xbox"}
+    - {id: 37, cat: Console/NDS, desc: "NINTENDO / WII / DS"}
+    - {id: 35, cat: Console/PSP, desc: "PS2/PS3/PS4/PSP"}
     # GSM/PDA
     - {id: 42, cat: PC/Mobile-Other, desc: "Tapety GSM/PDA"}
     - {id: 43, cat: PC/Mobile-Other, desc: "Programy GSM/PDA"}
@@ -66,9 +69,6 @@ caps:
     - {id: 60, cat: XXX/x264, desc: "Filmy"}
     - {id: 61, cat: XXX/Other, desc: "Gry "}
     - {id: 62, cat: XXX/Other, desc: "Hentai+18"}
-    # Anime
-    - {id: 69, cat: TV/Anime, desc: "Anime Pl"}
-    - {id: 70, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
@@ -125,6 +125,10 @@ search:
     search: "{{ .Keywords }}"
     page: 0
     # does not support sorting results, or imdbid searching, or have imdb in results
+  error:
+    - selector: img[src="../images/bladpobierania.png"]
+      message:
+        text: "you do not have permission to download!"
 
   rows:
     selector: table.header:has(a[href*="download.php?id="]), table.header:has(a[href*="piekielny.php"])

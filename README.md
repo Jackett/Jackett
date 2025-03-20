@@ -189,7 +189,7 @@ Prior versions of Jackett are no longer supported.
  * Genesis-Movement
  * HD-CzTorrent
  * HDGalaKtik
- * HellTorrents
+ * HellTorrents [PAY2DL]
  * HunTorrent
  * Il CorSaRo Blu
  * ilDraGoNeRo
@@ -367,7 +367,7 @@ Prior versions of Jackett are no longer supported.
  * Generation-Free [![(invite needed)][inviteneeded]](#)
  * GGPT
  * GigaTorrents
- * GimmePeers (formerly ILT)
+ * GimmePeers (formerly ILT) [PAY2DL]
  * GiroTorrent
  * GreatPosterWall (GPW)
  * HaiDan
