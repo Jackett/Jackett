@@ -6,8 +6,6 @@ language: hu-HU
 type: private
 encoding: UTF-8
 requestDelay: 2
-certificates:
-  - affbe2eda62b3fac90212d6f314a7eb19504ced2  # Expired 19 Mar 2025
 links:
   - https://bitbazis.net/
 
