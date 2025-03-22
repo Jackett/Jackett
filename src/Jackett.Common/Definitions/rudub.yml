@@ -9,10 +9,8 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://22mar.rudub.online/
+  - https://23mar.rudub.online/
 legacylinks:
-  - http://07mar.rudub.online/
-  - https://07mar.rudub.online/
   - http://08mar.rudub.online/
   - https://08mar.rudub.online/
   - http://09mar.rudub.online/
@@ -42,6 +40,8 @@ legacylinks:
   - http://21mar.rudub.online/
   - https://21mar.rudub.online/
   - http://22mar.rudub.online/
+  - https://22mar.rudub.online/
+  - http://23mar.rudub.online/
 
 caps:
   categorymappings:
