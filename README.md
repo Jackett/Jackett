@@ -639,6 +639,7 @@ Prior versions of Jackett are no longer supported.
  * YOiNKED
  * YUSCENE
  * Zamunda.net
+ * Zappateers
  * Zelka.org
  * ZmPT (织梦)
  * ZonaQ [![(invite needed)][inviteneeded]](#)
