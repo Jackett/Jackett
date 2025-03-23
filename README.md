@@ -104,6 +104,7 @@ Prior versions of Jackett are no longer supported.
  * OxTorrent-vip
  * OpenSharing
  * PC-torrent
+ * Pirate's Paradise
  * plugintorrent
  * PornoTorrent
  * PornRips
