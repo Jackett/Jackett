@@ -57,19 +57,20 @@ settings:
 
 search:
   paths:
-    # https://www.torrentfunk.com/all/torrents/2025.html?smi=0&sma=0&i=100&sort=added&o=desc&
-    - path: "all/torrents/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}.html"
-  keywordsfilters:
-    - name: re_replace
-      args: ["[\\s]+", "-"]
-    - name: tolower
+    # https://www.torrentfunk.com/?qq=1&q=&c=&i=50&sort=added&o=desc&smi=&sma=&submit=SEARCH
+    - path: /
+  allowEmptyInputs: true
   inputs:
-    smi: 0
-    sma: 0
+    qq: 1
+    q: "{{ .Keywords }}"
+    c: ""
     # 50, 100, 150, 200, 250
     i: 100
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    smi: ""
+    sma: ""
+    submit: SEARCH
 
   rows:
     selector: table.tmain tbody tr:has(a[href^="/torrent/"])
