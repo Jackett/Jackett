@@ -21,7 +21,6 @@ settings:
   - name: info_category_8000
     type: info_category_8000
 
-
 search:
   paths:
     - path: "{{ if .Keywords }}search.php?q={{ .Keywords }}{{ else }}index.php{{ end }}"
