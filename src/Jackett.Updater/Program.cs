@@ -734,6 +734,7 @@ namespace Jackett.Updater
                 "Definitions/torrentseeds.yml", // migrated to c#
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrent-town.yml",
+                "Definitions/torrentslocal.yml",
                 "Definitions/torrentsurf.yml", // renamed xtremebytes #9951
                 "Definitions/torrentv.yml",
                 "Definitions/torrentvault.yml",
