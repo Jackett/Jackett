@@ -109,6 +109,7 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Anzahl der Torrents beim Durchsuchen</b> <i>Torrents per page:</i> setting to <b>60</b> on your account profile. The default is <i>15</i>.
+  - name: info_activity
     type: info
     label: Account Inactivity
     default: "If you do not log in, your account will be automatically deleted after 28 days."
