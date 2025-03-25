@@ -36,12 +36,12 @@ search:
     details:
       selector: a.name-link
       attribute: href
-    magnet:
+    infohash:
       selector: button.magnet-btn
       attribute: onclick
       filters:
         - name: regexp
-          args: \'(.+?)\'
+          args: ([A-F|a-f|0-9]{40})
     date:
       selector: span.date-added
       optional: true
