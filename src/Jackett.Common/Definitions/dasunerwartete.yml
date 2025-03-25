@@ -96,6 +96,7 @@ login:
     password: "{{ .Config.password }}"
     loggiin: Login
   error:
+    - selector: div#login_error
     - selector: div.error-message
   test:
     path: index.php
