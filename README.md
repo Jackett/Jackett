@@ -428,9 +428,9 @@ Prior versions of Jackett are no longer supported.
  * KrazyZone
  * Kufei (库非)
  * Kufirc
+ * LaidBackManor
  * Last Digital Underground (LDU)
  * LastFiles (LF)
- * LaidBackManor
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * Le-Cinephile
@@ -450,8 +450,8 @@ Prior versions of Jackett are no longer supported.
  * MaDs Revolution
  * Majomparádé (TurkDepo)
  * Making Off
- * Mansão dos Animes (MDAN)
  * Malayabits
+ * Mansão dos Animes (MDAN)
  * Matrix
  * MegamixTracker
  * MeseVilág (Fairytale World)
@@ -521,7 +521,7 @@ Prior versions of Jackett are no longer supported.
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
- * Rain
+ * Rain (雨)
  * RareShare2
  * Rastastugan
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
@@ -565,6 +565,7 @@ Prior versions of Jackett are no longer supported.
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * The Crazy Ones
+ * The Empire (TE)
  * The Falling Angels (TFA)
  * The Geeks
  * The Kitchen (TK)
@@ -576,7 +577,6 @@ Prior versions of Jackett are no longer supported.
  * The Show (TSBZ)
  * The Vault (TVBZ)
  * The-New-Fun
- * TheEmpire (TE)
  * TheLeachZone (TLZ)
  * ThePiratedShip
  * TJUPT (北洋园PT)
