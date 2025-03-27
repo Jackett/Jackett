@@ -138,8 +138,9 @@ caps:
     - {id: 401, cat: Books, desc: "Section for cadets-Lectures and Notes"}
     - {id: 410, cat: Books, desc: "Section for cadets-Cheat Sheets"}
     - {id: 405, cat: Books, desc: "Section for cadets-Charts and Atlases"}
-    - {id: 409, cat: Books, desc: "Section for cadets-Young Skipper"}
     - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
+    - {id: 409, cat: Books, desc: "Section for cadets-Young Skipper"}
+    - {id: 413, cat: Books, desc: "Section for cadets-For the Little Ones"}
     - {id: 330, cat: Books, desc: "Examinations"}
     - {id: 12, cat: Books, desc: "Examinations-Answers to tests"}
     - {id: 333, cat: Books, desc: "Examinations-IMU CET (Indian Maritime University Common Entrance Test)"}
@@ -235,12 +236,14 @@ caps:
     - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
     - {id: 319, cat: Books, desc: "Fishing tackle and knots"}
+    - {id: 412, cat: Books, desc: "Marine Fauna"}
     - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
     - {id: 328, cat: Books, desc: "Technical Books (Not maritime)-Hydraulics"}
     - {id: 327, cat: Books, desc: "Technical Books (Not maritime)-Mechanics"}
     - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
-    - {id: 38, cat: Books, desc: "Archive-Uncategorized"}
+    - {id: 411, cat: Books, desc: "Others (not maritime)-Video"}
+    - {id: 38, cat: Books, desc: "Uncategorized"}
     - {id: 162, cat: Books, desc: "Archive"}
     - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 379, cat: Books, desc: "Archive-Video materials (Archive)"}
