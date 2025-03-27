@@ -552,7 +552,7 @@ Prior versions of Jackett are no longer supported.
  * SpeedCD
  * Speedmaster HD [![(invite needed)][inviteneeded]](#)
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
- * SportsCraze
+ * SportsCraze (SPCRZ)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
  * SugoiMusic
