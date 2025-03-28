@@ -53,7 +53,7 @@ search:
     description:
       selector: .entry-summary
     date:
-      selector: .published
+      selector: .post-date
     size:
       text: "512 MB"
     seeders:
