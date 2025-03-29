@@ -282,7 +282,7 @@ search:
         - name: re_replace
           args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
     details:
-      selector: a.genmed, a.seedmed
+      selector: a.genmed, a.seedmed, a.leechmed
       attribute: href
     download:
       selector: a[href^="./dl.php?id="]
