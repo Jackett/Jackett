@@ -10,19 +10,19 @@ links:
 
 caps:
   categorymappings:
-    - {id: 33, cat: Movies, desc: "iNTERNAL"}
     - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
+    - {id: 33, cat: Movies, desc: "iNTERNAL"}
     - {id: 4, cat: Movies, desc: "Bajki"}
     - {id: 31, cat: TV/Anime, desc: "Anime/Seriale"}
-    - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
     - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
+    - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
     - {id: 12, cat: Movies/BluRay, desc: "BD25/50_5/9"}
     - {id: 14, cat: Movies/3D, desc: "Filmy 3D"}
     - {id: 16, cat: Movies/SD, desc: "Filmy SD"}
     - {id: 17, cat: Movies/Other, desc: "Filmy inne"}
-    - {id: 5, cat: PC/Games, desc: "Gry pc"}
     - {id: 24, cat: PC/Games, desc: "Gry dodatki"}
+    - {id: 5, cat: PC/Games, desc: "Gry PC"}
     - {id: 10, cat: Console, desc: "Gry Konsole"}
     - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
     - {id: 19, cat: Other, desc: "Inne"}
@@ -41,6 +41,8 @@ caps:
     - {id: 15, cat: Movies, desc: "Filmy bez lektora"}
     - {id: 7, cat: XXX, desc: "XXX 18+"}
     - {id: 32, cat: Movies/Other, desc: "Anime/Filmy"}
+    - {id: 34, cat: Movies, desc: "Ai - Filmy"}
+    - {id: 35, cat: TV, desc: "Ai - Seriale"}
 
   modes:
     search: [q]
