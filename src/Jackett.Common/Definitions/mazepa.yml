@@ -200,7 +200,7 @@ search:
         - name: regexp
           args: f=(\d+)
     title:
-      selector: a.genmed, a.seedmed
+      selector: a.genmed, a.seedmed, a.leechmed
       filters:
         # normalize to SXXEYY format
         # Ukrainian
