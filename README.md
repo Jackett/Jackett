@@ -108,7 +108,6 @@ Prior versions of Jackett are no longer supported.
  * PornoTorrent
  * PornRips
  * Postman
- * ProPorn
  * Rapidzona
  * RedeTorrent
  * RinTorNeT
@@ -211,6 +210,7 @@ Prior versions of Jackett are no longer supported.
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
+ * ProPorno
  * PussyTorrents
  * Rainbow Tracker
  * RGFootball
