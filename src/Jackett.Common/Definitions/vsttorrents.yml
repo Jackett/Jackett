@@ -53,7 +53,8 @@ search:
     description:
       selector: .entry-summary
     date:
-      selector: .post-date
+      selector: time
+      attribute: datetime
     size:
       text: "512 MB"
     seeders:
