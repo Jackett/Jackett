@@ -23,7 +23,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
             "https://www.filmeshdtorrent.vip/",
-            "https://bludvfilmes.org/rarbg/",
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
@@ -33,6 +32,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://filmetorrent.org/baixar/",
             "https://filmetorrent.org/x/",
             "https://bludvfilmes.org/",
+            "https://bludvfilmes.org/rarbg/",
         };
 
         public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
