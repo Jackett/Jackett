@@ -131,7 +131,7 @@ search:
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    perPage: 50
+    perPage: 100
 
   keywordsfilters:
     - name: re_replace
@@ -237,4 +237,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 8.3.4 (custom)
+# json UNIT3D 9.0.3 (custom)
