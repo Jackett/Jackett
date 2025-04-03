@@ -7,13 +7,13 @@ type: public
 encoding: UTF-8
 # current domain at https://cursor.vip/btmulu then follow links to the final search-movie link
 links:
-  - https://www.btmulu.one/
+  - https://btmulu.work/
   - https://www.btmulu.cyou/
 legacylinks:
-  - https://btmulu.work/
   - https://www.btmulu.asia/
   - https://www.btmulu.digital/
   - https://www.btmulu.pw/
+  - https://www.btmulu.one/
 
 caps:
   categorymappings:
