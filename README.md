@@ -182,7 +182,6 @@ Prior versions of Jackett are no longer supported.
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay
- * ExtremlymTorrents (XTR)
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
