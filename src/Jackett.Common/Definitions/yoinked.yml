@@ -15,6 +15,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Books, desc: "Book"}
     - {id: 5, cat: Audio/Audiobook, desc: "AudioBook"}
+    - {id: 6, cat: Console, desc: "Games"}
 
   modes:
     search: [q]
