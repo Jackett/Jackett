@@ -35,8 +35,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        const string RSS_PATH = "feed/?type=magnet&token=";
-
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -91,7 +89,7 @@ namespace Jackett.Common.Indexers.Definitions
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
         private bool IsSubsEnabled => ((BoolConfigurationItem)configData.GetDynamic("include-subs")).Value;
 
-        public string RssFeedUri => SiteLink + RSS_PATH + RSSKey;
+        public string RssFeedUri => SiteLink;
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
