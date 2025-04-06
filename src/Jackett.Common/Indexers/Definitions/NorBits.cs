@@ -28,7 +28,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "NorBits";
         public override string Description => "NorBits is a NORWEGIAN Private site for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://norbits.net/";
-        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "nb-NO";
         public override string Type => "private";
 
