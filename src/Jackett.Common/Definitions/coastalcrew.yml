@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: 122, cat: Movies, desc: "Movie Klassiker"}
     - {id: 124, cat: Movies, desc: "Movie Kids"}
+    - {id: 127, cat: Movies, desc: "Movie Pack"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD-R"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
