@@ -54,6 +54,10 @@ caps:
     music-search: [q]
 
 settings:
+  - name: info_password
+    type: info
+    label: About Password Expiry
+    default: "MegamixTracker has a <b>mandatory Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://megamixtracker.hu/login.php\" target=\"_blank\">MegamixTracker</a>,  and if necessary use the <b>Jelszó visszaállítás</b> (<i>Password Reset</i>) button to renew it."
   - name: username
     type: text
     label: Username
