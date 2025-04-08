@@ -10,8 +10,6 @@ encoding: windows-1251
 followredirect: true
 links:
   - https://apr08.rudub.vip/
-  - https://apr07.rudub.vip/
-  - http://apr08.rudub.vip/
 legacylinks:
   - http://24mar.rudub.online/
   - https://24mar.rudub.online/
@@ -42,6 +40,8 @@ legacylinks:
   - http://apr06.rudub.vip/
   - https://apr06.rudub.vip/
   - http://apr07.rudub.vip/
+  - https://apr07.rudub.vip/
+  - http://apr08.rudub.vip/
 
 caps:
   categorymappings:
