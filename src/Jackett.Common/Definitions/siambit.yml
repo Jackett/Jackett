@@ -7,13 +7,13 @@ type: private
 encoding: tis-620
 requestDelay: 2
 links:
-  - https://bearbit.cc/
+  - https://bearbit.org/
 legacylinks:
   - https://www.siambit.me/
   - https://siambit.io/
   - https://thaibit.net/
   - https://bearbit.co/
-  - https://bearbit.org/
+  - https://bearbit.cc/
 
 caps:
   # dont forget to update the path categories in the search block
