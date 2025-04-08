@@ -195,7 +195,6 @@ namespace Jackett.Common.Indexers.Definitions
             catch (Exception ex)
             {
                 OnParseError(result.ContentString, ex);
-                throw ex;
             }
 
             return releases;
