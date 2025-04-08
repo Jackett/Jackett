@@ -1,7 +1,7 @@
 ---
 id: lst
 name: LST
-description: "LST is an English Private tracker for MOVIES / TV / GENERAL"
+description: "LST is an ENGLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
@@ -77,7 +77,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

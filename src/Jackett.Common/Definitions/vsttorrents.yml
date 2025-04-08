@@ -48,15 +48,19 @@ search:
       selector: .entry-title > a
       attribute: href
     poster:
-      selector: .mg-post-thumb
-      attribute: data-bg-image
-      filters:
-        - name: regexp
-          args: \('(.+?)'\)
+      selector: .wp-post-image
+      attribute: data-src
     description:
-      selector: .mg-content
+      selector: .entry-summary
+    date_year:
+      selector: .post-date
+      optional: true
+    date_time:
+      selector: time
+      attribute: datetime
+      optional: true
     date:
-      selector: .mg-blog-date
+      text: "{{ if or .Result.date_year .Result.date_time }}{{ or .Result.date_year .Result.date_time }}{{ else }}now{{ end }}"
     size:
       text: "512 MB"
     seeders:

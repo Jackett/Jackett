@@ -76,7 +76,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -186,10 +186,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.7 but torrents must be seeded for 3 days regardless of ratio
+# global MR is 0.7 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 0.7
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 8.3.6
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+# json UNIT3D 9.0.1

@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "bithdtv";
         public override string Name => "BIT-HDTV";
-        public override string Description => "BIT-HDTV - Home of High Definition";
+        public override string Description => "BIT-HDTV is a Private site - Home of High Definition";
         public override string SiteLink { get; protected set; } = "https://www.bit-hdtv.com/";
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";

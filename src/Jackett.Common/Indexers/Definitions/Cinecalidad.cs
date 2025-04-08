@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "cinecalidad";
         public override string Name => "Cinecalidad";
-        public override string Description => "Películas Full UHD/HD en Latino Dual.";
+        public override string Description => "Cinecalidad is a Public site for Películas Full UHD/HD en Latino Dual.";
         public override string SiteLink { get; protected set; } = "https://www.cinecalidad.vg/";
         public override string[] LegacySiteLinks => new[]
         {
@@ -215,6 +215,13 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         // skip if it doesn't contain all words
                         continue;
+                    }
+
+                    var yearDiv = row.QuerySelector("div[style*='left: 5px']");
+                    var yearText = yearDiv?.TextContent?.Trim(); // e.g., "2024"
+                    if (!string.IsNullOrEmpty(yearText))
+                    {
+                        title = $"{title} ({yearText})";
                     }
 
                     var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("data-src") ?? qImg.GetAttribute("src")));

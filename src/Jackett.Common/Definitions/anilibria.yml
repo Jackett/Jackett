@@ -1,7 +1,7 @@
 ---
 id: anilibria
 name: AniLibria
-description: "AniLibria is a Public torrent tracker for anime, voiced on russian by AniLibria team"
+description: "AniLibria is a Public torrent tracker for anime, voiced in Russian by AniLibria team"
 language: ru-RU
 type: public
 encoding: UTF-8

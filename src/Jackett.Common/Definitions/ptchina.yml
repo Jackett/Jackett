@@ -1,7 +1,7 @@
 ---
 id: ptchina
 name: PTChina (铂金学院)
-description: "PTChina (铂金学院) is a CHINESE Private site for MOVIES / TV"
+description: "PTChina (铂金学院) is a CHINESE Private Torrent Tracker for MOVIES / TV"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -197,4 +197,4 @@ search:
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "
-# NexusPHP v1.8.12 2024-04-13
+# NexusPHP v1.8.15 2024-12-23

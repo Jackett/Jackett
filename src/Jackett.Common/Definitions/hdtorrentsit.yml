@@ -1,7 +1,7 @@
 ---
 id: hdtorrentsit
 name: HDTorrents.it (API)
-description: "HDTorrents.it is an ITALIAN Private PAY2DL site for TV / MOVIES"
+description: "HDTorrents.it is an ITALIAN Private PAY2DL site for MOVIES / TV"
 language: it-IT
 type: private
 encoding: UTF-8
@@ -68,7 +68,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

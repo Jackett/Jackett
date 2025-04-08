@@ -1,7 +1,7 @@
 ---
 id: f1carreras-api
 name: F1Carreras (API)
-description: "F1Carreras is a Spanish Private Torrent Tracker for Motor Racing TV Releases"
+description: "F1Carreras is a SPANISH Private Torrent Tracker for Motor Racing TV Releases"
 language: es-MX
 type: private
 encoding: UTF-8
@@ -74,7 +74,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

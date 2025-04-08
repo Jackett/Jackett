@@ -7,12 +7,8 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentsir169.com/
+  - https://torrentsir171.com/
 legacylinks:
-  - http://torrentsir158.com/
-  - https://torrentsir158.com/
-  - http://torrentsir159.com/
-  - https://torrentsir159.com/
   - http://torrentsir160.com/
   - https://torrentsir160.com/
   - http://torrentsir161.com/
@@ -32,6 +28,10 @@ legacylinks:
   - http://torrentsir168.com/
   - https://torrentsir168.com/
   - http://torrentsir169.com/
+  - https://torrentsir169.com/
+  - http://torrentsir170.com/
+  - https://torrentsir170.com/
+  - http://torrentsir171.com/
 
 caps:
   categorymappings:
@@ -76,14 +76,15 @@ download:
 
 search:
   paths:
-    # https://torrentsir38.com/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2021&sop=and
+    # https://torrentsir171.com/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2025&sop=and
     - path: bbs/search.php
+  allowEmptyInputs: true
   inputs:
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     srows: 100
     gr_id: ""
     # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
     sfl: wr_subject
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # or, and
     sop: and
 

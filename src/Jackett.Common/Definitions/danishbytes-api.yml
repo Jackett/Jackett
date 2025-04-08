@@ -1,7 +1,7 @@
 ---
 id: danishbytes-api
 name: DanishBytes (API)
-description: "DanishBytes is a Private Danish Tracker"
+description: "DanishBytes is a Private Danish Torrent Tracker for MOVIES / TV / GENERAL"
 language: da-DK
 type: private
 encoding: UTF-8

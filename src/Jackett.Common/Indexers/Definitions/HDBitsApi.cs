@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "hdbitsapi";
         public override string Name => "HDBits (API)";
-        public override string Description => "The HighDefinition Bittorrent Community";
+        public override string Description => "HDBits is a Private site for the HighDefinition Bittorrent Community";
         public override string SiteLink { get; protected set; } = "https://hdbits.org/";
         public override string Language => "en-US";
         public override string Type => "private";

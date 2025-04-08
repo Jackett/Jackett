@@ -1,7 +1,7 @@
 ---
 id: kickasstorrents-to
 name: kickasstorrents.to
-description: "kickasstorrents.to is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+description: "kickasstorrents.to is a Public KickAssTorrent clone for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
@@ -42,13 +42,8 @@ caps:
     book-search: [q]
 
 settings:
-  - name: useragent
-    type: text
-    label: User-Agent
-  - name: info_useragent
-    type: info
-    label: How to get the User-Agent
-    default: "<ol><li>Access this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'user-agent:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole user-agent string <i>(everything after 'user-agent: ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: sort
     type: select
     label: Sort requested from site
@@ -71,9 +66,6 @@ download:
       attribute: href
 
 search:
-  headers:
-    User-Agent: ["{{ .Config.useragent }}"]
-
   paths:
     # 20 rows per page
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"

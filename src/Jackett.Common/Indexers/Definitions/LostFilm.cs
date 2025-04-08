@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "lostfilm";
         public override string Name => "LostFilm.tv";
-        public override string Description => "Unique portal about foreign series";
+        public override string Description => "LostFilm is a RUSSIAN semi-Private site. Unique portal for foreign series";
         public override string SiteLink { get; protected set; } = "https://www.lostfilm.tv/";
         public override string[] AlternativeSiteLinks => new[]
         {
@@ -38,7 +38,6 @@ namespace Jackett.Common.Indexers.Definitions
             "https://www.lostfilm.download/", // 43/43 // 9/9
             "https://www.lostfilm.life/", // 27/43 // 6/9
             "https://www.lostfilm.uno/", // 25/43 // 7/9
-            "https://www.lostfilm.win/", // 25/43 // 7/9
             "https://www.lostfilm.tw/", // 25/43 // 7/9
         };
         public override string[] LegacySiteLinks => new[]
@@ -46,6 +45,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://lostfilm.site", // redirects to .tw
             "https://lostfilm.tw/", // redirects to www.
             "https://www.lostfilm.run/", // ERR_NAME_NOT_RESOLVED
+            "https://www.lostfilm.win/", // ERR_NAME_NOT_RESOLVED
         };
         public override string Language => "ru-RU";
         public override string Type => "semi-private";
@@ -154,6 +154,7 @@ namespace Jackett.Common.Indexers.Definitions
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
             webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "5198DB6D2792F18928BC7959FBC11592F5EEAED6"); // for *.uno  expired 22/Feb/25
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

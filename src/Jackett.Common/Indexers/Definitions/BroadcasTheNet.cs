@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "broadcasthenet";
         public override string[] Replaces => new[] { "broadcastthenet" };
         public override string Name => "BroadcasTheNet";
-        public override string Description => "BroadcasTheNet (BTN) is an invite-only torrent tracker focused on TV shows";
+        public override string Description => "BroadcasTheNet (BTN) is a Private invite-only Torrent Tracker focused on TV shows";
         // Status: https://btn.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://broadcasthe.net/";
         public override string Language => "en-US";

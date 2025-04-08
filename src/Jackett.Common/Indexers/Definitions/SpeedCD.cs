@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "speedcd";
         public override string[] Replaces => new[] { "speedcdcookie" };
         public override string Name => "Speed.cd";
-        public override string Description => "Your home now!";
+        public override string Description => "Speed.cd is a Private site. Your home now!";
         public override string SiteLink { get; protected set; } = "https://speed.cd/";
         public override string[] AlternativeSiteLinks => new[]
         {

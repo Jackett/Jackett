@@ -3,13 +3,13 @@ id: zktorrent
 replaces:
   - gktorrent
 name: ZkTorrent
-description: "ZkTorrent is a French Public site for TV / MOVIES / GENERAL"
+description: "ZkTorrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.zktorrent1.com/
+  - https://www.zktorrent3.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -23,8 +23,6 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.gktorrent.xyz/
-  - https://www.gktorrent.pm/
   - https://www.gktorrent.tw/
   - https://www.gktorrent.in/
   - https://www.gktorrent.sk/
@@ -38,6 +36,8 @@ legacylinks:
   - https://wvw-gktorrent.com/
   - https://www-gktorrent.com/
   - https://www.zktorrent.com/
+  - https://www.zktorrent1.com/
+  - https://www.zktorrent2.com/
 
 caps:
   categorymappings:

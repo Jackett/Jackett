@@ -15,7 +15,7 @@ caps:
     - {id: 10, cat: Audio/Audiobook, desc: "Action/Adventure"}
     - {id: 80, cat: Audio/Audiobook, desc: "Adult/Erotica"}
     - {id: 20, cat: Audio/Audiobook, desc: "Biography/Memoirs"}
-    - {id: 30, cat: Audio/Audiobook, desc: "Business "}
+    - {id: 30, cat: Audio/Audiobook, desc: "Business"}
     - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
     - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
     - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller"}
@@ -45,6 +45,7 @@ caps:
     - {id: 285, cat: Audio/Audiobook, desc: "Travel"}
     - {id: 290, cat: Audio/Audiobook, desc: "Urban Fantasy/Paranormal"}
     - {id: 300, cat: Audio/Audiobook, desc: "Western"}
+    - {id: 310, cat: Audio/Audiobook, desc: "Young Adult"}
     - {id: 400, cat: Books/EBook, desc: "[E] Action/Adventure"}
     - {id: 410, cat: Books/EBook, desc: "[E] Adult/Erotica"}
     - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
@@ -134,6 +135,7 @@ search:
       attribute: alt
     title:
       selector: a[href^="details.php?id="]
+      remove: span.has-text-red
     details:
       selector: a[href^="details.php?id="]
       attribute: href

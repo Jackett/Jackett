@@ -1,9 +1,9 @@
 ---
 id: proporno
 name: ProPorno
-description: "ProPorno is a RUSSIAN Public tracker for 3X"
+description: "ProPorno is a RUSSIAN Semi-Private tracker for 3X"
 language: ru-RU
-type: public
+type: semi-private
 encoding: UTF-8
 links:
   - https://proporno.org/
@@ -34,12 +34,32 @@ caps:
   modes:
     search: [q]
 
-settings: []
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
 
 download:
   selectors:
     - selector: a[href^="magnet:?xt="]
       attribute: href
+
+login:
+  path: /
+  method: form
+  form: form[onSubmit]
+  inputs:
+    login_name: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    login: submit
+  error:
+    - selector: div.berrors:contains("Ошибка авторизации")
+  test:
+    path: /
+    selector: a[href$="/index.php?action=logout"]
 
 search:
   paths:
@@ -113,4 +133,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# DataLife v24

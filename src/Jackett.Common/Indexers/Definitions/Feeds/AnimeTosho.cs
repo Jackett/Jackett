@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers.Definitions.Feeds
     {
         public override string Id => "animetosho";
         public override string Name => "Anime Tosho";
-        public override string Description => "AnimeTosho (AT) is an automated service that provides torrent files, magnet links and DDL for all anime releases";
+        public override string Description => "AnimeTosho (AT) is a Public automated service that provides torrent files, magnet links and DDL for all anime releases";
         public override string SiteLink { get; protected set; } = "https://animetosho.org/";
         public override string Language => "en-US";
         public override string Type => "public";

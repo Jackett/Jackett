@@ -15,7 +15,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "privatehd";
         public override string Name => "PrivateHD";
-        public override string Description => "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows";
+        public override string Description => "PrivateHD is a Private BitTorrent site for High Quality, High Definition (HD) MOVIES and TV Shows";
         public override string SiteLink { get; protected set; } = "https://privatehd.to/";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();

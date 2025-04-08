@@ -131,7 +131,7 @@ download:
     path: takethanks.php
     method: post
     inputs:
-      torrentid: "{{ re_replace .DownloadUri.AbsolutePath \"/download-torrent-(\\d+).*\" \"$1\"}}"
+      torrentid: "{{ .DownloadUri.Query.id }}"
 
 search:
   paths:
@@ -153,28 +153,28 @@ search:
     order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"/download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table.sortable tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="/torrent-category-"]
+      selector: a[href*="browse.php?category="]
       attribute: href
       filters:
-        - name: regexp
-          args: "/torrent-category-([0-9]+)"
+        - name: querystring
+          args: category
     title_default:
       # is usually abbreaviated
-      selector: a[href*="/torrent-details-"]
+      selector: a[href*="details.php?id="]
     title:
       # while still abbreviated, is usually longer than the default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="/torrent-details-"]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href*="/download-torrent-"]
+      selector: a[href*="download.php?id="]
       attribute: href
     poster:
       selector: img[src*="/torrents/images/"]

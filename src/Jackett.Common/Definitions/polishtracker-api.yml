@@ -1,7 +1,7 @@
 ---
 id: polishtracker-api
 name: PolishTracker (API)
-description: "PolishTracker is a POLISH Private site for 0DAY / MOVIES / GENERAL"
+description: "PolishTracker is a POLISH Private Torrent Tracker for 0DAY / MOVIES / GENERAL"
 language: pl-PL
 type: private
 encoding: UTF-8

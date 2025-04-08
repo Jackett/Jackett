@@ -68,6 +68,7 @@ Prior versions of Jackett are no longer supported.
  * ExtraTorrent.st
  * EZTV
  * FilmesHdTorrent
+ * Frozen Layer
  * GamesTorrents
  * GloDLS
  * GTorrent.pro
@@ -76,7 +77,6 @@ Prior versions of Jackett are no longer supported.
  * Internet Archive (archive.org)
  * Isohunt2
  * iTorrent
- * JAV-Torrent
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
@@ -104,11 +104,11 @@ Prior versions of Jackett are no longer supported.
  * OxTorrent-vip
  * OpenSharing
  * PC-torrent
+ * Pirate's Paradise
  * plugintorrent
  * PornoTorrent
  * PornRips
  * Postman
- * ProPorn
  * Rapidzona
  * RedeTorrent
  * RinTorNeT
@@ -134,7 +134,6 @@ Prior versions of Jackett are no longer supported.
  * TorrentFunk
  * TorrentDosFilmes
  * TorrentDownload
- * TorrentGalaxy
  * TorrentKitty
  * TorrentProject2
  * TorrentQQ (토렌트큐큐)
@@ -183,13 +182,12 @@ Prior versions of Jackett are no longer supported.
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay
- * ExtremlymTorrents
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
  * HD-CzTorrent
  * HDGalaKtik
- * HellTorrents
+ * HellTorrents [PAY2DL]
  * HunTorrent
  * Il CorSaRo Blu
  * ilDraGoNeRo
@@ -211,6 +209,7 @@ Prior versions of Jackett are no longer supported.
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
+ * ProPorno
  * PussyTorrents
  * Rainbow Tracker
  * RGFootball
@@ -227,11 +226,10 @@ Prior versions of Jackett are no longer supported.
  * themixingbowl (TMB)
  * Toloka
  * TorrentMasters
- * Torrents-Local
  * TribalMixes
  * Union Fansub
  * UniOtaku
- * ViDEOTEKA
+ * ViDEOTEKA (VT)
  * ZOMB
  * Ztracker
 </details>
@@ -245,26 +243,27 @@ Prior versions of Jackett are no longer supported.
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
  * 720pier
- * Abnormal
+ * Abnormal (ABN)
  * ABtorrents (ABT + RNS)
  * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
  * Aftershock
- * AGSVPT (Artic Global Seed Vault)
+ * AFUN
+ * AGSVPT (Arctic Global Seed Vault)
  * Aidoru!Online
  * Aither
  * AlphaRatio (AR)
- * AmigosShareClub
+ * AmigosShareClub (ASC)
  * AnimeBytes (AB)
  * AnimeLovers
  * AnimeTorrents (AnT)
  * AnimeTorrents.ro (Anime Torrents Romania)
- * AnimeWorld
- * Anthelion
+ * AnimeWorld (AW)
+ * Anthelion (ANT)
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabP2P
  * ArabTorrents [![(invite needed)][inviteneeded]](#)
  * AsianCinema
- * AsianDVDClub
+ * AsianDVDClub (ADC)
  * Audiences
  * AudioNews (AN)
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
@@ -284,7 +283,6 @@ Prior versions of Jackett are no longer supported.
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * Bitpalace
  * BitPorn
- * Bitspyder
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
@@ -315,8 +313,8 @@ Prior versions of Jackett are no longer supported.
  * CinemaMovieS_ZT
  * Cinematik
  * CinemaZ (EuTorrents)
- * Coastal-Crew
- * ConCen [![(invite needed)][inviteneeded]](#)
+ * Coastal-Music-Crew (C-M-C)
+ * ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
  * Concertos
  * CrabPT (蟹黄堡)
  * CrazySpirits
@@ -330,7 +328,7 @@ Prior versions of Jackett are no longer supported.
  * DesiTorrents [![(invite needed)][inviteneeded]](#)
  * Diablo Torrent
  * DICMusic [![(invite needed)][inviteneeded]](#)
- * DigitalCore
+ * DigitalCore (DC)
  * DimeADozen (EzTorrent)
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DivTeam
@@ -344,7 +342,7 @@ Prior versions of Jackett are no longer supported.
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
- * Explosiv-World
+ * Explosiv-World (E-W)
  * ExtremeBits
  * F1Carreras
  * FANO.IN [![(invite needed)][inviteneeded]](#)
@@ -367,13 +365,13 @@ Prior versions of Jackett are no longer supported.
  * Generation-Free [![(invite needed)][inviteneeded]](#)
  * GGPT
  * GigaTorrents
- * GimmePeers (formerly ILT)
+ * GimmePeers (formerly ILT) [PAY2DL]
  * GiroTorrent
  * GreatPosterWall (GPW)
  * HaiDan
  * Hǎitáng (海棠PT)
- * HappyFappy
- * Hawke-uno
+ * HappyFappy (HF)
+ * Hawke-uno (HUNO)
  * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD Zero
  * HD-Club [![(invite needed)][inviteneeded]](#)
@@ -390,7 +388,7 @@ Prior versions of Jackett are no longer supported.
  * HDCiTY (HDC) [![(invite needed)][inviteneeded]](#)
  * HDClone
  * HDFans
- * HDHome (HDBigger) [![(invite needed)][inviteneeded]](#)
+ * HDHome [![(invite needed)][inviteneeded]](#)
  * HDKylin (麒麟)
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
@@ -400,7 +398,7 @@ Prior versions of Jackett are no longer supported.
  * HDTurk
  * HDU
  * HDVIDEO
- * Hebits
+ * Hebits (HB)
  * HellasHut
  * HHanClub
  * HHD
@@ -417,23 +415,22 @@ Prior versions of Jackett are no longer supported.
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
- * IrishTV
+ * IrishTV (ITV)
  * ItaTorrents
  * JME-REUNIT3D
- * JoyHD [![(invite needed)][inviteneeded]](#)
+ * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
  * JPopsuki
- * JPTV
  * KamePT [![(invite needed)][inviteneeded]](#)
  * Karagarga [![(invite needed)][inviteneeded]](#)
- * Keep Friends [![(invite needed)][inviteneeded]](#)
+ * Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
  * Kelu [![(invite needed)][inviteneeded]](#)
  * Korsar [![(invite needed)][inviteneeded]](#)
  * KrazyZone
  * Kufei (库非)
  * Kufirc
- * Last Digital Underground (LDU)
- * LastFiles
  * LaidBackManor
+ * Last Digital Underground (LDU)
+ * LastFiles (LF)
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * Le-Cinephile
@@ -453,13 +450,13 @@ Prior versions of Jackett are no longer supported.
  * MaDs Revolution
  * Majomparádé (TurkDepo)
  * Making Off
- * Mansão dos Animes (MDAN)
  * Malayabits
+ * Mansão dos Animes (MDAN)
  * Matrix
  * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
- * Milkie
+ * Milkie (ME)
  * MMA-Torrents [![(invite needed)][inviteneeded]](#)
  * MNV (Max-New-Vision)
  * MOJBLiNK
@@ -479,7 +476,7 @@ Prior versions of Jackett are no longer supported.
  * Nusanta(RA.RE)
  * OKPT
  * Old Greek Tracker
- * Old Toons World
+ * Old Toons World (OTW)
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus
  * OnlyEncodes+
@@ -488,6 +485,7 @@ Prior versions of Jackett are no longer supported.
  * OurBits (HDPter)
  * P2PBG
  * Panda
+ * PandaHD
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
@@ -523,12 +521,13 @@ Prior versions of Jackett are no longer supported.
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
- * Rain
+ * Rain (雨)
  * RareShare2
+ * Rastastugan
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
- * ReelFlix
+ * ReelFlix (HD4Free,LegacyHD)
  * RetroFlix
  * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
@@ -541,7 +540,7 @@ Prior versions of Jackett are no longer supported.
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
  * Secret Cinema
- * SeedFile
+ * SeedFile (SF)
  * seedpool
  * SFP (Share Friends Projekt)
  * Shareisland
@@ -553,8 +552,9 @@ Prior versions of Jackett are no longer supported.
  * SpeedCD
  * Speedmaster HD [![(invite needed)][inviteneeded]](#)
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
+ * SportsCraze (SPCRZ)
  * SportsCult
- * SpringSunday [![(invite needed)][inviteneeded]](#)
+ * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
  * SugoiMusic
  * Superbits (SBS)
  * Swarmazon
@@ -565,23 +565,23 @@ Prior versions of Jackett are no longer supported.
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * The Crazy Ones
+ * The Empire (TE)
  * The Falling Angels (TFA)
  * The Geeks
- * The Kitchen
+ * The Kitchen (TK)
  * The New Retro
- * The Occult
- * The Old School
+ * The Occult (TO)
+ * The Old School (TOS)
  * The Paradiese
- * The Place [![(invite needed)][inviteneeded]](#)
- * The Show
- * The Vault
+ * The Place (TP)
+ * The Show (TSBZ)
+ * The Vault (TVBZ)
  * The-New-Fun
- * TheEmpire (TE)
  * TheLeachZone (TLZ)
  * ThePiratedShip
  * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
- * TmGHuB [![(invite needed)][inviteneeded]](#)
+ * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
  * Toca Share
  * Tormac
  * Tornado
@@ -595,7 +595,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
  * TorrentDay (TD)
- * TorrentDD
+ * TorrentDD (TodayBit)
  * Torrenteros (TTR)
  * TorrentHR
  * Torrenting (TT)
@@ -607,7 +607,7 @@ Prior versions of Jackett are no longer supported.
  * TranceTraffic
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
- * TurkSeed
+ * TurkSeed (Aturk)
  * TurkTorrent (TT)
  * TV Chaos UK (TVCUK)
  * TVstore
@@ -616,7 +616,7 @@ Prior versions of Jackett are no longer supported.
  * UHDBits
  * UltraHD
  * UnlimitZ
- * upload.cx
+ * upload.cx (ULCX)
  * Upscale Vault
  * UTOPIA
  * Vault network
@@ -631,13 +631,14 @@ Prior versions of Jackett are no longer supported.
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)
- * XtremeBytes
+ * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
  * YggTorrent (YGG)
  * YOiNKED
  * YUSCENE
  * Zamunda.net
+ * Zappateers
  * Zelka.org
  * ZmPT (织梦)
  * ZonaQ [![(invite needed)][inviteneeded]](#)

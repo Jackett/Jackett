@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "pretome";
         public override string Name => "PreToMe";
-        public override string Description => "BitTorrent site for High Quality, High Definition (HD) movies and TV Shows";
+        public override string Description => "PreToMe is a Private site for High Quality, High Definition (HD) MOVIES and TV Shows";
         public override string SiteLink { get; protected set; } = "https://pretome.info/";
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";

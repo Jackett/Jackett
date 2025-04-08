@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "gazellegamesapi";
         public override string Name => "GazelleGames (API)";
-        public override string Description => "A gaming tracker";
+        public override string Description => "GazelleGames is a Private gaming tracker";
         // Status: https://ggn.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://gazellegames.net/";
         public override string Language => "en-US";

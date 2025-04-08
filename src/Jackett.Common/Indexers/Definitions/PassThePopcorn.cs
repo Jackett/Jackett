@@ -206,7 +206,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                         var downloadVolumeFactor = torrent.FreeleechType?.ToUpperInvariant() switch
                         {
-                            "FREELEECH" => 0,
+                            "FREELEECH" or "NEUTRAL LEECH" => 0,
                             "HALF LEECH" => 0.5,
                             _ => 1
                         };
@@ -227,6 +227,12 @@ namespace Jackett.Common.Indexers.Definitions
                             categories.Add(TorznabCatType.TV.ID);
                         }
 
+                        var uploadVolumeFactor = torrent.FreeleechType?.ToUpperInvariant() switch
+                        {
+                            "NEUTRAL LEECH" => 0,
+                            _ => 1
+                        };
+
                         var release = new ReleaseInfo
                         {
                             Guid = infoUrl,
@@ -242,7 +248,7 @@ namespace Jackett.Common.Indexers.Definitions
                             PublishDate = DateTime.Parse(torrent.UploadTime + " +0000", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
                             Imdb = result.ImdbId.IsNotNullOrWhiteSpace() ? int.Parse(result.ImdbId) : 0,
                             DownloadVolumeFactor = downloadVolumeFactor,
-                            UploadVolumeFactor = 1,
+                            UploadVolumeFactor = uploadVolumeFactor,
                             MinimumRatio = 1,
                             MinimumSeedTime = 345600,
                             Genres = result.Tags?.ToList() ?? new List<string>(),

@@ -28,7 +28,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "wolfmax4k";
         public override string Name => "Wolfmax 4k";
-        public override string Description => "Wolfmax 4k is a SPANISH public tracker for MOVIES / TV";
+        public override string Description => "Wolfmax 4k is a SPANISH Public site for MOVIES / TV";
 
         private string _siteLink = "https://wolfmax4k.com/";
         private string SiteLinkSearch;

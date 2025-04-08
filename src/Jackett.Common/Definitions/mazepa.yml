@@ -1,7 +1,7 @@
 ---
 id: mazepa
 name: Mazepa
-description: "Mazepa is a UKRAINIAN Semi-Private Torrent Tracker for Videos with Ukrainian soundtracks"
+description: "Mazepa is an UKRAINIAN Semi-Private Torrent Tracker for Videos with Ukrainian soundtracks"
 language: uk-UA
 type: semi-private
 encoding: UTF-8
@@ -200,7 +200,7 @@ search:
         - name: regexp
           args: f=(\d+)
     title:
-      selector: a.genmed, a.seedmed
+      selector: a.genmed, a.seedmed, a.leechmed
       filters:
         # normalize to SXXEYY format
         # Ukrainian
@@ -282,7 +282,7 @@ search:
         - name: re_replace
           args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
     details:
-      selector: a.genmed, a.seedmed
+      selector: a.genmed, a.seedmed, a.leechmed
       attribute: href
     download:
       selector: a[href^="./dl.php?id="]

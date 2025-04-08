@@ -1,7 +1,7 @@
 ---
 id: torrenteros-api
 name: Torrenteros (API)
-description: "Torrenteros (TTR) is a SPANISH site for MOVIES / TV / GENERAL"
+description: "Torrenteros (TTR) is a SPANISH Torrent Tracker for MOVIES / TV / GENERAL"
 language: es-ES
 type: private
 encoding: UTF-8
@@ -64,7 +64,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

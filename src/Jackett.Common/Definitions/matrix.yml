@@ -51,25 +51,24 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
   - name: sort
     type: select
     label: Sort requested from site
-    default: 0
+    default: ctime
     options:
-      0: created
-      1: title
-      4: size
-      6: seeders
+      ctime: created
+      name: title
+      size: size
+      seeders: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -87,17 +86,13 @@ settings:
     default: "If you do not log in to the site for 6 months, the system will automatically delete it!"
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Clouflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
-  error:
-    - selector: td.embedded:contains("Sikertelen bejelentkezés")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: a[href$="logout.php"]
+    selector: a[href*="logout.php?logout="]
 
 search:
   paths:
@@ -105,85 +100,77 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # 0 active only, 1 include dead, 2 only dead
-    incldead: 1
+    # 0 active only, 1 include dead, 2 only dead, 3 free, 4 double
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
   rows:
-    selector: "table.mainouter > tbody > tr > td > table tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/pic/ingyentorrent.gif\"]){{ else }}{{ end }}"
+    selector: table.table-center[width="905"] > tbody > tr:has(a[onclick])
 
   fields:
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: img[src^="/pic/categories"]
+      attribute: title
     title:
-      # titles can be abbreviated so using the name from DL
-      selector: a[href^="download.php?id="]
-      attribute: href
+      selector: td:nth-child(2) > div > a
+    _id:
+      selector: a[onclick]
+      attribute: onclick
       filters:
-        - name: querystring
-          args: name
-        - name: replace
-          args: [".torrent", ""]
+        - name: regexp
+          args: toggleRow\((\d+),
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
-      filters:
-        - name: re_replace
-          args: ["&hit=1.+", ""]
+      text: "details.php?id={{ .Result._id }}"
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
+      text: "download.php?id={{ .Result._id }}"
     poster:
-      selector: a.torrent-link
-      attribute: data-cover
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: \\\'(.+?)\\
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    files:
-      selector: td:nth-child(5) a
     date:
-      selector: td:contains("Feltöltve:")
+      selector: td:nth-child(3)
       filters:
-        - name: regexp
-          args: "Feltöltve: (.+?)(\\(|$)"
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    grabs:
-      selector: td:nth-child(7) b
+          args: "yyyy-MM-ddHH:mm:ss zzz"
     size:
-      selector: td:nth-child(7)
-      filters:
-        - name: regexp
-          args: "(.+?B)"
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(5)
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(9)
+      selector: td:nth-child(7)
+    _verified:
+      selector: span.torrent-ok, span.torrent-unchecked
+      case:
+        span.torrent-ok: Verified
+        span.torrent-unchecked: Unchecked
     genre:
-      selector: td:nth-child(2) > div > i > i
+      selector: td:nth-child(2) > div > i.small
       filters:
         - name: regexp
           args: "\\((.+)\\)"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ .Result._verified }} - {{ .Result.genre }}"
     downloadvolumefactor:
       case:
-        img[src$="/pic/ingyentorrent.gif"]: 0
+        span.text-red:contains("[x0]"): 0
         "*": 1
     uploadvolumefactor:
       case:
-        img[src$="/pic/x2.gif"]: 2
+        span.text-blue:contains("[x2]"): 2
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# TBDev
+# TBDev & XBTT

@@ -1,7 +1,7 @@
 ---
 id: torrentsome
 name: Torrentsome
-description: "Torrentsome is a Public KOREAN tracker for Korean media."
+description: "Torrentsome is a KOREAN Public tracker for Korean media."
 language: ko-KR
 type: public
 encoding: UTF-8
@@ -9,10 +9,13 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrentsome186.com/
+  - https://torrentsome189.com/
 legacylinks:
   - https://torrentsome184.com/
   - https://torrentsome185.com/
+  - https://torrentsome186.com/
+  - https://torrentsome187.com/
+  - https://torrentsome188.com/
 
 caps:
   categorymappings:

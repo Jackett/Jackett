@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "ncore";
         public override string Name => "nCore";
-        public override string Description => "A Hungarian private torrent site.";
+        public override string Description => "nCore is a HUNGARIAN Private site.";
         public override string SiteLink { get; protected set; } = "https://ncore.pro/";
         public override string[] LegacySiteLinks => new[]
         {

@@ -1,7 +1,7 @@
 ---
 id: bitporn
 name: BitPorn
-description: "BitPorn is a HUNGARIAN Private Torrent Tracker for 3X"
+description: "BitPorn (Malacka) is a HUNGARIAN Private Torrent Tracker for 3X"
 language: hu-HU
 type: private
 encoding: UTF-8

@@ -94,7 +94,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: div.glavni_txt table > tbody > tr[id^="record-"]
+    selector: div.glavni_txt table > tbody > tr[id^="record-"]:not(:has(img[src="/pic/nuked.gif"]))
 
   fields:
     category:

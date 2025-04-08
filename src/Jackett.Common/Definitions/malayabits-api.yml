@@ -70,7 +70,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -182,4 +182,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 1 x 24 x 60 x 60)
       text: 86400
-# json UNIT3D 8.3.6
+# json UNIT3D 9.0.5

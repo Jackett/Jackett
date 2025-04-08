@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "beyond-hd-api";
         public override string Name => "Beyond-HD (API)";
-        public override string Description => "Without BeyondHD, your HDTV is just a TV";
+        public override string Description => "Beyond-HD is a Private site. Without BeyondHD, your HDTV is just a TV";
         public override string SiteLink { get; protected set; } = "https://beyond-hd.me/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -296,7 +296,9 @@ namespace Jackett.Common.Indexers.Definitions
                     Size = row.Size,
                     Seeders = row.Seeders,
                     Peers = row.Leechers + row.Seeders,
-                    PublishDate = DateTime.Parse(row.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal)
+                    PublishDate = DateTime.Parse(row.CreatedAt, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                    Languages = row.Audios?.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()).ToList() ?? new List<string>(),
+                    Subs = row.Subtitles?.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()).ToList() ?? new List<string>(),
                 };
 
                 if (row.ImdbId.IsNotNullOrWhiteSpace())
@@ -469,11 +471,15 @@ namespace Jackett.Common.Indexers.Definitions
         public long Size { get; set; }
         public string Category { get; set; }
         public string Type { get; set; }
-        public int Seeders { get; set; }
-        public int Leechers { get; set; }
 
         [JsonProperty("times_completed")]
         public int Grabs { get; set; }
+
+        public int Seeders { get; set; }
+        public int Leechers { get; set; }
+
+        public string Audios { get; set; }
+        public string Subtitles { get; set; }
 
         [JsonProperty("imdb_id")]
         public string ImdbId { get; set; }

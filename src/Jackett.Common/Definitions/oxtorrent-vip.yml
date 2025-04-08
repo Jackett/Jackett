@@ -4,14 +4,15 @@ replaces:
   - oxtorrent
   - torrent911
 name: OxTorrent-vip
-description: "OxTorrent-vip is a French Public site for TV / MOVIES / GENERAL"
+description: "OxTorrent-vip is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.oxtorrent2.com/
-  - https://www.zone-torrent.com/
+  - https://www.oxtorrent3.com/
+  - https://www.zone-torrent1.com/
+  - https://www.mega-torrent4.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -25,7 +26,6 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.oxtorrent.zip/
   - https://www.oxtorrent.vip/
   - https://www.oxtorrent.lol/
   - https://www.oxtorrent.la/
@@ -43,6 +43,9 @@ legacylinks:
   - https://www.oxtorrent.ke/
   - https://www-torrent911.com/
   - https://www.oxtorrent1.com/
+  - https://www.zone-torrent.com/
+  - https://www.mega-torrent3.com/
+  - https://www.oxtorrent2.com/
 
 caps:
   categorymappings:

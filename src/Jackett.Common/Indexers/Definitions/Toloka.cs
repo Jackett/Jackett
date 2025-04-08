@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "toloka";
         public override string Name => "Toloka.to";
-        public override string Description => "Toloka is a Semi-Private Ukrainian torrent site with a thriving file-sharing community";
+        public override string Description => "Toloka is a UKRAINIAN Semi-Private site with a thriving file-sharing community";
         public override string SiteLink { get; protected set; } = "https://toloka.to/";
         public override string Language => "uk-UA";
         public override string Type => "semi-private";

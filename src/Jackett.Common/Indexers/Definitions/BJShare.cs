@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "bjshare";
         public override string Name => "BJ-Share";
-        public override string Description => "A brazilian tracker.";
+        public override string Description => "BJ-Share is a BRAZILIAN Private site";
         public override string SiteLink { get; protected set; } = "https://bj-share.info/";
         public override string[] LegacySiteLinks => new[]
         {

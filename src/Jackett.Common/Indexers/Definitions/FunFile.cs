@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "funfile";
         public override string Name => "FunFile";
-        public override string Description => "A general tracker";
+        public override string Description => "FunFile is a Private general tracker";
         public override string SiteLink { get; protected set; } = "https://www.funfile.org/";
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";

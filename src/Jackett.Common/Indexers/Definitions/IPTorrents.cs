@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "iptorrents";
         public override string Name => "IPTorrents";
-        public override string Description => "Always a step ahead.";
+        public override string Description => "IPTorrents is a Private site. Always a step ahead.";
         public override string SiteLink { get; protected set; } = "https://iptorrents.com/";
         public override string[] AlternativeSiteLinks => new[]
         {

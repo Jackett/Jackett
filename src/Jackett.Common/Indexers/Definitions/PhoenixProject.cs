@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Threading.Tasks;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Cache;
@@ -16,7 +17,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "phoenixproject";
         public override string Name => "Phoenix Project";
-        public override string Description => "MacOS software tracker";
+        public override string Description => "Phoenix Project is a Private MacOS software tracker";
         public override string SiteLink { get; protected set; } = "https://phoenixproject.app/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -67,6 +68,17 @@ namespace Jackett.Common.Indexers.Definitions
         protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
         {
             return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
+        }
+
+        protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
+        {
+            var releases = await base.PerformQuery(query);
+            foreach (var release in releases)
+            {
+                release.MinimumRatio = 0.6;
+                release.MinimumSeedTime = 259200;
+            }
+            return releases;
         }
     }
 }

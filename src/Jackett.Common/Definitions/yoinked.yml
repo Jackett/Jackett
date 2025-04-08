@@ -15,6 +15,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: Books, desc: "Book"}
     - {id: 5, cat: Audio/Audiobook, desc: "AudioBook"}
+    - {id: 6, cat: Console, desc: "Games"}
 
   modes:
     search: [q]
@@ -73,7 +74,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -183,4 +184,4 @@ search:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
       text: 0.5
-# json UNIT3D 8.3.1 (custom)
+# json UNIT3D 9.0.3
