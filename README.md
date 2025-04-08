@@ -57,6 +57,7 @@ Prior versions of Jackett are no longer supported.
  * cpasbien
  * cpasbienClone
  * CrackingPatching
+ * DaMagNet
  * DivxTotal
  * dmhy
  * DonTorrent
