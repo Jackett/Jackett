@@ -46,7 +46,6 @@ Prior versions of Jackett are no longer supported.
  * Bangumi Moe
  * BigFANGroup
  * BitRu
- * BitSearch
  * BluDV
  * BlueRoms
  * BT.etree
