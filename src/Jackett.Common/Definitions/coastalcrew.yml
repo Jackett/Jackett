@@ -17,21 +17,25 @@ caps:
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 26, cat: Movies/UHD, desc: "Movie 4K"}
+
     - {id: 56, cat: TV/SD, desc: "Serien DVD-R"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 59, cat: TV, desc: "Serien Pack"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 123, cat: TV, desc: "Serien Klassiker"}
     - {id: 126, cat: TV, desc: "Serien Kids"}
+
     - {id: 92, cat: TV/Documentary, desc: "Doku Avi"}
     - {id: 94, cat: TV/Documentary, desc: "Doku Audio"}
     - {id: 13, cat: TV/Documentary, desc: "Doku DVD-R"}
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
+
     - {id: 9, cat: PC, desc: "App Linux"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 12, cat: PC/0day, desc: "App Win"}
+
     - {id: 16, cat: Console, desc: "Game Misc"}
     - {id: 17, cat: PC/Games, desc: "Game PC"}
     - {id: 18, cat: Console/PS3, desc: "Game PS2"}
@@ -41,7 +45,7 @@ caps:
     - {id: 22, cat: Console/Wii, desc: "Game Wii"}
     - {id: 23, cat: Console/XBox, desc: "Game XBOX"}
     - {id: 24, cat: Console/XBox 360, desc: "Game XBOX360"}
-    - {id: 125, cat: Audio, desc: "Music Kids"}
+
     - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 48, cat: Audio, desc: "Music Album"}
     - {id: 49, cat: Audio, desc: "Music Charts"}
@@ -52,15 +56,20 @@ caps:
     - {id: 55, cat: Audio/Video, desc: "Music Video SD"}
     - {id: 109, cat: Audio/Video, desc: "Music Video HD"}
     - {id: 110, cat: Audio/Video, desc: "Music DVD-R"}
+    - {id: 128, cat: Audio, desc: "Music EP"}
+    - {id: 125, cat: Audio, desc: "Music Kids"}
+
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
     - {id: 116, cat: TV/Sport, desc: "Sport DVD-R"}
     - {id: 117, cat: TV/Sport, desc: "Sport DVD-R"}
+
     - {id: 64, cat: TV/Anime, desc: "Sonstiges Anime"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
     - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
+
     - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
     - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
     - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
@@ -70,6 +79,7 @@ caps:
     - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
     - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
     - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD-R"}
+
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 74, cat: XXX/Other, desc: "XXX Other"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
