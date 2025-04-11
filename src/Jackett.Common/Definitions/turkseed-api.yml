@@ -5,10 +5,9 @@ description: "TurkSeed (Aturk) is a TURKISH Private Torrent Tracker for MOVIES /
 language: tr-TR
 type: private
 encoding: UTF-8
-certificates:
-  - dbb741dab386cdc63ef4ad16bf2bc1ec96f830dc # CN=turkseed.com when using dot net domain
 links:
   - https://turkseed.com/
+legacylinks:
   - https://turkseed.net/
 
 caps:
