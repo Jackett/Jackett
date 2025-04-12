@@ -15,7 +15,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "体育 / Sports"}
     - {id: 406, cat: Audio/Video, desc: "MV / Music Videos"}
     - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary"}
-    - {id: 403, cat: Movies, desc: "综艺 / TV Shows"}
+    - {id: 403, cat: TV, desc: "综艺 / TV Shows"}
     - {id: 402, cat: TV, desc: "电视剧 / TVSeries"}
     - {id: 401, cat: Movies, desc: "电影 / Movies"}
     - {id: 405, cat: TV/Anime, desc: "动漫 / Anime"}
@@ -67,7 +67,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>5.Accounts with both uploaded and downloaded amount being 0 will be deleted if users have not logged in for more than 100 consecutive days.</li></ol>"
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users with no traffic (i.e. upload/download data is 0) will be deleted if they have not logged in for more than 100 consecutive days.</li></ol>"
 
 login:
   path: login.php
