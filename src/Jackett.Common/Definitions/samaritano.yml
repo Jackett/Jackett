@@ -97,7 +97,7 @@ search:
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    perPage: 100
+    perPage: 49
 
   keywordsfilters:
     - name: re_replace
