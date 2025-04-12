@@ -520,6 +520,7 @@ Prior versions of Jackett are no longer supported.
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * RailgunPT
  * Rain (雨)
  * RareShare2
  * Rastastugan
