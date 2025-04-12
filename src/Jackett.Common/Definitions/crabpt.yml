@@ -18,7 +18,7 @@ caps:
     - {id: 408, cat: Audio, desc: "音乐 / Music", default: true}
     - {id: 405, cat: TV/Anime, desc: "动漫 / Anime", default: true}
     - {id: 406, cat: Audio/Video, desc: "MV", default: true}
-    - {id: 403, cat: Movies, desc: "综艺 / TV Shows", default: true}
+    - {id: 403, cat: TV, desc: "综艺 / TV Shows", default: true}
     - {id: 407, cat: TV/Sport, desc: "体育竞技 / Sports", default: true}
     - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary", default: true}
     - {id: 409, cat: Other, desc: "其他 / Other", default: true}
