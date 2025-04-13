@@ -403,6 +403,7 @@ Prior versions of Jackett are no longer supported.
  * HHD
  * HomePornTorrents (HPT)
  * House of Devil
+ * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
  * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
