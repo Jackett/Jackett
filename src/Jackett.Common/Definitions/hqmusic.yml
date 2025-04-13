@@ -42,6 +42,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be deleted according to the following rules:<ol><li> Power Users and above will never have their accounts deleted.</li><li>Users and above will never have their accounts deleted if they park their accounts (See [User CP]).</li><li>Parked accounts will be deleted if they do not log in within 365 days.</li><li>Unparked accounts will be deleted if they do not log in within 240 days.</li><li>Inactive accounts downloading or uploading on the tracker will be deleted after 240 days of not logging in or after 120 days from the time of registration.</li></ol>"
 
 login:
   # switched from the form method to the cookie method due to https://github.com/Prowlarr/Prowlarr/issues/792
