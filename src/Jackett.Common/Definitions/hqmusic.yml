@@ -61,7 +61,7 @@ search:
     # https://tracker.hqmusic.info/torrents.php?search=&search_area=0&search_mode=0&incldead=0&haslog=0&cue=0&cover=0&tracks=0&spstate=0
     - path: torrents.php
   inputs:
-    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ end }}{{ if .Query.Album }} {{ .Query.album }}{{ else }}{{ end }}{{ if or .Query.Artist .Query.Album }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ if .Query.Artist }}{{ .Query.Artist }}{{ else }}{{ end }}{{ if .Query.Album }} {{ .Query.Album }}{{ else }}{{ end }}{{ if or .Query.Artist .Query.Album }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: 0
     # 0 AND, 1 OR, 2 exact
