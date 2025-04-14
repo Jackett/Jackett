@@ -175,19 +175,19 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(3)
     date:
-      selector: td:nth-last-child(6)
+      selector: td:nth-last-child(7)
       # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: dd/MM/yyyy
     seeders:
-      selector: td:nth-last-child(5)
+      selector: td:nth-last-child(6)
     leechers:
-      selector: td:nth-last-child(4)
+      selector: td:nth-last-child(5)
     grabs:
-      selector: td:nth-last-child(3)
+      selector: td:nth-last-child(4)
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
