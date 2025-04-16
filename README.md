@@ -117,7 +117,6 @@ Prior versions of Jackett are no longer supported.
  * Sexy-Pics
  * Shana Project
  * ShowRSS
- * Solid Torrents
  * sosulki
  * SubsPlease
  * sukebei.Nyaa.si
