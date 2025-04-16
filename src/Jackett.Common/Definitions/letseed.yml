@@ -37,6 +37,7 @@ caps:
     - {id: 22, cat: TV, desc: "DSNP"}
     - {id: 24, cat: TV, desc: "Exxen"}
     - {id: 26, cat: TV, desc: "GAIN"}
+    - {id: 47, cat: TV, desc: "MAX"}
     - {id: 20, cat: Movies, desc: "Netflix"}
     - {id: 42, cat: TV, desc: "Tabii"}
     - {id: 25, cat: TV, desc: "TOD"}
