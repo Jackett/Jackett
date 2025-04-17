@@ -31,6 +31,7 @@ caps:
     - {id: 80, cat: PC, desc: "Emulation Media"}
     - {id: 61, cat: PC, desc: "emuxtras"}
     - {id: 69, cat: TV, desc: "Entertainment"}
+    - {id: 89, cat: PC, desc: "Ghostware"}
     - {id: 84, cat: TV, desc: "GOG DRM FREE"}
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
