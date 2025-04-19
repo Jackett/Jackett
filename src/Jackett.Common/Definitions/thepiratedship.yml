@@ -18,6 +18,7 @@ caps:
     - {id: 14, cat: Movies/DVD, desc: "DVDR"}
     - {id: 15, cat: Movies/UHD, desc: "High Definition MKV/MP4"}
     - {id: 16, cat: Movies/UHD, desc: "4k Ultra High Definition  *Ratio Free*"}
+    - {id: 107, cat: Movies, desc: "Boxsets"}
     - {id: 17, cat: Movies/Other, desc: "Movies Requests"}
 #    - {id: 20, cat: TV, desc: "TV Shows"}
     - {id: 21, cat: TV, desc: "Sci-Fi / Supernatural / Horror"}
@@ -69,6 +70,7 @@ caps:
     - {id: 100, cat: Books/Comics, desc: "Comics/Magazines"}
     - {id: 99, cat: Books/EBook, desc: "E Books"}
     - {id: 98, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 103, cat: Other, desc: "Inactive Torrents"}
 #    - {id: 78, cat: Other, desc: "Practice Area"}
     - {id: 89, cat: Other, desc: "Test"}
     # undocumented
