@@ -24,6 +24,7 @@ caps:
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 123, cat: TV, desc: "Serien Klassiker"}
     - {id: 126, cat: TV, desc: "Serien Kids"}
+    - {id: 132, cat: TV/UHD, desc: "Serien UHD"}
 
     - {id: 92, cat: TV/Documentary, desc: "Doku Avi"}
     - {id: 94, cat: TV/Documentary, desc: "Doku Audio"}
