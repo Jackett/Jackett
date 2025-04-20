@@ -16,6 +16,7 @@ caps:
     - {id: 32, cat: TV/Sport, desc: "Basketball"}
     - {id: 34, cat: TV/Sport, desc: "Basketball - NBA"}
     - {id: 87, cat: TV/Sport, desc: "Basketball - NBA Playoffs"}
+    - {id: 121, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2025"}
     - {id: 119, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2024"}
     - {id: 117, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2023"}
     - {id: 113, cat: TV/Sport, desc: "Basketball - NBA Playoffs - 2022"}
@@ -47,6 +48,7 @@ caps:
     - {id: 46, cat: TV/Sport, desc: "Hockey"}
     - {id: 48, cat: TV/Sport, desc: "Hockey - NHL"}
     - {id: 88, cat: TV/Sport, desc: "Hockey - NHL Playoffs"}
+    - {id: 122, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2025"}
     - {id: 120, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2024"}
     - {id: 118, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2023"}
     - {id: 114, cat: TV/Sport, desc: "Hockey - NHL Playoffs - 2022"}
