@@ -125,8 +125,6 @@ search:
   rows:
     selector: data
     attribute: attributes
-    count:
-      selector: meta.total
 
   fields:
     category:
