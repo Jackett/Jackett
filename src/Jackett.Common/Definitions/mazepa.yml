@@ -41,8 +41,8 @@ caps:
     - {id: 42, cat: TV/Documentary, desc: "Озвучений Документальне HD"}
     - {id: 15, cat: TV/Documentary, desc: "Озвучений Документальне SD"}
     # Спорт
-    - {id: 20, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2024"}
-    - {id: 167, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2022-2023"}
+    - {id: 20, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2025"}
+    - {id: 167, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2022-2024"}
     - {id: 79, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2017-2021"}
     - {id: 21, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2007-2016"}
     - {id: 75, cat: TV/Sport, desc: "Спорт Формула 1 Сезони до 2006"}
