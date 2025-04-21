@@ -10,12 +10,12 @@ links:
 
 caps:
   categorymappings:
-    - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
     - {id: 33, cat: Movies, desc: "iNTERNAL"}
+    - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
     - {id: 4, cat: Movies, desc: "Bajki"}
     - {id: 31, cat: TV/Anime, desc: "Anime/Seriale"}
-    - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
+    - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
     - {id: 12, cat: Movies/BluRay, desc: "BD25/50_5/9"}
     - {id: 14, cat: Movies/3D, desc: "Filmy 3D"}
@@ -41,8 +41,6 @@ caps:
     - {id: 15, cat: Movies, desc: "Filmy bez lektora"}
     - {id: 7, cat: XXX, desc: "XXX 18+"}
     - {id: 32, cat: Movies/Other, desc: "Anime/Filmy"}
-    - {id: 34, cat: Movies, desc: "Ai - Filmy"}
-    - {id: 35, cat: TV, desc: "Ai - Seriale"}
 
   modes:
     search: [q]
@@ -237,4 +235,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 9.0.3 (custom)
+# json UNIT3D 9.0.6 (custom)
