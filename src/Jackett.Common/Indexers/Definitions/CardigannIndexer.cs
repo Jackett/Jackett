@@ -1344,20 +1344,20 @@ namespace Jackett.Common.Indexers.Definitions
             if (Selector.Selector != null)
             {
                 var selectorSelector = applyGoTemplateText(Selector.Selector.TrimStart('.'), variables);
-                selectorSelector = JsonParseFieldSelector(parentObj, selectorSelector);
+                var fieldSelector = JsonParseFieldSelector(parentObj, selectorSelector);
 
                 JToken selection = null;
 
-                if (selectorSelector != null)
+                if (fieldSelector != null)
                 {
-                    selection = parentObj.SelectToken(selectorSelector);
+                    selection = parentObj.SelectToken(fieldSelector);
                 }
 
                 if (selection == null)
                 {
                     if (required)
                     {
-                        throw new Exception($"Selector \"{selectorSelector}\" didn't match {parentObj}");
+                        throw new Exception($"Selector \"{selectorSelector}\" didn't match {parentObj.ToString(Formatting.None)}");
                     }
 
                     return null;
@@ -1365,7 +1365,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (selection.Type is JTokenType.Array)
                 {
-                    // turn this json array into a comma delimited string
+                    // turn this json array into a comma-delimited string
                     var valueArray = selection.Value<JArray>();
                     value = String.Join(",", valueArray);
                 }
@@ -1390,7 +1390,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     if (required)
                     {
-                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {parentObj}");
+                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {parentObj.ToString(Formatting.None)}");
                     }
 
                     return null;
@@ -1641,7 +1641,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         catch (Exception ex)
                         {
-                            logger.Trace(ex, "Failed to parse JSON rows count.");
+                            logger.Debug(ex, "Failed to parse JSON rows count.");
                         }
                     }
 
