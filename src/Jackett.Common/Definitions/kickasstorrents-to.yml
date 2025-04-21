@@ -8,8 +8,6 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://www.kickasstorrents.do/
-  - https://kickasstorrent.cr/
-  - https://katcr.to/
   - https://kickasstorrents.unblockninja.com/
   - https://kickasstorrents.ninjaproxy1.com/
   - https://kickasstorrents.proxyninja.org/
@@ -20,6 +18,8 @@ legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
   - https://kickasstorrents.to/
+  - https://kickasstorrent.cr/ # blocks Jackett UA, 'new' page broken
+  - https://katcr.to/ # blocks Jackett UA
 
 caps:
   categorymappings:
