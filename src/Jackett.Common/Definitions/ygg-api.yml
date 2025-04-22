@@ -29,7 +29,7 @@ settings:
   - name: info_key
     type: info
     label: About your passkey
-    default: "You will find your passkey on the <a href=\"https://www.ygg.re/user/account\" target=\"_blank\">YGG</a> account page."
+    default: "You will find your passkey on the <a href=\"https://www.yggtorrent.top/user/account\" target=\"_blank\">YGG</a> account page."
   - name: sort
     type: select
     label: Sort requested from site
