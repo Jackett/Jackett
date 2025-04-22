@@ -65,8 +65,10 @@ download:
     - selector: body
       usebeforeresponse: true
       filters:
+        - name: regexp
+          args: \"magnet\"\s*:\s*"(?<magnet>magnet:[^"]+)"
         - name: replace
-          args: ["PASSKEY_TO_BE_REPLACED_BY_REG_EX", "{{ .Config.passkey }}"]
+          args: ["PASSKEY_TO_BE_REPLACED_BY_REG_EX","{{ .Config.passkey }}"]
 
 search:
   paths:
