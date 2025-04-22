@@ -36,8 +36,7 @@ settings:
     default: uploaded_at
     options:
       uploaded_at: publish_date
-      seeders: seeders
-      downloads: downloads
+      seed: seeders
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -57,6 +56,17 @@ settings:
     type: info
     label: About missing Downloads
     default: "If the torrent has no seeder and no leecher then the torrent file may be missing and download may fail."
+
+download:
+  before:
+    path: "torrent/{{ .DownloadUri.Query.id }}/magnet?passkey=PASSKEY_TO_BE_REPLACED_BY_REG_EX"
+    method: get
+  selectors:
+    - selector: body
+      usebeforeresponse: true
+      filters:
+        - name: replace
+          args: ["PASSKEY_TO_BE_REPLACED_BY_REG_EX","{{ .Config.passkey }}"]
 
 search:
   paths:
@@ -90,8 +100,6 @@ search:
       selector: id
     details:
       text: "torrent/{{ .Result._id }}"
-    download:
-      text: "torrent/{{ .Result._id }}/download?passkey={{ .Config.passkey }}"
     year:
       selector: title
       filters:
@@ -107,6 +115,8 @@ search:
       selector: downloads
       optional: true
       default: 0
+    download:
+      text: torrent?id={{ .Result._id }}
     date:
       # unix
       selector: uploaded_at
