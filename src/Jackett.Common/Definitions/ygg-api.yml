@@ -1,7 +1,7 @@
 ---
 id: ygg-api
 name: Ygg API
-description: Indexeur non officiel pour ygg.re MOVIES / TV
+description: Indexeur non officiel pour YggTorrent (YGG) MOVIES / TV
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -68,7 +68,7 @@ download:
         - name: regexp
           args: \"magnet\"\s*:\s*"(?<magnet>magnet:[^"]+)"
         - name: replace
-          args: ["PASSKEY_TO_BE_REPLACED_BY_REG_EX","{{ .Config.passkey }}"]
+          args: ["PASSKEY_TO_BE_REPLACED_BY_REG_EX", "{{ .Config.passkey }}"]
 
 search:
   paths:
