@@ -57,6 +57,9 @@ login:
     formtoken:
       selector: input[name="formtoken"]
       attribute: value
+  test:
+    path: /
+    selector: a[href^="index.php?view=Login"]
 
 search:
   paths:
