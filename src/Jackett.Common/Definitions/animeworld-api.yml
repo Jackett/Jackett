@@ -1,7 +1,7 @@
 ---
 id: animeworld-api
 name: AnimeWorld (API)
-description: "AnimeWorld (AW) is a GERMAN Private site for ANIME / MANGA / HENTAI"
+description: "AnimeWorld (AW) is a GERMAN Private Torrent Tracker for ANIME / MANGA / HENTAI"
 language: de-DE
 type: private
 encoding: UTF-8
@@ -83,7 +83,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

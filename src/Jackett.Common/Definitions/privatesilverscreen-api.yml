@@ -1,7 +1,7 @@
 ---
 id: privatesilverscreen-api
 name: PrivateSilverScreen (API)
-description: "PrivateSilverScreen (PSS) is a Private tracker for MOVIES / TV / MUSIC"
+description: "PrivateSilverScreen (PSS) is a Private Torrent Tracker for MOVIES / TV / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
@@ -13,6 +13,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 6, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
@@ -70,7 +71,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -180,7 +181,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.25 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.25
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.2.0
+# json UNIT3D 9.0.5

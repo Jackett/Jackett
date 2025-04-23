@@ -12,25 +12,29 @@ caps:
   categorymappings:
     # FILM
     - {id: 2, cat: Movies/DVD, desc: "FILM DVD"}
-    - {id: 107, cat: Movies, desc: "FILM ANIME"}
-    - {id: 104, cat: Movies, desc: "FILM DVDRip"}
-    - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
-    - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
-    - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
     - {id: 66, cat: Movies/HD, desc: "FILM HDRip"}
+    - {id: 63, cat: Movies/WEB-DL, desc: "FILM WEB"}
+    - {id: 75, cat: Movies/UHD, desc: "FILM 2160 P"}
+    - {id: 101, cat: TV/Documentary, desc: "FILM Documentaire"}
+    - {id: 104, cat: Movies, desc: "FILM DVDRip"}
+    - {id: 107, cat: Movies, desc: "FILM ANIME"}
+    - {id: 111, cat: Movies, desc: "FILM Nouveautés 2024"}
+    - {id: 116, cat: Movies, desc: "FILM Nouveautés 2025"}
     - {id: 34, cat: Movies/SD, desc: "FILM TVRip"}
     - {id: 33, cat: Movies/SD, desc: "FILM HDTV"}
-    - {id: 31, cat: Movies/Other, desc: "FILM MUET"}
-    - {id: 30, cat: Movies/Foreign, desc: "FILM VOST"}
-    - {id: 29, cat: Movies/SD, desc: "FILM VHS"}
-    - {id: 28, cat: Movies/HD, desc: "FILM 720"}
-    - {id: 27, cat: Movies/HD, desc: "FILM BDRip"}
-    - {id: 26, cat: Movies/BluRay, desc: "FILM BluRay"}
-    - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
     - {id: 4, cat: Movies/HD, desc: "FILM 1080"}
-    - {id: 111, cat: Movies, desc: "FILM Nouveautés 2024"}
+    - {id: 25, cat: Movies/BluRay, desc: "FILM ISO"}
+    - {id: 26, cat: Movies/BluRay, desc: "FILM BluRay"}
+    - {id: 27, cat: Movies/HD, desc: "FILM BDRip"}
+    - {id: 28, cat: Movies/HD, desc: "FILM 720"}
+    - {id: 29, cat: Movies/SD, desc: "FILM VHS"}
+    - {id: 30, cat: Movies/Foreign, desc: "FILM VOST"}
+    - {id: 31, cat: Movies/Other, desc: "FILM MUET"}
+    - {id: 129, cat: Movies, desc: "FILM Nouveautés de cette année"}
     # SERIE
     - {id: 9, cat: TV/SD, desc: "SERIE DVD"}
+    - {id: 117, cat: TV, desc: "SERIE Nouveautés 2025"}
+    - {id: 110, cat: TV, desc: "SERIE Nouveautés 2024"}
     - {id: 108, cat: TV/HD, desc: "SERIE BlueRay"}
     - {id: 106, cat: TV/Anime, desc: "SERIE ANIME"}
     - {id: 105, cat: TV, desc: "SERIE Pack"}
@@ -45,23 +49,33 @@ caps:
     - {id: 15, cat: TV/WEB-DL, desc: "SERIE WEB.1080p"}
     - {id: 14, cat: TV/WEB-DL, desc: "SERIE WEB.720p"}
     - {id: 12, cat: TV/WEB-DL, desc: "SERIE WEB"}
-    - {id: 110, cat: TV, desc: "SERIE Nouveautés 2024"}
+    - {id: 128, cat: TV, desc: "SERIE Nouveautés de cette année"}
+    # ANIMEE
+    - {id: 113, cat: TV/Anime, desc: "ANIMEE Nouveautées 2024"}
+    - {id: 114, cat: Movies/Other, desc: "ANIMEE Fim"}
+    - {id: 115, cat: TV/Anime, desc: "ANIMEE Serie"}
+    - {id: 130, cat: TV/Anime, desc: "ANIMEE Nouveautés de cette année"}
     # LOGICIELS
     - {id: 56, cat: PC/ISO, desc: "LOGICIELS Linux"}
     - {id: 24, cat: PC/Mac, desc: "LOGICIELS Apple"}
     - {id: 58, cat: PC/0day, desc: "LOGICIELS Windows"}
+    - {id: 131, cat: PC, desc: "LOGICIELS Nouveautés de cette année"}
     # EBOOK
     - {id: 44, cat: Books/Mags, desc: "EBOOK Journaux"}
     - {id: 46, cat: Books/Technical, desc: "EBOOK Documents"}
     - {id: 48, cat: XXX/Other, desc: "EBOOK XXX"}
     - {id: 49, cat: Books/EBook, desc: "EBOOK Livres"}
+    - {id: 132, cat: Books, desc: "EBOOK Nouveautés de cette année"}
     # MUSIC
     - {id: 5, cat: Audio/Video, desc: "MUSIC clip video"}
     - {id: 109, cat: Audio/Video, desc: "MUSIC Spectacles.Theatre"}
+    - {id: 112, cat: Audio/Video, desc: "MUSIC Concert filmé"}
+    - {id: 133, cat: Audio/Video, desc: "MUSIC Nouveautés de cette année"}
     # JEUX
     - {id: 96, cat: PC/Games, desc: "JEUX Apple"}
     - {id: 8, cat: Console/PS3, desc: "JEUX PS3"}
     - {id: 45, cat: PC/Games, desc: "JEUX PC"}
+    - {id: 135, cat: Console, desc: "JEUX Nouveautés de cette année"}
 
   modes:
     search: [q]

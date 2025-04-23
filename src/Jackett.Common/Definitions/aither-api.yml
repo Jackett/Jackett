@@ -57,7 +57,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in to the Aither web site with your browser once every 120 days to prevent your account from getting disabled."
+    default: "You must log in to the Aither web site with your browser once every90 days to prevent your account from getting disabled."
 
 login:
   path: /api/torrents
@@ -72,7 +72,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -152,7 +152,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " +00:00" # UTC
+          args: " +00:00" # GMT
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
@@ -188,4 +188,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 8.3.3
+# json UNIT3D 9.0.1

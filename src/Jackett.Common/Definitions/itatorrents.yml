@@ -65,7 +65,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account disabled: 30 days of inactivity and no torrent seeding. Pruned Account: Has been disabled for 30 days, which is 60 days of inactivity in total."
+    default: "To not get disabled, you are required to login to the site at least once every 90 days or be actively seeding at least 1 torrent."
 
 login:
   path: /api/torrents
@@ -80,7 +80,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -104,6 +104,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
+    - name: re_replace # strip season and/or ep when single keyword (needed for mixed usage of S01 and Stagione 1)
+      args: ["^([SE]\\d{1,4}){1,2}$", "{{ if or (.Query.Season) (.Query.Ep) }}{{ else }}$1{{ end }}"]
     - name: re_replace # S01 to Stagione 1
       args: ["(?i)\\bS0*(\\d+)\\b", "Stagione $1"]
 
@@ -167,7 +169,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " -03:00" # BRT
+          args: " +00:00" # GMT
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
@@ -197,7 +199,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.3.3 (custom)
+# json UNIT3D 9.0.5 (custom)

@@ -10,6 +10,7 @@ links:
   - https://rousi.zip/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies(电影)", default: true}
     - {id: 402, cat: TV, desc: "TV Series(电视剧)", default: true}
@@ -29,7 +30,6 @@ caps:
     - {id: 417, cat: Other, desc: "Resource(图片、文档、素材、模板)", default: true}
     - {id: 418, cat: PC, desc: "Software(软件、系统、程序、APP等)", default: true}
     - {id: 409, cat: Other, desc: "Other(其它，确认上边无分类)", default: true}
-    # special
     - {id: 420, cat: XXX, desc: "步兵(步兵/无码)", default: false}
     - {id: 421, cat: XXX, desc: "骑兵(骑兵/有码)", default: false}
     - {id: 422, cat: XXX, desc: "III(三级片、限制级电影)", default: false}
@@ -227,4 +227,4 @@ search:
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "
-# NexusPHP v1.8.12 2024-07-13
+# NexusPHP v1.8.15 2024-12-23

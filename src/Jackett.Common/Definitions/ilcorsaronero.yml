@@ -1,7 +1,7 @@
 ---
 id: ilcorsaronero
 name: ilCorSaRoNeRo
-description: "ilCorSaRoNeRo is an ITALIAN Public site for TV / MOVIES / GENERAL"
+description: "ilCorSaRoNeRo is an ITALIAN Public site for MOVIES / TV / GENERAL"
 language: it-IT
 type: public
 encoding: UTF-8
@@ -96,7 +96,7 @@ search:
     cat: "{{ if .Keywords }}{{ re_replace .Config.category-id \"all\" \"\" }}{{ else }}{{ end }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:has(a[href^="/torrent/"])
     filters:
       - name: andmatch
 

@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "wolfmax4k";
         public override string Name => "Wolfmax 4k";
-        public override string Description => "Wolfmax 4k is a SPANISH public tracker for MOVIES / TV";
+        public override string Description => "Wolfmax 4k is a SPANISH Public site for MOVIES / TV";
 
         private string _siteLink = "https://wolfmax4k.com/";
         private string SiteLinkSearch;
@@ -159,6 +159,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<byte[]> Download(Uri link)
         {
             var wmPage = await RequestWithCookiesAndRetryAsync(link.ToString());
+            if (wmPage.ContentString.Contains("ERROR EL ARCHIVO NO EXISTE"))
+            {
+                throw new Exception("Error, the Download link at the requested path does not exist.");
+            }
             var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
             var enlacitoUrl = wmDoc.QuerySelector(".app-message a:not(.buttonPassword)")?.GetAttribute("href");
 

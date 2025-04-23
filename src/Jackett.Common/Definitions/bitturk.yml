@@ -1,7 +1,7 @@
 ---
 id: bitturk
 name: BiTTuRK
-description: "BiTTuRK is a Turkish Private Torrent Tracker for HD MOVIES / TV / GENERAL. This Indexer is for English only."
+description: "BiTTuRK is a TURKISH Private Torrent Tracker for HD MOVIES / TV / GENERAL. This Indexer is for English only."
 language: en-US
 type: private
 encoding: UTF-8
@@ -51,7 +51,6 @@ caps:
     - {id: 38, cat: Movies, desc: "Türk Filmi"}
     - {id: 39, cat: Movies, desc: "Türkçe BoX"}
     - {id: 40, cat: Movies, desc: "Türkçe Film"}
-    - {id: 41, cat: Movies, desc: "ViP"}
     - {id: 42, cat: Movies/SD, desc: "XviD"}
     - {id: 43, cat: Movies/SD, desc: "XviD BoX"}
     - {id: 55, cat: Movies/WEB-DL, desc: "WEB-DL"}
@@ -61,18 +60,19 @@ caps:
     - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
     - {id: 2, cat: Console, desc: "Oyun"}
     - {id: 74, cat: PC/Games, desc: "Oyun PC"}
-    - {id: 84, cat: Console/PS3, desc: "Oyun Playstation"}
-    - {id: 82, cat: Console/PSP, desc: " Oyun PSP"}
-    - {id: 83, cat: Console/Other, desc: "Oyun Gameboy"}
-    - {id: 87, cat: Console/XBox, desc: "Oyun XBOX"}
-    - {id: 88, cat: Console/Other, desc: "Oyun NEO-GEO"}
-    - {id: 89, cat: Console/Wii, desc: "Oyun Nintendo Wii"}
+    - {id: 84, cat: Console/PS3, desc: "Playstation"}
+    - {id: 82, cat: Console/PSP, desc: "PSP"}
+    - {id: 83, cat: Console/Other, desc: "Gameboy"}
+    - {id: 87, cat: Console/XBox, desc: "XBOX"}
+    - {id: 88, cat: Console/Other, desc: "NEO-GEO"}
+    - {id: 89, cat: Console/Wii, desc: "Nintendo Wii"}
     - {id: 6, cat: PC/0day, desc: "Program"}
     - {id: 47, cat: Other, desc: "Resimler"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
     - {id: 50, cat: TV, desc: "Yab@ncı Dizi"}
     - {id: 51, cat: TV, desc: "Yerli Dizi"}
+    - {id: 105, cat: TV, desc: "Yerli Dizi"}
     - {id: 44, cat: Books, desc: "E-BooK"}
 
   modes:

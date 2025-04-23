@@ -6,11 +6,13 @@ using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -24,7 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "animebytes";
         public override string Name => "AnimeBytes";
-        public override string Description => "Powered by Tentacles";
+        public override string Description => "AnimeBytes is a Private site. Powered by Tentacles";
         public override string SiteLink { get; protected set; } = "https://animebytes.tv/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -218,7 +220,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (queryCats.Any() && query.IsTVSearch && query.Season is > 0)
             {
                 // Avoid searching for specials if it's a non-zero season search
-                queryCats.RemoveAll(cat => cat is "anime[tv_special]" or "anime[ova]" or "anime[ona]" or "anime[dvd_special]" or "anime[bd_special]");
+                queryCats.RemoveAll(cat => cat is "anime[tv_special]" or "anime[ova]" or "anime[dvd_special]" or "anime[bd_special]");
             }
 
             if (queryCats.Any())
@@ -262,28 +264,28 @@ namespace Jackett.Common.Indexers.Definitions
 
             try
             {
-                var json = JToken.Parse(response.ContentString);
+                var jsonResponse = STJson.Deserialize<AnimeBytesResponse>(response.ContentString);
 
-                if (json.Value<string>("error") != null)
+                if (jsonResponse.Error.IsNotNullOrWhiteSpace())
                 {
-                    throw new Exception(json.Value<string>("error"));
+                    throw new Exception($"Unexpected response from indexer request: {jsonResponse.Error}");
                 }
 
-                if (json.Value<int>("Matches") == 0)
+                if (jsonResponse.Matches == 0)
                 {
                     return releases;
                 }
 
-                foreach (var group in json.Value<JArray>("Groups"))
+                foreach (var group in jsonResponse.Groups)
                 {
-                    var categoryName = group.Value<string>("CategoryName");
-                    var description = group.Value<string>("Description");
-                    var year = group.Value<int>("Year");
-                    var posterStr = group.Value<string>("Image");
+                    var categoryName = group.CategoryName;
+                    var description = group.Description;
+                    var year = group.Year;
+                    var posterStr = group.Image;
                     var poster = posterStr.IsNotNullOrWhiteSpace() ? new Uri(posterStr) : null;
-                    var groupName = group.Value<string>("GroupName");
-                    var seriesName = group.Value<string>("SeriesName");
-                    var mainTitle = WebUtility.HtmlDecode(group.Value<string>("FullName"));
+                    var groupName = group.GroupName;
+                    var seriesName = group.SeriesName;
+                    var mainTitle = WebUtility.HtmlDecode(group.FullName);
 
                     if (seriesName.IsNotNullOrWhiteSpace())
                     {
@@ -295,131 +297,95 @@ namespace Jackett.Common.Indexers.Definitions
                         mainTitle
                     };
 
-                    if (group.Value<JToken>("SynonymnsV2").HasValues && group.Value<JToken>("SynonymnsV2") is JObject)
+                    if (group.Synonymns != null && group.Synonymns.Any())
                     {
-                        var allSynonyms = group.Value<JToken>("SynonymnsV2").ToObject<Dictionary<string, string>>();
-
-                        if (AddJapaneseTitle && allSynonyms.TryGetValue("Japanese", out var japaneseTitle) && japaneseTitle.IsNotNullOrWhiteSpace())
+                        if (AddJapaneseTitle && group.Synonymns.TryGetValue("Japanese", out var japaneseTitle) && japaneseTitle.IsNotNullOrWhiteSpace())
                         {
                             synonyms.Add(japaneseTitle.Trim());
                         }
 
-                        if (AddRomajiTitle && allSynonyms.TryGetValue("Romaji", out var romajiTitle) && romajiTitle.IsNotNullOrWhiteSpace())
+                        if (AddRomajiTitle && group.Synonymns.TryGetValue("Romaji", out var romajiTitle) && romajiTitle.IsNotNullOrWhiteSpace())
                         {
                             synonyms.Add(romajiTitle.Trim());
                         }
 
-                        if (AddAlternativeTitles && allSynonyms.TryGetValue("Alternative", out var alternativeTitles) && alternativeTitles.IsNotNullOrWhiteSpace())
+                        if (AddAlternativeTitles && group.Synonymns.TryGetValue("Alternative", out var alternativeTitles) && alternativeTitles.IsNotNullOrWhiteSpace())
                         {
                             synonyms.UnionWith(alternativeTitles.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
-                        }
-                    }
-                    else if (group.Value<JToken>("Synonymns").HasValues)
-                    {
-                        if (group.Value<JToken>("Synonymns") is JArray)
-                        {
-                            var allSyonyms = group.Value<JToken>("Synonymns").ToObject<List<string>>();
-
-                            if (AddJapaneseTitle && allSyonyms.Count >= 1 && allSyonyms[0].IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.Add(allSyonyms[0]);
-                            }
-
-                            if (AddRomajiTitle && allSyonyms.Count >= 2 && allSyonyms[1].IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.Add(allSyonyms[1]);
-                            }
-
-                            if (AddAlternativeTitles && allSyonyms.Count >= 3 && allSyonyms[2].IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.UnionWith(allSyonyms[2].Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
-                            }
-                        }
-                        else if (group.Value<JToken>("Synonymns") is JObject)
-                        {
-                            var allSynonyms = group.Value<JToken>("Synonymns").ToObject<Dictionary<int, string>>();
-
-                            if (AddJapaneseTitle && allSynonyms.TryGetValue(0, out var japaneseTitle) && japaneseTitle.IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.Add(japaneseTitle.Trim());
-                            }
-
-                            if (AddRomajiTitle && allSynonyms.TryGetValue(1, out var romajiTitle) && romajiTitle.IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.Add(romajiTitle.Trim());
-                            }
-
-                            if (AddAlternativeTitles && allSynonyms.TryGetValue(2, out var alternativeTitles) && alternativeTitles.IsNotNullOrWhiteSpace())
-                            {
-                                synonyms.UnionWith(alternativeTitles.Split(',').Select(x => x.Trim()).Where(x => x.IsNotNullOrWhiteSpace()));
-                            }
                         }
                     }
 
                     List<int> category = null;
 
-                    foreach (var torrent in group.Value<JArray>("Torrents"))
+                    foreach (var torrent in group.Torrents)
                     {
                         // Skip non-freeleech results when freeleech only is set
-                        if (ConfigData.FreeleechOnly.Value && torrent.Value<double>("RawDownMultiplier") != 0)
+                        if (ConfigData.FreeleechOnly.Value && torrent.RawDownMultiplier != 0)
                         {
                             continue;
                         }
 
-                        var torrentId = torrent.Value<long>("ID");
-                        var link = torrent.Value<string>("Link");
-                        var linkUri = new Uri(link);
-                        var publishDate = DateTime.ParseExact(torrent.Value<string>("UploadTime"), "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
+                        var torrentId = torrent.Id;
+                        var link = torrent.Link;
+                        var publishDate = DateTime.ParseExact(torrent.UploadTime, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal);
                         var details = new Uri(SiteLink + "torrent/" + torrentId + "/group");
-                        var size = torrent.Value<long>("Size");
-                        var snatched = torrent.Value<long>("Snatched");
-                        var seeders = torrent.Value<int>("Seeders");
-                        var leechers = torrent.Value<int>("Leechers");
+                        var size = torrent.Size;
+                        var snatched = torrent.Snatched;
+                        var seeders = torrent.Seeders;
+                        var leechers = torrent.Leechers;
                         var peers = seeders + leechers;
-                        var fileCount = torrent.Value<int>("FileCount");
-                        var rawDownMultiplier = torrent.Value<double>("RawDownMultiplier");
-                        var rawUpMultiplier = torrent.Value<double>("RawUpMultiplier");
+                        var fileCount = torrent.FileCount;
+                        var rawDownMultiplier = torrent.RawDownMultiplier;
+                        var rawUpMultiplier = torrent.RawUpMultiplier;
 
                         // MST with additional 5 hours per GB
                         var minimumSeedTime = 259200 + (int)(size / (int)Math.Pow(1024, 3) * 18000);
 
-                        var propertyList = WebUtility.HtmlDecode(torrent.Value<string>("Property"))
+                        var propertyList = WebUtility.HtmlDecode(torrent.Property)
                              .Split('|')
                              .Select(t => t.Trim())
                              .Where(p => p.IsNotNullOrWhiteSpace())
                              .ToList();
 
                         propertyList.RemoveAll(p => _ExcludedProperties.Any(p.ContainsIgnoreCase));
-                        var properties = new HashSet<string>(propertyList);
+                        var properties = propertyList.ToHashSet();
 
-                        if (torrent.Value<JToken>("FileList") != null &&
-                            torrent.Value<JToken>("FileList").Any(f => f.Value<string>("filename").ContainsIgnoreCase("Remux")))
-                        {
-                            var resolutionProperty = properties.FirstOrDefault(_RemuxResolutions.ContainsIgnoreCase);
-
-                            if (resolutionProperty.IsNotNullOrWhiteSpace())
-                            {
-                                properties.Add($"{resolutionProperty} Remux");
-                            }
-                        }
-
-                        if (properties.Any(p => p.StartsWithIgnoreCase("M2TS")))
+                        if (properties.Any(p => p.StartsWith("M2TS", StringComparison.Ordinal)))
                         {
                             properties.Add("BR-DISK");
                         }
 
-                        if (!AllowRaws &&
-                            categoryName == "Anime" &&
-                            properties.Any(p => p.StartsWithIgnoreCase("RAW") || p.Contains("BR-DISK")))
+                        var isBluRayDisk = properties.Any(p => p.Equals("RAW", StringComparison.Ordinal) || p.StartsWith("M2TS", StringComparison.Ordinal) || p.StartsWith("ISO", StringComparison.Ordinal));
+
+                        if (!AllowRaws && categoryName == "Anime" && isBluRayDisk)
                         {
                             continue;
                         }
+
+                        properties = properties
+                             .Select(property =>
+                             {
+                                 if (isBluRayDisk)
+                                 {
+                                     property = Regex.Replace(property, @"\b(H\.?265)\b", "HEVC", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                     property = Regex.Replace(property, @"\b(H\.?264)\b", "AVC", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                                 }
+
+                                 if (torrent.Files.Any(f => f.FileName.ContainsIgnoreCase("Remux"))
+                                     && _RemuxResolutions.ContainsIgnoreCase(property))
+                                 {
+                                     property += " Remux";
+                                 }
+
+                                 return property;
+                             })
+                             .ToHashSet();
 
                         int? season = null;
                         int? episode = null;
 
                         var releaseInfo = categoryName == "Anime" ? "S01" : "";
-                        var editionTitle = torrent.Value<JToken>("EditionData")?.Value<string>("EditionTitle");
+                        var editionTitle = torrent.EditionData?.EditionTitle;
 
                         if (editionTitle.IsNotNullOrWhiteSpace())
                         {
@@ -573,11 +539,13 @@ namespace Jackett.Common.Indexers.Definitions
 
                         var infoString = properties.Select(p => "[" + p + "]").Join(string.Empty);
 
+                        var useYearInTitle = year is > 0 && torrent.Files.Any(f => f.FileName.Contains(year.Value.ToString()));
+
                         foreach (var title in synonyms)
                         {
                             var releaseTitle = groupName is "Movie" or "Live Action Movie" ?
                                 $"{releaseGroup}{title} {year} {infoString}" :
-                                $"{releaseGroup}{title} {releaseInfo} {infoString}";
+                                $"{releaseGroup}{title}{(useYearInTitle ? $" {year}" : string.Empty)} {releaseInfo} {infoString}";
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(title));
 
@@ -589,7 +557,7 @@ namespace Jackett.Common.Indexers.Definitions
                                 Year = year,
                                 Details = details,
                                 Guid = guid,
-                                Link = linkUri,
+                                Link = link,
                                 Poster = poster,
                                 PublishDate = publishDate,
                                 Category = category,
@@ -606,13 +574,13 @@ namespace Jackett.Common.Indexers.Definitions
                             releases.Add(release);
                         }
 
-                        if (AddFileNameTitles && torrent.Value<JToken>("FileList") != null)
+                        if (AddFileNameTitles)
                         {
-                            var files = torrent.Value<JToken>("FileList").ToList();
+                            var files = torrent.Files.ToList();
 
                             if (files.Count > 1)
                             {
-                                files = files.Where(f => !_ExcludedFileExtensions.Contains(Path.GetExtension(f.Value<string>("filename")))).ToList();
+                                files = files.Where(f => !_ExcludedFileExtensions.Contains(Path.GetExtension(f.FileName))).ToList();
                             }
 
                             if (files.Count != 1)
@@ -620,7 +588,7 @@ namespace Jackett.Common.Indexers.Definitions
                                 continue;
                             }
 
-                            var releaseTitle = files.First().Value<string>("filename");
+                            var releaseTitle = files.First().FileName;
 
                             var guid = new Uri(details + "&nh=" + StringUtil.Hash(releaseTitle));
 
@@ -632,7 +600,7 @@ namespace Jackett.Common.Indexers.Definitions
                                 Year = year,
                                 Details = details,
                                 Guid = guid,
-                                Link = linkUri,
+                                Link = link,
                                 Poster = poster,
                                 PublishDate = publishDate,
                                 Category = category,
@@ -677,7 +645,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var advancedSeasonRegex = new Regex(@"\b(?:(?<season>\d+)(?:st|nd|rd|th) Season|Season (?<season>\d+))\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             var seasonCharactersRegex = new Regex(@"(I{2,})$", RegexOptions.Compiled);
-            var seasonNumberRegex = new Regex(@"\b(?<!Part[- ._])(?:S)?(?<season>[2-9])$", RegexOptions.Compiled);
+            var seasonNumberRegex = new Regex(@"\b(?<!Part[- ._])(?<!\d[/])(?:S)?(?<season>[2-9])$", RegexOptions.Compiled);
 
             foreach (var title in titles)
             {
@@ -702,5 +670,110 @@ namespace Jackett.Common.Indexers.Definitions
 
             return null;
         }
+    }
+
+    public class AnimeBytesResponse
+    {
+        [JsonPropertyName("Matches")]
+        public int Matches { get; set; }
+
+        [JsonPropertyName("Groups")]
+        public IReadOnlyCollection<AnimeBytesGroup> Groups { get; set; }
+
+        public string Error { get; set; }
+    }
+
+    public class AnimeBytesGroup
+    {
+        [JsonPropertyName("ID")]
+        public long Id { get; set; }
+
+        [JsonPropertyName("CategoryName")]
+        public string CategoryName { get; set; }
+
+        [JsonPropertyName("FullName")]
+        public string FullName { get; set; }
+
+        [JsonPropertyName("GroupName")]
+        public string GroupName { get; set; }
+
+        [JsonPropertyName("SeriesName")]
+        public string SeriesName { get; set; }
+
+        [JsonPropertyName("Year")]
+        [JsonNumberHandling(JsonNumberHandling.AllowReadingFromString)]
+        public int? Year { get; set; }
+
+        [JsonPropertyName("Image")]
+        public string Image { get; set; }
+
+        [JsonPropertyName("SynonymnsV2")]
+        public IReadOnlyDictionary<string, string> Synonymns { get; set; }
+
+        [JsonPropertyName("Description")]
+        public string Description { get; set; }
+
+        [JsonPropertyName("Tags")]
+        public IReadOnlyCollection<string> Tags { get; set; }
+
+        [JsonPropertyName("Torrents")]
+        public IReadOnlyCollection<AnimeBytesTorrent> Torrents { get; set; }
+    }
+
+    public class AnimeBytesTorrent
+    {
+        [JsonPropertyName("ID")]
+        public long Id { get; set; }
+
+        [JsonPropertyName("EditionData")]
+        public AnimeBytesEditionData EditionData { get; set; }
+
+        [JsonPropertyName("RawDownMultiplier")]
+        public double RawDownMultiplier { get; set; }
+
+        [JsonPropertyName("RawUpMultiplier")]
+        public double RawUpMultiplier { get; set; }
+
+        [JsonPropertyName("Link")]
+        public Uri Link { get; set; }
+
+        [JsonPropertyName("Property")]
+        public string Property { get; set; }
+
+        [JsonPropertyName("Snatched")]
+        public int Snatched { get; set; }
+
+        [JsonPropertyName("Seeders")]
+        public int Seeders { get; set; }
+
+        [JsonPropertyName("Leechers")]
+        public int Leechers { get; set; }
+
+        [JsonPropertyName("Size")]
+        public long Size { get; set; }
+
+        [JsonPropertyName("FileCount")]
+        public int FileCount { get; set; }
+
+        [JsonPropertyName("FileList")]
+        public IReadOnlyCollection<AnimeBytesFile> Files { get; set; }
+
+        [JsonPropertyName("UploadTime")]
+        public string UploadTime { get; set; }
+    }
+
+    public class AnimeBytesFile
+    {
+        [JsonPropertyName("filename")]
+        public string FileName { get; set; }
+
+        [JsonPropertyName("size")]
+        public long FileSize { get; set; }
+    }
+
+    public class AnimeBytesEditionData
+    {
+        [JsonPropertyName("EditionTitle")]
+        public string EditionTitle { get; set; }
     }
 }

@@ -1,0 +1,80 @@
+---
+id: plugintorrent
+name: plugintorrent
+description: "plugintorrent is a Public site for AUDIO apps, plugins and samples"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://plugintorrent.com/
+
+caps:
+  categories:
+    PC: PC
+
+  modes:
+    search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      relevance: relevance
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt"]
+      attribute: href
+
+search:
+  # https://plugintorrent.com/?s=&orderby=date&order=DESC&post_type=post
+  paths:
+    - path: /
+  allowEmptyInputs: true
+  inputs:
+    s: "{{ .Keywords }}"
+    orderby: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    post_type: post
+
+  rows:
+    selector: article:has(a)
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: PC
+    title:
+      selector: .entry-title
+    details:
+      selector: .entry-title > a
+      attribute: href
+    download:
+      selector: .entry-title > a
+      attribute: href
+    description:
+      selector: .entry-summary
+    date:
+      selector: span.date
+    size:
+      text: "512 MB"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# wordpress 6.7.2

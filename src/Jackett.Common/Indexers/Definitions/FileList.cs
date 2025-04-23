@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "filelist";
         public override string Name => "FileList";
-        public override string Description => "The best Romanian site.";
+        public override string Description => "FileList is a Private Torrent Tracker. The best Romanian site.";
         public override string SiteLink { get; protected set; } = "https://filelist.io/";
         public override string[] AlternativeSiteLinks => new[]
         {

@@ -71,8 +71,8 @@ Your issue should have the following information.
 - **What happens** when you take the steps and **what you expected to happen**
 - **Error messages** and/or screenshots of the issue.
 - The **last working version** if it's applicable. Tracker issues normally don't need this information.
-- An attached copy of your **enhanced logs**. Don't forget to remove usernames/passwords/API-keys from the logs.
-    We'll be working on making sure these are automatically censored in the future.
+- An attached copy of your **enhanced logs**. Don't forget to check and remove usernames/passwords/API-keys etc. from the logs.
+    We've attempted to automatically censor these, but it pays to double check we've not missed anything.
 - Any other **relevant details** you can think of. The more information we have, the quicker we can solve the problem.
 
 ## Adding a New Tracker

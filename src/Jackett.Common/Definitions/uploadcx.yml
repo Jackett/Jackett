@@ -1,6 +1,6 @@
 ---
 id: uploadcx
-name: upload.cx
+name: upload.cx (API)
 description: "upload.cx (ULCX) is a Private Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
@@ -68,7 +68,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -184,4 +184,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 8.2.0
+# json UNIT3D 9.0.6

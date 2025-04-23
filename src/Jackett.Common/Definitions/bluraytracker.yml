@@ -17,9 +17,7 @@ caps:
     - {id: 17, cat: Movies/UHD, desc: " |- 4k/UHD Filmy "}
     - {id: 31, cat: Movies/BluRay, desc: " |- Bluray DB/BD/DVD"}
     - {id: 51, cat: Movies/3D, desc: " |- 3D Filmy"}
-    - {id: 14, cat: Movies/SD, desc: " |- DivX"}
     - {id: 45, cat: Movies/Other, desc: " |- Kreslené/Anime"}
-    - {id: 16, cat: Movies/SD, desc: " |- CAM/Kino"}
     - {id: 40, cat: TV, desc: "-----TV-----"}
     - {id: 32, cat: TV, desc: " |- Serialy CZ/SK/EN"}
     - {id: 47, cat: TV, desc: " |- Serialy"}
@@ -30,8 +28,9 @@ caps:
     - {id: 19, cat: PC/Mac, desc: " |- Programy MacOS"}
     - {id: 7, cat: Audio, desc: "-----Hudba-----"}
     - {id: 39, cat: Audio/Audiobook, desc: " |- Mluvene Slovo"}
-    - {id: 21, cat: Audio, desc: " |- MP3/FLAC"}
+    - {id: 21, cat: Audio/MP3, desc: " |- MP3"}
     - {id: 43, cat: Audio/Other, desc: " |- SoundTrack"}
+    - {id: 53, cat: Audio/Lossless, desc: " |- Flac"}
     - {id: 2, cat: PC/Games, desc: "--Hry--"}
     - {id: 3, cat: Console/PS3, desc: " |- Sony PS"}
     - {id: 4, cat: Console/Wii, desc: " |- Wii"}
@@ -40,7 +39,6 @@ caps:
     - {id: 28, cat: Console/NDS, desc: " |- Nintendo"}
     - {id: 42, cat: Books, desc: "Knihy A Časopisy"}
     - {id: 36, cat: Other, desc: "Ostatní"}
-    - {id: 46, cat: XXX, desc: "XXX (18+)"}
     # not listed
     - {id: 41, cat: Movies, desc: "VIP Torrent"}
     - {id: 48, cat: Movies, desc: " |- RLS"}

@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "anidub";
         public override string Name => "AniDUB";
-        public override string Description => "AniDUB Tracker is a semi-private russian tracker and release group for anime";
+        public override string Description => "AniDUB is a RUSSIAN Semi-Private tracker and release group for Anime";
         public override string SiteLink { get; protected set; } = "https://tr.anidub.com/";
         public override string Language => "ru-RU";
         public override string Type => "semi-private";

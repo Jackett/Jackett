@@ -5,8 +5,6 @@ description: "Xider-Torrent is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: UTF-8
-certificates:
-  - 2191bbeb4c86d287861b0a63d26aecc0983d5087 # Expired 18th November 2024
 links:
   - https://xider.eu/
 

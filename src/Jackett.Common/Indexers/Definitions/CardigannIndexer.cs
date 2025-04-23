@@ -178,7 +178,7 @@ namespace Jackett.Common.Indexers.Definitions
                             item = new DisplayInfoConfigurationItem($"About {Definition.Name} Categories", $"{Definition.Name} does not return categories in its search results.</br>To add to your Apps' Torznab indexer, replace all categories with 8000(Other).");
                             break;
                         case "info_cookie":
-                            item = new DisplayInfoConfigurationItem("How to get the Cookie", "<ol><li>Login to this tracker with your browser</li><li>If present in the login page, ensure you have the <b>Remember me</b> ticked and the <b>Log Me Out if IP Changes</b> unticked when you login</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>");
+                            item = new DisplayInfoConfigurationItem("How to get the Cookie", "<ol><li>Login to this tracker with your browser</li><li>If present in the login page, ensure you have the <b>Remember me</b> ticked and the <b>Log Me Out if IP Changes</b> unticked when you login</li><li>Navigate to the web site's torrent search page to view the list of available torrents for download</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Doc</b> button (Chrome Browser) or <b>HTML</b> button (FireFox)</li><li>Refresh the page by pressing <b>F5</b></li><li>Click on the first row entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the whole cookie string <i>(everything after 'cookie: ')</i> and <b>Paste</b> here.</li></ol>");
                             break;
                         case "info_flaresolverr":
                             item = new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it.");
@@ -254,7 +254,7 @@ namespace Jackett.Common.Indexers.Definitions
                 [".Config.sitelink"] = SiteLink,
                 [".True"] = "True",
                 [".False"] = null,
-                [".Today.Year"] = DateTime.Today.Year.ToString()
+                [".Today.Year"] = DateTime.Today.Month > 1 ? DateTime.Today.Year.ToString() : (DateTime.Today.Year - 1).ToString()
             };
 
             foreach (var setting in Definition.Settings)
@@ -1065,6 +1065,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
                 logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
+                landingResultDocument = null;
                 return null;
             }
 
@@ -1343,20 +1344,20 @@ namespace Jackett.Common.Indexers.Definitions
             if (Selector.Selector != null)
             {
                 var selectorSelector = applyGoTemplateText(Selector.Selector.TrimStart('.'), variables);
-                selectorSelector = JsonParseFieldSelector(parentObj, selectorSelector);
+                var fieldSelector = JsonParseFieldSelector(parentObj, selectorSelector);
 
                 JToken selection = null;
 
-                if (selectorSelector != null)
+                if (fieldSelector != null)
                 {
-                    selection = parentObj.SelectToken(selectorSelector);
+                    selection = parentObj.SelectToken(fieldSelector);
                 }
 
                 if (selection == null)
                 {
                     if (required)
                     {
-                        throw new Exception($"Selector \"{selectorSelector}\" didn't match {parentObj}");
+                        throw new Exception($"Selector \"{selectorSelector}\" didn't match {parentObj.ToString(Formatting.None)}");
                     }
 
                     return null;
@@ -1364,7 +1365,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (selection.Type is JTokenType.Array)
                 {
-                    // turn this json array into a comma delimited string
+                    // turn this json array into a comma-delimited string
                     var valueArray = selection.Value<JArray>();
                     value = String.Join(",", valueArray);
                 }
@@ -1389,7 +1390,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     if (required)
                     {
-                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {parentObj}");
+                        throw new Exception($"None of the case selectors \"{string.Join(",", Selector.Case)}\" matched {parentObj.ToString(Formatting.None)}");
                     }
 
                     return null;
@@ -1640,7 +1641,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         catch (Exception ex)
                         {
-                            logger.Trace(ex, "Failed to parse JSON rows count.");
+                            logger.Debug(ex, "Failed to parse JSON rows count.");
                         }
                     }
 

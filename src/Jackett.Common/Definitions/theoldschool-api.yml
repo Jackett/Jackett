@@ -1,7 +1,7 @@
 ---
 id: theoldschool-api
 name: The Old School (API)
-description: "The Old School is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "The Old School (TOS) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -97,7 +97,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -125,8 +125,6 @@ search:
   rows:
     selector: data
     attribute: attributes
-    count:
-      selector: meta.total
 
   fields:
     category:

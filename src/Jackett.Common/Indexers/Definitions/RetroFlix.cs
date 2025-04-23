@@ -14,7 +14,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "retroflix";
         public override string Name => "RetroFlix";
-        public override string Description => "Private Torrent Tracker for Classic Movies / TV / General Releases";
+        public override string Description => "RetroFlix is a Private site for Classic Movies / TV / General Releases";
         public override string SiteLink { get; protected set; } = "https://retroflix.club/";
         public override string[] LegacySiteLinks => new[]
         {

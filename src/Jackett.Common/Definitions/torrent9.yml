@@ -1,7 +1,7 @@
 ---
 id: torrent9
 name: Torrent9
-description: "Torrent9 is a FRENCH Public site for TV / MOVIES / GENERAL"
+description: "Torrent9 is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
@@ -10,7 +10,6 @@ testlinktorrent: false
 links:
   - https://ww1.torrent9.fm/
   - https://torrent9.to/
-  - https://torrent9.unblockninja.com/
 legacylinks:
   - https://ww1.torrent9.uno/
   - https://wvw.t9.pe/
@@ -35,6 +34,7 @@ legacylinks:
   - https://torrent9.ninjaproxy1.com/ # no response data
   - https://torrent9.proxyninja.org/ # Error 1007
   - https://www.torrent9.se/
+  - https://torrent9.unblockninja.com/ # 403 forbidden
 
 caps:
   # dont forget to update the search fields category case block

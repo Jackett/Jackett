@@ -1,0 +1,160 @@
+---
+id: bitgamer
+name: bitGAMER
+description: "bitGAMER is a Private Torrent Tracker for GAMES"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://bitgamer.ch/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX/Other, desc: "Adult Games"}
+    - {id: 3, cat: PC/0day, desc: "Burning/Ripping Tools"}
+    - {id: 4, cat: Books/Other, desc: "Guides/Game Documents"}
+    - {id: 13, cat: Movies/Other, desc: "Movies/TV/Video"}
+    - {id: 48, cat: Audio/Other, desc: "Music/OST"}
+    - {id: 52, cat: Console/Other, desc: "Amiga"}
+    - {id: 18, cat: PC/Mobile-iOS, desc: "Apple - iPhone/iPod/iPad"}
+    - {id: 54, cat: Console/Other, desc: "Arcade"}
+    - {id: 19, cat: Console/Other, desc: "Atari"}
+    - {id: 51, cat: Console/Other, desc: "Commodore 64"}
+    - {id: 22, cat: PC/Mobile-Android, desc: "Google - Android"}
+    - {id: 61, cat: Console/Other, desc: "Hyperspin"}
+    - {id: 24, cat: Console/XBox, desc: "Microsoft - Xbox"}
+    - {id: 25, cat: Console/XBox 360, desc: "Microsoft - Xbox 360"}
+    - {id: 49, cat: Console/XBox 360, desc: "Microsoft - Xbox 360 JTAG"}
+    - {id: 57, cat: Console/XBox One, desc: "Microsoft - Xbox One"}
+    - {id: 27, cat: Console/Other, desc: "Neo Geo"}
+    - {id: 55, cat: Console/3DS, desc: "Nintendo - 3DS"}
+    - {id: 28, cat: Console/NDS, desc: "Nintendo - DS"}
+    - {id: 29, cat: Console/Other, desc: "Nintendo - Game Boy Advance"}
+    - {id: 30, cat: Console/Other, desc: "Nintendo - Gameboy"}
+    - {id: 31, cat: Console/Other, desc: "Nintendo - Gamecube "}
+    - {id: 33, cat: Console/Other, desc: "Nintendo - N64 "}
+    - {id: 35, cat: Console/Other, desc: "Nintendo - NES"}
+    - {id: 50, cat: Console/Other, desc: "Nintendo - SNES"}
+    - {id: 63, cat: Console/Other, desc: "Nintendo - Switch"}
+    - {id: 37, cat: Console/Wii, desc: "Nintendo - Wii"}
+    - {id: 59, cat: Console/WiiU, desc: "Nintendo - Wii U"}
+    - {id: 53, cat: PC/Games, desc: "PC - DOS"}
+    - {id: 64, cat: PC/Games, desc: "PC - Linux"}
+    - {id: 39, cat: PC/Mac, desc: "PC - Mac OS X"}
+    - {id: 40, cat: PC/Games, desc: "PC - Windows"}
+    - {id: 41, cat: Console/Other, desc: "Sega"}
+    - {id: 42, cat: Console/Other, desc: "Sega - Dreamcast"}
+    - {id: 43, cat: Console/Other, desc: "Sega - Megadrive"}
+    - {id: 44, cat: Console/Other, desc: "Sony - Playstation"}
+    - {id: 45, cat: Console/Other, desc: "Sony - Playstation 2"}
+    - {id: 46, cat: Console/PS3, desc: "Sony - Playstation 3"}
+    - {id: 56, cat: Console/PS4, desc: "Sony - Playstation 4"}
+    - {id: 47, cat: Console/PSP, desc: "Sony - Playstation Portable "}
+    - {id: 58, cat: Console/PS Vita, desc: "Sony - Playstation Vita"}
+
+  modes:
+    search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td:has(:contains("Login failed"))
+  test:
+    path: my.php
+    selector: a[href^="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    search: "{{ .Keywords }}"
+    # multi-cat search appears to be broken on site
+    category: 0
+    # 0: name, 1: descr, 2: both
+    blah: 0
+    # 0: include dead, 1: alive, 2: dead, 3: freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: .outer > form > table > tbody > tr:has(a[href^="download.php"])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php"][title]
+      attribute: title
+    details:
+      selector: a[href^="details.php"]
+      attribute: href
+    download:
+      selector: a[href^="download.php"]
+      attribute: href
+    date:
+      # several old torrents with `0000-00-00 00:00:00` dates
+      selector: td:nth-child(5):not(:contains("000-00-0000:00:00"))
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+      optional: true
+      default: now
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    grabs:
+      selector: td:nth-child(7)
+    downloadvolumefactor:
+      case:
+        img[src*="/freeleech.png"]: 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

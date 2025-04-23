@@ -11,14 +11,12 @@ links:
 caps:
   categorymappings:
     # Эксклюзив
-    # Exclusive
     - {id: 387, cat: Movies/DVD, desc: " |- Отечественные фильмы DVD Master's"}
     - {id: 386, cat: Movies/DVD, desc: " |- Зарубежные фильмы DVD Master's"}
     - {id: 390, cat: TV/SD, desc: " |- Сериалы DVD Master's"}
     - {id: 388, cat: Movies/DVD, desc: " |- Мультфильмы DVD Master's"}
     - {id: 601, cat: TV/Anime, desc: " |- Мультсериалы DVD Master's"}
     # Кино, видео, мультипликация и ТВ
-    # Film, video, animation and TV
     - {id: 1002, cat: Movies, desc: " |- Зарубежные фильмы , мультфильмы [HD/UHD]"}
     - {id: 987, cat: Movies, desc: " |- Зарубежные фильмы , мультфильмы [SD]"}
     - {id: 1003, cat: Movies, desc: " |- Отечественные фильмы , мультфильмы [HD/UHD]"}
@@ -178,7 +176,6 @@ caps:
     - {id: 304, cat: TV/Anime, desc: " |- Аниме (озвучка)"}
     - {id: 303, cat: TV/Anime, desc: " |- Аниме (RAW)"}
     # Игры
-    # Games
     - {id: 471, cat: Console, desc: " |- Раздачи игр от R.G. FTN Gaming RePack"}
     - {id: 19, cat: Console, desc: " |- Новинки игр"}
     - {id: 99, cat: Console, desc: " |- Demo, Alpha, Beta версии"}
@@ -215,7 +212,6 @@ caps:
     - {id: 662, cat: Console, desc: " |- Софт для консолей"}
     - {id: 116, cat: Console, desc: " |- Портативные и Консольные (Игры)"}
     # ПО для Windows
-    # Software for Windows
     - {id: 529, cat: PC/0day, desc: " |- Информация и диагностика"}
     - {id: 518, cat: PC/0day, desc: " |- Системные утилиты"}
     - {id: 516, cat: PC/0day, desc: " |- Безопасность: Защита информации. Антивирусы/файерволы"}
@@ -267,7 +263,6 @@ caps:
     - {id: 960, cat: PC/0day, desc: " |- Вспомогательный софт для релизера"}
     - {id: 961, cat: PC/0day, desc: " |- Разное"}
     # Операционные системы и программирование
-    # Operating systems and programming
     - {id: 972, cat: PC, desc: " |- Windows 10 / 11 (Оригинальные версии)"}
     - {id: 909, cat: PC, desc: " |- Windows 8 / 8.1 (Оригинальные версии)"}
     - {id: 822, cat: PC, desc: " |- Windows 7 (Оригинальные версии)"}
@@ -303,7 +298,6 @@ caps:
     - {id: 368, cat: Other, desc: " |- Компоненты для сред программирования"}
     - {id: 367, cat: Other, desc: " |- Ищу и предлагаю (Веб-разработка и программирование)"}
     # iPhone, iPod, iPod Touch, iPad, мобильные телефоны . Android и КПК
-    # iPhone, iPod, iPod Touch, iPad, mobile phones.
     - {id: 430, cat: PC/Mobile-iOS, desc: " |- База знаний"}
     - {id: 967, cat: PC/Mobile-iOS, desc: " |- Прошивки и ОС"}
     - {id: 426, cat: PC/Mobile-iOS, desc: " |- Программы"}
@@ -313,7 +307,6 @@ caps:
     - {id: 175, cat: PC/Mobile-iOS, desc: " |- Приложения"}
     - {id: 174, cat: PC/Mobile-iOS, desc: " |- Игры"}
     # Музыка
-    # Music
     - {id: 939, cat: Audio/Lossless, desc: " |- Дискографии в Lossless"}
     - {id: 948, cat: Audio/MP3, desc: " |- Дискографии в MP3"}
     - {id: 129, cat: Audio, desc: " |- Многоканальная музыка (Электронная музыка)"}
@@ -415,7 +408,6 @@ caps:
     - {id: 290, cat: Audio, desc: " |- К фильмам"}
     - {id: 291, cat: Audio, desc: " |- К сериалам"}
     # Литература и обучение
-    # Literature and learning
     - {id: 61, cat: Books, desc: " |- Художественная литература"}
     - {id: 664, cat: Books, desc: " |- Художественная литература для детей"}
     - {id: 467, cat: Books, desc: " |- Художественная литература на иностранных языках"}
@@ -435,11 +427,13 @@ caps:
     - {id: 586, cat: Books, desc: " |- Авто - Тюнинг, чиптюнинг, настройка, отделка и укращения"}
     - {id: 672, cat: Books, desc: " |- Литература по медицине"}
     - {id: 793, cat: Books, desc: "Журналы научно-прикладные и познавательно-образовательные"}
+    - {id: 708, cat: PC, desc: "ЖИнтерактивный и компьтерный материал"}
     - {id: 875, cat: PC, desc: " |- Интерактивные компьютерные диски для хобби"}
     - {id: 583, cat: PC, desc: " |- Интерактивные справочники и каталоги для авто/мото транспорт.."}
     - {id: 465, cat: PC, desc: " |- Интерактивные и компьютерные диски для обучения ин. языкам"}
     - {id: 674, cat: PC, desc: " |- Интерактивные и компьютерные диски по медицине"}
     - {id: 710, cat: PC, desc: " |- Прочие материалы для детей и родителей"}
+    - {id: 888, cat: Books, desc: "Литература разных направлений"}
     - {id: 897, cat: Books, desc: " |- Прочее"}
     - {id: 896, cat: Books, desc: " |- Автомобили"}
     - {id: 895, cat: Books, desc: " |- Домашним мастерам"}
@@ -461,10 +455,10 @@ caps:
     - {id: 816, cat: Audio/Audiobook, desc: " |- Современная литература"}
     - {id: 190, cat: Audio/Audiobook, desc: " |- Аудио книги для детей"}
     - {id: 191, cat: Audio/Audiobook, desc: " |- Обучающие аудиокниги и аудиоупражнения для детей"}
+    - {id: 749, cat: Audio, desc: "Аудио концерты, спектакли, пьесы"}
     - {id: 687, cat: Audio, desc: " |- Аудиоспектакли и литературные чтения"}
     - {id: 751, cat: Audio, desc: " |- Аудио юмористические концерты (выступления)"}
     # Эротика
-    # Erotica
     - {id: 963, cat: XXX, desc: "Эротические художественные фильмы"}
     - {id: 964, cat: XXX, desc: "Эротические документальные фильмы"}
     - {id: 178, cat: XXX, desc: "Русская эротика"}
@@ -481,7 +475,7 @@ caps:
     - {id: 813, cat: XXX, desc: " |- 3D | Иностранная эротика"}
     - {id: 820, cat: XXX, desc: "Литература"}
     # Служебный раздел
-    # Service section
+    - {id: 912, cat: Other, desc: "Нарушение правил оформления"}
     - {id: 57, cat: Other, desc: "Временный склад (TEMP)"}
     - {id: 433, cat: Other, desc: "Архив раздач"}
 
@@ -602,7 +596,7 @@ search:
         - name: querystring
           args: f
     title:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -668,7 +662,7 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
       attribute: href
     download:
       selector: a[href^="/download.php?id="]
@@ -691,5 +685,5 @@ search:
     uploadvolumefactor:
       text: 1
     description:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed
 # TorrentPier

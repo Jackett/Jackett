@@ -3,17 +3,20 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
+using WebRequest = Jackett.Common.Utils.Clients.WebRequest;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -23,7 +26,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "knaben";
         public override string Name => "Knaben";
         public override string Description => "Knaben is a Public torrent meta-search engine";
-        public override string SiteLink { get; protected set; } = "https://knaben.eu/";
+        public override string SiteLink { get; protected set; } = "https://knaben.org/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://knaben.eu/",
+        };
         public override string Language => "en-US";
         public override string Type => "public";
 
@@ -145,7 +152,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IParseIndexerResponse GetParser()
         {
-            return new KnabenParser(TorznabCaps.Categories);
+            return new KnabenParser(TorznabCaps.Categories, logger);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -207,7 +214,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var request = new WebRequest
             {
-                Url = "https://api.knaben.eu/v1",
+                Url = "https://api.knaben.org/v1",
                 Type = RequestType.POST,
                 Headers = new Dictionary<string, string>
                 {
@@ -224,19 +231,32 @@ namespace Jackett.Common.Indexers.Definitions
     public class KnabenParser : IParseIndexerResponse
     {
         private readonly TorznabCapabilitiesCategories _categories;
+        private readonly Logger _logger;
 
-        private static readonly Regex DateTimezoneRegex = new Regex(@"[+-]\d{2}:\d{2}$", RegexOptions.Compiled);
+        private static readonly Regex _DateTimezoneRegex = new Regex(@"[+-]\d{2}:\d{2}$", RegexOptions.Compiled);
 
-        public KnabenParser(TorznabCapabilitiesCategories categories)
+        public KnabenParser(TorznabCapabilitiesCategories categories, Logger logger)
         {
             _categories = categories;
+            _logger = logger;
         }
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
+            if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
+            {
+                if (indexerResponse.WebResponse.IsRedirect)
+                {
+                    _logger.Warn("Redirected to {0} from indexer request", indexerResponse.WebResponse.RedirectingTo);
+                }
+
+                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request");
+            }
+
             var releases = new List<ReleaseInfo>();
 
             var jsonResponse = JsonConvert.DeserializeObject<KnabenResponse>(indexerResponse.Content);
+            _logger.Debug(jsonResponse.ToString());
 
             if (jsonResponse?.Hits == null)
             {
@@ -248,21 +268,34 @@ namespace Jackett.Common.Indexers.Definitions
             foreach (var row in rows)
             {
                 // Not all entries have the TZ in the "date" field
-                var publishDate = row.Date.IsNotNullOrWhiteSpace() && !DateTimezoneRegex.IsMatch(row.Date) ? $"{row.Date}+01:00" : row.Date;
+                var publishDate = row.Date.IsNotNullOrWhiteSpace() && !_DateTimezoneRegex.IsMatch(row.Date) ? $"{row.Date}+01:00" : row.Date;
+                var downloadLink = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl, UriKind.Absolute, out var downloadUrl) ? downloadUrl : null;
+                // ignore .torrent links from LimeTorrents
+                if (row.TrackerId.Contains("limetorrents"))
+                {
+                    downloadLink = null;
+                }
+                var magnetURI = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl, UriKind.Absolute, out var magnetUrl) ? magnetUrl : null;
+                // skip LimeTorrents results without magnets
+                if (row.TrackerId.Contains("limetorrents") && magnetURI == null)
+                {
+                    continue;
+                }
 
                 var releaseInfo = new ReleaseInfo
                 {
                     Guid = new Uri(row.InfoUrl),
                     Title = row.Title,
                     Details = new Uri(row.InfoUrl),
-                    Link = row.DownloadUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.DownloadUrl, UriKind.Absolute, out var downloadUrl) ? downloadUrl : null,
-                    MagnetUri = row.MagnetUrl.IsNotNullOrWhiteSpace() && Uri.TryCreate(row.MagnetUrl, UriKind.Absolute, out var magnetUrl) ? magnetUrl : null,
+                    Link = downloadLink,
+                    MagnetUri = magnetURI,
                     Category = row.CategoryIds.SelectMany(cat => _categories.MapTrackerCatToNewznab(cat.ToString())).Distinct().ToList(),
                     InfoHash = row.InfoHash,
                     Size = row.Size,
                     Seeders = row.Seeders,
                     Peers = row.Leechers + row.Seeders,
                     PublishDate = DateTime.Parse(publishDate, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
+                    Description = row.Tracker,
                     DownloadVolumeFactor = 0,
                     UploadVolumeFactor = 1
                 };
@@ -306,5 +339,9 @@ namespace Jackett.Common.Indexers.Definitions
         public int Leechers { get; set; }
 
         public string Date { get; set; }
+
+        public string TrackerId { get; set; }
+
+        public string Tracker { get; set; }
     }
 }

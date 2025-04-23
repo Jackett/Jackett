@@ -1,22 +1,24 @@
 ---
 id: lastfiles
 name: LastFiles
-description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for 0DAY / GENERAL"
+description: "LastFiles (LF) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ro-RO
 type: private
 encoding: UTF-8
 followredirect: true
 requestDelay: 2
 links:
+  - https://lastfiles.ro/
   - https://www.last-torrents.org/
 legacylinks:
   - http://last-torrents.org/
-  - https://last-torrents.org/
   - https://www.lastfiles.ro/
   - http://www.lastfiles.ro/
   - http://www.last-torrents.org/
+  - https://last-torrents.org/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 1, cat: TV/Anime, desc: "Movies: Anime", default: true}
     - {id: 2, cat: TV/Anime, desc: "Movies: Anime-Ro", default: true}
@@ -38,12 +40,13 @@ caps:
     - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
     - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
     - {id: 26, cat: PC/0day, desc: "Software", default: true}
-    - {id: 27, cat: XXX, desc: "Movies: XXX", default: false}
+    - {id: 27, cat: XXX/x264, desc: "Movies: XXX", default: false}
     - {id: 28, cat: Audio, desc: "Music", default: true}
     - {id: 30, cat: PC/Games, desc: "Games: PC-ISO", default: true}
     - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
-    - {id: 32, cat: Movies/UHD, desc: "Movies: 4K-Ro", default: true}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRo", default: true}
     - {id: 33, cat: PC/Games, desc: "Games: Packs", default: true}
+    - {id: 34, cat: XXX/Pack, desc: "XXX Pack", default: false}
     - {id: 42, cat: TV/Sport, desc: "Sport", default: true}
     - {id: 43, cat: Books, desc: "Documents", default: true}
     - {id: 44, cat: Other, desc: "Images", default: true}
@@ -53,10 +56,7 @@ caps:
     - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
     - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
-    - {id: 58, cat: Movies/SD, desc: "Movies: Cam", default: true}
-    - {id: 59, cat: Movies/SD, desc: "Movies: Cam-Ro", default: true}
-    - {id: 61, cat: Movies/3D, desc: "Movies: 3D", default: true}
-    - {id: 62, cat: Movies/3D, desc: "Movies: 3D-Ro", default: true}
+    - {id: 60, cat: XXX/ImageSet, desc: "ImagesXXX", default: false}
     - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
     - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
 
@@ -84,83 +84,101 @@ settings:
     type: info
     label: Account Inactivity
     default: "Accounts inactive for more than 42 days are automatically deleted."
-#  - name: sort
-#    type: select
-#    label: Sort requested from site
-#    default: 3
-#    options:
-#      3: created
-#      6: seeders
-#      4: size
-#      1: title
-#  - name: type
-#    type: select
-#    label: Order requested from site
-#    default: desc
-#    options:
-#      desc: desc
-#      asc: asc
 
 login:
-  path: takelogin.php
-  method: post
+  path: login
+  method: form
+  form: form[action$="/login"]
   inputs:
-    username: "{{ .Config.username }}"
+    name: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    submitme: Login!
-    use_ssl: 1
-    perm_ssl: 1
+    remember: on
+  selectorinputs:
+    _token:
+      selector: input[name="_token"]
+      attribute: value
   error:
-    - selector: td.embedded:contains("Login failed")
+    - selector: div.alert-danger:contains("Invalid credentials")
   test:
-    path: index.php
-    selector: a[href*="/logout.php?hash_please="]
+    path: /
+    selector: a[href$="/logout"]
 
 search:
   paths:
-    # https://www.last-torrents.org/browse.php?search=the+nun+ii&searchin=title&type=0&cat=+
-    # cannot support imdbid or tmdbid searches while using path category filters
-    - path: browse.php
-      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 58, 59, 60, 61, 62, 81, 82]
-    - path: browseadult.php
-      categories: [27]
+    # https://lastfiles.ro/torrents?keyword=tt8337290&category=32&genre=&torrent_status=free
+    - path: torrents
+      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 81, 82]
+    - path: torrents/adult
+      categories: [27, 34, 60]
 
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.Genre }}{{ .Query.Genre }} {{ else }}{{ end }}{{ .Keywords }}"
-    # title, genre, all
-    searchin: "{{ if .Query.Genre }}all{{ else }}title{{ end }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 free, 4 silver, 5 seedbox
-    type: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
-# sort and type can only be used in a non-search query due to conflicting parameters
-#    sort: "{{ .Config.sort }}"
-#    type: "{{ .Config.type }}"
+    # does not support multi categories, leaving out category keyword defaults to all
+    keyword: "{{ .Keywords }}"
+    # active, dead, free, double, seedbox
+    torrent_status: "{{ if .Config.freeleech }}free{{ else }}active{{ end }}"
+    # has sort for size and seeders but not for title or date
 
   rows:
-    selector: div.py-3
-    filters:
-      - name: andmatch
+    selector: table.table-hover > tbody > tr
 
   fields:
     category:
-      selector: a[href*="cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: img[src*="images/categories/"], img[src*="images/categoriesNORMALE/"]
+      attribute: src
+      case:
+        # not all categories are available at the moment, so some are deduced and unconfirmed
+        img[src$="/anime.png"]: 1
+        img[src$="/anime-ro.png"]: 2
+        img[src$="/bluray.png"]: 5
+        img[src$="/bluray-ro.png"]: 6
+        img[src$="/dvd.png"]: 9
+        img[src$="/dvd-ro.png"]: 10
+        img[src$="/hd.png"]: 11
+        img[src$="/hd-ro.png"]: 12
+        img[src$="/hdtve.png"]: 13
+        img[src$="/hdtve-ro.png"]: 14
+        img[src$="/oldies.png"]: 16
+        img[src$="/oldies-ro.png"]: 17
+        img[src$="/pack.png"]: 18
+        img[src$="/pack-ro.png"]: 19
+        img[src$="/tvepisode.png"]: 20
+        img[src$="/tvepisode-ro.png"]: 21
+        img[src$="/rocontent.png"]: 22
+        img[src$="/xvid.png"]: 24
+        img[src$="/xvid-ro.png"]: 25
+        img[src$="/soft.png"]: 26
+        img[src$="/xxx.png"]: 27
+        img[src$="/music.png"]: 28
+        img[src$="/pciso.png"]: 30
+        img[src$="/4k.png"]: 31
+        img[src$="/4kRO.png"]: 32
+        img[src$="/gpack.png"]: 33
+        img[src$="/xxxpacks.png"]: 34
+        img[src$="/sport.png"]: 42
+        img[src$="/docs.png"]: 43
+        img[src$="/images.png"]: 44
+        img[src$="/misc.png"]: 49
+        img[src$="/android.png"]: 51
+        img[src$="/web-DL.png"]: 54
+        img[src$="/web-DLRO.png"]: 55
+        img[src$="/doc.png"]: 56
+        img[src$="/doc-ro.png"]: 57
+        img[src$="/imagesxxx.png"]: 60
+        img[src$="/x265ro.png"]: 81
+        img[src$="/x265.png"]: 82
     title:
-      selector: a[href^="t"]
+      selector: a[href*="/torrents/"]
     details:
-      selector: a[href^="t"]
+      selector: a[href*="/torrents/"]
       attribute: href
     poster:
-      selector: a[href^="t"]
-      attribute: title
+      selector: a[href*="/torrents/"]
+      attribute: data-bs-title
       filters:
         - name: regexp
-          args: "src=(.+?) "
+          args: "src='(.+?)'"
     genre:
-      selector: i:has(a[href$="searchin=genre"]), font[size]
+      selector: div.torrent-genres
       filters:
         - name: replace
           args: [" & ", "_&_"]
@@ -171,46 +189,32 @@ search:
     description:
       text: "{{ .Result.genre }}"
     download:
-      selector: a[href^="download.php"]
+      selector: a[href*="/download/"]
       attribute: href
-    date_day:
-      selector: div.col-sm-4:nth-of-type(3):contains("day")
-      # auto adjusted by site account profile
-      optional: true
-      filters:
-        - name: fuzzytime
-    date_year:
-      selector: div.col-sm-4:nth-of-type(3):contains(":"):not(:contains("day"))
-      # auto adjusted by site account profile
-      optional: true
-      filters:
-        - name: dateparse
-          args: "MMM d yyyy, hh:mm tt"
     date:
-      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+      selector: td:nth-of-type(4) div[title]
+      attribute: title
+      filters:
+        - name: timeago
     size:
-      selector: div.col-sm-4:nth-of-type(4)
+      selector: td:nth-of-type(5)
     grabs:
-      selector: div.col-sm-3:contains("Completed") b
+      selector: td:nth-of-type(6)
     seeders:
-      selector: div.col-sm-3:contains("Seeders") b
+      selector: td:nth-of-type(7)
     leechers:
-      selector: div.col-sm-2:contains("Leechers") b
+      selector: td:nth-of-type(8)
     downloadvolumefactor:
       case:
-        img[src$="half2.png"]: 0.5
-        a#free-btn: 0
+        div.free-btn: 0
         "*": 1
     uploadvolumefactor:
       case:
-        a#double-btn: 2
+        div.double-btn: 2
         "*": 1
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # freeleech 2 days (as seconds =  2 x 24 x 60 x 60)
-      # notfree 1.5 days  (as seconds =  1.5 x 24 x 60 x 60)
-      case:
-        a#free-btn: 172800
-        "*": 129600
-# U-232 V5
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Last Files V1

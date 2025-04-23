@@ -5,23 +5,21 @@ description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.protege-torrent.com/Zetorrents
+# to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.zetorrents.sk/
+  - https://www.zetorrents1.com/
 legacylinks:
+  # latest domains list
+  - https://www.rantop.my/
+  - https://www.site-torrent.com/
+  # domain lists no longer working
+  - https://www.protege-torrent.com/
+  - https://www.torrent.ws/
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
-  # latest domains list
-  - https://www.protege-torrent.com/
-  - https://www.site-torrent.com/
-  - https://www.rantop.org/
-  - https://www.torrent.ws/
   - https://www.torrent.onl/
+  - https://www.rantop.org/
   # actual legacylinks
-  - https://wwv.zetorrents.io/
-  - https://ww1.zetorrents.io/
-  - https://www.zetorrents.org/
-  - https://wvw.zetorrents.org/
   - https://www.zetorrents.cc/
   - https://www.zetorrents.tv/
   - https://www.zetorrents.bz/
@@ -35,6 +33,10 @@ legacylinks:
   - https://www.zetorrents.in/
   - https://www.zetorrents.vg/
   - https://www.zetorrents.vc/
+  - https://www.zetorrents.sk/
+  - https://www.zetorrents.my/
+  - https://wvw-zetorrents.com/
+  - https://www-zetorrents.com/
 
 caps:
   categories:
@@ -76,7 +78,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

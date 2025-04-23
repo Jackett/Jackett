@@ -42,7 +42,8 @@ search:
 
   keywordsfilters:
     - name: re_replace
-      args: ["S[0-9]{2}([^E]|$)", ""] # remove season tag without episode (search doesn't support it)
+      args: ["\\bS\\d{2,3}\\b", ""] # remove season tag without episode (search doesn't support it)
+    - name: trim
     # fixes for site search issues - Prowlarr #1094
     - name: replace
       args: ["-", ""]

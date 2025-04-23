@@ -49,9 +49,10 @@ caps:
     - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
     - {id: 77, cat: TV, desc: "Dijital Platform EXXEN"}
     - {id: 87, cat: TV, desc: "Dijital Platform GAIN"}
-    - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
+    - {id: 105, cat: TV, desc: "Dijital Platform Max"}
     - {id: 101, cat: TV, desc: "Dijital Platform MUBi"}
     - {id: 103, cat: TV, desc: "Dijital Platform TABii"}
+    - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}

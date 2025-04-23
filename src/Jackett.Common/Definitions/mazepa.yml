@@ -1,7 +1,7 @@
 ---
 id: mazepa
 name: Mazepa
-description: "Mazepa is a UKRAINIAN Semi-Private Torrent Tracker for Videos with Ukrainian soundtracks"
+description: "Mazepa is an UKRAINIAN Semi-Private Torrent Tracker for Videos with Ukrainian soundtracks"
 language: uk-UA
 type: semi-private
 encoding: UTF-8
@@ -41,8 +41,8 @@ caps:
     - {id: 42, cat: TV/Documentary, desc: "Озвучений Документальне HD"}
     - {id: 15, cat: TV/Documentary, desc: "Озвучений Документальне SD"}
     # Спорт
-    - {id: 20, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2024"}
-    - {id: 167, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2022-2023"}
+    - {id: 20, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2025"}
+    - {id: 167, cat: TV/Sport, desc: "Спорт Формула 1 Сезон 2022-2024"}
     - {id: 79, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2017-2021"}
     - {id: 21, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2007-2016"}
     - {id: 75, cat: TV/Sport, desc: "Спорт Формула 1 Сезони до 2006"}
@@ -86,16 +86,7 @@ caps:
     - {id: 170, cat: PC, desc: "Програмне забезпечення Офіс, текстові редактори"}
     - {id: 171, cat: PC, desc: "Програмне забезпечення Аудіо, відео обробка"}
     - {id: 173, cat: PC, desc: "Програмне забезпечення Інше"}
-    # Закритий розділ
-    - {id: 160, cat: Audio, desc: "Закритий розділ Rock, Alternative, Punk, Metal"}
-    - {id: 161, cat: Audio, desc: "Закритий розділ Pop"}
-    - {id: 181, cat: Audio, desc: "Закритий розділ Synthpop, Futurepop, New Wave, Electropop"}
-    - {id: 165, cat: Audio, desc: "Закритий розділ Jazz, Blues, Soul"}
-    - {id: 180, cat: Audio, desc: "Закритий розділ New Age &amp; Meditative"}
-    - {id: 163, cat: Audio, desc: "Закритий розділ Rap, Hip-hop, RnB, Reggae"}
-    - {id: 166, cat: Audio, desc: "Закритий розділ Country, Country pop, Bluegrass, Southern rock"}
-    - {id: 162, cat: Audio, desc: "Закритий розділ Electronic"}
-    - {id: 164, cat: Audio, desc: "Закритий розділ Other Styles"}
+    - {id: 185, cat: PC, desc: "Програмне забезпечення Ігри"}
     # archive, not in tracker search category pulldown
     - {id: 23, cat: Other, desc: "Архів"}
 
@@ -209,7 +200,7 @@ search:
         - name: regexp
           args: f=(\d+)
     title:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed, a.leechmed
       filters:
         # normalize to SXXEYY format
         # Ukrainian
@@ -291,7 +282,7 @@ search:
         - name: re_replace
           args: ["(?i)^\\(\\s*([SE]\\d+.*?)\\s*\\)[\\s\\/\\|]*(.+)", "$2 $1"]
     details:
-      selector: a.genmed
+      selector: a.genmed, a.seedmed, a.leechmed
       attribute: href
     download:
       selector: a[href^="./dl.php?id="]

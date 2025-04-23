@@ -13,23 +13,23 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Films: General"}
+    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
     - {id: 21, cat: Movies/3D, desc: "Films: 3D"}
     - {id: 25, cat: Movies/Other, desc: "Films: Musical"}
     - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
     - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
+    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
-    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
-    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
-    - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dub or Vid issues"}
+    - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dubs/Cams/Vid Issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
     - {id: 8, cat: Movies/Other, desc: "Anime: Films"}
     - {id: 9, cat: TV/Anime, desc: "Anime: Series/OVAs"}
-    - {id: 2, cat: TV, desc: "Series/TV: General"}
+    - {id: 2, cat: TV, desc: "Series/TV: Complete Seasons"}
     - {id: 41, cat: TV, desc: "Series/TV: Single Episodes"}
-    - {id: 31, cat: TV/Foreign, desc: "Series/TV SP1: Dub"}
+    - {id: 31, cat: TV/Foreign, desc: "Series/TV SP1: video issues or Dub"}
     - {id: 29, cat: TV/Foreign, desc: "Series/TV SP2: No English"}
     - {id: 32, cat: TV/Other, desc: "Series/TV SP3: Other"}
     - {id: 38, cat: TV/Other, desc: "Series/TV [TMDB unlisted]"}
@@ -42,15 +42,16 @@ caps:
     - {id: 35, cat: TV/Sport, desc: "Culture: Sports"}
     - {id: 37, cat: TV/Other, desc: "Culture: Firearms and Freedom"}
     - {id: 36, cat: TV/Other, desc: "Culture: Roms"}
-    - {id: 6, cat: XXX, desc: "XXX: Smut [TMDB Listed]"}
-    - {id: 30, cat: XXX, desc: "XXX: Smut [TMDB UnListed]"}
-    - {id: 15, cat: XXX/Pack, desc: "XXX: MegaPacks"}
-    - {id: 10, cat: XXX, desc: "XXX: Hentai"}
-    - {id: 14, cat: XXX/Other, desc: "XXX: Creators Corner"}
-    - {id: 39, cat: XXX/Other, desc: "XXX: Pain and Violence"}
-    - {id: 13, cat: XXX/Other, desc: "XXX: Other"}
-    - {id: 11, cat: XXX/Other, desc: "XXX: Zoo"}
-    - {id: 26, cat: Other, desc: "FuckedUpShit"}
+    - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
+    - {id: 45, cat: XXX, desc: "Mature: NSFW No ENG Subs"}
+    - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
+    - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW MegaPacks"}
+    - {id: 10, cat: XXX, desc: "Mature: Hentai"}
+    - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
+    - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
+    - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
+    - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
+    - {id: 43, cat: Other, desc: "Internal Testing"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
 
   modes:
@@ -95,7 +96,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You are required to log in once per month. We will be purging user accounts via automated script set at an undisclosed interval."
+    default: "You must log in once every 60 days.You must download at least 1 item within your first month."
 
 login:
   path: /api/torrents
@@ -110,7 +111,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -226,4 +227,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.1.3
+# json UNIT3D 9.0.5

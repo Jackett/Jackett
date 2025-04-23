@@ -1,0 +1,103 @@
+---
+id: anime-timel
+name: Anime TimeL
+description: "This is the Anime Time indexer with Login enabled in the config to include NSFW content."
+language: en-US
+type: semi-private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://animetime.cc/
+
+caps:
+  categories:
+    anime: TV/Anime
+    books: Books
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: auth/log-in
+  method: form
+  form: form[action$="/auth/log-in"]
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    remember_me: true
+  error:
+    - selector: span.text-error
+  test:
+    path: /
+    selector: form[action$="/auth/log-out"]
+
+search:
+  paths:
+    # https://animetime.cc/search?query=
+    - path: "{{ if .Keywords }}search{{ else }}{{ end }}"
+
+  inputs:
+    query: "{{ .Keywords }}"
+
+  keywordsfilters:
+    - name: trim
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: div.flow-root > div.divide-y > div.p-2.space-y-2
+
+  fields:
+    category:
+      selector: span.badge.badge-primary
+    title:
+      selector: a[href*="/view/"]
+    details:
+      selector: a[href*="/view/"]
+      attribute: href
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: span[data-tip]
+      attribute: data-tip
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    size:
+      selector: span.badge.badge-ghost
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    genre:
+      selector: span.badge.badge-secondary, span.badge.badge-error
+      filters:
+        - name: replace
+          args: ["non english", "non_english"]
+        - name: replace
+          args: ["music video", "music_video"]
+        - name: replace
+          args: ["Anime Time", "Anime_Time"]
+    description:
+      text: "{{ .Result.genre }}"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

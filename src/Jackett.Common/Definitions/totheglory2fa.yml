@@ -12,6 +12,7 @@ links:
   - https://totheglory.im/
 
 caps:
+  # dont forget to update the path categories in the search block
   categories:
     # 电影 Movie
     电影DVDRip: Movies/SD # Movie DVDRip

@@ -1,0 +1,68 @@
+---
+id: uindex
+name: Uindex
+description: "Uindex is a Public Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://uindex.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Console, desc: "Games"}
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 5, cat: PC, desc: "Apps"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 7, cat: TV/Anime, desc: "Anime"}
+    - {id: 8, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://uindex.org/search.php?search=complete
+    - path: search.php
+  allowEmptyInputs: true
+  inputs:
+    search: "{{ .Keywords }}"
+
+  rows:
+    selector: table.maintable > tbody > tr:has(a[href^="magnet:?xt="])
+
+  fields:
+    category:
+      selector: a[href^="/search.php?c="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: c
+    title:
+      selector: a[href^="/details.php?id="]
+    details:
+      selector: a[href^="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    date:
+      selector: div.sub
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(4)
+    leechers:
+      selector: td:nth-child(5)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

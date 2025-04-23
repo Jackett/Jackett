@@ -1,10 +1,10 @@
 ---
 id: rustorka
 name: Rustorka
-description: "Rustorka is a RUSSIAN Semi-Private Torrent Tracker for TV / MOVIES / GENERAL"
+description: "Rustorka is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ru-RU
 type: semi-private
-encoding: windows-1251
+encoding: UTF-8
 links:
   - https://rustorka.com/
 legacylinks:
@@ -779,12 +779,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -815,15 +814,9 @@ settings:
       1: asc
 
 login:
-  path: forum/login.php
-  method: post
+  method: cookie
   inputs:
-    login_username: "{{ .Config.username }}"
-    login_password: "{{ .Config.password }}"
-    autologin: 1
-    login: Вход
-  error:
-    - selector: h4.warnColor1.mrg_16
+    cookie: "{{ .Config.cookie }}"
   test:
     path: forum/index.php
     selector: a[href="./login.php?logout=1"]

@@ -1,7 +1,7 @@
 ---
 id: diablotorrent
 name: Diablo Torrent
-description: "Diablo Torrent is a Hungarian Private site for TV / MOVIES / GENERAL"
+description: "Diablo Torrent is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: hu-HU
 type: private
 encoding: UTF-8
@@ -10,6 +10,7 @@ links:
   - https://diablotorrent.net/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     # Film
     - {id: 49, cat: Movies/SD, desc: "Film > Cam", default: true}

@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "animetorrents";
         public override string Name => "AnimeTorrents";
-        public override string Description => "Definitive source for anime and manga";
+        public override string Description => "AnimeTorrents is a Private site. Definitive source for anime and manga";
         public override string SiteLink { get; protected set; } = "https://animetorrents.me/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -83,6 +83,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(17, TorznabCatType.BooksComics, "Doujinshi");
             caps.Categories.AddCategoryMapping(18, TorznabCatType.BooksComics, "Doujinshi 18+");
             caps.Categories.AddCategoryMapping(19, TorznabCatType.Audio, "OST");
+            caps.Categories.AddCategoryMapping(20, TorznabCatType.AudioAudiobook, "Audiobooks");
 
             return caps;
         }

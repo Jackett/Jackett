@@ -9,6 +9,8 @@ links:
   - https://ex-torrenty.org/
 
 caps:
+  # find the category numbers from the szukaj.php page
+  # and dont forget to update the search fields category case block
   categorymappings:
     - {id: 774, cat: Movies, desc: "Filmy Polskie"}
     - {id: 642, cat: Movies, desc: "Filmy/Bajki"}
@@ -19,14 +21,15 @@ caps:
     - {id: 17, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 265, cat: Movies/HD, desc: "Filmy x265 HEVC"}
     - {id: 12, cat: Movies/3D, desc: "Filmy 3D"}
-    - {id: 530, cat: Movies/SD, desc: "Filmy TS/CAM"}
     - {id: 826, cat: Movies/HD, desc: "REMUX / Complete"}
+    - {id: 530, cat: Movies/SD, desc: "Filmy TS/CAM"}
     - {id: 9, cat: PC, desc: "Programy"}
     - {id: 7, cat: Console, desc: "Konsole"}
     - {id: 6, cat: PC/Games, desc: "Gry"}
     - {id: 5, cat: Audio, desc: "Muzyka"}
     - {id: 305, cat: Audio/Video, desc: "Teledyski"}
-    - {id: 22, cat: TV, desc: "TV"}
+    - {id: 829, cat: TV, desc: "Seriale Polskie"}
+    - {id: 922, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
     - {id: 228, cat: XXX, desc: "Erotyka"}
     - {id: 25, cat: Books/EBook, desc: "Książki"}
     - {id: 739, cat: Audio/Audiobook, desc: "AudioBooki"}
@@ -112,7 +115,8 @@ search:
         ":contains(\"Gry\")": 6
         ":contains(\"Muzyka\")": 5
         ":contains(\"Teledyski\")": 305
-        ":contains(\"TV\")": 22
+        ":contains(\"Seriale Polskie\")": 829
+        ":contains(\"Seriale Zagraniczne\")": 922
         ":contains(\"Erotyka\")": 228
         ":contains(\"Książki\")": 25
         ":contains(\"AudioBooki\")": 739

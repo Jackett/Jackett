@@ -1,7 +1,7 @@
 ---
 id: therarbg
 name: TheRARBG
-description: "TheRARBG is a Public site inspired by RARBG.to for TV / MOVIES / GENERAL"
+description: "TheRARBG is a Public site inspired by RARBG.to for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
@@ -34,6 +34,8 @@ caps:
     - {id: Other, cat: Other, desc: "Other"}
     - {id: Books, cat: Books, desc: "Books"}
     - {id: XXX, cat: XXX, desc: "XXX"}
+    - {id: TV shows, cat: TV, desc: "TV shows"}
+    - {id: E-books, cat: Books/EBook, desc: "E-books"}
 
   modes:
     search: [q]

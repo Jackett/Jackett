@@ -1,6 +1,6 @@
 ---
 id: yoinked
-name: YOiNKED
+name: YOiNKED (API)
 description: "YOiNKED is a Private Torrent Tracker for MOVIES / TV / MUSIC"
 language: en-US
 type: private
@@ -10,15 +10,19 @@ links:
 
 caps:
   categorymappings:
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 4, cat: Books, desc: "Book"}
+    - {id: 5, cat: Audio/Audiobook, desc: "AudioBook"}
+    - {id: 6, cat: Console, desc: "Games"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -55,7 +59,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "If you do not log into the site or seed torrents, your account will be automatically pruned within 60 days."
+    default: "You must log in to the website or the tracker must register activity from your Announce URL once every 90 days or your account will be disabled."
 
 login:
   path: /api/torrents
@@ -70,7 +74,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -148,7 +152,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " -03:00" # BRT
+          args: " +00:00" # GMT
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
@@ -180,4 +184,4 @@ search:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
       text: 0.5
-# json UNIT3D 8.3.1 (custom)
+# json UNIT3D 9.0.3

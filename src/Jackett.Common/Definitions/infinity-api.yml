@@ -1,7 +1,7 @@
 ---
 id: infinity-api
 name: INFINITY (API)
-description: "INFINITY is a Private Torrent Tracker for MOVIES / TV"
+description: "INFINITY is a Private PAY2DL Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -50,6 +50,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "The system bot will prune inactive users after 90 days of no activity. If you wish to keep your account be sure to login."
 
 login:
   path: /api/torrents
@@ -64,7 +68,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -174,7 +178,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.6 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.6
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.1.3
+# json UNIT3D 8.3.6

@@ -65,7 +65,7 @@ settings:
     default: "Account retention rules:<ol><li>Users with Extreme User and above will be retained forever</li><li>Starting from 20230701, the non-login ban time will be adjusted to:<ul><li>(Home Alone) User - 40 days</li><li>(Young and vigorous) Power User - 60 days</li><li>(Children of Jianghu) Elite User - 80 days</li><li>(Street Fighter) Crazy User - 100 days</li><li>(non-stop) Insane User - 120 days</li><li>(Outstanding Citizen) Veteran User - 180 days</li></ul></li><li>Users with no traffic (i.e. uploading/downloading data) If it is 0) If you do not log in for 7 consecutive days will be disabled</li><li>'Parked accounts' no longer enjoy the benefits of retaining accounts, and are also subject to the above rules.</li></ol>"
 
 login:
-  # using cookie method because site has cloudflare challenge and flaresolverr is currently broken. Switch to standard nexus login when fixed.
+  # using cookie method because site regularly disables login page for certain events during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

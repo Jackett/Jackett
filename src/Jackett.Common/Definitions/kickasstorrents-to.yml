@@ -1,15 +1,13 @@
 ---
 id: kickasstorrents-to
 name: kickasstorrents.to
-description: "kickasstorrents.to is a Public KickAssTorrent clone for TV / MOVIES / GENERAL"
+description: "kickasstorrents.to is a Public KickAssTorrent clone for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://kickasstorrents.to/
-  - https://kickasstorrent.cr/
-  - https://katcr.to/
+  - https://www.kickasstorrents.do/
   - https://kickasstorrents.unblockninja.com/
   - https://kickasstorrents.ninjaproxy1.com/
   - https://kickasstorrents.proxyninja.org/
@@ -19,6 +17,9 @@ links:
 legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
+  - https://kickasstorrents.to/
+  - https://kickasstorrent.cr/ # blocks Jackett UA, 'new' page broken
+  - https://katcr.to/ # blocks Jackett UA
 
 caps:
   categorymappings:
@@ -41,6 +42,8 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: sort
     type: select
     label: Sort requested from site
@@ -70,6 +73,11 @@ search:
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}3/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}4/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}5/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+
+  error:
+    - selector: h1:contains("403 Forbidden")
+      message:
+        text: "Site returned 403 Forbidden. Try updating your indexer config with a new/different user-agent."
 
   rows:
     selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])

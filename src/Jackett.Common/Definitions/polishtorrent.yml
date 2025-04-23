@@ -1,6 +1,6 @@
 ---
 id: polishtorrent
-name: Polish Torrent
+name: Polish Torrent (API)
 description: "Polish Torrent (PTT) is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: pl-PL
 type: private
@@ -10,9 +10,11 @@ links:
 
 caps:
   categorymappings:
+    - {id: 33, cat: Movies, desc: "iNTERNAL"}
     - {id: 6, cat: PC/0day, desc: "Aplikacje/Programy"}
-    - {id: 4, cat: TV/Anime, desc: "Bajki"}
-    - {id: 30, cat: TV/Anime, desc: "TV Seriale Bajki"}
+    - {id: 4, cat: Movies, desc: "Bajki"}
+    - {id: 31, cat: TV/Anime, desc: "Anime/Seriale"}
+    - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
     - {id: 1, cat: Movies/HD, desc: "Filmy HD"}
     - {id: 13, cat: Movies/DVD, desc: "DVD5/9"}
     - {id: 12, cat: Movies/BluRay, desc: "BD25/50_5/9"}
@@ -20,15 +22,15 @@ caps:
     - {id: 16, cat: Movies/SD, desc: "Filmy SD"}
     - {id: 17, cat: Movies/Other, desc: "Filmy inne"}
     - {id: 24, cat: PC/Games, desc: "Gry dodatki"}
-    - {id: 5, cat: PC/Games, desc: "Gry pc"}
-    - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
+    - {id: 5, cat: PC/Games, desc: "Gry PC"}
     - {id: 10, cat: Console, desc: "Gry Konsole"}
+    - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
     - {id: 19, cat: Other, desc: "Inne"}
     - {id: 8, cat: Audio, desc: "Muzyka"}
     - {id: 11, cat: Movies, desc: "Paczki"}
     - {id: 20, cat: Books, desc: "Book"}
-    - {id: 27, cat: TV/Other, desc: "Teatr Telewizyjny"}
     - {id: 25, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 27, cat: TV/Other, desc: "Teatr Telewizyjny"}
     - {id: 21, cat: TV/Sport, desc: "Sport"}
     - {id: 29, cat: Movies, desc: "Stare Filmy"}
     - {id: 22, cat: TV/SD, desc: "TV Seriale SD"}
@@ -38,6 +40,7 @@ caps:
     - {id: 2, cat: TV/UHD, desc: "TV 4K"}
     - {id: 15, cat: Movies, desc: "Filmy bez lektora"}
     - {id: 7, cat: XXX, desc: "XXX 18+"}
+    - {id: 32, cat: Movies/Other, desc: "Anime/Filmy"}
 
   modes:
     search: [q]
@@ -92,7 +95,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>Your account must be at least 90 days old to be subject to deactivation.</li><li>Last Login: You must be inactive for at least 90 days for your account to be deactivated.</li><li>Soft deletion of accounts: Deactivated user accounts will be soft deleted 120 days after deactivation.</li><li>User Groups: Accounts belonging to the following user groups may be automatically deactivated: Leech, User, PowerUser and SuperUser.</li><li>Please do not disregard the above information and log in to your account regularly to avoid deactivation.</li></ul>"
+    default: "Accounts that are inactive for 3 months will be moved to the 'Disabled' group. Strict restrictions are imposed on this group. If the account is still inactive after being moved to this group, it will be permanently blocked without the possibility of unblocking. Simply logging in and browsing the site does not count as an active account. Required activity: downloading/uploading torrents, possibly activity on the forum."
 
 login:
   path: /api/torrents
@@ -107,10 +110,9 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
-        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
@@ -127,7 +129,7 @@ search:
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    perPage: 50
+    perPage: 100
 
   keywordsfilters:
     - name: re_replace
@@ -227,7 +229,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.4 but torrents must be seeded for 2 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-# json UNIT3D 8.3.0 (custom)
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json UNIT3D 9.0.6 (custom)

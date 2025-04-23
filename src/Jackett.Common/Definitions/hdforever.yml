@@ -109,7 +109,7 @@ search:
     # site does not support imdbid search or display imdb links in results
 
   rows:
-    selector: table#torrent_table > tbody > tr.torrent
+    selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&"])
 
   fields:
     category:
@@ -122,6 +122,9 @@ search:
         div.cats_série: 5
         div.cats_sérieanim: 6
         div.cats_documentaire: 7
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
     download_regular:
       selector: a[href^="torrents.php?action=download&"]
       attribute: href
@@ -133,16 +136,66 @@ search:
           args: "&usetoken=1"
     download:
       text: "{{ if .Config.usetoken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
-    title_phase1:
-      selector: div.group_info
-      remove: span:nth-child(1), div.tags
+    _release_group:
+      selector: span.team_name
+      optional: true
+      filters:
+        - name: trim
+    poster:
+      selector: div.group_image img
+      attribute: src
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(4)
       filters:
         - name: replace
-          args: ["\n", ""]
-        - name: re_replace
-          args: ["^(.+)                                                                            (.+)", "$2-$1"]
+          args: ["Il y a ", ""]
         - name: replace
-          args: ["                         ", " "]
+          args: ["heures", "hours"]
+        - name: replace
+          args: ["heure", "hour"]
+        - name: replace
+          args: ["jours", "days"]
+        - name: replace
+          args: ["jour", "day"]
+        - name: replace
+          args: ["semaines", "weeks"]
+        - name: replace
+          args: ["semaine", "week"]
+        - name: replace
+          args: ["mois", "months"]
+        - name: replace
+          args: ["ans", "years"]
+        - name: replace
+          args: ["an", "year"]
+        - name: append
+          args: " ago"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        "div.group_info:contains(\"/ Free\")": 0
+        "div.group_info:contains(\"↓75%\")": 0.75
+        "div.group_info:contains(\"↓50%\")": 0.50
+        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    title_phase1:
+      selector: div.group_info
+      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img
+      filters:
+        - name: replace
+          args: ["\n", " "]
+        - name: re_replace
+          args: ["\\s+", " "]
         - name: replace
           args: ["Blu-Ray Original", "Complete.BluRay"]
         - name: replace
@@ -236,6 +289,8 @@ search:
           args: [".VOF", ".FRENCH"]
         - name: replace
           args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: append
+          args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -252,56 +307,6 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
       selector: div.group_info
-    poster:
-      selector: div.group_image img
-      attribute: src
-    details:
-      selector: a[href^="torrents.php?id="]
-      attribute: href
-    files:
-      selector: td:nth-child(3)
-    date:
-      selector: td:nth-child(4)
-      filters:
-        - name: replace
-          args: ["Il y a ", ""]
-        - name: replace
-          args: ["heures", "hours"]
-        - name: replace
-          args: ["heure", "hour"]
-        - name: replace
-          args: ["jours", "days"]
-        - name: replace
-          args: ["jour", "day"]
-        - name: replace
-          args: ["semaines", "weeks"]
-        - name: replace
-          args: ["semaine", "week"]
-        - name: replace
-          args: ["mois", "months"]
-        - name: replace
-          args: ["ans", "years"]
-        - name: replace
-          args: ["an", "year"]
-        - name: append
-          args: " ago"
-    size:
-      selector: td:nth-child(5)
-    grabs:
-      selector: td:nth-child(6)
-    seeders:
-      selector: td:nth-child(7)
-    leechers:
-      selector: td:nth-child(8)
-    downloadvolumefactor:
-      case:
-        "div.group_info:contains(\"/ Free\")": 0
-        "div.group_info:contains(\"↓75%\")": 0.75
-        "div.group_info:contains(\"↓50%\")": 0.50
-        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
-        "*": 1
-    uploadvolumefactor:
-      text: 1
     minimumratio:
       text: 0.6
     minimumseedtime:

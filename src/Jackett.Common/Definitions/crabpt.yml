@@ -5,22 +5,28 @@ description: "CrabPT (蟹黄堡) is a CHINESE Private Torrent Tracker for MOVIES
 language: zh-CN
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://crabpt.vip/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "电影 / Movies"}
-    - {id: 402, cat: TV, desc: "电视剧 / TVSeries"}
-    - {id: 413, cat: TV/Other, desc: "短剧 / Playlet"}
-    - {id: 408, cat: Audio, desc: "音乐 / Music"}
-    - {id: 405, cat: TV/Anime, desc: "动漫 / Anime"}
-    - {id: 406, cat: Audio/Video, desc: "MV"}
-    - {id: 403, cat: Movies, desc: "综艺 / TV Shows"}
-    - {id: 407, cat: TV/Sport, desc: "体育竞技 / Sports"}
-    - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary"}
-    - {id: 409, cat: Other, desc: "其他 / Other"}
-    - {id: 415, cat: Books/Comics, desc: "漫画 / Cartoon"}
+    - {id: 401, cat: Movies, desc: "电影 / Movies", default: true}
+    - {id: 402, cat: TV, desc: "电视剧 / TVSeries", default: true}
+    - {id: 413, cat: TV/Other, desc: "短剧 / Playlet", default: true}
+    - {id: 408, cat: Audio, desc: "音乐 / Music", default: true}
+    - {id: 405, cat: TV/Anime, desc: "动漫 / Anime", default: true}
+    - {id: 406, cat: Audio/Video, desc: "MV", default: true}
+    - {id: 403, cat: TV, desc: "综艺 / TV Shows", default: true}
+    - {id: 407, cat: TV/Sport, desc: "体育竞技 / Sports", default: true}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary", default: true}
+    - {id: 409, cat: Other, desc: "其他 / Other", default: true}
+    - {id: 415, cat: Books/Comics, desc: "漫画 / Cartoon", default: true}
+    - {id: 414, cat: Console, desc: "游戏 / Game", default: true}
+    - {id: 412, cat: Other, desc: "学习 / Study", default: true}
+    - {id: 411, cat: Audio/Audiobook, desc: "有声书 / Audiobook", default: true}
+    - {id: 410, cat: Books/EBook, desc: "电子书 / Ebook", default: true}
 
   modes:
     search: [q]
@@ -67,6 +73,10 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
   path: login.php
@@ -94,6 +104,9 @@ login:
 search:
   paths:
     - path: torrents.php
+      categories: [401, 402, 413, 408, 405, 406, 403, 407, 404, 409]
+    - path: special.php
+      categories: [415, 414, 412, 411, 410]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
@@ -110,7 +123,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -166,12 +179,20 @@ search:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
       selector: td.rowfollow:nth-child(6)
+      optional: true
+      default: 0
     leechers:
       selector: td.rowfollow:nth-child(7)
+      optional: true
+      default: 0
     grabs:
       selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0

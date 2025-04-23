@@ -8,7 +8,12 @@ encoding: UTF-8
 # current domain at https://cursor.vip/btmulu then follow links to the final search-movie link
 links:
   - https://btmulu.work/
+  - https://www.btmulu.cyou/
+legacylinks:
+  - https://www.btmulu.asia/
   - https://www.btmulu.digital/
+  - https://www.btmulu.pw/
+  - https://www.btmulu.one/
 
 caps:
   categorymappings:
@@ -48,8 +53,11 @@ search:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: article.item
-      attribute: data-key
+      selector: a[href^="/hash/"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     date:
       selector: p
       filters:

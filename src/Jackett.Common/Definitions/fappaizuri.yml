@@ -73,6 +73,11 @@ login:
     path: index.php
     selector: a[href="account-logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     # https://fappaizuri.me/torrents-search.php?search=&c8=1&c6=1&incldead=1&freeleech=0&lang=0
@@ -90,7 +95,7 @@ search:
     order: "{{ .Config.type }}"
 
   rows:
-    selector: tr.t-row:has(a[href^="download.php?id="])
+    selector: tr.t-row
 
   fields:
     category:
@@ -105,11 +110,11 @@ search:
       selector: a[href^="torrents-details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="torrents-details.php?id="]
       attribute: href
     poster:
       selector: a[href^="torrents-details.php?id="]
-      attribute: onmouseover
+      attribute: onMouseover
       filters:
         - name: regexp
           args: src=(.+?)>
@@ -123,13 +128,17 @@ search:
         - name: append
           args: "{{ if .Result._language }} - {{ .Result._language }}{{ else }}{{ end }}"
     size:
-      selector: td:nth-child(4)
+      selector: td:nth-child(3)
     seeders:
       selector: td:nth-child(5)
     leechers:
       selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
     date:
-      text: now
+      selector: td:nth-child(8)
+      filters:
+        - name: timeago
     downloadvolumefactor:
       case:
         img[src="images/free.png"]: 0

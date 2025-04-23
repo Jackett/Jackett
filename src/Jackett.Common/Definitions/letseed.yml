@@ -1,0 +1,211 @@
+---
+id: letseed
+name: LetSeed
+description: "LetSeed is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: tr-TR
+type: private
+encoding: UTF-8
+links:
+  - https://letseed.org/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: TV, desc: "Diziler"}
+    - {id: 5, cat: TV/Foreign, desc: "Yabancı Diziler"}
+    - {id: 6, cat: TV/Other, desc: "Yerli Dizi Boxset"}
+    - {id: 4, cat: TV, desc: "Yerli Diziler"}
+    - {id: 44, cat: Books, desc: "Eğitim"}
+    - {id: 46, cat: Books/EBook, desc: "E-Book"}
+    - {id: 45, cat: Books/Other, desc: "Eğitim"}
+    - {id: 1, cat: Movies, desc: "Filmler"}
+    - {id: 15, cat: Movies/UHD, desc: "4K"}
+    - {id: 2, cat: Movies/Other, desc: "Animasyonlar"}
+    - {id: 16, cat: Movies/Other, desc: "BoxSet"}
+    - {id: 14, cat: Movies/Foreign, desc: "Yabancı Yapımlar"}
+    - {id: 13, cat: Movies, desc: "Yerli Yapımlar"}
+    - {id: 32, cat: Audio, desc: "Müzik"}
+    - {id: 35, cat: Audio/Other, desc: "Diskografi"}
+    - {id: 34, cat: Audio/Foreign, desc: "Yabancı"}
+    - {id: 33, cat: Audio, desc: "Yerli"}
+    - {id: 28, cat: PC/Games, desc: "Oyun"}
+    - {id: 29, cat: PC/Games, desc: "PC"}
+    - {id: 31, cat: Console/PS4, desc: "Playstation"}
+    - {id: 30, cat: Console/XBox, desc: "XBOX"}
+    - {id: 19, cat: Other, desc: "Platform Sunumları"}
+    - {id: 21, cat: Movies, desc: "AMZN"}
+    - {id: 23, cat: Movies, desc: "BluTv"}
+    - {id: 22, cat: TV, desc: "DSNP"}
+    - {id: 24, cat: TV, desc: "Exxen"}
+    - {id: 26, cat: TV, desc: "GAIN"}
+    - {id: 47, cat: TV, desc: "MAX"}
+    - {id: 20, cat: Movies, desc: "Netflix"}
+    - {id: 42, cat: TV, desc: "Tabii"}
+    - {id: 25, cat: TV, desc: "TOD"}
+    - {id: 27, cat: TV, desc: "TV+"}
+    - {id: 36, cat: PC, desc: "Program"}
+    - {id: 37, cat: PC/ISO, desc: "İşletim Sistemi"}
+    - {id: 38, cat: PC/Mac, desc: "Mac"}
+    - {id: 39, cat: PC/0day, desc: "Windows"}
+    - {id: 40, cat: TV/Sport, desc: "Spor"}
+    - {id: 41, cat: TV/Sport, desc: "Spor Sunumları"}
+    - {id: 17, cat: TV, desc: "VIP Sunumlar"}
+    - {id: 18, cat: TV, desc: "VIP Sunumlar"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The Default is <i>30</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "To keep records updated regularly, all inactive accounts will be deleted after 60 days of inactivity."
+
+login:
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img#regimage
+    input: imagestring
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: ""
+  error:
+    - selector: table:has(td:contains("Bir hata oluştu"))
+    - selector: table:has(a[href*="login.php?error=1"])
+      message:
+        text: "Incorrect username!"
+    - selector: table:has(a[href*="login.php?error=2"])
+      message:
+        text: "The image verification code you entered was not approved."
+    - selector: table:has(a[href*="login.php?error=3"])
+      message:
+        text: "Please do not leave required fields blank!"
+    - selector: table:has(a[href*="login.php?error=4"])
+      message:
+        text: "Incorrect password!"
+    - selector: table:has(a[href*="login.php?error="])
+      message:
+        text: "Something went wrong during login!"
+  test:
+    path: browse.php
+    selector: a[href*="/logout.php"]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+
+search:
+  paths:
+    - path: browse.php
+      method: post
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\s]+", "%"]
+  inputs:
+    do: search
+    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
+    # does not support multi category searching so defaulting to all.
+    category: 0
+    # yes, no
+    include_dead_torrents: yes
+    sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
+    order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
+
+  rows:
+    selector: "table.sortable tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href*="browse.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title_default:
+      # is usually abbreaviated
+      selector: a[href*="details.php?id="]
+    title:
+      # while still abbreviated, is usually longer than the default
+      selector: div.tooltip-content > div
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href*="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="download.php?id="]
+      attribute: href
+    poster:
+      selector: img[src*="/torrents/images/"]
+      attribute: src
+    date:
+      selector: td:nth-child(2)
+      # auto adjusted by site account profile
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    downloadvolumefactor:
+      case:
+        img[src$="/freedownload.gif"]: 0
+        img[src$="/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="/x2.gif"]: 2
+        "*": 1
+    minimumseedtime:
+      # 1 day (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# TS Special Edition v.8.0

@@ -5,8 +5,6 @@ description: "MyPornClub is a Public Torrent Tracker for 3X"
 language: en-US
 type: public
 encoding: UTF-8
-certificates:
-  - 21debda35c67d63e823d122df5824a3f8465759a # expired 2 Nov 2024
 links:
   - https://myporn.club/
 

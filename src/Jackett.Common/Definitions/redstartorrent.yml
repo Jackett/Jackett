@@ -3,7 +3,7 @@ id: redstartorrent
 replaces:
   - rstorrent
 name: Red Star Torrent
-description: "Red Star Torrent (RST) is a POLISH Private Torrent Tracker for TV"
+description: "Red Star Torrent (RST) is a POLISH Private Torrent Tracker for MOVIES / TV"
 language: pl-PL
 type: private
 encoding: ISO-8859-2
@@ -53,8 +53,8 @@ login:
     - selector: td.embedded:has(h2:contains("failed"))
     - selector: td.embedded:has(h2:contains("Error"))
   test:
-    selector: a[href^="logout.php"]
     path: browse.php
+    selector: a[href^="logout.php"]
 
 search:
   paths:

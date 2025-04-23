@@ -1,12 +1,13 @@
 ---
 id: digitalcore
 name: DigitalCore
-description: "DigitalCore is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "DigitalCore (DC) is a Private Torrent Tracker for 0DAY / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
   - https://digitalcore.club/
+  - https://prxy.digitalcore.club/
 
 caps:
   categorymappings:

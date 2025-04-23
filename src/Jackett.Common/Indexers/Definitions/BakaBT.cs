@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "bakabt";
         public override string Name => "BakaBT";
-        public override string Description => "Anime Comunity";
+        public override string Description => "BakaBT is a Private site for the Anime Community";
         public override string SiteLink { get; protected set; } = "https://bakabt.me/";
         public override string Language => "en-US";
         public override string Type => "private";

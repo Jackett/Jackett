@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions.Feeds
     {
         public override string Id => "morethantv-api";
         public override string Name => "MoreThanTV (API)";
-        public override string Description => "Private torrent tracker for TV / MOVIES";
+        public override string Description => "MoreThanTV is a Private Torrent Tracker for TV / MOVIES";
         public override string SiteLink { get; protected set; } = "https://www.morethantv.me/";
         public override string Language => "en-US";
         public override string Type => "private";

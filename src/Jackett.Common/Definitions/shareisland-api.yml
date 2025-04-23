@@ -1,7 +1,7 @@
 ---
 id: shareisland-api
 name: Shareisland (API)
-description: "A general italian tracker"
+description: "Shareisland is a ITALIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: it-IT
 type: private
 encoding: UTF-8
@@ -81,7 +81,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -188,7 +188,7 @@ search:
       selector: created_at
       filters:
         - name: append
-          args: " +02:00" # EET
+          args: " +01:00" # CET
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
@@ -224,4 +224,4 @@ search:
     minimumseedtime:
       # 6 days (as seconds = 6 x 24 x 60 x 60)
       text: 518400
-# json UNIT3D 8.3.2 (custom)
+# json UNIT3D 9.0.5 (custom)

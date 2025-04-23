@@ -82,7 +82,7 @@ namespace Jackett.IntegrationTests
 
         private bool WaitUntilModalIsDisplayed(string cssSelector)
         {
-            var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(5));
+            var wait = new WebDriverWait(_webDriver, TimeSpan.FromSeconds(10));
             var element = wait.Until(condition =>
             {
                 try

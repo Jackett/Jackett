@@ -1,7 +1,7 @@
 ---
 id: bitporn
 name: BitPorn
-description: "BitPorn is a HUNGARIAN Private Torrent Tracker for 3X"
+description: "BitPorn (Malacka) is a HUNGARIAN Private Torrent Tracker for 3X"
 language: hu-HU
 type: private
 encoding: UTF-8
@@ -98,7 +98,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Inactive accounts will be deleted based on the following rules:<ul><li>Elite-ranked or higher-ranked accounts are never deleted after parking (in the control panel).</li><li>Veteran-ranked or higher-ranked accounts are never deleted.</li><li>Parked accounts are deleted if users haven't logged in for more than 400 days.</li><li>Non-parked accounts are deleted if users haven't logged in for more than 150 days.</li><li>Accounts with both uploaded and downloaded quantities at 0 will be deleted if users haven't logged in for more than 100 consecutive days.</li></ul>"
+    default: "You must log in to the site at least once a month; otherwise, your account will be suspended."
 
 login:
   path: takelogin.php
@@ -132,7 +132,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    selector: table.contenttable > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
@@ -208,4 +208,4 @@ search:
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.5 2023-07-06
+# NexusPHP v2.4 (custom)

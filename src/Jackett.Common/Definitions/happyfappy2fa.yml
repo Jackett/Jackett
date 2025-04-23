@@ -1,7 +1,7 @@
 ---
 id: happyfappy2fa
 name: HappyFappy2FA
-description: "HappyFappy is a Private Torrent Tracker for 3X. This indexer uses cookie login for 2FA."
+description: "HappyFappy (HF) is a Private Torrent Tracker for 3X. This indexer uses cookie login for 2FA."
 language: en-US
 type: private
 encoding: UTF-8

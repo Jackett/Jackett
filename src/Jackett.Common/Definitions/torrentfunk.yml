@@ -25,10 +25,10 @@ caps:
     - {id: 5, cat: PC, desc: Software}
     - {id: 6, cat: TV/Anime, desc: Anime}
     - {id: 7, cat: XXX, desc: Adult}
-    - {id: 8, cat: Other, desc: Other(tbd)}
+    - {id: 8, cat: Books/EBook, desc: Ebooks}
+    - {id: 10, cat: Other/Misc, desc: Other}
     - {id: 9, cat: Other, desc: Other(tbd)}
     - {id: 0, cat: Other, desc: Other(tbd)}
-    - {id: 10, cat: Other, desc: Other(tbd)}
     - {id: 11, cat: Other, desc: Other(tbd)}
 
   modes:
@@ -37,16 +37,40 @@ caps:
     movie-search: [q]
     music-search: [q]
 
-settings: []
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 search:
   paths:
-    # https://www.torrentfunk.com/all/torrents/morty-402-castellano.html
-    - path: "all/torrents/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}.html"
-  keywordsfilters:
-    - name: re_replace
-      args: ["[\\s]+", "-"]
-    - name: tolower
+    # https://www.torrentfunk.com/?qq=1&q=&c=&i=50&sort=added&o=desc&smi=&sma=&submit=SEARCH
+    - path: /
+  allowEmptyInputs: true
+  inputs:
+    qq: 1
+    q: "{{ .Keywords }}"
+    c: ""
+    # 50, 100, 150, 200, 250
+    i: 100
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    smi: ""
+    sma: ""
+    submit: SEARCH
 
   rows:
     selector: table.tmain tbody tr:has(a[href^="/torrent/"])
@@ -84,15 +108,15 @@ search:
       filters:
         - name: fuzzytime
     date_month:
-      # 7 Jul
-      # 25 Dec
+      # 7 Jul 25
+      # 25 Dec 25
       selector: td:nth-child(2):not(:contains("day"))
       optional: true
       filters:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "d MMM zzz"
+          args: "d MMM yy zzz"
     date:
       text: "{{ if or .Result.date_month .Result.date_day }}{{ or .Result.date_month .Result.date_day }}{{ else }}now{{ end }}"
     size:
@@ -101,6 +125,12 @@ search:
       selector: td:nth-child(4)
     leechers:
       selector: td:nth-child(5)
+    _verified:
+      selector: img[title="Torrent Verified"]
+      attribute: title
+      optional: true
+    description:
+      text: "{{ if .Result._verified }}Verified{{ else }}{{ end }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

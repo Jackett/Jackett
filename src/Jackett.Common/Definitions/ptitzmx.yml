@@ -60,7 +60,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted</li><li>Elite User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row</li><li>Un-parked accounts would be deleted if users have not logged in for more than 150 days in a row</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User and above users will be retained forever</li><li>Elite User and above users will not be deleted after parking their accounts (in the control panel)</li><li>Users with parked accounts will have their accounts deleted if they do not log in for 300 consecutive days</li><li>Users with un-parked accounts will have their accounts deleted if they do not log in for 90 consecutive days</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 7 days in a row.</li></ol>"
 
 login:
   path: login.php

@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "torrentsyndikat";
         public override string Name => "Torrent-Syndikat";
-        public override string Description => "A German general tracker";
+        public override string Description => "Torrent-Syndikat is a GERMAN Private general tracker";
         public override string SiteLink { get; protected set; } = "https://torrent-syndikat.org/";
         public override string Language => "de-DE";
         public override string Type => "private";

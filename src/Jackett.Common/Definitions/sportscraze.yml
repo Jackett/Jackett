@@ -1,0 +1,215 @@
+---
+id: sportscraze
+name: SportsCraze
+description: "SportsCraze (SPCRZ) is a Private Torrent Tracker for SPORT"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://sportscraze.xyz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Sport, desc: "EPL/Cup Matches"}
+    - {id: 2, cat: TV/Sport, desc: "American Football"}
+    - {id: 3, cat: TV/Sport, desc: "AutoMotoRacing"}
+    - {id: 77, cat: TV/Sport, desc: "Racing"}
+    - {id: 6, cat: TV/Sport, desc: "Athletics"}
+    - {id: 4, cat: TV/Sport, desc: "Baseball"}
+    - {id: 7, cat: TV/Sport, desc: "Bodybuilding/Fitness"}
+    - {id: 8, cat: TV/Sport, desc: "Golf"}
+    - {id: 9, cat: TV/Sport, desc: "Boxing"}
+    - {id: 12, cat: TV/Sport, desc: "Gaa"}
+    - {id: 13, cat: TV/Sport, desc: "Cycling"}
+    - {id: 14, cat: TV/Sport, desc: "Documentary"}
+    - {id: 17, cat: TV/Sport, desc: "Basketball"}
+    - {id: 16, cat: TV/Sport, desc: "Extreme Sports"}
+    - {id: 18, cat: TV/Sport, desc: "F1/FE"}
+    - {id: 19, cat: TV/Sport, desc: "Gymnastics"}
+    - {id: 21, cat: TV/Sport, desc: "UEFA Nations League"}
+    - {id: 22, cat: TV/Sport, desc: "UFL"}
+    - {id: 23, cat: TV/Sport, desc: "Handball"}
+    - {id: 24, cat: TV/Sport, desc: "IceHockey"}
+    - {id: 25, cat: TV/Sport, desc: "International Soccer"}
+    - {id: 26, cat: TV/Sport, desc: "Moto GP"}
+    - {id: 27, cat: TV/Sport, desc: "Kick Boxing"}
+    - {id: 28, cat: TV/Sport, desc: "La Liga/Cups"}
+    - {id: 29, cat: TV/Sport, desc: "Motor Sport"}
+    - {id: 30, cat: TV/Sport, desc: "MMA"}
+    - {id: 31, cat: TV/Sport, desc: "Rugby"}
+    - {id: 32, cat: TV/Sport, desc: "Irish Soccer"}
+    - {id: 33, cat: TV/Sport, desc: "NBA"}
+    - {id: 34, cat: TV/Sport, desc: "MLB"}
+    - {id: 35, cat: TV/Sport, desc: "NCAA"}
+    - {id: 36, cat: TV/Sport, desc: "NFL"}
+    - {id: 37, cat: TV/Sport, desc: "NHL"}
+    - {id: 38, cat: TV/Sport, desc: "Olympic Games"}
+    - {id: 39, cat: TV/Sport, desc: "Seria A/Cups"}
+    - {id: 40, cat: TV/Sport, desc: "Snooker/Pool"}
+    - {id: 41, cat: TV/Sport, desc: "Swimming"}
+    - {id: 42, cat: TV/Sport, desc: "French Ligue 1/Cups"}
+    - {id: 43, cat: TV/Sport, desc: "AFL"}
+    - {id: 44, cat: TV/Sport, desc: "Tennis"}
+    - {id: 45, cat: TV/Sport, desc: "Volleyball"}
+    - {id: 46, cat: TV/Sport, desc: "Weightlifting"}
+    - {id: 47, cat: TV/Sport, desc: "Wintersport"}
+    - {id: 48, cat: TV/Sport, desc: "Wrestling/WWE"}
+    - {id: 49, cat: TV/Sport, desc: "Champions League"}
+    - {id: 50, cat: TV/Sport, desc: "Europa League"}
+    - {id: 51, cat: TV/Sport, desc: "WNBA"}
+    - {id: 52, cat: TV/Sport, desc: "NASCAR"}
+    - {id: 53, cat: TV/Sport, desc: "Bundesliga"}
+    - {id: 54, cat: TV/Sport, desc: "UFC"}
+    - {id: 55, cat: TV/Sport, desc: "Darts"}
+    - {id: 56, cat: TV/Sport, desc: "Cricket"}
+    - {id: 57, cat: TV/Sport, desc: "Hocky"}
+    - {id: 58, cat: TV/Sport, desc: "Uefa Con League"}
+    - {id: 61, cat: TV/Sport, desc: "UEFA Euros "}
+    - {id: 62, cat: TV/Sport, desc: "Tour De France"}
+    - {id: 63, cat: TV/Sport, desc: "Table Tennis"}
+    - {id: 64, cat: TV/Sport, desc: "Surfing"}
+    - {id: 65, cat: TV/Sport, desc: "Sailing"}
+    - {id: 66, cat: TV/Sport, desc: "Indy Car"}
+    - {id: 67, cat: TV/Sport, desc: "EFL"}
+    - {id: 68, cat: TV/Sport, desc: "Scottish Premiership"}
+    - {id: 74, cat: TV/Sport, desc: "Hunting"}
+    - {id: 69, cat: TV/Sport, desc: "Worldcup Football"}
+    - {id: 70, cat: TV/Sport, desc: "Dutch Eredivisie"}
+    - {id: 71, cat: TV/Sport, desc: "African Nations Cup"}
+    - {id: 72, cat: TV/Sport, desc: "Saudi Pro League"}
+    - {id: 73, cat: TV/Sport, desc: "Womens Soccer"}
+    - {id: 75, cat: Other, desc: "Music Games Books"}
+    - {id: 76, cat: TV/Sport, desc: "Greek Sl/Cups"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  path: index.php?page=login
+  method: post
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: tr td span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://sportscraze.xyz/index.php?page=torrents&search=&category=0&active=0
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ range .Categories }}{{.}};{{end}}"
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze, 8 1x upload multiplier, 9 2x, 10 3x, 11 4x, 12 5x, 13 6x, 14 7x, 15 8x, 16 9x, 17 10x
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="index.php?page=torrent-details&id="]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.*?) "
+        - name: replace
+          args: ["torrentimg/nocover.jpg", ""]
+    size:
+      selector: td:nth-last-child(3)
+    date:
+      selector: td:nth-last-child(7)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: dd/MM/yyyy
+    seeders:
+      selector: td:nth-last-child(6)
+    leechers:
+      selector: td:nth-last-child(5)
+    grabs:
+      selector: td:nth-last-child(4)
+    downloadvolumefactor:
+      case:
+        img[src="images/freeleech.gif"]: 0
+        img[src="images/gold.gif"]: 0
+        img[src="images/silver.gif"]: 0.5
+        img[src="images/bronze.gif"]: 0.75
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="images/2x.gif"]: 2
+        img[src="images/3x.gif"]: 3
+        img[src="images/4x.gif"]: 4
+        img[src="images/5x.gif"]: 5
+        img[src="images/6x.gif"]: 6
+        img[src="images/7x.gif"]: 7
+        img[src="images/8x.gif"]: 8
+        img[src="images/9x.gif"]: 9
+        img[src="images/10x.gif"]: 10
+        "*": 1
+    minimumseedtime:
+      # 14 days (as seconds = 14 x 24 x 60 x 60)
+      text: 1209600
+#  xbtitFM v4.1.31

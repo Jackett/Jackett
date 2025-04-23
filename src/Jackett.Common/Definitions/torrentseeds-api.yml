@@ -1,11 +1,11 @@
 ---
 id: torrentseeds-api
 name: TorrentSeeds (API)
-description: "TorrentSeeds is a Private Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
+description: "TorrentSeeds (TS) is a Private Torrent Tracker for 0DAY / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
-requestDelay: 5
+requestDelay: 6
 links:
   - https://torrentseeds.org/
 

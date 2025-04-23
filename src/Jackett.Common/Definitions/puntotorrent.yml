@@ -3,7 +3,7 @@ id: puntotorrent
 replaces:
   - puntorrent
 name: PuntoTorrent
-description: "PuntoTorrent is a SPANISH site for General content"
+description: "PuntoTorrent is a SPANISH Private Torrent Tracker for 0DAY / GENERAL"
 language: es-ES
 type: private
 encoding: UTF-8

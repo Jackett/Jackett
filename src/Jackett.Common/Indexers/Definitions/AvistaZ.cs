@@ -14,10 +14,10 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "avistaz";
         public override string Name => "AvistaZ";
-        public override string Description => "Aka AsiaTorrents";
+        public override string Description => "AvistaZ (AsiaTorrents) is a Private Torrent Tracker for ASIAN MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://avistaz.to/";
 
-        protected override string TimezoneOffset => "+02:00";
+        protected override string TimezoneOffset => "+01:00";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 

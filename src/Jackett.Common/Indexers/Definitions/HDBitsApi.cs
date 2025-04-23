@@ -21,7 +21,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "hdbitsapi";
         public override string Name => "HDBits (API)";
-        public override string Description => "The HighDefinition Bittorrent Community";
+        public override string Description => "HDBits is a Private site for the HighDefinition Bittorrent Community";
         public override string SiteLink { get; protected set; } = "https://hdbits.org/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -119,7 +119,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (DateTime.TryParseExact($"{query.Season} {query.Episode}", "yyyy MM/dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var showDate))
                 {
-                    requestData["search"] = showDate.ToString("yyyy-MM-dd");
+                    requestData["search"] = showDate.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture);
                 }
                 else
                 {
@@ -230,9 +230,12 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var filename = (string)item["filename"];
             var name = (string)item["name"];
+            var typeCategory = (int)item["type_category"];
+            var typeMedium = (int)item["type_medium"];
 
-            return configData.UseFilenames.Value && filename.IsNotNullOrWhiteSpace()
-                ? filename.Replace(".torrent", "")
+            // Use release name for XXX content and full discs
+            return typeCategory != 7 && typeMedium != 1 && configData.UseFilenames.Value && filename.IsNotNullOrWhiteSpace()
+                ? filename!.Replace(".torrent", "")
                 : name;
         }
 

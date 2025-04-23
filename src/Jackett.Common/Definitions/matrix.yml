@@ -1,0 +1,176 @@
+---
+id: matrix
+name: Matrix
+description: "M.A.T.R.I.X is a HUNGARIAN Private Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://matrixworld.info/
+
+caps:
+  categorymappings:
+    - {id: 23, cat: Movies/Other, desc: "Animációk"}
+    - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
+    - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
+    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
+    - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
+    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
+    - {id: 48, cat: Movies/HD, desc: "Film/EN/1080p"}
+    - {id: 32, cat: Movies/HD, desc: "Film/EN/720p"}
+    - {id: 38, cat: Movies/BluRay, desc: "Film/EN/Blu-ray"}
+    - {id: 27, cat: Movies/DVD, desc: "Film/EN/DVD-R"}
+    - {id: 24, cat: Movies/SD, desc: "Film/EN/SD"}
+    - {id: 34, cat: Movies/HD, desc: "Film/HU/1080p"}
+    - {id: 31, cat: Movies/HD, desc: "Film/HU/720p"}
+    - {id: 35, cat: Movies/BluRay, desc: "Film/HU/Blu-ray"}
+    - {id: 26, cat: Movies/DVD, desc: "Film/HU/DVD-R"}
+    - {id: 5, cat: Movies/SD, desc: "Film/HU/SD"}
+    - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
+    - {id: 39, cat: PC/Games, desc: "Játékok/Rip/Dox"}
+    - {id: 47, cat: Other, desc: "Klippek"}
+    - {id: 30, cat: Audio/Lossless, desc: "Lossless/EN"}
+    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
+    - {id: 25, cat: Audio/MP3, desc: "MP3/EN"}
+    - {id: 6, cat: Audio/MP3, desc: "MP3/HU"}
+    - {id: 33, cat: PC, desc: "Program/egyéb"}
+    - {id: 1, cat: PC/ISO, desc: "Program/ISO"}
+    - {id: 36, cat: TV/HD, desc: "Sorozat/EN/HD"}
+    - {id: 49, cat: TV/SD, desc: "Sorozat/EN/SD"}
+    - {id: 28, cat: TV/HD, desc: "Sorozat/HU/HD"}
+    - {id: 7, cat: TV/SD, desc: "Sorozat/HU/SD"}
+    - {id: 9, cat: XXX, desc: "XXX"}
+    - {id: 44, cat: XXX/x264, desc: "XXX/HD"}
+    - {id: 43, cat: XXX/SD, desc: "XXX/SD"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    book-search: [q]
+    music-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: ctime
+    options:
+      ctime: created
+      name: title
+      size: size
+      seeders: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not log in to the site for 6 months, the system will automatically delete it!"
+
+login:
+  # using cookie method because login page has embedded Clouflare turnstile
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: a[href*="logout.php?logout="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active only, 1 include dead, 2 only dead, 3 free, 4 double
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table.table-center[width="905"] > tbody > tr:has(a[onclick])
+
+  fields:
+    categorydesc:
+      selector: img[src^="/pic/categories"]
+      attribute: title
+    title:
+      selector: td:nth-child(2) > div > a
+    _id:
+      selector: a[onclick]
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: toggleRow\((\d+),
+    details:
+      text: "details.php?id={{ .Result._id }}"
+    download:
+      text: "download.php?id={{ .Result._id }}"
+    poster:
+      selector: a[onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: \\\'(.+?)\\
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    date:
+      selector: td:nth-child(3)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    size:
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(5)
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      selector: td:nth-child(7)
+    _verified:
+      selector: span.torrent-ok, span.torrent-unchecked
+      case:
+        span.torrent-ok: Verified
+        span.torrent-unchecked: Unchecked
+    genre:
+      selector: td:nth-child(2) > div > i.small
+      filters:
+        - name: regexp
+          args: "\\((.+)\\)"
+    description:
+      text: "{{ .Result._verified }} - {{ .Result.genre }}"
+    downloadvolumefactor:
+      case:
+        span.text-red:contains("[x0]"): 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        span.text-blue:contains("[x2]"): 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# TBDev & XBTT

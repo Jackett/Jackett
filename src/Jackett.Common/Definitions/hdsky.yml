@@ -11,20 +11,21 @@ links:
 caps:
   categorymappings:
     - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 402, cat: TV, desc: "TV Series/剧集(分集)"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
     - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 410, cat: Movies, desc: "iPad/iPad影视"}
     - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
+    - {id: 402, cat: TV, desc: "TV Series/剧集(分集)"}
+    - {id: 411, cat: TV, desc: "TV Series/剧集(合集)"}
+    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
     - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐MV"}
     - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
     - {id: 408, cat: Audio, desc: "HQ Audio/无损音乐"}
     - {id: 409, cat: Other, desc: "Misc/其他"}
-    - {id: 410, cat: Movies, desc: "iPad/iPad影视"}
-    - {id: 411, cat: TV, desc: "TV Series/剧集(合集)"}
     - {id: 412, cat: TV, desc: "TV Series/海外剧集(分集)"}
     - {id: 413, cat: TV, desc: "TV Series/海外剧集(合集)"}
     - {id: 414, cat: TV, desc: "TV Shows/海外综艺(分集)"}
     - {id: 415, cat: TV, desc: "TV Shows/海外综艺(合集)"}
+    - {id: 416, cat: TV, desc: "Shortplay/短剧"}
 
   modes:
     search: [q]
@@ -69,7 +70,7 @@ search:
     incldead: 0
     # show promotions 0=all, 1=normal, 2=free, 3=2x, 4=2xfree, 5=50%, 6=2x50%, 7=30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0=title, 1=descr, 3=uploader, 4=imdb url
+    # 0=title, 3=uploader, 4=imdb url
     search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
     # 0=AND, 1=OR, 2=exact
     search_mode: 0
@@ -81,32 +82,38 @@ search:
       - name: andmatch
 
   fields:
-    title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
     category:
       selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
-    details:
-      selector: a[title][href^="details.php?id="]
-      attribute: href
     download:
       selector: form[action*="/download.php?id="]
       attribute: action
+    title_onmouseover:
+      optional: true
+      selector: a[onmouseover*="details.php?id="]
+    title_details:
+      optional: true
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+    title:
+      # title_onmouseover is more common but sometimes can be replaced by title_details #15849
+      text: "{{ if .Result.title_onmouseover }}{{ .Result.title_onmouseover }}{{ else }}{{ .Result.title_details }}{{ end }}"
+    _id:
+      text: "{{ .Result.download }}"
+      filters:
+        - name: querystring
+          args: id
+    details:
+      text: "details.php?id={{ .Result._id }}"
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
-    size:
-      selector: td.rowfollow:nth-child(5)
-    grabs:
-      selector: td.rowfollow:nth-child(8)
-    seeders:
-      selector: td.rowfollow:nth-child(6)
-    leechers:
-      selector: td.rowfollow:nth-child(7)
+    doubanid:
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -128,6 +135,14 @@ search:
           args: "yyyy-MM-ddHH:mm:ss zzz"
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td.rowfollow:nth-child(5)
+    seeders:
+      selector: td.rowfollow:nth-child(6)
+    leechers:
+      selector: td.rowfollow:nth-child(7)
+    grabs:
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -145,4 +160,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP Standard v1.5 Beta 5
+# NexusPHP Standard v1.5 Beta 5 (custom)

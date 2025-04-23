@@ -1,7 +1,7 @@
 ---
 id: majomparade
 name: Majomparádé
-description: "Majomparádé (TurkDepo) is a HUNGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+description: "Majomparádé (TurkDepo) is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: hu-HU
 type: private
 encoding: UTF-8
@@ -10,6 +10,7 @@ links:
   - https://majomparade.eu/
 
 caps:
+  # dont forget to update the path categories in the search block
   categorymappings:
     - {id: 4, cat: Movies/3D, desc: "3D/Magyar", default: true}
     - {id: 5, cat: Movies/3D, desc: "3D/Külföldi", default: true}

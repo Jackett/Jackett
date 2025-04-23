@@ -70,51 +70,37 @@ search:
     at: "{{ .Config.sort }}"
 
   rows:
-    selector: table.table-striped > tbody > tr
+    selector: div.row > div.col-xs-12
 
   fields:
     category:
-      selector: td:nth-child(1) a
+      selector: p.card-text a
       attribute: href
     _platform:
-      selector: td:nth-child(1)
+      selector: p.card-text a
     title:
-      selector: td:nth-child(2)
+      selector: h4.card-title a
       filters:
         - name: append
           args: " - {{ .Result._platform }}"
     details:
-      selector: td:nth-child(2) a
+      selector: h4.card-title a
       attribute: href
     download:
-      selector: td:nth-child(3) a
+      selector: div.card-footer a
       attribute: href
     size:
-      selector: td:nth-child(4)
-    date_year:
-      selector: td:nth-child(5):not(:contains("-"))
-      optional: true
-      filters:
-        - name: dateparse
-          args: "yyyy"
-    date_month:
-      selector: td:nth-child(5):contains("-")
-      optional: true
+      selector: p.card-text
       filters:
         - name: regexp
-          args: (\d{4}-\d{2})
-        - name: dateparse
-          args: "yyyy-MM"
-    date_day:
-      selector: td:nth-child(5):contains("-")
-      optional: true
+          args: (\d+\.?\d+[T|G|K]iB)
+    date:
+      selector: p.card-text
       filters:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2})
         - name: dateparse
           args: "yyyy-MM-dd"
-    date:
-      text: "{{ if or .Result.date_year .Result.date_day .Result.date_month }}{{ or .Result.date_year .Result.date_day .Result.date_month }}{{ else }}now{{ end }}"
     seeders:
       text: 1
     leechers:

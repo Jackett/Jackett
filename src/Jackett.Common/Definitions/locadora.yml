@@ -1,7 +1,7 @@
 ---
 id: locadora
-name: Locadora
-description: "Locadora is a BRAZILIAN Private Tracker for MOVIES, TV and ANIME"
+name: Locadora (API)
+description: "Locadora is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / ANIME"
 language: pt-BR
 type: private
 encoding: UTF-8
@@ -58,7 +58,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts inactive for 90 days are deactivated."
+    default: "Accounts that are inactive for 90 days are deactivated."
 
 login:
   path: /api/torrents
@@ -73,7 +73,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 

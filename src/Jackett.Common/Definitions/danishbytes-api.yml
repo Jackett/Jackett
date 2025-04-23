@@ -1,7 +1,7 @@
 ---
 id: danishbytes-api
 name: DanishBytes (API)
-description: "DanishBytes is a Private Danish Tracker"
+description: "DanishBytes is a Private Danish Torrent Tracker for MOVIES / TV / GENERAL"
 language: da-DK
 type: private
 encoding: UTF-8
@@ -17,10 +17,11 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Sound"}
+    - {id: 5, cat: PC/0day, desc: "Apps"}
     - {id: 4, cat: PC/Games, desc: "Games"}
-    - {id: 5, cat: PC/0day, desc: "Appz"}
-    - {id: 8, cat: Books, desc: "Bookz"}
+    - {id: 3, cat: Audio, desc: "Sound"}
+    - {id: 8, cat: Books, desc: "Books"}
+    - {id: 17, cat: Audio/Audiobook, desc: "AudioBooks"}
 
   modes:
     search: [q]

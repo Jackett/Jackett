@@ -26,6 +26,7 @@ caps:
     - {id: 21, cat: PC, desc: "Applications Other"}
     - {id: 18, cat: PC/0day, desc: "Applications Windows"}
     - {id: 52, cat: Books, desc: "Books/Magazines All"}
+    - {id: 86, cat: Audio/Audiobook, desc: "Books/Magazines AudioBooks"}
     - {id: 9, cat: TV/Documentary, desc: "Documentaries All"}
     - {id: 53, cat: TV/Documentary, desc: "Documentaries Greek"}
     - {id: 54, cat: TV/Documentary, desc: "Documentaries HD"}
@@ -51,8 +52,6 @@ caps:
     - {id: 23, cat: Audio/Lossless, desc: "Music FLAC"}
     - {id: 22, cat: Audio/MP3, desc: "Music MP3"}
     - {id: 25, cat: Audio/Video, desc: "Music Video"}
-    - {id: 75, cat: Movies/HD, desc: "NO IN SUBS Movies HD"}
-    - {id: 76, cat: Movies/UHD, desc: "NO SUBS IN Movies 4K"}
     - {id: 35, cat: TV/Sport, desc: "Sports HD"}
     - {id: 34, cat: TV/Sport, desc: "Sports SD"}
     - {id: 80, cat: Books, desc: "Tutorials Books"}

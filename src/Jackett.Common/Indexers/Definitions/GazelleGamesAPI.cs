@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "gazellegamesapi";
         public override string Name => "GazelleGames (API)";
-        public override string Description => "A gaming tracker";
+        public override string Description => "GazelleGames is a Private gaming tracker";
         // Status: https://ggn.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://gazellegames.net/";
         public override string Language => "en-US";
@@ -285,7 +285,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var groupId = int.Parse(gObj.Key);
                     var group = gObj.Value as JObject;
 
-                    if (group["Torrents"].Type == JTokenType.Array && group["Torrents"] is JArray { Count: 0 })
+                    if (group["Torrents"] is not JObject groupTorrents)
                     {
                         continue;
                     }
@@ -295,7 +295,9 @@ namespace Jackett.Common.Indexers.Definitions
                                      .Distinct()
                                      .ToArray();
 
-                    foreach (var tObj in JObject.FromObject(group["Torrents"]))
+                    var torrents = JObject.FromObject(groupTorrents);
+
+                    foreach (var tObj in torrents)
                     {
                         var torrent = tObj.Value as JObject;
 

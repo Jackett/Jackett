@@ -29,10 +29,10 @@ search:
     selector: tbody tr
 
   fields:
-    title:
-      selector: td.title > span.title a
     category:
       text: 1
+    title:
+      selector: td.title > span.title a
     details:
       selector: td.title > span.title a
       attribute: href
@@ -42,16 +42,13 @@ search:
     size:
       selector: td.size
     seeders:
-      selector: td.peers div.seed
+      text: 1
     leechers:
-      selector: td.peers div.leech
-    grabs:
-      selector: td.peers div.done
+      text: 1
     date:
+      # unix
       selector: td.date time
       attribute: datetime
-      filters:
-        - name: fuzzytime
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

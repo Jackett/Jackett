@@ -159,21 +159,28 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        font.free: 0
-        font.twoupfree: 0
-        font.halfdown: 0.5
-        font.twouphalfdown: 0.5
-        font.thirtypercent: 0.3
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
         "*": 1
+    uploadvolumefactor_custom:
+      selector: span:has(img.arrowup)
+      optional: true
+      filters:
+        - name: replace
+          args: ["X", ""]
     uploadvolumefactor:
       case:
-        font.twouphalfdown: 2
-        font.twoupfree: 2
-        font.twoup: 2
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        span:has(img.arrowup): "{{ .Result.uploadvolumefactor_custom }}"
         "*": 1
     minimumratio:
       text: 0.8
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP Standard v1.5 Beta 4 (custom ulvf dlvf)
+# NexusPHP Standard v1.5 Beta 4 (custom ulvf)

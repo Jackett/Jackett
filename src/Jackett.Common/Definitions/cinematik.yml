@@ -1,7 +1,7 @@
 ---
 id: cinematik
-name: Cinematik
-description: "A tracker for full BD and DVD discs of non-mainstream movies, niche cinema and arthouse."
+name: Cinematik (API)
+description: "Cinematik is a Private tracker for full BD and DVD discs of non-mainstream movies, niche cinema and arthouse."
 language: en-US
 type: private
 encoding: UTF-8
@@ -74,7 +74,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -190,4 +190,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json UNIT3D 8.2.0
+# json UNIT3D 9.0.6

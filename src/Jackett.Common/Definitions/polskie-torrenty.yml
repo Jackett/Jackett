@@ -11,22 +11,23 @@ links:
 caps:
   categorymappings:
     # Filmy
-    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
     - {id: 30, cat: Movies/SD, desc: "Filmy DivX/XviD"}
-    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
-    - {id: 72, cat: Movies/HD, desc: "Filmy x264/1080p"}
-    - {id: 73, cat: Movies/HD, desc: "Filmy x264/720p"}
-    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 76, cat: Movies/HD, desc: "Filmy BluRay / REMUX"}
+    - {id: 72, cat: Movies/HD, desc: "Filmy x264/h264/1080p"}
+    - {id: 73, cat: Movies/HD, desc: "Filmy x264/h264/720p"}
     - {id: 75, cat: Movies/HD, desc: "Filmy x264/h264"}
-    - {id: 76, cat: Movies/HD, desc: "Filmy HD 1080p AVC"}
     - {id: 77, cat: Movies/UHD, desc: "Filmy 4K UHD"}
-    - {id: 78, cat: Movies/SD, desc: "Filmy IVO"}
+    - {id: 88, cat: Movies/HD, desc: "Filmy x265/h265/1080p"}
+    - {id: 89, cat: Movies/HD, desc: "Filmy x265/h265/720p"}
+    - {id: 74, cat: Movies/HD, desc: "Filmy x265/h265"}
+    - {id: 27, cat: Movies/DVD, desc: "Filmy DVD"}
+    - {id: 71, cat: Movies/3D, desc: "Filmy 3D"}
+    - {id: 78, cat: Movies/SD, desc: "Filmy IVO / AI"}
     - {id: 79, cat: Movies/SD, desc: "Filmy TS/CAM"}
-    - {id: 88, cat: Movies/HD, desc: "Filmy x265/1080p"}
-    - {id: 89, cat: Movies/HD, desc: "Filmy x265/720p"}
     # Seriale
     - {id: 25, cat: TV, desc: "Seriale Polskie"}
     - {id: 26, cat: TV/Foreign, desc: "Seriale Zagraniczne"}
+    - {id: 122, cat: TV, desc: "Seriale Fiona 9"}
     # Dla Dzieci
     - {id: 32, cat: Movies, desc: "Filmy/Bajki"}
     - {id: 111, cat: Audio/Audiobook, desc: "Audiobook"}
@@ -68,7 +69,7 @@ caps:
     - {id: 59, cat: XXX/ImageSet, desc: "Zdjęcia"}
     - {id: 60, cat: XXX/x264, desc: "Filmy"}
     - {id: 61, cat: XXX/Other, desc: "Gry"}
-    - {id: 63, cat: XXX/Other, desc: "Hentai+18"}
+    - {id: 62, cat: XXX/Other, desc: "Hentai+18"}
     # Anime
     - {id: 69, cat: TV/Anime, desc: "Anime"}
     - {id: 70, cat: XXX/Other, desc: "Hentai"}
@@ -76,7 +77,7 @@ caps:
     # Inne
     - {id: 55, cat: Other, desc: "Tapety"}
     - {id: 57, cat: Other, desc: "Pozostale"}
-    - {id: 86, cat: Other, desc: "Śmieszne"}
+    - {id: 54, cat: Other, desc: "Śmieszne"}
     - {id: 105, cat: Other, desc: "Design www"}
     - {id: 106, cat: Other, desc: "Filmy (S)VCD"}
     - {id: 107, cat: Other, desc: "Flash/Shockwave"}
@@ -106,12 +107,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -125,15 +125,10 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
-  path: login.php
-  method: form
-  form: form[name="login"]
+  # using cookie to prevent FlareSolverrSharp invalid-charset-exception after picking up `charset=utf8mb4` #15835
+  method: cookie
   inputs:
-    uid: "{{ .Config.username }}"
-    pwd: "{{ .Config.password }}"
-    keeplogged: 1
-  error:
-    - selector: font[color="#FF0000"]
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]

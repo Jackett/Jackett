@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "subsplease";
         public override string Name => "SubsPlease";
-        public override string Description => "SubsPlease - A better HorribleSubs/Erai replacement";
+        public override string Description => "SubsPlease is a Public site. A better HorribleSubs/Erai replacement";
         public override string SiteLink { get; protected set; } = "https://subsplease.org/";
         public override string[] LegacySiteLinks => new[]
         {

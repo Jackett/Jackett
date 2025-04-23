@@ -14,13 +14,14 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Console, desc: "Game"}
-    - {id: 5, cat: PC, desc: "Application"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Sport, desc: "Sport"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 5, cat: PC, desc: "Application"}
+    - {id: 4, cat: Console, desc: "Game"}
     - {id: 8, cat: Books, desc: "E-Books"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audio-Books"}
+    - {id: 12, cat: Audio/Video, desc: "Music-Video"}
 
   modes:
     search: [q]
@@ -75,7 +76,7 @@ search:
   paths:
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/wiki/Torrent-API-(UNIT3D-v8.x.x)
     # https://github.com/HDInnovations/UNIT3D-Community-Edition/blob/master/app/Http/Controllers/API/TorrentController.php#L476
-    - path: "/api/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -159,6 +160,6 @@ search:
         0: 1 # normal
         1: 2 # double
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # json UNIT3D 6.0.4

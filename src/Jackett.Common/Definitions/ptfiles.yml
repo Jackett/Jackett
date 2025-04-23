@@ -1,7 +1,7 @@
 ---
 id: ptfiles
 name: PTFiles
-description: "PTFiles (PTF) is a Private site for TV / MOVIES / GENERAL"
+description: "PTFiles (PTF) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: windows-1252
@@ -110,7 +110,7 @@ search:
 
   rows:
     # for some users (don't know why) the table is called tablethree instead of tortable
-    selector: table#tortable > tbody > tr.rowhead, table#tablethree > tbody > tr.rowhead
+    selector: table#tortable > tbody > tr.rowhead:has(a[href^="dl.php/"]), table#tablethree > tbody > tr.rowhead:has(a[href^="dl.php/"])
 
   fields:
     # column 3 will be the wait time for new users

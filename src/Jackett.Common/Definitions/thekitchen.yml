@@ -1,0 +1,172 @@
+---
+id: thekitchen
+name: The Kitchen
+description: "TheKitchen (TK) is a Private Torrent Tracker for COOKING / CUISINES / RECIPES"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://thekitchen.click/
+
+caps:
+  categorymappings:
+    - {id: 240, cat: Other, desc: "Business : Catering"}
+    - {id: 221, cat: Other, desc: "Cuisine : Indian"}
+    - {id: 215, cat: Other, desc: "Food : Dairy Free"}
+    - {id: 232, cat: Other, desc: "Food : Meat"}
+    - {id: 257, cat: Other, desc: "Franchise : Bake Off/Baking Sh"}
+    - {id: 241, cat: Other, desc: "Business : Food Prep"}
+    - {id: 222, cat: Other, desc: "Cuisine : Italian"}
+    - {id: 251, cat: Other, desc: "Food : Dating/Romance"}
+    - {id: 234, cat: Other, desc: "Food : Organic Food"}
+    - {id: 255, cat: Other, desc: "Franchise : Hells Kitchen"}
+    - {id: 243, cat: Other, desc: "Cuisine : African"}
+    - {id: 223, cat: Other, desc: "Cuisine : Mexican"}
+    - {id: 225, cat: Other, desc: "Food : Desserts/Pastries"}
+    - {id: 235, cat: Other, desc: "Food : Seasonal"}
+    - {id: 254, cat: Other, desc: "Franchise : Iron Chef"}
+    - {id: 216, cat: Other, desc: "Cuisine : American"}
+    - {id: 224, cat: Other, desc: "Cuisine : Middle Eastern"}
+    - {id: 228, cat: Other, desc: "Food : Fish"}
+    - {id: 238, cat: Other, desc: "Food : Soups/Salads/Starter"}
+    - {id: 253, cat: Other, desc: "Franchise : Masterchef"}
+    - {id: 217, cat: Other, desc: "Cuisine : Asian"}
+    - {id: 214, cat: Other, desc: "Cuisine : Spanish"}
+    - {id: 230, cat: Other, desc: "Food : Fruit"}
+    - {id: 236, cat: Other, desc: "Food : Sugar Free"}
+    - {id: 256, cat: Other, desc: "Franchise : Top Chef"}
+    - {id: 249, cat: Other, desc: "Cuisine : Australasia"}
+    - {id: 226, cat: Other, desc: "Drinks : Alchohol"}
+    - {id: 231, cat: Other, desc: "Food : Health Food/Nutrition"}
+    - {id: 229, cat: Other, desc: "Food : Tech/Hygiene"}
+    - {id: 252, cat: TV, desc: "TV : Chef/Food Ent/Drama"}
+    - {id: 218, cat: Other, desc: "Cuisine : British"}
+    - {id: 227, cat: Other, desc: "Drinks : Non-Alchohol"}
+    - {id: 246, cat: Other, desc: "Food : Herbs/Spice/Fungi"}
+    - {id: 233, cat: Other, desc: "Food : Vegan"}
+    - {id: 242, cat: TV, desc: "TV : Chef/Food Shows"}
+    - {id: 219, cat: Other, desc: "Cuisine : European(other)"}
+    - {id: 239, cat: Other, desc: "Food : Bread"}
+    - {id: 250, cat: Other, desc: "Food : Kids"}
+    - {id: 248, cat: Other, desc: "Food : Vegetables"}
+    - {id: 245, cat: TV, desc: "TV : Chef/Food Travel"}
+    - {id: 220, cat: Other, desc: "Cuisine : French"}
+    - {id: 247, cat: Other, desc: "Food : Cooking On A Budget"}
+    - {id: 259, cat: Other, desc: "Food : Kosher"}
+    - {id: 244, cat: Other, desc: "Food : Vegetarian"}
+    - {id: 237, cat: TV, desc: "TV : Reality Food Shows"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_tcg
+    type: info
+    label: Message from the TCG staff
+    default: We wish to encourage all members to participate in the communities we are creating. We have worked with the Jackett maintainers to ensure that the security and longevity of our trackers continues, and as such some torrents are removed from the results in Jackett.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Unparked accounts that haven't visited (read: browsed) the site for 38 days (and are over 28 days old) are pruned. Parked accounts are pruned when 112 days have elapsed since the last recorded activity (read: browsed). Seeding activity does NOT count, you must BROWSE the site. Donators with a star (and ONLY donators with a star) are immune to auto-pruning. Power Users and above are also immune. We regularly clean out accounts with very low share ratios that are subject to the Ratio Watch system."
+
+login:
+  # using cookie method because login page has embedded hCaptcha
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: main.php
+    selector: a[href^="logout.php?id="]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 free (not used by request), 4 exclusive, 5 neutral
+    incldead: 1
+    titleonly: 1
+    # 0 Exact, 1 Fuzzy, 3 Parsed, 4 Simple # 2 Pure is not used
+    nonboolean: 0
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
+
+  rows:
+    selector: table[border="0"] > tbody > tr.ttable:has(a[href^="browse.php?cat="]):not(:has(font[color="blue"])):not(:contains("*TCG*"))
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+    grabs:
+      selector: td:nth-child(8)
+      filters:
+        - name: replace
+          args: ["Never", "0"]
+    files:
+      selector: td:nth-child(4)
+    size:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    date:
+      selector: td:nth-child(6)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss"
+    downloadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "font[color=\"green\"]": 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# XBTT TCG 0.98

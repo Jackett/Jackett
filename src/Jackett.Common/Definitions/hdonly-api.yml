@@ -1,0 +1,311 @@
+---
+id: hdonly-api
+replaces:
+  - hdonly
+name: HD-Only (API)
+description: "HD-Only (HD-O) is a FRENCH Private Torrent Tracker for HD MOVIES / TV"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://hd-only.org/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV, desc: "Séries"}
+    # Fake ids to match release types by desc
+    - {id: 101, cat: Movies, desc: "Film"}
+    - {id: 103, cat: Movies/Other, desc: "Dessin animé"}
+    - {id: 105, cat: TV, desc: "Série"}
+    - {id: 106, cat: TV/Anime, desc: "Série Animée"}
+    - {id: 107, cat: Movies/Other, desc: "Film d'animation"}
+    - {id: 109, cat: Audio/Video, desc: "Concert"}
+    - {id: 111, cat: TV/Documentary, desc: "Documentaire"}
+    - {id: 113, cat: Movies/Other, desc: "Court-métrage"}
+    - {id: 114, cat: Movies/Other, desc: "Clip"}
+    - {id: 115, cat: Movies/Other, desc: "Démonstration"}
+    - {id: 121, cat: Other, desc: "Autre"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tmdbid, genre]
+    movie-search: [q, tmdbid, genre]
+  allowrawsearch: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API Key
+    default: "Find or Generate a new API Key by accessing your <a href=\"https://hd-only.org/\" target=\"_blank\">HD-Only</a> account <i>Access Settings</i> tab and copy the API Key."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: add_hybrid_features_to_filename
+    type: checkbox
+    label: Include DV/HDR10 in filename when a release has multiple HDR formats.
+    default: false
+  - name: add_version_francophone_to_title
+    type: checkbox
+    label: Append Version Francophone flags to titles if available (VFF, VFQ, VFI, VF)
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: ajax.php
+  method: get
+  inputs:
+    action: browse
+    apikey: "{{ .Config.apikey }}"
+
+search:
+  # https://hd-only.org/ajax.php?filelist=blood+2009&action=browse&group_results=0&order_by=time&order_way=desc&freetorrent=1
+  paths:
+    - path: ajax.php
+      response:
+        type: json
+
+  inputs:
+    # does not support categories, uses releasetype for single filter, so we cannot do multi releasetype filtering either.
+    # $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Keywords }}"
+    tmdb: "{{ .Query.TMDBID }}"
+    taglist: "{{ .Query.Genre }}"
+    action: browse
+    group_results: 0
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    # 1 freeleech, 0 normal
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    # site does not support imdbid search or display imdb links in results
+    apikey: "{{ .Config.apikey }}"
+
+  keywordsfilters:
+    # strip season
+    - name: re_replace
+      args: ["(?i)\\bS\\d{1,3}\\b", ""]
+    - name: trim
+
+  rows:
+    selector: response.results
+
+  fields:
+    _group_id:
+      selector: group.groupId
+    _torrent_id:
+      selector: torrentId
+    category:
+      selector: group.categoryId
+    categorydesc|append:
+      selector: group.releaseType
+      optional: true
+    details:
+      text: "torrents.php?id={{ .Result._group_id }}&torrentid={{ .Result._torrent_id }}"
+    download:
+      text: "ajax.php?action=download&id={{ .Result._torrent_id }}&apikey={{ .Config.apikey }}"
+    genre:
+      selector: group.tags
+      filters:
+        - name: re_replace
+          args: ["(?i)(science.fiction)", "science_fiction"]
+    poster:
+      selector: group.cover
+      optional: true
+    tmdbid:
+      selector: group.tmdb
+    files:
+      selector: fileCount
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: snatches
+    size:
+      selector: size
+    date:
+      selector: time
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    year:
+      selector: group.groupYear
+      optional: true
+    _season:
+      selector: season
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^0$", ""]
+        - name: re_replace
+          args: ["^([1-9])$", "S0$1"]
+        - name: re_replace
+          args: ["^(\\d{2,})$", "S$1"]
+    _episode:
+      selector: episode
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["^0$", ""]
+        - name: re_replace
+          args: ["^([1-9])$", "E0$1"]
+        - name: re_replace
+          args: ["^(\\d{2,})$", "E$1"]
+    _episode_info:
+      text: "{{ .Result._season }}{{ .Result._episode }}"
+    _format:
+      selector: format
+      filters:
+        - name: replace
+          args: ["Blu-Ray Original", "COMPLETE BLURAY"]
+        - name: re_replace
+          args: ["Blu-Ray Remux", "Remux"]
+        - name: re_replace
+          args: ["Blu-Ray Rip", "BluRay.Rip"]
+        - name: re_replace
+          args: ["mHD", "mHD.BluRay.Rip"]
+    _encoding:
+      selector: encoding
+    _release_group:
+      selector: team
+      optional: true
+    _media:
+      selector: media
+      optional: true
+    _vff:
+      selector: vff
+      optional: true
+    _vfq:
+      selector: vfq
+      optional: true
+    _vf2:
+      selector: vf2
+      optional: true
+    _vfi:
+      selector: vfi
+      optional: true
+    _vf:
+      selector: vf
+      optional: true
+    _vof:
+      selector: vof
+      optional: true
+    _hdr:
+      selector: hdr
+      optional: true
+    _hdr10plus:
+      selector: hdr10plus
+      optional: true
+    _dovi:
+      selector: dovi
+      optional: true
+    title_optional:
+      selector: group.groupName
+      filters:
+        - name: append
+          args: ".{{ .Result.year }}.{{ .Result._episode_info }}.{{ .Result._format }}.{{ .Result._encoding }}.{{ .Result._media }}{{ if eq .Result._hdr \"True\" }}.HDR{{ else }}{{ end }}.{{ if eq .Result._hdr10plus \"True\" }}.HDR10+{{ else }}{{ end }}.{{ if eq .Result._dovi \"True\" }}.DoVi{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if or (eq .Result._vf2 \"True\") (or (eq .Result._vff \"True\") (or (eq .Result._vfq \"True\") (or (eq .Result._vfi \"True\")  (eq .Result._vf \"True\")))) }}.MULTI{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["(\\.MULTI)\\1", ".MULTI"]
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vf2 \"True\") }}.VF2{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vff \"True\") }}.VFF{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vfq \"True\") }}.VFQ{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vfi \"True\") }}.VFI{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if and (.Config.add_version_francophone_to_title) (eq .Result._vf \"True\") }}.VF{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if eq .Result._vof \"True\" }}.FRENCH{{ else }}{{ end }}"
+        - name: re_replace
+          args: ["[\\s.]+", "."]
+        - name: re_replace
+          args: ["\\.*([\\-:,])\\.*", "$1"]
+        - name: trim
+        - name: trim
+          args: .
+        - name: append
+          args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
+    title_filename:
+      selector: "fileName"
+      optional: true
+      filters:
+        - name: re_replace
+          args: ["\\s÷$", ""]
+        - name: append
+          args: " {{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr \"True\") }}[HDR]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._hdr10plus \"True\") }}[HDR10+]{{ else }}{{ end }}{{ if and (.Config.add_hybrid_features_to_filename) (eq .Result._dovi \"True\") }}[DoVi]{{ else }}{{ end }}"
+    title_phase1:
+      text: "{{ if and (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    description:
+      text: "{{ .Result.title_filename }}"
+      filters:
+        - name: re_replace
+          args: ["\\s÷$", ""]
+    _free:
+      selector: isFreeleech
+    downloadvolumefactor:
+      text: "{{ if eq .Result._free \"True\" }}0{{ else }}1{{ end }}"
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# JSON Gazelle

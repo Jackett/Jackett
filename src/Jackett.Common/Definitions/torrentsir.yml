@@ -7,27 +7,31 @@ type: public
 encoding: UTF-8
 followredirect: true
 links:
-  - https://torrentsir158.com/
+  - https://torrentsir171.com/
 legacylinks:
-  - http://torrentsir149.com/
-  - https://torrentsir149.com/
-  - http://torrentsir150.com/
-  - https://torrentsir150.com/
-  - http://torrentsir151.com/
-  - https://torrentsir151.com/
-  - http://torrentsir152.com/
-  - https://torrentsir152.com/
-  - http://torrentsir153.com/
-  - https://torrentsir153.com/
-  - http://torrentsir154.com/
-  - https://torrentsir154.com/
-  - http://torrentsir155.com/
-  - https://torrentsir155.com/
-  - http://torrentsir156.com/
-  - https://torrentsir156.com/
-  - http://torrentsir157.com/
-  - https://torrentsir157.com/
-  - http://torrentsir158.com/
+  - http://torrentsir160.com/
+  - https://torrentsir160.com/
+  - http://torrentsir161.com/
+  - https://torrentsir161.com/
+  - http://torrentsir162.com/
+  - https://torrentsir162.com/
+  - http://torrentsir163.com/
+  - https://torrentsir163.com/
+  - http://torrentsir164.com/
+  - https://torrentsir164.com/
+  - http://torrentsir165.com/
+  - https://torrentsir165.com/
+  - http://torrentsir166.com/
+  - https://torrentsir166.com/
+  - http://torrentsir167.com/
+  - https://torrentsir167.com/
+  - http://torrentsir168.com/
+  - https://torrentsir168.com/
+  - http://torrentsir169.com/
+  - https://torrentsir169.com/
+  - http://torrentsir170.com/
+  - https://torrentsir170.com/
+  - http://torrentsir171.com/
 
 caps:
   categorymappings:
@@ -72,14 +76,15 @@ download:
 
 search:
   paths:
-    # https://torrentsir38.com/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2021&sop=and
+    # https://torrentsir171.com/bbs/search.php?srows=100&gr_id=&sfl=wr_subject&stx=2025&sop=and
     - path: bbs/search.php
+  allowEmptyInputs: true
   inputs:
-    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     srows: 100
     gr_id: ""
     # wr_subject||wr_content, wr_subject, wr_content, mb_id, wr_name
     sfl: wr_subject
+    stx: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     # or, and
     sop: and
 

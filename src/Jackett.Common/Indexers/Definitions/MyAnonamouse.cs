@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "myanonamouse";
         public override string Name => "MyAnonamouse";
-        public override string Description => "Friendliness, Warmth and Sharing";
+        public override string Description => "MyAnonamouse is a Private site. Friendliness, Warmth and Sharing";
         public override string SiteLink { get; protected set; } = "https://www.myanonamouse.net/";
         public override string Language => "en-US";
         public override string Type => "private";
@@ -198,7 +198,7 @@ namespace Jackett.Common.Indexers.Definitions
             var limit = query.Limit > 0 ? query.Limit : 100;
             var offset = query.Offset > 0 ? query.Offset : 0;
 
-            var qParams = new NameValueCollection
+            var parameters = new NameValueCollection
             {
                 {"tor[text]", term},
                 {"tor[searchType]", configData.SearchType.Value},
@@ -215,38 +215,47 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (configData.SearchInDescription.Value)
             {
-                qParams.Add("tor[srchIn][description]", "true");
+                parameters.Add("tor[srchIn][description]", "true");
             }
 
             if (configData.SearchInSeries.Value)
             {
-                qParams.Add("tor[srchIn][series]", "true");
+                parameters.Add("tor[srchIn][series]", "true");
             }
 
             if (configData.SearchInFilenames.Value)
             {
-                qParams.Add("tor[srchIn][filenames]", "true");
+                parameters.Add("tor[srchIn][filenames]", "true");
             }
 
-            var catList = MapTorznabCapsToTrackers(query);
+            if (configData.SearchLanguages.Values is { Length: > 0 })
+            {
+                var searchLanguages = configData.SearchLanguages.Values.Where(l => l != null);
+
+                foreach (var (language, index) in searchLanguages.Select((value, index) => (value, index)))
+                {
+                    parameters.Set($"tor[browse_lang][{index}]", language);
+                }
+            }
+
+            var catList = MapTorznabCapsToTrackers(query).Distinct().ToList();
+
             if (catList.Any())
             {
-                var index = 0;
-                foreach (var cat in catList)
+                foreach (var (category, index) in catList.Select((value, index) => (value, index)))
                 {
-                    qParams.Add("tor[cat][" + index + "]", cat);
-                    index++;
+                    parameters.Set($"tor[cat][{index}]", category);
                 }
             }
             else
             {
-                qParams.Add("tor[cat][]", "0");
+                parameters.Add("tor[cat][]", "0");
             }
 
             var urlSearch = SearchUrl;
-            if (qParams.Count > 0)
+            if (parameters.Count > 0)
             {
-                urlSearch += $"?{qParams.GetQueryString()}";
+                urlSearch += $"?{parameters.GetQueryString()}";
             }
 
             var response = await RequestWithCookiesAndRetryAsync(
@@ -271,6 +280,11 @@ namespace Jackett.Common.Indexers.Definitions
                 if (error.IsNotNullOrWhiteSpace() && error.StartsWithIgnoreCase("Nothing returned, out of"))
                 {
                     return releases;
+                }
+
+                if (jsonResponse.Data == null)
+                {
+                    throw new Exception($"Unexpected response content from indexer request: {jsonResponse.Message ?? "Check the logs for more information."}");
                 }
 
                 foreach (var item in jsonResponse.Data)
@@ -361,7 +375,8 @@ namespace Jackett.Common.Indexers.Definitions
     public class MyAnonamouseResponse
     {
         public string Error { get; set; }
-        public List<MyAnonamouseTorrent> Data { get; set; }
+        public IReadOnlyCollection<MyAnonamouseTorrent> Data { get; set; }
+        public string Message { get; set; }
     }
 
     public class MyAnonamouseTorrent

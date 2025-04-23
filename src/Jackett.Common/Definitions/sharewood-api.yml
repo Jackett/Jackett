@@ -3,13 +3,11 @@ id: sharewood-api
 replaces:
   - sharewoodapi
 name: Sharewood (API)
-description: "sharewood is a Semi-Private FRENCH Torrent Tracker for GENERAL"
+description: "sharewood is a FRENCH Semi-Private Torrent Tracker for GENERAL"
 language: fr-FR
 type: semi-private
 encoding: UTF-8
 requestDelay: 2.1
-certificates:
-  - 023A091295E81813D040DFA0FA842DF9892BF0F5  # expired 10-March-2024 note: despite a new CA issued this one still pops up occasionally
 links:
   - https://www.sharewood.tv/
 
@@ -198,6 +196,6 @@ search:
     minimumratio:
       text: 0.75
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# UNIT3D
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D v2.0
