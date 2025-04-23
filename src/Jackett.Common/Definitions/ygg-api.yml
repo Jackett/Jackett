@@ -12,14 +12,35 @@ links:
 caps:
   categorymappings:
     - {id: 2178, cat: Movies/Other, desc: "Films d’animation"}
-    - {id: 2179, cat: TV/Anime, desc: "Séries d’animation / Mangas"}
     - {id: 2183, cat: Movies, desc: "Films"}
+    - {id: 2145, cat: TV, desc: "Film/Vidéo"}
+    - {id: 2179, cat: TV/Anime, desc: "Séries d’animation / Mangas"}
+    - {id: 2181, cat: TV/Documentary, desc: "Film/Vidéo : Documentaire"}
+    - {id: 2182, cat: TV, desc: "Film/Vidéo : Emission TV"}
     - {id: 2184, cat: TV, desc: "Séries"}
+    - {id: 2185, cat: TV, desc: "Film/Vidéo : Spectacle"}
+    - {id: 2186, cat: TV/Sport, desc: "Film/Vidéo : Sport"}
+    - {id: 2187, cat: TV/Other, desc: "Film/Vidéo : Vidéo-clips"}
+    - {id: 2139, cat: Audio, desc: "Audio"}
+    - {id: 2147, cat: Audio, desc: "Audio : Karaoké"}
+    - {id: 2148, cat: Audio, desc: "Audio : Musique"}
+    - {id: 2149, cat: Audio/Other, desc: "Audio : Samples"}
+    - {id: 2150, cat: Audio, desc: "Audio : Podcast Radio"}
+    - {id: 2151, cat: Audio/Audiobook, desc: "eBook : Audio"}
+    - {id: 2180, cat: Audio/Video, desc: "Film/Vidéo : Concert"}
+    - {id: 2140, cat: Books, desc: "eBook"}
+    - {id: 2152, cat: Books/EBook, desc: "eBook : Bds"}
+    - {id: 2153, cat: Books/Comics, desc: "eBook : Comics"}
+    - {id: 2154, cat: Books/EBook, desc: "eBook : Livres"}
+    - {id: 2155, cat: Books/Comics, desc: "eBook : Mangas"}
+    - {id: 2156, cat: Books/Mags, desc: "eBook : Presse"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q, year]
+    music-search: [q]
+    book-search: [q]
   allowrawsearch: true
 
 settings:
