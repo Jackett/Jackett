@@ -18,10 +18,11 @@ caps:
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 26, cat: Movies/UHD, desc: "Movie 4K"}
 
-    - {id: 56, cat: TV/SD, desc: "Serien DVD-R"}
+    - {id: 133, cat: TV/Anime, desc: "Serien Anime"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 59, cat: TV, desc: "Serien Pack"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
+    - {id: 56, cat: TV/SD, desc: "Serien DVD-R"}
     - {id: 123, cat: TV, desc: "Serien Klassiker"}
     - {id: 126, cat: TV, desc: "Serien Kids"}
     - {id: 132, cat: TV/UHD, desc: "Serien UHD"}
@@ -65,21 +66,21 @@ caps:
     - {id: 116, cat: TV/Sport, desc: "Sport DVD-R"}
     - {id: 117, cat: TV/Sport, desc: "Sport DVD-R"}
 
-    - {id: 64, cat: TV/Anime, desc: "Sonstiges Anime"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
     - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
 
-    - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
-    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
-    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
+    - {id: 131, cat: TV/UHD, desc: "Internt'l Serie UHD"}
     - {id: 103, cat: Movies/SD, desc: "Internt'l Movie SD"}
-    - {id: 104, cat: Other, desc: "Internt'l Misc"}
-    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
-    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
-    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
+    - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
+    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
+    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
     - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD-R"}
+    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
+    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
+    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
+    - {id: 104, cat: Other, desc: "Internt'l Misc"}
 
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
     - {id: 74, cat: XXX/Other, desc: "XXX Other"}
