@@ -298,7 +298,17 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var result = await RequestWithCookiesAsync(detailsStr);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    logger.Warn("Fetching {0} returned HTTP 500", detailsStr);
+                    return;
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
 
             var searchResultParser = new HtmlParser();
             using var doc = searchResultParser.ParseDocument(result.ContentString);
@@ -338,7 +348,17 @@ namespace Jackett.Common.Indexers.Definitions
 
             var result = await RequestWithCookiesAsync(detailsStr);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    logger.Warn("Fetching {0} returned HTTP 500",detailsStr);
+                    return;
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
 
             var searchResultParser = new HtmlParser();
             using var doc = searchResultParser.ParseDocument(result.ContentString);
