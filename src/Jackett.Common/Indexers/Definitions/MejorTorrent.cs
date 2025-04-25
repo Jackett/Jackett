@@ -351,7 +351,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 if (result.Status == HttpStatusCode.InternalServerError)
                 {
-                    logger.Warn("Fetching {0} returned HTTP 500",detailsStr);
+                    logger.Warn("Fetching {0} returned HTTP 500", detailsStr);
                     return;
                 }
                 else
