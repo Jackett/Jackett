@@ -9,10 +9,8 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://apr25.rudub.biz/
+  - https://apr26.rudub.biz/
 legacylinks:
-  - http://apr10.rudub.vip/
-  - https://apr10.rudub.vip/
   - http://apr11.rudub.vip/
   - https://apr11.rudub.vip/
   - http://apr12.rudub.vip/
@@ -42,6 +40,8 @@ legacylinks:
   - http://apr24.rudub.biz/
   - https://apr24.rudub.biz/
   - http://apr25.rudub.biz/
+  - https://apr25.rudub.biz/
+  - http://apr26.rudub.biz/
 
 caps:
   categorymappings:
