@@ -233,6 +233,8 @@ caps:
     - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
     - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
     - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
+    - {id: 414, cat: Books, desc: "Rarity-1500 - 1600"}
+    - {id: 415, cat: Books, desc: "Rarity-before 1500"}
     - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
     - {id: 319, cat: Books, desc: "Fishing tackle and knots"}
