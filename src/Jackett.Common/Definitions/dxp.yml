@@ -72,6 +72,8 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 login:
   path: takelogin.php
