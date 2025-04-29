@@ -5,6 +5,7 @@ description: "Aither is a Private Torrent Tracker for HD MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
+# status https://status.aither.cc/
 links:
   - https://aither.cc/
 
@@ -188,4 +189,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 9.0.1
+# json UNIT3D 9.0.6
