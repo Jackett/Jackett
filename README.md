@@ -526,7 +526,6 @@ Prior versions of Jackett are no longer supported.
  * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
- * RoTorrent
  * Rousi
  * SAMARITANO
  * SATClubbing
