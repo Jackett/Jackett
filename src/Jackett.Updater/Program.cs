@@ -522,6 +522,7 @@ namespace Jackett.Updater
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro
                 "Definitions/lightning-tor.yml",
+                "Definitions/libronube.yml",
                 "Definitions/lilleskyorg.yml",
                 "Definitions/limetorrentsclone.yml",
                 "Definitions/lusthive.yml",

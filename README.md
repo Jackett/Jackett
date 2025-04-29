@@ -83,7 +83,6 @@ Prior versions of Jackett are no longer supported.
  * Knaben
  * LAPUMiA
  * LePorno.info
- * Libronube
  * LimeTorrents
  * LinuxTracker
  * Mac Torrents Download
