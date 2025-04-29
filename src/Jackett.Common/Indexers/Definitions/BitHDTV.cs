@@ -46,7 +46,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationDataCookie("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
-            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Inactive accounts are disabled after 90 days for User class, after 180 days for Power User class, after 270 days for Elite User & Insane User class. This doesn't apply to Veteran User class or above. Parking your account doubles the maximum inactive time. Only the login and browsing the site is considered activity."));
+            configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Inactive accounts are disabled after 2 months days for User class, after 3 months for Power User, after 4 months for Elite User, after 6 months for  Insane User, after 9 months for Veteran User, after 11 months for  VIP, after 12 months for  Dedicated BHD User & all Staff. Parking your account doubles the maximum inactive time. Only the login and browsing the site is considered activity."));
         }
 
         private TorznabCapabilities SetCapabilities()
