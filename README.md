@@ -430,7 +430,6 @@ Prior versions of Jackett are no longer supported.
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * Le-Cinephile
- * LearnBits
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
