@@ -81,7 +81,6 @@ Prior versions of Jackett are no longer supported.
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
- * LAPUMiA
  * LePorno.info
  * LimeTorrents
  * LinuxTracker
