@@ -166,8 +166,6 @@ namespace Jackett.Common.Indexers.Definitions
                 indexerResponse = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
             }
 
-            var seasonRegex = new Regex(@"\bS\d{2,3}(E\d{2,3})?\b", RegexOptions.Compiled);
-
             var releases = new List<ReleaseInfo>();
 
             try
@@ -216,15 +214,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
 
                         var id = torrent.Id;
-                        var title = torrent.ReleaseName;
                         var infoUrl = GetInfoUrl(result.GroupId, id);
-
-                        var categories = new List<int> { TorznabCatType.Movies.ID };
-
-                        if (title != null && seasonRegex.Match(title).Success)
-                        {
-                            categories.Add(TorznabCatType.TV.ID);
-                        }
 
                         var uploadVolumeFactor = torrent.FreeleechType?.ToUpperInvariant() switch
                         {
@@ -235,11 +225,11 @@ namespace Jackett.Common.Indexers.Definitions
                         var release = new ReleaseInfo
                         {
                             Guid = infoUrl,
-                            Title = title,
+                            Title = torrent.ReleaseName,
                             Year = int.Parse(result.Year),
                             Details = infoUrl,
                             Link = GetDownloadUrl(id, jsonResponse.AuthKey, jsonResponse.PassKey),
-                            Category = categories,
+                            Category = MapTrackerCatToNewznab(result.CategoryId),
                             Size = long.Parse(torrent.Size),
                             Grabs = int.Parse(torrent.Snatched),
                             Seeders = int.Parse(torrent.Seeders),
@@ -386,6 +376,7 @@ namespace Jackett.Common.Indexers.Definitions
     public class PassThePopcornMovie
     {
         public string GroupId { get; set; }
+        public string CategoryId { get; set; }
         public string Title { get; set; }
         public string Year { get; set; }
         public string ImdbId { get; set; }
