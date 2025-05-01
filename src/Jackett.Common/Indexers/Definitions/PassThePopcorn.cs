@@ -120,6 +120,8 @@ namespace Jackett.Common.Indexers.Definitions
                 { "action", "advanced" },
                 { "json", "noredirect" },
                 { "grouping", "0" },
+                { "order_by", "time" },
+                { "order_way", "desc" },
             };
 
             if (configFreeOnly)
