@@ -79,7 +79,8 @@ login:
     selector: div#statusbar
 
 search:
-  path: browse.php
+  paths:
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}&c{{.}}=1{{end}}"
     # 0 active, 1 incldead, 2 onlydead

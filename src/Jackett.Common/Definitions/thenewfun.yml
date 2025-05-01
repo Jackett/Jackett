@@ -116,7 +116,8 @@ login:
 
 search:
   # https://the-new-fun.spdns.eu/browse.php?showsearch=1&c140=1&c142=1&search=2022+1080p&incldead=1&orderby=added&sort=desc
-  path: browse.php
+  paths:
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     showsearch: 1
