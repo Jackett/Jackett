@@ -70,18 +70,30 @@ search:
     year: ""
 
   rows:
-    selector: div.search-results > ul > li, div.movies-list > ul > li, div.series-list> ul > li, div.movies_anime-list > ul > li, div.series_anime-list > ul > li, div.varios-list> ul > li
+    selector: div.search-results > ul > li, div.movies-list > ul > li, div.series-list > ul > li, div.movies_anime-list > ul > li, div.series_anime-list > ul > li, div.varios-list > ul > li
 
   fields:
     category:
-      text: 7
-    _fileinfo:
+      case:
+        ":root:has(div.movies-list)": 1
+        ":root:has(div.movies_anime-list)": 3
+        ":root:has(div.series-list)": 4
+        ":root:has(div.series_anime-list)": 6
+        ":root:has(div.varios-list)": 7
+        "*": 7
+    _file_info:
       selector: div.file-info
+    _has_season:
+      selector: p:contains("temporada")
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d+\s*\w+),
     title:
       selector: a[href^="torrent_details.php?id="]
       filters:
         - name: append
-          args: " [{{ .Result._fileinfo }}]"
+          args: " {{ if .Result._has_season }}{{ .Result._has_season }} {{ else }}{{ end }}[{{ .Result._file_info }}]"
     details:
       selector: a[href^="torrent_details.php?id="]
       attribute: href
@@ -102,8 +114,8 @@ search:
     date:
       selector: p
       filters:
-        - name: replace
-          args: ["Subido: ", ""]
+        - name: regexp
+          args: (\d{2}/\d{2}/\d{4})
         - name: append
           args: " +01:00" # CET
         - name: dateparse
