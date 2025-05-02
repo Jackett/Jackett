@@ -12,10 +12,10 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
-    - {id: 2, cat: Movies, desc: "Películas de dibujos"}
-    - {id: 3, cat: Movies, desc: "Películas anime"}
+    - {id: 2, cat: Movies/Other, desc: "Películas de dibujos"}
+    - {id: 3, cat: Movies/Other, desc: "Películas anime"}
     - {id: 4, cat: TV, desc: "Series"}
-    - {id: 5, cat: TV, desc: "Series de dibujos"}
+    - {id: 5, cat: TV/Other, desc: "Series de dibujos"}
     - {id: 6, cat: TV/Anime, desc: "Series anime"}
     - {id: 7, cat: Other, desc: "Varios"}
 
@@ -75,12 +75,13 @@ search:
   fields:
     category:
       case:
-        ":root:has(div.movies-list)": 1
-        ":root:has(div.movies_anime-list)": 3
-        ":root:has(div.series-list)": 4
-        ":root:has(div.series_anime-list)": 6
-        ":root:has(div.varios-list)": 7
-        "*": 7
+        ":root:has(a.active[href=\"movies.php\"])": 1
+        ":root:has(a.active[href=\"peliculas_de_dibujos.php\"])": 2
+        ":root:has(a.active[href=\"peliculas_anime.php\"])": 3
+        ":root:has(a.active[href=\"series.php\"])": 4
+        ":root:has(a.active[href=\"series_de_dibujos.php\"])": 5
+        ":root:has(a.active[href=\"series_anime.php\"])": 6
+        ":root:has(a.active[href=\"varios.php\"])": 7
     _file_info:
       selector: div.file-info
     _has_season:
