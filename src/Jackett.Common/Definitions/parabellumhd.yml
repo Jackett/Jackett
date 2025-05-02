@@ -71,19 +71,29 @@ search:
       filters:
         - name: regexp
           args: "Categoría: (.+?),"
-    _file_info:
+    _format:
       selector: div.file-info
-    _has_season:
-      selector: p:contains("temporada")
       optional: true
       filters:
         - name: regexp
-          args: (\d+\s*\w+),
+          args: "Formato: (.+?),"
+    _resolution:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: "Resolución: (.+?),"
+    _seasons:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d+\s*\w+)$
     title:
       selector: a[href^="torrent_details.php?id="]
       filters:
         - name: append
-          args: " {{ if .Result._has_season }}{{ .Result._has_season }} {{ else }}{{ end }}[{{ .Result._file_info }}]"
+          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }}"
     details:
       selector: a[href^="torrent_details.php?id="]
       attribute: href
@@ -94,13 +104,13 @@ search:
       selector: div.file-info
       filters:
         - name: regexp
-          args: (\d+\.?\d*\s[G|M|K]B)\s*$
+          args: "Tamaño: (.+?),"
     seeders:
       selector: span.seeders
     leechers:
       selector: span.leechers
-#    grabs:
-#      selector: span.snatched
+    grabs:
+      selector: span.snatched
     date:
       selector: p
       filters:
