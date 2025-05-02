@@ -594,7 +594,6 @@ Prior versions of Jackett are no longer supported.
  * Torrenting (TT)
  * TorrentLeech (TL)
  * TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
- * TorrentSeeds (TS)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
  * TranceTraffic
