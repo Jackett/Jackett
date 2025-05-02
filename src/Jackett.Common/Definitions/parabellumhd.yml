@@ -1,0 +1,119 @@
+---
+id: parabellumhd
+name: ParabellumHD
+description: "ParabellumHD is a SPANISH Private Torrent Tracker for MOVIES / TV"
+language: es-ES
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://parabellumhd.cx/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Películas"}
+    - {id: 2, cat: Movies, desc: "Películas de dibujos"}
+    - {id: 3, cat: Movies, desc: "Películas anime"}
+    - {id: 4, cat: TV, desc: "Series"}
+    - {id: 5, cat: TV, desc: "Series de dibujos"}
+    - {id: 6, cat: TV/Anime, desc: "Series anime"}
+    - {id: 7, cat: Other, desc: "Varios"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      name: title
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.error-message
+  test:
+    path: tracker_home.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://parabellumhd.cx/movies.php?view=list&order=date&page=1&search=buried&year=
+    - path: movies.php
+    - path: peliculas_de_dibujos.php
+    - path: peliculas_anime.php
+    - path: series.php
+    - path: series_de_dibujos.php
+    - path: series_anime.php
+    - path: varios.php
+  allowEmptyInputs: true
+  inputs:
+    view: list
+    order: "{{ .Config.sort }}"
+    page: 1
+    search: "{{ .Keywords }}"
+    year: ""
+
+  rows:
+    selector: div.search-results > ul > li, div.movies-list > ul > li, div.series-list> ul > li, div.movies_anime-list > ul > li, div.series_anime-list > ul > li, div.varios-list> ul > li
+
+  fields:
+    category:
+      text: 7
+    _fileinfo:
+      selector: div.file-info
+    title:
+      selector: a[href^="torrent_details.php?id="]
+      filters:
+        - name: append
+          args: " [{{ .Result._fileinfo }}]"
+    details:
+      selector: a[href^="torrent_details.php?id="]
+      attribute: href
+    download:
+      selector: a[href$="&action=download"]
+      attribute: href
+    size:
+      selector: div.file-info
+      filters:
+        - name: regexp
+          args: (\d+\.?\d*\s[G|M|K]B)\s*$
+    seeders:
+      selector: span.seeders
+    leechers:
+      selector: span.leechers
+    grabs:
+      selector: span.snatched
+    date:
+      selector: p
+      filters:
+        - name: replace
+          args: ["Subido: ", ""]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "dd/MM/yyyy zzz"
+    downloadvolumefactor:
+      case:
+        ":root:has(span.freeleech-text:contains(\"FREELEECH ACTIVADO\"))": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.5
+# engine n/a
