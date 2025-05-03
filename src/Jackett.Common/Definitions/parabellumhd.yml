@@ -20,8 +20,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, year]
+    movie-search: [q, year]
 
 settings:
   - name: username
@@ -60,7 +60,12 @@ search:
     view: list
     order: "{{ .Config.sort }}"
     search: "{{ .Keywords }}"
-    year: ""
+    year: "{{ .Query.Year }}"
+  keywordsfilters:
+    - name: re_replace # remove year
+      args: ["\\b(20\\d{2})\\b", ""]
+    - name: re_replace
+      args: ["\\b(19\\d{2})\\b", ""]
 
   rows:
     selector: div.search-results > ul > li
