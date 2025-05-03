@@ -66,6 +66,10 @@ search:
       args: ["\\b(20\\d{2})\\b", ""]
     - name: re_replace
       args: ["\\b(19\\d{2})\\b", ""]
+    - name: re_replace # strip season
+      args: ["(?i)\\b(S\\d+)\\b", ""]
+    - name: re_replace # strip El
+      args: ["(?i)\\b(el)\\b", ""]
 
   rows:
     selector: div.search-results > ul > li
@@ -94,6 +98,8 @@ search:
       filters:
         - name: regexp
           args: (\d+\s*\w+)$
+        - name: re_replace
+          args: ["(?i)(\\d+) (temporadas?)", "Season $1"]
     title:
       selector: a[href^="torrent_details.php?id="]
       filters:
