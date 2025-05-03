@@ -93,7 +93,7 @@ search:
       selector: a[href^="torrent_details.php?id="]
       filters:
         - name: append
-          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }}"
+          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }} Spanish"
     details:
       selector: a[href^="torrent_details.php?id="]
       attribute: href
