@@ -186,6 +186,7 @@ namespace Jackett.Common.Indexers.Definitions
             // Convert to release info
             return ConvertEraiRawsInfoToJackettInfo(filteredItems);
         }
+
         private async Task<IEnumerable<RssFeedItem>> GetItemsFromFeed()
         {
             var RssFeedUri = SiteLink +
@@ -196,7 +197,7 @@ namespace Jackett.Common.Indexers.Definitions
                 RSS_LinkType +
                 "token=" +
                 RSS_Key;
-            logger.Warn(RssFeedUri);
+
             // Retrieve RSS feed
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
             if (result.IsRedirect)
