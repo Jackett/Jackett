@@ -21,10 +21,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "Filmes HD Torrent";
         public override string SiteLink { get; protected set; } = "https://www.filmeshdtorrent.vip/";
 
-        public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://www.filmeshdtorrent.vip/",
-        };
-
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://baixarfilmestorrents.net/",
             "https://comandofilmes.life/",
