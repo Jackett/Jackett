@@ -120,6 +120,11 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "dd/MM/yyyy zzz"
+    description:
+      selector: p
+      filters:
+        - name: regexp
+          args: "Categoría: (.+?),"
     downloadvolumefactor:
       case:
         ":root:has(span.freeleech-text:contains(\"FREELEECH ACTIVADO\"))": 0
