@@ -1,16 +1,21 @@
 ---
 id: bitsearch
+replaces:
+  - solidtorrents
 name: BitSearch
-description: "BitSearch is a Public torrent meta-search engine"
+description: "BitSearch (Solid Torrents) is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
-requestDelay: 2
 links:
   - https://bitsearch.to/
+  - https://solidtorrents.to/
 legacylinks:
   - https://bitsearch.nocensor.cloud/
   - https://bitsearch.mrunblock.bond/
+  - https://solidtorrents.net/
+  - https://solidtorrents.nocensor.cloud/
+  - https://solidtorrents.eu/
 
 caps:
   categories:
@@ -36,8 +41,9 @@ caps:
     "Other/Program": PC/0day
     "Other/Sourcecode": PC
     "Other/Source Code": PC
-    "Other/Video": Other
+    "Other/Video": TV
     Softwares: PC/0day
+    "Softwares/Mac": PC/Mac
     "Softwares/Windows": PC/0day
     TV: TV
     Unknown: Other
@@ -51,10 +57,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: prefer_magnet_links
-    type: checkbox
-    label: Prefer Magnet Links
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -70,28 +72,18 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_category_8000
-    type: info
-    label: About BitSearch Categories
-    default: BitSearch does not properly return categories in its search results for some releases.</br>To add to your Apps' Torznab indexer, you will need to include the 8000(Other) category.
 
 search:
   paths:
-     # https://bitsearch.to/search?q=&sort=date&order=desc
-    - path: search
-  inputs:
-    q: "{{ .Keywords }}"
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
-    limit: 100
-    page: 1
+     # https://bitsearch.to/search?q=&sort=date&order=desc&limit=100
+    - path: "{{ if .Keywords }}search?q={{ .Keywords }}&sort={{ .Config.sort }}&order={{ .Config.type }}&limit=100{{ else }}latest{{ end }}"
 
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
 
   rows:
-    selector: div.search-result:has(a.dl-torrent), li.search-result:has(a.dl-torrent)
+    selector: li.search-result:has(a.dl-magnet)
 
   fields:
     category:
@@ -101,22 +93,9 @@ search:
     details:
       selector: h5 a
       attribute: href
-    download_optional:
-      selector: a.dl-torrent
-      attribute: href
-      optional: true
-    download:
-      text: "{{ if .Config.prefer_magnet_links }}{{ else }}{{ .Result.download_optional }}{{ end }}"
-      optional: true
     magnet:
       selector: a[href^="magnet:?xt"]
       attribute: href
-    infohash:
-      selector: a[href^="magnet:?xt"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: ([A-F|a-f|0-9]{40})
     grabs_dot:
       selector: div.stats div:has(img[alt="Download"]):contains(".")
       optional: true
@@ -125,16 +104,16 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
-        - name: replace
-          args: ["M", "00000"]
+        - name: re_replace
+          args: ["[MB]", "00000"] # 'billion' too long for Jackett table cell
     grabs_nodot:
       selector: div.stats div:has(img[alt="Download"]):not(:contains("."))
       optional: true
       filters:
         - name: replace
           args: ["K", "000"]
-        - name: replace
-          args: ["M", "000000"]
+        - name: re_replace
+          args: ["[MB]", "000000"]
     grabs:
       text: "{{ if or .Result.grabs_dot .Result.grabs_nodot }}{{ or .Result.grabs_dot .Result.grabs_nodot }}{{ else }}0{{ end }}"
     size:
@@ -147,16 +126,16 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
-        - name: replace
-          args: ["M", "00000"]
+        - name: re_replace
+          args: ["[MB]", "00000"]
     seeders_nodot:
       selector: div.stats div:has(img[alt="Seeder"]):not(:contains("."))
       optional: true
       filters:
         - name: replace
           args: ["K", "000"]
-        - name: replace
-          args: ["M", "000000"]
+        - name: re_replace
+          args: ["[MB]", "000000"]
     seeders:
       text: "{{ if or .Result.seeders_dot .Result.seeders_nodot }}{{ or .Result.seeders_dot .Result.seeders_nodot }}{{ else }}0{{ end }}"
     leechers_dot:
@@ -167,16 +146,16 @@ search:
           args: [".", ""]
         - name: replace
           args: ["K", "00"]
-        - name: replace
-          args: ["M", "00000"]
+        - name: re_replace
+          args: ["[MB]", "00000"]
     leechers_nodot:
       selector: div.stats div:has(img[alt="Leecher"]):not(:contains("."))
       optional: true
       filters:
         - name: replace
           args: ["K", "000"]
-        - name: replace
-          args: ["M", "000000"]
+        - name: re_replace
+          args: ["[MB]", "000000"]
     leechers:
       text: "{{ if or .Result.leechers_dot .Result.leechers_nodot }}{{ or .Result.leechers_dot .Result.leechers_nodot }}{{ else }}0{{ end }}"
     date:

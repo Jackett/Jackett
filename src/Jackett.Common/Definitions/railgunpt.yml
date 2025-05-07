@@ -1,31 +1,29 @@
 ---
-id: hdatmos
-name: HDAtmos
-description: "HDAtmos is a CHINESE Private Torrent Tracker for HD MOVIES / TV / GENERAL"
+id: railgunpt
+name: RailgunPT
+description: "RailgunPT is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
-  - https://hdatmos.club/
+  - https://bilibili.download/
 
 caps:
-  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies/电影", default: true}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片", default: true}
-    - {id: 405, cat: TV/Anime, desc: "Animations/动漫", default: true}
-    - {id: 402, cat: TV, desc: "TV Series/电视剧", default: true}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/MV演唱会", default: true}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育", default: true}
-    - {id: 408, cat: Audio, desc: "HQ Audio/音乐", default: true}
-    - {id: 416, cat: Audio, desc: "洗版区/音乐", default: false}
-    - {id: 415, cat: TV/Sport, desc: "洗版区/体育", default: false}
-    - {id: 414, cat: Audio/Video, desc: "洗版区/MV演唱会", default: false}
-    - {id: 413, cat: TV/Anime, desc: "洗版区/动漫", default: false}
-    - {id: 412, cat: TV, desc: "洗版区/电视剧", default: false}
-    - {id: 411, cat: TV/Documentary, desc: "洗版区/纪录片", default: false}
-    - {id: 410, cat: Movies, desc: "洗版区/电影", default: false}
+    - {id: 408, cat: Audio, desc: "音乐 / HQ Audio"}
+    - {id: 409, cat: Other, desc: "其他 / Misc"}
+    - {id: 407, cat: TV/Sport, desc: "体育 / Sports"}
+    - {id: 406, cat: Audio/Video, desc: "MV / Music Videos"}
+    - {id: 403, cat: TV, desc: "综艺 / TV Shows"}
+    - {id: 402, cat: TV, desc: "剧集 / TVSeries"}
+    - {id: 405, cat: TV/Anime, desc: "动漫 / Anime"}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片 / Documentary"}
+    - {id: 420, cat: Other, desc: "下架视频备份"}
+    - {id: 419, cat: Books/Comics, desc: "漫画 / Comics"}
+    - {id: 412, cat: Console, desc: "游戏 / Games"}
+    - {id: 411, cat: Books/Other, desc: "学习 / Study"}
+    - {id: 410, cat: PC, desc: "软件 / Software"}
+    - {id: 401, cat: Movies, desc: "电影 / Movies"}
 
   modes:
     search: [q]
@@ -46,7 +44,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the HDAtmos Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Rain Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -74,11 +72,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
-  - name: info_special
-    type: info
-    label: Special Categories
-    default: "Only <b>Power User</b> or above can view Special section. Searching for 洗版区 categories by users below this class will result in search errors."
+    default: "Account retention rules:<ol><li>Users Level 5 and above will be retained forever</li><li>Users of Level 4 and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 300 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 120 consecutive days</li><li>Users with no traffic (i.e. upload/download data is 0) within 30 days after registration will have their accounts deleted.</li></ol>"
 
 login:
   path: login.php
@@ -99,8 +93,6 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
-      message:
-        selector: td.text
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -108,9 +100,6 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [401, 404, 405, 402, 406, 407, 408]
-    - path: special.php
-      categories: [416, 415, 414, 413, 412, 411, 410]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
@@ -127,7 +116,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -149,9 +138,20 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -161,7 +161,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -171,13 +171,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(7)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -192,7 +192,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 1.0
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.12 2024-07-13
+# NexusPHP v1.8.15 2024-12-23

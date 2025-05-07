@@ -46,7 +46,7 @@ Prior versions of Jackett are no longer supported.
  * Bangumi Moe
  * BigFANGroup
  * BitRu
- * BitSearch
+ * BitSearch (Solid Torrents)
  * BluDV
  * BlueRoms
  * BT.etree
@@ -57,6 +57,7 @@ Prior versions of Jackett are no longer supported.
  * cpasbien
  * cpasbienClone
  * CrackingPatching
+ * DaMagNet
  * DivxTotal
  * dmhy
  * DonTorrent
@@ -80,9 +81,7 @@ Prior versions of Jackett are no longer supported.
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
- * LAPUMiA
  * LePorno.info
- * Libronube
  * LimeTorrents
  * LinuxTracker
  * Mac Torrents Download
@@ -117,7 +116,6 @@ Prior versions of Jackett are no longer supported.
  * Sexy-Pics
  * Shana Project
  * ShowRSS
- * Solid Torrents
  * sosulki
  * SubsPlease
  * sukebei.Nyaa.si
@@ -131,7 +129,6 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
- * TorrentFunk
  * TorrentDosFilmes
  * TorrentDownload
  * TorrentKitty
@@ -142,7 +139,6 @@ Prior versions of Jackett are no longer supported.
  * Torrentsome (토렌트썸)
  * torrentssg (토렌트쓱)
  * Torrenttip (토렌트팁)
- * Torrentz2nz
  * TrahT
  * truPornolabs
  * U3C3
@@ -319,6 +315,7 @@ Prior versions of Jackett are no longer supported.
  * CrabPT (蟹黄堡)
  * CrazySpirits
  * CrnaBerza
+ * cspt (财神)
  * cyanbug (大青虫)
  * DANISH BYTES
  * Dark-Shadow
@@ -337,7 +334,6 @@ Prior versions of Jackett are no longer supported.
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
- * Enthralled
  * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
@@ -382,7 +378,6 @@ Prior versions of Jackett are no longer supported.
  * HD-Torrents (HDT)
  * HD-UNiT3D
  * HDArea (HDA)
- * HDAtmos
  * HDBao
  * HDBits [![(invite needed)][inviteneeded]](#)
  * HDCiTY (HDC) [![(invite needed)][inviteneeded]](#)
@@ -397,13 +392,13 @@ Prior versions of Jackett are no longer supported.
  * HDTorrents.it [PAY2DL]
  * HDTurk
  * HDU
- * HDVIDEO
  * Hebits (HB)
  * HellasHut
  * HHanClub
  * HHD
  * HomePornTorrents (HPT)
  * House of Devil
+ * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * iAnon
  * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
@@ -415,7 +410,6 @@ Prior versions of Jackett are no longer supported.
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
- * IrishTV (ITV)
  * ItaTorrents
  * JME-REUNIT3D
  * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
@@ -434,12 +428,11 @@ Prior versions of Jackett are no longer supported.
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * Le-Cinephile
- * LearnBits
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
- * LetSeed
+ * LetSeed [![(invite needed)][inviteneeded]](#)
  * Libble
  * LibraNet (LN)
  * LinkoManija
@@ -485,7 +478,7 @@ Prior versions of Jackett are no longer supported.
  * OurBits (HDPter)
  * P2PBG
  * Panda
- * PandaHD
+ * ParabellumHD
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
@@ -521,8 +514,8 @@ Prior versions of Jackett are no longer supported.
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
+ * RailgunPT
  * Rain (雨)
- * RareShare2
  * Rastastugan
  * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
@@ -532,7 +525,6 @@ Prior versions of Jackett are no longer supported.
  * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
- * RoTorrent
  * Rousi
  * SAMARITANO
  * SATClubbing
@@ -601,7 +593,6 @@ Prior versions of Jackett are no longer supported.
  * Torrenting (TT)
  * TorrentLeech (TL)
  * TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
- * TorrentSeeds (TS)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
  * TranceTraffic

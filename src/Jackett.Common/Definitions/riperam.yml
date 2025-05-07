@@ -12,7 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 238, cat: Movies, desc: "Новинки кино (2024). Новые фильмы скачать бесплатно"}
+    - {id: 238, cat: Movies, desc: "Новинки кино (2024-2025). Новые фильмы скачать бесплатно"}
     - {id: 425, cat: Movies/HD, desc: "DVDRip / DVD-5/DVD-9"}
     - {id: 50, cat: Movies/HD, desc: "DVDRip"}
     - {id: 52, cat: Movies/HD, desc: "DVD-5/DVD-9"}
@@ -25,6 +25,7 @@ caps:
     - {id: 350, cat: Movies, desc: "Видео (iPhone, iPod Touch)"}
     - {id: 351, cat: Movies, desc: "HD Видео (Apple TV, iPad)"}
     - {id: 352, cat: Movies, desc: "Видео для смартфонов и КПК"}
+    - {id: 1497, cat: Movies, desc: "Новинки кино (2025). Новые фильмы скачать бесплатно"}
     - {id: 239, cat: Movies, desc: "Фильмы, мультфильмы"}
     - {id: 420, cat: Movies, desc: "Зарубежные фильмы"}
     - {id: 12, cat: Movies, desc: "Зарубежные фильмы до 2000го года..."}

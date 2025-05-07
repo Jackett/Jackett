@@ -1,0 +1,148 @@
+---
+id: parabellumhd
+name: ParabellumHD
+description: "ParabellumHD is a SPANISH Private Torrent Tracker for MOVIES / TV"
+language: es-ES
+type: private
+encoding: UTF-8
+links:
+  - https://parabellumhd.cx/
+
+caps:
+  categorymappings:
+    - {id: "Películas", cat: Movies, desc: "Películas"}
+    - {id: "Series", cat: TV, desc: "Series"}
+    - {id: "Películas de dibujos", cat: Movies/Other, desc: "Películas de dibujos"}
+    - {id: "Series de dibujos", cat: TV/Other, desc: "Series de dibujos"}
+    - {id: "Películas anime", cat: Movies/Other, desc: "Películas anime"}
+    - {id: "Series anime", cat: TV/Anime, desc: "Series anime"}
+    - {id: "Varios", cat: Other, desc: "Varios"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, year]
+    movie-search: [q, year]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      name: title
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.error-message
+  test:
+    path: tracker_home.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://parabellumhd.cx/search.php?page=1&view=list&order=date&search=&year=
+    - path: search.php
+  allowEmptyInputs: true
+  inputs:
+    page: 1
+    view: list
+    order: "{{ .Config.sort }}"
+    search: "{{ .Keywords }}"
+    # if the year is not available in .Query.Year then extract it from .Query.Keywords if found
+    year: "{{ if .Query.Year }}{{ .Query.Year }}{{ else }}{{ re_replace .Query.Keywords \"(.*\\b([1|2][9|0]\\d{2})\\b.*)\" \"$2\" }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace # remove year
+      args: ["\\b(20\\d{2})\\b", ""]
+    - name: re_replace
+      args: ["\\b(19\\d{2})\\b", ""]
+    - name: re_replace # strip season
+      args: ["(?i)\\b(S\\d+)\\b", ""]
+    - name: re_replace # strip El
+      args: ["(?i)\\b(el)\\b", ""]
+
+  rows:
+    selector: div.search-results > ul > li
+
+  fields:
+    category:
+      selector: p
+      filters:
+        - name: regexp
+          args: "Categoría: (.+?),"
+    _format:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: "Formato: (.+?),"
+    _resolution:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: "Resolución: (.+?),"
+    _seasons:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: (\d+\s*\w+)$
+        - name: re_replace
+          args: ["(?i)(\\d+) (temporadas?)", "Season $1"]
+    title:
+      selector: a[href^="torrent_details.php?id="]
+      filters:
+        - name: append
+          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }} Spanish"
+    details:
+      selector: a[href^="torrent_details.php?id="]
+      attribute: href
+    download:
+      selector: a[href$="&action=download"]
+      attribute: href
+    size:
+      selector: div.file-info
+      filters:
+        - name: regexp
+          args: "Tamaño: (.+?),"
+    seeders:
+      selector: span.seeders
+    leechers:
+      selector: span.leechers
+    grabs:
+      selector: span.snatched
+    date:
+      selector: p
+      filters:
+        - name: regexp
+          args: (\d{2}/\d{2}/\d{4})
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "dd/MM/yyyy zzz"
+    description:
+      selector: p
+      filters:
+        - name: regexp
+          args: "Categoría: (.+?),"
+    downloadvolumefactor:
+      case:
+        ":root:has(span.freeleech-text:contains(\"FREELEECH ACTIVADO\"))": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.5
+# engine n/a

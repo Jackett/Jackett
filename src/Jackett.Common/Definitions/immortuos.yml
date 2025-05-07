@@ -35,6 +35,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_free
+    type: info
+    label: About OnlyUpload at Immortuos
+    default: "OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech)."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -90,7 +94,7 @@ search:
     qty: 100
     page: 0
     view: list
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    onlyup: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     # can search by genre but need range support. &genres%5B%5D=Action&genres%5B%5D=Comedy for Action and Comedy
 
   rows:

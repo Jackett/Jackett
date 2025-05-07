@@ -119,7 +119,7 @@ search:
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
   rows:
-    selector: tr.t-row
+    selector: tr.t-row:has(a[href^="download.php?id="])
     filters:
       - name: andmatch
 

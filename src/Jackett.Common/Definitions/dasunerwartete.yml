@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 145, cat: Movies, desc: "Filme > DRG"}
     - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
     - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
     - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}

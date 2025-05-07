@@ -155,7 +155,8 @@ login:
     selector: form[name="jump1"]
 
 search:
-  path: index.php
+  paths:
+    - path: index.php
   keywordsfilters:
     - name: re_replace
       args: ["(?i)S(\\d+)", " $1 "]

@@ -91,7 +91,8 @@ login:
 
 search:
   # https://mnvv2.info/browse.php?showsearch=1&c13=1&c3=1&search=&blah=0&incldead=1&team=0&orderby=added&sort=desc&language=all
-  path: browse.php
+  paths:
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"

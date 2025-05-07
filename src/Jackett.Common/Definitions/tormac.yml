@@ -109,7 +109,7 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
+    path: /
     selector: "a[onclick=\"return post2url('login.php', {logout: 1});\"]"
 
 search:

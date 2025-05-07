@@ -70,7 +70,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ul><li>Sixth degree burn (Extreme User) and above will be retained forever</li><li>Second degree burn (Elite User) and above that have their accounts parked (in the control panel) for 60 consecutive days will be deleted</li><li>Users who have parked their accounts and do not log in for 60 consecutive days will have their accounts deleted</li><li>Users who have not parked their accounts will have their accounts deleted if they do not log in for 60 consecutive days</li><li>Users without traffic (i.e. upload / download data are all 0) will have their accounts deleted if they do not log in for 14 consecutive days.</li></ul>"
+    default: "Account retention rules:<ul><li>Ultimate User and above will keep the account forever</li><li>Veteran User level accounts will not be disabled if they are parked (control panel)</li><li>Unparked accounts will be banned if they have not logged in for 60 days</li><li>Users below Veteran User level will be banned if they have not logged in for more than 300 days</li><li>Users who have not generated any traffic in 30 days (i.e. upload/download are 0) will be banned</li><li>Banned accounts will be deleted if they have not logged in for more than 365 days</li></ul>"
 
 login:
   # using cookie method because site regularly disables login page for certain events during the year
@@ -174,8 +174,8 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
-      text: 129600
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
     description_verified:
       case:
         span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"

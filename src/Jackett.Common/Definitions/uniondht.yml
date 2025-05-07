@@ -11,41 +11,15 @@ links:
 caps:
   categorymappings:
     - {id: 34, cat: PC/Games, desc: "Игры для ПК (общее)"}
-    - {id: 59, cat: PC/Games, desc: " |- Демо-версии"}
-    - {id: 58, cat: PC/Games, desc: " |- NoCD / NoDVD"}
-    - {id: 57, cat: PC/Games, desc: " |- Русификаторы"}
-    - {id: 56, cat: PC/Games, desc: " |- Патчи"}
-    - {id: 55, cat: PC/Games, desc: " |- Чит-программы, трейнеры, сейвы"}
-    - {id: 54, cat: PC/Games, desc: " |- Дополнения для игр"}
-    - {id: 53, cat: PC/Games, desc: " |- Приложенные к игровым журналам материалы"}
-    - {id: 902, cat: PC/Games, desc: " |- Дополнительные материалы, бонусные диски, гайды"}
+    - {id: 59, cat: PC/Games, desc: " |- Игры в разработке и демо-версии"}
+    - {id: 58, cat: PC/Games, desc: " |- Разное (дополнения, патчи, русификаторы)"}
     - {id: 35, cat: PC/Games, desc: "Горячие новинки"}
-    - {id: 36, cat: PC/Games, desc: "Аркады"}
-    - {id: 65, cat: PC/Games, desc: " |- Аркады (разное)"}
-    - {id: 64, cat: PC/Games, desc: " |- Логические аркады"}
-    - {id: 63, cat: PC/Games, desc: " |- Настольные и карточные аркады"}
-    - {id: 62, cat: PC/Games, desc: " |- Мини/флеш-игры"}
     - {id: 37, cat: PC/Games, desc: "Приключения и квесты"}
+    - {id: 36, cat: PC/Games, desc: "Аркады"}
     - {id: 38, cat: PC/Games, desc: "Стратегии"}
-    - {id: 69, cat: PC/Games, desc: " |- RTS (стратегии в реальном времени)"}
-    - {id: 68, cat: PC/Games, desc: " |- TBS (пошаговые стратегии)"}
-    - {id: 67, cat: PC/Games, desc: " |- Wargame"}
-    - {id: 66, cat: PC/Games, desc: " |- Экономические стратегии"}
     - {id: 39, cat: PC/Games, desc: "Симуляторы"}
-    - {id: 74, cat: PC/Games, desc: " |- Авиасимуляторы"}
-    - {id: 73, cat: PC/Games, desc: " |- Спортивные симуляторы"}
-    - {id: 72, cat: PC/Games, desc: " |- Космические симуляторы"}
-    - {id: 71, cat: PC/Games, desc: " |- Гоночные симуляторы"}
-    - {id: 70, cat: PC/Games, desc: " |- Другие симуляторы"}
-    - {id: 40, cat: PC/Games, desc: "Action"}
-    - {id: 78, cat: PC/Games, desc: " |- FPS (1st Person)"}
-    - {id: 77, cat: PC/Games, desc: " |- TPS (3rd Person)"}
-    - {id: 76, cat: PC/Games, desc: " |- Stealth Action"}
-    - {id: 75, cat: PC/Games, desc: " |- Тактические шутеры"}
-    - {id: 41, cat: PC/Games, desc: "RPG"}
-    - {id: 43, cat: PC/Games, desc: "Многопользовательские игры"}
-    - {id: 81, cat: PC/Games, desc: " |- MMORPG"}
-    - {id: 44, cat: PC/Games, desc: "Для самых маленьких"}
+    - {id: 40, cat: PC/Games, desc: "Экшены"}
+    - {id: 41, cat: PC/Games, desc: "Ролевые игры"}
 
     - {id: 101, cat: Console/XBox, desc: "Xbox"}
     - {id: 139, cat: Console/XBox 360, desc: " |- XBox360 | Игры"}
@@ -60,42 +34,38 @@ caps:
     - {id: 972, cat: Console/PS3, desc: " |- PS3 | Emulation"}
     - {id: 126, cat: Console/PSP, desc: " |- PSN | Игры"}
 
-    - {id: 154, cat: Movies, desc: "Зарубежные фильмы"}
-    - {id: 1216, cat: Movies, desc: " |- Зарубежные фильмы 2020"}
-    - {id: 783, cat: Movies, desc: " |- Зарубежные фильмы 2016-2019 (Новинки зарубежного кино)"}
-    - {id: 197, cat: Movies, desc: " |- Зарубежные фильмы до 2016"}
-    - {id: 1142, cat: Movies, desc: " |- Фильмы Ближнего Зарубежья"}
-    - {id: 155, cat: Movies, desc: "Российские фильмы"}
-    - {id: 784, cat: Movies, desc: " |- Российские фильмы 2016-2020 (Новинки русского кино)"}
-    - {id: 184, cat: Movies, desc: " |- Российские фильмы до 2016"}
+    - {id: 154, cat: Movies, desc: "Новинки фильмов и мультфильмов (2025)"}
+    - {id: 1216, cat: Movies/UHD, desc: " |- Новинки | UHD 4K"}
+    - {id: 783, cat: Movies/HD, desc: " |- Новинки | HD"}
+    - {id: 197, cat: Movies, desc: " |- Новинки | Rips"}
+    - {id: 1142, cat: Movies/SD, desc: " |- Новинки | CAMRip, TS, WEBRip (LQ)"}
+    - {id: 1233, cat: Movies, desc: "Зарубежное кино"}
+    - {id: 1234, cat: Movies/UHD, desc: " |- Зарубежное кино | UHD 4K"}
+    - {id: 1235, cat: Movies/HD, desc: " |- Зарубежное кино | HD"}
+    - {id: 1236, cat: Movies, desc: " |- Зарубежное кино | Rips"}
+    - {id: 1237, cat: Movies, desc: " |- Сборники фильмов"}
+    - {id: 155, cat: Movies, desc: "Российское кино"}
+    - {id: 784, cat: Movies/UHD, desc: " |- Российское кино | UHD 4K"}
+    - {id: 184, cat: Movies/BluRay, desc: " |- Российское кино | Blu-Ray и BDRemux"}
+    - {id: 1226, cat: Movies/HD, desc: " |- Российское кино | HD Rips"}
+    - {id: 1227, cat: Movies, desc: " |- Российское и советское кино | Rips"}
+    - {id: 830, cat: Movies/3D, desc: "3D Фильмы, мультфильмы, сериалы"}
+    - {id: 156, cat: Movies, desc: "Зарубежные и Российские сериалы"}
+    - {id: 1228, cat: Movies, desc: " |- Новинки зарубежных сериалов (2024-2025)"}
+    - {id: 1229, cat: Movies, desc: " |- Зарубежные сериалы до 2024г."}
+    - {id: 1230, cat: Movies, desc: " |- Российские cериалы"}
     - {id: 158, cat: Movies, desc: "Мультфильмы"}
-    - {id: 924, cat: Movies, desc: " |- Мультфильмы 2016-2020 (Новинки мультфильмов)"}
-    - {id: 172, cat: Movies, desc: " |- Мультфильмы до 2016"}
-    - {id: 830, cat: Movies/3D, desc: "3D Видео"}
-    - {id: 1128, cat: Movies/3D, desc: " |- 3D Фильмы, кино"}
-    - {id: 832, cat: Movies/3D, desc: " |- 3D Мультфильмы"}
-    - {id: 834, cat: Movies/3D, desc: " |- 3D Разное"}
-    - {id: 187, cat: TV, desc: "Трейлеры и дополнительные материалы"}
-    - {id: 156, cat: TV, desc: "Зарубежные сериалы"}
-    - {id: 157, cat: TV/Anime, desc: "Российские сериалы"}
+    - {id: 924, cat: Movies/UHD, desc: " |- Мультфильмы | UHD 4K"}
+    - {id: 172, cat: Movies/BluRay, desc: " |- Мультфильмы | Blu-Ray и BDRemux"}
+    - {id: 1232, cat: Movies, desc: " |- Мультфильмы | Rips"}
+    - {id: 1231, cat: Movies/HD, desc: " |- Мультфильмы | HD Rips"}
     - {id: 159, cat: TV, desc: "Мультсериалы"}
     - {id: 160, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
-    - {id: 161, cat: TV, desc: "Развлекательные телепередачи и шоу"}
 
     - {id: 211, cat: TV/Anime, desc: "Аниме (Основной)"}
-    - {id: 517, cat: TV/Anime, desc: " |- Аниме | Rips"}
-    - {id: 518, cat: TV/Anime, desc: " |- Аниме | HD Rips"}
-    - {id: 928, cat: TV/Anime, desc: " |- Блич | Bleach"}
-    - {id: 929, cat: TV/Anime, desc: " |- Ван-Пис | One Piece"}
-    - {id: 930, cat: TV/Anime, desc: " |- Наруто | Naruto"}
-    - {id: 519, cat: TV/Anime, desc: " |- Азиатская анимация"}
-    - {id: 520, cat: TV/Anime, desc: " |- Аниме | Разное"}
-    - {id: 212, cat: TV/Anime, desc: "Аниме (DVD и Blu-ray)"}
-    - {id: 230, cat: TV/Anime, desc: " |- Аниме | DVD"}
-    - {id: 521, cat: TV/Anime, desc: " |- Аниме | Blu-Ray и BDRemux"}
-    - {id: 214, cat: TV/Anime, desc: "Манга и прочий арт"}
-    - {id: 226, cat: TV/Anime, desc: " |- Манга"}
-    - {id: 225, cat: TV/Anime, desc: " |- Обои, артбуки и др."}
+    - {id: 1238, cat: TV/Anime, desc: " |- Онгоинги и новинки аниме 2025"}
+    - {id: 517, cat: TV/Anime, desc: " |- Аниме (HD)"}
+    - {id: 518, cat: TV/Anime, desc: " |- Аниме (Rips | DVD)"}
 
     - {id: 810, cat: Books, desc: "Книги и журналы"}
     - {id: 812, cat: Books, desc: " |- Художественная литература"}
@@ -128,8 +98,8 @@ caps:
     - {id: 1132, cat: PC, desc: " |- Windows 10"}
     - {id: 939, cat: PC, desc: " |- Windows 8"}
     - {id: 346, cat: PC, desc: " |- Windows 7"}
-    - {id: 348, cat: PC, desc: " |- Windows XP"}
     - {id: 347, cat: PC, desc: " |- Windows Vista"}
+    - {id: 348, cat: PC, desc: " |- Windows XP"}
     - {id: 349, cat: PC, desc: " |- Настольные OS, выпущенные до 2001 года (Microsoft Windows OS.."}
     - {id: 345, cat: PC, desc: " |- Серверные (Microsoft Windows OS)"}
     - {id: 344, cat: PC, desc: " |- Разное (Microsoft Windows OS)"}
@@ -267,6 +237,7 @@ caps:
     - {id: 1084, cat: XXX, desc: " |- Видео для телефонов и КПК / Pocket РС & Phone Video"}
     - {id: 872, cat: XXX, desc: " |- Японские порно фильмы"}
     - {id: 1165, cat: XXX, desc: "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Len.."}
+    - {id: 1221, cat: XXX, desc: " |- Эротические и Документальные видео (DVD) / Erotic, Documenta..."}
     - {id: 1166, cat: XXX, desc: " |- Эротические и Документальные видео (HD Video) / Erotic, Docu.."}
     - {id: 1167, cat: XXX, desc: " |- Фильмы с сюжетом, Классические (DVD) / Feature & Vignett.."}
     - {id: 1168, cat: XXX, desc: " |- Гонзо, Лесбо и Фильмы без сюжета (DVD) / Gonzo, All Girl &.."}
@@ -301,6 +272,7 @@ caps:
     - {id: 1173, cat: XXX, desc: " |- Сайтрипы 2019 (HD Video) / SiteRip's 2019 (HD Video)"}
     - {id: 1172, cat: XXX, desc: " |- Сайтрипы 2020 (HD Video) / SiteRip's 2020 (HD Video)"}
     - {id: 1218, cat: XXX, desc: " |- Сайтрипы 2021 (HD Video) / SiteRip's 2021 (HD Video)"}
+    - {id: 1223, cat: XXX, desc: " |- Сайтрипы 2022 (HD Video) / SiteRip's 2022 (HD Video)"}
     - {id: 867, cat: XXX, desc: " |- Сайтрипы 1991-2010 / SiteRip's 1991-2010"}
     - {id: 1122, cat: XXX, desc: " |- Сайтрипы 2011-2012 / SiteRip's 2011-2012"}
     - {id: 1121, cat: XXX, desc: " |- Сайтрипы 2013 / SiteRip's 2013"}
@@ -312,14 +284,17 @@ caps:
     - {id: 1143, cat: XXX, desc: " |- Сайтрипы 2019 / SiteRip's 2019"}
     - {id: 1144, cat: XXX, desc: " |- Сайтрипы 2020 / SiteRip's 2020"}
     - {id: 1219, cat: XXX, desc: " |- Сайтрипы 2021 / SiteRip's 2021"}
+    - {id: 1224, cat: XXX, desc: " |- Сайтрипы 2021 / SiteRip's 2022"}
     - {id: 1085, cat: XXX, desc: " |- Сцены из фильмов / Movie Scenes (кроме SiteRip)"}
     - {id: 1171, cat: XXX, desc: " |- Порноролики Разное / Clips (various)"}
+    - {id: 1222, cat: XXX, desc: " |- Компиляции и Музыкальные порно клипы / Compilations & Po.."}
     - {id: 1140, cat: XXX, desc: " |- Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual R"}
     - {id: 1159, cat: XXX, desc: "Японское и китайское порно / Japanese & Chinese Adult Vi.."}
     - {id: 1160, cat: XXX, desc: " |- Паки японских фильмов и сайтрипов / Full Length Japanese Mov.."}
     - {id: 1164, cat: XXX, desc: " |- Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movie.."}
     - {id: 1163, cat: XXX, desc: " |- Японские фильмы и сайтрипы 1991-2014 / Japanese Movies &.."}
     - {id: 1162, cat: XXX, desc: " |- Японские фильмы и сайтрипы 2015-2022 / Japanese Movies &.."}
+    - {id: 1220, cat: XXX, desc: " |- Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movie.."}
     - {id: 1161, cat: XXX, desc: " |- Архив (Японское порно)"}
     - {id: 848, cat: XXX, desc: "Фото и журналы / Photos & Magazines"}
     - {id: 1190, cat: XXX, desc: " |- MetArt & MetModels"}

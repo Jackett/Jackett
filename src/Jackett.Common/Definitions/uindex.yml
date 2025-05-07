@@ -17,7 +17,7 @@ caps:
     - {id: 5, cat: PC, desc: "Apps"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Anime, desc: "Anime"}
-    - {id: 8, cat: Other, desc: "Other"}
+    - {id: 0, cat: Other, desc: "Other"}
 
   modes:
     search: [q]

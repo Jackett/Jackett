@@ -18,7 +18,7 @@ caps:
     - {id: 140, cat: TV/Documentary, desc: "Doku - SD"}
     - {id: 142, cat: TV/Documentary, desc: "Doku - Sonstige"}
     - {id: 120, cat: Books, desc: "Ebook"}
-    - {id: 135, cat: Movies/UHD, desc: "Filme - 2160p"}
+    - {id: 150, cat: Movies/UHD, desc: "Filme - 2160p"}
     - {id: 131, cat: TV/Anime, desc: "Filme - Animie"}
     - {id: 101, cat: Movies/BluRay, desc: "Filme - Blue Ray"}
     - {id: 102, cat: Movies/Other, desc: "Filme - Bollywood"}
@@ -116,7 +116,8 @@ login:
 
 search:
   # https://the-new-fun.spdns.eu/browse.php?showsearch=1&c140=1&c142=1&search=2022+1080p&incldead=1&orderby=added&sort=desc
-  path: browse.php
+  paths:
+    - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     showsearch: 1

@@ -96,7 +96,8 @@ login:
 
 search:
   # https://hdf.world/torrents.php?searchstr=Un+Singe+en+hiver+1962&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
-  path: torrents.php
+  paths:
+    - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     searchstr: "{{ .Keywords }}"

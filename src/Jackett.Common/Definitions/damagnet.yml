@@ -1,0 +1,82 @@
+---
+id: damagnet
+name: DaMagNet
+description: "DaMagNet is a Public DHT Crawler"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://damag.net/
+
+caps:
+  categorymappings:
+    - {id: Other, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+download:
+  infohash:
+    hash:
+      selector: a[href^="magnet:?xt"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: input[name="q"]
+      attribute: value
+      filters:
+        - name: validfilename
+
+search:
+  paths:
+    # https://damag.net/?q=2025&wanted=100
+    - path: /
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    # 20, 50, 100
+    wanted: 100
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
+  rows:
+    selector: table.table-striped > tbody > tr:has(a)
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: a
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    date:
+      text: now
+    files:
+      selector: span.label
+    size:
+      selector: span[id^="size"]
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

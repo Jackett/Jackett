@@ -21,6 +21,7 @@ caps:
     - {id: 51, cat: Movies/SD, desc: "Film-Cine"}
     - {id: 40, cat: TV/HD, desc: "TV-HD"}
     - {id: 41, cat: TV/SD, desc: "TV-SD"}
+    - {id: 53, cat: TV/Documentary, desc: "Documentario"}
     - {id: 46, cat: Audio, desc: "Musica"}
     - {id: 42, cat: PC/Games, desc: "PC-Giochi"}
     - {id: 43, cat: PC/0day, desc: "App-Win"}

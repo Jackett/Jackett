@@ -12,12 +12,12 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 2, cat: TV, desc: "Série"}
-    - {id: 3, cat: Audio, desc: "Musique"}
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV, desc: "Séries"}
+    - {id: 3, cat: Books, desc: "Ebook"}
     - {id: 4, cat: Console, desc: "Jeux"}
     - {id: 5, cat: PC, desc: "Logiciel"}
-    - {id: 6, cat: Books, desc: "Ebook"}
+    - {id: 6, cat: Audio, desc: "Musique"}
 
   modes:
     search: [q]
@@ -181,10 +181,6 @@ search:
     genre:
       selector: meta.genres
       filters:
-        - name: re_replace
-          args: ["(?i)(Science Fiction)", "Science_Fiction"]
-        - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -230,7 +226,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.5 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.5
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
-# json UNIT3D 9.0.0
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json UNIT3D 9.0.1

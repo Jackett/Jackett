@@ -28,10 +28,9 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "mejortorrent";
         public override string Name => "MejorTorrent";
         public override string Description => "MejorTorrent is a Public site - Hay veces que un torrent viene mejor! :)";
-        public override string SiteLink { get; protected set; } = "https://www29.mejortorrent.eu/";
+        public override string SiteLink { get; protected set; } = "https://www30.mejortorrent.eu/";
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www14.mejortorrent.rip/",
             "https://www15.mejortorrent.rip/",
             "https://www16.mejortorrent.rip/",
             "https://www17.mejortorrent.zip/",
@@ -40,12 +39,13 @@ namespace Jackett.Common.Indexers.Definitions
             "https://www20.mejortorrent.zip/",
             "https://www21.mejortorrent.zip/",
             "https://www22.mejortorrent.zip/",
-             "https://www23.mejortorrent.zip/",
-             "https://www24.mejortorrent.zip/",
-             "https://www25.mejortorrent.zip/",
-             "https://www26.mejortorrent.eu/",
-             "https://www27.mejortorrent.eu/",
-             "https://www28.mejortorrent.eu/",
+            "https://www23.mejortorrent.zip/",
+            "https://www24.mejortorrent.zip/",
+            "https://www25.mejortorrent.zip/",
+            "https://www26.mejortorrent.eu/",
+            "https://www27.mejortorrent.eu/",
+            "https://www28.mejortorrent.eu/",
+            "https://www29.mejortorrent.eu/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -299,7 +299,17 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var result = await RequestWithCookiesAsync(detailsStr);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    logger.Warn("Fetching {0} returned HTTP 500", detailsStr);
+                    return;
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
 
             var searchResultParser = new HtmlParser();
             using var doc = searchResultParser.ParseDocument(result.ContentString);
@@ -339,7 +349,17 @@ namespace Jackett.Common.Indexers.Definitions
 
             var result = await RequestWithCookiesAsync(detailsStr);
             if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+            {
+                if (result.Status == HttpStatusCode.InternalServerError)
+                {
+                    logger.Warn("Fetching {0} returned HTTP 500", detailsStr);
+                    return;
+                }
+                else
+                {
+                    throw new ExceptionWithConfigData(result.ContentString, configData);
+                }
+            }
 
             var searchResultParser = new HtmlParser();
             using var doc = searchResultParser.ParseDocument(result.ContentString);

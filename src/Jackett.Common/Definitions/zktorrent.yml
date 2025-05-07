@@ -9,7 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.zktorrent3.com/
+  - https://www.zktorrent5.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -23,8 +23,6 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.gktorrent.tw/
-  - https://www.gktorrent.in/
   - https://www.gktorrent.sk/
   - https://www.gktorrent.uno/
   - https://www.gktorrent.gy/
@@ -38,6 +36,8 @@ legacylinks:
   - https://www.zktorrent.com/
   - https://www.zktorrent1.com/
   - https://www.zktorrent2.com/
+  - https://www.zktorrent3.com/
+  - https://www.zktorrent4.com/
 
 caps:
   categorymappings:
@@ -111,10 +111,10 @@ search:
 
   fields:
     category:
-      selector: td:nth-child(1) > i
+      selector: i
       attribute: class
     title_phase1:
-      selector: td:nth-child(1) a
+      selector: a
       filters:
         - name: re_replace
           args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b(19|20\\d{2})\\b)$", "$3 $1$2"]
@@ -133,7 +133,7 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      selector: td:nth-child(1) a
+      selector: a
       attribute: href
       filters:
         - name: regexp
