@@ -9,7 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.zktorrent4.com/
+  - https://www.zktorrent5.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -23,7 +23,6 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.gktorrent.in/
   - https://www.gktorrent.sk/
   - https://www.gktorrent.uno/
   - https://www.gktorrent.gy/
@@ -38,6 +37,7 @@ legacylinks:
   - https://www.zktorrent1.com/
   - https://www.zktorrent2.com/
   - https://www.zktorrent3.com/
+  - https://www.zktorrent4.com/
 
 caps:
   categorymappings:
