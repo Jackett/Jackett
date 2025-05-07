@@ -17,7 +17,7 @@ caps:
     - {id: 20, cat: Audio/Audiobook, desc: "Biography/Memoirs"}
     - {id: 30, cat: Audio/Audiobook, desc: "Business"}
     - {id: 40, cat: Audio/Audiobook, desc: "Childrens"}
-    - {id: 70, cat: Audio/Audiobook, desc: "Computers "}
+    - {id: 70, cat: Audio/Audiobook, desc: "Computers"}
     - {id: 260, cat: Audio/Audiobook, desc: "Crime/Thriller"}
     - {id: 90, cat: Audio/Audiobook, desc: "Fantasy-General"}
     - {id: 100, cat: Audio/Audiobook, desc: "Fantasy-Youth"}

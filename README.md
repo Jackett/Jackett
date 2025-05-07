@@ -334,7 +334,6 @@ Prior versions of Jackett are no longer supported.
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
- * Enthralled
  * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
@@ -433,7 +432,7 @@ Prior versions of Jackett are no longer supported.
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
- * LetSeed
+ * LetSeed [![(invite needed)][inviteneeded]](#)
  * Libble
  * LibraNet (LN)
  * LinkoManija

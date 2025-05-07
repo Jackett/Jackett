@@ -20,8 +20,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, year]
+    movie-search: [q, year]
 
 settings:
   - name: username
@@ -60,7 +60,17 @@ search:
     view: list
     order: "{{ .Config.sort }}"
     search: "{{ .Keywords }}"
-    year: ""
+    # if the year is not available in .Query.Year then extract it from .Query.Keywords if found
+    year: "{{ if .Query.Year }}{{ .Query.Year }}{{ else }}{{ re_replace .Query.Keywords \"(.*\\b([1|2][9|0]\\d{2})\\b.*)\" \"$2\" }}{{ end }}"
+  keywordsfilters:
+    - name: re_replace # remove year
+      args: ["\\b(20\\d{2})\\b", ""]
+    - name: re_replace
+      args: ["\\b(19\\d{2})\\b", ""]
+    - name: re_replace # strip season
+      args: ["(?i)\\b(S\\d+)\\b", ""]
+    - name: re_replace # strip El
+      args: ["(?i)\\b(el)\\b", ""]
 
   rows:
     selector: div.search-results > ul > li
@@ -89,11 +99,13 @@ search:
       filters:
         - name: regexp
           args: (\d+\s*\w+)$
+        - name: re_replace
+          args: ["(?i)(\\d+) (temporadas?)", "Season $1"]
     title:
       selector: a[href^="torrent_details.php?id="]
       filters:
         - name: append
-          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }}"
+          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }} Spanish"
     details:
       selector: a[href^="torrent_details.php?id="]
       attribute: href
