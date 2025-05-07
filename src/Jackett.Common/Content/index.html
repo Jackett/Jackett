@@ -53,12 +53,12 @@
         <div id="warning-external-access" hidden class="alert alert-danger text-center" role="alert">
             <strong>
                 <span class="glyphicon glyphicon-alert"></span> Security Risk: Your instance has external access enabled without using an admin password. <span class="glyphicon glyphicon-alert"></span>
-              <button id="remind-external-access-button" title="Remind me again later" class="btn btn-success btn-xs">
-                  <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
-              </button>
-              <button id="dismiss-external-access-button" title="Do not show again" class="btn btn-danger btn-xs">
-                  <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
-              </button>
+                <button id="remind-external-access-button" title="Remind me again later" class="btn btn-success btn-xs">
+                    <span class="glyphicon glyphicon-hourglass" aria-hidden="true"></span>
+                </button>
+                <button id="dismiss-external-access-button" title="Do not show again" class="btn btn-danger btn-xs">
+                    <span class="glyphicon glyphicon-eye-close" aria-hidden="true"></span>
+                </button>
             </strong>
         </div>
 
@@ -214,8 +214,17 @@
             <input id="jackett-logging" class="form-control input-right" type="checkbox" />
         </div>
         <div class="input-area">
-            <span class="input-header">Cache enabled (recommended): </span>
-            <input id="jackett-cache-enabled" class="form-control input-right" type="checkbox" />
+            <span class="input-header">Cache type (recommended to use): </span>
+            <select id="jackett-cache-type" class="form-control input-right">
+                <option value="0">Disabled</option>
+                <option value="1">Memory</option>
+                <option value="2">SqLite</option>
+                <option value="3">MongoDb</option>
+            </select>
+        </div>
+        <div class="input-area">
+            <span class="input-header" id="input-header-jackett-cache-connection-string">Cache Connection String: </span>
+            <input id="jackett-cache-connection-string" class="form-control input-right" type="text" value="" placeholder="">
         </div>
         <div class="input-area">
             <span class="input-header">Cache TTL (seconds): </span>
@@ -226,12 +235,12 @@
             <input id="jackett-cache-max-results-per-indexer" class="form-control input-right" type="text" value="" placeholder="1000">
         </div>
         <div class="input-area">
-          <span class="input-header">FlareSolverr API URL: </span>
-          <input id="jackett-flaresolverrurl" class="form-control input-right" type="url" value="" placeholder="Blank for default">
+            <span class="input-header">FlareSolverr API URL: </span>
+            <input id="jackett-flaresolverrurl" class="form-control input-right" type="url" value="" placeholder="Blank for default">
         </div>
         <div class="input-area">
-          <span class="input-header">FlareSolverr Max Timeout (ms): </span>
-          <input id="jackett-flaresolverr-maxtimeout" class="form-control input-right" type="text" value="" placeholder="55000">
+            <span class="input-header">FlareSolverr Max Timeout (ms): </span>
+            <input id="jackett-flaresolverr-maxtimeout" class="form-control input-right" type="text" value="" placeholder="55000">
         </div>
         <div class="input-area">
             <span class="input-header">OMDB API key: </span>
@@ -797,6 +806,6 @@
     </script>
 
     <script type="text/javascript" src="../libs/api.js?changed=2017083001"></script>
-    <script type="text/javascript" src="../custom.js?changed=20240420v1"></script>
+    <script type="text/javascript" src="../custom.js?changed=20240613v1"></script>
 </body>
 </html>
