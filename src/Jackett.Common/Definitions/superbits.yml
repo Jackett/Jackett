@@ -24,7 +24,7 @@ caps:
     - {id: 10, cat: Audio/Video, desc: Musikvideos}
     - {id: 11, cat: Books/Mags, desc: E-tidningar}
     - {id: 12, cat: Audio, desc: MP3}
-    - {id: 13, cat: Other, desc: Omslag}
+    - {id: 13, cat: Audio, desc: Pod}
     - {id: 14, cat: Other, desc: Övrigt}
     - {id: 15, cat: PC/Games, desc: PC-Spel}
     - {id: 16, cat: PC/0day, desc: Program}
