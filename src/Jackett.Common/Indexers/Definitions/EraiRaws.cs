@@ -20,10 +20,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "Erai-Raws";
         public override string Description => "Erai-Raws is a Semi-Private team release site for Anime subtitles.";
         public override string SiteLink { get; protected set; } = "https://www.erai-raws.info/";
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://www.erai-raws.info/",
-        };
         public override string[] LegacySiteLinks => new[]
         {
             "https://erairaws.mrunblock.bond/",
@@ -35,8 +31,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        const string RSS_PATH = "feed/?type=magnet&token=";
-
+        const string RSS_FEED = "feed/?";
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -49,6 +44,78 @@ namespace Jackett.Common.Indexers.Definitions
             var rssKey = new StringConfigurationItem("RSSKey") { Value = "" };
             configData.AddDynamic("rssKey", rssKey);
             configData.AddDynamic("rssKeyHelp", new DisplayInfoConfigurationItem(string.Empty, "Find the RSS Key by accessing <a href=\"https://www.erai-raws.info/rss-page/\" target =_blank>Erai-Raws RSS page</a> while you're logged in. Copy the <i>All RSS</i> URL, the RSS Key is the last part. Example: for the URL <b>.../feed/?type=torrent&0879fd62733b8db8535eb1be2333</b> the RSS Key is <b>0879fd62733b8db8535eb1be2333</b>"));
+
+            var rssCategories = new SingleSelectConfigurationItem("Select a Category", new Dictionary<string, string>
+                {
+                    {"none", "-- Categories --"},
+                    {"episodes/", "Airing"},
+                    {"batches/", "Batches"},
+                    {"specials/", "Movies or Special Episodes"},
+                    {"encodes/", "Encodings"},
+                    {"raws/", "Raws"}
+                })
+            { Value = "none" };
+            configData.AddDynamic("rssCategories", rssCategories);
+
+            var rssResolution = new SingleSelectConfigurationItem("Select a Resolution", new Dictionary<string, string>
+                {
+                    {"none", "-- Resolution --"},
+                    {"res=1080p&", "1080p"},
+                    {"res=720p&", "720p"},
+                    {"res=SD&", "SD"}
+                })
+            { Value = "none" };
+            configData.AddDynamic("rssResolution", rssResolution);
+
+            var rssLinkType = new SingleSelectConfigurationItem("Select a Link Type", new Dictionary<string, string>
+                {
+                    {"type=torrent&", "Torrent"},
+                    {"type=magnet&", "Magnet"}
+                })
+            { Value = "type=magnet&" };
+            configData.AddDynamic("rssLinkType", rssLinkType);
+
+            var rssSubtitles = new MultiSelectConfigurationItem("Select one or more Subtitles (None ticked = ALL)", new Dictionary<string, string>
+                {
+                    {"subs[]=us&", "English"},
+                    {"subs[]=br&", "Portuguese(Brazil)"},
+                    {"subs[]=mx&", "Spanish(Latin_America)"},
+                    {"subs[]=es&", "Spanish"},
+                    {"subs[]=sa&", "Arabic"},
+                    {"subs[]=fr&", "French"},
+                    {"subs[]=de&", "German"},
+                    {"subs[]=it&", "Italian"},
+                    {"subs[]=ru&", "Russian"},
+                    {"subs[]=jp&", "Japanese"},
+                    {"subs[]=pt&", "Portuguese"},
+                    {"subs[]=pl&", "Polish"},
+                    {"subs[]=nl&", "Dutch"},
+                    {"subs[]=no&", "Norwegian"},
+                    {"subs[]=fi&", "Finnish"},
+                    {"subs[]=tr&", "Turkish"},
+                    {"subs[]=se&", "Swedish"},
+                    {"subs[]=gr&", "Greek"},
+                    {"subs[]=il&", "Hebrew"},
+                    {"subs[]=ro&", "Romanian"},
+                    {"subs[]=id&", "Indonesian"},
+                    {"subs[]=th&", "Thai"},
+                    {"subs[]=kr&", "Korean"},
+                    {"subs[]=dk&", "Danish"},
+                    {"subs[]=cn&", "Chinese(Simplified&Traditional)"},
+                    {"subs[]=bg&", "Bulgarian"},
+                    {"subs[]=vn&", "Vietnamese"},
+                    {"subs[]=in&", "Hindi"},
+                    {"subs[]=lk&", "Tamil"},
+                    {"subs[]=ua&", "Ukrainian"},
+                    {"subs[]=hu&", "Hungarian"},
+                    {"subs[]=cz&", "Czech"},
+                    {"subs[]=hr&", "Croatian"},
+                    {"subs[]=my&", "Malaysian"},
+                    {"subs[]=sk&", "Slovakian"},
+                    {"subs[]=ph&", "Filipino"}
+                })
+            { Values = new[] { "" } };
+            configData.AddDynamic("rssSubtitles", rssSubtitles);
 
             configData.AddDynamic(
                 "DDoS-Guard",
@@ -86,13 +153,17 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         private TitleParser titleParser = new TitleParser();
-
-        private string RSSKey => ((StringConfigurationItem)configData.GetDynamic("rssKey")).Value;
+        private string RSS_Key => ((StringConfigurationItem)configData.GetDynamic("rssKey")).Value;
+        private string RSS_Categories => ((SingleSelectConfigurationItem)configData.GetDynamic("rssCategories")).Value;
+        private string RSS_Resolution => ((SingleSelectConfigurationItem)configData.GetDynamic("rssResolution")).Value;
+        private string RSS_LinkType => ((SingleSelectConfigurationItem)configData.GetDynamic("rssLinkType")).Value;
+        private string GetRSS_Subtitles()
+        {
+            var rssSubtitles = (MultiSelectConfigurationItem)configData.GetDynamic("rssSubtitles");
+            return string.Join("", rssSubtitles.Values);
+        }
         private bool IsTitleDetailParsingEnabled => ((BoolConfigurationItem)configData.GetDynamic("title-detail-parsing")).Value;
         private bool IsSubsEnabled => ((BoolConfigurationItem)configData.GetDynamic("include-subs")).Value;
-
-        public string RssFeedUri => SiteLink + RSS_PATH + RSSKey;
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -118,6 +189,15 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task<IEnumerable<RssFeedItem>> GetItemsFromFeed()
         {
+            var RssFeedUri = SiteLink +
+                RSS_Categories.Replace("none", string.Empty) +
+                RSS_FEED +
+                RSS_Resolution.Replace("none", string.Empty) +
+                GetRSS_Subtitles() +
+                RSS_LinkType +
+                "token=" +
+                RSS_Key;
+
             // Retrieve RSS feed
             var result = await RequestWithCookiesAndRetryAsync(RssFeedUri);
             if (result.IsRedirect)
