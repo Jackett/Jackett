@@ -626,6 +626,7 @@ Prior versions of Jackett are no longer supported.
  * XWT-Classics
  * XWTorrents (XWT)
  * YggTorrent (YGG)
+ * YggAPI (YGG)
  * YOiNKED
  * YUSCENE
  * Zamunda.net
