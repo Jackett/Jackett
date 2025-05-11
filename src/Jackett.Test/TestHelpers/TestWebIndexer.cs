@@ -32,7 +32,7 @@ namespace Jackett.Test.TestHelpers
         public override TorznabCapabilities TorznabCaps { get; protected set; } = new TorznabCapabilities();
 
         public TestWebIndexer(Logger logger)
-            : base(client: null, configService: null, logger: logger, configData: new ConfigurationData(), p: null, cacheService: null)
+            : base(client: null, configService: null, logger: logger, configData: new ConfigurationData(), p: null, cacheManager: null)
         {
         }
 

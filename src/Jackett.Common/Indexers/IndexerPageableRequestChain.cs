@@ -9,8 +9,10 @@ namespace Jackett.Common.Indexers
 
         public IndexerPageableRequestChain()
         {
-            _chains = new List<List<IndexerPageableRequest>>();
-            _chains.Add(new List<IndexerPageableRequest>());
+            _chains = new List<List<IndexerPageableRequest>>
+            {
+                new List<IndexerPageableRequest>()
+            };
         }
 
         public int Tiers => _chains.Count;

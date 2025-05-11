@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -54,12 +55,12 @@ namespace Jackett.Common.Indexers.Definitions
         };
 
         public NCore(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                     ICacheService cs)
+                     CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataNCore())
         {
         }
