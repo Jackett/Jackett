@@ -68,6 +68,7 @@ search:
       args: ["(?i)\\b(S\\d+)\\b", ""]
     - name: re_replace # strip El
       args: ["(?i)\\b(el)\\b", ""]
+    - name: tolower
 
   rows:
     selector: div.search-results > ul > li
