@@ -13,6 +13,7 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
 
@@ -32,10 +33,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override bool SupportsPagination => true;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
-
-        private static string SearchUrl => "https://passthepopcorn.me/torrents.php";
-        private string AuthKey { get; set; }
-        private string PassKey { get; set; }
 
         // TODO: merge ConfigurationDataAPILoginWithUserAndPasskeyAndFilter class with with ConfigurationDataUserPasskey
         private new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter configData
@@ -58,7 +55,7 @@ namespace Jackett.Common.Indexers.Definitions
             webclient.requestDelay = 4;
         }
 
-        private TorznabCapabilities SetCapabilities()
+        private static TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
             {
@@ -154,7 +151,7 @@ namespace Jackett.Common.Indexers.Definitions
                 queryCollection.Set("page", page.ToString());
             }
 
-            var movieListSearchUrl = $"{SearchUrl}?{queryCollection.GetQueryString()}";
+            var movieListSearchUrl = $"https://passthepopcorn.me/torrents.php?{queryCollection.GetQueryString()}";
 
             var authHeaders = new Dictionary<string, string>
             {
@@ -163,10 +160,6 @@ namespace Jackett.Common.Indexers.Definitions
             };
 
             var indexerResponse = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
-            if (indexerResponse.IsRedirect) // untested
-            {
-                indexerResponse = await RequestWithCookiesAndRetryAsync(movieListSearchUrl, headers: authHeaders);
-            }
 
             var releases = new List<ReleaseInfo>();
 
@@ -230,7 +223,7 @@ namespace Jackett.Common.Indexers.Definitions
                             Title = torrent.ReleaseName,
                             Year = int.Parse(result.Year),
                             Details = infoUrl,
-                            Link = GetDownloadUrl(id, jsonResponse.AuthKey, jsonResponse.PassKey),
+                            Link = GetDownloadUrl(id),
                             Category = MapTrackerCatToNewznab(result.CategoryId),
                             Size = long.Parse(torrent.Size),
                             Grabs = int.Parse(torrent.Snatched),
@@ -322,14 +315,24 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        private Uri GetDownloadUrl(int torrentId, string authKey, string passKey)
+        public override async Task<byte[]> Download(Uri link)
+        {
+            return await Download(
+                link,
+                method: RequestType.GET,
+                headers: new Dictionary<string, string>
+                {
+                    { "ApiUser", configData.User.Value },
+                    { "ApiKey", configData.Key.Value }
+                }).ConfigureAwait(false);
+        }
+
+        private Uri GetDownloadUrl(int torrentId)
         {
             var query = new NameValueCollection
             {
                 { "action", "download" },
-                { "id", torrentId.ToString() },
-                { "authkey", authKey },
-                { "torrent_pass", passKey }
+                { "id", torrentId.ToString() }
             };
 
             return new UriBuilder(SiteLink)
@@ -371,8 +374,6 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public string TotalResults { get; set; }
         public IReadOnlyCollection<PassThePopcornMovie> Movies { get; set; }
-        public string AuthKey { get; set; }
-        public string PassKey { get; set; }
     }
 
     public class PassThePopcornMovie
