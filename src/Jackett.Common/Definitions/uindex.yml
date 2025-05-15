@@ -31,11 +31,12 @@ settings: []
 
 search:
   paths:
-    # https://uindex.org/search.php?search=complete
+    # https://uindex.org/search.php?search=complete&c=0
     - path: search.php
   allowEmptyInputs: true
   inputs:
     search: "{{ .Keywords }}"
+    c: 0
 
   rows:
     selector: table.maintable > tbody > tr:has(a[href^="magnet:?xt="])
