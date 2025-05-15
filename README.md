@@ -458,7 +458,7 @@ Prior versions of Jackett are no longer supported.
  * MouseBits
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
- * NCore [![(invite needed)][inviteneeded]](#)
+ * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
