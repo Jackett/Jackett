@@ -432,7 +432,7 @@ Prior versions of Jackett are no longer supported.
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
- * LetSeed [![(invite needed)][inviteneeded]](#)
+ * LetSeed
  * Libble
  * LibraNet (LN)
  * LinkoManija
