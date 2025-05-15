@@ -24,6 +24,12 @@ caps:
     - {id: 311, cat: Audio/Audiobook, desc: "Audio:Romance"}
     - {id: 317, cat: Audio/Audiobook, desc: "Audio:Urbn Fant/para"}
     - {id: 319, cat: Audio/Audiobook, desc: "Audio:V.I.P"}
+    - {id: 320, cat: Audio/Audiobook, desc: "Audio:Science/engine"}
+    - {id: 321, cat: Audio/Audiobook, desc: "Audio:History/War"}
+    - {id: 322, cat: Audio/Audiobook, desc: "Audio:non fiction"}
+    - {id: 323, cat: Audio/Audiobook, desc: "Audio:Educational"}
+    - {id: 324, cat: Audio/Audiobook, desc: "Audio:Tutorials"}
+    - {id: 325, cat: Audio/Audiobook, desc: "Audio:True Crime"}
     # Collections
     - {id: 305, cat: Books/EBook, desc: "Same Author"}
     - {id: 307, cat: Books/EBook, desc: "Collection: Military"}
