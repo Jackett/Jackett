@@ -83,7 +83,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Found 0 results in the tracker");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -110,7 +112,9 @@ namespace Jackett.Common.Indexers.Definitions
             // free=1 normal: (DL and UL counted as normal.)
             // free=0 (any)
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
                 qc.Add("free", "2");
+            }
 
             var results = new List<WebResult>();
             var search = new UriBuilder(SearchUrl);
@@ -142,13 +146,20 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parser = new HtmlParser();
             foreach (var result in results)
+            {
                 try
                 {
+                    if (result.ContentString.Contains("Request limit per User exceeded! Please try later!"))
+                    {
+                        throw new Exception("Request limit per User exceeded! Please try later!");
+                    }
                     using var dom = parser.ParseDocument(result.ContentString);
 
                     var tableBody = dom.QuerySelector("#torrents-index-table > #torrents-index-table-body");
                     if (tableBody == null) // No results, so skip this search
+                    {
                         continue;
+                    }
 
                     foreach (var row in tableBody.Children)
                     {
@@ -160,7 +171,9 @@ namespace Jackett.Common.Indexers.Definitions
                         var detailsLink = new Uri(qLink.GetAttribute("href"));
                         //Skip irrelevant and duplicate entries
                         if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
+                        {
                             continue;
+                        }
 
                         var genres = row.QuerySelector("font.small")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
@@ -214,6 +227,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     OnParseError(result.ContentString, ex);
                 }
+            }
 
             return releases;
         }
