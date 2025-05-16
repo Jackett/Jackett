@@ -47,6 +47,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Inactive accounts are disabled after 2 months days for User class, after 3 months for Power User, after 4 months for Elite User, after 6 months for  Insane User, after 9 months for Veteran User, after 11 months for  VIP, after 12 months for  Dedicated BHD User & all Staff. Parking your account doubles the maximum inactive time. Only the login and browsing the site is considered activity."));
+            configData.AddDynamic("Rate Limits", new DisplayInfoConfigurationItem("Rate Limits", "BitHDTV has rate limits, the indexer will fail if you excceed them. Read the post at <a href=\"https://www.bit-hdtv.com/forums/viewtopic.php?id=18657\" target=\"_blank\">forum topic 18657</a>"));
         }
 
         private TorznabCapabilities SetCapabilities()
