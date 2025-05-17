@@ -36,8 +36,8 @@ settings: []
 
 download:
   selectors:
-    -  selector: a[href^="magnet:?xt="]
-       attribute: href
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   # https://torrentgalaxy.one/get-posts/keywords:tt1890725/
