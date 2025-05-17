@@ -131,6 +131,7 @@ Prior versions of Jackett are no longer supported.
  * Torrent9
  * TorrentDosFilmes
  * TorrentDownload
+ * TorrentGalaxyClone
  * TorrentKitty
  * TorrentProject2
  * TorrentQQ (토렌트큐큐)
