@@ -280,6 +280,7 @@ Prior versions of Jackett are no longer supported.
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * Bitpalace
  * BitPorn
+ * BitSexy
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
