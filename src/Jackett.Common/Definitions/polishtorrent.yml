@@ -95,7 +95,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts that are inactive for 3 months will be moved to the 'Disabled' group. Strict restrictions are imposed on this group. If the account is still inactive after being moved to this group, it will be permanently blocked without the possibility of unblocking. Simply logging in and browsing the site does not count as an active account. Required activity: downloading/uploading torrents, possibly activity on the forum."
+    default: "<ul><li>If a user has not logged in for 30 days, the account will be marked as inactive.</li><li>If the account remains inactive for an additional 120 days, it will be automatically deactivated (soft delete).</li><li>This means the user will lose access to the account, although the data will be retained for a specified period.</li><li>This policy applies to users in the following groups: User, PowerUser, SuperUser, and Leech.</li><li>How can you keep your account active?</li><li>Simply log in at least once every 30 days and stay active in downloads to maintain your status.</li></ul>"
 
 login:
   path: /api/torrents
@@ -235,4 +235,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 9.0.6 (custom)
+# json UNIT3D 9.0.8 (custom)

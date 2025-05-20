@@ -17,6 +17,8 @@ caps:
     - {id: 5, cat: PC, desc: "Apps"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: TV/Anime, desc: "Anime"}
+    - {id: 8, cat: Other, desc: "Other"}
+    # while zero does not return results when c=0 used, results occasionally have this cat instead of eight
     - {id: 0, cat: Other, desc: "Other"}
 
   modes:
@@ -29,11 +31,12 @@ settings: []
 
 search:
   paths:
-    # https://uindex.org/search.php?search=complete
+    # https://uindex.org/search.php?search=complete&c=0
     - path: search.php
   allowEmptyInputs: true
   inputs:
     search: "{{ .Keywords }}"
+    c: 0
 
   rows:
     selector: table.maintable > tbody > tr:has(a[href^="magnet:?xt="])

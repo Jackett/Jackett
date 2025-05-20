@@ -131,6 +131,7 @@ Prior versions of Jackett are no longer supported.
  * Torrent9
  * TorrentDosFilmes
  * TorrentDownload
+ * TorrentGalaxyClone
  * TorrentKitty
  * TorrentProject2
  * TorrentQQ (토렌트큐큐)
@@ -256,6 +257,7 @@ Prior versions of Jackett are no longer supported.
  * AnimeWorld (AW)
  * Anthelion (ANT)
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
+ * ArabicSource
  * ArabP2P
  * ArabTorrents [![(invite needed)][inviteneeded]](#)
  * AsianCinema
@@ -279,6 +281,7 @@ Prior versions of Jackett are no longer supported.
  * BitHUmen [![(invite needed)][inviteneeded]](#)
  * Bitpalace
  * BitPorn
+ * BitSexy
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
@@ -432,7 +435,7 @@ Prior versions of Jackett are no longer supported.
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
  * Lesbians4u
- * LetSeed [![(invite needed)][inviteneeded]](#)
+ * LetSeed
  * Libble
  * LibraNet (LN)
  * LinkoManija
@@ -458,7 +461,7 @@ Prior versions of Jackett are no longer supported.
  * MouseBits
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
- * NCore [![(invite needed)][inviteneeded]](#)
+ * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT

@@ -197,8 +197,9 @@ namespace Jackett.Common.Indexers.Definitions
                     var title = mainLink.TextContent;
                     var details = new Uri(SiteLink + mainLink.GetAttribute("href"));
 
-                    var posterMatch = _posterRegex.Match(mainLink.GetAttribute("onmouseover"));
-                    var poster = posterMatch.Success ? new Uri(SiteLink + posterMatch.Groups[1].Value.Replace("\\", "/")) : null;
+                    // posters, when fetched on the dashboard search results page, generate cloudflare challenges
+                    // var posterMatch = _posterRegex.Match(mainLink.GetAttribute("onmouseover"));
+                    // var poster = posterMatch.Success ? new Uri(SiteLink + posterMatch.Groups[1].Value.Replace("\\", "/")) : null;
 
                     var link = new Uri(SiteLink + row.Children[4].FirstElementChild.GetAttribute("href"));
                     var description = row.Children[2].QuerySelector("span")?.TextContent.Trim();
@@ -261,7 +262,7 @@ namespace Jackett.Common.Indexers.Definitions
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(cat),
                         Description = description,
-                        Poster = poster,
+                        // Poster = poster,
                         Imdb = imdb,
                         Size = size,
                         Grabs = grabs,

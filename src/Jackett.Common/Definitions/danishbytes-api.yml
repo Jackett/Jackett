@@ -19,9 +19,10 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 5, cat: PC/0day, desc: "Apps"}
     - {id: 4, cat: PC/Games, desc: "Games"}
-    - {id: 3, cat: Audio, desc: "Sound"}
+    - {id: 3, cat: Audio, desc: "Music"}
     - {id: 8, cat: Books, desc: "Books"}
     - {id: 17, cat: Audio/Audiobook, desc: "AudioBooks"}
+    - {id: 19, cat: Audio, desc: "Podcasts"}
 
   modes:
     search: [q]

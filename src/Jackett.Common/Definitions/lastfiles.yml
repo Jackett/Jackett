@@ -62,10 +62,10 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, genre]
-    movie-search: [q, genre]
-    music-search: [q, genre]
-    book-search: [q, genre]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: username

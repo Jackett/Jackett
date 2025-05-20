@@ -133,7 +133,6 @@ search:
       selector: td:nth-child(3)
     date:
       selector: td:nth-child(5) > span
-      attribute: title
       filters:
         - name: append
           args: " +00:00" # GMT

@@ -23,7 +23,9 @@ settings:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php?q={{ .Keywords }}{{ else }}index.php{{ end }}"
+    - path: search.php
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   rows:
     selector: table > tbody > tr

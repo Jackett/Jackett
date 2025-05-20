@@ -126,7 +126,7 @@ search:
       selector: td:nth-child(1) a
       filters:
         - name: re_replace
-          args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b(19|20\\d{2})\\b)$", "$3 $1$2"]
+          args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b((19|20)\\d{2})\\b)$", "$3 $1$2"]
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:

@@ -104,6 +104,8 @@ settings:
     type: info
     label: Account Inactivity
     default: "Accounts can use the park system for up to 180 days."
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 login:
   path: takelogin.php

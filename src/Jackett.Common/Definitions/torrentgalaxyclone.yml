@@ -1,0 +1,82 @@
+---
+id: torrentgalaxyclone
+name: TorrentGalaxyClone
+description: "TorrentGalaxyClone is a Public site for MOVIES / TV / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+# https://proxygalaxy.cc/ for health status and alternate domains
+links:
+  - https://torrentgalaxy.one/
+  - https://torrentgalaxy.info/
+  - https://torrentgalaxy.space/
+
+caps:
+  # dont forget to update the path categories in the search block
+  categorymappings:
+    - {id: Anime, cat: TV/Anime, desc: "Anime"}
+    - {id: Apps, cat: PC, desc: "Apps"}
+    - {id: Books, cat: Books, desc: "Books"}
+    - {id: Docus, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: Games, cat: Console, desc: "Games"}
+    - {id: Movies, cat: Movies, desc: "Movies"}
+    - {id: Music, cat: Audio, desc: "Music"}
+    - {id: Other, cat: Other, desc: "Other"}
+    - {id: TV, cat: TV, desc: "TV"}
+    - {id: XXX, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  # https://torrentgalaxy.one/get-posts/keywords:tt1890725/
+  # https://torrentgalaxy.one/get-posts/keywords:andor/
+  # https://torrentgalaxy.one/get-posts/category:Movies:category:TV:keywords:bodies
+  paths:
+    - path: "get-posts/{{ if or .Query.IMDBID .Keywords }}keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}{{ end }}{{ range .Categories }}:category:{{.}}{{end}}"
+
+  rows:
+    selector: div.tgxtablerow
+
+  fields:
+    category:
+      selector: a[href^="/get-posts/category:"]
+    title:
+      selector: a[href^="/post-detail/"]
+      attribute: title
+    details:
+      selector: a[href^="/post-detail/"]
+      attribute: href
+    download:
+      selector: a[href^="/post-detail/"]
+      attribute: href
+    imdbid:
+      selector: a[href^="/get-posts/keywords:tt"]
+      attribute: href
+    size:
+      selector: div.tgxtablecell:nth-last-child(5)
+    seeders:
+      selector: div.tgxtablecell:nth-last-child(2) span font
+    leechers:
+      selector: div.tgxtablecell:nth-last-child(2) span font:nth-of-type(2)
+    date:
+      selector: div.tgxtablecell:nth-last-child(1)
+      remove: div.bighide
+      filters:
+        - name: timeago
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

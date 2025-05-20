@@ -29,9 +29,11 @@ caps:
 
     - {id: 92, cat: TV/Documentary, desc: "Doku Avi"}
     - {id: 94, cat: TV/Documentary, desc: "Doku Audio"}
+    - {id: 135, cat: TV/Documentary, desc: "Doku UHD"}
     - {id: 13, cat: TV/Documentary, desc: "Doku DVD-R"}
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
+    - {id: 136, cat: TV/Documentary, desc: "Doku Pack"}
 
     - {id: 9, cat: PC, desc: "App Linux"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
@@ -66,6 +68,7 @@ caps:
     - {id: 116, cat: TV/Sport, desc: "Sport DVD-R"}
     - {id: 117, cat: TV/Sport, desc: "Sport DVD-R"}
 
+    - {id: 134, cat: Other, desc: "Sonstiges Pack"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}

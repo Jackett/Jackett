@@ -1,0 +1,189 @@
+---
+id: ncore
+name: nCore
+description: "nCore is a HUNGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://ncore.pro/
+legacylinks:
+  - https://ncore.cc/
+
+caps:
+  categorymappings:
+    # E-book
+    - {id: ebook, cat: Books, desc: "E-book/Eng"}
+    - {id: ebook_hun, cat: Books, desc: "E-book/Hun"}
+    # Játék
+    - {id: console, cat: Console, desc: "Játék/Console"}
+    - {id: game_iso, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: game_rip, cat: PC/Games, desc: "Játék/Rip"}
+    # Filmek
+    - {id: xvid_hun, cat: Movies/SD, desc: "Film/SD/Hun"}
+    - {id: xvid, cat: Movies/SD, desc: "Film/SD/Eng"}
+    - {id: dvd_hun, cat: Movies/DVD, desc: "Film/DVD/Hun"}
+    - {id: dvd, cat: Movies/DVD, desc: "Film/DVD/Eng"}
+    - {id: dvd9_hun, cat: Movies/DVD, desc: "Film/Dvd9/Hun"}
+    - {id: dvd9, cat: Movies/DVD, desc: "Film/Dvd9/Eng"}
+    - {id: hd_hun, cat: Movies/HD, desc: "Film/HD/Hun"}
+    - {id: hd, cat: Movies/HD, desc: "Film/HD/Eng"}
+    # Sorozatok
+    - {id: xvidser, cat: TV/SD, desc: "Sorozat/SD/Eng"}
+    - {id: xvidser_hun, cat: TV/SD, desc: "Sorozat/SD/Hun"}
+    - {id: dvdser, cat: TV/Other, desc: "Sorozat/DVDR/Eng"}
+    - {id: dvdser_hun, cat: TV/Other, desc: "Sorozat/DVDR/Hun"}
+    - {id: hdser, cat: TV/HD, desc: "Sorozat/HD/Eng"}
+    - {id: hdser_hun, cat: TV/HD, desc: "Sorozat/HD/Hun"}
+    # Zene
+    - {id: mp3_hun, cat: Audio/MP3, desc: "Zene/MP3/Hun"}
+    - {id: mp3, cat: Audio/MP3, desc: "Zene/MP3/Eng"}
+    - {id: lossless_hun, cat: Audio/MP3, desc: "Zene/Lossless/Hun"}
+    - {id: lossless, cat: Audio/MP3, desc: "Zene/Lossless/Eng"}
+    - {id: clip, cat: Audio/Video, desc: "Zene/Klip"}
+    # Program
+    - {id: iso, cat: PC/ISO, desc: "Win/Program/ISO"}
+    - {id: misc, cat: PC/0day, desc: "Win/Program/Rip"}
+    - {id: mobil, cat: PC/Mobile-Other, desc: "Win/Program/Rip"}
+    # Felnőtt tartalom
+    - {id: xxx_xvid, cat: XXX/SD, desc: "XXX/Film/SD"}
+    - {id: xxx_dvd, cat: XXX/DVD, desc: "XXX/DVDR"}
+    - {id: xxx_hd, cat: XXX/UHD, desc: "XXX/HD"}
+    - {id: xxx_imageset, cat: XXX/ImageSet, desc: "XXX/Kép"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, genre]
+    movie-search: [q, imdbid, genre]
+    music-search: [q, genre]
+    book-search: [q, genre]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2facode
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the nCore Web Site. Otherwise just leave it empty."
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrent oldalanként:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Anyone who does not access the site for 8 weeks from registration or has been more than 8 weeks since their last stay will be automatically suspended. Anyone who does not log in (stays inactive) for 12 weeks after registration or after their last visit will be removed automatically."
+
+login:
+  method: post
+  path: login.php
+  inputs:
+    nev: "{{ .Config.username }}"
+    pass: "{{ .Config.password }}"
+    2factor: "{{ .Config.2facode }}"
+    ne_leptessen_ki: "1"
+    set_lang: "en"
+    submitted: "1"
+  error:
+    - selector: div#hibauzenet table tbody tr
+  test:
+    path: index.php
+    selector: a[href*="profile.php"]
+
+download:
+  selectors:
+    - selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    mire: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    miben: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
+    tipus: "{{ if .Categories }}kivalasztottak_kozott{{ else }}all_own{{ end }}"
+    submit.x: 1
+    submit.y: 1
+    tags: "{{ .Query.Genre }}"
+    $raw: "{{ range .Categories }}&kivalasztott_tipus[]={{.}}{{end}}"
+
+  rows:
+    selector: .box_torrent_all .box_torrent
+
+  fields:
+    category:
+      selector: .box_alap_img > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: tipus
+    title:
+      selector: div[class^="torrent_txt"] > a
+      attribute: title
+    details:
+      selector: div[class^="torrent_txt"] > a
+      attribute: href
+    download:
+      selector: div[class^="torrent_txt"] > a
+      attribute: href
+      filters:
+        - name: replace
+          args: ["torrents.php?action=details", "ajax.php?action=torrent_drop"]
+# image is returned with invalid Content-Type header 'image'
+#    poster:
+#      selector: div.infobar > img
+#      attribute: onmouseover
+#      filters:
+#        - name: regexp
+#          args: "'(.+?)'"
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["https://dereferer.link/?", ""]
+    size:
+      selector: div.box_meret2
+    seeders:
+      selector: div.box_s2
+    leechers:
+      selector: div.box_l2
+    date:
+      selector: div.box_feltoltve2
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# MST is 48 hours + 24 minutes (.4 hours) per GB of downloaded size
+#    minimumseedtime:
+#      # 2 days (as seconds = 2 x 24 x 60 x 60)
+#      text: 172800
+    description_imdb:
+      selector: a.infolink
+      optional: true
+    description_alt:
+      selector: div.siterank > span
+      attribute: title
+      optional: true
+    description:
+      case:
+        div.torrent_ok: "Verified"
+        div.torrent_unchecked: "Unverified"
+      filters:
+        - name: append
+          args: "{{ if or .Result.description_alt .Result.description_imdb }}: {{ else }}{{ end }}{{ .Result.description_alt }}{{ if and .Result.description_alt .Result.description_imdb }} {{ else }}{{ end }}{{ .Result.description_imdb }}"
+# engine n/a

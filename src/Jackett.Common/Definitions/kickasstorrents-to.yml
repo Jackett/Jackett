@@ -7,19 +7,19 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://www.kickasstorrents.do/
+  - https://kickass.torrentbay.st/
+  - https://kickass.torrentsbay.org/
   - https://kickasstorrents.unblockninja.com/
   - https://kickasstorrents.ninjaproxy1.com/
   - https://kickasstorrents.proxyninja.org/
   - https://kickasstorrents.proxyninja.net/
-  - https://kickass.torrentbay.st/
-  - https://kickass.torrentsbay.org/
 legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
   - https://kickasstorrents.to/
   - https://kickasstorrent.cr/ # blocks Jackett UA, 'new' page broken
   - https://katcr.to/ # blocks Jackett UA
+  - https://www.kickasstorrents.do/ # blocks Jackett UA
 
 caps:
   categorymappings:
@@ -73,11 +73,6 @@ search:
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}3/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}4/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
     - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}5/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
-
-  error:
-    - selector: h1:contains("403 Forbidden")
-      message:
-        text: "Site returned 403 Forbidden. Try updating your indexer config with a new/different user-agent."
 
   rows:
     selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])

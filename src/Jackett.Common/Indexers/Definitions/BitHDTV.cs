@@ -48,6 +48,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "Inactive accounts are disabled after 2 months days for User class, after 3 months for Power User, after 4 months for Elite User, after 6 months for  Insane User, after 9 months for Veteran User, after 11 months for  VIP, after 12 months for  Dedicated BHD User & all Staff. Parking your account doubles the maximum inactive time. Only the login and browsing the site is considered activity."));
+            configData.AddDynamic("Rate Limits", new DisplayInfoConfigurationItem("Rate Limits", "BitHDTV has rate limits, the indexer will fail if you exceed them. Read the post at <a href=\"https://www.bit-hdtv.com/forums/viewtopic.php?id=18657\" target=\"_blank\">forum topic 18657</a>"));
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -84,7 +85,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Found 0 results in the tracker");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -111,7 +114,9 @@ namespace Jackett.Common.Indexers.Definitions
             // free=1 normal: (DL and UL counted as normal.)
             // free=0 (any)
             if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value)
+            {
                 qc.Add("free", "2");
+            }
 
             var results = new List<WebResult>();
             var search = new UriBuilder(SearchUrl);
@@ -143,13 +148,20 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parser = new HtmlParser();
             foreach (var result in results)
+            {
                 try
                 {
+                    if (result.ContentString.Contains("Request limit per User exceeded! Please try later!"))
+                    {
+                        throw new Exception("Request limit per User exceeded! Please try later!");
+                    }
                     using var dom = parser.ParseDocument(result.ContentString);
 
                     var tableBody = dom.QuerySelector("#torrents-index-table > #torrents-index-table-body");
                     if (tableBody == null) // No results, so skip this search
+                    {
                         continue;
+                    }
 
                     foreach (var row in tableBody.Children)
                     {
@@ -161,7 +173,9 @@ namespace Jackett.Common.Indexers.Definitions
                         var detailsLink = new Uri(qLink.GetAttribute("href"));
                         //Skip irrelevant and duplicate entries
                         if (!query.MatchQueryStringAND(release.Title) || releases.Any(r => r.Guid == detailsLink))
+                        {
                             continue;
+                        }
 
                         var genres = row.QuerySelector("font.small")?.TextContent;
                         if (!string.IsNullOrEmpty(genres))
@@ -215,6 +229,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     OnParseError(result.ContentString, ex);
                 }
+            }
 
             return releases;
         }
