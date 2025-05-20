@@ -662,6 +662,8 @@ t=book:
    params  : q, title, author, publisher, year, genre
 ```
 
+Note that most indexers will only support a subset of these search modes and parameters, use the t=caps to get a list of the actual modes and parms supported by an indexer.
+
 Examples:
 
 ```
@@ -711,7 +713,7 @@ A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab`
 It will query all configured indexers and return the combined results.
 
 If your client supports multiple feeds it's recommended to add each indexer directly instead of using the "all" indexer.
-Using the "all" indexer has no advantages (besides reduced management overhead), the only disadvantages:
+Using the "all" indexer has no advantages (besides reduced management overhead), the many disadvantages:
 * you lose control over indexer specific settings (categories, search modes, etc.)
 * mixing search modes (IMDB, query, etc.) might cause low-quality results
 * indexer specific categories (>= 100000) can't be used.
