@@ -17,25 +17,9 @@ caps:
     - {id: 14, cat: PC/Games, desc: "Игры в разработке и демо-версии"}
     - {id: 9, cat: PC/Games, desc: "Разное (дополнения, патчи, русификаторы)"}
     - {id: 18, cat: PC/Games, desc: "Горячие новинки"}
-    - {id: 809, cat: PC/Games, desc: "Горячие новинки от R.G. Механики"}
-    - {id: 810, cat: PC/Games, desc: "Аркады от R.G. Механики"}
-    - {id: 811, cat: PC/Games, desc: "Приключения и квесты от R.G. Механики"}
-    - {id: 812, cat: PC/Games, desc: "Стратегии от R.G. Механики"}
-    - {id: 813, cat: PC/Games, desc: "Симуляторы от R.G. Механики"}
-    - {id: 814, cat: PC/Games, desc: "Action от R.G. Механики"}
-    - {id: 815, cat: PC/Games, desc: "RPG от R.G. Механики"}
-    - {id: 903, cat: PC/Games, desc: "jRPG от R.G. Механики"}
-    - {id: 935, cat: PC/Games, desc: "Ранний доступ от R.G. GOGFAN"}
-    - {id: 914, cat: PC/Games, desc: "Аркады от R.G. GOGFAN"}
-    - {id: 915, cat: PC/Games, desc: "Приключения и квесты от R.G. GOGFAN"}
-    - {id: 931, cat: PC/Games, desc: "Стратегии от R.G. GOGFAN"}
-    - {id: 930, cat: PC/Games, desc: "Симуляторы от R.G. GOGFAN"}
-    - {id: 929, cat: PC/Games, desc: "Action от R.G. GOGFAN"}
-    - {id: 928, cat: PC/Games, desc: "RPG от R.G. GOGFAN"}
     - {id: 24, cat: PC/Games, desc: "Приключения и квесты"}
     - {id: 25, cat: PC/Games, desc: "Стратегии"}
-    - {id: 21, cat: PC/Games, desc: "Аркады (основной)"}
-    - {id: 23, cat: PC/Games, desc: "Аркады (коллекции, антологии)"}
+    - {id: 19, cat: PC/Games, desc: "Аркады"}
     - {id: 29, cat: PC/Games, desc: "Симуляторы"}
     - {id: 35, cat: PC/Games, desc: "Экшены"}
     - {id: 40, cat: PC/Games, desc: "Ролевые игры"}
@@ -44,6 +28,7 @@ caps:
     - {id: 42, cat: PC/Games, desc: "Хентайные"}
     - {id: 968, cat: PC/Games, desc: "Игры для VR"}
     - {id: 46, cat: PC/Games, desc: "Для самых маленьких"}
+    - {id: 978, cat: PC/Games, desc: "Игры для macOS и Linux"}
     # Games for Consoles      # Игры для Консолей
     - {id: 69, cat: Console/XBox, desc: "Xbox"}
     - {id: 86, cat: Console/XBox 360, desc: "XBox360 | Игры"}
@@ -53,7 +38,6 @@ caps:
     - {id: 612, cat: Console/XBox 360, desc: "XBox360 | Live"}
     - {id: 614, cat: Console/XBox 360, desc: "XBox360 | Soft"}
     - {id: 88, cat: Console/XBox, desc: "XBox | Игры"}
-    - {id: 85, cat: Console/XBox, desc: "Прочее | Архив (XBox)"}
     - {id: 70, cat: Console/PSP, desc: "PlayStation"}
     - {id: 973, cat: Console/PS4, desc: "PS5 | Игры"}
     - {id: 910, cat: Console/PS4, desc: "PS4 | Игры"}
@@ -85,82 +69,59 @@ caps:
     - {id: 351, cat: Console, desc: "Saturn | Игры"}
     - {id: 352, cat: Console, desc: "Игры для старых консолей"}
     - {id: 390, cat: Console, desc: "Коллекции (игры для разных платформ)"}
-    # Games for macOS and Linux      # Игры для macOS и Linux
-    - {id: 129, cat: PC/Games, desc: "Игры для Linux от R.G. GOGFAN"}
-    - {id: 965, cat: PC/Games, desc: "[Linux] Ранний доступ от R.G. GOGFAN"}
-    - {id: 874, cat: PC/Games, desc: "[Linux] Аркады от R.G. GOGFAN"}
-    - {id: 695, cat: PC/Games, desc: "[Linux] Приключения и квесты от R.G. GOGFAN"}
-    - {id: 873, cat: PC/Games, desc: "[Linux] Стратегии от R.G. GOGFAN"}
-    - {id: 872, cat: PC/Games, desc: "[Linux] Симуляторы от R.G. GOGFAN"}
-    - {id: 871, cat: PC/Games, desc: "[Linux] Action от R.G. GOGFAN"}
-    - {id: 932, cat: PC/Games, desc: "[Linux] RPG от R.G. GOGFAN"}
-    - {id: 861, cat: PC/Games, desc: "Игры для macOS от R.G. GOGFAN"}
-    - {id: 966, cat: PC/Games, desc: "[macOS] Ранний доступ от R.G. GOGFAN"}
-    - {id: 862, cat: PC/Games, desc: "[macOS] Аркады от R.G. GOGFAN"}
-    - {id: 875, cat: PC/Games, desc: "[macOS] Приключения и квесты от R.G. GOGFAN"}
-    - {id: 876, cat: PC/Games, desc: "[macOS] Стратегии от R.G. GOGFAN"}
-    - {id: 877, cat: PC/Games, desc: "[macOS] Симуляторы от R.G. GOGFAN"}
-    - {id: 878, cat: PC/Games, desc: "[macOS] Action от R.G. GOGFAN"}
-    - {id: 933, cat: PC/Games, desc: "[macOS] RPG от R.G. GOGFAN"}
     # Cinema      # Кинематограф
-    - {id: 429, cat: Movies, desc: "Новинки фильмов и мультфильмов (2024-2025)"}
     - {id: 964, cat: Movies/UHD, desc: "Новинки | UHD 4K"}
     - {id: 431, cat: Movies/WEB-DL, desc: "Новинки | HD"}
     - {id: 430, cat: Movies, desc: "Новинки | Rips"}
     - {id: 703, cat: Movies, desc: "Новинки | CAMRip, TS, WEBRip(LQ)"}
-    - {id: 74, cat: Movies/Foreign, desc: "Зарубежное кино"}
     - {id: 963, cat: Movies/UHD, desc: "Зарубежное кино | UHD 4K"}
     - {id: 122, cat: Movies/HD, desc: "Зарубежное кино | HD"}
     - {id: 124, cat: Movies/Foreign, desc: "Зарубежное кино | Rips"}
     - {id: 123, cat: Movies, desc: "Сборники фильмов"}
-    - {id: 75, cat: Movies, desc: "Отечественное кино"}
     - {id: 974, cat: Movies/UHD, desc: "Отечественное кино | UHD 4K"}
     - {id: 127, cat: Movies/BluRay, desc: "Отечественное кино | Blu-Ray и BDRemux"}
     - {id: 128, cat: Movies/HD, desc: "Отечественное кино | HD Rips"}
     - {id: 133, cat: Movies/DVD, desc: "Отечественное кино | DVD"}
     - {id: 131, cat: Movies, desc: "Российское и советское кино | Rips"}
     - {id: 869, cat: Movies/3D, desc: "3D"}
-    - {id: 161, cat: TV/Foreign, desc: "Сериалы"}
     - {id: 886, cat: Movies, desc: "Новинки зарубежных сериалов (2024-2025)"}
     - {id: 135, cat: Movies, desc: "Зарубежные сериалы до 2024г."}
     - {id: 160, cat: TV, desc: "Отечественные cериалы"}
-    - {id: 320, cat: TV, desc: "Мультфильмы"}
-    - {id: 325, cat: TV/SD, desc: "Мультфильмы | DVD"}
+    - {id: 325, cat: TV/UHD, desc: "Мультфильмы | UHD 4K"}
     - {id: 938, cat: TV/HD, desc: "Мультфильмы | Blu-Ray и BDRemux"}
     - {id: 324, cat: TV/HD, desc: "Мультфильмы | HD Rips"}
     - {id: 328, cat: TV, desc: "Мультфильмы | Rips"}
     - {id: 330, cat: TV, desc: "Сборники мультфильмов"}
     - {id: 321, cat: TV, desc: "Мультсериалы"}
-    - {id: 162, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+    - {id: 162, cat: TV/Documentary, desc: "Документальные фильмы и телешоу"}
     # Anime      # Аниме
     - {id: 693, cat: TV/Anime, desc: "Аниме (Основной)"}
-    - {id: 684, cat: TV/Anime, desc: "Аниме (DVD)"}
-    - {id: 106, cat: TV/Anime, desc: "Аниме Манга и прочий арт"}
-    - {id: 678, cat: TV/Anime, desc: "Аниме (HD и Blu-ray)"}
+    - {id: 660, cat: TV/Anime, desc: "Онгоинги и новинки аниме"}
     - {id: 95, cat: TV/Anime, desc: "Аниме (HD)"}
-    - {id: 660, cat: TV/Anime, desc: "Аниме ?"}
+    - {id: 684, cat: TV/Anime, desc: "Аниме (Rips | DVD)"}
+    - {id: 106, cat: TV/Anime, desc: "Манга и прочий арт"}
     - {id: 680, cat: TV/Anime, desc: "Аниме (Хентай)"}
-    - {id: 682, cat: TV/Anime, desc: "Аниме UnCensored"}
-    - {id: 681, cat: TV/Anime, desc: "Аниме Censored"}
-    - {id: 697, cat: TV/Anime, desc: "Аниме Манга, обои, артбуки и др."}
+    - {id: 682, cat: TV/Anime, desc: "UnCensored"}
+    - {id: 681, cat: TV/Anime, desc: "Censored"}
+    - {id: 697, cat: TV/Anime, desc: "Манга, обои, артбуки и др."}
     # Music and Music Video      # Музыка и Музыкальное видео
     - {id: 450, cat: Audio, desc: "Общий раздел музыки"}
     - {id: 470, cat: Audio, desc: "Классическая музыка"}
     - {id: 495, cat: Audio, desc: "New Age, Relax, Meditative & Flamenco"}
     - {id: 456, cat: Audio, desc: "Jazz, Blues"}
-    - {id: 462, cat: Audio, desc: "JReggae, Ska, Dub"}
+    - {id: 462, cat: Audio, desc: "Reggae, Ska, Dub"}
     - {id: 491, cat: Audio, desc: "Фольклор, Народная и Этническая музыка"}
     - {id: 468, cat: Audio, desc: "Зарубежный Rock"}
     - {id: 469, cat: Audio/Lossless, desc: "Rосk, Mеtаl, Аltеrnаtivе, Рunk, Indереndеnt (lоsslеss)"}
     - {id: 472, cat: Audio/MP3, desc: "Rосk, Mеtаl, Аltеrnаtivе, Рunk, Indереndеnt (mp3)"}
     - {id: 476, cat: Audio, desc: "Отечественный Rock"}
-    - {id: 477, cat: Audio/Lossless, desc: "Rосk, Punk, Alternative (losslеss)"}
-    - {id: 479, cat: Audio/MP3, desc: "Rосk, Punk, Alternative (mр3)"}
+    - {id: 477, cat: Audio/Lossless, desc: "Rосk, Metal, Punk, Alternative (losslеss)"}
+    - {id: 479, cat: Audio/MP3, desc: "Rосk, Metal, Punk, Alternative (mр3)"}
     - {id: 482, cat: Audio, desc: "Поп-музыка, Eurodance, Disco"}
     - {id: 483, cat: Audio, desc: "Зарубежная Поп-музыка"}
     - {id: 484, cat: Audio, desc: "Отечественная Поп-музыка"}
     - {id: 485, cat: Audio, desc: "Eurodance, Technopop, Disco"}
-    - {id: 489, cat: Audio/MP3, desc: "Поп-музыка, Eurodance, Disco (официальные сборники) (mp3)"}
+    - {id: 489, cat: Audio/MP3, desc: "Поп-музыка, Eurodance, Disco (сборники) (mp3)"}
     - {id: 503, cat: Audio, desc: "Rap, Hip-Hop, R'n'B"}
     - {id: 504, cat: Audio, desc: "Зарубежный Rap, Hip-Hop, R'n'B"}
     - {id: 505, cat: Audio, desc: "Отечественный Rap, Hip-Hop, R'n'B"}
@@ -179,32 +140,19 @@ caps:
     - {id: 535, cat: Audio, desc: "Музыка других жанров"}
     - {id: 539, cat: Audio, desc: "Музыкальное видео"}
     # Software      # Программное обеспечение
-    - {id: 202, cat: PC/Mac, desc: "Mac OS (для Apple Macintosh)"}
-    - {id: 203, cat: PC/Mac, desc: "Mac OS (для РС-Hackintosh)"}
-    - {id: 208, cat: PC/Mac, desc: "[macOS] Архиваторы и файловые менеджеры"}
-    - {id: 204, cat: PC/Mac, desc: "[macOS] Проигрыватели и кодеки"}
-    - {id: 205, cat: PC/Mac, desc: "[macOS] Офисные приложения и редакторы"}
-    - {id: 206, cat: PC/Mac, desc: "[macOS] Работа с носителями и медиа"}
-    - {id: 939, cat: PC/Mac, desc: "[macOS] Информационная безопасность"}
-    - {id: 940, cat: PC/Mac, desc: "[macOS] Интернет-приложения"}
-    - {id: 207, cat: PC/Mac, desc: "Системные программы для Mac OS"}
-    - {id: 215, cat: PC, desc: "Операционные системы (Unix и Unix-подобные)"}
-    - {id: 216, cat: PC, desc: "Программное обеспечение для Unix и Unix-подобных OS"}
-    - {id: 217, cat: PC, desc: "Другие OS и программное обеспечение под них"}
+    - {id: 639, cat: TV, desc: "Обучающие видеоматериалы"}
+    - {id: 202, cat: TV, desc: "macOS и ПО под них"}
+    - {id: 274, cat: TV, desc: "Веб-разработка и программирование"}
+    - {id: 303, cat: TV, desc: "Материалы для мультимедиа и дизайна"}
     - {id: 969, cat: PC, desc: "Windows 11"}
     - {id: 905, cat: PC, desc: "Windows 10"}
     - {id: 230, cat: PC, desc: "Windows 7"}
-    - {id: 879, cat: PC, desc: "Windows 8"}
-    - {id: 229, cat: PC, desc: "Windows Vista"}
-    - {id: 228, cat: PC, desc: "Windows XP"}
     - {id: 227, cat: PC, desc: "Настольные OS, выпущенные до 2001 года (Microsoft Windows OS.."}
     - {id: 970, cat: PC, desc: "Сборки (Microsoft Windows 11)"}
     - {id: 906, cat: PC, desc: "Сборки (Microsoft Windows 10)"}
     - {id: 701, cat: PC, desc: "Сборки (Microsoft Windows 7)"}
-    - {id: 880, cat: PC, desc: "Сборки (Microsoft Windows 8)"}
-    - {id: 698, cat: PC, desc: "Сборки (Microsoft Windows XP)"}
     - {id: 231, cat: PC, desc: "Серверные (Microsoft Windows OS)"}
-    - {id: 232, cat: PC, desc: "Разное (Microsoft Windows OS)"}
+    - {id: 232, cat: PC, desc: "Разное (Microsoft Windows, WinXP, Vista, 8)"}
     - {id: 236, cat: PC, desc: "Работа с жёстким диском"}
     - {id: 237, cat: PC, desc: "Резервное копирование"}
     - {id: 240, cat: PC, desc: "Архиваторы и файловые менеджеры"}
@@ -234,55 +182,18 @@ caps:
     - {id: 263, cat: PC, desc: "Медицинское программное обеспечение"}
     - {id: 264, cat: PC, desc: "Справочные системы и карты"}
     - {id: 265, cat: PC, desc: "Разное (Пользовательские программы)"}
-    - {id: 268, cat: PC, desc: "WYSIWYG Редакторы для веб-диза"}
-    - {id: 269, cat: PC, desc: "Текстовые редакторы с подсветкой"}
-    - {id: 270, cat: PC, desc: "Среды программирования, компиляторы и вспомогательные програ.."}
-    - {id: 271, cat: PC, desc: "Компоненты для сред программирования"}
-    - {id: 272, cat: PC, desc: "Системы управления базами данных (СУБД)"}
-    - {id: 273, cat: PC, desc: "Скрипты и шаблоны"}
-    - {id: 274, cat: PC, desc: "Разное (Веб-разработка и программирование)"}
     - {id: 278, cat: PC, desc: "Программные комплекты"}
-    - {id: 279, cat: PC, desc: "Плагины для программ компании Adobe"}
     - {id: 280, cat: PC, desc: "Графические редакторы"}
     - {id: 281, cat: PC, desc: "Программы для верстки, печати и работы со шрифтами"}
     - {id: 282, cat: PC, desc: "3D моделирование, рендеринг и плагины для них"}
     - {id: 283, cat: PC, desc: "Анимация"}
-    - {id: 284, cat: PC, desc: "Создание DVD и BD дисков"}
     - {id: 285, cat: PC, desc: "Редакторы видео"}
     - {id: 286, cat: PC, desc: "Видео- Аудио- конверторы"}
     - {id: 287, cat: PC, desc: "Работа со звуком"}
     - {id: 290, cat: PC, desc: "Разное (Программы для работы с мультимедиа и 3D)"}
-    - {id: 293, cat: PC, desc: "Растровые и Векторные Клипарты"}
-    - {id: 294, cat: PC, desc: "Заготовки, виньетки, рамки"}
-    - {id: 295, cat: PC, desc: "Стили, кисти, формы и узоры для Adobe Photoshop"}
-    - {id: 296, cat: PC, desc: "Текстуры и материалы"}
-    - {id: 297, cat: PC, desc: "3D графика"}
-    - {id: 298, cat: PC, desc: "Футажи"}
-    - {id: 299, cat: PC, desc: "Звуковые эффекты"}
-    - {id: 300, cat: PC, desc: "Библиотеки сэмплов"}
-    - {id: 301, cat: PC, desc: "Шрифты"}
-    - {id: 302, cat: PC, desc: "Photostoсks"}
-    - {id: 303, cat: PC, desc: "Разное (Материалы для мультимедиа и дизайна)"}
-    - {id: 597, cat: PC, desc: "Справочно-правовые Системы"}
-    - {id: 600, cat: PC, desc: "Консультант Плюс"}
-    - {id: 599, cat: PC, desc: "Гарант"}
-    - {id: 601, cat: PC, desc: "Кодекс"}
     - {id: 623, cat: PC, desc: "Мобильные телефоны"}
     - {id: 624, cat: PC, desc: "КПК"}
     - {id: 625, cat: PC, desc: "Навигаторы"}
-    - {id: 626, cat: PC, desc: "Карты для навигаторов"}
-    - {id: 627, cat: PC, desc: "Плееры"}
-    - {id: 628, cat: PC, desc: "Разное (Мобильные устройства и КПК)"}
-    - {id: 622, cat: PC/Mobile-iOS, desc: "Apple Mobile Device Software"}
-    - {id: 667, cat: PC/Mobile-iOS, desc: "Прошивки (iPhone/iPod Touch/iPad)"}
-    - {id: 668, cat: PC/Mobile-iOS, desc: "Программы (iPhone/iPod Touch/iPad)"}
-    - {id: 669, cat: PC/Mobile-iOS, desc: "Игры (iPhone/iPod Touch/iPad)"}
-    - {id: 670, cat: PC/Mobile-iOS, desc: "Видео (iPhone/iPod Touch/iPad)"}
-    - {id: 672, cat: PC/Mobile-iOS, desc: "Разное (iPhone/iPod Touch/iPad)"}
-    - {id: 671, cat: PC/Mobile-iOS, desc: "Музыка (iPhone/iPod Touch/iPad)"}
-    - {id: 639, cat: PC, desc: "Обучающие видеоматериалы"}
-    - {id: 640, cat: PC, desc: "Мультимедийные материалы"}
-    - {id: 642, cat: PC, desc: "Разное"}
     # Library      # Библиотека
     - {id: 717, cat: Books, desc: "Аудиокниги"}
     - {id: 738, cat: Books, desc: "Детектив / боевик"}
