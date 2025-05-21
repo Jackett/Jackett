@@ -425,7 +425,6 @@ Prior versions of Jackett are no longer supported.
  * KrazyZone
  * Kufei (库非)
  * Kufirc
- * LaidBackManor
  * Last Digital Underground (LDU)
  * LastFiles (LF)
  * Lat-Team
