@@ -510,6 +510,7 @@ namespace Jackett.Updater
                 "Definitions/kinonavse100.yml",
                 "Definitions/kisssub.yml",
                 "Definitions/knaben.yml", // migrated to C# API
+                "Definitions/laidbackmanor.yml",
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lat-team.yml", // switch to *-API #8682
                 "Definitions/latinop2p.yml",
