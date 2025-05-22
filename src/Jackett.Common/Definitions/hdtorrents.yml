@@ -1,0 +1,190 @@
+---
+id: hdtorrents
+name: HD-Torrents
+description: "HD-Torrents (HDT) is a Private Torrent Tracker for HD MOVIES / TV / MUSIC / 3X"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://hdts.ru/
+  - https://hd-torrents.org/
+  - https://hd-torrents.net/
+  - https://hd-torrents.me/
+
+caps:
+  categorymappings:
+    - {id: 70, cat: Movies/BluRay, desc: "Movie/UHD/Blu-Ray"}
+    - {id: 1, cat: Movies/BluRay, desc: "Movie/Blu-Ray"}
+    - {id: 71, cat: Movies/UHD, desc: "Movie/UHD/Remux"}
+    - {id: 2, cat: Movies/HD, desc: "Movie/Remux"}
+    - {id: 5, cat: Movies/HD, desc: "Movie/1080p/i"}
+    - {id: 3, cat: Movies/HD, desc: "Movie/720p"}
+    - {id: 64, cat: Movies/UHD, desc: "Movie/2160p"}
+    - {id: 63, cat: Audio, desc: "Movie/Audio Track"}
+    - {id: 72, cat: TV/UHD, desc: "TV Show/UHD/Blu-ray"}
+    - {id: 59, cat: TV/HD, desc: "TV Show/Blu-ray"}
+    - {id: 73, cat: TV/UHD, desc: "TV Show/UHD/Remux"}
+    - {id: 60, cat: TV/HD, desc: "TV Show/Remux"}
+    - {id: 30, cat: TV/HD, desc: "TV Show/1080p/i"}
+    - {id: 38, cat: TV/HD, desc: "TV Show/720p"}
+    - {id: 65, cat: TV/UHD, desc: "TV Show/2160p"}
+    - {id: 44, cat: Audio, desc: "Music/Album"}
+    - {id: 61, cat: Audio/Video, desc: "Music/Blu-Ray"}
+    - {id: 62, cat: Audio/Video, desc: "Music/Remux"}
+    - {id: 57, cat: Audio/Video, desc: "Music/1080p/i"}
+    - {id: 45, cat: Audio/Video, desc: "Music/720p"}
+    - {id: 66, cat: Audio/Video, desc: "Music/2160p"}
+    - {id: 58, cat: XXX, desc: "XXX/Blu-ray"}
+    - {id: 78, cat: XXX, desc: "XXX/Remux"}
+    - {id: 74, cat: XXX, desc: "XXX/UHD/Blu-ray"}
+    - {id: 48, cat: XXX, desc: "XXX/1080p/i"}
+    - {id: 47, cat: XXX, desc: "XXX/720p"}
+    - {id: 67, cat: XXX, desc: "XXX/2160p"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: data
+    options:
+      data: created
+      size: size
+      seeds: seeders
+      filename: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not log in for 50 days, your account will be disabled for inactivity. If you are VIP you won't be disabled until the VIP period is over."
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+login:
+  path: login.php
+  method: form
+  form: form
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: div > font[color="#FF0000"]
+  test:
+    path: /
+    selector: a[href^="logout.php?check_hash="]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 All, 1 ActiveOnly, 2 DeadOnly, 5 Free, 6 50, 7 25, 8 75
+    active: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 title, 3 title and descr, 1 genre, 2 imdb
+    options: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  keywordsfilters:
+    # manually url encode parenthesis to prevent "hacking" detection, remove . as not used in titles
+    - name: re_replace
+      args: ["\\.", " "]
+    - name: re_replace
+      args: ["\\(", "%28"]
+    - name: re_replace
+      args: ["\\)", "%29"]
+
+  rows:
+    selector: "table.mainblockcontenttt > tbody > tr:has(td.mainblockcontent):not(:first-of-type){{ if .Config.freeleech }}:has(img[src=\"images/sign_free.png\"]){{ else }}{{ end }}"
+
+  fields:
+    _has_freeleech:
+      case:
+        ":root table.navus tr td:nth-child(2):contains(\" VIP\")": yes
+        ":root table.navus tr td:nth-child(2):contains(\" Uploader\")": yes
+        ":root table.navus tr td:nth-child(2):contains(\" HD Internal\")": yes
+        ":root table.navus tr td:nth-child(2):contains(\" Moderator\")": yes
+        ":root table.navus tr td:nth-child(2):contains(\" Administrator\")": yes
+        ":root table.navus tr td:nth-child(2):contains(\" Owner\")": yes
+        "*": no
+    category:
+      selector: a[href^="torrents.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    genre:
+      selector: td:nth-child(3) span
+    description:
+      text: "{{ .Result.genre }}"
+    date:
+      # auto adjusted by site account profile
+      selector: td:nth-child(7)
+      filters:
+        - name: dateparse
+          args: "HH:mm:ss  dd/MM/yyyy"
+    size:
+      selector: td:nth-child(8)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    grabs:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor_freeleech:
+      case:
+        img[src$="no_ratio.png"]: 0
+        img[src$="free.png"]: 0
+        img[src$="50.png"]: 0.5
+        img[src$="25.png"]: 0.75
+        img[src$="75.png"]: 0.25
+        "*": 1
+    downloadvolumefactor:
+      text: "{{ if eq .Result._has_freeleech \"yes\" }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor:
+      case:
+        img[src$="no_ratio.png"]: 0
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# engine n/a

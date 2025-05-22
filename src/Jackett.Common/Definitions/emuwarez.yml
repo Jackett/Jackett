@@ -19,10 +19,6 @@ caps:
     movie-search: [q, imdbid, tmdbid]
 
 settings:
-  - name: ip_filtering
-    type: info
-    label: "IP Filtering"
-    default: "eMuwarez blocks Non-Spanish IP addresses. A <b>FlareSolverr</b> error means your IP was not accepted."
   - name: apikey
     type: text
     label: APIKey

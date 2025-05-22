@@ -30,6 +30,7 @@ caps:
     - {id: 323, cat: Audio/Audiobook, desc: "Audio:Educational"}
     - {id: 324, cat: Audio/Audiobook, desc: "Audio:Tutorials"}
     - {id: 325, cat: Audio/Audiobook, desc: "Audio:True Crime"}
+    - {id: 326, cat: Audio/Audiobook, desc: "Audio:Tech/Computers"}
     # Collections
     - {id: 305, cat: Books/EBook, desc: "Same Author"}
     - {id: 307, cat: Books/EBook, desc: "Collection: Military"}
@@ -50,9 +51,16 @@ caps:
     - {id: 278, cat: Books/EBook, desc: "Tutorials"}
     - {id: 300, cat: Books/EBook, desc: "Textbooks"}
     - {id: 301, cat: Books/EBook, desc: "Educational"}
+    - {id: 328, cat: Books/EBook, desc: "Engineering"}
     # Hobbies/pastimes
     - {id: 271, cat: Books/EBook, desc: "CookBooks"}
-    - {id: 272, cat: Books/EBook, desc: " General Hobbies"}
+    - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
+    - {id: 327, cat: Books/EBook, desc: "Gardening"}
+    - {id: 329, cat: Books/EBook, desc: "Motorcars/Repairs"}
+    - {id: 330, cat: Books/EBook, desc: "D.I.Y"}
+    - {id: 331, cat: Books/EBook, desc: "Electronics"}
+    - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
+    - {id: 334, cat: Books/EBook, desc: "Veterinary/Pets"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
     - {id: 289, cat: Books/EBook, desc: "Autobiography/Memoir"}

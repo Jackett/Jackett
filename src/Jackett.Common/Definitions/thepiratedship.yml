@@ -169,6 +169,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 3 day (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # XenForo

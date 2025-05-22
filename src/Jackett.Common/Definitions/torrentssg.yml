@@ -7,7 +7,10 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://xn--sm2bw9uj0jb6a.com/
 links:
+  - https://ssg1.torrentssg8.com/
+legacylinks:
   - https://torrentssg7.com/
+  - https://torrentssg8.com/
 
 caps:
   categorymappings:
@@ -38,6 +41,10 @@ caps:
     music-search: [q]
 
 settings:
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "torrentssg (토렌트쓱) blocks Non-South Korean IP addresses. A <b>FlareSolverr</b> error means your IP was not accepted."
   - name: info_flaresolverr
     type: info_flaresolverr
 
@@ -48,7 +55,7 @@ download:
 
 search:
   paths:
-    # https://torrentssg7.com/bbs/search.php?bo_table=&sca=&sop=and&sfl=wr_subject%7C%7Cwr_content&stx=2025
+    # https://ssg1.torrentssg8.com/bbs/search.php?bo_table=&sca=&sop=and&sfl=wr_subject%7C%7Cwr_content&stx=2025
     - path: bbs/search.php
   allowEmptyInputs: true
   inputs:

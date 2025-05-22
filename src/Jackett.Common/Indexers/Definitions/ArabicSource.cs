@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
     [ExcludeFromCodeCoverage]
     public class ArabicSource : IndexerBase
     {
-        public override string Id => "ArabicSource";
+        public override string Id => "arabicsource";
         public override string Name => "ArabicSource";
         public override string Description => "ArabicSource is an ARABIC Private Torrent Tracker for MOVIES / TV";
         public override string SiteLink { get; protected set; } = "https://arabicsource.net/";
