@@ -5,6 +5,7 @@ description: "Ebooks-Shares is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS
 language: en-US
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://ebooks-shares.org/
 
@@ -133,6 +134,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     # https://ebooks-shares.org/index.php?page=torrents&search=&category=0&active=0
@@ -148,7 +154,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
 
   fields:
     category:
@@ -170,7 +176,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=downloadcheck"]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
