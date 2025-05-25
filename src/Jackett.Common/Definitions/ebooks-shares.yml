@@ -52,9 +52,10 @@ caps:
     - {id: 278, cat: Books/EBook, desc: "Tutorials"}
     - {id: 300, cat: Books/EBook, desc: "Textbooks"}
     - {id: 301, cat: Books/EBook, desc: "Educational"}
-    - {id: 328, cat: Books/EBook, desc: "Engineering"}
+    - {id: 328, cat: Books/EBook, desc: "Engineering/Mech"}
+    - {id: 337, cat: Books/EBook, desc: "Computers"}
     # Hobbies/pastimes
-    - {id: 271, cat: Books/EBook, desc: "CookBooks"}
+    - {id: 271, cat: Books/EBook, desc: "Food And Drink"}
     - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
     - {id: 327, cat: Books/EBook, desc: "Gardening"}
     - {id: 329, cat: Books/EBook, desc: "Motorcars/Repairs"}
@@ -62,11 +63,14 @@ caps:
     - {id: 331, cat: Books/EBook, desc: "Electronics"}
     - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
     - {id: 334, cat: Books/EBook, desc: "Veterinary/Pets"}
+    - {id: 336, cat: Books/EBook, desc: "Video Games"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
     - {id: 289, cat: Books/EBook, desc: "Autobiography/Memoir"}
     - {id: 274, cat: Books/EBook, desc: "Business"}
     - {id: 316, cat: Books/EBook, desc: "True Crime"}
+    - {id: 335, cat: Books/EBook, desc: "Entertainment"}
+    - {id: 338, cat: Books/EBook, desc: "Encyclopedia/Ref"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
