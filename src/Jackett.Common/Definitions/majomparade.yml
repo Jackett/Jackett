@@ -6,6 +6,8 @@ language: hu-HU
 type: private
 encoding: UTF-8
 requestDelay: 2
+certificates:
+  - 7abca7edddde769ebc8f4528bcd44622a4c1e395 # Expired 26-May-2025
 links:
   - https://majomparade.eu/
 
