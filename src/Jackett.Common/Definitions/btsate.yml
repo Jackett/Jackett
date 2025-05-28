@@ -39,6 +39,8 @@ search:
   rows:
     selector: items
     attribute: _source
+    filters:
+      - name: andmatch
 
   fields:
     category:
