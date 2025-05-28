@@ -208,8 +208,26 @@ namespace Jackett.Common.Indexers.Definitions
 
             pageableRequests.Add(GetPagedRequests(postData));
 
+            if (LooksLikeReleaseName(searchTerm))
+            {
+                var filenameSearchPostData = GetFileNameSearchPostData(searchTerm, postData);
+
+                pageableRequests.Add(GetPagedRequests(filenameSearchPostData));
+            }
+
             return pageableRequests;
         }
+
+        private static Dictionary<string, object> GetFileNameSearchPostData(string searchTerm, Dictionary<string, object> postData)
+        {
+            var adjusted = new Dictionary<string, object>(postData);
+            adjusted.Remove(BHDParams.search);
+            adjusted.Add(BHDParams.file_name, searchTerm);
+            return adjusted;
+        }
+
+        public static bool LooksLikeReleaseName(string searchTerm) =>
+            System.Text.RegularExpressions.Regex.IsMatch(searchTerm, @"^.+\.[a-zA-Z0-9]+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         private IEnumerable<IndexerRequest> GetPagedRequests(Dictionary<string, object> postData)
         {
@@ -388,7 +406,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         internal const string search = "search"; // string - The torrent name. It does support !negative searching. Example: Christmas Movie
         internal const string info_hash = "info_hash"; // string - The torrent info_hash. This is an exact match.
-        internal const string folder_name = "folder_name"; // string - The torrent folder name. This is an exact match.file_name string The torrent included file names. This is an exact match.
+        internal const string folder_name = "folder_name"; // string - The torrent folder name. This is an exact match.
+        internal const string file_name = "file_name"; // string The torrent included file names. This is an exact match.
         internal const string size = "size"; // int - The torrent size. This is an exact match.
         internal const string uploaded_by = "uploaded_by"; // string - The uploaders username. Only non anonymous results will be returned.
         internal const string imdb_id = "imdb_id"; // int - The ID of the matching IMDB page.
