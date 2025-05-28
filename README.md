@@ -52,6 +52,7 @@ Prior versions of Jackett are no longer supported.
  * BT.etree
  * BTdirectory (BT目录)
  * BTSOW
+ * btstate
  * Byrutor
  * Cinecalidad
  * cpasbienClone
