@@ -6,6 +6,8 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
+  - https://theparadiese.hopto.org/
+legacylinks:
   - https://theparadiese.org/
 
 caps:
