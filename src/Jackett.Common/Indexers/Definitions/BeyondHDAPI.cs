@@ -208,7 +208,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             pageableRequests.Add(GetPagedRequests(postData));
 
-            if (LooksLikeReleaseName(searchTerm))
+            if (LooksLikeFileName(searchTerm))
             {
                 var filenameSearchPostData = GetFileNameSearchPostData(searchTerm, postData);
 
@@ -226,7 +226,7 @@ namespace Jackett.Common.Indexers.Definitions
             return adjusted;
         }
 
-        public static bool LooksLikeReleaseName(string searchTerm) =>
+        public static bool LooksLikeFileName(string searchTerm) =>
             System.Text.RegularExpressions.Regex.IsMatch(searchTerm, @"^.+\.[a-zA-Z0-9]+$", System.Text.RegularExpressions.RegexOptions.IgnoreCase);
 
         private IEnumerable<IndexerRequest> GetPagedRequests(Dictionary<string, object> postData)
