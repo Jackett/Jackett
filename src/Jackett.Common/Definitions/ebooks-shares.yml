@@ -54,6 +54,7 @@ caps:
     - {id: 301, cat: Books/EBook, desc: "Educational"}
     - {id: 328, cat: Books/EBook, desc: "Engineering/Mech"}
     - {id: 337, cat: Books/EBook, desc: "Computers"}
+    - {id: 339, cat: Books/EBook, desc: "Science/Physics"}
     # Hobbies/pastimes
     - {id: 271, cat: Books/EBook, desc: "Food And Drink"}
     - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
