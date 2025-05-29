@@ -143,7 +143,6 @@ Prior versions of Jackett are no longer supported.
  * TrahT
  * U3C3
  * Uindex
- * UnionDHT
  * VSTHouse
  * VST Torrentz
  * VSTorrent
