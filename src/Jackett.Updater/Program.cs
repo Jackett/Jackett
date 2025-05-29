@@ -769,6 +769,7 @@ namespace Jackett.Updater
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
                 "Definitions/tspate.yml",
+                "Definitions/trupornolabs.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
                 "Definitions/turknova.yml",
