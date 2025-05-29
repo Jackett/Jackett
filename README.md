@@ -148,7 +148,6 @@ Prior versions of Jackett are no longer supported.
  * VST Torrentz
  * VSTorrent
  * Wolfmax4K
- * xxxAdultTorrent
  * XXXClub
  * xxxtor
  * YourBittorrent
