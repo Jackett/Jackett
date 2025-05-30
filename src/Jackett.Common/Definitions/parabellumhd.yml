@@ -65,8 +65,9 @@ search:
   keywordsfilters:
     - name: re_replace # remove year
       args: ["\\b((19|20)\\d{2})\\b", ""]
-    - name: re_replace # strip season
-      args: ["(?i)\\b(S\\d+)\\b", ""]
+    # strip season and/or ep
+    - name: re_replace
+      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
     - name: re_replace # strip El
       args: ["(?i)\\b(el)\\b", ""]
     - name: tolower
