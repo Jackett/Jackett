@@ -1,7 +1,9 @@
 ---
-id: btsate
-name: btsate
-description: "btsate is a Public BitTorrent DHT search engine."
+id: btstate
+replaces:
+  - btsate
+name: btstate
+description: "btstate is a Public BitTorrent DHT search engine."
 language: en-US
 type: public
 encoding: UTF-8
