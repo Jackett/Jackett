@@ -17,11 +17,13 @@ caps:
     - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
     - {id: 143, cat: TV/Anime, desc: "Filme > Anime"}
     - {id: 138, cat: Movies, desc: "Filme > Packs"}
+    - {id: 148, cat: Movies, desc: "Filme > Packs UHD"}
     - {id: 60, cat: TV/SD, desc: "Serien > SD"}
     - {id: 57, cat: TV/HD, desc: "Serien > HD"}
     - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
     - {id: 144, cat: TV/Anime, desc: "Serien > Anime"}
     - {id: 59, cat: TV, desc: "Serien > Packs"}
+    - {id: 147, cat: TV, desc: "Serien > Packs UHD"}
     - {id: 110, cat: Audio/MP3, desc: "Audio > MP3"}
     - {id: 48, cat: Audio/Lossless, desc: "Audio > Flac"}
     - {id: 52, cat: Audio, desc: "Audio > Pack"}
