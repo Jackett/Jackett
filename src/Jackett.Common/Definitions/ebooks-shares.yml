@@ -45,6 +45,7 @@ caps:
     - {id: 314, cat: Books/EBook, desc: "Historical "}
     - {id: 315, cat: Books/EBook, desc: "Cozy/Mystery "}
     - {id: 318, cat: Books/EBook, desc: "Urbn Fantasy/Para"}
+    - {id: 340, cat: Books/EBook, desc: "Lit/RPG"}
     # Children & Y/A
     - {id: 299, cat: Books/EBook, desc: "Young Adult"}
     - {id: 298, cat: Books/EBook, desc: "Children's"}
