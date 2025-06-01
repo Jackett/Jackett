@@ -516,6 +516,7 @@ namespace Jackett.Updater
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lat-team.yml", // switch to *-API #8682
                 "Definitions/latinop2p.yml",
+                "Definitions/le-cinephile.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/learnbits.yml",
                 "Definitions/lechaudron.yml",

@@ -426,7 +426,6 @@ Prior versions of Jackett are no longer supported.
  * LastFiles (LF)
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
- * Le-Cinephile
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
