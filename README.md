@@ -464,7 +464,6 @@ Prior versions of Jackett are no longer supported.
  * Nirvana
  * NorBits
  * NordicQuality
- * Ntelogo
  * Nusanta(RA.RE)
  * OKPT
  * Old Greek Tracker

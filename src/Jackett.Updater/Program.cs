@@ -576,6 +576,7 @@ namespace Jackett.Updater
                 "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
+                "Definitions/ntelogo.yml",
                 "Definitions/nyaa-pantsu.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
