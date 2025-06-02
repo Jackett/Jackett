@@ -111,7 +111,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+    selector: div.torrents >div > div.torrent-table-sub-info
 
   fields:
     category:
@@ -133,9 +133,6 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
@@ -146,7 +143,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
+      selector: div.torrent-info-text-added > span[title]
       attribute: title
       optional: true
       filters:
@@ -156,7 +153,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
+      selector: div.torrent-info-text-added:not(:has(span))
       optional: true
       filters:
         - name: append
@@ -166,13 +163,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(5)
+      selector: div.torrent-info-text-size
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: div.torrent-info-text-seeders
     leechers:
-      selector: td.rowfollow:nth-child(7)
+      selector: div.torrent-info-text-leechers
     grabs:
-      selector: td.rowfollow:nth-child(8)
+      selector: div.torrent-info-text-finished
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -189,7 +186,14 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
+    description_verified:
+      case:
+        span[title="通过"]: "Verified:"
+        span[title="未审"]: "Unverified:"
+        span[title="拒绝"]: "Banned:"
     description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span
+      selector: div.text-start
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
 # NexusPHP v1.8.15 2024-12-23
