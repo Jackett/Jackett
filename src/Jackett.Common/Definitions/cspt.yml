@@ -111,7 +111,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: div.torrents >div > div.torrent-table-sub-info
+    selector: div.torrents > div > div.torrent-table-sub-info
 
   fields:
     category:
