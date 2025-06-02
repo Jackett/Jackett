@@ -35,6 +35,8 @@ caps:
     # Collections
     - {id: 305, cat: Books/EBook, desc: "Same Author"}
     - {id: 307, cat: Books/EBook, desc: "Collection: Military"}
+    - {id: 342, cat: Books/EBook, desc: "Collection: Multiple Authors"}
+    - {id: 343, cat: Books/EBook, desc: "Collection: Fantasy"}
     # Fiction
     - {id: 281, cat: Books/EBook, desc: "Horror"}
     - {id: 282, cat: Books/EBook, desc: "Sci-Fi/Fantasy"}
@@ -46,6 +48,7 @@ caps:
     - {id: 315, cat: Books/EBook, desc: "Cozy/Mystery "}
     - {id: 318, cat: Books/EBook, desc: "Urbn Fantasy/Para"}
     - {id: 340, cat: Books/EBook, desc: "Lit/RPG"}
+    - {id: 341, cat: Books/EBook, desc: "Collections"}
     # Children & Y/A
     - {id: 299, cat: Books/EBook, desc: "Young Adult"}
     - {id: 298, cat: Books/EBook, desc: "Children's"}
