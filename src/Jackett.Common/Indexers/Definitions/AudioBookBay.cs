@@ -33,6 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://audiobookbay.lu/",
             "http://audiobookbay.is/",
+            "http://audiobookbay.se/",
         };
         public override string[] LegacySiteLinks => new[]
         {
@@ -41,7 +42,6 @@ namespace Jackett.Common.Indexers.Definitions
             "http://audiobookbay.nl/",
             "http://audiobookbay.ws/",
             "http://audiobookbay.fi/",
-            "http://audiobookbay.se/",
             "http://audiobookbayabb.com/",
             "https://audiobookbay.fi/",
             "https://audiobookbay.li/",
