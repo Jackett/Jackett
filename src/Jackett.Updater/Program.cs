@@ -333,6 +333,7 @@ namespace Jackett.Updater
                 "Definitions/btmet.yml",
                 "Definitions/btkitty.yml",
                 "Definitions/btmirror.yml",
+                "Definitions/btsate.yml", // -> btstate #16006
                 "Definitions/btstornet.yml",
                 "Definitions/btworld.yml",
                 "Definitions/btxpress.yml",
@@ -351,6 +352,7 @@ namespace Jackett.Updater
                 "Definitions/classix.yml",
                 "Definitions/cloudtorrents.yml",
                 "Definitions/cooltorrent.yml",
+                "Definitions/cpabien.yml",
                 "Definitions/cpasbiensi.yml",
                 "Definitions/crazyhd.yml",
                 "Definitions/crazyscorner.yml",
@@ -514,6 +516,7 @@ namespace Jackett.Updater
                 "Definitions/lapausetorrents.yml",
                 "Definitions/lat-team.yml", // switch to *-API #8682
                 "Definitions/latinop2p.yml",
+                "Definitions/le-cinephile.yml",
                 "Definitions/leaguehd.yml", // renamed to lemonhd
                 "Definitions/learnbits.yml",
                 "Definitions/lechaudron.yml",
@@ -574,6 +577,7 @@ namespace Jackett.Updater
                 "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
+                "Definitions/ntelogo.yml",
                 "Definitions/nyaa-pantsu.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
@@ -768,6 +772,7 @@ namespace Jackett.Updater
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
                 "Definitions/tspate.yml",
+                "Definitions/trupornolabs.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
                 "Definitions/turknova.yml",
@@ -784,6 +789,7 @@ namespace Jackett.Updater
                 "Definitions/ultrahdclub.yml",
                 "Definitions/underverse.yml",
                 "Definitions/underversel.yml",
+                "Definitions/uniondht.yml",
                 "Definitions/uniongang.yml",
                 "Definitions/uniongangcookie.yml",
                 "Definitions/uniotaku.yml", // to be migrated to c#
@@ -808,6 +814,7 @@ namespace Jackett.Updater
                 "Definitions/xperiencebytes-api.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/xxxadulttorrent.yml",
                 "Definitions/xxxtorrents.yml",
                 "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",

@@ -83,7 +83,7 @@ settings:
 
 login:
   method: post
-  path: login.php
+  path: login.php?2fa
   inputs:
     nev: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"

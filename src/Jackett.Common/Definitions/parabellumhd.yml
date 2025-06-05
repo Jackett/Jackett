@@ -52,20 +52,22 @@ login:
 
 search:
   paths:
-    # https://parabellumhd.cx/search.php?page=1&view=list&order=date&search=&year=
+    # https://parabellumhd.cx/search.php?page=1&view=list&order=date&search=last&year=
+    # https://parabellumhd.cx/search.php?page=1&view=list&order=date&search=&year=2025
     - path: search.php
   allowEmptyInputs: true
   inputs:
     page: 1
     view: list
     order: "{{ .Config.sort }}"
-    search: "{{ .Keywords }}"
-    year: "{{ .Query.Year }}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
+    year: "{{ if .Keywords }}{{ .Query.Year }}{{ else }}{{ .Today.Year }}{{ end }}"
   keywordsfilters:
     - name: re_replace # remove year
       args: ["\\b((19|20)\\d{2})\\b", ""]
-    - name: re_replace # strip season
-      args: ["(?i)\\b(S\\d+)\\b", ""]
+    # strip season and/or ep
+    - name: re_replace
+      args: ["\\b(?:[SE]\\d{1,4}){1,2}\\b", ""]
     - name: re_replace # strip El
       args: ["(?i)\\b(el)\\b", ""]
     - name: tolower
@@ -78,32 +80,44 @@ search:
       selector: p
       filters:
         - name: regexp
-          args: "Categoría: (.+?),"
+          args: "(?i)Categoría: (.+?),"
     _format:
       selector: div.file-info
       optional: true
       filters:
         - name: regexp
-          args: "Formato: (.+?),"
+          args: "(?i)Formato: (.+?),"
     _resolution:
       selector: div.file-info
       optional: true
       filters:
         - name: regexp
-          args: "Resolución: (.+?),"
+          args: "(?i)Resolución: (.+?),"
     _seasons:
       selector: div.file-info
       optional: true
       filters:
         - name: regexp
-          args: (\d+\s*\w+)$
+          args: "(?i)(\\d+ temporadas?)"
         - name: re_replace
-          args: ["(?i)(\\d+) (temporadas?)", "Season $1"]
+          args: ["(?i)(temporadas?)", "Seasons"]
+    _season:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: "(?i)Temporada: (\\d+)"
+    _episode:
+      selector: div.file-info
+      optional: true
+      filters:
+        - name: regexp
+          args: "(?i)Episodio: (\\d+)"
     title:
       selector: a[href^="torrent_details.php?id="]
       filters:
         - name: append
-          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }} Spanish"
+          args: " {{ if .Result._seasons }}{{ .Result._seasons }}{{ else }}{{ end }}{{ if .Result._season }}S{{ .Result._season }}{{ else }}{{ end }}{{ if .Result._episode }}E{{ .Result._episode }}{{ else }}{{ end }} {{ if .Result._format }}{{ .Result._format }}{{ else }}{{ end }} {{ if .Result._resolution }}{{ .Result._resolution }}{{ else }}{{ end }} Spanish"
     details:
       selector: a[href^="torrent_details.php?id="]
       attribute: href

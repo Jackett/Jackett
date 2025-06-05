@@ -6,9 +6,10 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - https://riperam.org/
+  - https://riper.online/
 legacylinks:
   - http://riperam.org/
+  - https://riperam.org/
 
 caps:
   categorymappings:

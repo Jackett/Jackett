@@ -57,19 +57,6 @@ settings:
       -s: size desc
       s: size asc
 
-download:
-  infohash:
-    hash:
-      selector: :root
-      filters:
-        - name: regexp
-          args: "\"info_hash\": \"([A-F|a-f|0-9]{40})\","
-    title:
-      selector: :root
-      filters:
-        - name: regexp
-          args: "status\": \\w+, \"name\": \"(.+?)\", \"short_name"
-
 search:
   paths:
     - path: "get-posts/order:{{ .Config.sort }}{{ range .Categories }}:category:{{.}}{{end}}{{ if or .Query.IMDBID .Keywords }}:keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}:time:10D{{ end }}:paginate_by:100:format:json/"
@@ -99,8 +86,8 @@ search:
           args: [" ", "-"]
     details:
       text: "/post-detail/{{ .Result._id }}/{{ .Result.details_url }}/"
-    download:
-      text: "{{ .Result.details }}?format=json"
+    infohash:
+      selector: h
     poster:
       selector: t
     imdbid:

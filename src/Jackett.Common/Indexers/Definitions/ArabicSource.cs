@@ -251,7 +251,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var title = qDetailsLink.TextContent + description;
                     var details = new Uri(qDetailsLink.GetAttribute("href"));
 
-                    var poster = new Uri(row.QuerySelector("img[src*=\"/torrents/images/\"]").GetAttribute("src"));
+                    var qPosterLink = row.QuerySelector("img[src*=\"/torrents/images/\"]");
                     var size = ParseUtil.GetBytes(row.QuerySelector("td:nth-last-child(5)").TextContent);
                     var matchDateAdded = Regex.Match(row.QuerySelector(" td:nth-child(2)").TextContent, @"(\d{2}-\d{2}-\d{4} \d{2}:\d{2})", RegexOptions.IgnoreCase);
                     var publishDate = matchDateAdded.Groups[1].Success && DateTime.TryParseExact(matchDateAdded.Groups[1].Value, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDate) ? parsedDate : DateTime.Now;
@@ -277,7 +277,6 @@ namespace Jackett.Common.Indexers.Definitions
                         Link = details,
                         PublishDate = publishDate,
                         Category = MapTrackerCatToNewznab(cat),
-                        Poster = poster,
                         Size = size,
                         Grabs = grabs,
                         Seeders = seeders,
@@ -287,6 +286,10 @@ namespace Jackett.Common.Indexers.Definitions
                         UploadVolumeFactor = upVolumeFactor,
                         MinimumRatio = 1.05
                     };
+                    if (qPosterLink != null)
+                    {
+                        release.Poster = new Uri(qPosterLink.GetAttribute("src"));
+                    }
 
                     releases.Add(release);
                 }

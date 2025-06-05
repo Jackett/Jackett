@@ -5,6 +5,7 @@ description: "Ebooks-Shares is a Private Torrent Tracker for EBOOKS / AUDIOBOOKS
 language: en-US
 type: private
 encoding: UTF-8
+testlinktorrent: false
 links:
   - https://ebooks-shares.org/
 
@@ -34,6 +35,8 @@ caps:
     # Collections
     - {id: 305, cat: Books/EBook, desc: "Same Author"}
     - {id: 307, cat: Books/EBook, desc: "Collection: Military"}
+    - {id: 342, cat: Books/EBook, desc: "Collection: Multiple Authors"}
+    - {id: 343, cat: Books/EBook, desc: "Collection: Fantasy"}
     # Fiction
     - {id: 281, cat: Books/EBook, desc: "Horror"}
     - {id: 282, cat: Books/EBook, desc: "Sci-Fi/Fantasy"}
@@ -44,6 +47,8 @@ caps:
     - {id: 314, cat: Books/EBook, desc: "Historical "}
     - {id: 315, cat: Books/EBook, desc: "Cozy/Mystery "}
     - {id: 318, cat: Books/EBook, desc: "Urbn Fantasy/Para"}
+    - {id: 340, cat: Books/EBook, desc: "Lit/RPG"}
+    - {id: 341, cat: Books/EBook, desc: "Collections"}
     # Children & Y/A
     - {id: 299, cat: Books/EBook, desc: "Young Adult"}
     - {id: 298, cat: Books/EBook, desc: "Children's"}
@@ -51,9 +56,11 @@ caps:
     - {id: 278, cat: Books/EBook, desc: "Tutorials"}
     - {id: 300, cat: Books/EBook, desc: "Textbooks"}
     - {id: 301, cat: Books/EBook, desc: "Educational"}
-    - {id: 328, cat: Books/EBook, desc: "Engineering"}
+    - {id: 328, cat: Books/EBook, desc: "Engineering/Mech"}
+    - {id: 337, cat: Books/EBook, desc: "Computers"}
+    - {id: 339, cat: Books/EBook, desc: "Science/Physics"}
     # Hobbies/pastimes
-    - {id: 271, cat: Books/EBook, desc: "CookBooks"}
+    - {id: 271, cat: Books/EBook, desc: "Food And Drink"}
     - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
     - {id: 327, cat: Books/EBook, desc: "Gardening"}
     - {id: 329, cat: Books/EBook, desc: "Motorcars/Repairs"}
@@ -61,11 +68,14 @@ caps:
     - {id: 331, cat: Books/EBook, desc: "Electronics"}
     - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
     - {id: 334, cat: Books/EBook, desc: "Veterinary/Pets"}
+    - {id: 336, cat: Books/EBook, desc: "Video Games"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
     - {id: 289, cat: Books/EBook, desc: "Autobiography/Memoir"}
     - {id: 274, cat: Books/EBook, desc: "Business"}
     - {id: 316, cat: Books/EBook, desc: "True Crime"}
+    - {id: 335, cat: Books/EBook, desc: "Entertainment"}
+    - {id: 338, cat: Books/EBook, desc: "Encyclopedia/Ref"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
@@ -133,6 +143,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     # https://ebooks-shares.org/index.php?page=torrents&search=&category=0&active=0
@@ -148,7 +163,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
+    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
 
   fields:
     category:
@@ -170,7 +185,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=downloadcheck"]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]

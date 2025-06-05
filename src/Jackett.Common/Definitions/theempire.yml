@@ -5,6 +5,8 @@ description: "TheEmpire (TE) is a Private Torrent Tracker for COMMONWEALTH TV / 
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 922b485175aeea4e956d03596eedebcd4a09fedc  # expired 23-May-2025
 links:
   - https://theempire.click/
 legacylinks:

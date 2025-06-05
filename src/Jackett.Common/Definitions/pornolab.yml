@@ -188,12 +188,22 @@ settings:
       1: asc
 
 login:
-  path: forum/index.php
+  path: forum/login.php
   method: form
   form: form[action="/forum/login.php"]
+  captcha:
+    type: image
+    selector: img[src^="//static.pornolab.net/captcha/"]
+    input: input[name^="cap_code_"]
   inputs:
-    login_username: "{{ .Config.username }}"
-    login_password: "{{ .Config.password }}"
+    input[name="login_username"]: "{{ .Config.username }}"
+    input[name="login_password"]: "{{ .Config.password }}"
+  selectors: true
+  selectorinputs:
+    cap_sid:
+      selector: input[name="cap_sid"]
+      attribute: value
+      optional: true
   error:
     - selector: div:contains("Форум временно отключен")
     - selector: h4.warnColor1.tCenter.mrg_16

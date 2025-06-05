@@ -196,8 +196,25 @@ search:
       filters:
         - name: regexp
           args: "(?i)[\\[\\({](1?\\d{1,3}(?:[\\.,]\\d{1,2})?\\s*[KMGTP]?i?B)[\\]\\)}]"
+    size_default:
+      selector: a[href^="./viewforum.php?f="]
+      attribute: href
+      case:
+        a[href*="f=25"]: 10GB
+        a[href*="f=26"]: 10GB
+        a[href*="f=34"]: 10GB
+        a[href*="f=36"]: 10GB
+        a[href*="f=51"]: 2GB
+        a[href*="f=52"]: 2GB
+        a[href*="f=29"]: 2GB
+        a[href*="f=30"]: 2GB
+        a[href*="f=31"]: 2GB
+        a[href*="f=33"]: 2GB
+        a[href*="f=35"]: 2GB
+        a[href*="f=37"]: 2GB
+        "*": 512MB
     size:
-      text: "{{ if .Result.size_title }}{{ .Result.size_title }}{{ else }}512 MB{{ end }}"
+      text: "{{ if .Result.size_title }}{{ .Result.size_title }}{{ else }}{{ .Result.size_default }}{{ end }}"
     seeders:
       text: 1
     leechers:

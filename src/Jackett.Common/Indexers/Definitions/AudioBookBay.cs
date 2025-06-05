@@ -34,20 +34,23 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://audiobookbay.lu/",
             "http://audiobookbay.is/",
+            "http://audiobookbay.se/",
+            "http://audiobookbay.fi/",
+            "http://audiobookbay.ws/",
+            "http://theaudiobookbay.se/",
         };
         public override string[] LegacySiteLinks => new[]
         {
             "https://audiobookbay.la/",
             "http://audiobookbay.net/",
-            "http://audiobookbay.nl/",
-            "http://audiobookbay.ws/",
-            "http://audiobookbay.fi/",
-            "http://audiobookbay.se/",
+            "http://audiobookbay.nl/", // redirects to .lu
+            "https://audiobookbay.nl/", // redirects to .lu
             "http://audiobookbayabb.com/",
-            "https://audiobookbay.fi/",
+            "https://audiobookbay.fi/", // redirects to http
             "https://audiobookbay.li/",
-            "https://audiobookbay.se/", // redirects to .is but has invalid CA
-            "https://audiobookbay.is/"
+            "https://audiobookbay.se/", // redirectds to http
+            "https://theaudiobookbay.se/", // invaid CA cn=nicereads.org
+            "https://audiobookbay.is/" // redirects to http
         };
         public override string Language => "en-US";
         public override string Type => "public";

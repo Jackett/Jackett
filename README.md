@@ -52,9 +52,9 @@ Prior versions of Jackett are no longer supported.
  * BT.etree
  * BTdirectory (BT目录)
  * BTSOW
+ * btstate
  * Byrutor
  * Cinecalidad
- * cpasbien
  * cpasbienClone
  * CrackingPatching
  * DaMagNet
@@ -141,15 +141,12 @@ Prior versions of Jackett are no longer supported.
  * torrentssg (토렌트쓱)
  * Torrenttip (토렌트팁)
  * TrahT
- * truPornolabs
  * U3C3
  * Uindex
- * UnionDHT
  * VSTHouse
  * VST Torrentz
  * VSTorrent
  * Wolfmax4K
- * xxxAdultTorrent
  * XXXClub
  * xxxtor
  * YourBittorrent
@@ -429,7 +426,6 @@ Prior versions of Jackett are no longer supported.
  * LastFiles (LF)
  * Lat-Team
  * Le Saloon [![(invite needed)][inviteneeded]](#)
- * Le-Cinephile
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
@@ -467,7 +463,6 @@ Prior versions of Jackett are no longer supported.
  * Nirvana
  * NorBits
  * NordicQuality
- * Ntelogo
  * Nusanta(RA.RE)
  * OKPT
  * Old Greek Tracker

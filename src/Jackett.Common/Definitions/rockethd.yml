@@ -52,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If it has been 60 days since your last login, your account will be inactive. After another 30 days without logging in, your account will be Disabled!"
 
 login:
   path: /api/torrents

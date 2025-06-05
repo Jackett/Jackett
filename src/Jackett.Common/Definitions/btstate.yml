@@ -1,0 +1,72 @@
+---
+id: btstate
+replaces:
+  - btsate
+name: btstate
+description: "btstate is a Public BitTorrent DHT search engine."
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://btstate.com/
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+search:
+  paths:
+    # https://btstate.com/api/searchByKeyword/2025?take=100&skip=0&page=1&pageSize=100
+    - path: "api/searchByKeyword/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+      response:
+        type: json
+
+  inputs:
+    take: 100
+    skip: 0
+    page: 1
+    pageSize: 100
+
+  rows:
+    selector: items
+    attribute: _source
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: name
+    details:
+      text: "{{ .Config.sitelink }}"
+    infohash:
+      selector: infohash
+    date:
+      # unix
+      selector: createTime
+      filters:
+        - name: regexp
+          args: ^(\d{10})
+    size:
+      selector: size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api
