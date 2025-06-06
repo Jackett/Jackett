@@ -29,10 +29,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://dontorrent.homes/";
+        public override string SiteLink { get; protected set; } = "https://dontorrent.haus/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.homes/",
+            "https://dontorrent.haus/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -41,7 +41,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.co/",
             "https://dontorrent.auction/",
             "https://dontorrent.football/",
             "https://dontorrent.wiki/",
@@ -56,6 +55,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.download/",
             "https://dontorrent.gift/",
             "https://dontorrent.report/",
+            "https://dontorrent.homes/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
