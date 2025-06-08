@@ -385,6 +385,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1319, TorznabCatType.TVSport, "|- Спорт (видео)");
             caps.Categories.AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             caps.Categories.AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
+            caps.Categories.AddCategoryMapping(2545, TorznabCatType.TVSport, "|- Клубный чемпионат мира 2025");
             caps.Categories.AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (отбор)");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (отбор)");
             caps.Categories.AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
@@ -629,7 +630,6 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2314, TorznabCatType.Books, "|- Популярная медицинская периодика (газеты и журналы)");
             caps.Categories.AddCategoryMapping(2132, TorznabCatType.Books, "|- Нетрадиционная, народная медицина и популярные книги о здоровье");
             caps.Categories.AddCategoryMapping(2131, TorznabCatType.Books, "|- Ветеринария, разное");
-            caps.Categories.AddCategoryMapping(2315, TorznabCatType.Books, "|- Тематические коллекции книг");
             caps.Categories.AddCategoryMapping(2362, TorznabCatType.BooksEBook, "Иностранные языки для взрослых");
             caps.Categories.AddCategoryMapping(1265, TorznabCatType.BooksEBook, "|- Английский язык (для взрослых)");
             caps.Categories.AddCategoryMapping(1266, TorznabCatType.BooksEBook, "|- Немецкий язык");
@@ -1110,6 +1110,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1121, TorznabCatType.AudioVideo, "|- Отечественная поп-музыка (Видео)");
             caps.Categories.AddCategoryMapping(431, TorznabCatType.AudioVideo, "|- Зарубежная Поп-музыка, Eurodance, Disco (Видео)");
             caps.Categories.AddCategoryMapping(2378, TorznabCatType.AudioVideo, "|- Восточноазиатская поп-музыка (Видео)");
+            caps.Categories.AddCategoryMapping(1039, TorznabCatType.AudioVideo, "|- Восточноазиатский Rock (Видео)");
             caps.Categories.AddCategoryMapping(2383, TorznabCatType.AudioVideo, "|- Разножанровые сборные концерты и сборники видеоклипов (Видео)");
             caps.Categories.AddCategoryMapping(2305, TorznabCatType.AudioVideo, "|- Джаз и Блюз (Видео)");
             caps.Categories.AddCategoryMapping(1782, TorznabCatType.AudioVideo, "|- Rock (Видео)");
@@ -1130,6 +1131,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1122, TorznabCatType.AudioVideo, "|- Отечественная поп-музыка (DVD Видео)");
             caps.Categories.AddCategoryMapping(986, TorznabCatType.AudioVideo, "|- Зарубежная Поп-музыка, Eurodance, Disco (DVD Видео)");
             caps.Categories.AddCategoryMapping(2379, TorznabCatType.AudioVideo, "|- Восточноазиатская поп-музыка (DVD Видео)");
+            caps.Categories.AddCategoryMapping(1038, TorznabCatType.AudioVideo, "|- Восточноазиатский Rock (DVD Видео)");
             caps.Categories.AddCategoryMapping(2088, TorznabCatType.AudioVideo, "|- Разножанровые сборные концерты и сборники видеоклипов (DVD Видео)");
             caps.Categories.AddCategoryMapping(2304, TorznabCatType.AudioVideo, "|- Джаз и Блюз (DVD Видео)");
             caps.Categories.AddCategoryMapping(1783, TorznabCatType.AudioVideo, "|- Зарубежный Rock (DVD Видео)");
@@ -1156,6 +1158,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2508, TorznabCatType.AudioVideo, "|- Зарубежная поп-музыка (HD Видео)");
             caps.Categories.AddCategoryMapping(2426, TorznabCatType.AudioVideo, "|- Отечественная поп-музыка (HD видео)");
             caps.Categories.AddCategoryMapping(2351, TorznabCatType.AudioVideo, "|- Восточноазиатская Поп-музыка (HD Видео)");
+            caps.Categories.AddCategoryMapping(1340, TorznabCatType.AudioVideo, "|- Восточноазиатский Rock (HD Видео)");
             caps.Categories.AddCategoryMapping(2306, TorznabCatType.AudioVideo, "|- Джаз и Блюз (HD Видео)");
             caps.Categories.AddCategoryMapping(1795, TorznabCatType.AudioVideo, "|- Зарубежный рок (HD Видео)");
             caps.Categories.AddCategoryMapping(2271, TorznabCatType.AudioVideo, "|- Отечественный рок (HD видео)");
@@ -1360,23 +1363,19 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1375, TorznabCatType.PCMac, "|- Офисные программы (Mac OS)");
             caps.Categories.AddCategoryMapping(1371, TorznabCatType.PCMac, "|- Программы для интернета и сетей (Mac OS)");
             caps.Categories.AddCategoryMapping(1374, TorznabCatType.PCMac, "|- Другие программы (Mac OS)");
-            caps.Categories.AddCategoryMapping(1933, TorznabCatType.PCMobileiOS, "iOS");
             caps.Categories.AddCategoryMapping(1935, TorznabCatType.PCMobileiOS, "|- Программы для iOS");
             caps.Categories.AddCategoryMapping(1003, TorznabCatType.PCMobileiOS, "|- Игры для iOS");
             caps.Categories.AddCategoryMapping(1937, TorznabCatType.PCMobileiOS, "|- Разное для iOS");
-            caps.Categories.AddCategoryMapping(2235, TorznabCatType.PCMobileiOS, "Видео");
             caps.Categories.AddCategoryMapping(1908, TorznabCatType.PCMobileiOS, "|- Фильмы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(864, TorznabCatType.PCMobileiOS, "|- Сериалы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(863, TorznabCatType.PCMobileiOS, "|- Мультфильмы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(2535, TorznabCatType.PCMobileiOS, "|- Аниме для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(2534, TorznabCatType.PCMobileiOS, "|- Музыкальное видео для iPod, iPhone, iPad");
-            caps.Categories.AddCategoryMapping(2238, TorznabCatType.PCMac, "Видео HD");
             caps.Categories.AddCategoryMapping(1936, TorznabCatType.PCMac, "|- Фильмы HD для Apple TV");
             caps.Categories.AddCategoryMapping(315, TorznabCatType.PCMac, "|- Сериалы HD для Apple TV");
             caps.Categories.AddCategoryMapping(1363, TorznabCatType.PCMac, "|- Мультфильмы HD для Apple TV");
             caps.Categories.AddCategoryMapping(2082, TorznabCatType.PCMac, "|- Документальное видео HD для Apple TV");
             caps.Categories.AddCategoryMapping(2241, TorznabCatType.PCMac, "|- Музыкальное видео HD для Apple TV");
-            caps.Categories.AddCategoryMapping(2236, TorznabCatType.Audio, "Аудио");
             caps.Categories.AddCategoryMapping(1909, TorznabCatType.AudioAudiobook, "|- Аудиокниги (AAC, ALAC)");
             caps.Categories.AddCategoryMapping(1927, TorznabCatType.AudioLossless, "|- Музыка lossless (ALAC)");
             caps.Categories.AddCategoryMapping(2240, TorznabCatType.Audio, "|- Музыка Lossy (AAC-iTunes)");
