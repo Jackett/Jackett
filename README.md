@@ -71,7 +71,6 @@ Prior versions of Jackett are no longer supported.
  * FilmesHdTorrent
  * Frozen Layer
  * GamesTorrents
- * GloDLS
  * GTorrent.pro
  * Idope
  * ilCorSaRoNeRo

@@ -438,6 +438,7 @@ namespace Jackett.Updater
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
                 "Definitions/gktorrent.yml", // renamed to zktorrent #15399
+                "Definitions/glodls.yml",
                 "Definitions/gods.yml",
                 "Definitions/goodtracker.yml",
                 "Definitions/gormogon.yml",
