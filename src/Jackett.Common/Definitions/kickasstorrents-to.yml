@@ -23,16 +23,79 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: anime, cat: TV/Anime, desc: Anime}
-    - {id: apps, cat: PC, desc: Apps}
-    - {id: books, cat: Books, desc: Books}
-    - {id: documentaries, cat: TV/Documentary, desc: Documentaries}
-    - {id: games, cat: Console, desc: Games}
-    - {id: movies, cat: Movies, desc: Movies}
-    - {id: music, cat: Audio, desc: Music}
-    - {id: other, cat: Other, desc: Other}
-    - {id: tv, cat: TV, desc: TV}
-    - {id: xxx, cat: XXX, desc: XXX}
+    # category naming is inconsistent with root cat being left out on some results, hence the duplicate entries with/without root
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: AnimeEnglish-translated, cat: TV/Anime, desc: "Anime English-translated"}
+    - {id: English-translated, cat: TV/Anime, desc: "Anime English-translated"}
+    - {id: Apps, cat: PC, desc: Apps}
+    - {id: AppsWindows, cat: PC/0day, desc: "Apps Windows"}
+    - {id: Windows, cat: PC/0day, desc: "Apps Windows"}
+    - {id: AppsMac, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: Mac, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: AppsAndroid, cat: PC/Mobile-Android, desc: "Apps Android"}
+    - {id: Android, cat: PC/Mobile-Android, desc: "Apps Android"}
+    - {id: AppsLinux, cat: PC, desc: "Apps Linux"}
+    - {id: Linux, cat: PC, desc: "Apps Linux"}
+    - {id: Books, cat: Books, desc: Books}
+    - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Audio books"}
+    - {id: Audiobooks, cat: Audio/Audiobook, desc: "Audio books"}
+    - {id: BooksComics, cat: Books/Comics, desc: Comics}
+    - {id: Comics, cat: Books/Comics, desc: Comics}
+    - {id: BooksEbooks, cat: Books/EBook, desc: Ebooks}
+    - {id: EBooks, cat: Books/EBook, desc: Ebooks}
+    - {id: Games, cat: Console, desc: "Games"}
+    - {id: PCGames, cat: PC/Games, desc: "Games PC"}
+    - {id: GamesPCGames, cat: PC/Games, desc: "Games PC"}
+    - {id: GamesOtherGames, cat: PC/Games, desc: "Games Other"}
+    - {id: OtherGames, cat: PC/Games, desc: "Games Other"}
+    - {id: GamesNDS, cat: Console/NDS, desc: NDS}
+    - {id: NDS, cat: Console/NDS, desc: NDS}
+    - {id: GamesPS3, cat: Console/PS3, desc: PS3}
+    - {id: PS3, cat: Console/PS3, desc: PS3}
+    - {id: GamesPS4, cat: Console/PS4, desc: PS4}
+    - {id: PS4, cat: Console/PS4, desc: PS4}
+    - {id: GamesPSP, cat: Console/PSP, desc: PSP}
+    - {id: PSP, cat: Console/PSP, desc: PSP}
+    - {id: GamesXbox360, cat: Console/XBox 360, desc: Xbox360}
+    - {id: Xbox360, cat: Console/XBox 360, desc: Xbox360}
+    - {id: GamesWii, cat: Console/Wii, desc: Wii}
+    - {id: Wii, cat: Console/Wii, desc: Wii}
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: Movies3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
+    - {id: 3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
+    - {id: MoviesDocumentary, cat: Movies/Other, desc: "Movies Documentary"}
+    - {id: Documentary, cat: Movies/Other, desc: "Movies Documentary"}
+    - {id: MoviesDVD, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: DVD, cat: Movies/DVD, desc: "Movies DVD"}
+    - {id: MoviesMP4, cat: Movies/HD, desc: "Movies MP4"}
+    - {id: MP4, cat: Movies/HD, desc: "Movies MP4"}
+    - {id: MoviesHighresMovies, cat: Movies/HD, desc: "Movies Highres"}
+    - {id: HighresMovies, cat: Movies/HD, desc: "Movies Highres"}
+    - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed"}
+    - {id: DubbedMovies, cat: Movies, desc: "Movies Dubbed"}
+    - {id: MoviesUltraHD, cat: Movies/UHD, desc: "Movies UltraHD"}
+    - {id: UltraHD, cat: Movies/UHD, desc: "Movies UltraHD"}
+    - {id: MoviesOtherMovies, cat: Movies/Other, desc: "Movies Other"}
+    - {id: OtherMovies, cat: Movies/Other, desc: "Movies Other"}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: MusicLossless, cat: Audio/Lossless, desc: "Music Lossless"}
+    - {id: Lossless, cat: Audio/Lossless, desc: "Music Lossless"}
+    - {id: MusicMP3, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: MP3, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: MusicMusicvideos, cat: Audio/Video, desc: "Music videos"}
+    - {id: Musicvideos, cat: Audio/Video, desc: "Music videos"}
+    - {id: MusicOthermusic, cat: Audio/Other, desc: "Music Other"}
+    - {id: Othermusic, cat: Audio/Other, desc: "Music Other"}
+    - {id: Other, cat: Other, desc: Other}
+    - {id: Movieclips, cat: Other, desc: "Movie clips"}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: AdultVideo, cat: XXX/WEB-DL, desc: "Adult Video"}
+    - {id: XXXVideo, cat: XXX/WEB-DL, desc: "Adult Video"}
+    - {id: Video, cat: XXX/WEB-DL, desc: "Adult Video"}
+    - {id: AdultGames, cat: XXX/Other, desc: "Adult Games"}
+    - {id: XXXGames, cat: XXX/Other, desc: "Adult Games"}
+    - {id: AdultPictures, cat: XXX/ImageSet, desc: "Adult Pictures"}
+    - {id: XXXPictures, cat: XXX/ImageSet, desc: "Adult Pictures"}
 
   modes:
     search: [q]
@@ -44,65 +107,35 @@ caps:
 settings:
   - name: info_flaresolverr
     type: info_flaresolverr
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: time
-    options:
-      time: created
-      seeders: seeders
-      size: size
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
-
-download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
 
 search:
   paths:
-    # 20 rows per page
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}2/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}3/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}4/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
-    - path: "{{ if .Keywords }}usearch/{{ .Keywords }}/{{ else }}new/{{ end }}5/?sortby={{ .Config.sort }}&sort={{ .Config.type }}"
+    # 50 rows per page, however the All page only returns 49 actual results as the 50th is a duplicate of the 49th 8-/
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/All/{{ end }}"
+    - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/All/?page=2{{ end }}"
 
   rows:
-    selector: table.data tr.odd:has(a[class="cellMainLink"]), table.data tr.even:has(a[class="cellMainLink"])
-    filters:
-      - name: andmatch
+    selector: table.data > tbody > tr:has(a[href^="magnet:?xt="])
 
   fields:
     category:
-      selector: span > strong > a
-      attribute: href
+      selector: span > strong
       filters:
-        - name: tolower
-        - name: trim
-          args: /
+        - name: re_replace
+          args: ["[>| ]+", ""]
     title:
-      selector: a[class="cellMainLink"]
+      selector: a.cellMainLink
     details:
-      selector: a[class="cellMainLink"]
+      selector: a.cellMainLink
       attribute: href
     download:
-      selector: a[class="cellMainLink"]
+      selector: a[href^="magnet:?xt="]
       attribute: href
     size:
       selector: td:nth-child(2)
     date:
-      selector: td:nth-child(4)
-      attribute: title
+      selector: td.timeago
       filters:
-        - name: replace
-          args: ["<br/>", " "]
         - name: timeago
     seeders:
       selector: td:nth-child(5)
