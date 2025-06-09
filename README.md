@@ -42,7 +42,6 @@ Prior versions of Jackett are no longer supported.
  * AniSource
  * ApacheTorrent
  * AudioBook Bay (ABB)
- * Badass Torrents
  * Bangumi Moe
  * BigFANGroup
  * BitRu
