@@ -1,0 +1,70 @@
+---
+id: filemood
+name: FileMood
+description: "FileMood is a Public BitTorrent DHT search engine."
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://filemood.com/
+
+caps:
+  categories:
+    Other: Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+search:
+  paths:
+    - path: result
+      followredirect: true
+
+  inputs:
+    q: "{{ .Keywords }}{{ if .Keywords }} in:title{{ else }}{{ end }}"
+
+  rows:
+    selector: table > tbody > tr:has(a.btn-success)
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: a
+      attribute: title
+    details:
+      selector: a
+      attribute: href
+    infohash:
+      selector: a
+      attribute: href
+      filters:
+        - name: regexp
+          args: "([A-F|a-f|0-9]{40})"
+    size:
+      selector: td.dn-size
+    date:
+      text: now
+    seeders:
+      selector: td.dn-status
+      filters:
+        - name: split
+          args: ["/", 0]
+    leechers:
+      selector: td.dn-status
+      filters:
+        - name: split
+          args: ["/", 1]
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

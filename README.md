@@ -67,6 +67,7 @@ Prior versions of Jackett are no longer supported.
  * EXT Torrents
  * ExtraTorrent.st
  * EZTV
+ * FileMood
  * FilmesHdTorrent
  * Frozen Layer
  * GamesTorrents
