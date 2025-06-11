@@ -104,7 +104,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="]):has(a[href^="download.php?id="])
 
   fields:
     category:
