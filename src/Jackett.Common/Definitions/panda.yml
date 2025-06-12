@@ -19,7 +19,8 @@ caps:
     - {id: 412, cat: PC, desc: "Software/软件"}
     - {id: 411, cat: Console, desc: "Games/游戏"}
     - {id: 410, cat: Books, desc: "E-Books/电子书"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/MV"}
+    - {id: 414, cat: Audio/Audiobook, desc: "Audiobook/有声书"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐短片"}
     - {id: 413, cat: Audio/Video, desc: "Concert/演唱会/音乐会"}
     - {id: 408, cat: Audio, desc: "Music/音乐"}
     - {id: 409, cat: Other, desc: "Others/其他"}

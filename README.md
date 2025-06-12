@@ -42,7 +42,6 @@ Prior versions of Jackett are no longer supported.
  * AniSource
  * ApacheTorrent
  * AudioBook Bay (ABB)
- * Badass Torrents
  * Bangumi Moe
  * BigFANGroup
  * BitRu
@@ -68,10 +67,10 @@ Prior versions of Jackett are no longer supported.
  * EXT Torrents
  * ExtraTorrent.st
  * EZTV
+ * FileMood
  * FilmesHdTorrent
  * Frozen Layer
  * GamesTorrents
- * GloDLS
  * GTorrent.pro
  * Idope
  * ilCorSaRoNeRo
@@ -176,6 +175,7 @@ Prior versions of Jackett are no longer supported.
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay
+ * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
@@ -400,7 +400,6 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
- * iAnon
  * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
  * ilolicon PT
  * ImmortalSeed (iS)

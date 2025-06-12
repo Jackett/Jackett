@@ -294,6 +294,7 @@ namespace Jackett.Updater
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/b2s-share.yml",
+                "Definitions/badasstorrents.yml",
                 "Definitions/baibako.yml", // renamed rudub #5673
                 "Definitions/beitai.yml",
                 "Definitions/beyond-hd.yml", // migrated to C# API
@@ -412,7 +413,6 @@ namespace Jackett.Updater
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
-                "Definitions/fenyarnyek-tracker.yml",
                 "Definitions/file-shack.yml",
                 "Definitions/filebase.yml",
                 "Definitions/filelisting.yml",
@@ -438,6 +438,7 @@ namespace Jackett.Updater
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
                 "Definitions/gfxnews.yml",
                 "Definitions/gktorrent.yml", // renamed to zktorrent #15399
+                "Definitions/glodls.yml",
                 "Definitions/gods.yml",
                 "Definitions/goodtracker.yml",
                 "Definitions/gormogon.yml",

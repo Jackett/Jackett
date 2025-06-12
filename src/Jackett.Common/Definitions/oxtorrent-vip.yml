@@ -10,7 +10,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.oxtorrent5.com/
+  - https://www.oxtorrent7.com/
   - hhttps://www.zone-torrent2.com/
   - https://www.mega-torrent6.com/
 legacylinks:
@@ -26,7 +26,6 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.oxtorrent.gy/
   - https://www.oxtorrent.cz/
   - https://www.torrent911.lol/
   - https://www.oxtorrent.im/
@@ -45,6 +44,7 @@ legacylinks:
   - https://www.oxtorrent4.com/
   - https://www.mega-torrent5.com/
   - https://www.zone-torrent1.com/
+  - https://www.oxtorrent5.com/
 
 caps:
   categorymappings:

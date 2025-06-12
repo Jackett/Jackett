@@ -6,6 +6,8 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
+  - https://sor-next.top/
+legacylinks:
   - https://sor-next.tk/
 
 caps:
