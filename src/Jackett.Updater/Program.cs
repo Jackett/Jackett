@@ -413,7 +413,6 @@ namespace Jackett.Updater
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
                 "Definitions/feedurneed.yml", // merged with devilsplayground #6872
-                "Definitions/fenyarnyek-tracker.yml",
                 "Definitions/file-shack.yml",
                 "Definitions/filebase.yml",
                 "Definitions/filelisting.yml",

@@ -1,0 +1,148 @@
+---
+id: fenyarnyek-tracker
+name: Fenyarnyek-Tracker
+description: "Fenyarnyek-Tracker is a HUNGARIAN semi private site for TV / MOVIES / GENERAL"
+language: hu-HU
+type: semi-private
+encoding: UTF-8
+links:
+  - http://tracker.fenyarnyek.com/
+legacylinks:
+  - https://tracker.fenyarnyek.com/  # site is forcing http
+
+caps:
+  categorymappings:
+    - {id: 13, cat: Movies/SD, desc: "SD Hun"}
+    - {id: 14, cat: Movies/SD, desc: "SD Eng"}
+    - {id: 15, cat: Movies/SD, desc: "Xvid Hun"}
+    - {id: 16, cat: Movies/SD, desc: "Xvid Eng"}
+    - {id: 17, cat: Movies/HD, desc: "HD Hun"}
+    - {id: 18, cat: Movies/HD, desc: "HD Eng"}
+    - {id: 19, cat: Movies/DVD, desc: "DVD Hun"}
+    - {id: 20, cat: Movies/DVD, desc: "DVD Eng"}
+    - {id: 21, cat: Movies/SD, desc: "Cam Hun"}
+    - {id: 22, cat: Movies/SD, desc: "Cam Eng"}
+    - {id: 23, cat: TV, desc: "Sorozat Hun"}
+    - {id: 24, cat: TV, desc: "Sorozat Eng"}
+    - {id: 25, cat: TV/Anime, desc: "Animációs"}
+    - {id: 26, cat: Books, desc: "Ebook Hun"}
+    - {id: 27, cat: Books, desc: "Ebook Eng"}
+    - {id: 28, cat: PC/Games, desc: "Game Iso"}
+    - {id: 29, cat: PC/Games, desc: "Game Rip"}
+    - {id: 30, cat: XXX, desc: "XXX Film"}
+    - {id: 31, cat: XXX/ImageSet, desc: "XXX kép"}
+    - {id: 32, cat: Audio, desc: "Zene Hun"}
+    - {id: 33, cat: Audio, desc: "Zene Eng"}
+    - {id: 34, cat: Other, desc: "Képek"}
+    - {id: 35, cat: PC/Mobile-Other, desc: "Mobil"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+
+login:
+  method: post
+  path: index.php?page=login
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: td.lista span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # http://tracker.fenyarnyek.com/index.php?page=torrents&search=&category=0&active=0
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    # does not support multi categories, defaulting to All.
+    category: 0
+    # 0 all, 1 activeonly, 2 deadonly
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  rows:
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href*="category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="index.php?page=torrent-details"]
+    details:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?) "
+    date:
+      selector: td:nth-child(4)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "dd/MM/yyyy"
+    size:
+      selector: a[href^="index.php?page=torrent-details"]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "Méret: (.+?)<"
+    seeders:
+      selector: td:nth-last-child(5)
+    leechers:
+      selector: td:nth-last-child(6)
+    grabs:
+      selector: td:nth-last-child(7)
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# xbtit
