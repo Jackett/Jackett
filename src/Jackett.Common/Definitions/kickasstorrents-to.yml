@@ -63,6 +63,8 @@ caps:
     - {id: Movies, cat: Movies, desc: Movies}
     - {id: Movies3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
     - {id: 3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
+    - {id: MoviesBollywood, cat: Movies, desc: "Movies Bollywood"}
+    - {id: Bollywood, cat: Movies, desc: "Movies Bollywood"}
     - {id: MoviesDocumentary, cat: Movies/Other, desc: "Movies Documentary"}
     - {id: Documentary, cat: Movies/Other, desc: "Movies Documentary"}
     - {id: MoviesDVD, cat: Movies/DVD, desc: "Movies DVD"}
