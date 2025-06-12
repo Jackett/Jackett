@@ -51,7 +51,6 @@ caps:
     - {id: 89, cat: TV, desc: "مسلسلات عربية كامله (Full Arabic Series)"}
     - {id: 52, cat: TV, desc: "مسرحيات (Plays)"}
     - {id: 71, cat: TV, desc: "مسلسلات مدبلجه عربي (Arabic Dubbed Series)"}
-    - {id: 117, cat: TV, desc: "رمضان 2025 (Ramadan 2025)"}
     - {id: 90, cat: TV, desc: "برامج ومسابقات (Shows)"}
     # المرئيات الاجنبية Foreign Movies
     - {id: 92, cat: TV/Foreign, desc: "تعليمي (Educational)"}
@@ -116,7 +115,8 @@ search:
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    # does not support multi categories, default to All
+    category: 0
     # 0 all 1 activeonly 2 deadonly
     active: 0
     # 0 all 1 internal 2 external
