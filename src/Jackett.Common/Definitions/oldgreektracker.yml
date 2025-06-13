@@ -199,9 +199,6 @@ search:
     download:
       selector: a[href*="details.php?id="]
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
     poster:
       selector: img[src*="/torrents/images/"]
       attribute: src
