@@ -40,6 +40,8 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
