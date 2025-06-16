@@ -100,7 +100,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}search_torrent/{{ .Keywords }}{{ .Config.sort }}{{ else }}home/{{ end }}"
   keywordsfilters:
     # if searching for season packs with S01 to saison 1 #9712
     - name: re_replace
