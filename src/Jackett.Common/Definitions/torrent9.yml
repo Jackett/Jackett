@@ -55,6 +55,8 @@ caps:
   allowrawsearch: true
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
