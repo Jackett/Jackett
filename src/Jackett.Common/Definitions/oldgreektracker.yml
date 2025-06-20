@@ -73,6 +73,7 @@ caps:
     - {id: 29, cat: TV/Anime, desc: "TV: Foreign Animation"}
     - {id: 31, cat: TV/Other, desc: "TV: Foreign Cartoons"}
     - {id: 79, cat: TV/Documentary, desc: "TV: Foreign Documentaries"}
+    - {id: 147, cat: TV, desc: "TV: Foreign Packs"}
     - {id: 77, cat: TV, desc: "TV: Foreign TV Episodes"}
     - {id: 75, cat: TV, desc: "TV: Foreign TV Series"}
     - {id: 76, cat: TV, desc: "TV: Foreign TV Shows"}
