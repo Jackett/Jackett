@@ -611,7 +611,6 @@ Prior versions of Jackett are no longer supported.
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
- * Wukong (悟空问道)
  * x-ite.me (XM)
  * Xider-Torrent
  * XSpeeds (XS)
