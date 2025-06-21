@@ -526,6 +526,7 @@ namespace Jackett.Updater
                 "Definitions/legittorrents.yml",
                 "Definitions/lemencili.yml",
                 "Definitions/leparadisdunet.yml",
+                "Definitions/lepornoinfo.yml",
                 "Definitions/les-cinephiles.yml",
                 "Definitions/leporno.yml",
                 "Definitions/liaorencili.yml", // renamed to cilipro

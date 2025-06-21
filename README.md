@@ -80,7 +80,6 @@ Prior versions of Jackett are no longer supported.
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
- * LePorno.info
  * LimeTorrents
  * LinuxTracker
  * Mac Torrents Download
