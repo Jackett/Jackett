@@ -308,6 +308,7 @@ Prior versions of Jackett are no longer supported.
  * CinemaMovieS_ZT
  * Cinematik
  * CinemaZ (EuTorrents)
+ * ClearJAV
  * Coastal-Music-Crew (C-M-C)
  * ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
  * Concertos
