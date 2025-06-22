@@ -62,7 +62,6 @@ caps:
 
   modes:
     search: [q]
-    movie-search: [q]
 
 settings:
   - name: apikey
@@ -145,11 +144,6 @@ search:
       selector: download_link
     infohash:
       selector: info_hash
-    poster:
-      selector: description
-      filters:
-        - name: regexp
-          args: \[img=450\](.?+)\[/img\]
     files:
       selector: num_file
     seeders:
