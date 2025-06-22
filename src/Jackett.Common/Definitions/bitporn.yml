@@ -61,7 +61,6 @@ caps:
     - {id: 52, cat: XXX, desc: Uncategorized"}
 
 
-
   modes:
     search: [q]
     movie-search: [q]
