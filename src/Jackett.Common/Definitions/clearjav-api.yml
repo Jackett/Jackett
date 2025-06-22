@@ -14,7 +14,6 @@ caps:
 
   modes:
     search: [q]
-    movie-search: [q]
 
 settings:
   - name: apikey
