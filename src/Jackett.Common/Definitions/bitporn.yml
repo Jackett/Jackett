@@ -60,7 +60,6 @@ caps:
     - {id: 51, cat: XXX, desc: VR"}
     - {id: 52, cat: XXX, desc: Uncategorized"}
 
-
   modes:
     search: [q]
     movie-search: [q]
