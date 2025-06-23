@@ -489,6 +489,7 @@ namespace Jackett.Updater
                 "Definitions/hush.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/ibit.yml",
+                "Definitions/icc2022.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
