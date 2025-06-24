@@ -87,7 +87,7 @@ login:
     - selector: font[color="red"]
   test:
     path: torrents.php
-    selector: "a[href*=\"logout\"]"
+    selector: a[href*="logout"]
 
 download:
   selectors:
