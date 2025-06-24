@@ -87,7 +87,7 @@ login:
     - selector: font[color="red"]
   test:
     path: torrents.php
-    selector: "#info_block,.userinfo,a[href*=\"logout\"],a[href*=\"userdetails\"]"
+    selector: "a[href*=\"logout\"]"
 
 download:
   selectors:
