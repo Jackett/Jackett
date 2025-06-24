@@ -169,7 +169,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
+    selector: "table.lista:not(table[cellspacing]) > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
 
   fields:
     category:
