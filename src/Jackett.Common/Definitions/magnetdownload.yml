@@ -1,0 +1,96 @@
+---
+id: magnetdownload
+name: MagnetDownload
+description: "MagnetDownload is a Public DHT Crawler"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.magnetdownload.com/
+
+caps:
+  categorymappings:
+    - {id: Other, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+download:
+  before:
+    path: api/json_info
+    inputs:
+      # /info/14152933
+      hashes: "{{ re_replace .DownloadUri.AbsolutePath \"/info/\" \"\" }}"
+  infohash:
+    usebeforeresponse: true
+    hash:
+      selector: :root
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
+    title:
+      selector: :root
+      filters:
+        - name: regexp
+          args: name\". \"(.+?)\"
+        - name: validfilename
+
+search:
+  paths:
+    # https://www.magnetdownload.com/search/2025/
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/"
+
+  rows:
+    selector: tr > td.x-item
+#    filters:
+#      - name: andmatch
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: a
+      attribute: title
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    date:
+      # 2 days, 5 hours
+      selector: span.ctime
+      filters:
+        - name: timeago
+    files:
+      selector: div.tail
+      filters:
+        - name: regexp
+          args: Files. (\d+)
+    size:
+      selector: div.tail
+      filters:
+        - name: regexp
+          args: size. (.+?)  T
+    grabs:
+      selector: div.tail
+      filters:
+        - name: regexp
+          args: requests. (\d+)
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
