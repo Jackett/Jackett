@@ -6,8 +6,8 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://chdbits.co/
   - https://ptchdbits.co/
+  - https://chdbits.co/
 
 caps:
   categorymappings:
@@ -66,6 +66,8 @@ login:
   path: login.php
   method: form
   form: form[action="takelogin.php"]
+  headers:
+    user-agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"]
   captcha:
     type: image
     selector: img[alt="CAPTCHA"]
@@ -80,9 +82,12 @@ login:
   error:
     - selector: td.embedded:has(h2:contains("失败"))
     - selector: td.embedded:has(h2:contains("failed"))
+    - selector: td.embedded:has(h2:contains("错误"))
+    - selector: td.embedded:has(h2:contains("error"))
+    - selector: font[color="red"]
   test:
     path: torrents.php
-    selector: a[href*="logout.php"]
+    selector: "#info_block,.userinfo,a[href*=\"logout\"],a[href*=\"userdetails\"]"
 
 download:
   selectors:
