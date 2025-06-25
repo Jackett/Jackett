@@ -329,7 +329,6 @@ Prior versions of Jackett are no longer supported.
  * DigitalCore (DC)
  * DimeADozen (EzTorrent)
  * DiscFan [![(invite needed)][inviteneeded]](#)
- * DivTeam
  * DocsPedia
  * Drugari
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)

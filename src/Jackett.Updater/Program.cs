@@ -375,6 +375,7 @@ namespace Jackett.Updater
                 "Definitions/devils-playground.yml",
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
+                "Definitions/divteam.yml",
                 "Definitions/documentarytorrents.yml",
                 "Definitions/dodder.yml",
                 "Definitions/downloadville.yml",
