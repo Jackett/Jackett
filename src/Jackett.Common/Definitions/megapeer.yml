@@ -40,6 +40,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_category_8000
+    type: info_category_8000
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -163,7 +167,7 @@ search:
       selector: a[href^="/download/"]
       attribute: href
     size:
-      selector: td:nth-child(4)
+      selector: td:nth-last-child(2)
     seeders:
       selector: td:last-child font:first-of-type
     leechers:

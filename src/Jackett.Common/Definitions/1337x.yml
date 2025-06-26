@@ -14,12 +14,6 @@ links:
   - https://x1337x.eu/
   - https://x1337x.se/
   - https://x1337x.cc/
-  - https://1337x.unblockninja.com/
-  - https://1337x.ninjaproxy1.com/
-  - https://1337x.proxyninja.org/
-  - https://1337x.proxyninja.net/
-  - https://1337x.torrentbay.st/
-  - https://1337x.torrentsbay.org/
 legacylinks:
   - https://1337x.is/
   - https://1337x.gd/
@@ -27,6 +21,12 @@ legacylinks:
   - https://1337x.abcproxy.org/
   - https://1337x.so/
   - https://1337x.unblockit.download/
+  - https://1337x.unblockninja.com/ # keyword search not working
+  - https://1337x.ninjaproxy1.com/ # keyword search not working
+  - https://1337x.proxyninja.org/ # keyword search not working
+  - https://1337x.proxyninja.net/ # keyword search not working
+  - https://1337x.torrentbay.st/ # keyword search not working
+  - https://1337x.torrentsbay.org/ # keyword search not working
 
 caps:
   categorymappings:

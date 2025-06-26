@@ -56,6 +56,11 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -104,6 +109,9 @@ search:
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table.table-center[width="905"] > tbody > tr:has(a[onclick])

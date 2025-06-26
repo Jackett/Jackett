@@ -60,6 +60,9 @@ caps:
     - {id: 328, cat: Books/EBook, desc: "Engineering/Mech"}
     - {id: 337, cat: Books/EBook, desc: "Computers"}
     - {id: 339, cat: Books/EBook, desc: "Science/Physics"}
+    - {id: 346, cat: Books/EBook, desc: "Chemistry"}
+    - {id: 347, cat: Books/EBook, desc: "Medical"}
+    - {id: 348, cat: Books/EBook, desc: "Mathematics"}
     # Hobbies/pastimes
     - {id: 271, cat: Books/EBook, desc: "Food And Drink"}
     - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
@@ -78,6 +81,7 @@ caps:
     - {id: 316, cat: Books/EBook, desc: "True Crime"}
     - {id: 335, cat: Books/EBook, desc: "Entertainment"}
     - {id: 338, cat: Books/EBook, desc: "Encyclopedia/Ref"}
+    - {id: 349, cat: Books/EBook, desc: "Self Help"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
@@ -165,7 +169,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.lista > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
+    selector: "table.lista:not(table[cellspacing]) > tbody > tr:has(a[href^=\"index.php?page=torrent-details&id=\"]){{ if .Config.vip }}{{ else }}:not(:has(a[href$=\"&category=16\"])):not(:has(a[href$=\"&category=319\"])){{ end }}"
 
   fields:
     category:

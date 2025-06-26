@@ -104,7 +104,7 @@ login:
     - selector: div.div_tartalom:contains("Sikertelen bejelentkezés")
   test:
     path: index.php
-    selector: a[href^="logout.php?hash="]
+    selector: a[href^="logout.php"]
 
 search:
   paths:

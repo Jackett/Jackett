@@ -1,6 +1,6 @@
 ---
 id: bitporn
-name: BitPorn
+name: BitPorn (API)
 description: "BitPorn (Malacka) is a HUNGARIAN Private Torrent Tracker for 3X"
 language: hu-HU
 type: private
@@ -10,67 +10,67 @@ links:
 
 caps:
   categorymappings:
-    - {id: 418, cat: XXX, desc: "Amateur"}
-    - {id: 410, cat: XXX, desc: "Anal"}
-    - {id: 414, cat: XXX, desc: "Animal"}
-    - {id: 415, cat: XXX, desc: "Asian"}
-    - {id: 416, cat: XXX, desc: "BBW"}
-    - {id: 417, cat: XXX, desc: "BDSM"}
-    - {id: 419, cat: XXX, desc: "Big Ass"}
-    - {id: 420, cat: XXX, desc: "Big Tits"}
-    - {id: 421, cat: XXX, desc: "Black"}
-    - {id: 447, cat: XXX, desc: "Cartoon"}
-    - {id: 448, cat: XXX, desc: "Casting"}
-    - {id: 422, cat: XXX, desc: "Classic"}
-    - {id: 434, cat: XXX, desc: "Collection"}
-    - {id: 423, cat: XXX, desc: "Creampie"}
-    - {id: 424, cat: XXX, desc: "Cumshot"}
-    - {id: 451, cat: XXX, desc: "Deepthroat"}
-    - {id: 455, cat: XXX, desc: "Extreme"}
-    - {id: 460, cat: XXX, desc: "Fansite"}
-    - {id: 454, cat: XXX, desc: "Family"}
-    - {id: 425, cat: XXX, desc: "Feature"}
-    - {id: 426, cat: XXX, desc: "Fetish"}
-    - {id: 457, cat: XXX, desc: "Fisting"}
-    - {id: 453, cat: XXX, desc: "Gangbang"}
-    - {id: 459, cat: XXX, desc: "Game"}
-    - {id: 427, cat: XXX, desc: "Gay / Bi"}
-    - {id: 412, cat: XXX, desc: "Hair"}
-    - {id: 411, cat: XXX, desc: "Hardcore"}
-    - {id: 456, cat: XXX, desc: "HiddenCam"}
-    - {id: 428, cat: XXX, desc: "Homemade"}
-    - {id: 429, cat: XXX, desc: "Interracial"}
-    - {id: 430, cat: XXX, desc: "Lesbian"}
-    - {id: 431, cat: XXX, desc: "Magyar"}
-    - {id: 432, cat: XXX, desc: "Masturbation"}
-    - {id: 433, cat: XXX, desc: "Mature"}
-    - {id: 435, cat: XXX, desc: "Milf"}
-    - {id: 436, cat: XXX, desc: "Old and Young"}
-    - {id: 437, cat: XXX, desc: "Parody"}
-    - {id: 449, cat: XXX, desc: "Pictures"}
-    - {id: 438, cat: XXX, desc: "Pissing"}
-    - {id: 439, cat: XXX, desc: "POV"}
-    - {id: 440, cat: XXX, desc: "Pregnant"}
-    - {id: 452, cat: XXX, desc: "Public"}
-    - {id: 441, cat: XXX, desc: "Shemale"}
-    - {id: 442, cat: XXX, desc: "Softcore"}
-    - {id: 443, cat: XXX, desc: "Squirt"}
-    - {id: 444, cat: XXX, desc: "Straight"}
-    - {id: 445, cat: XXX, desc: "Teen"}
-    - {id: 450, cat: XXX, desc: "Threesome"}
-    - {id: 446, cat: XXX, desc: "VR"}
-    - {id: 458, cat: XXX, desc: "Uncategorized"}
+    - {id: 4, cat: XXX, desc: Amateur"}
+    - {id: 5, cat: XXX, desc: Anal"}
+    - {id: 6, cat: XXX, desc: Asian"}
+    - {id: 7, cat: XXX, desc: BBW"}
+    - {id: 8, cat: XXX, desc: BDSM"}
+    - {id: 9, cat: XXX, desc: Big Ass"}
+    - {id: 10, cat: XXX, desc: Big Tits"}
+    - {id: 11, cat: XXX, desc: Black"}
+    - {id: 12, cat: XXX, desc: Cartoon"}
+    - {id: 13, cat: XXX, desc: Casting"}
+    - {id: 14, cat: XXX, desc: Classic"}
+    - {id: 15, cat: XXX, desc: Collection"}
+    - {id: 16, cat: XXX, desc: Creampie"}
+    - {id: 17, cat: XXX, desc: Cumshot"}
+    - {id: 18, cat: XXX, desc: Deepthroat"}
+    - {id: 19, cat: XXX, desc: Extreme"}
+    - {id: 20, cat: XXX, desc: Fansite"}
+    - {id: 21, cat: XXX, desc: Family"}
+    - {id: 22, cat: XXX, desc: Feature"}
+    - {id: 23, cat: XXX, desc: Fetish"}
+    - {id: 24, cat: XXX, desc: Fisting"}
+    - {id: 25, cat: XXX, desc: Gangbang"}
+    - {id: 26, cat: XXX, desc: Game"}
+    - {id: 27, cat: XXX, desc: Gay / Bi"}
+    - {id: 28, cat: XXX, desc: Hair"}
+    - {id: 29, cat: XXX, desc: Hardcore"}
+    - {id: 30, cat: XXX, desc: HiddenCam"}
+    - {id: 31, cat: XXX, desc: Homemade"}
+    - {id: 32, cat: XXX, desc: Interracial"}
+    - {id: 33, cat: XXX, desc: Lesbian"}
+    - {id: 34, cat: XXX, desc: Magyar"}
+    - {id: 35, cat: XXX, desc: Masturbation"}
+    - {id: 36, cat: XXX, desc: Mature"}
+    - {id: 37, cat: XXX, desc: Milf"}
+    - {id: 38, cat: XXX, desc: Old and Young"}
+    - {id: 39, cat: XXX, desc: Parody"}
+    - {id: 40, cat: XXX, desc: Pictures"}
+    - {id: 41, cat: XXX, desc: Pissing"}
+    - {id: 42, cat: XXX, desc: POV"}
+    - {id: 43, cat: XXX, desc: Pregnant"}
+    - {id: 44, cat: XXX, desc: Public"}
+    - {id: 45, cat: XXX, desc: Shemale"}
+    - {id: 46, cat: XXX, desc: Softcore"}
+    - {id: 47, cat: XXX, desc: Squirt"}
+    - {id: 48, cat: XXX, desc: Straight"}
+    - {id: 49, cat: XXX, desc: Teen"}
+    - {id: 50, cat: XXX, desc: Threesome"}
+    - {id: 51, cat: XXX, desc: VR"}
+    - {id: 52, cat: XXX, desc: Uncategorized"}
 
   modes:
     search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://bitporn.eu/\" target=\"_blank\">BitPorn</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -78,12 +78,12 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: 4
+    default: created_at
     options:
-      4: created
-      7: seeders
-      5: size
-      1: title
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -91,121 +91,105 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_tpp
-    type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "You must log in to the site at least once a month; otherwise, your account will be suspended."
 
 login:
-  path: takelogin.php
-  method: post
-  inputs:
-    secret: ""
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
+  path: /api/torrents
+  method: get
   error:
-    - selector: td.embedded:has(h2:contains("Bejelentkezés sikertelen!"))
-  test:
-    path: index.php
-    selector: a[href="logout.php"]
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("Account is Banned")
 
 search:
   paths:
-    - path: torrents.php
+    # https://hdinnovations.github.io/UNIT3D/torrent_api.html
+    # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
+    - path: api/torrents/filter
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # 0 incldead, 1 active, 2 dead
-    incldead: 0
-    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
-    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: 0
-    # 0 AND, 2 exact
-    search_mode: 0
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
-    notnewword: 1
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
-    selector: table.contenttable > tbody > tr:has(a[href^="details.php?id="])
+    selector: data
+    attribute: attributes
 
   fields:
     category:
-      selector: a[href^="?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
-    title_default:
-      selector: a[href^="details.php?id="]
+      selector: category_id
     title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
+      selector: name
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      selector: details_link
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
-    date_elapsed:
-      # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
-      attribute: title
-      optional: true
-      filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    date_added:
-      # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
-      optional: true
-      filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
-    date:
-      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
-    size:
-      selector: td.rowfollow:nth-child(5)
+      selector: download_link
+    infohash:
+      selector: info_hash
+    files:
+      selector: num_file
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: seeders
     leechers:
-      selector: td.rowfollow:nth-child(7)
+      selector: leechers
     grabs:
-      selector: td.rowfollow:nth-child(8)
+      selector: times_completed
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
+      case:
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
     downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
+      selector: double_upload
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
-        "*": 1
+        False: 1 # normal
+        True: 2 # double
     uploadvolumefactor:
-      case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
-        "*": 1
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 48 hours (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-    description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span
-# NexusPHP v2.4 (custom)
+# json UNIT3D 9.1.1 (custom)

@@ -80,11 +80,11 @@ Prior versions of Jackett are no longer supported.
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
- * LePorno.info
  * LimeTorrents
  * LinuxTracker
  * Mac Torrents Download
  * Magnet Cat
+ * MagnetDownload
  * MegaPeer
  * MejorTorrent
  * Mikan
@@ -309,6 +309,7 @@ Prior versions of Jackett are no longer supported.
  * CinemaMovieS_ZT
  * Cinematik
  * CinemaZ (EuTorrents)
+ * ClearJAV
  * Coastal-Music-Crew (C-M-C)
  * ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
  * Concertos
@@ -328,7 +329,6 @@ Prior versions of Jackett are no longer supported.
  * DigitalCore (DC)
  * DimeADozen (EzTorrent)
  * DiscFan [![(invite needed)][inviteneeded]](#)
- * DivTeam
  * DocsPedia
  * Drugari
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
@@ -347,7 +347,6 @@ Prior versions of Jackett are no longer supported.
  * Femdomcult
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
- * FinVip
  * Flux-Zone
  * Free Farm (自由农场)
  * FSM
@@ -400,7 +399,6 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
- * ICC2022 (冰淇淋) [![(invite needed)][inviteneeded]](#)
  * ilolicon PT
  * ImmortalSeed (iS)
  * Immortuos
@@ -612,7 +610,6 @@ Prior versions of Jackett are no longer supported.
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
- * Wukong (悟空问道)
  * x-ite.me (XM)
  * Xider-Torrent
  * XSpeeds (XS)
