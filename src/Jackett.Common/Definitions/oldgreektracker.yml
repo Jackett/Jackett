@@ -5,6 +5,8 @@ description: "Old Greek Tracker is a GREEK Private Torrent Tracker for PRE-2020 
 language: el-GR
 type: private
 encoding: UTF-8
+certificates:
+  - 0adc2cd3e9c2136f02d453f980c497b0842e31fe # Expired 28 Jun 2025
 links:
   - https://oldgreektracker.xyz/
 legacylinks:
