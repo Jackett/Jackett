@@ -1606,7 +1606,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var publishDate = GetPublishDateOfRelease(row);
 
                 var author = row.QuerySelector("td.u-name-col").TextContent;
-                var description = "Uploader: " + author + "<br>" + title; 
+                var description = "Uploader: " + author + "<br>" + title;
 
                 var release = new ReleaseInfo
                 {
