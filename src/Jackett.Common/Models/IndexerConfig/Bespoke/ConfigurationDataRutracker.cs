@@ -5,6 +5,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
     [ExcludeFromCodeCoverage]
     internal class ConfigurationDataRutracker : ConfigurationDataCaptchaLogin
     {
+        public StringConfigurationItem SearchByUploader { get; private set; }
+        public DisplayInfoConfigurationItem SearchByUploaderInfo { get; private set; }
         public BoolConfigurationItem UseMagnetLinks { get; private set; }
         public BoolConfigurationItem StripRussianLetters { get; private set; }
         public BoolConfigurationItem AddRussianToTitle { get; private set; }
@@ -15,6 +17,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
         public ConfigurationDataRutracker()
         {
+            SearchByUploader = new StringConfigurationItem("Search By Uploader");
+            SearchByUploaderInfo = new DisplayInfoConfigurationItem("Search By Uploader Info", "<b>About searching by Uploader (Author):</b> You can search by Uploader (Author) by entering an Author username, or leave empty to get all results.");
             UseMagnetLinks = new BoolConfigurationItem("Use Magnet Links") { Value = false };
             StripRussianLetters = new BoolConfigurationItem("Strip Russian Letters") { Value = true };
             AddRussianToTitle = new BoolConfigurationItem("Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.") { Value = false };
