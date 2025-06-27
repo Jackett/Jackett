@@ -133,6 +133,13 @@ caps:
     book-search: [q]
 
 settings:
+  - name: uploader
+    type: text
+    label: Filter by Uploader
+  - name: info_uploader
+    type: info
+    label: About filtering by Uploader
+    default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of TPB titles, eg -MeGusta."
   - name: info_api
     type: info
     label: About this Indexer
@@ -162,7 +169,7 @@ search:
     - name: tolower
 
   rows:
-    selector: $
+    selector: "${{ if .Config.uploader }}:has(username:contains({{ .Config.uploader }})){{ else }}{{ end }}"
     count:
       selector: $[0].id
 
@@ -199,6 +206,10 @@ search:
       selector: seeders
     leechers:
       selector: leechers
+    _username:
+      selector: username
+    description:
+      text: "Uploader: {{ .Result._username }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

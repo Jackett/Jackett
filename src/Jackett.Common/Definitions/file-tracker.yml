@@ -493,6 +493,13 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: uploader
+    type: text
+    label: Search by Uploader
+  - name: info_uploader
+    type: info
+    label: About searching by Uploader
+    default: "You can search by Uploader (Author) by entering an Author username, or leave empty to get all results."
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -543,6 +550,7 @@ login:
 search:
   paths:
     - path: tracker.php
+      method: post
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_allw: 1
@@ -568,6 +576,8 @@ search:
     df: 1
     # show author
     da: 1
+    # author
+    pn: "{{ if .Config.uploader }}{{ .Config.uploader }}{{ else }}{{ end }}"
     # show speed
     ds: 0
     # -1=all time
@@ -577,6 +587,7 @@ search:
     nm: "{{ .Keywords }}"
     # search all words
     allw: 1
+    submit: "%A0%A0Search%A0%A0"
 
   keywordsfilters:
     - name: diacritics
@@ -684,6 +695,11 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    _username:
+      selector: td:nth-child(5)
     description:
       selector: a.genmed, a.seedmed
+      filters:
+        - name: prepend
+          args: "Uploader: {{ .Result._username }}<br>"
 # TorrentPier
