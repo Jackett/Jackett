@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using AngleSharp;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
-using Jackett.Common.Models.DTO.AnilibriaTop;
+using Jackett.Common.Models.DTO.Anilibria;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
@@ -20,21 +20,24 @@ using WebClient = Jackett.Common.Utils.Clients.WebClient;
 namespace Jackett.Common.Indexers.Definitions
 {
     [ExcludeFromCodeCoverage]
-    public class AnilibriaTop : IndexerBase
+    public class Anilibria : IndexerBase
     {
-        public override string Id => "anilibriatop";
-        public override string Name => "AnilibriaTop";
-        public override string Description => "Anilibria (AnilibriaTop) is a russian-language anime distribution platform";
+        public override string Id => "anilibria";
+        public override string Name => "Anilibria";
+        public override string Description => "Anilibria is a russian-language anime distribution platform";
         public override string SiteLink { get; protected set; } = "https://anilibria.top/";
-        private string ApiBase => $"{SiteLink}api/v1/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://www.anilibria.tv/",
+        }; private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        public AnilibriaTop(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+        public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
-            configData: new ConfigurationDataAnilibriaTop())
+            configData: new ConfigurationDataAnilibria())
         {
         }
 
@@ -85,13 +88,9 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var template = Uri.EscapeDataString(query.GetQueryString());
 
-            if (query.IsTest)
+            if (string.IsNullOrEmpty(template))
             {
                 template = "*";
-            }
-            else if (string.IsNullOrEmpty(template))
-            {
-                return releases;
             }
 
             var responseReleases = await RequestWithCookiesAsync(
@@ -126,7 +125,7 @@ namespace Jackett.Common.Indexers.Definitions
                         InfoHash = torrentInfo.Hash,
                         Grabs = torrentInfo.Grabs,
                         DownloadVolumeFactor = 0,
-                        UploadVolumeFactor = 0,
+                        UploadVolumeFactor = 1,
                         Category = MapTrackerCatToNewznab(torrentInfo.Category)
                     }));
             return releases;

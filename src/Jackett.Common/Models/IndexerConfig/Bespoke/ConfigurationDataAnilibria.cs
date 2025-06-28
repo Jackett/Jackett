@@ -1,6 +1,6 @@
 namespace Jackett.Common.Models.IndexerConfig.Bespoke
 {
-    public class ConfigurationDataAnilibriaTop : ConfigurationData
+    public class ConfigurationDataAnilibria : ConfigurationData
     {
     }
 }

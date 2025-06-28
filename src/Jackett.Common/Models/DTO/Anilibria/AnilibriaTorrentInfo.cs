@@ -1,6 +1,6 @@
 using System;
 
-namespace Jackett.Common.Models.DTO.AnilibriaTop
+namespace Jackett.Common.Models.DTO.Anilibria
 {
     public class AnilibriaTorrentInfo
     {

@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "Definitions/anaschcc.yml",
                 "Definitions/angietorrents.yml",
                 "Definitions/anidex.yml", // migrated to C#
+                "Definitions/anilibria.yml", // migrated to c# #5762
                 "Definitions/anime-free.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",

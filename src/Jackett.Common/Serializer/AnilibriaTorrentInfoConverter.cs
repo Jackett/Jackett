@@ -1,5 +1,5 @@
 using System;
-using Jackett.Common.Models.DTO.AnilibriaTop;
+using Jackett.Common.Models.DTO.Anilibria;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
