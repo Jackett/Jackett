@@ -113,7 +113,7 @@ namespace Jackett.Common.Indexers.Definitions
                 torrentsInfo.Select(
                     torrentInfo => new ReleaseInfo
                     {
-                        Guid = GetReleaseLink(torrentInfo.Alias),
+                        Guid = GetGuidLink(torrentInfo.Alias, torrentInfo.Hash),
                         Title = $"{torrentInfo.NameMain} / {torrentInfo.Label}",
                         Details = GetReleaseLink(torrentInfo.Alias),
                         Poster = GetPosterLink(torrentInfo.PosterSrc),
@@ -132,6 +132,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
+        private Uri GetGuidLink(string alias, string hash) => new($"{SiteLink}anime/releases/release/{alias}/{hash}");
         private Uri GetReleaseLink(string alias) => new($"{SiteLink}anime/releases/release/{alias}");
         private Uri GetPosterLink(string posterSrc) => new($"{SiteLink}{posterSrc.TrimStart('/')}");
         private Uri GetDownloadLink(string hash) => new($"{ApiBase}anime/torrents/{hash}/file");
