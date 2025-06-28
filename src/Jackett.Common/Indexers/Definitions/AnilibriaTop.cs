@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var caps = new TorznabCapabilities
             {
-                TvSearchParams = new List<TvSearchParam> {TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep}
+                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep }
             };
             caps.Categories.AddCategoryMapping("TV", TorznabCatType.TVAnime, "Аниме TV");
             caps.Categories.AddCategoryMapping("MOVIE", TorznabCatType.TVAnime, "Аниме Фильмы");

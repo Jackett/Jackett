@@ -19,5 +19,5 @@ namespace Jackett.Common.Models.DTO.AnilibriaTop
         public int Year { get; set; }
         public long Grabs { get; set; }
         public string Category { get; set; }
-}
+    }
 }
