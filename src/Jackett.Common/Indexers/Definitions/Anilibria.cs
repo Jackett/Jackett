@@ -29,7 +29,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.anilibria.tv/",
-        }; private string ApiBase => $"{SiteLink}api/v1/";
+        };
+        private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
