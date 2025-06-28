@@ -40,6 +40,8 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
             configData: new ConfigurationDataAnilibria())
         {
+            // requestDelay to try to avoid DDoS-Guard and avoind having to wait for Flaresolverr to resolve challenge
+            webclient.requestDelay = 2.1;
         }
 
         private static TorznabCapabilities SetCapabilities()
