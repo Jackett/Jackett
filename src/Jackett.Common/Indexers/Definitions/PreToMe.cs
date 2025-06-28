@@ -123,6 +123,12 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("cat[]=6&tags=FLAC", TorznabCatType.AudioLossless, "Music/FLAC");
             caps.Categories.AddCategoryMapping("cat[]=6&tags=320kbps", TorznabCatType.AudioMP3, "Music/320kbps");
 
+            // Sport
+            caps.Categories.AddCategoryMapping("cat[]=52", TorznabCatType.TVSport, "Sport");
+            caps.Categories.AddCategoryMapping("cat[]=52&tags=1080p", TorznabCatType.TVSport, "Sport/1080p");
+            caps.Categories.AddCategoryMapping("cat[]=52&tags=720p", TorznabCatType.TVHD, "Sport/720p");
+            caps.Categories.AddCategoryMapping("cat[]=52&tags=2160p", TorznabCatType.TVUHD, "Sport/2160p");
+
             // TV
             caps.Categories.AddCategoryMapping("cat[]=7", TorznabCatType.TV, "TV");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=1080p", TorznabCatType.TVHD, "TV/1080p");
@@ -131,9 +137,9 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("cat[]=7&tags=x264", TorznabCatType.TVHD, "TV/x264");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=x265", TorznabCatType.TVHD, "TV/x265");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=HDTV", TorznabCatType.TVHD, "TV/HDTV");
-            caps.Categories.AddCategoryMapping("cat[]=7&tags=BluRay", TorznabCatType.TVHD, "TV/BluRay");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=Documentary", TorznabCatType.TVDocumentary, "TV/Documentary");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=PDTV", TorznabCatType.TVSD, "TV/PDTV");
+            caps.Categories.AddCategoryMapping("cat[]=7&tags=BluRay", TorznabCatType.TVHD, "TV/BluRay");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=DolbyVision", TorznabCatType.TVUHD, "TV/DolbyVision");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=DVDRiP", TorznabCatType.TVSD, "TV/DVDRiP");
             caps.Categories.AddCategoryMapping("cat[]=7&tags=XviD", TorznabCatType.TVSD, "TV/XviD");
@@ -145,6 +151,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("cat[]=51&tags=1080p", TorznabCatType.XXXx264, "XXX/1080p");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=720p", TorznabCatType.XXXx264, "XXX/720p");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=2160p", TorznabCatType.XXXUHD, "XXX/2160p");
+            caps.Categories.AddCategoryMapping("cat[]=51&tags=VR180", TorznabCatType.XXXOther, "XXX/VR180");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=x264", TorznabCatType.XXXx264, "XXX/x264");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=x265", TorznabCatType.XXXx264, "XXX/x265");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD, "XXX/XviD");
