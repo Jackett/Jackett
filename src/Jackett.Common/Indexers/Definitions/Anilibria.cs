@@ -7,6 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using AngleSharp;
 using Autofac.Core;
+using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.DTO.Anilibria;
@@ -133,7 +134,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Grabs = torrentInfo.Grabs,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        Category = MapTrackerCatToNewznab(torrentInfo.Category)
+                        Category = MapTrackerCatToNewznab((torrentInfo.Category.IsNotNullOrWhiteSpace()) ? torrentInfo.Category : "TV")
                     }));
             return releases;
         }
