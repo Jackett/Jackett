@@ -2,16 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using AngleSharp;
-using Autofac.Core;
-using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.DTO.Anilibria;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Serializer;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -38,8 +34,8 @@ namespace Jackett.Common.Indexers.Definitions
         private ConfigurationDataAnilibria ConfigData => (ConfigurationDataAnilibria)configData;
 
         public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                            ICacheService cs) : base(
-            configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
+                            CacheManager cm) : base(
+            configService: configService, client: wc, logger: l, p: ps, cacheManager: cm,
             configData: new ConfigurationDataAnilibria())
         {
             // requestDelay to try to avoid DDoS-Guard and avoind having to wait for Flaresolverr to resolve challenge
