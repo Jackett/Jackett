@@ -94,7 +94,7 @@ namespace Jackett.Common.Indexers.Definitions
             var searchResponse = await RequestWithCookiesAsync($"{ApiBase}app/search/releases?query={searchQuery}");
             var searchResults = JsonConvert.DeserializeObject<IReadOnlyList<AnilibriaSearchResult>>(searchResponse.ContentString);
 
-            var releaseIds = searchResults.Where(r => r.Id.HasValue).Select(r  => r.Id.Value).ToList();
+            var releaseIds = searchResults.Where(r => r.Id.HasValue).Select(r => r.Id.Value).ToList();
 
             var addRusTag = ConfigData.AddRussianToTitle.Value ? " RUS" : string.Empty;
 
