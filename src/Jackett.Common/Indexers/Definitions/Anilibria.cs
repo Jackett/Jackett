@@ -2,17 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
-using System.Net;
-using System.Text;
 using System.Threading.Tasks;
-using AngleSharp;
-using Autofac.Core;
 using Jackett.Common.Extensions;
-using Jackett.Common.Helpers;
 using Jackett.Common.Models;
-using Jackett.Common.Models.DTO.Anilibria;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
-using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -92,50 +85,49 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var template = Uri.EscapeDataString(query.GetQueryString());
 
-            if (string.IsNullOrEmpty(template))
+            var queryString = query.GetQueryString();
+            var searchQuery = queryString.IsNotNullOrWhiteSpace()
+                ? Uri.EscapeDataString(queryString)
+                : "*";
+
+            var searchResponse = await RequestWithCookiesAsync($"{ApiBase}app/search/releases?query={searchQuery}");
+            var searchResults = JsonConvert.DeserializeObject<IReadOnlyList<AnilibriaSearchResult>>(searchResponse.ContentString);
+
+            var releaseIds = searchResults.Where(r => r.Id.HasValue).Select(r  => r.Id.Value).ToList();
+
+            var addRusTag = ConfigData.AddRussianToTitle.Value ? " RUS" : string.Empty;
+
+            foreach (var releaseId in releaseIds)
             {
-                template = "*";
-            }
+                var torrentsResponse = await RequestWithCookiesAsync($"{ApiBase}anime/torrents/release/{releaseId}");
+                var torrents = JsonConvert.DeserializeObject<IReadOnlyList<AnilibriaTorrent>>(torrentsResponse.ContentString);
 
-            var responseReleases = await RequestWithCookiesAsync(
-                $"{ApiBase}app/search/releases?query={template}", cookieOverride: string.Empty);
-            var ids = JArray.Parse(responseReleases.ContentString).Select(o => (long?)o["id"]).Where(id => id.HasValue)
-                            .Select(id => id.Value).ToList();
-            var torrentsInfo = new List<AnilibriaTorrentInfo>();
+                foreach (var torrent in torrents)
+                {
+                    var category = torrent.Release.Type.Value;
 
-            foreach (var id in ids)
-            {
-                var torrents = await RequestWithCookiesAsync(
-                    $"{ApiBase}anime/torrents/release/{id}", cookieOverride: string.Empty);
-                torrentsInfo.AddRange(
-                    JsonConvert.DeserializeObject<List<AnilibriaTorrentInfo>>(
-                        torrents.ContentString, new AnilibriaTopTorrentInfoConverter()));
-            }
-
-            var AddRusTag = (ConfigData.AddRussianToTitle.Value) ? " RUS" : string.Empty;
-
-            releases.AddRange(
-                torrentsInfo.Select(
-                    torrentInfo => new ReleaseInfo
+                    releases.Add(new ReleaseInfo
                     {
-                        Guid = GetGuidLink(torrentInfo.Alias, torrentInfo.Hash),
-                        Title = $"{torrentInfo.NameMain} / {torrentInfo.Label}{AddRusTag}",
-                        Details = GetReleaseLink(torrentInfo.Alias),
-                        Poster = GetPosterLink(torrentInfo.PosterSrc),
-                        Year = torrentInfo.Year,
-                        Link = GetDownloadLink(torrentInfo.Hash),
-                        Size = torrentInfo.Size,
-                        Seeders = torrentInfo.Seeders,
-                        Peers = torrentInfo.Seeders + torrentInfo.Leechers,
-                        PublishDate = torrentInfo.CreatedAt,
-                        InfoHash = torrentInfo.Hash,
-                        Grabs = torrentInfo.Grabs,
+                        Guid = GetGuidLink(torrent.Release.Alias, torrent.Hash),
+                        Link = GetDownloadLink(torrent.Hash),
+                        Details = GetReleaseLink(torrent.Release.Alias),
+                        Title = $"{torrent.Release.Name.Main} / {torrent.Label}{addRusTag}",
+                        Category = MapTrackerCatToNewznab(category.IsNotNullOrWhiteSpace() ? category : "TV"),
+                        Year = torrent.Release.Year,
+                        InfoHash = torrent.Hash,
+                        Size = torrent.Size,
+                        Seeders = torrent.Seeders,
+                        Peers = torrent.Seeders + torrent.Leechers,
+                        Grabs = torrent.Grabs,
+                        PublishDate = torrent.CreatedAt,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        Category = MapTrackerCatToNewznab((torrentInfo.Category.IsNotNullOrWhiteSpace()) ? torrentInfo.Category : "TV")
-                    }));
+                        Poster = GetPosterLink(torrent.Release.Poster.Original),
+                    });
+                }
+            }
+
             return releases;
         }
 
@@ -143,5 +135,53 @@ namespace Jackett.Common.Indexers.Definitions
         private Uri GetReleaseLink(string alias) => new($"{SiteLink}anime/releases/release/{alias}");
         private Uri GetPosterLink(string posterSrc) => new($"{SiteLink}{posterSrc.TrimStart('/')}");
         private Uri GetDownloadLink(string hash) => new($"{ApiBase}anime/torrents/{hash}/file");
+    }
+
+    public sealed class AnilibriaSearchResult
+    {
+        public long? Id { get; set; }
+    }
+
+    public sealed class AnilibriaTorrent
+    {
+        public AnilibriaTorrentRelease Release { get; set; }
+        public string Label { get; set; }
+        public string Hash { get; set; }
+        public long Size { get; set; }
+        public long Seeders { get; set; }
+        public long Leechers { get; set; }
+
+        [JsonProperty("completed_times")]
+        public long Grabs { get; set; }
+
+        [JsonProperty("created_at")]
+        public DateTime CreatedAt { get; set; }
+    }
+
+    public sealed class AnilibriaTorrentRelease
+    {
+        public long Id { get; set; }
+        public AnilibriaTorrentReleaseType Type { get; set; }
+        public AnilibriaTorrentReleaseName Name { get; set; }
+        public string Alias { get; set; }
+        public int? Year { get; set; }
+        public AnilibriaTorrentReleasePoster Poster { get; set; }
+    }
+
+    public sealed class AnilibriaTorrentReleaseType
+    {
+        public string Value { get; set; }
+    }
+
+    public sealed class AnilibriaTorrentReleaseName
+    {
+        public string Main { get; set; }
+        public string English { get; set; }
+    }
+
+    public sealed class AnilibriaTorrentReleasePoster
+    {
+        [JsonProperty("src")]
+        public string Original { get; set; }
     }
 }
