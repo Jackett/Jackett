@@ -39,8 +39,8 @@ namespace Jackett.Common.Indexers.Definitions
         private ConfigurationDataAnilibria ConfigData => (ConfigurationDataAnilibria)configData;
 
         public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                            CacheManager  cm) : base(
-            configService: configService, client: wc, logger: l, p: ps, CacheManager : cm,
+                            CacheManager cm) : base(
+            configService: configService, client: wc, logger: l, p: ps, CacheManager: cm,
             configData: new ConfigurationDataAnilibria())
         {
             // requestDelay to try to avoid DDoS-Guard and avoind having to wait for Flaresolverr to resolve challenge
