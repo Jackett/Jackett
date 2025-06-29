@@ -6,6 +6,7 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 using AngleSharp;
+using Autofac.Core;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.DTO.Anilibria;
@@ -34,6 +35,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Language => "ru-RU";
         public override string Type => "public";
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
+        private ConfigurationDataAnilibria ConfigData => (ConfigurationDataAnilibria)configData;
 
         public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs) : base(
@@ -111,12 +113,14 @@ namespace Jackett.Common.Indexers.Definitions
                         torrents.ContentString, new AnilibriaTopTorrentInfoConverter()));
             }
 
+            var AddRusTag = (ConfigData.AddRussianToTitle.Value) ? " RUS" : string.Empty;
+
             releases.AddRange(
                 torrentsInfo.Select(
                     torrentInfo => new ReleaseInfo
                     {
                         Guid = GetGuidLink(torrentInfo.Alias, torrentInfo.Hash),
-                        Title = $"{torrentInfo.NameMain} / {torrentInfo.Label}",
+                        Title = $"{torrentInfo.NameMain} / {torrentInfo.Label}{AddRusTag}",
                         Details = GetReleaseLink(torrentInfo.Alias),
                         Poster = GetPosterLink(torrentInfo.PosterSrc),
                         Year = torrentInfo.Year,
