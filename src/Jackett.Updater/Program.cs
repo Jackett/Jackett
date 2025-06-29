@@ -275,6 +275,7 @@ namespace Jackett.Updater
                 "Definitions/anaschcc.yml",
                 "Definitions/angietorrents.yml",
                 "Definitions/anidex.yml", // migrated to C#
+                "Definitions/anilibria.yml", // migrated to c# #5762
                 "Definitions/anime-free.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
@@ -690,6 +691,7 @@ namespace Jackett.Updater
                 "Definitions/speedtorrentreloaded.yml",
                 "Definitions/spidertk.yml",
                 "Definitions/sporthd.yml",
+                "Definitions/sportscraze.yml",
                 "Definitions/sukebei-pantsu.yml",
                 "Definitions/swarmazon.yml", //  switched to *-API #13725
                 "Definitions/t411.yml",

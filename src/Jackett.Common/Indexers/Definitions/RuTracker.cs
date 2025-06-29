@@ -1530,6 +1530,11 @@ namespace Jackett.Common.Indexers.Definitions
                 searchString = new Regex("[^a-zA-Zа-яА-ЯёЁ0-9]+").Replace(searchString, "%");
             }
 
+            if (!string.IsNullOrWhiteSpace(configData.SearchByUploader.Value))
+            {
+                queryCollection.Set("pn", configData.SearchByUploader.Value);
+            }
+
             // if the search string is empty use the getnew view
             if (string.IsNullOrWhiteSpace(searchString))
             {
@@ -1601,6 +1606,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var publishDate = GetPublishDateOfRelease(row);
 
+                var author = row.QuerySelector("td.u-name-col").TextContent;
+                var description = "Uploader: " + author + "<br>" + title;
+
                 var release = new ReleaseInfo
                 {
                     MinimumRatio = 1,
@@ -1613,7 +1621,7 @@ namespace Jackett.Common.Indexers.Definitions
                         configData.MoveFirstTagsToEndOfReleaseTitle.Value,
                         configData.AddRussianToTitle.Value
                     ),
-                    Description = title,
+                    Description = description,
                     Details = details,
                     Link = configData.UseMagnetLinks.Value ? details : link,
                     Guid = details,

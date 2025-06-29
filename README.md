@@ -341,6 +341,7 @@ Prior versions of Jackett are no longer supported.
  * Explosiv-World (E-W)
  * ExtremeBits
  * F1Carreras
+ * F1GP
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
  * FearNoPeer
@@ -538,7 +539,6 @@ Prior versions of Jackett are no longer supported.
  * SpeedCD
  * Speedmaster HD [![(invite needed)][inviteneeded]](#)
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
- * SportsCraze (SPCRZ)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
  * SugoiMusic

@@ -26,6 +26,7 @@ caps:
     - {id: 79, cat: TV, desc: "Educational"}
     - {id: 93, cat: Books/EBook, desc: "Fantasy"}
     - {id: 71, cat: Other, desc: "Fonts"}
+    - {id: 94, cat: Books/EBook, desc: "Gaming"}
     - {id: 82, cat: Books/EBook, desc: "History"}
     - {id: 87, cat: Books/EBook, desc: "Horror"}
     - {id: 72, cat: Books, desc: "IT Books"}

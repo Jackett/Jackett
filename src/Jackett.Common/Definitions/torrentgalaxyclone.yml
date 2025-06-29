@@ -33,7 +33,14 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: uploader
+    type: text
+    label: Filter by Uploader
+  - name: info_uploader
+    type: info
+    label: About filtering by Uploader
+    default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of TGx titles, eg RMTeam."
 
 download:
   selectors:
@@ -48,7 +55,7 @@ search:
     - path: "get-posts/{{ if or .Query.IMDBID .Keywords }}keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}{{ end }}{{ range .Categories }}:category:{{.}}{{end}}"
 
   rows:
-    selector: div.tgxtablerow
+    selector: "div.tgxtablerow{{ if .Config.uploader }}:has(a.username:contains({{ .Config.uploader }})){{ else }}{{ end }}"
 
   fields:
     category:
@@ -76,6 +83,10 @@ search:
       remove: div.bighide
       filters:
         - name: timeago
+    _username:
+      selector: a.username
+    description:
+      text: "Uploader: {{ .Result._username }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

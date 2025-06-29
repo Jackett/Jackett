@@ -120,6 +120,13 @@ caps:
   allowrawsearch: true
 
 settings:
+  - name: uploader
+    type: text
+    label: Filter by Uploader
+  - name: info_uploader
+    type: info
+    label: About filtering by Uploader
+    default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of 1337x titles, eg -GalaxyRG."
   - name: info_flaresolverr
     type: info_flaresolverr
   - name: downloadlink
@@ -177,7 +184,7 @@ search:
       args: ["\\bS(20\\d{2})\\b", "$1"]
 
   rows:
-    selector: tr:has(a[href^="/torrent/"])
+    selector: "tr:has(a[href^=\"/torrent/\"]){{ if .Config.uploader }}:has(td[class^=\"coll-5\"]:contains({{ .Config.uploader }})){{ else }}{{ end }}"
 
   fields:
     title_default:
@@ -273,6 +280,10 @@ search:
       selector: td[class^="coll-2"]
     leechers:
       selector: td[class^="coll-3"]
+    _username:
+      selector: td[class^="coll-5"]
+    description:
+      text: "Uploader: {{ .Result._username }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
