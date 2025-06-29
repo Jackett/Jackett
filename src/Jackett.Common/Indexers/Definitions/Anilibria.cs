@@ -30,6 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://www.anilibria.tv/",
         };
+        // https://anilibria.top/api/docs/v1
         private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";
@@ -41,7 +42,7 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
             configData: new ConfigurationDataAnilibria())
         {
-            // requestDelay to try to avoid DDoS-Guard and avoind having to wait for Flaresolverr to resolve challenge
+            // requestDelay to try to avoid DDoS-Guard and having to wait for Flaresolverr to resolve challenges
             webclient.requestDelay = 2.1;
         }
 
