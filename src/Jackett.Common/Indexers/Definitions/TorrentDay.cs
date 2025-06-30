@@ -25,6 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://tday.love/";
         public override string[] AlternativeSiteLinks => new[]
         {
+            "https://torrentday.com/",
             "https://tday.love/",
             "https://torrentday.cool/",
             "https://secure.torrentday.com/",
@@ -43,7 +44,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://torrentday.com/",
             "https://tdonline.org/", // redirect to https://www.torrentday.com/
             "https://torrentday.eu/", // redirect to https://www.torrentday.com/
             "https://td-update.com/", // redirect to https://www.torrentday.com/
