@@ -154,7 +154,7 @@ namespace Jackett.Common.Indexers.Definitions
             releases.AddRange(
                 from torrent in torrents
                 let category = torrent.Release.Type.Value
-                let title = (ConfigData.EnglishTitleOnly.Value) ? $"{torrent.Release.Name.English} {GetFormatLabel(torrent.Label)}" :  $"{torrent.Release.Name.Main} / {GetFormatLabel(torrent.Label)}"
+                let title = (ConfigData.EnglishTitleOnly.Value) ? $"{torrent.Release.Name.English} {GetFormatLabel(torrent.Label)}" : $"{torrent.Release.Name.Main} / {GetFormatLabel(torrent.Label)}"
                 select new ReleaseInfo
                 {
                     Guid = GetGuidLink(torrent.Release.Alias, torrent.Hash),
