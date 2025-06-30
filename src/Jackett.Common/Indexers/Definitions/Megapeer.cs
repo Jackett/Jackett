@@ -42,8 +42,18 @@ namespace Jackett.Common.Indexers.Definitions
             configData: new ConfigurationDataMegaPeer())
         {
             // requestDelay to try to avoid DDoS-Guard and having to wait for Flaresolverr to resolve challenges
-            webclient.requestDelay = 2.1;
+            webclient.requestDelay = 5.1;
         }
+
+        private readonly string[] _categories =
+        {
+            "79",
+            "80",
+            "5",
+            "76",
+            "6",
+            "0"
+        };
 
         private static TorznabCapabilities SetCapabilities()
         {
@@ -63,9 +73,9 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("80", TorznabCatType.Movies, "Зарубежные фильмы");
             caps.Categories.AddCategoryMapping("5", TorznabCatType.TV, "Наши сериалы");
             caps.Categories.AddCategoryMapping("6", TorznabCatType.TV, "Зарубежные сериалы сериалы");
-            //todo I don't know where to add this category according to Jackett standards. This category on the tracker includes both animated movies and animated series.
             caps.Categories.AddCategoryMapping("76", TorznabCatType.TVOther, "Мультипликация");
-            //todo Add other categories according to Jackett standard
+            caps.Categories.AddCategoryMapping("0", TorznabCatType.OtherMisc, "Прочее");
+
             return caps;
         }
 
@@ -93,6 +103,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             return IndexerConfigurationStatus.Completed;
         }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             return query?.GetQueryString().IsNotNullOrWhiteSpace() ?? false
@@ -106,7 +117,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 {"dnt", "1"},
                 {"pragma", "no-cache"},
-                {"referer", SiteLink + "alltorrents"},
+                {"referer", SiteLink + "search.php"},
                 {"sec-fetch-dest", "document"},
                 {"sec-fetch-mode", "navigate"},
                 {"sec-fetch-site", "same-origin"},
@@ -114,22 +125,28 @@ namespace Jackett.Common.Indexers.Definitions
                 {"upgrade-insecure-requests", "1"},
                 {"User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"}
             };
-            var gridUrl = $"{SiteLink}browse.php?search=&age={DateTime.UtcNow.Year}&cat=0&stype=0&sort=0&ascdesc=0";
-            var responseGrid = await RequestWithCookiesAndRetryAsync(gridUrl, headers: headers);
+
+            var commonLink =
+                $"https://megapeer.vip/browse.php?search=&age={DateTime.UtcNow.Year}&cat=searchCat&stype=0&sort=0&ascdesc=0";
+
+            var megaPeerTorrents = new List<MegaPeerTorrent>();
+            var link = commonLink.Replace("searchCat", "0");
+            var responseGrid = await RequestWithCookiesAndRetryAsync(link, headers: headers);
             responseGrid.Encoding = Encoding.GetEncoding(1251);
-            var megaPeerTorrents = ParseHtmlGridPage(responseGrid);
+            var megaPeerTorrentsPart = ParseHtmlGridPage(responseGrid);
+            megaPeerTorrentsPart.ForEach(t => t.Category = "0");
+            megaPeerTorrents.AddRange(megaPeerTorrentsPart);
+            var categories = _categories.Where(c => c != "0").ToArray();
 
-            if (query.IsTest || !IsConfigured)
+            foreach (var cat in categories)
             {
-                var first = megaPeerTorrents.First();
-                megaPeerTorrents.Clear();
-                megaPeerTorrents.Add(first);
-            }
-
-            if (ConfigData.AddCategories.Value)
-            {
-                headers["referer"] = gridUrl;
-                megaPeerTorrents = await GetMegaPeerDetailTorrentsAsync(megaPeerTorrents, headers);
+                link = commonLink.Replace("searchCat", cat);
+                responseGrid = await RequestWithCookiesAndRetryAsync(link, headers: headers);
+                responseGrid.Encoding = Encoding.GetEncoding(1251);
+                megaPeerTorrentsPart = ParseHtmlGridPage(responseGrid);
+                megaPeerTorrentsPart.ForEach(t => t.Category = cat);
+                megaPeerTorrents.ReplaceIfExistsByKey(megaPeerTorrentsPart, t => t.Url);
+                headers["referer"] = link;
             }
 
             return MapToReleaseInfo(megaPeerTorrents);
@@ -158,7 +175,6 @@ namespace Jackett.Common.Indexers.Definitions
                         megaPeersTorrent.Category = torrentDetail.Category;
                         megaPeersTorrent.Poster = torrentDetail.Poster;
                     }
-
                     finally
                     {
                         semaphore.Release();
@@ -173,7 +189,7 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<ReleaseInfo>> SearchReleasesAsync(TorznabQuery query)
         {
             var searchQuery = HttpUtility.UrlEncode(query.GetQueryString(), Encoding.GetEncoding("windows-1251"));
-            var headers = new Dictionary<string, string>()
+            var headers = new Dictionary<string, string>
             {
                 {"dnt", "1"},
                 {"pragma", "no-cache"},
@@ -186,30 +202,34 @@ namespace Jackett.Common.Indexers.Definitions
                 {"User-Agent", "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/138.0.0.0 Safari/537.36"}
             };
 
+            var commonLink =
+                $"https://megapeer.vip/browse.php?search={searchQuery}&age=&cat=searchCat&stype=0&sort=0&ascdesc=0&page=searchPage";
+
             var megaPeerTorrents = new List<MegaPeerTorrent>();
             var page = 0;
 
-            while (true)
+            foreach (var cat in _categories)
             {
-                var gridUrl = $"https://megapeer.vip/browse.php?search={searchQuery}&stype=0&sort=0&ascdesc=0&page={page}";
-                var responseGrid = await RequestWithCookiesAndRetryAsync(gridUrl, headers: headers);
-                responseGrid.Encoding = Encoding.GetEncoding(1251);
-                var megaPeerTorrentsPart = ParseHtmlGridPage(responseGrid);
-                headers["referer"] = gridUrl;
+                var link = commonLink.Replace("searchCat", cat).Replace("searchPage", page.ToString());
 
-                if (ConfigData.AddCategories.Value)
+                while (true)
                 {
-                    megaPeerTorrentsPart = await GetMegaPeerDetailTorrentsAsync(megaPeerTorrentsPart, headers);
-                }
+                    var responseGrid = await RequestWithCookiesAndRetryAsync(link, headers: headers);
+                    responseGrid.Encoding = Encoding.GetEncoding(1251);
+                    var megaPeerTorrentsPart = ParseHtmlGridPage(responseGrid);
+                    megaPeerTorrentsPart.ForEach(t => t.Category = cat);
+                    megaPeerTorrents.AddRangeIfNotExists(megaPeerTorrentsPart, t => t.Url);
+                    page++;
+                    headers["referer"] = link;
 
-                megaPeerTorrents.AddRange(megaPeerTorrentsPart);
-                page++;
-
-                if (page > GetMaxPageCount(responseGrid.ContentString))
-                {
-                    break;
+                    if (page > GetMaxPageCount(responseGrid.ContentString))
+                    {
+                        page = 0;
+                        break;
+                    }
                 }
             }
+
             return MapToReleaseInfo(megaPeerTorrents);
 
         }
@@ -385,41 +405,55 @@ namespace Jackett.Common.Indexers.Definitions
             return torrents;
         }
 
-        public static string ReplaceSeasonInfoWithTag(string input)
+        public static string ReplaceSeasonInfoWithTag(string input, int defaultSeason = 1)
         {
+            const string episodeWords = "сер(и|и[яе])|выпуск(и|ов|а)?";
+
             var matchFull = Regex.Match(input,
-                                        @"\[(\d+)\s*сезон[:\s]*(\d+)(?:-(\d+))?\s*сер(и|и[яе])[^]]*\]",
-                                        RegexOptions.IgnoreCase);
+                $@"\[(\d+)\s*сезон[:\s]*(\d+)(?:-(\d+))?\s*({episodeWords})[^]]*\]",
+                RegexOptions.IgnoreCase);
+
             if (matchFull.Success)
             {
                 var season = int.Parse(matchFull.Groups[1].Value);
                 var fromEp = int.Parse(matchFull.Groups[2].Value);
                 var toEp = matchFull.Groups[3].Success ? int.Parse(matchFull.Groups[3].Value) : fromEp;
-                var replacement = $"S{season}E{fromEp}" + (toEp != fromEp ? $"-E{toEp}" : "");
+                var replacement = $"S{season:D2}E{fromEp:D2}" + (toEp != fromEp ? $"-E{toEp:D2}" : "");
                 return input.Replace(matchFull.Value, replacement);
             }
 
             var matchRange = Regex.Match(input, @"\[(\d+)-(\d+)\s*сезон\]", RegexOptions.IgnoreCase);
-
             if (matchRange.Success)
             {
                 var fromSeason = int.Parse(matchRange.Groups[1].Value);
                 var toSeason = int.Parse(matchRange.Groups[2].Value);
-                var replacement = $"[S{fromSeason}-{toSeason}]";
+                var replacement = $"[S{fromSeason:D2}-S{toSeason:D2}]";
                 return input.Replace(matchRange.Value, replacement);
             }
 
             var matchSingle = Regex.Match(input, @"\[(\d+)\s*сезон\]", RegexOptions.IgnoreCase);
-
             if (matchSingle.Success)
             {
                 var season = int.Parse(matchSingle.Groups[1].Value);
-                var replacement = $"[S{season}]";
+                var replacement = $"[S{season:D2}]";
                 return input.Replace(matchSingle.Value, replacement);
+            }
+
+            var matchEpisodesOnly = Regex.Match(input,
+                $@"\[(\d+)(?:-(\d+))?\s*({episodeWords})[^]]*\]",
+                RegexOptions.IgnoreCase);
+
+            if (matchEpisodesOnly.Success)
+            {
+                var fromEp = int.Parse(matchEpisodesOnly.Groups[1].Value);
+                var toEp = matchEpisodesOnly.Groups[2].Success ? int.Parse(matchEpisodesOnly.Groups[2].Value) : fromEp;
+                var replacement = $"S{defaultSeason:D2}E{fromEp:D2}" + (toEp != fromEp ? $"-E{toEp:D2}" : "");
+                return input.Replace(matchEpisodesOnly.Value, replacement);
             }
 
             return input;
         }
+
 
         private long ParseSize(string input)
         {
