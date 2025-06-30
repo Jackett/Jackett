@@ -33,7 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Language => "ru-RU";
         public override string Type => "public";
         private const int MaxConcurrentRequest = 5;
-        private ConfigurationDataMegaPeer ConfigData => (ConfigurationDataMegaPeer) configData;
+        private ConfigurationDataMegaPeer ConfigData => (ConfigurationDataMegaPeer)configData;
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public MegaPeer(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -131,7 +131,7 @@ namespace Jackett.Common.Indexers.Definitions
                 headers["referer"] = gridUrl;
                 megaPeerTorrents = await GetMegaPeerDetailTorrentsAsync(megaPeerTorrents, headers);
             }
-            
+
             return MapToReleaseInfo(megaPeerTorrents);
         }
 
@@ -172,7 +172,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task<List<ReleaseInfo>> SearchReleasesAsync(TorznabQuery query)
         {
-            var searchQuery = HttpUtility.UrlEncode(query.GetQueryString(),Encoding.GetEncoding("windows-1251"));
+            var searchQuery = HttpUtility.UrlEncode(query.GetQueryString(), Encoding.GetEncoding("windows-1251"));
             var headers = new Dictionary<string, string>()
             {
                 {"dnt", "1"},
