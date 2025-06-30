@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://www.anilibria.tv/",
         };
-        // https://anilibria.top/api/docs/v1
+        // API DOCS at https://anilibria.top/api/docs/v1
         private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";
@@ -154,12 +154,13 @@ namespace Jackett.Common.Indexers.Definitions
             releases.AddRange(
                 from torrent in torrents
                 let category = torrent.Release.Type.Value
+                let title = (ConfigData.EnglishTitleOnly.Value) ? $"{torrent.Release.Name.English} {GetFormatLabel(torrent.Label)}" :  $"{torrent.Release.Name.Main} / {GetFormatLabel(torrent.Label)}"
                 select new ReleaseInfo
                 {
                     Guid = GetGuidLink(torrent.Release.Alias, torrent.Hash),
                     Link = GetDownloadLink(torrent.Hash),
                     Details = GetReleaseLink(torrent.Release.Alias),
-                    Title = $"{torrent.Release.Name.Main} / {GetFormatLabel(torrent.Label)}",
+                    Title = title,
                     Category = MapTrackerCatToNewznab(category.IsNotNullOrWhiteSpace() ? category : "TV"),
                     Year = torrent.Release.Year,
                     InfoHash = torrent.Hash,
