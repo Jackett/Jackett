@@ -42,7 +42,7 @@ namespace Jackett.Common.Indexers.Definitions
             configData: new ConfigurationDataMegaPeer())
         {
             // requestDelay to try to avoid DDoS-Guard and having to wait for Flaresolverr to resolve challenges
-            webclient.requestDelay = 5.1;
+            webclient.requestDelay = 2.1;
         }
 
         private readonly string[] _categories =
