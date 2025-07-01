@@ -231,6 +231,7 @@ Prior versions of Jackett are no longer supported.
 <details> <summary> <b> Supported Private Trackers </b> </summary>
 
  * 0day.kiev
+ * 13City
  * 1ptbar
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT)
