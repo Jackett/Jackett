@@ -152,6 +152,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("cat[]=51&tags=720p", TorznabCatType.XXXx264, "XXX/720p");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=2160p", TorznabCatType.XXXUHD, "XXX/2160p");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=VR180", TorznabCatType.XXXOther, "XXX/VR180");
+            caps.Categories.AddCategoryMapping("cat[]=51&tags=XXX-VR180", TorznabCatType.XXXOther, "XXX/VR180");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=x264", TorznabCatType.XXXx264, "XXX/x264");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=x265", TorznabCatType.XXXx264, "XXX/x265");
             caps.Categories.AddCategoryMapping("cat[]=51&tags=XviD", TorznabCatType.XXXXviD, "XXX/XviD");
