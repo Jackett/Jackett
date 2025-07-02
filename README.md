@@ -171,7 +171,6 @@ Prior versions of Jackett are no longer supported.
  * DreamingTree
  * DXP (Deaf Experts)
  * Electro-Torrent
- * EniaHD
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay

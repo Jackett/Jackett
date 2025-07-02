@@ -394,6 +394,7 @@ namespace Jackett.Updater
                 "Definitions/elittracker.yml",
                 "Definitions/emmidtracker.yml",
                 "Definitions/emtrek.yml",
+                "Definitions/eniahd.yml",
                 "Definitions/enthralled.yml",
                 "Definitions/enthralled2fa.yml",
                 "Definitions/eotforum.yml",
