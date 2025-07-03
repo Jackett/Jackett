@@ -462,7 +462,7 @@ Prior versions of Jackett are no longer supported.
  * NordicQuality
  * Nusanta(RA.RE)
  * OKPT
- * Old Greek Tracker
+ * Old Greek Tracker (OGT)
  * Old Toons World (OTW)
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus
