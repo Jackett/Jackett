@@ -171,7 +171,6 @@ Prior versions of Jackett are no longer supported.
  * DreamingTree
  * DXP (Deaf Experts)
  * Electro-Torrent
- * EniaHD
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay
@@ -231,6 +230,7 @@ Prior versions of Jackett are no longer supported.
 <details> <summary> <b> Supported Private Trackers </b> </summary>
 
  * 0day.kiev
+ * 13City
  * 1ptbar
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT)
@@ -458,12 +458,11 @@ Prior versions of Jackett are no longer supported.
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
- * Nirvana
  * NorBits
  * NordicQuality
  * Nusanta(RA.RE)
  * OKPT
- * Old Greek Tracker
+ * Old Greek Tracker (OGT)
  * Old Toons World (OTW)
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus

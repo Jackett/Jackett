@@ -1,31 +1,24 @@
 ---
-id: kufei
-name: Kufei (库非)
-description: "Kufei (库非) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: 13city
+name: 13City
+description: "13City is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://kufei.org/
+  - https://13city.org/
 
 caps:
   categorymappings:
-    - {id: 410, cat: Console, desc: "Games/游戏"}
-    - {id: 411, cat: Books, desc: "E-Books/电子书"}
-    - {id: 408, cat: Audio, desc: "Music/音乐"}
-    - {id: 412, cat: PC, desc: "Software/软件"}
-    - {id: 415, cat: TV, desc: "Drama/戏剧"}
-    - {id: 416, cat: Audio/Audiobook, desc: "Audio Books/有声读物"}
-    - {id: 409, cat: Other, desc: "Others/其他"}
-    - {id: 413, cat: Other, desc: "Education/教育"}
-    - {id: 414, cat: Audio/Video, desc: "Concert/演唱会"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos/音乐、视频"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
-    - {id: 405, cat: TV/Anime, desc: "Animations/动画、动漫"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
-    - {id: 401, cat: Movies, desc: "Movies/电影"}
+    - {id: 401, cat: Movies, desc: "电影/Movies"}
+    - {id: 402, cat: TV, desc: "电视剧/TVSeries"}
+    - {id: 403, cat: TV, desc: "综艺/TV Shows"}
+    - {id: 405, cat: TV/Anime, desc: "动漫/Animations"}
+    - {id: 406, cat: Audio/Video, desc: "演唱会、MV/Music Videos"}
+    - {id: 408, cat: Audio, desc: "音乐/Music"}
+    - {id: 409, cat: Books/EBook, desc: "电子书/E-book"}
+    - {id: 409, cat: Audio/Audiobook, desc: "有声读物/A-book"}
+    - {id: 413, cat: TV/Documentary, desc: "纪录片/Documentary"}
 
   modes:
     search: [q]
@@ -35,19 +28,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: 2facode
-    type: text
-    label: 2FA code
-  - name: info_2fa
-    type: info
-    label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Kufei Web Site. Otherwise just leave it empty."
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -75,27 +60,13 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted</li><li>Elite User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row</li><li>Un-parked accounts would be deleted if users have not logged in for more than 150 days in a row</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 30 days in a row.</li></ol>"
+    default: "Account retention rules:<ol><li>If there is no valid traffic within 7 days of registration (participation in the calculation of sharing rate), the account will be blocked</li><li>After the level is reduced to \"Peasant\", if the sharing rate is not improved within 7 days, the account will be blocked</li><li>Long-term non-login:<ul>- UnParked account: 60 consecutive days of non-login → banned</ul><ul>- Parked account: 180 consecutive days of non-login → banned</ul><ul>- Nexus Master and above levels are not subject to long-term non-login ban restrictions</li></ol>"
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: imagestring
+  # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
+  method: cookie
   inputs:
-    secret: ""
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    two_step_code: "{{ .Config.2facode }}"
-    logout: ""
-    securelogin: ""
-    ssl: yes
-    trackerssl: yes
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -119,7 +90,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -175,12 +146,20 @@ search:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
       selector: td.rowfollow:nth-child(6)
+      optional: true
+      default: 0
     leechers:
       selector: td.rowfollow:nth-child(7)
+      optional: true
+      default: 0
     grabs:
       selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -196,8 +175,11 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumratio:
-      text: 1.0
+      text: 2.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.9.5 2025-06-22
+# NexusPHP v1.9.6 2025-06-25

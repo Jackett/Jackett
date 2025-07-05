@@ -20,6 +20,7 @@ caps:
     - {id: 7, cat: TV/Sport, desc: "F1 Oldies"}
     - {id: 8, cat: TV/Sport, desc: "F1 Press Conferences"}
     - {id: 9, cat: TV/Sport, desc: "F1 Post Races"}
+    - {id: 14, cat: TV/Sport, desc: "F1 Academy"}
 
   modes:
     search: [q]

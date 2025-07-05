@@ -1,12 +1,10 @@
 ---
 id: oldgreektracker
-name: Old Greek Tracker
-description: "Old Greek Tracker is a GREEK Private Torrent Tracker for PRE-2020 MOVIES / TV / GENERAL"
+name: Old Greek Tracker (OGT)
+description: "Old Greek Tracker (OGT) is a GREEK Private Torrent Tracker for PRE-2020 MOVIES / TV / GENERAL"
 language: el-GR
 type: private
 encoding: UTF-8
-certificates:
-  - 0adc2cd3e9c2136f02d453f980c497b0842e31fe # Expired 28 Jun 2025
 links:
   - https://oldgreektracker.xyz/
 legacylinks:
@@ -156,7 +154,7 @@ download:
     inputs:
       torrentid: "{{ .DownloadUri.Query.id }}"
   selectors:
-    - selector: a[href*="download.php?id="]
+    - selector: a[href*="download-torrent-"]
       attribute: href
 
 search:
@@ -179,28 +177,28 @@ search:
     order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table.sortable tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
-      selector: a[href*="?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: torrent-category-(\d+)
     title_default:
       # is usually abbreaviated
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
     title:
       # while still abbreviated, is usually longer than the default
       selector: div.tooltip-content div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     poster:
       selector: img[src*="/torrents/images/"]

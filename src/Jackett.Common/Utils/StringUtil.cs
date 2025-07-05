@@ -208,7 +208,7 @@ namespace Jackett.Common.Utils
             {
                 yield return index;
                 index = source.IndexOf(value, index + 1);
-            };
+            }
         }
 
         public static IEnumerable<int> AllIndexesOf(this string source, string value)
@@ -218,7 +218,7 @@ namespace Jackett.Common.Utils
             {
                 yield return index;
                 index = source.IndexOf(value, index + value.Length);
-            };
+            }
         }
 
         /// <summary>

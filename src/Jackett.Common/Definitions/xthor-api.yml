@@ -18,9 +18,11 @@ caps:
     # Movies / Films
     - {id: 118, cat: Movies/BluRay, desc: "Films/2160p/Bluray"}
     - {id: 119, cat: Movies/UHD, desc: "Films/2160p/Remux"}
+    - {id: 127, cat: Movies/UHD, desc: "Films/2160p/AV1"}
     - {id: 107, cat: Movies/UHD, desc: "Films/2160p/x265"}
     - {id: 1, cat: Movies/BluRay, desc: "Films/1080p/BluRay"}
     - {id: 2, cat: Movies/HD, desc: "Films/1080p/Remux"}
+    - {id: 126, cat: Movies/HD, desc: "Films/1080p/AV1"}
     - {id: 100, cat: Movies/HD, desc: "Films/1080p/x265"}
     - {id: 4, cat: Movies/HD, desc: "Films/1080p/x264"}
     - {id: 5, cat: Movies/HD, desc: "Films/720p/x264"}

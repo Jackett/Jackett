@@ -394,6 +394,7 @@ namespace Jackett.Updater
                 "Definitions/elittracker.yml",
                 "Definitions/emmidtracker.yml",
                 "Definitions/emtrek.yml",
+                "Definitions/eniahd.yml",
                 "Definitions/enthralled.yml",
                 "Definitions/enthralled2fa.yml",
                 "Definitions/eotforum.yml",
@@ -577,6 +578,7 @@ namespace Jackett.Updater
                 "Definitions/nextjav.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
+                "Definitions/nirvana.yml",
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nntt.yml",
