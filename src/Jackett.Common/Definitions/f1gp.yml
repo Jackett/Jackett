@@ -21,6 +21,10 @@ caps:
     - {id: 8, cat: TV/Sport, desc: "F1 Press Conferences"}
     - {id: 9, cat: TV/Sport, desc: "F1 Post Races"}
     - {id: 14, cat: TV/Sport, desc: "F1 Academy"}
+    - {id: 15, cat: TV/Sport, desc: "F1 Movies"}
+    - {id: 16, cat: TV/Sport, desc: "F1 Series"}
+    - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
+    - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
 
   modes:
     search: [q]
