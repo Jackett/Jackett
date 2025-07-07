@@ -275,7 +275,7 @@ Prior versions of Jackett are no longer supported.
  * Bitded
  * bitGAMER
  * Bithorlo (BHO)
- * BitHUmen [![(invite needed)][inviteneeded]](#)
+ * BitHUmen
  * Bitpalace
  * BitPorn
  * BitSexy
