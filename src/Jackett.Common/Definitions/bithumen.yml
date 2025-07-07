@@ -48,44 +48,61 @@ caps:
     music-search: [q]
     book-search: [q]
 
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "If you do not visit the site for 1 year, you will be banned for inactivity. The permanent deletion of your account after the ban is 2 years."
+
 login:
-  path: takelogin.php
-  method: post
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: td.embedded:has(h2:contains("bejelentkezés"))
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
-    selector: a[href*="logout.php"]
+    path: index.php
+    selector: a[href^="/logout.php?"]
 
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
-    incldead: 1
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    onlytitle: "{{ if .Query.IMDBID }}{{ else }}yes{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
 
   rows:
     selector: table#torrenttable > tbody > tr:has(a[href^="details.php?id="])
-    filters:
-      - name: andmatch
 
   fields:
-# download button can be disbled in the profile, use details link instead
-#      download:
-#        selector: a[href^="download.php/"]
-#        attribute: href
-    download:
-      selector: a[href^="details.php?id="]
+    category:
+      selector: a[href^="?cat="]
       attribute: href
       filters:
-        - name: replace
-          args: ["details.php?id=", "download.php/"]
-        - name: append
-          args: "/invalid.torrent"
+        - name: querystring
+          args: cat
     title_default:
       selector: a[href^="details.php?id="]
     title:
@@ -96,21 +113,30 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+    # download button can be disabled in the profile, use details link instead
+    download:
+      selector: a[href^="details.php?id="]
       attribute: href
+      filters:
+        - name: replace
+          args: ["details.php?id=", "download.php/"]
+        - name: append
+          args: "/invalid.torrent"
     poster:
       selector: a[onmouseover^="bithumen.UI.images.coverShow"]
       attribute: onmouseover
       filters:
         - name: regexp
           args: "\"(.*?)\""
-    category:
-      selector: a[href^="?cat="]
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
       attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    size:
+      selector: td:nth-child(6) > u
+    files:
+      selector: td:nth-child(3)
+    grabs:
+      selector: td:nth-child(7)
     seeders:
       selector: td:nth-child(8)
     leechers:
@@ -118,21 +144,19 @@ search:
       filters:
         - name: regexp
           args: /\s*([\d,]+)
-    grabs:
-      selector: td:nth-child(7)
-    files:
-      selector: td:nth-child(3)
-    size:
-      selector: td:nth-child(6) > u
+    genre:
+      selector: span:has(a[href^="browse.php?genre="])
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       selector: td:nth-child(5) > nobr > font:contains(" × ")
       optional: true
       default: 1
-      filters:
-        - name: replace
-          args: ["×", ""]
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+    description:
+      selector: td:nth-child(2) > div
     date_year:
       selector: td:nth-child(5):contains('.')
       optional: true
@@ -155,6 +179,4 @@ search:
           args: ["tegnap", "yesterday"]
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
-    description:
-      selector: td:nth-child(2) > div
 # engine tbd
