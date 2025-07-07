@@ -60,7 +60,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "recherche/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/"
   keywordsfilters:
     # if searching for season packs switch S01 to saison 1 #9712
     - name: re_replace
