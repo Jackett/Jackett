@@ -25,6 +25,7 @@ caps:
     - {id: 16, cat: TV/Sport, desc: "F1 Series"}
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
+    - {id: 19, cat: TV/Sport, desc: "FE Championship"}
 
   modes:
     search: [q]
