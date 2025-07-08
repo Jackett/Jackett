@@ -17,12 +17,14 @@ caps:
     - {id: 9, cat: PC, desc: "Application"}
     - {id: 10, cat: Audio/Video, desc: "Music Video"}
     - {id: 11, cat: TV/Sport, desc: "Sport"}
+    - {id: 12, cat: Books, desc: "eBook"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
