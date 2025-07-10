@@ -110,7 +110,7 @@ search:
     s: 0
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
-    limit: 100
+    limit: 99
 
   rows:
     selector: tr.torrent-info
