@@ -118,6 +118,7 @@ Prior versions of Jackett are no longer supported.
  * Sexy-Pics
  * Shana Project
  * ShowRSS
+ * SkidrowRepack
  * sosulki
  * SubsPlease
  * sukebei.Nyaa.si
