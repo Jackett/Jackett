@@ -1,0 +1,84 @@
+---
+id: skidrowrepack
+name: SkidrowRepack
+description: "SkidrowRepack is a Public Torrent Tracker for GAMES"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://skidrowrepack.com/
+
+caps:
+  categorymappings:
+    - {id: 9, cat: PC/Games, desc: "Action"}
+    - {id: 10, cat: PC/Games, desc: "Adventure"}
+    - {id: 21, cat: PC/Games, desc: "Online Games"}
+    - {id: 11, cat: PC/Games, desc: "Arcade"}
+    - {id: 12, cat: PC/Games, desc: "Fighting"}
+    - {id: 13, cat: PC/Games, desc: "Horror"}
+    - {id: 14, cat: PC/Games, desc: "Logic, Puzzle"}
+    - {id: 15, cat: PC/Games, desc: "Racing"}
+    - {id: 16, cat: PC/Games, desc: "RPG"}
+    - {id: 17, cat: PC/Games, desc: "Shooters"}
+    - {id: 18, cat: PC/Games, desc: "Simulator"}
+    - {id: 19, cat: PC/Games, desc: "Sports"}
+    - {id: 20, cat: PC/Games, desc: "Strategy"}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a.dwn-load
+      attribute: href
+
+search:
+  paths:
+    - path: index.php
+  inputs:
+    $raw: "{{ range .Categories }}catlist[]={{.}}&{{end}}"
+    do: search
+    subaction: search
+    search_start: 0
+    full_search: 1
+    result_from: 1
+    showposts: 1
+    # 0 article, 1 comments, 2 static pages, 3 article titles
+    titleonly: "{{ if .Keywords }}3{{ else }}0{{ end }}"
+    searchdate: 0
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}game{{ end }}"
+    sortby: date
+    resorder: desc
+
+  rows:
+    selector: div.mov
+
+  fields:
+    category:
+      text: 9
+    title:
+      selector: a.mov-t
+    details:
+      selector: a.mov-t
+      attribute: href
+    download:
+      selector: a.mov-t
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    size:
+      text: "4 GB"
+    date:
+      text: now
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
