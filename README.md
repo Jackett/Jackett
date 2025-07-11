@@ -513,7 +513,6 @@ Prior versions of Jackett are no longer supported.
  * RailgunPT
  * Rain (雨)
  * Rastastugan
- * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
  * ReelFlix (HD4Free,LegacyHD)
