@@ -1,9 +1,9 @@
 ---
 id: catorrent
 name: Catorrent
-description: "Catorrent is a RUSSIAN Semi-Private Torrent Tracker for GAMES"
+description: "Catorrent is a RUSSIAN Public Torrent Tracker for GAMES"
 language: ru-RU
-type: semi-private
+type: public
 encoding: UTF-8
 links:
   - https://catorrent.org/
@@ -33,28 +33,7 @@ caps:
   modes:
     search: [q]
 
-settings:
-  - name: username
-    type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-
-login:
-  path: index.php
-  method: form
-  form: form[action=""]
-  inputs:
-    login_name: "{{ .Config.username }}"
-    login_password: "{{ .Config.password }}"
-    login_not_save: ""
-    login: submit
-  error:
-    - selector: div.berrors
-  test:
-    path: /
-    selector: a[href$="/index.php?action=logout"]
+settings: []
 
 download:
   selectors:

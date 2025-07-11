@@ -1,0 +1,71 @@
+---
+id: qbite
+name: Qbite (Hubite)
+description: "Qbite (Hubite) is a Public Torrent Tracker for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://qbite.top/
+
+caps:
+  categorymappings:
+    - {id: XXX, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    # https://qbite.top/?do=search&subaction=search&story=2025
+    - path: /
+  inputs:
+    do: search
+    subaction: search
+    story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  rows:
+    selector: div.modelCard-box
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: a.modelCard-image
+      attribute: title
+    details:
+      selector: a.modelCard-image
+      attribute: href
+    download:
+      selector: a.modelCard-image
+      attribute: href
+    poster:
+      # will often fails with 429 Too Many Request so not sure if its worth including
+      selector: img[src*="/poster/"]
+      attribute: src
+    date:
+      selector: div.media-item > span
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "d-MM-yyyy zzz"
+    size:
+      selector: a.modelCard-profileTag
+    seeders:
+      # site uses a JS random number generator 1-1000 for seed/leech
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# Engine n/a

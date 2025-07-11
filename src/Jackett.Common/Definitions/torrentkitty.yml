@@ -6,7 +6,6 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://www.torrentkitty.tv/
   - https://www.torrentkitty.cam/
   - https://www.torrentkitty.ink/
   - https://www.torrentkitty.io/
@@ -18,6 +17,7 @@ links:
   - https://torkitty.com/
 legacylinks:
   - https://www.torrentkitty.se/
+  - https://www.torrentkitty.tv/
 
 caps:
   categories:

@@ -26,8 +26,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         public override bool SupportsPagination => false;
 
-        protected virtual string TimezoneOffset => "-04:00"; // Avistaz does not specify a timezone & returns server time
-
         private readonly Dictionary<string, string> AuthHeaders = new Dictionary<string, string>
         {
             {"Accept", "application/json"},
@@ -246,7 +244,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                         Details = details,
                         Guid = details,
                         Category = ParseCategories(query, row),
-                        PublishDate = DateTime.Parse($"{row.Value<string>("created_at")} {TimezoneOffset}", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
+                        PublishDate = DateTime.Parse($"{row.Value<string>("created_at_iso")}", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
                         Description = description,
                         Size = row.Value<long>("file_size"),
                         Files = row.Value<long>("file_count"),

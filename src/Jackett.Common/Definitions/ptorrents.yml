@@ -1,0 +1,89 @@
+---
+id: ptorrents
+name: ptorrents
+description: "ptorrents is a Public tracker for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.ptorrents.com/
+
+caps:
+  categories:
+    "3D and VR Movies": XXX
+    "Adult Anime and Game": XXX
+    Anime: XXX
+    BDSM: XXX
+    Bisexual: XXX
+    Bukkake: XXX
+    "Chinese Movie": XXX
+    "Erotic Picture Gallery": XXX/ImageSet
+    "Erotic Softcore Movies": XXX
+    "Femdom and Strapon": XXX
+    Fetish: XXX
+    "Fisting and Dildo": XXX
+    Game: PC/Games
+    Gangbang: XXX
+    "Japanese Movie": XXX
+    Peeing: XXX
+    "Porn Movies": XXX
+    Pregnant: XXX
+    "Special Porn Movies": XXX
+    Transsexual: XXX
+    Voyeur: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a.download-button
+      attribute: href
+
+search:
+  paths:
+    - path: "s.php?search={{ if .Keywords }}{{ .Keywords }}{{ else }}%20{{ end }}"
+
+  rows:
+    selector: div.image-wrapper
+
+  fields:
+    category:
+      selector: div.catalog a
+    title:
+      selector: a.overlay
+      filters:
+        - name: re_replace
+          args: ["^.+?\\] ", ""]
+    details:
+      selector: a.overlay
+      attribute: href
+    download:
+      selector: a.overlay
+      attribute: href
+      filters:
+        - name: regexp
+          args: "-(\\d+).html"
+        - name: prepend
+          args: "/dl.php?t="
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      selector: a.overlay
+      filters:
+        - name: regexp
+          args: "^\\[(.+?)\\]"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

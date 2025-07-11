@@ -53,6 +53,7 @@ Prior versions of Jackett are no longer supported.
  * BTSOW
  * btstate
  * Byrutor
+ * Catorrent
  * Cinecalidad
  * cpasbienClone
  * CrackingPatching
@@ -107,6 +108,8 @@ Prior versions of Jackett are no longer supported.
  * PornoTorrent
  * PornRips
  * Postman
+ * ptorrents
+ * Qbite (Hubite)
  * Rapidzona
  * RedeTorrent
  * RinTorNeT
@@ -115,6 +118,7 @@ Prior versions of Jackett are no longer supported.
  * Sexy-Pics
  * Shana Project
  * ShowRSS
+ * SkidrowRepack
  * sosulki
  * SubsPlease
  * sukebei.Nyaa.si
@@ -164,7 +168,6 @@ Prior versions of Jackett are no longer supported.
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
  * BookTracker
  * BootyTape
- * Catorrent
  * comicat
  * Deildu
  * Devil-Torrents
@@ -275,7 +278,7 @@ Prior versions of Jackett are no longer supported.
  * Bitded
  * bitGAMER
  * Bithorlo (BHO)
- * BitHUmen [![(invite needed)][inviteneeded]](#)
+ * BitHUmen
  * Bitpalace
  * BitPorn
  * BitSexy

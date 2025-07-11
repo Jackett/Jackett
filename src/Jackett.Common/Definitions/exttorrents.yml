@@ -75,8 +75,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -103,19 +103,21 @@ search:
   paths:
     # https://ext.to/browse/?sort=age&order=desc&age=4&with_adult=1
     # https://ext.to/browse/?sort=age&order=desc&q=wipeout&with_adult=1
+    # https://ext.to/browse/?imdb_id=tt2693776
     - path: browse/
     - path: browse/
       inputs:
         page: 2
       followredirect: true
   inputs:
-    q: "{{ .Keywords }}"
+    q: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"
     # 0=last 24 hours, 1=last 3 days, 2=last week, 3=last 2 weeks, 4=last month
-    age: "{{ if .Keywords }}{{ else }}0{{ end }}"
+    age: "{{ if or .Keywords .Query.IMDBID }}{{ else }}0{{ end }}"
     # familysafe 0=enabled, 1=disabled
-    with_adult: 1
+    with_adult: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
+    imdb_id: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
 
   rows:
     selector: table.table-striped > tbody > tr
