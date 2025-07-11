@@ -820,6 +820,7 @@ namespace Jackett.Updater
                 "Definitions/xbit.yml",
                 "Definitions/xbytes2.yml",
                 "Definitions/xfsub.yml",
+                "Definitions/xider-torrent.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/xperiencebytes-api.yml",
                 "Definitions/xtremefile.yml",
