@@ -655,6 +655,7 @@ namespace Jackett.Updater
                 "Definitions/rptscene.yml",
                 "Definitions/rptscene-api.yml", // changed engine, new indexer rptscene #5368
                 "Definitions/rus-media.yml",
+                "Definitions/satclubbing.yml",
                 "Definitions/scenefz.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/scenehd.yml", // migrated to C# (use JSON API)
                 "Definitions/scenelinks.yml",
