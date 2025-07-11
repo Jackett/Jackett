@@ -353,7 +353,6 @@ Prior versions of Jackett are no longer supported.
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * Flux-Zone
  * Free Farm (自由农场)
- * FSM
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
  * FutureTorrent
