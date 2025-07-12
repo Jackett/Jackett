@@ -273,6 +273,7 @@ Prior versions of Jackett are no longer supported.
  * Best-Core
  * BeyondHD (BHD)
  * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigCore
  * Bit-Bázis
  * BIT-HDTV
  * Bitded
