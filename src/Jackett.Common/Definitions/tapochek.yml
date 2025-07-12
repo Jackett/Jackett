@@ -79,16 +79,15 @@ caps:
     - {id: 124, cat: Movies/Foreign, desc: "Зарубежное кино | Rips"}
     - {id: 123, cat: Movies, desc: "Сборники фильмов"}
     - {id: 974, cat: Movies/UHD, desc: "Отечественное кино | UHD 4K"}
-    - {id: 127, cat: Movies/BluRay, desc: "Отечественное кино | Blu-Ray и BDRemux"}
     - {id: 128, cat: Movies/HD, desc: "Отечественное кино | HD Rips"}
     - {id: 133, cat: Movies/DVD, desc: "Отечественное кино | DVD"}
     - {id: 131, cat: Movies, desc: "Российское и советское кино | Rips"}
     - {id: 869, cat: Movies/3D, desc: "3D"}
     - {id: 886, cat: Movies, desc: "Новинки зарубежных сериалов (2024-2025)"}
-    - {id: 135, cat: Movies, desc: "Зарубежные сериалы до 2024г."}
     - {id: 160, cat: TV, desc: "Отечественные cериалы"}
+    - {id: 135, cat: Movies, desc: "Зарубежные сериалы до 2025г."}
+    - {id: 979, cat: TV, desc: "Русские сериалы до 2025г"}
     - {id: 325, cat: TV/UHD, desc: "Мультфильмы | UHD 4K"}
-    - {id: 938, cat: TV/HD, desc: "Мультфильмы | Blu-Ray и BDRemux"}
     - {id: 324, cat: TV/HD, desc: "Мультфильмы | HD Rips"}
     - {id: 328, cat: TV, desc: "Мультфильмы | Rips"}
     - {id: 330, cat: TV, desc: "Сборники мультфильмов"}
