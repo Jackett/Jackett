@@ -141,6 +141,7 @@ search:
         span:contains("4x"): 4
         span:contains("5x"): 5
         "*": 1
-    minimumratio:
-      text: 999
+    minimumseedtime:
+      # 1 days (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
 # engine n/a
