@@ -390,7 +390,6 @@ Prior versions of Jackett are no longer supported.
  * HDKylin (麒麟)
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
- * HDT-LaFenice
  * HDtime
  * HDTorrents.it [PAY2DL]
  * HDTurk
