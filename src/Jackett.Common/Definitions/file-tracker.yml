@@ -544,7 +544,7 @@ login:
   error:
     - selector: h4.warnColor1
   test:
-    path: index.php
+    path: search.php
     selector: a[href="/login.php?logout=1"]
 
 search:
