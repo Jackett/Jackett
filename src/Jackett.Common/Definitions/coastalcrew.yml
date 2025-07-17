@@ -13,6 +13,7 @@ caps:
     - {id: 122, cat: Movies, desc: "Movie Klassiker"}
     - {id: 124, cat: Movies, desc: "Movie Kids"}
     - {id: 127, cat: Movies, desc: "Movie Pack"}
+    - {id: 138, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD-R"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
@@ -50,6 +51,7 @@ caps:
     - {id: 23, cat: Console/XBox, desc: "Game XBOX"}
     - {id: 24, cat: Console/XBox 360, desc: "Game XBOX360"}
 
+    - {id: 137, cat: Audio, desc: "Music OST"}
     - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 48, cat: Audio, desc: "Music Album"}
     - {id: 49, cat: Audio, desc: "Music Charts"}
