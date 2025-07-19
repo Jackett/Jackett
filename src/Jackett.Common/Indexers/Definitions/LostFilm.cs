@@ -51,7 +51,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private static readonly Regex parsePlayEpisodeRegex = new Regex("PlayEpisode\\('(?<id>\\d{1,3})(?<season>\\d{3})(?<episode>\\d{3})'\\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex parsePlayEpisodeRegex = new Regex(@"PlayEpisode\('(?<id>\d+)(?<season>\d{3})(?<episode>\d{3})'\)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex parseReleaseDetailsRegex = new Regex("Видео:\\ (?<quality>.+).\\ Размер:\\ (?<size>.+).\\ Перевод", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private string LoginUrl => SiteLink + "login";
