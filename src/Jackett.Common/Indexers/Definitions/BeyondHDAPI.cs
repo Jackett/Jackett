@@ -197,7 +197,8 @@ namespace Jackett.Common.Indexers.Definitions
             }
             else if (query.IsTmdbQuery)
             {
-                postData.Add(BHDParams.tmdb_id, query.TmdbID.ToString());
+                var tmdb_prefix = (query.IsTVSearch) ? "tv/" : "movie/";
+                postData.Add(BHDParams.tmdb_id, tmdb_prefix + query.TmdbID.ToString());
             }
 
             if (query.Limit > 0 && query.Offset > 0)
