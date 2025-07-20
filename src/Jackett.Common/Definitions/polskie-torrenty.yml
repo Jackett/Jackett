@@ -148,6 +148,8 @@ search:
   fields:
     categorydesc:
       selector: div.link1 > font
+      optional: true
+      default: Pozostale
     title_phase1:
       selector: a.link1
       attribute: href
