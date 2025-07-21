@@ -6,7 +6,7 @@ language: fr-FR
 type: private
 encoding: UTF-8
 followredirect: true
-requestDelay: 2
+requestDelay: 4
 links:
   - https://www.yggtorrent.top/
 legacylinks:
