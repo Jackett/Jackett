@@ -8,8 +8,9 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://abtorrents.me/
   - https://abtorrents.xyz/
+legacylinks:
+  - https://abtorrents.me/
 
 caps:
   categorymappings:
