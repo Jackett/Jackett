@@ -58,11 +58,13 @@ caps:
     - {id: 300, cat: Books/EBook, desc: "Textbooks"}
     - {id: 301, cat: Books/EBook, desc: "Educational"}
     - {id: 328, cat: Books/EBook, desc: "Engineering/Mech"}
+    - {id: 336, cat: Books/EBook, desc: "Video Games"}
     - {id: 337, cat: Books/EBook, desc: "Computers"}
     - {id: 339, cat: Books/EBook, desc: "Science/Physics"}
     - {id: 346, cat: Books/EBook, desc: "Chemistry"}
     - {id: 347, cat: Books/EBook, desc: "Medical"}
     - {id: 348, cat: Books/EBook, desc: "Mathematics"}
+    - {id: 350, cat: Books/EBook, desc: "Programming"}
     # Hobbies/pastimes
     - {id: 271, cat: Books/EBook, desc: "Food And Drink"}
     - {id: 272, cat: Books/EBook, desc: "General Hobbies"}
@@ -72,7 +74,6 @@ caps:
     - {id: 331, cat: Books/EBook, desc: "Electronics"}
     - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
     - {id: 334, cat: Books/EBook, desc: "Veterinary/Pets"}
-    - {id: 336, cat: Books/EBook, desc: "Video Games"}
     - {id: 344, cat: Books/EBook, desc: "Model Making"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
