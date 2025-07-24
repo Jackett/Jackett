@@ -29,22 +29,22 @@ namespace Jackett.Common.Indexers.Definitions
         {
             // Uptrends.com uptime checkpoints // Uptime.com availability locations
             "https://www.lostfilm.tv/", // 43/43 // 9/9
-            "https://www.lostfilmtv.site/", // 43/43 // 9/9
             "https://www.lostfilmtv5.site/", // 43/43 // 9/9
             "https://www.lostfilmtv2.site/", // 43/43 // 9/9
             "https://www.lostfilmtv3.site/", // 43/43 // 9/9
             "https://www.lostfilm.today/", // 43/43 // 9/9
             "https://www.lostfilm.download/", // 43/43 // 9/9
-            "https://www.lostfilm.life/", // 27/43 // 6/9
-            "https://www.lostfilm.uno/", // 25/43 // 7/9
-            "https://www.lostfilm.tw/", // 25/43 // 7/9
+            "https://www.lostfilm.run/", // 43/43 // 9/9
+            "https://lostfilm.site", // 43/43 // 9/9
+            "https://www.lostfilm.life/", // 42/43 // 9/9
+            "https://www.lostfilm.uno/", // 42/43 // 9/9
+            "https://www.lostfilm.tw/", // 35/43 // 7/9
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://lostfilm.site", // redirects to .tw
             "https://lostfilm.tw/", // redirects to www.
-            "https://www.lostfilm.run/", // ERR_NAME_NOT_RESOLVED
-            "https://www.lostfilm.win/", // ERR_NAME_NOT_RESOLVED
+            "https://www.lostfilm.win/", // blank page
+            "https://www.lostfilmtv.site/", // ERR_NAME_NOT_RESOLVED
         };
         public override string Language => "ru-RU";
         public override string Type => "semi-private";
