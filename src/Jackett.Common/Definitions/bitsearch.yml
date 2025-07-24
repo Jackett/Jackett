@@ -19,35 +19,47 @@ legacylinks:
 
 caps:
   categories:
-    AudioBook: Audio/Audiobook
-    eBook: Books/EBook
-    "Ebook/Course": Books/EBook
-    Games: PC/Games
-    "Games/PC": PC/Games
+    Anime: TV/Anime
+    Anime/Dub/Dual Audio: TV/Anime
+    Anime/Raw: TV/Anime
+    Anime/Subbed: TV/Anime
+    Books: Books
+    Books/Academic: Books/EBook
+    Books/Comics: Books/Comics
+    Books/Fiction: Books/EBook
+    Books/Magazines: Books/Mags
+    Books/Non-fiction: Books/EBook
+    Games: Console
+    Games/Console: Console
+    Games/Mobile: PC/Mobile-Other
+    Games/PC: PC/Games
+    Games/RIP: PC/Games
     Movies: Movies
+    Movies/Dub/Dual Audio: Movies
     Music: Audio
-    "Music/Album": Audio
-    "Music/mp3": Audio/MP3
-    "Music/Lossless": Audio/Lossless
-    "Music/Video": Audio/Video
+    Music/Album: Audio
+    Music/Discography: Audio
+    Music/FLAC: Audio/Lossless
+    Music/MP3: Audio/MP3
+    Music/Single: Audio
     Other: Other
-    "Other/Android": PC/Mobile-Android
-    "Other/Archive": Other
-    "Other/Audio": Audio
-    "Other/Database": PC
-    "Other/DiskImage": PC/ISO
-    "Other/Document": Books/Comics
-    "Other/Image": Other/Misc
-    "Other/Program": PC/0day
-    "Other/Sourcecode": PC
-    "Other/Source Code": PC
-    "Other/Video": TV
+    Other/Android: PC/Mobile-Android
+    Other/Archive: Other
+    Other/Audio: Audio
+    Other/Database: PC
+    Other/DiskImage: PC/ISO
+    Other/Document: Books/Comics
+    Other/Image: Other/Misc
+    Other/Program: PC
+    Other/Source Code: PC
+    Other/Video: TV
     Softwares: PC/0day
-    "Softwares/Mac": PC/Mac
-    "Softwares/Windows": PC/0day
+    Softwares/Android: PC/Mobile-Android
+    Softwares/Linux: PC
+    Softwares/MacOS: PC/Mac
+    Softwares/Windows: PC/0day
+    Softwares/iOS: PC/Mobile-iOS
     TV: TV
-    Unknown: Other
-    XXX: XXX
 
   modes:
     search: [q]
@@ -59,110 +71,71 @@ caps:
 settings:
   - name: sort
     type: select
-    label: Sort requested from site
-    default: date
+    label: Sort requested from site.
+    default: created
     options:
-      date: created
+      created: created
       seeders: seeders
       size: size
   - name: type
     type: select
-    label: Order requested from site
+    label: Order requested from site.
     default: desc
     options:
       desc: desc
       asc: asc
 
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt"]
+      attribute: href
+
 search:
   paths:
-     # https://bitsearch.to/search?q=&sort=date&order=desc&limit=100
-    - path: "{{ if .Keywords }}search?q={{ .Keywords }}&sort={{ .Config.sort }}&order={{ .Config.type }}&limit=100{{ else }}latest{{ end }}"
+     # https://bitsearch.to/search?q=spongebob&sortBy=created&order=desc&page=1
+    - path: "{{ if .Keywords }}search?q={{ .Keywords }}&sortBy={{ .Config.sort }}&order={{ .Config.type }}&page=1{{ else }}latest{{ end }}"
 
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
 
   rows:
-    selector: li.search-result:has(a.dl-magnet)
+    selector: div.space-y-4 > div.bg-white > div.items-start
 
   fields:
     category:
-      selector: a.category
+      # latest, search
+      selector: div.space-y-2 > span:nth-child(1), span.space-x-1:nth-child(1)
     title:
-      selector: h5 a
+      selector: h3 > a
     details:
-      selector: h5 a
+      selector: h3 > a
       attribute: href
-    magnet:
-      selector: a[href^="magnet:?xt"]
+    download:
+      selector: h3 > a
       attribute: href
-    grabs_dot:
-      selector: div.stats div:has(img[alt="Download"]):contains(".")
-      optional: true
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: ["K", "00"]
-        - name: re_replace
-          args: ["[MB]", "00000"] # 'billion' too long for Jackett table cell
-    grabs_nodot:
-      selector: div.stats div:has(img[alt="Download"]):not(:contains("."))
-      optional: true
-      filters:
-        - name: replace
-          args: ["K", "000"]
-        - name: re_replace
-          args: ["[MB]", "000000"]
-    grabs:
-      text: "{{ if or .Result.grabs_dot .Result.grabs_nodot }}{{ or .Result.grabs_dot .Result.grabs_nodot }}{{ else }}0{{ end }}"
     size:
-      selector: div.stats div:has(img[alt="Size"])
-    seeders_dot:
-      selector: div.stats div:has(img[alt="Seeder"]):contains(".")
+      selector: div.space-y-2 > span:nth-child(2), span.space-x-1:nth-child(2)
+    date_year:
+      selector: div.space-y-2 > span:nth-child(3):contains("/"), span.space-x-1:nth-child(3):contains("/")
       optional: true
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: ["K", "00"]
-        - name: re_replace
-          args: ["[MB]", "00000"]
-    seeders_nodot:
-      selector: div.stats div:has(img[alt="Seeder"]):not(:contains("."))
-      optional: true
-      filters:
-        - name: replace
-          args: ["K", "000"]
-        - name: re_replace
-          args: ["[MB]", "000000"]
-    seeders:
-      text: "{{ if or .Result.seeders_dot .Result.seeders_nodot }}{{ or .Result.seeders_dot .Result.seeders_nodot }}{{ else }}0{{ end }}"
-    leechers_dot:
-      selector: div.stats div:has(img[alt="Leecher"]):contains(".")
-      optional: true
-      filters:
-        - name: replace
-          args: [".", ""]
-        - name: replace
-          args: ["K", "00"]
-        - name: re_replace
-          args: ["[MB]", "00000"]
-    leechers_nodot:
-      selector: div.stats div:has(img[alt="Leecher"]):not(:contains("."))
-      optional: true
-      filters:
-        - name: replace
-          args: ["K", "000"]
-        - name: re_replace
-          args: ["[MB]", "000000"]
-    leechers:
-      text: "{{ if or .Result.leechers_dot .Result.leechers_nodot }}{{ or .Result.leechers_dot .Result.leechers_nodot }}{{ else }}0{{ end }}"
-    date:
-      selector: div.stats div:has(img[alt="Date"])
       filters:
         - name: dateparse
-          args: "MMM d, yyyy"
+          args: "M/d/yyyy"
+    date_ago:
+      selector: div.space-y-2 > span:nth-child(3):contains("ago"), span.space-x-1:nth-child(3):contains("ago")
+      optional: true
+      filters:
+        - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
+    seeders:
+      selector: div.space-x-3 > span:nth-child(1), span:contains("seeders")
+    leechers:
+      selector: div.space-x-3 > span:nth-child(2), span:contains("leechers")
+    grabs:
+      selector: span:contains("downloads")
+      optional: true
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
