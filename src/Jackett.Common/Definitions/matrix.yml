@@ -10,12 +10,14 @@ links:
 
 caps:
   categorymappings:
+    # cats commented out have no hits in results so image to use in category case block cannot be loaded for matching
+    # also note: 43 & 44 have the same pic, as does 60 & 61
     - {id: 23, cat: Movies/Other, desc: "Animációk"}
     - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
     - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
-    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
+#    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
     - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
-    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
+#    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
     - {id: 48, cat: Movies/HD, desc: "Film/EN/1080p"}
     - {id: 32, cat: Movies/HD, desc: "Film/EN/720p"}
     - {id: 38, cat: Movies/BluRay, desc: "Film/EN/Blu-ray"}
@@ -28,9 +30,9 @@ caps:
     - {id: 5, cat: Movies/SD, desc: "Film/HU/SD"}
     - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
     - {id: 39, cat: PC/Games, desc: "Játékok/Rip/Dox"}
-    - {id: 47, cat: Other, desc: "Klippek"}
+#    - {id: 47, cat: Other, desc: "Klippek"}
     - {id: 30, cat: Audio/Lossless, desc: "Lossless/EN"}
-    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
+#    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
     - {id: 25, cat: Audio/MP3, desc: "MP3/EN"}
     - {id: 6, cat: Audio/MP3, desc: "MP3/HU"}
     - {id: 33, cat: PC, desc: "Program/egyéb"}
@@ -39,7 +41,7 @@ caps:
     - {id: 49, cat: TV/SD, desc: "Sorozat/EN/SD"}
     - {id: 28, cat: TV/HD, desc: "Sorozat/HU/HD"}
     - {id: 7, cat: TV/SD, desc: "Sorozat/HU/SD"}
-    - {id: 9, cat: XXX, desc: "XXX"}
+#    - {id: 9, cat: XXX, desc: "XXX"}
     - {id: 44, cat: XXX/x264, desc: "XXX/HD"}
     - {id: 43, cat: XXX/SD, desc: "XXX/SD"}
 
@@ -117,9 +119,40 @@ search:
     selector: table.table-center[width="905"] > tbody > tr:has(a[onclick])
 
   fields:
-    categorydesc:
-      selector: img[src^="/pic/categories"]
-      attribute: title
+    category:
+      case:
+        img[src="/pic/categories/cat_anime.gif"]: 23
+        img[src="/pic/categories/061.png"]: 61
+        img[src="/pic/categories/061.png"]: 60
+#        img[]: 45
+        img[src="/pic/categories/016.png"]: 40
+#        img[]: 20
+        img[src="/pic/categories/010.png"]: 48
+        img[src="/pic/categories/9.png"]: 32
+        img[src="/pic/categories/011.png"]: 38
+        img[src="/pic/categories/8.png"]: 27
+        img[src="/pic/categories/7.png"]: 24
+        img[src="/pic/categories/4.png"]: 34
+        img[src="/pic/categories/3.png"]: 31
+        img[src="/pic/categories/5.png"]: 35
+        img[src="/pic/categories/2.png"]: 26
+        img[src="/pic/categories/1.png"]: 5
+        img[src="/pic/categories/021.png"]: 4
+        img[src="/pic/categories/cat_games.gif"]: 39
+#        img[]: 47
+        img[src="/pic/categories/024.png"]: 30
+#        img[]: 29
+        img[src="/pic/categories/023.png"]: 25
+        img[src="/pic/categories/018.png"]: 6
+        img[src="/pic/categories/025.png"]: 33
+        img[src="/pic/categories/020.png"]: 1
+        img[src="/pic/categories/015.png"]: 36
+        img[src="/pic/categories/014.png"]: 49
+        img[src="/pic/categories/013.png"]: 28
+        img[src="/pic/categories/012.png"]: 7
+#        img[]: 9
+        img[src="/pic/categories/6.png"]: 44
+        img[src="/pic/categories/6.png"]: 43
     title:
       selector: td:nth-child(2) > div > a
     _id:
