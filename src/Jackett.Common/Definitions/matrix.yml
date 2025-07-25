@@ -13,7 +13,7 @@ caps:
     # cats commented out have no hits in results so image to use in category case block cannot be loaded for matching
     # also note: 43 & 44 have the same pic, as does 60 & 61
     - {id: 23, cat: Movies/Other, desc: "Animációk"}
-    - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
+#    - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
     - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
 #    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
     - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
@@ -43,7 +43,7 @@ caps:
     - {id: 7, cat: TV/SD, desc: "Sorozat/HU/SD"}
 #    - {id: 9, cat: XXX, desc: "XXX"}
     - {id: 44, cat: XXX/x264, desc: "XXX/HD"}
-    - {id: 43, cat: XXX/SD, desc: "XXX/SD"}
+#    - {id: 43, cat: XXX/SD, desc: "XXX/SD"}
 
   modes:
     search: [q]
@@ -122,7 +122,7 @@ search:
     category:
       case:
         img[src="/pic/categories/cat_anime.gif"]: 23
-        img[src="/pic/categories/061.png"]: 61
+#        img[src="/pic/categories/061.png"]: 61
         img[src="/pic/categories/061.png"]: 60
 #        img[]: 45
         img[src="/pic/categories/016.png"]: 40
@@ -152,7 +152,7 @@ search:
         img[src="/pic/categories/012.png"]: 7
 #        img[]: 9
         img[src="/pic/categories/6.png"]: 44
-        img[src="/pic/categories/6.png"]: 43
+#        img[src="/pic/categories/6.png"]: 43
     title:
       selector: td:nth-child(2) > div > a
     _id:
