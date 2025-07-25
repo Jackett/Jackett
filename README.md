@@ -181,7 +181,7 @@ Prior versions of Jackett are no longer supported.
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
- * HD-CzTorrent
+ * HD-CzTorrent [PAY2DL]
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
@@ -405,7 +405,7 @@ Prior versions of Jackett are no longer supported.
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
- * INFINITY
+ * INFINITY [PAY2DL]
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
