@@ -44,12 +44,13 @@ caps:
     - {id: 275, cat: Books/EBook, desc: "General Fiction"}
     - {id: 280, cat: Books/EBook, desc: "Crime/Thriller/Myste"}
     - {id: 312, cat: Books/EBook, desc: "Romance"}
-    - {id: 313, cat: Books/EBook, desc: "Comedy/Humour "}
-    - {id: 314, cat: Books/EBook, desc: "Historical "}
+    - {id: 313, cat: Books/EBook, desc: "Comedy/Humour"}
+    - {id: 314, cat: Books/EBook, desc: "Historical Fiction"}
     - {id: 315, cat: Books/EBook, desc: "Cozy/Mystery "}
     - {id: 318, cat: Books/EBook, desc: "Urbn Fantasy/Para"}
     - {id: 340, cat: Books/EBook, desc: "Lit/RPG"}
     - {id: 341, cat: Books/EBook, desc: "Collections"}
+    - {id: 352, cat: Books/EBook, desc: "Westerns"}
     # Children & Y/A
     - {id: 299, cat: Books/EBook, desc: "Young Adult"}
     - {id: 298, cat: Books/EBook, desc: "Children's"}
@@ -83,6 +84,7 @@ caps:
     - {id: 335, cat: Books/EBook, desc: "Entertainment"}
     - {id: 338, cat: Books/EBook, desc: "Encyclopedia/Ref"}
     - {id: 349, cat: Books/EBook, desc: "Self Help"}
+    - {id: 351, cat: Books/EBook, desc: "Religion"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
