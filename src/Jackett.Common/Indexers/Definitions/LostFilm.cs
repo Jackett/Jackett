@@ -23,7 +23,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "lostfilm";
         public override string Name => "LostFilm.tv";
-        public override string Description => "LostFilm is a RUSSIAN semi-Private site. Unique portal for foreign series";
+        public override string Description => "LostFilm is a RUSSIAN Semi-Private site. Unique portal for foreign series";
         public override string SiteLink { get; protected set; } = "https://www.lostfilm.tv/";
         public override string[] AlternativeSiteLinks => new[]
         {
