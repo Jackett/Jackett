@@ -13,67 +13,23 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 56, cat: Movies, desc: "BTRG"}
-    - {id: 57, cat: Movies, desc: "Yerli Dizi"}
-    - {id: 62, cat: Movies, desc: "Yab@ncı Dizi"}
-    - {id: 63, cat: Movies, desc: "Türkçe Film"}
-    - {id: 64, cat: Movies, desc: "Türk Filmi"}
-    - {id: 66, cat: Movies/HD, desc: "x265"}
-    - {id: 67, cat: XXX, desc: "XxX"}
-    - {id: 68, cat: Movies, desc: "Dual (TR-~)"}
-    - {id: 71, cat: Movies, desc: "NFLIX"}
-    - {id: 78, cat: TV, desc: "EXXEN"}
-    - {id: 79, cat: TV, desc: "BLUTV"}
-    - {id: 90, cat: TV, desc: "Disney+"}
-    - {id: 91, cat: TV, desc: "Prime Video"}
-    - {id: 93, cat: TV, desc: "Gain"}
-    - {id: 94, cat: TV, desc: "ATVP"}
-    - {id: 95, cat: Movies, desc: "HMAX"}
-    - {id: 98, cat: Movies, desc: "PUHUTV"}
-    - {id: 58, cat: Movies, desc: "Film"}
-    - {id: 72, cat: Movies, desc: "Belgesel"}
-    - {id: 60, cat: Movies/3D, desc: "3D"}
-    - {id: 76, cat: Movies/UHD, desc: "4K UHD"}
-    - {id: 80, cat: TV/Sport, desc: "Formula-1"}
-    - {id: 45, cat: Other, desc: "Eğitim/Prog"}
     - {id: 1, cat: Movies, desc: "Filmler"}
-    - {id: 14, cat: Movies/3D, desc: "3D Film"}
-    - {id: 77, cat: Movies/UHD, desc: "4K UHD"}
-    - {id: 16, cat: Movies, desc: "Animasyon"}
-    - {id: 17, cat: TV/Anime, desc: "Anime"}
-    - {id: 31, cat: Movies, desc: "Belgesel"}
-    - {id: 32, cat: Movies/BluRay, desc: "Bluray"}
-    - {id: 33, cat: Movies/HD, desc: "BRRiP"}
-    - {id: 34, cat: Movies, desc: "Çizgi Film"}
-    - {id: 35, cat: Movies, desc: "D-Z0N3"}
-    - {id: 36, cat: Movies/DVD, desc: "DVD"}
-    - {id: 37, cat: Movies, desc: "MP4"}
     - {id: 38, cat: Movies, desc: "Türk Filmi"}
-    - {id: 39, cat: Movies, desc: "Türkçe BoX"}
     - {id: 40, cat: Movies, desc: "Türkçe Film"}
-    - {id: 42, cat: Movies/SD, desc: "XviD"}
-    - {id: 43, cat: Movies/SD, desc: "XviD BoX"}
-    - {id: 55, cat: Movies/WEB-DL, desc: "WEB-DL"}
-    - {id: 7, cat: Audio, desc: "Müzik"}
-    - {id: 20, cat: Audio, desc: "Türkçe MüziK"}
-    - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
-    - {id: 21, cat: Audio/Video, desc: "Video Klipler"}
-    - {id: 2, cat: Console, desc: "Oyun"}
-    - {id: 74, cat: PC/Games, desc: "Oyun PC"}
-    - {id: 84, cat: Console/PS3, desc: "Playstation"}
-    - {id: 82, cat: Console/PSP, desc: "PSP"}
-    - {id: 83, cat: Console/Other, desc: "Gameboy"}
-    - {id: 87, cat: Console/XBox, desc: "XBOX"}
-    - {id: 88, cat: Console/Other, desc: "NEO-GEO"}
-    - {id: 89, cat: Console/Wii, desc: "Nintendo Wii"}
-    - {id: 6, cat: PC/0day, desc: "Program"}
-    - {id: 47, cat: Other, desc: "Resimler"}
+    - {id: 113, cat: Movies, desc: "Yabancı Dil"}
+    - {id: 77, cat: Movies/UHD, desc: "4K UHD / 3D"}
+    - {id: 16, cat: Movies, desc: "Animasyon"}
+    - {id: 31, cat: Movies, desc: "Belgesel"}
+    - {id: 112, cat: XXX, desc: "XxX"}
     - {id: 48, cat: TV, desc: "Televizyon"}
     - {id: 49, cat: TV/HD, desc: "Tv HD"}
     - {id: 50, cat: TV, desc: "Yab@ncı Dizi"}
     - {id: 51, cat: TV, desc: "Yerli Dizi"}
-    - {id: 105, cat: TV, desc: "Yerli Dizi"}
-    - {id: 44, cat: Books, desc: "E-BooK"}
+    - {id: 7, cat: Audio, desc: "Müzik"}
+    - {id: 20, cat: Audio, desc: "Türkçe MüziK"}
+    - {id: 46, cat: Audio, desc: "Yab@ncı MüziK"}
+    - {id: 2, cat: Console, desc: "Oyun / Program"}
+    - {id: 44, cat: Books, desc: "E-BooK / Eğitim"}
 
   modes:
     search: [q]
