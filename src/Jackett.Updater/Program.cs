@@ -336,6 +336,7 @@ namespace Jackett.Updater
                 "Definitions/btkitty.yml",
                 "Definitions/btmirror.yml",
                 "Definitions/btsate.yml", // -> btstate #16006
+                "Definitions/btsow.yml",
                 "Definitions/btstornet.yml",
                 "Definitions/btworld.yml",
                 "Definitions/btxpress.yml",
