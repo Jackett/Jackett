@@ -61,7 +61,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q]
+    tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
     book-search: [q]
@@ -120,7 +120,7 @@ search:
     - path: torrents-search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
+    search: "{{ .Keywords }}"
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 all, 1 notfree, 2 onlyfree
