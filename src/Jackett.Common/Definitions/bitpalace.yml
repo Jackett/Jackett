@@ -35,10 +35,10 @@ caps:
     - {id: 3, cat: Movies/SD, desc: "XVID HUN"}
     - {id: 12, cat: XXX/DVD, desc: "XXX DVD-R"}
     - {id: 6, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 10, cat: XXX/ImageSet, desc: "XXX/Képek"}
+    - {id: 10, cat: XXX/ImageSet, desc: "XXX KÉPEK"}
     - {id: 11, cat: XXX/XviD, desc: "XXX XVID"}
     - {id: 19, cat: Audio/Video, desc: "ZENE Klipp"}
-    - {id: 26, cat: Audio/MP3, desc: "ZENE MP3"}
+    - {id: 20, cat: Audio/MP3, desc: "ZENE MP3"}
 
   modes:
     search: [q]
