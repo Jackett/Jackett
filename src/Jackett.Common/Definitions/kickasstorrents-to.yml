@@ -96,6 +96,7 @@ caps:
     - {id: Video, cat: XXX/WEB-DL, desc: "Adult Video"}
     - {id: AdultGames, cat: XXX/Other, desc: "Adult Games"}
     - {id: AdultHentai, cat: XXX/Other, desc: "Adult Hentai"}
+    - {id: AdultMagazines, cat: XXX/Other, desc: "Adult Magazines"}
     - {id: XXXGames, cat: XXX/Other, desc: "Adult Games"}
     - {id: AdultPictures, cat: XXX/ImageSet, desc: "Adult Pictures"}
     - {id: XXXPictures, cat: XXX/ImageSet, desc: "Adult Pictures"}
