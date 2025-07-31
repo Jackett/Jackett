@@ -86,6 +86,10 @@ search:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sort: time
 
+  headers:
+    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
+
   rows:
     selector: ul.page-list > li:has(a[href$=".html"][title])
     filters:
