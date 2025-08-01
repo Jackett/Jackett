@@ -29,6 +29,7 @@ caps:
     Books/Fiction: Books/EBook
     Books/Magazines: Books/Mags
     Books/Non-fiction: Books/EBook
+    Ebook/Course: Books/EBook
     Games: Console
     Games/Console: Console
     Games/Mobile: PC/Mobile-Other
