@@ -355,7 +355,7 @@ Prior versions of Jackett are no longer supported.
  * Free Farm (自由农场)
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
- * FutureTorrent
+ * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
  * Gay-Torrents.org
  * GAYtorrent.ru
