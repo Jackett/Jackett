@@ -41,7 +41,7 @@ caps:
     - {id: 49, cat: TV/SD, desc: "Sorozat/EN/SD"}
     - {id: 28, cat: TV/HD, desc: "Sorozat/HU/HD"}
     - {id: 7, cat: TV/SD, desc: "Sorozat/HU/SD"}
-#    - {id: 9, cat: XXX, desc: "XXX"}
+    - {id: 9, cat: XXX, desc: "XXX"}
     - {id: 44, cat: XXX/x264, desc: "XXX/HD"}
 #    - {id: 43, cat: XXX/SD, desc: "XXX/SD"}
 
@@ -150,7 +150,7 @@ search:
         img[src="/pic/categories/014.png"]: 49
         img[src="/pic/categories/013.png"]: 28
         img[src="/pic/categories/012.png"]: 7
-#        img[]: 9
+        img[src="/pic/categories/cat_xxx.gif"]: 9
         img[src="/pic/categories/6.png"]: 44
 #        img[src="/pic/categories/6.png"]: 43
     title:
