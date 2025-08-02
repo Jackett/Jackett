@@ -19,10 +19,8 @@ caps:
     - {id: 3, cat: PC/Mac, desc: "Программы - Video"}
     - {id: 4, cat: PC/Mac, desc: "Программы - Graphics"}
     - {id: 95, cat: PC/Mac, desc: " |- Вспомогательный инструментарий - presets, effects, brush.."}
-    - {id: 79, cat: PC/Mac, desc: " |- Архив Программы - Graphics"}
     - {id: 5, cat: PC/Mac, desc: "Программы - System Utilities"}
     - {id: 23, cat: PC/Mac, desc: " |- Средства разработки приложений"}
-    - {id: 78, cat: PC/Mac, desc: " |- Архив Программы - System & Utilities"}
     - {id: 6, cat: PC/Mac, desc: "Программы - Office/PrePress/Database"}
     - {id: 7, cat: PC/Mac, desc: "Программы - Network / WEB"}
     - {id: 63, cat: PC/Mac, desc: " |- Веб-разработка, инструментарий"}
@@ -33,17 +31,24 @@ caps:
     # Книги, руководства по Apple
     - {id: 30, cat: Books, desc: "Книги, Журналы"}
     - {id: 31, cat: Other, desc: "Видео Apple / Обучающее видео"}
+    - {id: 103, cat: Other, desc: " |- Видеоуроки"}
+    - {id: 104, cat: Other, desc: " |- Компьютерные видеоуроки"}
     # iPhone / iPod / iPad / Apple TV
-    - {id: 32, cat: PC/Mobile-iOS, desc: "Программы и игры из App Store"}
+    - {id: 32, cat: PC/Mobile-iOS, desc: "Программы для iOS"}
+    - {id: 97, cat: PC/Mobile-iOS, desc: "Игры для iOS"}
     - {id: 33, cat: PC/Mobile-iOS, desc: "iOS. Анлок, джейлбрейк и т.п."}
     # Apple Audio
-    - {id: 34, cat: Audio/Lossless, desc: "Музыка Lossless (ALAC)"}
-    - {id: 35, cat: Audio/MP3, desc: "Музыка Lossy (AAC)"}
     - {id: 36, cat: Audio/Audiobook, desc: "Аудиокниги (AAC/ALAC)"}
+    - {id: 34, cat: Audio/Lossless, desc: "Музыка Lossless (ALAC)"}
+    - {id: 101, cat: Audio/MP3, desc: "Музыка Lossy (AAC-iTunes)"}
+    - {id: 35, cat: Audio/MP3, desc: "Музыка Lossy (AAC)"}
+    - {id: 102, cat: Audio/MP3, desc: "Музыка Lossy (AAC) (Singles, EPs)"}
     # Видео для iPod / iPad / iPhone / AppleTV
     - {id: 37, cat: Movies/SD, desc: "AppleTV - SD"}
     - {id: 38, cat: Movies/SD, desc: " |- Фильмы для iPod, iPhone, iPad"}
     - {id: 39, cat: TV/SD, desc: " |- Сериалы для iPod, iPhone, iPad"}
+    - {id: 98, cat: TV/Other, desc: " |- Мультфильмы для iPod, iPhone, iPad"}
+    - {id: 99, cat: TV/Anime, desc: " |- Аниме для iPod, iPhone, iPad"}
     - {id: 40, cat: Audio/Video, desc: " |- Музыкальное видео для iPod, iPhone, iPad"}
     - {id: 41, cat: TV/HD, desc: "AppleTV - HD"}
     - {id: 42, cat: Movies/HD, desc: " |- Фильмы HD для Apple TV"}
@@ -51,6 +56,7 @@ caps:
     - {id: 94, cat: TV/Other, desc: " |- Мультсериалы HD для Apple TV"}
     - {id: 93, cat: TV/Anime, desc: " |- Аниме HD для Apple TV"}
     - {id: 43, cat: TV/HD, desc: " |- Сериалы HD для Apple TV"}
+    - {id: 100, cat: TV/Documentary, desc: " |- Документальное видео HD для Apple TV"}
     - {id: 44, cat: Audio/Video, desc: " |- Музыкальное видео HD для Apple TV"}
     # Разное
     - {id: 55, cat: Other/Misc, desc: "Тестовый раздел"}
