@@ -487,7 +487,6 @@ Prior versions of Jackett are no longer supported.
  * Portugas
  * Pretome
  * PrivateHD (PHD)
- * PrivateSilverScreen (PSS)
  * ProAudioTorrents (PAT)
  * PT GTK
  * PT分享站 (itzmx)
