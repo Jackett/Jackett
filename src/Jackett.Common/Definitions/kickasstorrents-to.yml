@@ -92,6 +92,7 @@ caps:
     - {id: Movieclips, cat: Other, desc: "Movie clips"}
     - {id: TV, cat: TV, desc: TV}
     - {id: AdultVideo, cat: XXX/WEB-DL, desc: "Adult Video"}
+    - {id: Adult, cat: XXX/WEB-DL, desc: "Adult Video"}
     - {id: XXXVideo, cat: XXX/WEB-DL, desc: "Adult Video"}
     - {id: Video, cat: XXX/WEB-DL, desc: "Adult Video"}
     - {id: AdultGames, cat: XXX/Other, desc: "Adult Games"}
