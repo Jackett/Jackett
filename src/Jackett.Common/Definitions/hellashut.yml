@@ -6,6 +6,8 @@ language: el-GR
 type: private
 encoding: UTF-8
 testlinktorrent: false
+certificates:
+  - b0728082e46b3cc54c913847cd931b7b895f5b72 # Expired 16 July 2025
 links:
   - https://hellashut.net/
 legacylinks:

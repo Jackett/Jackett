@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "ajax/torrents_data.php";
-        private string SearchUrlReferer => SiteLink + "torrents.php?cat=0&searchin=filename&search=";
+        private string SearchUrlReferer => SiteLink + "torrents.php?cat=0&searchin=filedisc&search=";
 
         private new ConfigurationDataAnimeTorrents configData => (ConfigurationDataAnimeTorrents)base.configData;
 

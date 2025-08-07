@@ -9,12 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrentsome203.com/
+  - https://torrentsome207.com/
 legacylinks:
-  - https://torrentsome188.com/
-  - https://torrentsome189.com/
-  - https://torrentsome190.com/
-  - https://torrentsome191.com/
   - https://torrentsome192.com/
   - https://torrentsome193.com/
   - https://torrentsome194.com/
@@ -26,6 +22,10 @@ legacylinks:
   - https://torrentsome200.com/
   - https://torrentsome201.com/
   - https://torrentsome202.com/
+  - https://torrentsome203.com/
+  - https://torrentsome204.com/
+  - https://torrentsome205.com/
+  - https://torrentsome206.com/
 
 caps:
   categorymappings:
@@ -80,6 +80,10 @@ search:
     keywords: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     search_type: 0
     order: time
+
+  headers:
+    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: div.topic-item:not(:has(div:nth-child(3):contains("-")))

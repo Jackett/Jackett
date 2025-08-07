@@ -96,14 +96,18 @@ caps:
     - {id: 302, cat: Books, desc: "Safety of Navigation-Emergency and life-saving equipment"}
     - {id: 301, cat: Books, desc: "Safety of Navigation-Cybersecurity"}
     - {id: 10, cat: Books, desc: "English for seamen"}
+    - {id: 419, cat: Books, desc: "English for seamen-Marine multilingual dictionaries"}
     - {id: 270, cat: Books, desc: "English for seamen-EN↔RU dictionaries & phrasebooks"}
+    - {id: 417, cat: Books, desc: "English for seamen-Dictionaries & phrasebooks (other langs"}
+    - {id: 265, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries EN↔EN"}
+    - {id: 416, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries RU↔RU"}
+    - {id: 418, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries…"}
     - {id: 387, cat: Books, desc: "English for seamen-English for Radio Operators"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
     - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
     - {id: 268, cat: Books, desc: "English for seamen-English for ETO's"}
     - {id: 269, cat: Books, desc: "English for seamen-English for Shipbuilders"}
     - {id: 388, cat: Books, desc: "English for seamen-English for Yachtsmen"}
-    - {id: 265, cat: Books, desc: "English for seamen-Marine dictionaries and glossaries RU↔RU/EN↔EN"}
     - {id: 271, cat: Books, desc: "English for seamen-Business English and Correspondence"}
     - {id: 205, cat: Books, desc: "General english"}
     - {id: 39, cat: Books, desc: "Purpose-built ships"}

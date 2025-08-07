@@ -97,6 +97,7 @@ caps:
     - {id: 98, cat: TV/Sport, desc: "PrimeiraPortugal"}
     - {id: 53, cat: TV/Sport, desc: "Cricket"}
     - {id: 99, cat: TV/Sport, desc: "Darts"}
+    - {id: 100, cat: TV/Sport, desc: "ESport"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
     - {id: 52, cat: TV/Sport, desc: "Field Hockey"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}

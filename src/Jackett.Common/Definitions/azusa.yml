@@ -64,20 +64,23 @@ login:
 search:
   paths:
     - path: torrents.php
+  allowEmptyInputs: true
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    inclbookmarked: 0
+    approval_status: ""
+    trackerStatus: ""
+    search: "{{ .Keywords }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: 0
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    notnewword: 1
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)

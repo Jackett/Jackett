@@ -9,12 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrenttip184.top/
+  - https://torrenttip188.top/
 legacylinks:
-  - https://Torrenttip169.com/
-  - https://torrenttip170.com/
-  - https://torrenttip171.com/
-  - https://torrenttip172.com/
   - https://torrenttip173.com/
   - https://torrenttip174.com/
   - https://torrenttip175.com/
@@ -26,6 +22,10 @@ legacylinks:
   - https://torrenttip181.top/
   - https://torrenttip182.top/
   - https://torrenttip183.top/
+  - https://torrenttip184.top/
+  - https://torrenttip185.top/
+  - https://torrenttip186.top/
+  - https://torrenttip187.top/
 
 caps:
   categorymappings:
@@ -85,6 +85,10 @@ search:
   inputs:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sort: time
+
+  headers:
+    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
+    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
 
   rows:
     selector: ul.page-list > li:has(a[href$=".html"][title])

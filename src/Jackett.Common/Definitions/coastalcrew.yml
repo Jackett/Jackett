@@ -13,6 +13,8 @@ caps:
     - {id: 122, cat: Movies, desc: "Movie Klassiker"}
     - {id: 124, cat: Movies, desc: "Movie Kids"}
     - {id: 127, cat: Movies, desc: "Movie Pack"}
+    - {id: 138, cat: Movies/BluRay, desc: "Movie BluRay"}
+    - {id: 140, cat: Movies/3D, desc: "Movie 3D"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD-R"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
@@ -39,6 +41,7 @@ caps:
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 12, cat: PC/0day, desc: "App Win"}
+    - {id: 139, cat: PC/Mobile-Android, desc: "App Android Apps"}
 
     - {id: 16, cat: Console, desc: "Game Misc"}
     - {id: 17, cat: PC/Games, desc: "Game PC"}
@@ -50,6 +53,7 @@ caps:
     - {id: 23, cat: Console/XBox, desc: "Game XBOX"}
     - {id: 24, cat: Console/XBox 360, desc: "Game XBOX360"}
 
+    - {id: 137, cat: Audio, desc: "Music OST"}
     - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 48, cat: Audio, desc: "Music Album"}
     - {id: 49, cat: Audio, desc: "Music Charts"}
@@ -157,6 +161,7 @@ search:
 
   rows:
     selector: div.selection_wrap
+
   fields:
     category_p1:
       selector: div.kat_cat_pic_name

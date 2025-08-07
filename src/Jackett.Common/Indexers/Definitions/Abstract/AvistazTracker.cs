@@ -244,7 +244,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                         Details = details,
                         Guid = details,
                         Category = ParseCategories(query, row),
-                        PublishDate = DateTime.Parse($"{row.Value<string>("created_at_iso")}", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
+                        PublishDate = row.Value<DateTime>("created_at_iso").ToUniversalTime(),
                         Description = description,
                         Size = row.Value<long>("file_size"),
                         Files = row.Value<long>("file_count"),

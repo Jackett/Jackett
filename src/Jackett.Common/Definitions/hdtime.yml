@@ -37,6 +37,11 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -92,6 +97,9 @@ search:
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])

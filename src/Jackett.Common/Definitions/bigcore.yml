@@ -1,0 +1,147 @@
+---
+id: bigcore
+name: BigCore
+description: "BigCore is a HUNGARIAN Private Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://bigcore.eu/
+
+caps:
+  categorymappings:
+    - {id: 48, cat: Movies/SD, desc: "CAM/Hun"}
+    - {id: 49, cat: Movies/SD, desc: "CAM/Eng"}
+    - {id: 50, cat: Movies/SD, desc: "SD/Hun"}
+    - {id: 51, cat: Movies/SD, desc: "SD/Eng"}
+    - {id: 52, cat: Movies/DVD, desc: "DVD/Hun"}
+    - {id: 53, cat: Movies/DVD, desc: "DVD/Eng"}
+    - {id: 54, cat: Movies/HD, desc: "HD/Hun"}
+    - {id: 55, cat: Movies/HD, desc: "HD/Eng"}
+    - {id: 56, cat: TV, desc: "Sorozat/Hun"}
+    - {id: 57, cat: TV, desc: "Sorozat/Eng"}
+    - {id: 58, cat: PC/Games, desc: "Játék/ISO"}
+    - {id: 59, cat: PC/ISO, desc: "Program/ISO"}
+    - {id: 60, cat: PC/Games, desc: "Játék/RIP"}
+    - {id: 61, cat: PC/0day, desc: "Program/RIP"}
+    - {id: 62, cat: Audio, desc: "Zene/Hun"}
+    - {id: 63, cat: Audio, desc: "Zene/Eng"}
+    - {id: 64, cat: Books, desc: "Könyv"}
+    - {id: 65, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 66, cat: XXX/x264, desc: "XXX/Video"}
+    - {id: 67, cat: XXX/ImageSet, desc: "XXX/Kép"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      1: title
+      4: created
+      7: seeders
+      5: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek száma egy oldalon</b> setting to <b>100</b> on your account profile. The default is <i>30</i>.
+
+login:
+  # using cookie method because login page has embedded Google reCAPTCHA
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="/logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 myupload, 4 waiting for seed
+    incldead: 1
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: tr[id^="torrent_row_"], tr[id^="hidden_torrent_row_"]
+    after: 1
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a.tooltip[href$="details"]
+      attribute: title
+    details:
+      selector: a.tooltip[href$="details"]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: a[href^="kepek/"]
+      attribute: href
+    files:
+      selector: a.viewFileList
+    date:
+      selector: td:nth-child(7) a[title]
+      attribute: title
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    size:
+      selector: td:nth-child(8)
+    grabs:
+      selector: td:nth-child(9)
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    description:
+      case:
+        i.fa-check: "Verified"
+        i.fa-question: "Unverified"
+    downloadvolumefactor:
+      case:
+        span:contains("0x"): 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        span:contains("2x"): 2
+        span:contains("3x"): 3
+        span:contains("4x"): 4
+        span:contains("5x"): 5
+        "*": 1
+    minimumseedtime:
+      # 1 days (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# engine n/a

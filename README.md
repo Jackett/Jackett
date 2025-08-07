@@ -50,7 +50,6 @@ Prior versions of Jackett are no longer supported.
  * BlueRoms
  * BT.etree
  * BTdirectory (BT目录)
- * BTSOW
  * btstate
  * Byrutor
  * Catorrent
@@ -181,7 +180,7 @@ Prior versions of Jackett are no longer supported.
  * File-Tracker
  * Gay-Torrents.net
  * Genesis-Movement
- * HD-CzTorrent
+ * HD-CzTorrent [PAY2DL]
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
@@ -273,6 +272,7 @@ Prior versions of Jackett are no longer supported.
  * Best-Core
  * BeyondHD (BHD)
  * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigCore
  * Bit-Bázis
  * BIT-HDTV
  * Bitded
@@ -353,10 +353,9 @@ Prior versions of Jackett are no longer supported.
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * Flux-Zone
  * Free Farm (自由农场)
- * FSM
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
- * FutureTorrent
+ * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
  * Gay-Torrents.org
  * GAYtorrent.ru
@@ -390,7 +389,6 @@ Prior versions of Jackett are no longer supported.
  * HDKylin (麒麟)
  * HDRoute [![(invite needed)][inviteneeded]](#)
  * HDSky [![(invite needed)][inviteneeded]](#)
- * HDT-LaFenice
  * HDtime
  * HDTorrents.it [PAY2DL]
  * HDTurk
@@ -399,7 +397,6 @@ Prior versions of Jackett are no longer supported.
  * HellasHut
  * HHanClub
  * HHD
- * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
@@ -407,7 +404,7 @@ Prior versions of Jackett are no longer supported.
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
- * INFINITY
+ * INFINITY [PAY2DL]
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
@@ -490,7 +487,6 @@ Prior versions of Jackett are no longer supported.
  * Portugas
  * Pretome
  * PrivateHD (PHD)
- * PrivateSilverScreen (PSS)
  * ProAudioTorrents (PAT)
  * PT GTK
  * PT分享站 (itzmx)
@@ -514,7 +510,6 @@ Prior versions of Jackett are no longer supported.
  * RailgunPT
  * Rain (雨)
  * Rastastugan
- * Red Leaves (红叶) [![(invite needed)][inviteneeded]](#)
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
  * ReelFlix (HD4Free,LegacyHD)
@@ -524,7 +519,6 @@ Prior versions of Jackett are no longer supported.
  * Romanian Metal Torrents (RMT)
  * Rousi
  * SAMARITANO
- * SATClubbing
  * SceneHD [![(invite needed)][inviteneeded]](#)
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
@@ -613,7 +607,6 @@ Prior versions of Jackett are no longer supported.
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * x-ite.me (XM)
- * Xider-Torrent
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)

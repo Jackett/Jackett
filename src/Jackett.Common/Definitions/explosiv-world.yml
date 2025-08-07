@@ -91,11 +91,11 @@ login:
   method: form
   form: form
   inputs:
-    username: "{{ .Config.username }}"
+    login_identifier: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    loggiin: Einloggen
   error:
-    - selector: div#login_error
-    - selector: div.error-message
+    - selector: div.alert
   test:
     path: index.php
     selector: a[href="logout.php"]

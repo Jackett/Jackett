@@ -41,9 +41,8 @@ search:
   paths:
     - path: /
   inputs:
-    v: ""
-    c: ""
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    q: "{{ .Keywords }}"
+  allowEmptyInputs: true
   keywordsfilters:
     - name: re_replace
       args: ["[\\s]+", "-"]
@@ -81,7 +80,7 @@ search:
     size:
       selector: td:nth-child(3)
     date_day:
-      selector: td:nth-child(4):not(:contains("/"))
+      selector: td:nth-child(4):not(:contains("/")):not(:contains("-"))
       optional: true
       filters:
         - name: replace
@@ -90,9 +89,11 @@ search:
           args: ["Yesterday", "1 day"]
         - name: timeago
     date_year:
-      selector: td:nth-child(4):contains("/")
+      selector: td:nth-child(4):contains("/"), td:nth-child(4):contains("-")
       optional: true
       filters:
+        - name: replace
+          args: ["-", "/"]
         - name: append
           args: " -07:00" # PDT
         - name: dateparse

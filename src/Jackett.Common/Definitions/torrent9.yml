@@ -8,7 +8,6 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://www.torrent9.zone/
   - https://torrent9.to/
 legacylinks:
   - https://www4.torrent9.to/
@@ -34,6 +33,7 @@ legacylinks:
   - https://www.torrent9.se/
   - https://torrent9.unblockninja.com/ # 403 forbidden
   - https://ww1.torrent9.fm/
+  - https://www.torrent9.zone/
 
 caps:
   # dont forget to update the search fields category case block

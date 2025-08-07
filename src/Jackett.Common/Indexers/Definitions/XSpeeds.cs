@@ -157,6 +157,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(149, TorznabCatType.TV, "TV Specials");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.TVSD, "TV Boxsets");
             caps.Categories.AddCategoryMapping(120, TorznabCatType.TVUHD, "TV Boxset 4K");
+            caps.Categories.AddCategoryMapping(165, TorznabCatType.TVUHD, "TV Boxset AV1");
             caps.Categories.AddCategoryMapping(76, TorznabCatType.TVHD, "TV Boxset HD");
             caps.Categories.AddCategoryMapping(97, TorznabCatType.TVHD, "TV Boxset HEVC");
             caps.Categories.AddCategoryMapping(147, TorznabCatType.TVSD, "TV Boxset SD");
