@@ -101,7 +101,7 @@ login:
         selector: td.text
   test:
     path: /
-    selector: a[href="/logout.php"]
+    selector: a[href*="/logout.php"]
 
 search:
   paths:
