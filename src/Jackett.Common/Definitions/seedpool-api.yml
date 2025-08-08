@@ -13,13 +13,17 @@ caps:
     - {id: 2, cat: TV, desc: "TV Show"}
     - {id: 1, cat: Movies, desc: "Movie"}
     - {id: 6, cat: TV/Anime, desc: "Anime"}
+    # for radarr
+    - {id: 6, cat: Movies/Other, desc: "Anime"}
     - {id: 8, cat: TV/Sport, desc: "Sports"}
     - {id: 5, cat: Audio, desc: "Music"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audiobook"}
     - {id: 7, cat: Books/EBook, desc: "E-Books"}
     - {id: 12, cat: Other, desc: "Hobby"}
     - {id: 16, cat: PC, desc: "Software"}
+    # Seedpool has a combined "Games category"
     - {id: 3, cat: Console, desc: "Games"}
+    - {id: 3, cat: PC/Games, desc: "Games"}
     - {id: 21, cat: Other, desc: "Music Production"}
     - {id: 11, cat: Other, desc: "Other"}
 
