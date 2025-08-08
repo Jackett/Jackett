@@ -38,6 +38,14 @@ caps:
     search: [q]
     movie-search: [q, imdbid]
 
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
 login:
   path: takelogin.php
   method: post
