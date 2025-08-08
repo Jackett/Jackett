@@ -1,0 +1,197 @@
+---
+id: ptskit
+name: PTSKIT
+description: "PTSKIT is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://www.ptskit.org/
+
+caps:
+  # dont forget to update the path categories in the search block
+  categorymappings:
+    - {id: 401, cat: TV/Other, desc: "短剧(Playlet)", default: true}
+    - {id: 402, cat: TV, desc: "动态漫(Animation)", default: true}
+    - {id: 404, cat: Movies, desc: "电影(Movies)", default: true}
+    - {id: 405, cat: TV, desc: "电视剧(TV Series)", default: true}
+    - {id: 409, cat: TV, desc: "综艺(TV Shows)", default: true}
+    - {id: 408, cat: Audio/Video, desc: "音乐(Music Video)", default: true}
+    - {id: 403, cat: TV, desc: "游戏(TV)", default: true}
+    - {id: 407, cat: TV/Anime, desc: "动漫/漫画(Anime/Manga)", default: true}
+    - {id: 406, cat: Other, desc: "其他(Other)", default: true}
+    - {id: 411, cat: XXX, desc: "日韩(Japanese/Korean)", default: false}
+    - {id: 410, cat: XXX, desc: "国产(Chinese)", default: false}
+    - {id: 412, cat: XXX, desc: "欧美(European/American)", default: false}
+    - {id: 413, cat: XXX, desc: "里番(HiAnime)", default: false}
+    - {id: 414, cat: XXX, desc: "漫画(Hentai)", default: false}
+    - {id: 415, cat: XXX/Other, desc: "游戏(Games)", default: false}
+    - {id: 416, cat: XXX/Other, desc: "其他(Other)", default: false}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
+
+login:
+  # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: torrents.php
+      categories: [401, 402, 404, 405, 409, 408, 403, 407, 406]
+    - path: special.php
+      categories: [411, 410, 412, 413, 414, 415, 416]
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    # 0 incldead, 1 active, 2 dead
+    incldead: 0
+    # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
+    spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 title, 1 descr, 3 uploader, 4 imdburl
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    # 0 AND, 1 OR, 2 exact
+    search_mode: 0
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+    notnewword: 1
+
+  rows:
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
+    title:
+      selector: a[title][href^="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
+    date_elapsed:
+      # time type: time elapsed (default)
+      selector: td.rowfollow:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      # time added
+      selector: td.rowfollow:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+    size:
+      selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
+    seeders:
+      selector: td.rowfollow:nth-child(6)
+      optional: true
+      default: 0
+    leechers:
+      selector: td.rowfollow:nth-child(7)
+      optional: true
+      default: 0
+    grabs:
+      selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
+    downloadvolumefactor:
+      case:
+        img.pro_free: 0
+        img.pro_free2up: 0
+        img.pro_50pctdown: 0.5
+        img.pro_50pctdown2up: 0.5
+        img.pro_30pctdown: 0.3
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img.pro_50pctdown2up: 2
+        img.pro_free2up: 2
+        img.pro_2up: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.9.6 2025-06-25

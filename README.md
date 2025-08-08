@@ -497,6 +497,7 @@ Prior versions of Jackett are no longer supported.
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
+ * PTSKIT
  * PTtime
  * PTVicomo
  * Punk's Horror Tracker
