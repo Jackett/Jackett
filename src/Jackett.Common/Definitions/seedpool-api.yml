@@ -24,6 +24,9 @@ caps:
     # Seedpool has a combined "Games category"
     - {id: 3, cat: Console, desc: "Games"}
     - {id: 3, cat: PC/Games, desc: "Games"}
+    # Music production can have software and audio samples
+    - {id: 21, cat: PC, desc: "Music Production"}
+    - {id: 21, cat: Audio/Other, desc: "Music Production"}
     - {id: 21, cat: Other, desc: "Music Production"}
     - {id: 11, cat: Other, desc: "Other"}
 
