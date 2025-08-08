@@ -22,6 +22,7 @@ caps:
     - {id: 12, cat: TV, desc: "Programas TV"}
     - {id: 13, cat: TV, desc: "Telenovelas"}
     - {id: 3, cat: Other, desc: "Delete"}
+
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
