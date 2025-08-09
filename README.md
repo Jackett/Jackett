@@ -91,7 +91,7 @@ Prior versions of Jackett are no longer supported.
  * MixTapeTorrent
  * MoviesDVDR
  * MyPornClub
- * Newstudio
+ * NewStudio
  * Nipponsei
  * NoNaMe Club (NNM-Club)
  * NorTorrent
@@ -201,7 +201,7 @@ Prior versions of Jackett are no longer supported.
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
- * Newstudio (login)
+ * NewStudio (login)
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
