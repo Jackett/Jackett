@@ -19,11 +19,20 @@ caps:
     - {id: 7, cat: Audio/Other, desc: "电影音轨 (Soundtracks"}
     - {id: 8, cat: Audio/Lossless, desc: "无损音乐 (Lossless)"}
     - {id: 9, cat: Other, desc: "其他 (Other)"}
+
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
 
 login:
   path: login.php?action=login
