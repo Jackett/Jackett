@@ -1,5 +1,7 @@
 ---
-id: digitalcore
+id: digitalcore-api
+replaces:
+  - digitalcore
 name: DigitalCore
 description: "DigitalCore (DC) is a Private Torrent Tracker for 0DAY / GENERAL"
 language: en-US
@@ -62,11 +64,13 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: apikey
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Generate a new API Key by accessing your <a href=\"https://digitalcore.club/\" target=\"_blank\">DigitalCore</a> account <i>Settings</i> page and clicking on the <b>Security</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -100,18 +104,15 @@ settings:
     label: Account Inactivity
     default: "If your account is inactive (you do not sign in) for more than 60 days, your account is disabled. Park your account if you are going away for more than 60 days."
 
-login:
-  # using cookie method because login page is dynamically generated using JS
-  method: cookie
-  inputs:
-    cookie: "{{ .Config.cookie }}"
-
 search:
   paths:
     - path: api/v1/torrents
       response:
         type: json
         noResultsMessage: ""
+
+  headers:
+    X-API-KEY: ["{{ .Config.apikey }}"]
 
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
