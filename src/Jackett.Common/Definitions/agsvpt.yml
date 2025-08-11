@@ -8,6 +8,8 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://www.agsvpt.com/
+  - https://pt.agsvpt.cn/
+legacylinks:
   - https://abroad.agsvpt.com/
 
 caps:
