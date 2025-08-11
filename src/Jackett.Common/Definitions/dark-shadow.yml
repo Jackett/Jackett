@@ -32,8 +32,9 @@ caps:
     - {id: 125, cat: PC/Mac, desc: "Apps > Mac-OSX"}
     - {id: 11, cat: PC/Mobile-Other, desc: "Apps > Mobil"}
     - {id: 141, cat: PC/ISO, desc: "Apps > Other"}
-    - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
+    - {id: 148, cat: TV/Documentary, desc: "Doku > UHD"}
     - {id: 123, cat: TV/Documentary, desc: "Doku > Pack's"}
     - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
     - {id: 24, cat: Console, desc: "Spiel > Konsole"}
@@ -41,11 +42,11 @@ caps:
     - {id: 121, cat: Console, desc: "Spiel > Wimmelbild"}
     - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
-    - {id: 144, cat: TV/Sport, desc: "Sport > Wrestling"}
     - {id: 96, cat: Books/Mags, desc: "ePaper > Zeitungen"}
     - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
     - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
     - {id: 143, cat: XXX/x264, desc: "XXX > HD / SD"}
+    - {id: 149, cat: XXX/Other, desc: "XXX > Magazine"}
     - {id: 75, cat: XXX/Pack, desc: "XXX > Pack's"}
     - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic's"}
 
