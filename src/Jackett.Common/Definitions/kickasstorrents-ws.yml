@@ -16,9 +16,7 @@ links:
   - https://kickasst.net/
   - https://kickasstorrents.id/
   - https://thekat.cc/
-  - https://kickass-kat.com/
-  - https://kickass.sh/
-
+  - https://kickasshydra.dev/
 legacylinks:
   - https://kickass.gg/
   - https://katcr.io/
@@ -29,6 +27,8 @@ legacylinks:
   - https://katcr.to/ # kickasstorrents-to proxy
   - https://kickasstorrent.cr/ # kickasstorrents-to proxy
   - https://kickasstorrents.unblockninja.com/ # currently kickasstorrents-to proxy
+  - https://kickass-kat.com/
+  - https://kickass.sh/
 
 caps:
   categorymappings:
