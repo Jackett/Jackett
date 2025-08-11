@@ -42,7 +42,7 @@ search:
     name: "{{ re_replace .Keywords \"[\\s]+\" \"+\" }}"
 
   rows:
-    selector: article.item
+    selector: article.item:has(a[href^="/hash/"])
     filters:
       - name: andmatch
 
