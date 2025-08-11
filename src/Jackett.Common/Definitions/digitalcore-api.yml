@@ -2,7 +2,7 @@
 id: digitalcore-api
 replaces:
   - digitalcore
-name: DigitalCore
+name: DigitalCore (API)
 description: "DigitalCore (DC) is a Private Torrent Tracker for 0DAY / GENERAL"
 language: en-US
 type: private
