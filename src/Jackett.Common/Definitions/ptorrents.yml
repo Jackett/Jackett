@@ -75,7 +75,9 @@ search:
     date:
       text: now
     size:
-      selector: a.overlay
+      selector: a.overlay:contains(" MB"), a.overlay:contains(" GB")
+      optional: true
+      default: 512MB
       filters:
         - name: regexp
           args: "^\\[(.+?)\\]"
