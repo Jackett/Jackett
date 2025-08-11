@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://filelist.io/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://filelist.io/"
+            "https://filelist.io/",
+            "https://thefl.org/",
         };
         public override string[] LegacySiteLinks => new[]
         {
