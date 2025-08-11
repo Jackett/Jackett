@@ -57,6 +57,8 @@ search:
   fields:
     category:
       selector: div.icon_default
+      optional: true
+      default: PS1
     title:
       selector: div.short_game_title
     details:
