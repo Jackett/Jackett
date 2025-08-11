@@ -113,6 +113,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(27, TorznabCatType.TVUHD, "Seriale 4K");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesForeign, "RO Dubbed");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.TVForeign, "RO Dubbed");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.TVForeign, "K-Drama");
 
             return caps;
         }
