@@ -126,6 +126,8 @@ search:
   fields:
     category:
       selector: td a[href^="torrents.php?cat="]
+      optional: true
+      default: 53
       attribute: href
       filters:
         - name: querystring
