@@ -23,8 +23,10 @@ caps:
     - {id: Music, cat: Audio, desc: "Music"}
     - {id: Other, cat: Other, desc: "Other"}
     - {id: TV, cat: TV, desc: "TV"}
-    - {id: Documentaries, cat: TV/Documentary, desc: "Docus"}
     - {id: XXX, cat: XXX, desc: "XXX"}
+    # unlisted
+    - {id: Documentaries, cat: TV/Documentary, desc: "Docus"}
+    - {id: E-books, cat: Books, desc: "E-books"}
 
   modes:
     search: [q]
