@@ -41,6 +41,7 @@ caps:
     Music/Album: Audio
     Music/Discography: Audio
     Music/FLAC: Audio/Lossless
+    Music/Lossless: Audio/Lossless
     Music/MP3: Audio/MP3
     Music/Single: Audio
     Other: Other
