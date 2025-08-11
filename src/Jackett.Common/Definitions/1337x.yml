@@ -12,7 +12,6 @@ links:
   - https://1337x.st/
   - https://x1337x.ws/
   - https://x1337x.eu/
-  - https://x1337x.se/
   - https://x1337x.cc/
 legacylinks:
   - https://1337x.is/
@@ -27,6 +26,7 @@ legacylinks:
   - https://1337x.proxyninja.net/ # keyword search not working
   - https://1337x.torrentbay.st/ # keyword search not working
   - https://1337x.torrentsbay.org/ # keyword search not working
+  - https://x1337x.se/
 
 caps:
   categorymappings:
