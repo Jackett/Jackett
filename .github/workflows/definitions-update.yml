@@ -26,7 +26,12 @@ jobs:
         with:
           app-id: "${{ secrets.BOT_APP_ID }}"
           private-key: "${{ secrets.BOT_APP_PRIVATE_KEY }}"
-          owner: "${{ github.repository_owner }}"
+
+      - name: Get GitHub App User ID
+        id: get-user-id
+        run: echo "user-id=$(gh api "/users/${{ steps.app-token.outputs.app-slug }}[bot]" --jq .id)" >> "$GITHUB_OUTPUT"
+        env:
+          GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Checkout
         uses: actions/checkout@v5
@@ -49,8 +54,8 @@ jobs:
       - name: Commit Changes
         if: github.event_name != 'pull_request'
         run: |
-          git config user.name jackett-bot
-          git config user.email jackett-bot@users.noreply.github.com
+          git config user.name '${{ steps.app-token.outputs.app-slug }}[bot]'
+          git config user.email '${{ steps.get-user-id.outputs.user-id }}+${{ steps.app-token.outputs.app-slug }}[bot]@users.noreply.github.com'
 
           git add src/Jackett.Common/Definitions/rudub.yml
 
