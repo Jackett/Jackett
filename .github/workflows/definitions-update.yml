@@ -1,0 +1,53 @@
+name: Update definitions
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: '0 1 * * *'
+  pull_request:
+    paths:
+      - '.github/workflows/definitions-update.ya?ml'
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.number || github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: write
+
+jobs:
+  update-rudub:
+    name: Update rudub
+    if: github.repository == 'Jackett/Jackett'
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+
+      - name: Setup Environment Variables
+        run: |
+          echo "CURRENT_RUDUB_DOMAIN=$(date +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.club" >> $GITHUB_ENV
+          echo "PREVIOUS_RUDUB_DOMAIN=$(date --date='yesterday' +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.club" >> $GITHUB_ENV
+
+      - name: Update rudub definition
+        uses: mikefarah/yq@master
+        with:
+          cmd: yq -i '.legacylinks += "https://" + strenv(PREVIOUS_RUDUB_DOMAIN) + "/" | .legacylinks += "http://" + strenv(CURRENT_RUDUB_DOMAIN) + "/" | .links = ["https://" + strenv(CURRENT_RUDUB_DOMAIN) + "/"] | .legacylinks |= unique | .legacylinks = .legacylinks.[-30:]' src/Jackett.Common/Definitions/rudub.yml
+
+      - name: Show changes
+        run: git diff --color
+
+      - name: Commit Changes
+        if: github.event_name != 'pull_request'
+        run: |
+          git config user.name github-actions
+          git config user.email github-actions@github.com
+
+          git add src/Jackett.Common/Definitions/rudub.yml
+
+          if git status | grep -q modified
+          then
+            git commit -m "Update rudub"
+            git push
+          else
+            echo "No changes since last run"
+          fi
