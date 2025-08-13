@@ -11,11 +11,6 @@ followredirect: true
 links:
   - https://aug13.rudub.club/
 legacylinks:
-  - http://jul28.rudub.top/
-  - https://jul28.rudub.top/
-  - http://jul29.rudub.top/
-  - https://jul29.rudub.top/
-  - http://jul30.rudub.top/
   - https://jul30.rudub.top/
   - http://jul31.rudub.top/
   - https://jul31.rudub.top/
@@ -46,16 +41,13 @@ legacylinks:
   - http://aug12.rudub.club/
   - https://aug12.rudub.club/
   - http://aug13.rudub.club/
-
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}
-
   modes:
     search: [q]
     tv-search: [q, season, ep]
   allowrawsearch: true
-
 settings:
   - name: username
     type: text
@@ -91,7 +83,6 @@ settings:
     options:
       desc: desc
       asc: asc
-
 login:
   path: takelogin.php
   method: post
@@ -103,7 +94,6 @@ login:
   test:
     path: browse.php
     selector: a[href="logout.php"]
-
 search:
   paths:
     # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
@@ -114,15 +104,12 @@ search:
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-
   keywordsfilters:
     # strip season and/or ep
     - name: re_replace
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
-
   rows:
     selector: div.card__torlist__browse_2
-
   fields:
     category:
       text: 1
