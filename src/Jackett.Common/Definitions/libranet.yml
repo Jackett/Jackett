@@ -5,6 +5,8 @@ description: "LibraNet (LN) is a HUNGARIAN Private Torrent Tracker for EBOOKS / 
 language: hu-HU
 type: private
 encoding: ISO-8859-2
+certificates:
+  - cf854da037e14a70df5da3b4088dc4059d5f3ffd # Expired 13 Aug 2025
 links:
   - https://libranet.org/
 
