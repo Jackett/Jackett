@@ -592,6 +592,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/ntelogo.yml",
                 "Definitions/nyaa-pantsu.yml",
+                "Definitions/nyaapantsu.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/oasis.yml",

@@ -96,7 +96,6 @@ Prior versions of Jackett are no longer supported.
  * NoNaMe Club (NNM-Club)
  * NorTorrent
  * Nyaa.si
- * NyaaPantsu
  * OneJAV
  * OxTorrent
  * OxTorrent-vip
