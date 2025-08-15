@@ -605,6 +605,7 @@ namespace Jackett.Updater
                 "Definitions/oxtorrent.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/pandahd.yml",
+                "Definitions/parabellumhd.yml",
                 "Definitions/parnuxi.yml",
                 "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
