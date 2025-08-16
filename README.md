@@ -525,6 +525,7 @@ Prior versions of Jackett are no longer supported.
  * Secret Cinema
  * SeedFile (SF)
  * seedpool
+ * SewerPT (下水道)
  * SFP (Share Friends Projekt)
  * Shareisland
  * Shazbat
