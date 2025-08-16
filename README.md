@@ -530,6 +530,7 @@ Prior versions of Jackett are no longer supported.
  * Shareisland
  * Shazbat
  * SiamBIT
+ * SkipTheCommercials
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
