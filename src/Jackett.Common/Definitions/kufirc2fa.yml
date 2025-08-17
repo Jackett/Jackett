@@ -1,0 +1,191 @@
+---
+id: kufirc2fa
+name: Kufirc2FA
+description: "Kufirc is a HUNGARIAN Private tracker for 3X. This indexer uses cookie login for 2FA."
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://kufirc.com/
+
+caps:
+  categorymappings:
+    - {id: 30, cat: XXX, desc: "Amateur"}
+    - {id: 29, cat: XXX, desc: "Anal"}
+    - {id: 5, cat: XXX, desc: "Animal"}
+    - {id: 27, cat: XXX, desc: "Asian"}
+    - {id: 26, cat: XXX, desc: "BBW"}
+    - {id: 44, cat: XXX, desc: "BDSM"}
+    - {id: 25, cat: XXX, desc: "Big Ass"}
+    - {id: 24, cat: XXX, desc: "Big Tits"}
+    - {id: 34, cat: XXX, desc: "Black"}
+    - {id: 35, cat: XXX, desc: "Busty"}
+    - {id: 23, cat: XXX, desc: "Classic"}
+    - {id: 33, cat: XXX, desc: "Creampie"}
+    - {id: 22, cat: XXX, desc: "Cumshot"}
+    - {id: 36, cat: XXX, desc: "Feature"}
+    - {id: 21, cat: XXX, desc: "Fetish"}
+    - {id: 31, cat: XXX, desc: "Film/Cam/Hun"}
+    - {id: 46, cat: XXX/XviD, desc: "Film/Xvid/hun"}
+    - {id: 37, cat: XXX, desc: "Foreign"}
+    - {id: 19, cat: XXX, desc: "Gay / Bi"}
+    - {id: 18, cat: XXX, desc: "Hardcore"}
+    - {id: 32, cat: XXX, desc: "HD porn"}
+    - {id: 28, cat: XXX, desc: "Hentai / 3D"}
+    - {id: 17, cat: XXX, desc: "Homemade"}
+    - {id: 38, cat: XXX, desc: "Interracial"}
+    - {id: 11, cat: XXX, desc: "Kép"}
+    - {id: 48, cat: XXX, desc: "Latina"}
+    - {id: 16, cat: XXX, desc: "Lesbian"}
+    - {id: 56, cat: Books/Mags, desc: "Magazines"}
+    - {id: 6, cat: XXX, desc: "Magyar"}
+    - {id: 15, cat: XXX, desc: "Masturbation"}
+    - {id: 14, cat: XXX, desc: "Mature"}
+    - {id: 13, cat: XXX/Pack, desc: "Megapack"}
+    - {id: 55, cat: XXX, desc: "Milf"}
+    - {id: 49, cat: XXX, desc: "Natural Tits"}
+    - {id: 39, cat: XXX, desc: "Old + Young"}
+    - {id: 12, cat: XXX, desc: "Oral"}
+    - {id: 20, cat: XXX, desc: "Orgia / Gang Bang"}
+    - {id: 42, cat: XXX/Other, desc: "Other"}
+    - {id: 50, cat: XXX, desc: "Parody"}
+    - {id: 41, cat: XXX, desc: "Paysite"}
+    - {id: 40, cat: XXX, desc: "Piss"}
+    - {id: 43, cat: XXX, desc: "Porn Music Videos"}
+    - {id: 54, cat: XXX, desc: "Pov"}
+    - {id: 45, cat: XXX, desc: "Pregnant / Preggo"}
+    - {id: 57, cat: XXX, desc: "Scat/Puke"}
+    - {id: 10, cat: XXX, desc: "Shemale / TS"}
+    - {id: 51, cat: XXX, desc: "Siterip"}
+    - {id: 52, cat: XXX, desc: "Softcore"}
+    - {id: 53, cat: XXX, desc: "Squirt"}
+    - {id: 9, cat: XXX, desc: "Straight"}
+    - {id: 8, cat: XXX, desc: "Tini"}
+    - {id: 47, cat: XXX, desc: "VR"}
+    - {id: 7, cat: PC/Games, desc: "XXX játék / program"}
+
+  modes:
+    search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek oldalanként:</b> setting to <b>100</b> on your account profile.
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: "#nav_userinfo"
+
+search:
+  paths:
+    # https://kufirc.com/torrents.php?filter_cat[30]=1&filter_cat[29]=1&order_by=time&order_way=desc&searchtext=&action=advanced&title=720p+2022&sizeall=&sizetype=&sizerange=&filelist=&taglist=&autocomplete_toggle=
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchtext: ""
+    title: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
+    filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    sizeall: ""
+    sizetype: ""
+    sizerange: ""
+    filelist: ""
+    taglist: ""
+    autocomplete_toggle: ""
+
+  rows:
+    selector: table#torrent_table > tbody > tr[class^="torrent row"]:has(a[href*="action=download"])
+
+  fields:
+    category:
+      selector: a[href*="filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "(\\d+)]=1"
+    title:
+      selector: a[href^="/torrents.php?id="]
+    details:
+      selector: a[href^="/torrents.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download&id="]
+      attribute: href
+    description_tags:
+      selector: div.tags
+    description:
+      case:
+        span.icon_okay: "Verified: {{ .Result.description_tags }}"
+        "*": "Unverified: {{ .Result.description_tags }}"
+    poster:
+      selector: td:nth-child(2) > script
+      filters:
+        - name: regexp
+          args: "src=\\\\\"(.*?)\\\\\""
+        - name: re_replace
+          args: ["\\\\(.)", "$1"]
+        - name: replace
+          args: ["/static/common/noartwork/noimage.png", ""]
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(5) > span
+      attribute: title
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm"
+    size:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    seeders:
+      selector: td:nth-child(8)
+    leechers:
+      selector: td:nth-child(9)
+    downloadvolumefactor:
+      case:
+        span.icon[title*="Freeleech"]: 0
+        "img[alt=\"Freeleech\"]": 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        "img[alt=\"DoubleSeed\"]": 2
+        "*": 1
+    minimumratio:
+      text: 0.5
+# Luminance
