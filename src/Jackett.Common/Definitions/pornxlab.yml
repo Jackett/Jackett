@@ -1,37 +1,20 @@
 ---
-id: ptorrents
-name: ptorrents
-description: "ptorrents is a Public tracker for 3X"
+id: pornxlab
+replaces:
+  - ptorrents
+name: PornXLab
+description: "PornXLab is a Public tracker for 3X"
 language: en-US
 type: public
 encoding: UTF-8
 links:
+  - https://www.pornxlab.com/
+legacylinks:
   - https://www.ptorrents.com/
 
 caps:
   categories:
-    "3D and VR Movies": XXX
-    "Adult Anime and Game": XXX
-    Anime: XXX
-    BDSM: XXX
-    Bisexual: XXX
-    Bukkake: XXX
-    "Chinese Movie": XXX
-    "Erotic Picture Gallery": XXX/ImageSet
-    "Erotic Softcore Movies": XXX
-    "Femdom and Strapon": XXX
-    Fetish: XXX
-    "Fisting and Dildo": XXX
-    Game: PC/Games
-    Gangbang: XXX
-    Hentai: XXX
-    "Japanese Movie": XXX
-    Peeing: XXX
-    "Porn Movies": XXX
-    Pregnant: XXX
-    "Special Porn Movies": XXX
-    Transsexual: XXX
-    Voyeur: XXX
+    XXX: XXX
 
   modes:
     search: [q]
@@ -52,7 +35,7 @@ search:
 
   fields:
     category:
-      selector: div.catalog a
+      text: XXX
     title:
       selector: a.overlay
       filters:
@@ -75,12 +58,7 @@ search:
     date:
       text: now
     size:
-      selector: a.overlay:contains(" MB"), a.overlay:contains(" GB")
-      optional: true
-      default: 512MB
-      filters:
-        - name: regexp
-          args: "^\\[(.+?)\\]"
+      selector: span.size
     seeders:
       text: 1
     leechers:
@@ -89,4 +67,6 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    description:
+      selector: div.catalog a
 # engine n/a
