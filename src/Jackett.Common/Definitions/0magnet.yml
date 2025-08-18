@@ -42,7 +42,7 @@ search:
   paths:
     - path: search
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}.{{ end }}"
 
   rows:
     selector: table > tbody > tr:has(td)
