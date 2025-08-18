@@ -1721,7 +1721,7 @@ namespace Jackett.Common.Indexers.Definitions
                     // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
                     // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
                     // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
-                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)\s/\s(.+?)\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)(?:\s/\s(.+?))?\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
                     // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
                     title = Regex.Replace(title, @"\bBlu-ray Disc\b", "BR-DISK", RegexOptions.Compiled | RegexOptions.IgnoreCase);
