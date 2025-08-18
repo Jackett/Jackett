@@ -544,7 +544,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1686, TorznabCatType.Books, "Вера и религия");
             caps.Categories.AddCategoryMapping(2215, TorznabCatType.Books, "|- Христианство");
             caps.Categories.AddCategoryMapping(2216, TorznabCatType.Books, "|- Ислам");
-            caps.Categories.AddCategoryMapping(2546, TorznabCatType, "|- Иудаизм");
+            caps.Categories.AddCategoryMapping(2546, TorznabCatType.Books, "|- Иудаизм");
             caps.Categories.AddCategoryMapping(2217, TorznabCatType.Books, "|- Религии Индии, Тибета и Восточной Азии");
             caps.Categories.AddCategoryMapping(2218, TorznabCatType.Books, "|- Нетрадиционные религиозные, духовные и мистические учения");
             caps.Categories.AddCategoryMapping(2252, TorznabCatType.Books, "|- Религиоведение. История Религии");
