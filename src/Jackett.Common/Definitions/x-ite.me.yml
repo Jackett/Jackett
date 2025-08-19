@@ -5,6 +5,8 @@ description: "X-ite.me (XM) is a Private Torrent Tracker for LGBTQ MOVIES / GENE
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - BDA8F8F6401AF1D9D9A15EA3B7D30FD36DCC4F75 # Expired 19th Aug 2025
 links:
   - https://x-ite.me/
 
