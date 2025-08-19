@@ -404,7 +404,7 @@ Prior versions of Jackett are no longer supported.
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
- * INFINITY [PAY2DL]
+ * INFINITY [PAY2DL] [![(invite needed)][inviteneeded]](#)
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
