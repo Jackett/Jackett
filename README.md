@@ -322,7 +322,6 @@ Prior versions of Jackett are no longer supported.
  * cspt (财神)
  * cyanbug (大青虫)
  * DANISH BYTES
- * Dark-Shadow
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
