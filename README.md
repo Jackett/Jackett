@@ -396,6 +396,7 @@ Prior versions of Jackett are no longer supported.
  * HellasHut
  * HHanClub
  * HHD
+ * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
