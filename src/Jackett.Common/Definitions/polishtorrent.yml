@@ -97,7 +97,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "<ul><li>If a user has not logged in for 30 days, the account will be marked as inactive.</li><li>If the account remains inactive for an additional 120 days, it will be automatically deactivated (soft delete).</li><li>This means the user will lose access to the account, although the data will be retained for a specified period.</li><li>This policy applies to users in the following groups: User, PowerUser, SuperUser, and Leech.</li><li>How can you keep your account active?</li><li>Simply log in at least once every 30 days and stay active in downloads to maintain your status.</li></ul>"
+    default: "<ul><li> login as much as possible – no login for 30 days results in the account as DISABLED.</li><li>Lack of login for another 60 days causes permanent account blocking.</li><li>after 90 days of inactivity, the account is automatically deleted by the system.</li><li>This policy applies to users in the following groups: User, PowerUser, SuperUser, and Leech.</li></ul>"
 
 login:
   path: /api/torrents
