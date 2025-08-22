@@ -5,6 +5,8 @@ description: "TribalMixes is a ratioless Semi-Private Torrent Tracker for DJ MIX
 language: en-GB
 type: semi-private
 encoding: ISO-8859-1
+certificates:
+  - 2bce64a8b2401c791d52146852fc1e194a992c75 # Expired 23rd Aug 2025
 links:
   - https://www.tribalmixes.com/
 
