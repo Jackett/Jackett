@@ -108,40 +108,37 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
+      attribute: onmouseover
     download:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: a[href^="torrentimg/"]
-      attribute: href
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
       filters:
+        - name: regexp
+          args: src=(.+?) width
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: p:nth-of-type(2)
-      filters:
-        - name: regexp
-          args: (\d.*?)$
+      selector: td:nth-child(11)
     date:
       # auto adjusted by site account profile
-      selector: p:nth-of-type(3)
+      selector: td:nth-child(6)
       filters:
-        - name: regexp
-          args: (\d{2}:\d{2}:\d{2} \d{2}\/\d{2}\/\d{4})
         - name: dateparse
-          args: "HH:mm:ss dd/MM/yyyy"
+          args: "dd/MM/yyyy"
     seeders:
-      selector: p:nth-of-type(4) a:nth-child(1)
+      selector: td:nth-child(7)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: p:nth-of-type(4) a:nth-child(2)
+      selector: td:nth-child(8)
       default: 0
     grabs:
       optional: true
-      selector: p:nth-of-type(4) a:nth-child(3)
+      selector: td:nth-child(9)
       default: 0
     downloadvolumefactor:
       case:
