@@ -144,6 +144,7 @@ Prior versions of Jackett are no longer supported.
  * TrahT
  * U3C3
  * Uindex
+ * UzTracker
  * VSTHouse
  * VST Torrentz
  * VSTorrent
