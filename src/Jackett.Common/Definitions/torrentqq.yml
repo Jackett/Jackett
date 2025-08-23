@@ -6,13 +6,10 @@ language: ko-KR
 type: public
 encoding: UTF-8
 followredirect: true
-certificates:
-  - aa14c810b9cc3bdd3ed5424262a6a01a2c400a5f # invalid CA for qq381
 links:
-  - https://torrentqq381.com/
+  - https://torrentqq382.com/
   - https://torrentegg72.com/
 legacylinks:
-  - https://torrentqq367.com/
   - https://torrentegg59.com/
   - https://torrentqq368.com/
   - https://torrentegg60.com/
@@ -39,6 +36,7 @@ legacylinks:
   - https://torrentegg70.com/
   - https://torrentqq380.com/
   - https://torrentegg71.com/
+  - https://torrentqq381.com/
 
 caps:
   categorymappings:
