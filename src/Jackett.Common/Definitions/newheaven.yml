@@ -65,6 +65,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_general
+    type: info
+    label: Layout Manager Settings
+    default: "Go to <b>Usercenter</b>-><b>Einstellungen</b>, scroll down to <b>Layout Manager</b> and ensure <b>Comments</b>-, <b>Files</b>- and <b>Snatcher</b>-Anzeige are set to <b>anzeigen</b>, so that the number of files, grabs, seeders and leechers can be correctly detected."
   # using cookie method because I could not get the form method to work when converting broken C# indexer to yaml #15527
   - name: cookie
     type: text
@@ -134,7 +138,7 @@ search:
     # 0 any, 1 1day, 7 1week, 30 30days, 90 90days
     time: 0
     # title, nfo, descr, all
-    details: "{{ if .Query.IMDBID }}descr{{ else }}title{{ end }}"
+    details: "{{ if .Query.IMDBID }}all{{ else }}title{{ end }}"
 
   rows:
     selector: "table.torrenttable > tbody > tr:not(:has(td.torrenttableheader)){{ if .Config.onlyupload }}:has(img[src$=\"/onlyup.png\"]){{ else }}{{ end }}"
@@ -194,15 +198,19 @@ search:
     date:
       text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
     files:
-      selector: td:nth-child(5)
+      selector: a[href$="#filelist"]
     size:
       selector: td:nth-child(4)
     grabs:
       selector: td:nth-child(7)
     seeders:
-      selector: td:nth-child(8)
+      selector: a[href$="#seeders"]
+      optional: true
+      default: 0
     leechers:
-      selector: td:nth-child(9)
+      selector: a[href$="#leechers"]
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         div:contains("50% DL"): 0.5
