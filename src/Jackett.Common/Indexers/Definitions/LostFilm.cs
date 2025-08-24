@@ -36,7 +36,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://www.lostfilm.today/", // 43/43 // 9/9
             "https://www.lostfilm.download/", // 43/43 // 9/9
             "https://www.lostfilm.run/", // 43/43 // 9/9
-            "https://lostfilm.site", // 43/43 // 9/9
+            "https://lostfilm.site/", // 43/43 // 9/9
             "https://www.lostfilm.life/", // 42/43 // 9/9
             "https://www.lostfilm.uno/", // 42/43 // 9/9
             "https://www.lostfilm.tw/", // 35/43 // 7/9

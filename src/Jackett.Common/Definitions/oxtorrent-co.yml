@@ -6,9 +6,10 @@ language: fr-FR
 type: public
 encoding: UTF-8
 links:
-  - https://www.oxtorrent.co/
+  - https://www1.oxtorrent.co/
 legacylinks:
   - https://oxtorrent.unblockit.download/
+  - https://www.oxtorrent.co/
 
 caps:
   categorymappings:

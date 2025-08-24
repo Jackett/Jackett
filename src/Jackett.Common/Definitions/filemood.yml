@@ -55,11 +55,15 @@ search:
       text: now
     seeders:
       selector: td.dn-status
+      optional: true
+      default: 0
       filters:
         - name: split
           args: ["/", 0]
     leechers:
       selector: td.dn-status
+      optional: true
+      default: 0
       filters:
         - name: split
           args: ["/", 1]

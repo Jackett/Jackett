@@ -18,6 +18,7 @@ caps:
     - {id: 10, cat: Audio/Video, desc: "Music Video"}
     - {id: 11, cat: TV/Sport, desc: "Sport"}
     - {id: 12, cat: Books, desc: "eBook"}
+    - {id: 13, cat: Audio/Audiobook, desc: "Audiobook"}
 
   modes:
     search: [q]

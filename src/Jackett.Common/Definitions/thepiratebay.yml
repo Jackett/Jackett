@@ -10,14 +10,13 @@ links:
   - https://thepiratebay.unblockninja.com/
   - https://thepiratebay.ninjaproxy1.com/
   - https://tpb.proxyninja.org/
-  - https://tpb.proxyninja.net/
+  - https://thepiratebay.proxyninja.net/
   - https://thepiratebay.torrentbay.st/
-  - https://tpb31.ukpass.co/
   - https://tpb.skynetcloud.site/
   - https://piratehaven.xyz/
   - https://mirrorbay.top/
   - https://thepiratebay0.org/
-  - https://thepiratebay10.org/
+  - https://thepiratebay10.xyz/
   - https://pirateproxylive.org/
   - https://thehiddenbay.com/
   - https://thepiratebay.zone/
@@ -26,15 +25,13 @@ links:
   - https://piratebay.live/
   - https://piratebay.party/
   - https://thepiratebay.party/
-  - https://pirate-proxy.africa/
   - https://thepiratebaye.org/
-  - https://5mins.eu/
   - https://thepiratebay.cloud/
   - https://tpb-proxy.xyz/
-  - https://piratebay.army/
-  - https://tpb-visit.me/
   - https://tpb.re/
-  - https://pirate-proxy.ong/
+  - https://tpirbay.site/
+  - https://tpirbay.top/
+  - https://tpirbay.xyz/
 legacylinks:
   - https://pirate-proxy.page/
   - https://5mins.shop/
@@ -61,6 +58,14 @@ legacylinks:
   - https://pirate-proxy.date/
   - https://thepirateproxy.net/
   - https://thepiratebay.abcproxy.org/
+  - https://tpb.proxyninja.net/
+  - https://tpb31.ukpass.co/
+  - https://thepiratebay10.org/
+  - https://pirate-proxy.africa/
+  - https://5mins.eu/
+  - https://piratebay.army/
+  - https://tpb-visit.me/
+  - https://pirate-proxy.ong/
 
 caps:
   categorymappings:
@@ -140,7 +145,6 @@ settings:
     type: info
     label: About filtering by Uploader
     default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of TPB titles, eg -MeGusta."
-
   - name: info_api
     type: info
     label: About this Indexer

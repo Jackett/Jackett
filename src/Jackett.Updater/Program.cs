@@ -365,6 +365,7 @@ namespace Jackett.Updater
                 "Definitions/dajiao.yml",
                 "Definitions/danishbytes.yml", // migrated to C#
                 "Definitions/dariustracker.yml",
+                "Definitions/dark-shadow.yml",
                 "Definitions/darktracker.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/datascene.yml", // switch to *-API #8682
@@ -377,6 +378,7 @@ namespace Jackett.Updater
                 "Definitions/devils-playground.yml",
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
+                "Definitions/digitalcore.yml", // switch to *-API
                 "Definitions/divteam.yml",
                 "Definitions/documentarytorrents.yml",
                 "Definitions/dodder.yml",
@@ -488,7 +490,6 @@ namespace Jackett.Updater
                 "Definitions/heavens-hell.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
-                "Definitions/homeporntorrents.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/hon3yhd.yml",
                 "Definitions/horriblesubs.yml",
@@ -591,6 +592,7 @@ namespace Jackett.Updater
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/ntelogo.yml",
                 "Definitions/nyaa-pantsu.yml",
+                "Definitions/nyaapantsu.yml",
                 "Definitions/nyaa.yml",
                 "Definitions/nyoo.yml",
                 "Definitions/oasis.yml",
@@ -603,6 +605,7 @@ namespace Jackett.Updater
                 "Definitions/oxtorrent.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/pandahd.yml",
+                "Definitions/parabellumhd.yml",
                 "Definitions/parnuxi.yml",
                 "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
@@ -632,6 +635,7 @@ namespace Jackett.Updater
                 "Definitions/pt99.yml",
                 "Definitions/ptlsp.yml",
                 "Definitions/ptmsg.yml",
+                "Definitions/ptorrent.yml", // renamed to pornxlab
                 "Definitions/purovicio.yml",
                 "Definitions/puurhollands.yml",
                 "Definitions/qctorrent.yml",
@@ -685,7 +689,6 @@ namespace Jackett.Updater
                 "Definitions/shokweb.yml",
                 "Definitions/simpleanime.yml",
                 "Definitions/skipthecommercials.yml", // switch to *-API #8682
-                "Definitions/skipthecommercials-api.yml",
                 "Definitions/skipthetrailers.yml",
                 "Definitions/skytorrents-lol.yml",
                 "Definitions/skytorrents-to.yml",

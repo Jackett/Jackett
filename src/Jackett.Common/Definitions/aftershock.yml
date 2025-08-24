@@ -101,7 +101,7 @@ login:
         selector: td.text
   test:
     path: /
-    selector: a[href="/logout.php"]
+    selector: a[href*="/logout.php"]
 
 search:
   paths:
@@ -120,6 +120,12 @@ search:
       - name: andmatch
 
   fields:
+    category:
+      selector: a[href*="/browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a.index
       attribute: href
@@ -127,17 +133,11 @@ search:
         - name: querystring
           args: name
         - name: urldecode
-    category:
-      selector: td a[href^="/browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     details:
-      selector: a.index
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a.index
       attribute: href
       filters:
         - name: urldecode
@@ -147,6 +147,8 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
+        - name: replace
+          args: ["\"", ""]
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href

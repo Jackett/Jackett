@@ -7,12 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://therarbg.to/
-  - https://t-rb.org/
-  - https://the.rarbg.club/
-  - https://trb.archivebay.online/
-  - https://trb.t-pb.org/
-  - https://trb.themirror.wiki/
-  - https://torrentlite.org/ # fork
+  - https://therarbg.com/
+  - https://therar.site/
   - https://rarbg.unblockninja.com/
   - https://rarbg.ninjaproxy1.com/
   - https://rarbg.proxyninja.org/
@@ -20,7 +16,12 @@ links:
   - https://rarbg.torrentbay.st/
   - https://rarbg.torrentsbay.org/
 legacylinks:
-  - https://therarbg.com/
+  - https://t-rb.org/
+  - https://the.rarbg.club/
+  - https://trb.archivebay.online/
+  - https://trb.t-pb.org/
+  - https://trb.themirror.wiki/
+  - https://torrentlite.org/ # fork, dead
 
 caps:
   categorymappings:

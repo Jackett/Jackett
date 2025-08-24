@@ -14,9 +14,9 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Filme"}
     - {id: 2, cat: TV, desc: "Seriado"}
-    - {id: 3, cat: Audio, desc: "Som (Musica)"}
+    - {id: 3, cat: Audio, desc: "Som (Música)"}
     - {id: 4, cat: Console, desc: "Jogo"}
-    - {id: 5, cat: PC, desc: "App"}
+    - {id: 5, cat: PC, desc: "Aplicativo"}
     - {id: 6, cat: Books/EBook, desc: "E-Books"}
     - {id: 7, cat: Other, desc: "Cursos"}
     - {id: 8, cat: XXX/ImageSet, desc: "Fotos Adultas"}
@@ -43,6 +43,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -109,10 +113,15 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
     files:
       selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -134,11 +143,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
-          args: ["(?i)(Cinema TV)", "Cinema_TV"]
-        - name: re_replace
-          args: ["(?i)(Ficção científica)", "Ficção_científica"]
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -159,7 +166,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -169,16 +181,20 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
       # api returns False, True
       selector: double_upload
       case:
         False: 1 # normal
         True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 7.2.0
+# json UNIT3D 9.1.5

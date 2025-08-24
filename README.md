@@ -91,12 +91,11 @@ Prior versions of Jackett are no longer supported.
  * MixTapeTorrent
  * MoviesDVDR
  * MyPornClub
- * Newstudio
+ * NewStudio
  * Nipponsei
  * NoNaMe Club (NNM-Club)
  * NorTorrent
  * Nyaa.si
- * NyaaPantsu
  * OneJAV
  * OxTorrent
  * OxTorrent-vip
@@ -106,8 +105,8 @@ Prior versions of Jackett are no longer supported.
  * plugintorrent
  * PornoTorrent
  * PornRips
+ * PornXLab
  * Postman
- * ptorrents
  * Qbite (Hubite)
  * Rapidzona
  * RedeTorrent
@@ -145,6 +144,7 @@ Prior versions of Jackett are no longer supported.
  * TrahT
  * U3C3
  * Uindex
+ * UzTracker
  * VSTHouse
  * VST Torrentz
  * VSTorrent
@@ -176,6 +176,7 @@ Prior versions of Jackett are no longer supported.
  * Erai-Raws
  * Ex-torrenty
  * ExKinoRay
+ * EZTV (login)
  * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
@@ -200,7 +201,7 @@ Prior versions of Jackett are no longer supported.
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
- * Newstudio (login)
+ * NewStudio (login)
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
@@ -322,7 +323,6 @@ Prior versions of Jackett are no longer supported.
  * cspt (财神)
  * cyanbug (大青虫)
  * DANISH BYTES
- * Dark-Shadow
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
@@ -397,6 +397,7 @@ Prior versions of Jackett are no longer supported.
  * HellasHut
  * HHanClub
  * HHD
+ * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
@@ -404,7 +405,7 @@ Prior versions of Jackett are no longer supported.
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
- * INFINITY [PAY2DL]
+ * INFINITY [PAY2DL] [![(invite needed)][inviteneeded]](#)
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
@@ -472,7 +473,6 @@ Prior versions of Jackett are no longer supported.
  * OurBits (HDPter)
  * P2PBG
  * Panda
- * ParabellumHD
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
@@ -497,6 +497,7 @@ Prior versions of Jackett are no longer supported.
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
+ * PTSKIT
  * PTtime
  * PTVicomo
  * Punk's Horror Tracker
@@ -525,10 +526,12 @@ Prior versions of Jackett are no longer supported.
  * Secret Cinema
  * SeedFile (SF)
  * seedpool
+ * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
  * SFP (Share Friends Projekt)
  * Shareisland
  * Shazbat
  * SiamBIT
+ * SkipTheCommercials
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)

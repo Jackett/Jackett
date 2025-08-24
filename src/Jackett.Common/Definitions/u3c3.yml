@@ -7,13 +7,14 @@ type: public
 encoding: UTF-8
 links:
   - https://u3c3.com/
-  - https://a.u3c3.life/
   - https://u001.25img.com/
   - https://u002.25img.com/
   - https://u003.25img.com/
-  - https://m0m0m0m.mnmnmnmnmn.com/ # numbers in subdomain can be m2m9m9m or less
+  - https://m0m0m1m.mnmnmnmnmn.com/ # numbers in subdomain can be m2m9m9m or less
 legacylinks:
   - https://u3c3.in/
+  - https://a.u3c3.life/
+  - https://m0m0m0m.mnmnmnmnmn.com/
 
 caps:
   categorymappings:

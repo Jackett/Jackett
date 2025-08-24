@@ -1,0 +1,118 @@
+---
+id: eztvl
+name: EZTVL
+description: "EZTV is a Public torrent site for TV shows. This indexer supports login."
+language: en-US
+type: semi-private
+encoding: UTF-8
+links:
+  - https://eztvx.to/
+  - https://eztv.wf/
+  - https://eztv.tf/
+  - https://eztv.yt/
+  - https://eztv1.xyz/
+legacylinks:
+  - https://eztv.ag/ # redirects to .re
+  - https://eztv.it/ # redirects to .re
+  - https://eztv.ch/ # redirects to .re
+  - https://eztv.io/
+  - https://eztv.re/
+  - https://eztv.li/
+  - https://eztv.mrunblock.bond/
+  - https://eztv.nocensor.cloud/
+  - https://eztv.unblockninja.com/ # layout=def_wlinks not working
+  - https://eztv.ninjaproxy1.com/ # layout=def_wlinks not working
+  - https://eztv.proxyninja.org/ # layout=def_wlinks not working
+  - https://eztv.abcproxy.org/
+  - https://eztv.unblockit.download/
+
+caps:
+  categories:
+    1: TV
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+
+login:
+  path: login/
+  method: post
+  inputs:
+    loginname: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    submit: Login
+  error:
+    - selector: span.text-error
+  test:
+    path: home
+    selector: a[href="/logout/"]
+
+search:
+  paths:
+    - path: "{{ if .Keywords }}search/{{ .Keywords }}{{ else }}home{{ end }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\bS\\d{2,3}\\b", ""] # remove season tag without episode (search doesn't support it)
+    - name: trim
+    # fixes for site search issues - Prowlarr #1094
+    - name: replace
+      args: ["-", ""]
+    - name: replace
+      args: [" ", "-"]
+    - name: replace
+      args: ["&", ""]
+
+  headers:
+    cookie: ["sort_no=100; q_filter=all; q_filter_web=on; q_filter_reality=on; q_filter_x265=on; layout=def_wlinks"] # show 100 results for keywordless search and show links in results
+
+  rows:
+    # only use latest added torrents table for keywordless search to avoid duplicates, some torrents don't have any download links so skip them
+    selector: "table.forum_header_border:contains('Latest') tr[name='hover'].forum_header_border:has(a.magnet), table.forum_header_border:contains('Releases') tr[name='hover'].forum_header_border:has(a.magnet)"
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: td:nth-child(2) a
+      attribute: title
+      filters:
+        - name: replace
+          args: ["[eztv]", ""]
+        - name: re_replace
+          args: ["\\(.*\\)$", ""]
+        - name: trim
+    details:
+      selector: td:nth-child(2) a
+      attribute: href
+    download:
+      selector: td:nth-child(3) a.magnet, td:nth-child(3) a
+      attribute: href
+    size:
+      selector: td:nth-child(4)
+      optional: true
+      default: 512 MB
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " ago"
+    seeders:
+      selector: td:nth-child(6)
+    leechers:
+      text: 0
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

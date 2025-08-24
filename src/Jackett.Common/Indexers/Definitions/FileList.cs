@@ -32,7 +32,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://filelist.io/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://filelist.io/"
+            "https://filelist.io/",
+            "https://thefl.org/",
         };
         public override string[] LegacySiteLinks => new[]
         {
@@ -114,6 +115,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(27, TorznabCatType.TVUHD, "Seriale 4K");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesForeign, "RO Dubbed");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.TVForeign, "RO Dubbed");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.TVForeign, "K-Drama");
 
             return caps;
         }

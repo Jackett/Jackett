@@ -12,23 +12,31 @@ caps:
   categorymappings:
     - {id: 2, cat: TV, desc: "TV Show"}
     - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 10, cat: Movies/UHD, desc: "4K Movie"}
-    - {id: 13, cat: TV, desc: "TV Boxsets"}
-    - {id: 12, cat: PC/Games, desc: "Linux Game"}
-    - {id: 3, cat: PC/Games, desc: "PC Game"}
-    - {id: 5, cat: Audio/Lossless, desc: "Music"}
     - {id: 6, cat: TV/Anime, desc: "Anime"}
-    - {id: 4, cat: Console/Other, desc: "NSW Game"}
+    - {id: 6, cat: Movies/Other, desc: "Anime"} # for Radarr
     - {id: 8, cat: TV/Sport, desc: "Sports"}
-    - {id: 7, cat: Books/EBook, desc: "E-Books"}
+    - {id: 5, cat: Audio, desc: "Music"}
     - {id: 9, cat: Audio/Audiobook, desc: "Audiobook"}
-    - {id: 15, cat: Other, desc: "Education"}
-    - {id: 16, cat: PC/0day, desc: "Windows"}
-    - {id: 17, cat: PC, desc: "Linux"}
-    - {id: 18, cat: PC/Mac, desc: "macOS"}
-    - {id: 14, cat: Console/PS4, desc: "PS4"}
-    - {id: 19, cat: Console/XBox, desc: "Xbox"}
+    - {id: 7, cat: Books/EBook, desc: "E-Book"}
+    - {id: 12, cat: Other, desc: "Hobby"}
+    - {id: 16, cat: PC, desc: "Software"}
+    # Seedpool has a combined Game category
+    - {id: 3, cat: Console, desc: "Game"}
+    - {id: 3, cat: PC/Games, desc: "Game"}
+    # Music Production category can have software and audio samples
+    - {id: 21, cat: PC, desc: "Music Production"}
+    - {id: 21, cat: Audio/Other, desc: "Music Production"}
+    - {id: 21, cat: Other, desc: "Music Production"}
     - {id: 11, cat: Other, desc: "Other"}
+    - {id: 13, cat: TV, desc: "Deprecated - BoxSet"}
+    - {id: 14, cat: PC/Games, desc: "Deprecated - Game"}
+    - {id: 15, cat: Other, desc: "Deprecated - Education"}
+    - {id: 10, cat: Movies/UHD, desc: "Deprecated - 4K Movie"}
+    - {id: 17, cat: PC/0day, desc: "Deprecated - Linux"}
+    - {id: 18, cat: PC/Mac, desc: "Deprecated - macOS"}
+    - {id: 19, cat: Console, desc: "Deprecated - Consoles"}
+    - {id: 20, cat: TV/Foreign, desc: "Deprecated - JPTV"}
+    - {id: 4, cat: Console/Other, desc: "Deprecated - NSW Game"}
 
   modes:
     search: [q]
@@ -193,4 +201,4 @@ search:
     minimumseedtime:
       # 10 days (as seconds = 10 x 24 x 60 x 60)
       text: 864000
-# json UNIT3D 9.1.1 (custom)
+# json UNIT3D 9.1.5 (custom)

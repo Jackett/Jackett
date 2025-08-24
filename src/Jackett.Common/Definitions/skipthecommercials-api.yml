@@ -1,27 +1,19 @@
 ---
-id: hdzero-api
-name: HDZero (API)
-description: "HD Zero is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: es-ES
+id: skipthecommercials-api
+name: SkipTheCommercials (API)
+description: "SkipTheCommercials (STC) is a Private Torrent Tracker for TV"
+language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://hdzero.org/
+  - https://skipthecommercials.xyz/
+legacylinks:
+  - https://skipthecommericals.xyz/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Películas"}
-    - {id: 2, cat: TV, desc: "Series"}
-    - {id: 5, cat: TV, desc: "Series Emision"}
-    - {id: 6, cat: TV/Anime, desc: "Animacion Peliculas"}
-    - {id: 7, cat: TV/Anime, desc: "Animacion Series"}
-    - {id: 8, cat: TV/Anime, desc: "Anime Peliculas"}
-    - {id: 9, cat: TV/Anime, desc: "Anime Series"}
-    - {id: 10, cat: TV/Documentary, desc: "Documentales"}
-    - {id: 11, cat: TV/Documentary, desc: "Documentales Series"}
-    - {id: 12, cat: TV, desc: "Programas TV"}
-    - {id: 13, cat: TV, desc: "Telenovelas"}
-    - {id: 3, cat: Other, desc: "Delete"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV Show"}
 
   modes:
     search: [q]
@@ -35,7 +27,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://hdzero.org/\" target=\"_blank\">HD Zero</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://skipthecommericals.xyz/\" target=\"_blank\">SkipTheCommercials</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -60,6 +52,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "You must be seeding at least 1 torrent or login once every 90 days to not get pruned. Once pruned, you will get additional 30 days to reactivate your account by logging in."
 
 login:
   path: /api/torrents
@@ -114,7 +110,7 @@ search:
     files:
       selector: num_file
     title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }} Spanish"
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -135,6 +131,10 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     description:
@@ -180,9 +180,7 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-    minimumratio:
-      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 9.1.2 (custom)
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 9.1.5
