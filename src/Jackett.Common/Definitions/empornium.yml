@@ -66,6 +66,10 @@ caps:
     search: [q]
 
 settings:
+  - name: info_2fa
+    type: info
+    label: "About 2FA"
+    default: "If you want to enable 2FA then use the Empornium2FA indexer instead."
   - name: username
     type: text
     label: Username
