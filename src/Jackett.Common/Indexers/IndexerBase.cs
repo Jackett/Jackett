@@ -1,5 +1,6 @@
 using System.Text;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -16,13 +17,13 @@ namespace Jackett.Common.Indexers
         public abstract override string Language { get; }
         public abstract override string Type { get; }
 
-        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, ICacheService cacheService, string downloadBase = null)
-            : base(configService, client, logger, configData, p, cacheService, downloadBase)
+        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, ConfigurationData configData, IProtectionService p, CacheManager cacheManager, string downloadBase = null)
+            : base(configService, client, logger, configData, p, cacheManager, downloadBase)
         {
         }
 
-        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cacheService)
-            : base(configService, client, logger, p, cacheService)
+        protected IndexerBase(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, CacheManager cacheManager)
+            : base(configService, client, logger, p, cacheManager)
         {
         }
     }

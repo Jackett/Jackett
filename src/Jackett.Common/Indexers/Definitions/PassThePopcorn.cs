@@ -11,6 +11,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Serializer;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -42,12 +43,12 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         public PassThePopcorn(IIndexerConfigurationService configService, Utils.Clients.WebClient c, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(@"Enter filter options below to restrict search results.
                                                                         Separate options with a space if using more than one option.<br>Filter options available:
                                                                         <br><code>GoldenPopcorn</code><br><code>Scene</code><br><code>Checked</code><br><code>Free</code>"))

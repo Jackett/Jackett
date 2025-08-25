@@ -2,6 +2,7 @@ using System;
 using System.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 
@@ -17,12 +18,12 @@ namespace Jackett.Common.Indexers.Meta
 
         public AggregateIndexer(IFallbackStrategyProvider fallbackStrategyProvider,
                                 IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
-                                WebClient client, Logger logger, IProtectionService ps, ICacheService cs)
+                                WebClient client, Logger logger, IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    ps: ps,
-                   cs: cs,
+                   cm: cm,
                    configData: new ConfigurationData(),
                    fallbackStrategyProvider: fallbackStrategyProvider,
                    resultFilterProvider: resultFilterProvider,
@@ -52,12 +53,12 @@ namespace Jackett.Common.Indexers.Meta
 
         public FilterIndexer(string filter, IFallbackStrategyProvider fallbackStrategyProvider,
                           IResultFilterProvider resultFilterProvider, IIndexerConfigurationService configService,
-                          WebClient client, Logger logger, IProtectionService ps, ICacheService cs, Func<IIndexer, bool> filterFunc)
+                          WebClient client, Logger logger, IProtectionService ps, CacheManager cm, Func<IIndexer, bool> filterFunc)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    ps: ps,
-                   cs: cs,
+                   cm: cm,
                    configData: new ConfigurationData(),
                    fallbackStrategyProvider: fallbackStrategyProvider,
                    resultFilterProvider: resultFilterProvider,
