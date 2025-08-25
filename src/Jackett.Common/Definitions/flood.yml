@@ -1,7 +1,7 @@
 ---
 id: flood
-name: flood
-description: "flood is a private torrent tracker for movies / TV"
+name: Flood
+description: "Flood is a Private Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -120,3 +120,4 @@ search:
       text: 432000
     downloadvolumefactor:
       selector: download_accounting_factor
+# json api
