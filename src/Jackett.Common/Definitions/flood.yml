@@ -10,8 +10,8 @@ links:
 
 caps:
   categorymappings:
-    - {id: 'movie', cat: Movies, desc: "Movies"}
-    - {id: 'show', cat: TV, desc: "TV"}
+    - {id: movie, cat: Movies, desc: "Movies"}
+    - {id: show, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
