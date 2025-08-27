@@ -11,8 +11,8 @@ encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
   - https://www.oxtorrent8.com/
-  - https://www.zone-torrent3.com/
-  - https://www.mega-torrent6.com/
+  - https://www.zone-torrent.me/
+  - https://www.mega-torrent.net/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -28,8 +28,6 @@ legacylinks:
   - https://oxtorrent.blog/
   - https://www.site-torrent.com/
   # actual legacylinks
-  - https://www.torrent911.lol/
-  - https://www.oxtorrent.im/
   - https://www.oxtorrent.cv/
   - https://www.torrent911.ke/
   - https://oxtorrent.proxyninja.org/
@@ -49,6 +47,8 @@ legacylinks:
   - hhttps://www.zone-torrent2.com/
   - https://www.zone-torrent2.com/
   - https://www.oxtorrent7.com/
+  - https://www.mega-torrent6.com/
+  - https://www.zone-torrent3.com/
 
 caps:
   categorymappings:
