@@ -70,6 +70,7 @@ caps:
     - {id: 100, cat: Books/Comics, desc: "Comics/Magazines"}
     - {id: 99, cat: Books/EBook, desc: "E Books"}
     - {id: 98, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 109, cat: PC/Mobile-Other, desc: "Phone Applications"}
     - {id: 103, cat: Other, desc: "Inactive Torrents"}
 #    - {id: 78, cat: Other, desc: "Practice Area"}
     - {id: 89, cat: Other, desc: "Test"}
