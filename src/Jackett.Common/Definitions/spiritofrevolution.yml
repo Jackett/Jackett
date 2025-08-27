@@ -27,7 +27,7 @@ caps:
     - {id: 135, cat: TV/HD, desc: "Serien HD"}
     - {id: 136, cat: TV/SD, desc: "Serien Pack/SD"}
     - {id: 180, cat: TV/HD, desc: "Serien Pack/HD"}
-    - {id: 184, cat: TV/UHD, desc: "Serien Pack/UHD"}
+    - {id: 192, cat: TV/UHD, desc: "Serien Pack/UHD"}
     - {id: 179, cat: TV/Anime, desc: "Serien Anime"}
     - {id: 128, cat: Audio/MP3, desc: "Audio MP3/AAC"}
     - {id: 169, cat: Audio, desc: "Audio Pack"}
