@@ -29,10 +29,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://dontorrent.international/";
+        public override string SiteLink { get; protected set; } = "https://dontorrent.irish/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.international/",
+            "https://dontorrent.irish/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -41,7 +41,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.webcam/",
             "https://dontorrent.schule/",
             "https://dontorrent.stream/",
             "https://dontorrent.website/",
@@ -56,6 +55,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.jetzt/",
             "https://dontorrent.loan/",
             "https://dontorrent.graphics/",
+            "https://dontorrent.international/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -133,6 +133,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D "); // cloudflare
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
