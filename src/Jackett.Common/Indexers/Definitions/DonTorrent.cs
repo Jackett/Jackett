@@ -133,7 +133,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D "); // cloudflare
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
