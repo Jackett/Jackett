@@ -101,7 +101,7 @@ search:
 
   fields:
     category:
-      selector: a[href^="search-torrents.php?cat="]
+      selector: a[href^="torrents-search.php?cat="]
       attribute: href
       filters:
         - name: querystring
