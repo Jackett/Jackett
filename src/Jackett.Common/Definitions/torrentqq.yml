@@ -5,10 +5,12 @@ description: "TorrentQQ (토렌트큐큐) is a Public KOREAN tracker for Korean 
 language: ko-KR
 type: public
 encoding: UTF-8
+certificates:
+  - 81ffa075511611129626f6dd81aa3e5a6b399c7b # cloudflare
 followredirect: true
 links:
   - https://torrentqq383.com/
-  - https://torrentegg72.com/
+  - https://torrentegg73.com/
 legacylinks:
   - https://torrentegg59.com/
   - https://torrentqq368.com/
@@ -38,6 +40,7 @@ legacylinks:
   - https://torrentegg71.com/
   - https://torrentqq381.com/
   - https://torrentqq382.com/
+  - https://torrentegg72.com/
 
 caps:
   categorymappings:
