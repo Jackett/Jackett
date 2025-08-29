@@ -76,8 +76,6 @@ search:
       selector: total
 
   fields:
-    _id:
-      selector: id
     title:
       selector: name
     infohash:
