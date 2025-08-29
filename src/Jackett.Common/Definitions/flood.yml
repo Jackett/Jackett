@@ -35,9 +35,6 @@ settings:
       name: title
       size: size
       seeders: seeders
-      leechers: leechers
-      times_completed: grabs
-      release_date: release date
   - name: order_dir
     type: select
     label: Order requested from site
