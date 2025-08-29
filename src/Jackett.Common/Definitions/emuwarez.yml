@@ -12,11 +12,16 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
+    - {id: 4, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 5, cat: Audio, desc: "Musica"}
+    - {id: 6, cat: Console, desc: "Juegos"}
+    - {id: 7, cat: PC, desc: "Software"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
