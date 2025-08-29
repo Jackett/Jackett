@@ -115,4 +115,6 @@ search:
       text: 432000
     downloadvolumefactor:
       selector: download_accounting_factor
+    uploadvolumefactor:
+      text: 1
 # json api
