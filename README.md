@@ -205,6 +205,7 @@ Prior versions of Jackett are no longer supported.
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
+ * Postman (login)
  * ProPorno
  * PussyTorrents
  * Rainbow Tracker

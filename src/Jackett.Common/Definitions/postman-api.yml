@@ -1,0 +1,131 @@
+---
+id: postman-api
+name: Postman (API)
+description: "Postman is a Semi-Private I2P Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses the API for login."
+language: en-US
+type: semi-private
+encoding: UTF-8
+requestDelay: 6 # rate limit: 10 req/min
+links:
+  - http://tracker2.postman.i2p/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: Audio, desc: "Music"}
+    - {id: 3, cat: TV, desc: "TV"}
+    - {id: 4, cat: PC/Games, desc: "Games"}
+    - {id: 5, cat: PC/0day, desc: "Apps"}
+    - {id: 6, cat: Other/Misc, desc: "Misc."}
+    - {id: 8, cat: TV, desc: "Pictures"}
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
+    - {id: 10, cat: Books/Comics, desc: "Comics"}
+    - {id: 24, cat: Audio/Other, desc: "Podcasts"}
+    - {id: 11, cat: Books, desc: "Books"}
+    - {id: 17, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 20, cat: Books/EBook, desc: "E-Books"}
+    - {id: 21, cat: Other, desc: "Course/Lesson"}
+    - {id: 22, cat: Other, desc: "Essay/Op-Ed"}
+    - {id: 23, cat: Other, desc: "Cad/3D Printing"}
+    - {id: 13, cat: Audio/Video, desc: "Music Vid."}
+    - {id: 14, cat: XXX, desc: "Pr0n"}
+    - {id: 15, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 16, cat: Other, desc: "Leaked Documents"}
+    - {id: 18, cat: Other, desc: "Conspiracy"}
+    - {id: 19, cat: Other, desc: "Religious Content"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"http://tracker2.postman.i2p/\" target=\"_blank\">Postman</a> account <i>Preferences</i> page."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      5: seeders
+      7: size
+
+login:
+  path: api/meta/session
+  method: get
+  error:
+    - selector: :root:contains("403")
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("429"):contains("daily quota")
+      message:
+        text: "You have exceeded your daily quota, you have to wait until 00:00 UTC next day."
+    - selector: :root:contains("429"):contains("rate limit")
+      message:
+        text: "API is temporary unavailable due to rate limiting. Try going slower please!"
+
+search:
+  paths:
+    - path: api/torrents
+      response:
+        type: json
+
+  inputs:
+    name: "{{ .Keywords }}"
+    sort_id: "{{ .Config.sort }}"
+    filter_id: -1
+    catfilter_id: -1
+    entries: 100
+
+  headers:
+    X-Postman-Token: ["{{ .Config.apikey }}"]
+
+  rows:
+    selector: torrents
+    count:
+      selector: available_entries
+
+  fields:
+    category:
+      selector: category_id
+    title:
+      selector: name
+    download_link:
+      selector: download_link
+    download:
+      text: "/{{ .Result.download_link }}"
+    details:
+      text: "{{ .Result.download }}"
+      filters:
+        - name: replace
+          args: ["action=Download", "view=TorrentDetail"]
+    magnet:
+      selector: magnet_link
+    date:
+      selector: added
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss"
+    files:
+      selector: file_count
+    size:
+      selector: size
+    grabs:
+      selector: times_completed
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# Postman Tracker JSON API v0.86 build 2025081002
