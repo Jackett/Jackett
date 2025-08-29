@@ -74,7 +74,7 @@ login:
 
 search:
   paths:
-    - path: /api/torrents/
+    - path: api/torrents
       response:
         type: json
 
@@ -98,13 +98,15 @@ search:
       selector: category_id
     title:
       selector: name
-    details:
+    download_link:
       selector: download_link
+    download:
+      text: "/{{ .Result.download_link }}"
+    details:
+      text: "{{ .Result.download }}"
       filters:
         - name: replace
           args: ["action=Download", "view=TorrentDetail"]
-    download:
-      selector: download_link
     magnet:
       selector: magnet_link
     date:
@@ -126,4 +128,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-# Postman Tracker JSON API - Version 0.86 build 2025081002
+# Postman Tracker JSON API v0.86 build 2025081002
