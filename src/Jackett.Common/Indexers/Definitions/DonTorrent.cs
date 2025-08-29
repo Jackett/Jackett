@@ -99,6 +99,8 @@ namespace Jackett.Common.Indexers.Definitions
             // avoid CLoudflare too many requests limiter
             webclient.requestDelay = 2.1;
 
+            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
+
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
         }
@@ -129,11 +131,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             return caps;
         }
+        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
+        {
+            base.LoadValuesFromJson(jsonConfig, useProtectionService);
+
+            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
+        }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
             var releases = await PerformQuery(new TorznabQuery());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
