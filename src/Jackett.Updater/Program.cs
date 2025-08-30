@@ -840,6 +840,7 @@ namespace Jackett.Updater
                 "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
+                "Definitions/zomb.yml",
                 "Definitions/zooqle.yml",
                 "Microsoft.Owin.dll",
                 "Microsoft.Owin.FileSystems.dll",

@@ -227,7 +227,6 @@ Prior versions of Jackett are no longer supported.
  * Union Fansub
  * UniOtaku
  * ViDEOTEKA (VT)
- * ZOMB
  * Ztracker
 </details>
 
