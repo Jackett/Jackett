@@ -83,16 +83,19 @@ caps:
     - {id: 133, cat: Movies/DVD, desc: "Отечественное кино | DVD"}
     - {id: 131, cat: Movies, desc: "Российское и советское кино | Rips"}
     - {id: 869, cat: Movies/3D, desc: "3D"}
-    - {id: 886, cat: Movies, desc: "Новинки зарубежных сериалов (2024-2025)"}
-    - {id: 160, cat: TV, desc: "Отечественные cериалы"}
-    - {id: 135, cat: Movies, desc: "Зарубежные сериалы до 2025г."}
-    - {id: 979, cat: TV, desc: "Русские сериалы до 2025г"}
     - {id: 325, cat: TV/UHD, desc: "Мультфильмы | UHD 4K"}
     - {id: 324, cat: TV/HD, desc: "Мультфильмы | HD Rips"}
     - {id: 328, cat: TV, desc: "Мультфильмы | Rips"}
     - {id: 330, cat: TV, desc: "Сборники мультфильмов"}
     - {id: 321, cat: TV, desc: "Мультсериалы"}
-    - {id: 162, cat: TV/Documentary, desc: "Документальные фильмы и телешоу"}
+    - {id: 162, cat: TV/Documentary, desc: "Документальные фильмы и телешоу
+ Сериалы"}
+    - {id: 982, cat: TV/UHD, desc: "Новинки зарубежных сериалов UHD|4K"}
+    - {id: 886, cat: TV, desc: "Новинки зарубежных сериалов"}
+    - {id: 986, cat: TV/UHD, desc: "Зарубежные сериалы UHD|4K до 2025г"}
+    - {id: 135, cat: TV, desc: "Зарубежные сериалы до 2025г."}
+    - {id: 160, cat: TV, desc: "Новинки русских сериалов"}
+    - {id: 979, cat: TV, desc: "Русские сериалы до 2025г"}
     # Anime      # Аниме
     - {id: 693, cat: TV/Anime, desc: "Аниме (Основной)"}
     - {id: 660, cat: TV/Anime, desc: "Онгоинги и новинки аниме"}
