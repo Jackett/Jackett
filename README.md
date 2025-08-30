@@ -469,7 +469,6 @@ Prior versions of Jackett are no longer supported.
  * Orpheus
  * OnlyEncodes+
  * OshenPT
- * Ostwiki
  * OurBits (HDPter)
  * P2PBG
  * Panda
