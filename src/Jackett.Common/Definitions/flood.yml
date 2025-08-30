@@ -11,7 +11,8 @@ links:
 caps:
   categorymappings:
     - {id: movie, cat: Movies, desc: "Movies"}
-    - {id: show, cat: TV, desc: "TV"}
+    - {id: show_season, cat: TV, desc: "TV season"}
+    - {id: show_episode, cat: TV, desc: "TV episode"}
 
   modes:
     search: [q]
@@ -82,11 +83,6 @@ search:
       selector: info_hash
     category:
       selector: media_type
-      filters:
-        - name: replace
-          args: ["show_season", "show"]
-        - name: replace
-          args: ["show_episode", "show"]
     details:
       selector: main_url
     download:
