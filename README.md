@@ -351,6 +351,7 @@ Prior versions of Jackett are no longer supported.
  * Femdomcult
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
+ * Flood (FLD)
  * Flux-Zone
  * Free Farm (自由农场)
  * FunFile (FF)
