@@ -5,6 +5,8 @@ description: "LetSeed is a TURKISH Private Torrent Tracker for MOVIES / TV / GEN
 language: tr-TR
 type: private
 encoding: UTF-8
+certificates:
+  - 5a61cc89a0417dcfe03ef685f7423b6b0bd4dc6b # expired 28 Aug 2025
 links:
   - https://letseed.org/
 
