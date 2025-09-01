@@ -22,6 +22,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using System.Threading.Tasks;
 #if !NET462
 using Microsoft.Extensions.Hosting;
 #endif
@@ -54,6 +55,11 @@ namespace Jackett.Server
                             options.AccessDeniedPath = new PathString("/UI/Login");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
+                            options.Events.OnRedirectToLogin = context =>
+                            {
+                                context.Response.Redirect("/UI/Login");
+                                return Task.CompletedTask;
+                            };
                         });
 
 #if NET462
