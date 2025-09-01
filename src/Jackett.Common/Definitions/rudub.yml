@@ -9,10 +9,8 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://aug31.rudub.buzz/
+  - https://sep01.rudub.buzz/
 legacylinks:
-  - https://aug16.rudub.club/
-  - http://aug17.rudub.club/
   - https://aug17.rudub.club/
   - http://aug18.rudub.club/
   - https://aug18.rudub.club/
@@ -41,6 +39,8 @@ legacylinks:
   - http://aug30.rudub.buzz/
   - https://aug30.rudub.buzz/
   - http://aug31.rudub.buzz/
+  - https://aug31.rudub.buzz/
+  - http://sep01.rudub.buzz/
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}
