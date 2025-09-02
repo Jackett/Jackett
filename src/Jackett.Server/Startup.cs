@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using System.Threading.Tasks;
 #if !NET462
 using Microsoft.Extensions.Hosting;
 #endif
@@ -55,11 +54,6 @@ namespace Jackett.Server
                             options.AccessDeniedPath = new PathString("/UI/Login");
                             options.LogoutPath = new PathString("/UI/Logout");
                             options.Cookie.Name = "Jackett";
-                            options.Events.OnRedirectToLogin = context =>
-                            {
-                                context.Response.Redirect("/UI/Login");
-                                return Task.CompletedTask;
-                            };
                         });
 
 #if NET462
@@ -175,14 +169,16 @@ namespace Jackett.Server
             {
                 app.UsePathBase(serverBasePath);
             }
+            var forwardedHeaderOptions = new ForwardedHeadersOptions();
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                // When adjusting these pareamters make sure it's well tested with various environments
-                // See https://github.com/Jackett/Jackett/issues/3517
-                ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-            });
+            // When adjusting these parameters make sure it's well tested with various environments
+            // See https://github.com/Jackett/Jackett/issues/3517
+            forwardedHeaderOptions.ForwardLimit = 10;
+            forwardedHeaderOptions.ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+            forwardedHeaderOptions.KnownNetworks.Clear();
+            forwardedHeaderOptions.KnownProxies.Clear();
+
+            app.UseForwardedHeaders(forwardedHeaderOptions);
 
             var rewriteOptions = new RewriteOptions()
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
