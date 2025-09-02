@@ -60,7 +60,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>If there is no valid traffic within 100 days of registration (participation in the calculation of sharing rate), the account will be blocked</li><li>After the level is reduced to \"Peasant\", if the sharing rate is not improved within 30 days, the account will be blocked</li><li>Long-term non-login:<ul>- UnParked account: 150 consecutive days of non-login → banned</ul><ul>- Parked account: 400 consecutive days of non-login → banned</ul><ul>- Veteran Master and above levels are not subject to long-term non-login ban restrictions</li></ol>"
+    default: "Account retention rules:<ol><li>If there is no valid traffic within 100 days of registration (participation in the calculation of sharing rate), the account will be blocked</li><li>After the level is reduced to \"Peasant\", if the sharing rate is not improved within 30 days, the account will be blocked</li><li>Long-term non-login:<ul>- UnParked account: 150 consecutive days of non-login → banned</ul><ul>- Parked account: 400 consecutive days of non-login → banned</ul><ul>- Veteran Master and above levels are not subject to long-term non-login ban restrictions</ul></li></ol>"
 
 login:
   # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
