@@ -26,7 +26,7 @@ settings:
   - name: info_login
     type: info
     label: About LosslessClub Forum versus LosslessClub Tracker
-    default: "The  <a href=\"https://losslessclub.com/\" target=\"_blank\">LosslessClub Forum</a> credentials are different from the <a href=\"https://losslessclub.com/login.php\" target=\"_blank\">LosslessClub Tracker</a> credentials so if the indexer is giving you 'Error Username or password is incorrect' then you are likely using the Forum credentials to access the Tracker."
+    default: "The <a href=\"https://losslessclub.com/\" target=\"_blank\">LosslessClub Forum</a> credentials are different from the <a href=\"https://losslessclub.com/login.php\" target=\"_blank\">LosslessClub Tracker</a> credentials so if the indexer is giving you 'Error Username or password is incorrect' then you are likely using the Forum credentials to access the Tracker."
 
 login:
   path: takelogin.php
