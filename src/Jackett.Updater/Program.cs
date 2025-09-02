@@ -444,6 +444,7 @@ namespace Jackett.Updater
                 "Definitions/gamera.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/generationfree.yml", // switch to unit3d api #12982
+                "Definitions/genesismovement.yml",
                 "Definitions/gfxnews.yml",
                 "Definitions/gktorrent.yml", // renamed to zktorrent #15399
                 "Definitions/glodls.yml",
