@@ -61,7 +61,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must seed at least 1 torrent or log in every 30 days to avoid being pruned."
+    default: "If a user has not actively logged in for 30 days, the profile is automatically deactivated and receives the user class 'Disabled'.<br>After deactivation, the profile can be reactivated within 60 days – after which it will be permanently deleted."
 
 login:
   path: /api/torrents
