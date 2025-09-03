@@ -13,7 +13,7 @@
     <PackageReference Include="MSTest.TestAdapter" Version="3.0.2" />
     <PackageReference Include="MSTest.TestFramework" Version="3.0.2" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.7.0" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.35.0" />
   </ItemGroup>
 
 </Project>
