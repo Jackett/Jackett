@@ -56,6 +56,16 @@ namespace Jackett.Server
                             options.Cookie.Name = "Jackett";
                         });
 
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                // When adjusting these parameters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                options.ForwardLimit = 10;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                options.KnownNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
+
 #if NET462
             services.AddMvc(
                         config => config.Filters.Add(
@@ -127,13 +137,7 @@ namespace Jackett.Server
                 app.UsePathBase(serverBasePath);
             }
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                // When adjusting these pareamters make sure it's well tested with various environments
-                // See https://github.com/Jackett/Jackett/issues/3517
-                ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-            });
+            app.UseForwardedHeaders();
 
             var rewriteOptions = new RewriteOptions()
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
@@ -170,13 +174,7 @@ namespace Jackett.Server
                 app.UsePathBase(serverBasePath);
             }
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                // When adjusting these pareamters make sure it's well tested with various environments
-                // See https://github.com/Jackett/Jackett/issues/3517
-                ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-            });
+            app.UseForwardedHeaders();
 
             var rewriteOptions = new RewriteOptions()
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
