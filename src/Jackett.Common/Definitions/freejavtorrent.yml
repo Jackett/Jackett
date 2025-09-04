@@ -1,0 +1,73 @@
+---
+id: freejavtorrent
+name: Free JAV Torrent
+description: "Free JAV Torrent is a Public tracker for Asian 3X (JAV)"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.freejavtorrent.com/
+
+caps:
+  categories:
+    "Japanese Movies": XXX
+    "Japanese Movies Packs": XXX/Pack
+    "Chinese Movies": XXX
+    "Japanese Movies SiteRip 1991-2014": XXX/Pack
+    "Japanese Movies SiteRip 2015-2024": XXX/Pack
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a.download-button
+      attribute: href
+
+search:
+  paths:
+    - path: "s.php?search={{ if .Keywords }}{{ .Keywords }}{{ else }}%20{{ end }}"
+
+  rows:
+    selector: div.image-wrapper
+
+  fields:
+    category:
+      selector: div.catalog a
+    title:
+      selector: a.overlay
+      filters:
+        - name: re_replace
+          args: ["^.+?\\] ", ""]
+    details:
+      selector: a.overlay
+      attribute: href
+    download:
+      selector: a.overlay
+      attribute: href
+      filters:
+        - name: regexp
+          args: "-(\\d+).html"
+        - name: prepend
+          args: "/dl.php?t="
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      selector: a.overlay
+      filters:
+        - name: regexp
+          args: "^\\[(\\d+(?:\\.\\d+)?\\s?[KMGT]B)\\]"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
