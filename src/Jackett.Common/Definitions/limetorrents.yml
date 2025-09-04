@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 # changes to this indexer should also be made to limetorrentsclone
 links:
-  - https://www.limetorrents.lol/
+  - https://www.limetorrents.fun/
   - https://limetorrents.unblockninja.com/
   - https://limetorrents.ninjaproxy1.com/
   - https://limetorrents.proxyninja.org/
@@ -19,6 +19,7 @@ legacylinks:
   - https://limetorrents.nocensor.cloud/
   - https://limetorrents.abcproxy.org/
   - https://limetorrents.unblockit.download/
+  - https://www.limetorrents.lol/
 
 caps:
   categorymappings:
