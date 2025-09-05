@@ -29,10 +29,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://dontorrent.irish/";
+        public override string SiteLink { get; protected set; } = "https://dontorrent.lighting/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.irish/",
+            "https://dontorrent.lighting/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
@@ -41,7 +41,6 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.schule/",
             "https://dontorrent.stream/",
             "https://dontorrent.website/",
             "https://dontorrent.group/",
@@ -56,6 +55,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.loan/",
             "https://dontorrent.graphics/",
             "https://dontorrent.international/",
+            "https://dontorrent.irish/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -99,8 +99,6 @@ namespace Jackett.Common.Indexers.Definitions
             // avoid CLoudflare too many requests limiter
             webclient.requestDelay = 2.1;
 
-            webclient.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
-
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
         }
@@ -130,12 +128,6 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(DonTorrentCatType.Musica, TorznabCatType.Audio, "Música");
 
             return caps;
-        }
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            base.LoadValuesFromJson(jsonConfig, useProtectionService);
-
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "21658BD5F953594852103C1728C09A676B932C4D"); // cloudflare
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
