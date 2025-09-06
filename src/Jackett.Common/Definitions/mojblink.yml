@@ -5,8 +5,6 @@ description: "MOJBLiNK is a SLOVENIAN Private Torrent Tracker for MOVIES / TV / 
 language: sl-SI
 type: private
 encoding: UTF-8
-certificates:
-  - 736af8ef7f489e74d09d8feedc21821e1fbae296  # expired 23 Aug 2025
 links:
   - https://www.mojblink.si/
 
