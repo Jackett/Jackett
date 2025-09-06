@@ -40,13 +40,11 @@ caps:
     - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
     - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
     - {id: 26, cat: PC/0day, desc: "Software", default: true}
-    - {id: 27, cat: XXX/x264, desc: "Movies: XXX", default: false}
     - {id: 28, cat: Audio, desc: "Music", default: true}
     - {id: 30, cat: PC/Games, desc: "Games: PC-ISO", default: true}
     - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
     - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRo", default: true}
     - {id: 33, cat: PC/Games, desc: "Games: Packs", default: true}
-    - {id: 34, cat: XXX/Pack, desc: "XXX Pack", default: false}
     - {id: 42, cat: TV/Sport, desc: "Sport", default: true}
     - {id: 43, cat: Books, desc: "Documents", default: true}
     - {id: 44, cat: Other, desc: "Images", default: true}
@@ -56,9 +54,11 @@ caps:
     - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
     - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
-    - {id: 60, cat: XXX/ImageSet, desc: "ImagesXXX", default: false}
     - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
     - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
+    - {id: 27, cat: XXX/x264, desc: "Movies: XXX", default: false}
+    - {id: 34, cat: XXX/Pack, desc: "XXX Pack", default: false}
+    - {id: 60, cat: XXX/ImageSet, desc: "ImagesXXX", default: false}
 
   modes:
     search: [q]
@@ -78,12 +78,24 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: _
+    options:
+      _: created
+      name: title
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info_flaresolverr
     type: info_flaresolverr
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "Accounts inactive for more than 42 days are automatically deleted."
 
 login:
   path: login
@@ -108,15 +120,20 @@ search:
     # https://lastfiles.ro/torrents?keyword=tt8337290&category=32&genre=&torrent_status=free
     - path: torrents
       categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 81, 82]
+      inputs:
+        $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
+    # does not support multi categories
     - path: torrents/adult
       categories: [27, 34, 60]
 
   inputs:
-    # does not support multi categories, leaving out category keyword defaults to all
     keyword: "{{ .Keywords }}"
     # active, dead, free, double, seedbox
     torrent_status: "{{ if .Config.freeleech }}free{{ else }}active{{ end }}"
-    # has sort for size and seeders but not for title or date
+    # no option to sort by date, and using direction without sort breaks search, but the default for all is desc,
+    # so we only add sort if it's anything other than date, and only add direction if it's asc
+    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
+    direction: "{{ re_replace .Config.type \"desc\" \"\" }}"
 
   rows:
     selector: table.table-hover > tbody > tr
@@ -153,7 +170,7 @@ search:
         img[src$="/4k.png"]: 31
         img[src$="/4kRO.png"]: 32
         img[src$="/gpack.png"]: 33
-        img[src$="/xxxpacks.png"]: 34
+        img[src$="/packxxx.jpeg"]: 34
         img[src$="/sport.png"]: 42
         img[src$="/docs.png"]: 43
         img[src$="/images.png"]: 44
@@ -178,32 +195,127 @@ search:
         - name: regexp
           args: "src='(.+?)'"
     genre:
-      selector: div.torrent-genres
+      selector: div.mt-1, div.torrent-genres
       filters:
+        - name: replace
+          args: ["\n", ""]
         - name: replace
           args: [" & ", "_&_"]
         - name: replace
-          args: ["Hip Hop", "Hip_Hop"]
-        - name: replace
           args: ["Science Fiction", "Science_Fiction"]
+        - name: replace
+          args: ["TV Movie", "TV_Movie"]
+        - name: replace
+          args: ["Various Artists", "Various_Artists"]
+        - name: replace
+          args: ["Packs Android", "Packs_Android"]
+        - name: replace
+          args: ["Hard Rock", "Hard_Rock"]
+        - name: replace
+          args: ["Romanian Standup Comedy", "Romanian_Standup_Comedy"]
+        - name: replace
+          args: ["Windows Apps", "Windows_Apps"]
+        - name: replace
+          args: ["Rock Pop  Soul soft rock", "Rock_Pop_Soul_soft_rock"]
+        - name: replace
+          args: ["Love songs", "Love_songs"]
+        - name: replace
+          args: ["Dance-pop  Synth-pop", "Dance-pop_Synth-pop"]
+        - name: replace
+          args: ["R&B  Soul", "R&B_Soul"]
+        - name: replace
+          args: ["Heavy Metal", "Heavy_Metal"]
+        - name: replace
+          args: ["Alternative Rock  Electronic", "Alternative_Rock_Electronic"]
+        - name: replace
+          args: ["New Wave", "New_Wave"]
+        - name: replace
+          args: ["Alternative Rock", "Alternative_Rock"]
+        - name: replace
+          args: ["Deep House Mix", "Deep_House_Mix"]
+        - name: replace
+          args: ["Folk metal", "Folk_metal"]
+        - name: replace
+          args: ["Ro eBook", "Ro_eBook"]
+        - name: replace
+          args: ["Pop rock", "Pop_rock"]
+        - name: replace
+          args: ["Indie Folk", "Indie_Folk"]
+        - name: replace
+          args: ["Folk Rock", "Folk_Rock"]
+        - name: replace
+          args: ["World Music", "World_Music"]
+        - name: replace
+          args: ["Black Metal", "Black_Metal"]
+        - name: replace
+          args: ["Blues Rock", "Blues_Rock"]
+        - name: replace
+          args: ["Jazz Rock", "Jazz_Rock"]
+        - name: replace
+          args: ["Indie Pop", "Indie_Pop"]
+        - name: replace
+          args: ["Indie Rock", "Indie_Rock"]
+        - name: replace
+          args: ["XXX Images", "XXX_Images"]
+        - name: replace
+          args: ["Biblia Sacra", "Biblia_Sacra"]
+        - name: replace
+          args: ["Video Downloader", "Video_Downloader"]
+        - name: replace
+          args: ["XXX  ADULT  +18", "XXX_ADULT_+18"]
+        - name: replace
+          args: ["Fotbal | UEFA EURO 2025 U21", "Fotbal_|_UEFA_EURO_2025_U21"]
+        - name: replace
+          args: ["Dezvoltare Personala", "Dezvoltare_Personala"]
+        - name: replace
+          args: ["Action Drama War History Adventure", "Action_Drama_War_History_Adventure"]
+        - name: replace
+          args: ["Bossa Nova", "Bossa_Nova"]
+        - name: replace
+          args: ["Funk Soul", "Funk_Soul"]
+        - name: replace
+          args: ["Formula 1", "Formula_1"]
+        - name: replace
+          args: ["Literatura Universala", "Literatura_Universala"]
+        - name: replace
+          args: ["Romane inspirate de Holocaust", "Romane_inspirate_de_Holocaust"]
+        - name: replace
+          args: ["Politica si stiinte politice", "Politica_si_stiinte_politice"]
+        - name: replace
+          args: ["Comentarii si opinii", "Comentarii_si_opinii"]
+        - name: replace
+          args: ["Studii și eseuri", "Studii_ș_i_eseuri"]
     description:
       text: "{{ .Result.genre }}"
     download:
       selector: a[href*="/download/"]
       attribute: href
-    date:
-      selector: td:nth-of-type(4) div[title]
-      attribute: title
+    date_elapsed:
+      # torrents
+      selector: td:nth-child(4) div[title]
+      optional: true
       filters:
-        - name: timeago
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "MMM dd, yyyy @ h:mm tt zzz"
+    date_added:
+      # torrents/adult
+      selector: td:nth-child(4):not(:has(div))
+      optional: true
+      filters:
+        - name: dateparse
+          args: "dd-MMM-yyyy zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-of-type(5)
+      selector: td:nth-child(5)
     grabs:
-      selector: td:nth-of-type(6)
+      selector: td:nth-child(8)
     seeders:
-      selector: td:nth-of-type(7)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-of-type(8)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         div.free-btn: 0
@@ -215,6 +327,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# Last Files V1
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# Last Files V2
