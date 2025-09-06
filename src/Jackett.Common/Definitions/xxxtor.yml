@@ -5,8 +5,6 @@ description: "xxxtor is a RUSSIAN Public Torrent Tracker for 3X"
 language: ru-RU
 type: public
 encoding: UTF-8
-certificates:
-  - 8fc6357f59e24d16d38f06ed34f780717f4bf0b4  # expired 3 Feb 2025
 links:
   - https://xxxtor.com/
 legacylinks:
