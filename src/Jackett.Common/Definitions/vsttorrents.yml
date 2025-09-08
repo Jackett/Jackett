@@ -5,6 +5,8 @@ description: "VST Torrentz is a Public site for AUDIO apps, plugins and samples"
 language: en-US
 type: public
 encoding: UTF-8
+certificates:
+  - 6c409884781875c4bf36096a4170152107606d99 # E=test@test.com, CN=vsttorrentz.net, O=My Company, L=Newbury, S=Berkshire, C=US
 links:
   - https://vsttorrentz.net/
 legacylinks:
