@@ -69,6 +69,7 @@ Prior versions of Jackett are no longer supported.
  * EZTV
  * FileMood
  * FilmesHdTorrent
+ * Free JAV Torrent
  * Frozen Layer
  * GamesTorrents
  * GTorrent.pro
@@ -180,7 +181,6 @@ Prior versions of Jackett are no longer supported.
  * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
- * Genesis-Movement
  * HD-CzTorrent [PAY2DL]
  * HDGalaKtik
  * HellTorrents [PAY2DL]
@@ -205,6 +205,7 @@ Prior versions of Jackett are no longer supported.
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
  * PornoLab
+ * Postman (login)
  * ProPorno
  * PussyTorrents
  * Rainbow Tracker
@@ -226,7 +227,6 @@ Prior versions of Jackett are no longer supported.
  * Union Fansub
  * UniOtaku
  * ViDEOTEKA (VT)
- * ZOMB
  * Ztracker
 </details>
 
@@ -351,6 +351,7 @@ Prior versions of Jackett are no longer supported.
  * Femdomcult
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
+ * Flood (FLD)
  * Flux-Zone
  * Free Farm (自由农场)
  * FunFile (FF)
@@ -436,6 +437,7 @@ Prior versions of Jackett are no longer supported.
  * Locadora
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
+ * LuckPT [![(invite needed)][inviteneeded]](#)
  * M-Team TP (MTTP) [![(invite needed)][inviteneeded]](#)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
@@ -469,7 +471,6 @@ Prior versions of Jackett are no longer supported.
  * Orpheus
  * OnlyEncodes+
  * OshenPT
- * Ostwiki
  * OurBits (HDPter)
  * P2PBG
  * Panda

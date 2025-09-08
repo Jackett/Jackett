@@ -1,0 +1,116 @@
+---
+id: flood
+name: Flood
+description: "Flood (FLD) is a Private Torrent Tracker for MOVIES / TV"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://flood.st/
+
+caps:
+  categorymappings:
+    - {id: movie, cat: Movies, desc: "Movies"}
+    - {id: show_season, cat: TV, desc: "TV season"}
+    - {id: show_episode, cat: TV, desc: "TV episode"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tmdbid, imdbid]
+    movie-search: [q, tmdbid, imdbid]
+
+settings:
+  - name: apikey
+    type: text
+    label: API key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or generate a new API key by accessing the <b>Security</b> tab of your <a href=\"https://flood.st/settings/security\" target=\"_blank\">account settings</a>."
+  - name: order_by
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      name: title
+      size: size
+      seeders: seeders
+  - name: order_dir
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: api/test
+  method: get
+
+search:
+  paths:
+    - path: api/torrents
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    name: "{{ .Keywords }}"
+    show_season_number: "{{ .Query.Season }}"
+    show_episode_number: "{{ .Query.Ep }}"
+    tmdb_id: "{{ .Query.TMDBID }}"
+    imdb_id: "{{ .Query.IMDBID }}"
+    order_by: "{{ .Config.order_by }}"
+    order_dir: "{{ .Config.order_dir }}"
+    limit: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: items
+    count:
+      selector: total
+
+  fields:
+    title:
+      selector: name
+    infohash:
+      selector: info_hash
+    category:
+      selector: media_type
+    details:
+      selector: main_url
+    download:
+      selector: download_url
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    description:
+      selector: description
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      selector: created_at
+      filters:
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    minimumseedtime:
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+    downloadvolumefactor:
+      selector: download_accounting_factor
+    uploadvolumefactor:
+      text: 1
+# json api

@@ -190,14 +190,6 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
-        public override void LoadValuesFromJson(JToken jsonConfig, bool useProtectionService = false)
-        {
-            base.LoadValuesFromJson(jsonConfig, useProtectionService);
-
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "9C516CD4F5E8A4A1883F4AB478195AB7AE7773B2"); // for *.octopus.town  expired 17/Aug/25
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "FF73E9AB52344B649B38E6872664B0FFE7499D3F"); // for primary domain using untrusted comodo_AAA service
-        }
-
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);

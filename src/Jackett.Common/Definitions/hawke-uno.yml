@@ -135,6 +135,13 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
+    _internal:
+      selector: internal
+      case:
+        0: "{{ .False }}"
+        1: "{{ .True }}"
+    description:
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}"
     downloadvolumefactor:
       # api returns 0=false, 1=true
       selector: freeleech

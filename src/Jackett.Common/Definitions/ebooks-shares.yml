@@ -94,6 +94,7 @@ caps:
     - {id: 286, cat: Books/EBook, desc: "General Military "}
     # Zoology
     - {id: 334, cat: Books/EBook, desc: "Veterinary/Pets"}
+    - {id: 361, cat: Books/EBook, desc: "Nature And Wildlife"}
     # Art & Crafts
     - {id: 344, cat: Books/EBook, desc: "Model Making"}
     - {id: 357, cat: Books/EBook, desc: "Art"}

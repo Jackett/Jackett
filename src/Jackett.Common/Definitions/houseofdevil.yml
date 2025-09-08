@@ -92,11 +92,15 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your <b>UserCP</b> page. The default is <i>15</i>.
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "If you are inactive for longer than 8 weeks, your account will be automatically deactivated."
+  - name: info_seedhours
+    type: info
+    label: Seeding Hours
+    default: Before using this indexer, make sure that you have set <b>Seed-Angaben</b> and <b>DSL Speed</b> on your <b>UserCP</b> page.
 
 login:
   path: takelogin.php

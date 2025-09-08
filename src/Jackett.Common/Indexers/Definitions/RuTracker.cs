@@ -32,7 +32,10 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://rutracker.org/",
             "https://rutracker.net/",
-            "https://rutracker.nl/"
+        };
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://rutracker.nl/",
         };
         public override Encoding Encoding => Encoding.GetEncoding("windows-1251");
         public override string Language => "ru-RU";

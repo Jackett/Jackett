@@ -116,8 +116,10 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     pin: "{{ .Config.pin }}"
+    remember: 1
   error:
     - selector: table.tableinborder:contains("Login fehlgeschlagen!")
+    - selector: div#loginStatus
   test:
     path: index.php
     selector: a[href="logout.php"], title:contains("APRILSCHERZ")

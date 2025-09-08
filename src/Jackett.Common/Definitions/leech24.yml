@@ -36,6 +36,7 @@ caps:
     - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
     - {id: 47, cat: Movies, desc: "Movies - Packs"}
     - {id: 2, cat: Movies/SD, desc: "Movies - SD/Xvid"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "Movies - Web-DL"}
     - {id: 56, cat: Movies/HD, desc: "Movies - x265"}
     - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 23, cat: Audio/Lossless, desc: "Music - Lossless"}
@@ -59,6 +60,7 @@ caps:
     - {id: 48, cat: TV/Other, desc: "TV - Packs"}
     - {id: 53, cat: TV/SD, desc: "TV - SD/x264"}
     - {id: 7, cat: TV/SD, desc: "TV - SVCD/VCD"}
+    - {id: 62, cat: TV/WEB-DL, desc: "TV - Web-DL"}
     - {id: 41, cat: TV/HD, desc: "TV - x264"}
     - {id: 60, cat: TV/HD, desc: "TV - x265"}
 

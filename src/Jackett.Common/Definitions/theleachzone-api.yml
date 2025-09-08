@@ -114,6 +114,8 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
+        - name: replace
+          args: ["https://dummyimage.com/90x135", ""]
     imdbid:
       selector: imdb_id
     tmdbid:
@@ -131,8 +133,13 @@ search:
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        0: "{{ .False }}"
+        1: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     files:
       selector: num_file
     seeders:

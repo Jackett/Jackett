@@ -27,7 +27,7 @@ caps:
     - {id: 13, cat: Movies/BluRay, desc: "Movies Bluray"}
     - {id: 47, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 15, cat: Movies, desc: "Movies Boxsets"}
-    - {id: 29, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 29, cat: Movies/Other, desc: "Documentaries"}
 
     - {id: 26, cat: TV/SD, desc: "TV Episodes"}
     - {id: 32, cat: TV/HD, desc: "TV Episodes HD"}

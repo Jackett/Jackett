@@ -144,8 +144,13 @@ search:
           args: ["(?i)(Науково фантастичний)", "Науково_фантастичний"]
         - name: re_replace
           args: ["(?i)(Політика та війна)", "Політика_та_війна"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
