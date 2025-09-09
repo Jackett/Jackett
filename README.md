@@ -34,7 +34,6 @@ Prior versions of Jackett are no longer supported.
  * 1337x
  * 52BT
  * ACG.RIP
- * Anidex
  * AniLibria
  * Anime Time
  * Anime Tosho
