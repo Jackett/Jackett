@@ -123,7 +123,6 @@ Prior versions of Jackett are no longer supported.
  * The Pirate Bay (TPB)
  * TheRARBG
  * Tokyo Tosho
- * Torlock
  * Torrent Downloads
  * Torrent Oyun indir
  * Torrent[CORE]

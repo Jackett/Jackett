@@ -743,6 +743,7 @@ namespace Jackett.Updater
                 "Definitions/tntvillage.yml",
                 "Definitions/toonsforme.yml",
                 "Definitions/topnow.yml",
+                "Definitions/torlock.yml",
                 "Definitions/torlook.yml",
                 "Definitions/toros.yml", // renamed to bulltorrent
                 "Definitions/torrent-explosiv.yml", // renamed to explosiv-world #6183
