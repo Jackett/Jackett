@@ -150,7 +150,6 @@ Prior versions of Jackett are no longer supported.
  * Wolfmax4K
  * XXXClub
  * xxxtor
- * YourBittorrent
  * YTS.ag
  * zetorrents
  * ZkTorrent
