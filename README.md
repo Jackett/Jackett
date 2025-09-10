@@ -762,7 +762,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 
 ## Installation on Linux (ARMv6 or below)
- 1. Install [Mono 5.8](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
+ 1. Install [Mono 5.10](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:

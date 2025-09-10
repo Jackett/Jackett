@@ -2,7 +2,7 @@
 
   <PropertyGroup>
     <PackageId>$(MSBuildProjectName)</PackageId>
-    <TargetFrameworks>net8.0;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;net471</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
     <NoWarn></NoWarn>
@@ -21,7 +21,7 @@
   </PropertyGroup>
 
   <Choose>
-    <When Condition="'$(TargetFramework)' != 'net462' and $(RuntimeIdentifier.Contains('win')) == 'false'">
+    <When Condition="'$(TargetFramework)' != 'net471' and $(RuntimeIdentifier.Contains('win')) == 'false'">
       <PropertyGroup>
         <AssemblyName>jackett</AssemblyName>
       </PropertyGroup>
@@ -40,8 +40,8 @@
     <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="8.0.0" />
   </ItemGroup>
 
-  <!-- Conditionally obtain references for the .NET462 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+  <!-- Conditionally obtain references for the .NET471 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net471' ">
     <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
