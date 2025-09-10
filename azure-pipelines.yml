@@ -2,7 +2,7 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 22
+  minorVersion: 23
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
@@ -108,7 +108,7 @@ stages:
             Mono:
               buildDescription: Mono
               imageName: ubuntu-22.04
-              framework: net462
+              framework: net471
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.Mono.tar.gz
@@ -280,7 +280,6 @@ stages:
                 $newVersion.Value = '4.0.0.0'
                 $xml.Save($file)
                 Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Net.Http.dll'
-                Remove-Item '$(Build.BinariesDirectory)/Jackett/System.Runtime.InteropServices.RuntimeInformation.dll'
 
           - task: Bash@3
             displayName: Set Folder and File Permissions (Mono, Linux and macOS)
@@ -438,7 +437,7 @@ stages:
             Mono:
               buildDescription: Mono
               imageName: ubuntu-22.04
-              framework: net462
+              framework: net471
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
@@ -535,7 +534,7 @@ stages:
               buildDescription: Mono
               imageName: ubuntu-22.04
               artifactName: Jackett.Binaries.Mono.tar.gz
-              framework: net462
+              framework: net471
               runtime: linux-x64
         pool:
           vmImage: $(imageName)
