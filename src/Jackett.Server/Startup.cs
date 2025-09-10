@@ -56,6 +56,7 @@ namespace Jackett.Server
                             options.Cookie.Name = "Jackett";
                         });
 
+#if NET471
             services.Configure<ForwardedHeadersOptions>(options =>
             {
                 // When adjusting these parameters make sure it's well tested with various environments
@@ -66,7 +67,6 @@ namespace Jackett.Server
                 options.KnownProxies.Clear();
             });
 
-#if NET471
             services.AddMvc(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
@@ -74,6 +74,15 @@ namespace Jackett.Server
                     .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
                                         new DefaultContractResolver()); //Web app uses Pascal Case JSON);
 #else
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                // When adjusting these parameters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                options.ForwardLimit = 10;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                options.KnownIPNetworks.Clear();
+                options.KnownProxies.Clear();
+            });
 
             services.AddControllers(
                         config => config.Filters.Add(

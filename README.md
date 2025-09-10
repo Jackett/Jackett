@@ -20,10 +20,10 @@ The software implements the [Torznab](https://torznab.github.io/spec-1.3-draft/i
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
 #### Supported Systems
-The currently supported version of Jackett is 0.23.+, which is compatible with the following OS:
-* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
-* macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
+The currently supported version of Jackett is 0.24.+, which is compatible with the following OS:
+* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md#windows)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md#linux)
+* macOS 14.0+ (Sonoma) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md#apple)
 
 Prior versions of Jackett are no longer supported.
 
@@ -714,7 +714,7 @@ We recommend you install Jackett as a Windows service using the supplied [Window
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net80#dependencies
+1. Check if you need any .NET prerequisites installed, see https://learn.microsoft.com/en-us/dotnet/core/install/windows#net-installer
 2. Download the latest version of the [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe)
 3. Run the Jackett.Installer.Windows.exe program.
 4. When prompted if you would like this app to make changes to your computer, select "yes".
@@ -938,8 +938,8 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net10.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net10.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
@@ -951,8 +951,8 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net10.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net10.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
