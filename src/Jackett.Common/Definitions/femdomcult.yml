@@ -133,8 +133,6 @@ search:
       selector: td:nth-child(5) > span
       attribute: title
       # auto adjusted by site account profile
-      optional: true
-      default: "20 years ago" # some torrents have "Never" date
       filters:
         - name: dateparse
           args: "MMM dd yyyy, HH:mm"
@@ -148,12 +146,13 @@ search:
       selector: td:nth-child(9)
     downloadvolumefactor:
       case:
-        "img[alt=\"Freeleech\"]": 0
+        i.unlimited_leech: 0
+        img[alt="Freeleech"]: 0
         "*": 1
     uploadvolumefactor:
       case:
         span.icon[title*="DoubleSeed"]: 2
-        "img[alt=\"DoubleSeed\"]": 2
+        img[alt="DoubleSeed"]: 2
         "*": 1
     minimumratio:
       text: 0.5
