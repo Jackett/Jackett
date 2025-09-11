@@ -20,7 +20,7 @@ The software implements the [Torznab](https://torznab.github.io/spec-1.3-draft/i
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
 #### Supported Systems
-The currently supported version of Jackett is 0.22.+, which is compatible with the following OS:
+The currently supported version of Jackett is 0.23.+, which is compatible with the following OS:
 * Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
 * macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
@@ -34,7 +34,6 @@ Prior versions of Jackett are no longer supported.
  * 1337x
  * 52BT
  * ACG.RIP
- * Anidex
  * AniLibria
  * Anime Time
  * Anime Tosho
@@ -124,7 +123,6 @@ Prior versions of Jackett are no longer supported.
  * The Pirate Bay (TPB)
  * TheRARBG
  * Tokyo Tosho
- * Torlock
  * Torrent Downloads
  * Torrent Oyun indir
  * Torrent[CORE]
@@ -152,7 +150,6 @@ Prior versions of Jackett are no longer supported.
  * Wolfmax4K
  * XXXClub
  * xxxtor
- * YourBittorrent
  * YTS.ag
  * zetorrents
  * ZkTorrent
@@ -528,6 +525,7 @@ Prior versions of Jackett are no longer supported.
  * SeedFile (SF)
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
+ * SexTorrent
  * SFP (Share Friends Projekt)
  * Shareisland
  * Shazbat
@@ -765,7 +763,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 
 ## Installation on Linux (ARMv6 or below)
- 1. Install [Mono 5.8](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
+ 1. Install [Mono 5.10](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
        * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
        * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
  2. Install  libcurl:

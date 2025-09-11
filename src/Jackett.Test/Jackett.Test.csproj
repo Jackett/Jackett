@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;net462</TargetFrameworks>
+    <TargetFrameworks>net8.0;net471</TargetFrameworks>
     <NoWarn />
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
@@ -47,8 +47,8 @@
     <ProjectReference Include="..\Jackett.Server\Jackett.Server.csproj" />
   </ItemGroup>
 
-  <!-- Conditionally obtain references for the .NET462 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net462' ">
+  <!-- Conditionally obtain references for the .NET471 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net471' ">
     <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
     <Reference Include="System.Web" />
   </ItemGroup>

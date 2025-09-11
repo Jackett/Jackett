@@ -25,11 +25,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using NLog;
-using Dapper;
-using Jackett.Common.Models;
-
-#if !NET462
+#if !NET471
 using Microsoft.Extensions.Hosting;
 #endif
 
@@ -73,7 +69,7 @@ namespace Jackett.Server
                 options.KnownProxies.Clear();
             });
 
-#if NET462
+#if NET471
             services.AddMvc(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
@@ -166,7 +162,7 @@ namespace Jackett.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-#if NET462
+#if NET471
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStarted.Register(OnStarted);

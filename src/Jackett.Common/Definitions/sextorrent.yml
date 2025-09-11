@@ -1,39 +1,68 @@
-# Femdomcult uses the Luminance code, which is based on gazelle
+# SexTorrent uses the Luminance code, which is based on gazelle
 # ajax.php API additionally needs the auth=$authkey argument
 # Because the API is e.g. missing poster images we use screen scraping instead of the generic gazelle based approach
 ---
-id: femdomcult
-name: Femdomcult
-description: "Femdomcult is a Private Torrent Tracker for FETISH 3X"
+id: sextorrent
+name: SexTorrent
+description: "SexTorrent is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://femdomcult.org/
+  - https://sextorrent.eu/
 
 caps:
   categorymappings:
-    - {id: 58, cat: XXX, desc: "Amateur/Mainstream"}
-    - {id: 60, cat: XXX, desc: "Anime Comics"}
-    - {id: 73, cat: XXX, desc: "Asian Femdom"}
-    - {id: 61, cat: XXX, desc: "Audio"}
-    - {id: 78, cat: XXX, desc: "EBook"}
-    - {id: 74, cat: XXX, desc: "Female Muscles"}
-    - {id: 59, cat: XXX, desc: "Femdom"}
-    - {id: 62, cat: XXX, desc: "Femdom Vip"}
-    - {id: 63, cat: XXX, desc: "Fetish"}
-    - {id: 68, cat: XXX, desc: "Fetish Vip"}
-    - {id: 76, cat: XXX, desc: "Game"}
-    - {id: 64, cat: XXX, desc: "Gts-Vore-Crush"}
-    - {id: 72, cat: XXX, desc: "Images"}
-    - {id: 69, cat: XXX, desc: "Lezdom"}
-    - {id: 70, cat: XXX, desc: "Pov"}
-    - {id: 65, cat: XXX, desc: "Scat"}
-    - {id: 71, cat: XXX, desc: "Strapon"}
-    - {id: 66, cat: XXX, desc: "Transdom"}
-    - {id: 77, cat: XXX, desc: "Unknown & Low Quality"}
-    - {id: 75, cat: XXX, desc: "Virtual Reality"}
-    - {id: 0, cat: XXX/Other, desc: "Other"}
+    - {id: 63, cat: XXX, desc: "Hairy"}
+    - {id: 64, cat: XXX, desc: "Voyeur"}
+    - {id: 30, cat: XXX, desc: "Amateur"}
+    - {id: 29, cat: XXX, desc: "Anal"}
+    - {id: 27, cat: XXX, desc: "Asian"}
+    - {id: 26, cat: XXX, desc: "BBW"}
+    - {id: 44, cat: XXX, desc: "BDSM"}
+    - {id: 25, cat: XXX, desc: "Big Ass"}
+    - {id: 24, cat: XXX, desc: "Big Tits"}
+    - {id: 34, cat: XXX, desc: "Black"}
+    - {id: 66, cat: XXX, desc: "Busty"}
+    - {id: 23, cat: XXX, desc: "Classic"}
+    - {id: 33, cat: XXX, desc: "Creampie"}
+    - {id: 22, cat: XXX, desc: "Cumshot"}
+    - {id: 62, cat: XXX/DVD, desc: "DVD-R"}
+    - {id: 21, cat: XXX, desc: "Fetish"}
+    - {id: 19, cat: XXX, desc: "Gay / Bi"}
+    - {id: 18, cat: XXX, desc: "Hardcore"}
+    - {id: 32, cat: XXX, desc: "HD porn"}
+    - {id: 28, cat: XXX, desc: "Hentai / 3D"}
+    - {id: 17, cat: XXX, desc: "Homemade"}
+    - {id: 38, cat: XXX, desc: "Interracial"}
+    - {id: 48, cat: XXX, desc: "Latina"}
+    - {id: 16, cat: XXX, desc: "Lesbian"}
+    - {id: 61, cat: XXX, desc: "Lingerie"}
+    - {id: 56, cat: XXX/Other, desc: "Magazines"}
+    - {id: 60, cat: XXX/Other, desc: "Manga / Comic"}
+    - {id: 15, cat: XXX, desc: "Masturbation"}
+    - {id: 14, cat: XXX, desc: "Mature"}
+    - {id: 13, cat: XXX/Pack, desc: "Megapack"}
+    - {id: 55, cat: XXX, desc: "Milf"}
+    - {id: 49, cat: XXX, desc: "Natural Tits"}
+    - {id: 12, cat: XXX, desc: "Oral"}
+    - {id: 20, cat: XXX, desc: "Orgia / Gang Bang"}
+    - {id: 42, cat: XXX/Other, desc: "Other"}
+    - {id: 50, cat: XXX, desc: "Parody"}
+    - {id: 41, cat: XXX/WEB-DL, desc: "Paysite"}
+    - {id: 11, cat: XXX/ImageSet, desc: "Picture set"}
+    - {id: 40, cat: XXX, desc: "Piss"}
+    - {id: 43, cat: XXX/Other, desc: "Porn Music Videos"}
+    - {id: 45, cat: XXX, desc: "Pregnant / Preggo"}
+    - {id: 57, cat: XXX, desc: "Scat/Puke"}
+    - {id: 10, cat: XXX, desc: "Shemale / TS"}
+    - {id: 51, cat: XXX/WEB-DL, desc: "Siterip"}
+    - {id: 52, cat: XXX, desc: "Softcore"}
+    - {id: 53, cat: XXX, desc: "Squirt"}
+    - {id: 9, cat: XXX, desc: "Straight"}
+    - {id: 8, cat: XXX, desc: "Tini"}
+    - {id: 65, cat: XXX, desc: "Virtual Reality"}
+    - {id: 7, cat: XXX/Other, desc: "XXX Games / Program"}
 
   modes:
     search: [q]
@@ -67,7 +96,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "User classes Beginner and Perv have to be inactive (= not logged in on the site, tracker activity/seeding does not count) for 4 months before getting disabled automatically. Member class and higher are exempt."
+    default: "After 4 months of no activity (no login) your account will be disabled."
 
 login:
   path: login
@@ -77,10 +106,15 @@ login:
     password: "{{ .Config.password }}"
     cinfo: "2550|1350|24|-60"
     keeplogged: 1
+  selectorinputs:
+    token:
+      selector: input[name="token"]
+      attribute: value
   error:
-    - selector: form#loginform > span.warning
+    # invalid credentials error is added by JS, this is the IP ban error
+    - selector: div.thin > div > h2
   test:
-    path: torrents.php
+    path: index.php
     selector: "#nav_userinfo"
 
 search:
@@ -156,8 +190,4 @@ search:
         "*": 1
     minimumratio:
       text: 0.5
-    # MR is reduced but not removed if MST is met
-    # minimumseedtime:
-    #   # 3 days (as seconds = 3 x 24 x 60 x 60)
-    #   text: 259200
 # luminance
