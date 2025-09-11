@@ -25,6 +25,9 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using NLog;
+using Dapper;
+using Jackett.Common.Models;
 #if !NET471
 using Microsoft.Extensions.Hosting;
 #endif
