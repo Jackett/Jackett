@@ -147,6 +147,7 @@ search:
     downloadvolumefactor:
       case:
         i.unlimited_leech: 0
+        i.sitewide_leech: 0
         img[alt="Freeleech"]: 0
         "*": 1
     uploadvolumefactor:
