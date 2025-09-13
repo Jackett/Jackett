@@ -2,12 +2,12 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 23
+  minorVersion: 24
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
-  netCoreFramework: net8.0
-  netCoreSdkVersion: 8.0.x
+  netCoreFramework: net10.0
+  netCoreSdkVersion: 10.0.x
   # system.debug: true
 
 trigger:
@@ -124,6 +124,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              includePreviewVersions: true
 
           - task: DotNetCoreCLI@2
             displayName: Build DateTimeRoutines
@@ -341,6 +342,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              includePreviewVersions: true
 
           - task: DotNetCoreCLI@2
             displayName: Install Dotnet Format
@@ -451,6 +453,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              includePreviewVersions: true
 
           - task: DotNetCoreCLI@2
             displayName: Unit Tests & Code Coverage
@@ -499,7 +502,7 @@ stages:
           - task: PublishPipelineArtifact@1
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              targetPath: $(Build.SourcesDirectory)/coverlet/reports/coverage.cobertura.Windows.net8.0.xml
+              targetPath: $(Build.SourcesDirectory)/coverlet/reports/coverage.cobertura.Windows.net10.0.xml
 
   - stage: IntegrationTestJackett
     displayName: Integration Tests
@@ -576,6 +579,7 @@ stages:
               packageType: sdk
               version: $(netCoreSdkVersion)
               installationPath: $(Agent.ToolsDirectory)/dotnet
+              includePreviewVersions: true
 
           - task: DotNetCoreCLI@2
             displayName: Integration Tests
