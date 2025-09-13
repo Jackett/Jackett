@@ -90,8 +90,9 @@ caps:
     - {id: 124, cat: Audio, desc: " |- Фольклор, Народная и Этническая музыка"}
     - {id: 231, cat: Audio, desc: " |- Сборники и альбомы выходившие неофициальными изданиями."}
     - {id: 144, cat: Audio, desc: "♫ ROCK & METAL ♫"}
-    - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal"}
-    - {id: 202, cat: Audio, desc: " |- Сборники Русского рока"}
+    - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal (mp3)"}
+    - {id: 202, cat: Audio, desc: " |- Сборники Русского рока (mp3)"}
+    - {id: 323, cat: Audio, desc: " |- Русский Rock, Metal (Lossless)"}
     - {id: 214, cat: Audio, desc: " |- Soft & Pop-Rock"}
     - {id: 156, cat: Audio, desc: " |- Progressive, Art, Classic & Hard Rock"}
     - {id: 213, cat: Audio, desc: " |- Melodic & Folk Rock"}
