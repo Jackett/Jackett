@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFrameworks>net8.0;net471</TargetFrameworks>
@@ -16,6 +16,8 @@
 
   <ItemGroup>
     <None Remove="Common\Utils\Invalid-RSS.xml" />
+    <None Remove="Resources\testhtml.db" />
+    <None Remove="Resources\testjson.db" />
   </ItemGroup>
 
   <ItemGroup>
