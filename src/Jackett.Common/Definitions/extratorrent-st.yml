@@ -94,7 +94,7 @@ search:
           args: ["in ", ""]
         - name: trim
     title:
-      selector: a[href^="/torrent/"]
+      selector: a[href^="/torrent/"]:not([href$="comments"])
     details:
       selector: a[href^="/torrent/"]
       attribute: href
