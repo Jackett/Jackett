@@ -87,6 +87,7 @@ caps:
     - {id: 349, cat: Books/EBook, desc: "Self Help"}
     - {id: 351, cat: Books/EBook, desc: "Religion"}
     - {id: 358, cat: Books/EBook, desc: "History"}
+    - {id: 362, cat: Books/EBook, desc: "Politics"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
