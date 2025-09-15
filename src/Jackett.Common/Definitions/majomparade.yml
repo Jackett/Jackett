@@ -67,6 +67,10 @@ settings:
     label: User-Agent
   - name: info_useragent
     type: info_useragent
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrentek oldalanként:</b> setting to <b>100</b> on your account profile.
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -87,10 +91,6 @@ search:
       categories: [4, 5, 48, 50, 75, 76, 26, 25, 58, 59, 42, 51, 38, 24, 85, 87, 47, 36, 6, 7, 56, 33, 44, 28, 32, 30, 53, 74, 40, 41, 34, 35, 46]
       inputs:
         tipus: 1
-    - path: letoltes.php
-      categories: [4, 5, 48, 50, 75, 76, 26, 25, 58, 59, 42, 51, 38, 24, 85, 87, 47, 36, 6, 7, 56, 33, 44, 28, 32, 30, 53, 74, 40, 41, 34, 35, 46]
-      inputs:
-        tipus: 2
     - path: xxx.php
       categories: [70, 39, 57]
   inputs:
