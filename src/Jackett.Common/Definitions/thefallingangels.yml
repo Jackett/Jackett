@@ -60,7 +60,8 @@ caps:
     - {id: 130, cat: Books, desc: "E-Books FSK 18"}
     - {id: 159, cat: Movies/Other, desc: "Anime Movies HD"}
     - {id: 160, cat: Movies/Other, desc: "Anime Movies SD"}
-    - {id: 128, cat: TV/Anime, desc: "Anime Serien"}
+    - {id: 168, cat: TV/Anime, desc: "Anime Serien HD"}
+    - {id: 169, cat: TV/Anime, desc: "Anime Serien SD"}
     - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
     - {id: 118, cat: Other, desc: "Other Mobile"}
     - {id: 119, cat: Other, desc: "Other Hörbücher"}
