@@ -404,6 +404,7 @@ namespace Jackett.Updater
                 "Definitions/epizod.yml",
                 "Definitions/erzsebet.yml",
                 "Definitions/erzsebetpl.yml",
+                "Definitions/esharenet.yml",
                 "Definitions/estrenosdtl.yml",
                 "Definitions/ethor.yml",
                 "Definitions/ettv.yml",
