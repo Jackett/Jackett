@@ -42,6 +42,7 @@ caps:
     - {id: 30, cat: TV, desc: "TV Seriale Bajki"}
     - {id: 9, cat: TV/HD, desc: "TV Seriale HD"}
     - {id: 22, cat: TV/SD, desc: "TV Seriale SD"}
+    - {id: 38, cat: TV, desc: "Reality TV"}
 
   modes:
     search: [q]
