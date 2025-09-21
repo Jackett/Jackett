@@ -26,6 +26,8 @@ caps:
     # category naming is inconsistent with root cat being left out on some results, hence the duplicate entries with/without root
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeEnglish-translated, cat: TV/Anime, desc: "Anime English-translated"}
+    - {id: AnimeSubs, cat: TV/Anime, desc: Anime Subs}
+    - {id: AnimeRaw, cat: TV/Anime, desc: Anime Raw}
     - {id: English-translated, cat: TV/Anime, desc: "Anime English-translated"}
     - {id: Apps, cat: PC, desc: Apps}
     - {id: AppsWindows, cat: PC/0day, desc: "Apps Windows"}
