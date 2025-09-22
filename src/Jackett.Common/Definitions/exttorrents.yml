@@ -22,9 +22,11 @@ legacylinks:
 caps:
   categorymappings:
     - {id: "/anime/", cat: TV/Anime, desc: Anime}
-    - {id: "/anime//anime/subs/", cat: TV/Anime, desc: Anime Subs}
-    - {id: "/anime//anime/raw", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/anime//anime/audio-lossless/", cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: "/anime//anime/english-translated/", cat: TV/Anime, desc: "Anime English Translated"}
+    - {id: "/anime//anime/raw", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/anime//anime/subs/", cat: TV/Anime, desc: Anime Subs}
+    - {id: "/anime/raw", cat: TV/Anime, desc: Anime Raw}
     - {id: "/applications/", cat: PC, desc: Apps}
     - {id: "/applications//applications/android/", cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: "/applications//applications/ios/", cat: PC/Mobile-iOS, desc: "Apps iOS"}
@@ -37,6 +39,7 @@ caps:
     - {id: "/books//books/comics/", cat: Books/Comics, desc: "Books Comics"}
     - {id: "/books//books/ebooks/", cat: Books/EBook, desc: "Books Ebooks"}
     - {id: "/games/", cat: PC/Games, desc: Games}
+    - {id: "/games//games/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/games//games/nds/", cat: Console/NDS, desc: "Games NDS"}
     - {id: "/games//games/other-games/", cat: Console/Other, desc: "Games Other"}
     - {id: "/games//games/pc-games/", cat: PC/Games, desc: "Games PC"}
@@ -46,7 +49,6 @@ caps:
     - {id: "/games//games/switch/", cat: Console/Other, desc: "Games Switch"}
     - {id: "/games//games/wii/", cat: Console/Wii, desc: "Games Wii"}
     - {id: "/games//games/xbox360/", cat: Console/XBox 360, desc: "Games Xbox360"}
-    - {id: "/games//games/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/movies/", cat: Movies, desc: Movies}
     - {id: "/movies//movies/3d-movies/", cat: Movies/3D, desc: "Movies 3D"}
     - {id: "/movies//movies/bollywood/", cat: Movies, desc: "Movies Bollywood"}
@@ -54,11 +56,11 @@ caps:
     - {id: "/movies//movies/dubbed-movies/", cat: Movies, desc: "Movies Dubbed"}
     - {id: "/movies//movies/dvd/", cat: Movies/DVD, desc: "Movies DVD"}
     - {id: "/movies//movies/highres-movies/", cat: Movies/HD, desc: "Movies Highres"}
+    - {id: "/movies//movies/movie-clips/", cat: Movies/Other, desc: "Movies Movie clips"}
     - {id: "/movies//movies/mp4/", cat: Movies, desc: "Movies MP4"}
+    - {id: "/movies//movies/music-videos/", cat: Audio/Video, desc: "Movies Music videos"}
     - {id: "/movies//movies/other-movies/", cat: Movies, desc: "Movies Other Movies"}
     - {id: "/movies//movies/ultrahd/", cat: Movies/UHD, desc: "Movies UltraHD"}
-    - {id: "/movies//movies/music-videos/", cat: Audio/Video, desc: "Movies Music videos"}
-    - {id: "/movies//movies/movie-clips/", cat: Movies/Other, desc: "Movies Movie clips"}
     - {id: "/music/", cat: Audio, desc: Music}
     - {id: "/music//music/aac/", cat: Audio, desc: "Music AAC"}
     - {id: "/music//music/lossless/", cat: Audio/Lossless, desc: "Music Lossless"}
@@ -67,13 +69,13 @@ caps:
     - {id: "/music//music/radio-shows/", cat: Audio, desc: "Music Radio Shows"}
     - {id: "/other/", cat: Other, desc: Other}
     - {id: "/tv/", cat: TV, desc: TV}
+    - {id: "/video/", cat: XXX, desc: "XXX Video"}
     - {id: "/xxx/", cat: XXX, desc: XXX}
     - {id: "/xxx//xxx/games/", cat: XXX/Other, desc: "XXX Games"}
     - {id: "/xxx//xxx/hentai/", cat: XXX/Other, desc: "XXX Hentai"}
     - {id: "/xxx//xxx/magazines/", cat: XXX/Other, desc: "XXX Magazines"}
     - {id: "/xxx//xxx/pictures/", cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: "/xxx//xxx/video/", cat: XXX, desc: "XXX Video"}
-    - {id: "/video/", cat: XXX, desc: "XXX Video"}
 
   modes:
     search: [q]
