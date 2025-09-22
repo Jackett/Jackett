@@ -17,50 +17,52 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: Movies, cat: Movies, desc: Movies}
-    - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
-    - {id: UltraHD, cat: Movies/UHD, desc: Movies UHD}
-    - {id: 3D Movies, cat: Movies/3D, desc: Movies 3D}
-    - {id: Bollywood, cat: Movies, desc: Bollywood}
-    - {id: Movie clips, cat: Movies, desc: Movies clips}
-    - {id: DVD, cat: Movies/DVD, desc: Movies DVD}
-    - {id: MP4, cat: Movies, desc: Movies MP4}
-    - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
-    - {id: Other Movies, cat: Movies/Other, desc: Movies Other}
-    - {id: Documentary, cat: TV/Documentary, desc: Documentary}
-    - {id: TV, cat: TV, desc: TV}
-    - {id: MP3, cat: Audio/MP3, desc: Music MP3}
-    - {id: AAC, cat: Audio, desc: Music AAC}
-    - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
-    - {id: Music videos, cat: Audio/Video, desc: Music Videos}
-    - {id: Other Music, cat: Audio/Other, desc: Music Other}
-    - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
-    - {id: Video, cat: XXX, desc: Adult / Porn}
     - {id: "Adult / Porn", cat: XXX, desc: Adult / Porn}
-    - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
-    - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
+    - {id: 3D Movies, cat: Movies/3D, desc: Movies 3D}
+    - {id: AAC, cat: Audio, desc: Music AAC}
+    - {id: Android, cat: PC/Mobile-Android, desc: Software Android}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: Audio books, cat: Audio/Audiobook, desc: Books Audiobook}
+    - {id: Bollywood, cat: Movies, desc: Bollywood}
+    - {id: Comics, cat: Books/Comics, desc: Books Comics}
+    - {id: DVD, cat: Movies/DVD, desc: Movies DVD}
+    - {id: Documentary, cat: TV/Documentary, desc: Documentary}
+    - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
+    - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
+    - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
-    - {id: Windows, cat: PC, desc: Software Windows}
-    - {id: Android, cat: PC/Mobile-Android, desc: Software Android}
-    - {id: Mac, cat: PC/Mac, desc: Software Mac}
+    - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
     - {id: Linux, cat: PC, desc: Software Linux}
-    - {id: PC Games, cat: PC/Games, desc: PC Games}
+    - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
+    - {id: MP3, cat: Audio/MP3, desc: Music MP3}
+    - {id: MP4, cat: Movies, desc: Movies MP4}
+    - {id: Mac, cat: PC/Mac, desc: Software Mac}
+    - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
+    - {id: Movie clips, cat: Movies, desc: Movies clips}
+    - {id: Movies, cat: Movies, desc: Movies}
+    - {id: Music videos, cat: Audio/Video, desc: Music Videos}
     - {id: NDS, cat: Console/NDS, desc: Games NDS}
+    - {id: Other Applications, cat: PC, desc: Other Applications}
+    - {id: Other Games, cat: Console/Other, desc: Games Other}
+    - {id: Other Movies, cat: Movies/Other, desc: Movies Other}
+    - {id: Other Music, cat: Audio/Other, desc: Music Other}
+    - {id: Other, cat: Other/Misc, desc: Other}
+    - {id: PC Games, cat: PC/Games, desc: PC Games}
     - {id: PS3, cat: Console/PS3, desc: Games PS3}
     - {id: PS4, cat: Console/PS4, desc: Games PS4}
     - {id: PSP, cat: Console/PSP, desc: Games PSP}
-    - {id: Wii, cat: Console/Wii, desc: Games Wii}
-    - {id: Xbox360, cat: Console/XBox 360, desc: Games Xbox360}
+    - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
+    - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
+    - {id: Raw, cat: TV/Anime, desc: Anime Raw}
+    - {id: Subs, cat: TV/Anime, desc: Anime Subs}
     - {id: Switch, cat: Console/Other, desc: Games Switch}
-    - {id: Other Games, cat: Console/Other, desc: Games Other}
-    - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
-    - {id: Anime, cat: TV/Anime, desc: Anime}
-    - {id: Audio books, cat: Audio/Audiobook, desc: Books Audiobook}
-    - {id: Comics, cat: Books/Comics, desc: Books Comics}
-    - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
-    - {id: Other, cat: Other/Misc, desc: Other}
-    - {id: Other Applications, cat: PC, desc: Other Applications}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: UltraHD, cat: Movies/UHD, desc: Movies UHD}
+    - {id: Video, cat: XXX, desc: Adult / Porn}
+    - {id: Wii, cat: Console/Wii, desc: Games Wii}
+    - {id: Windows, cat: PC, desc: Software Windows}
+    - {id: Xbox360, cat: Console/XBox 360, desc: Games Xbox360}
 
   modes:
     search: [q]
