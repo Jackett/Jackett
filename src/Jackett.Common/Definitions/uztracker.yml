@@ -128,10 +128,11 @@ caps:
     - {id: 238, cat: Audio, desc: " |- ♫ Электронная музыка Hi-Res"}
     - {id: 237, cat: Audio, desc: " |- ♫ Рок-музыка Hi-Res"}
     - {id: 236, cat: Audio, desc: " |- ♫ Джаз и Блюз	Hi-Res"}
-    - {id: 247, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
-    - {id: 317, cat: Audio, desc: " |- ♫ Советская и Российская эстрада (оцифровки)"}
-    - {id: 240, cat: Audio, desc: " |- ♫ Зарубежная поп музыка (оцифровки)"}
-    - {id: 249, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
+    - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
+    - {id: 328, cat: Audio, desc: " |- Советская и Российская эстрада (оцифровки)"}
+    - {id: 327, cat: Audio, desc: " |- Зарубежная поп музыка (оцифровки)"}
+    - {id: 326, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
+    - {id: 325, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
     - {id: 203, cat: Audio, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
     - {id: 139, cat: Audio, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}
