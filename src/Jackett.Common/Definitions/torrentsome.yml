@@ -48,7 +48,9 @@ caps:
     movie-search: [q]
     music-search: [q]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   infohash:
