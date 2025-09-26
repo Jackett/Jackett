@@ -105,6 +105,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_novpn
+    type: info
+    label: VPN Not Allowed
+    default: "You may be banned if you use a VPN, proxy, TOR or data center to access the TeamOS web site.​ This mean all brands of VPNS, no exceptions!!"
   # using cookie method because login page is dynamically generated using JS #5572
   - name: cookie
     type: text
