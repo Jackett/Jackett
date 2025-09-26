@@ -55,7 +55,9 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   infohash:
