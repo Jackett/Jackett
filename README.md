@@ -76,7 +76,6 @@ Prior versions of Jackett are no longer supported.
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
  * Isohunt2
- * iTorrent
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
