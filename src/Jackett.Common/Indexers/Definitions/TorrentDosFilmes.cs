@@ -21,15 +21,17 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "torrentdosfilmes";
         public override string Name => "TorrentDosFilmes";
-        public override string SiteLink { get; protected set; } = "https://torrentsdosfilmes.to/";
+        public override string SiteLink { get; protected set; } = "https://torrentdosfilmes.net/";
 
         public override string[] AlternativeSiteLinks { get; protected set; } = {
-            "https://torrentsdosfilmes.to/",
-            "https://ComandoFilmes.xyz/"
+            "https://torrentdosfilmes.net/",
+            "https://comando4kfilmes.xyz/",
         };
 
         public override string[] LegacySiteLinks { get; protected set; } = {
-            "https://torrentdosfilmes.site/"
+            "https://torrentdosfilmes.site/",
+            "https://torrentsdosfilmes.to/",
+            "https://ComandoFilmes.xyz/",
         };
 
         public TorrentDosFilmes(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
