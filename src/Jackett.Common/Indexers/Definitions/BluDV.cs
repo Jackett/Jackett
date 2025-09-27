@@ -19,7 +19,11 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "bludv";
         public override string Name => "BluDV";
-        public override string SiteLink { get; protected set; } = "https://bludv.xyz/";
+        public override string SiteLink { get; protected set; } = "https://bludv.org/";
+
+        public override string[] LegacySiteLinks { get; protected set; } = {
+            "https://bludv.xyz/",
+        };
 
         public BluDV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService, wc, l, ps, cs)
