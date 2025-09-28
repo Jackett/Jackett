@@ -933,21 +933,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net9.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net9.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install nuget msbuild dotnet-sdk-8.0 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-9.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net9.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net9.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
