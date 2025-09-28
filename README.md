@@ -35,7 +35,6 @@ Prior versions of Jackett are no longer supported.
  * 52BT
  * ACG.RIP
  * AniLibria
- * Anime Time
  * Anime Tosho
  * AniRena
  * AniSource
@@ -157,7 +156,6 @@ Prior versions of Jackett are no longer supported.
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
  * AniDUB
- * Anime Time (login)
  * AnimeLayer
  * ArenaBG
  * Best-Torrents [PAY2DL]

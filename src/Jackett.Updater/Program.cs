@@ -277,6 +277,8 @@ namespace Jackett.Updater
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/anilibria.yml", // migrated to c# #5762
                 "Definitions/anime-free.yml",
+                "Definitions/anime-time.yml",
+                "Definitions/anime-timel.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
                 "Definitions/animetime.yml",
