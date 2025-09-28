@@ -90,8 +90,9 @@ caps:
     - {id: 124, cat: Audio, desc: " |- Фольклор, Народная и Этническая музыка"}
     - {id: 231, cat: Audio, desc: " |- Сборники и альбомы выходившие неофициальными изданиями."}
     - {id: 144, cat: Audio, desc: "♫ ROCK & METAL ♫"}
-    - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal"}
-    - {id: 202, cat: Audio, desc: " |- Сборники Русского рока"}
+    - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal (mp3)"}
+    - {id: 202, cat: Audio, desc: " |- Сборники Русского рока (mp3)"}
+    - {id: 323, cat: Audio, desc: " |- Русский Rock, Metal (Lossless)"}
     - {id: 214, cat: Audio, desc: " |- Soft & Pop-Rock"}
     - {id: 156, cat: Audio, desc: " |- Progressive, Art, Classic & Hard Rock"}
     - {id: 213, cat: Audio, desc: " |- Melodic & Folk Rock"}
@@ -127,10 +128,11 @@ caps:
     - {id: 238, cat: Audio, desc: " |- ♫ Электронная музыка Hi-Res"}
     - {id: 237, cat: Audio, desc: " |- ♫ Рок-музыка Hi-Res"}
     - {id: 236, cat: Audio, desc: " |- ♫ Джаз и Блюз	Hi-Res"}
-    - {id: 247, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
-    - {id: 317, cat: Audio, desc: " |- ♫ Советская и Российская эстрада (оцифровки)"}
-    - {id: 240, cat: Audio, desc: " |- ♫ Зарубежная поп музыка (оцифровки)"}
-    - {id: 249, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
+    - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
+    - {id: 328, cat: Audio, desc: " |- Советская и Российская эстрада (оцифровки)"}
+    - {id: 327, cat: Audio, desc: " |- Зарубежная поп музыка (оцифровки)"}
+    - {id: 326, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
+    - {id: 325, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
     - {id: 203, cat: Audio, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
     - {id: 139, cat: Audio, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}

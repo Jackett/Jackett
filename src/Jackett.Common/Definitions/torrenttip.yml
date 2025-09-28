@@ -9,11 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrenttip192.top/
+  - https://torrenttip195.top/
 legacylinks:
-  - https://torrenttip177.com/
-  - https://torrenttip178.com/
-  - https://torrenttip179.com/
   - https://torrenttip180.top/
   - https://torrenttip181.top/
   - https://torrenttip182.top/
@@ -26,6 +23,9 @@ legacylinks:
   - https://torrenttip189.top/
   - https://torrenttip190.top/
   - https://torrenttip191.top/
+  - https://torrenttip192.top/
+  - https://torrenttip193.top/
+  - https://torrenttip194.top/
 
 caps:
   categorymappings:
@@ -55,7 +55,9 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   infohash:

@@ -53,6 +53,7 @@ caps:
     - {id: 11, cat: XXX/ImageSet, desc: "Picture set"}
     - {id: 40, cat: XXX, desc: "Piss"}
     - {id: 43, cat: XXX/Other, desc: "Porn Music Videos"}
+    - {id: 67, cat: XXX, desc: "POV"}
     - {id: 45, cat: XXX, desc: "Pregnant / Preggo"}
     - {id: 57, cat: XXX, desc: "Scat/Puke"}
     - {id: 10, cat: XXX, desc: "Shemale / TS"}
@@ -181,6 +182,7 @@ search:
     downloadvolumefactor:
       case:
         i.unlimited_leech: 0
+        i.sitewide_leech: 0
         img[alt="Freeleech"]: 0
         "*": 1
     uploadvolumefactor:

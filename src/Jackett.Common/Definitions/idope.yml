@@ -7,7 +7,7 @@ type: public
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://idope.se/
+  - https://idope.me/
 legacylinks:
   - https://idope.black-mirror.xyz/
   - https://idope.unblocked.casa/
@@ -19,6 +19,7 @@ legacylinks:
   - https://idope.uk-unblock.pro/
   - https://idope.unblocked.rest/
   - https://idope.unblocked.monster/
+  - https://idope.se/
 
 caps:
   categorymappings:

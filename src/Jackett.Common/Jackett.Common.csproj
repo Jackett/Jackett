@@ -57,14 +57,14 @@
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
     <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.4.0" />
-    <PackageReference Include="Polly" Version="8.6.1" />
+    <PackageReference Include="Polly" Version="8.6.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
     <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.5" />
+    <PackageReference Include="System.Text.Json" Version="8.0.6" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 

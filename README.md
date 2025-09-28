@@ -76,7 +76,6 @@ Prior versions of Jackett are no longer supported.
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
  * Isohunt2
- * iTorrent
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
@@ -334,7 +333,6 @@ Prior versions of Jackett are no longer supported.
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
- * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)

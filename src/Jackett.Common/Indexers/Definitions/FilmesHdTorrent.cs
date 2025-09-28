@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "filmeshdtorrent";
         public override string Name => "Filmes HD Torrent";
-        public override string SiteLink { get; protected set; } = "https://www.filmeshdtorrent.vip/";
+        public override string SiteLink { get; protected set; } = "https://www.limontorrents.vip/";
 
         public override string[] LegacySiteLinks { get; protected set; } = {
             "https://baixarfilmestorrents.net/",
@@ -29,6 +29,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://filmetorrent.org/x/",
             "https://bludvfilmes.org/",
             "https://bludvfilmes.org/rarbg/",
+            "https://www.filmeshdtorrent.vip/",
         };
 
         public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm) : base(configService, wc, l, ps, cm)

@@ -404,6 +404,7 @@ namespace Jackett.Updater
                 "Definitions/epizod.yml",
                 "Definitions/erzsebet.yml",
                 "Definitions/erzsebetpl.yml",
+                "Definitions/esharenet.yml",
                 "Definitions/estrenosdtl.yml",
                 "Definitions/ethor.yml",
                 "Definitions/ettv.yml",
@@ -509,6 +510,7 @@ namespace Jackett.Updater
                 "Definitions/inperil.yml",
                 "Definitions/irishtv.yml",
                 "Definitions/isohunt.yml",
+                "Definitions/itorrent.yml",
                 "Definitions/iv-torrents.yml",
                 "Definitions/jme-reunit3d.yml", // switch to -API #13043
                 "Definitions/jav-torrent.yml",

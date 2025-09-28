@@ -6,6 +6,8 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
+  - https://www.crazyspirits.ca/
+legacylinks:
   - https://www.crazyspirits.com/
 
 caps:

@@ -1,0 +1,131 @@
+# CGPeers uses the Luminance code, which is based on gazelle
+# ajax.php API additionally needs the auth=$authkey argument
+# Because the API is e.g. missing poster images we use screen scraping instead of the generic gazelle based approach
+---
+id: cgpeers
+name: CGPeers
+description: "CGPeers is a Private Torrent Tracker for GRAPHICS SOFTWARE / TUTORIALS / ETC"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://cgpeers.to/
+legacylinks:
+  - https://www.cgpeers.com/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC/ISO, desc: "Applications"}
+    - {id: 8, cat: PC/ISO, desc: "Audio"}
+    - {id: 7, cat: Other, desc: "Game Development"}
+    - {id: 5, cat: Other, desc: "Materials"}
+    - {id: 6, cat: Other/Misc, desc: "Miscellaneous"}
+    - {id: 4, cat: Other, desc: "Models"}
+    - {id: 2, cat: PC/0day, desc: "Plugins"}
+    - {id: 3, cat: Other, desc: "Tutorials"}
+    - {id: 9, cat: Other, desc: "Web Development"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href^="/user.php?id="]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    title: "{{ .Keywords }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    action: advanced
+    filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  rows:
+    selector: table#torrent_table > tbody > tr:has(a[href*="action=download"])
+
+  fields:
+    download:
+      selector: a[href^="/torrents.php?action=download&id="]
+      attribute: href
+    title:
+      selector: a[href^="/torrents.php?id="]
+    category:
+      selector: a[href*="filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "(\\d+)]=1"
+    details:
+      selector: a[href^="/torrents.php?id="]
+      attribute: href
+    poster:
+      selector: td:nth-child(2) > script
+      filters:
+        - name: regexp
+          args: "src=(.*?)>"
+        - name: re_replace
+          args: ["[\\\\\"]", ""]
+        - name: re_replace
+          args: ["/static/common/noartwork/.+", ""]
+    files:
+      selector: td:nth-child(3)
+    date:
+      selector: td:nth-child(6) > span
+      attribute: title
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm"
+    size:
+      selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        i.unlimited_leech: 0
+        i.sitewide_leech: 0
+        img[alt="Freeleech"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        span.icon[title*="DoubleSeed"]: 2
+        img[alt="DoubleSeed"]: 2
+        "*": 1
+# luminance

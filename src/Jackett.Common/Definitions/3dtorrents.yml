@@ -18,8 +18,10 @@ caps:
     - {id: 17, cat: Movies/BluRay, desc: "Movies Blu-ray"}
     - {id: 27, cat: Movies/BluRay, desc: "Movies BD25 Encode"}
     - {id: 33, cat: Movies/BluRay, desc: "Movies BD9 AVCHD"}
-    - {id: 22, cat: Movies, desc: "Movies 2D to 3D Conv"}
-    - {id: 32, cat: Movies, desc: "Bluray MKV Remux"}
+    - {id: 22, cat: Movies, desc: "Movies Home Conversions"}
+    - {id: 32, cat: Movies, desc: "Movies Bluray MKV Remux"}
+    - {id: 38, cat: Movies, desc: "Movies Studio Conversion"}
+    - {id: 39, cat: Movies/3D, desc: "Movies VR 360"}
     - {id: 23, cat: Movies/3D, desc: "Movies Evo 3D"}
     - {id: 36, cat: Movies/UHD, desc: "Movies 4K UHD Bluray"}
     - {id: 37, cat: Movies/UHD, desc: "Movies 4K UHD Encode"}

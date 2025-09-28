@@ -57,6 +57,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that your ratio is <b>not below 0.8</b>, otherwise the site will not return download links to the indexer. This does not apply to freeleech torrents."
 
 login:
   # using cookie method because login page returns 0 bytes with a cookie flog=6

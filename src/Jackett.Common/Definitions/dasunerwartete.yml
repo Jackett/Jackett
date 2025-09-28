@@ -124,7 +124,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
 
   rows:
-    selector: $
+    selector: data
 
   fields:
     categorydesc:

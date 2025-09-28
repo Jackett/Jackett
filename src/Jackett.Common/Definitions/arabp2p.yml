@@ -126,7 +126,7 @@ search:
     # does not support imdbid search or provide imdb link in results
 
   rows:
-    selector: table#torrents_list_p > tbody > tr:has(a[href^="download.php?id="])
+    selector: table#torrents_list_p > tbody > tr:has(a[href^="download.php?id="]), table#torrents_list_p > tbody > tr:has(a[href^="magnet:?xt="])
     filters:
       - name: andmatch
 
