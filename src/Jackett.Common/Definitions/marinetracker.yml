@@ -58,6 +58,7 @@ caps:
     - {id: 107, cat: Books, desc: "Electrical Technical Officer's Library-ETO Handbooks"}
     - {id: 105, cat: Books, desc: "Electrical Technical Officer's Library-Sources of electricity"}
     - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
+    - {id: 420, cat: Books, desc: "Organization and management of maritime transport-Annual reports"}
     - {id: 6, cat: PC, desc: "Maritime Software"}
     - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
     - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
