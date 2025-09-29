@@ -4,6 +4,7 @@
     <TargetFramework>net9.0-windows</TargetFramework>
     <OutputType>WinExe</OutputType>
     <UseWindowsForms>true</UseWindowsForms>
+    <EnableWindowsTargeting>true</EnableWindowsTargeting>
     <AssemblyName>JackettTray</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <NoWarn />
