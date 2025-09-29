@@ -20,7 +20,7 @@ The software implements the [Torznab](https://torznab.github.io/spec-1.3-draft/i
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
 #### Supported Systems
-The currently supported version of Jackett is 0.23.+, which is compatible with the following OS:
+The currently supported version of Jackett is 0.24.+, which is compatible with the following OS:
 * Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#windows)
 * Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux)
 * macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#apple)
@@ -709,7 +709,7 @@ We recommend you install Jackett as a Windows service using the supplied [Window
 
 To get started with using the installer for Jackett, follow the steps below:
 
-1. Check if you need any .NET prerequisites installed, see https://docs.microsoft.com/en-us/dotnet/core/install/windows?tabs=net80#dependencies
+1. Check if you need any .NET prerequisites installed, see https://learn.microsoft.com/en-us/dotnet/core/install/windows#net-installer
 2. Download the latest version of the [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe)
 3. Run the Jackett.Installer.Windows.exe program.
 4. When prompted if you would like this app to make changes to your computer, select "yes".
