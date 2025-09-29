@@ -26,9 +26,9 @@
     <PackageReference Include="Polly" Version="8.6.3" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="8.0.1" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageReference Include="System.Text.Json" Version="8.0.6" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
+    <PackageReference Include="System.Text.Json" Version="9.0.9" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 

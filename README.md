@@ -21,9 +21,9 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 #### Supported Systems
 The currently supported version of Jackett is 0.23.+, which is compatible with the following OS:
-* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#windows)
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#linux)
-* macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/8.0/supported-os.md#macos)
+* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#windows)
+* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux)
+* macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#apple)
 
 Prior versions of Jackett are no longer supported.
 
@@ -933,21 +933,21 @@ git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/osx-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net9.0 --self-contained -r osx-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net9.0/osx-x64/jackett # run jackett
 ```
 
 ### Linux
 
 
 ```bash
-sudo apt install nuget msbuild dotnet-sdk-8.0 # install build tools (Debian/ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-9.0 # install build tools (Debian/ubuntu)
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
 # dotnet core version
-dotnet publish Jackett.Server -f net8.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net8.0/linux-x64/jackett # run jackett
+dotnet publish Jackett.Server -f net9.0 --self-contained -r linux-x64 -c Debug # takes care of everything
+./Jackett.Server/bin/Debug/net9.0/linux-x64/jackett # run jackett
 ```
 
 ## Screenshots
