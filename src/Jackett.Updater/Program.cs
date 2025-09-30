@@ -277,6 +277,8 @@ namespace Jackett.Updater
                 "Definitions/anidex.yml", // migrated to C#
                 "Definitions/anilibria.yml", // migrated to c# #5762
                 "Definitions/anime-free.yml",
+                "Definitions/anime-time.yml",
+                "Definitions/anime-timel.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
                 "Definitions/animetime.yml",
@@ -631,6 +633,7 @@ namespace Jackett.Updater
                 "Definitions/pornorip.yml",
                 "Definitions/pornoslab.yml",
                 "Definitions/pornotor.yml",
+                "Definitions/pornxlab.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
                 "Definitions/potuk.yml",
                 "Definitions/privatesilverscreen-api.yml",

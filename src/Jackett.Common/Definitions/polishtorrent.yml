@@ -32,6 +32,7 @@ caps:
     - {id: 33, cat: Movies, desc: "iNTERNAL"}
     - {id: 18, cat: PC/Mobile-Android, desc: "Mobile"}
     - {id: 8, cat: Audio, desc: "Muzyka"}
+    - {id: 37, cat: TV, desc: "Reality TV"}
     - {id: 11, cat: Movies, desc: "Paczki"}
     - {id: 36, cat: TV, desc: "Seriale TV - Całe Sezony"}
     - {id: 21, cat: TV/Sport, desc: "Sport"}
