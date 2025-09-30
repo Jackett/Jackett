@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net8.0;netstandard2.0</TargetFrameworks>
+    <TargetFrameworks>net9.0;netstandard2.0</TargetFrameworks>
     <Version>0.0.0</Version>
     <LangVersion>9</LangVersion>
     <NoWarn />
@@ -9,12 +9,12 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net8.0|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net8.0|AnyCPU'">
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
     <WarningsAsErrors />
   </PropertyGroup>
@@ -30,7 +30,7 @@
   </Target>
 
   <!-- Conditionally obtain references for the .NET 8.0 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net8.0' ">
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
     <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
   </ItemGroup>
 
