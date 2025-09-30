@@ -23,6 +23,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "Shazbat";
         public override string Description => "Shazbat is a Private site with highly curated TV content";
         public override string SiteLink { get; protected set; } = "https://www.shazbat.tube/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://www.shazbat.tv/",
+        };
         public override string Language => "en-US";
         public override string Type => "private";
 
