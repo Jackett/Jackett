@@ -453,7 +453,7 @@ Prior versions of Jackett are no longer supported.
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
- * Nirvana
+ * Nirvana [![(invite needed)][inviteneeded]](#)
  * NorBits
  * NordicQuality
  * Nusanta(RA.RE)
