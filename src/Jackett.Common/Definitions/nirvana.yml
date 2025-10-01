@@ -14,7 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "Сериалы"}
     - {id: 6, cat: Movies/Other, desc: "Аниме-фильмы"}
     - {id: 7, cat: TV/Anime, desc: "Аниме-сериалы"}
-    - {id: 6, cat: Movies/Other, desc: "35mm"}
+    - {id: 8, cat: Movies/Other, desc: "35mm"}
     - {id: 4, cat: Other, desc: "No"}
 
   modes:
