@@ -330,6 +330,7 @@ Prior versions of Jackett are no longer supported.
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
+ * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
