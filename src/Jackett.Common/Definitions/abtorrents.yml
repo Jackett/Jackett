@@ -8,9 +8,10 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://abtorrents.xyz/
+  - https://usefultrash.net/
 legacylinks:
   - https://abtorrents.me/
+  - https://abtorrents.xyz/
 
 caps:
   categorymappings:
