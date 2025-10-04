@@ -84,7 +84,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts will be automatically deleted after 45 days of inactivity, regardless of class. To maintain an active account, all you have to do is authenticate yourself regularly and participate: In the life of the site, in the forum, in the shoot, in the games of the forum and not only in the downloads. Log in regularly to the site the Rules may change, view your messages."
+    default: "Accounts inactive for 45 days are automatically deleted (all ranks included). To remain active, simply log in and participate (downloads, forums, shoutbox, games). Accounts created solely to build up numbers will be deactivated. As a free tracker with a limited number of spots, we regularly delete inactive accounts."
 
 login:
   path: /api/torrents
