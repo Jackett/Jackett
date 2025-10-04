@@ -67,7 +67,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
+    default: "Veteran User or above would never be deleted. Elite User or above would never be deleted if packed (at User CP). Packed accounts would be deleted if users have not logged in for more than 180 days in a row. Unpacked accounts would be deleted if users have not logged in for more than 90 days in a row. Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 7 days in a row."
 
 login:
   path: login.php
@@ -190,8 +190,8 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
