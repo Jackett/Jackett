@@ -354,7 +354,7 @@ Prior versions of Jackett are no longer supported.
  * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)
- * Generation-Free [![(invite needed)][inviteneeded]](#)
+ * Generation-Free
  * GGPT
  * GigaTorrents
  * GimmePeers (formerly ILT) [PAY2DL]
