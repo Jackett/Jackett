@@ -62,7 +62,6 @@ Prior versions of Jackett are no longer supported.
  * EBook Bay (EBB)
  * Elitetorrent.wf
  * EpubLibre
- * EXT Torrents
  * ExtraTorrent.st
  * EZTV
  * FileMood
