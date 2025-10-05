@@ -60,7 +60,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Users must log in or be seeding for their account to be considered active. If the account is not active for a consecutive 90 days, the account will be deactivated. After a consecutive 120 days, the account will be pruned. (Staff DO NOT delete accounts manually.)"
+    default: "Users must log in or be seeding for their account to be considered active. If the account is not active for a consecutive 90 days, the account will be deactivated. After a consecutive 120 days, the account will be pruned."
 
 login:
   path: /api/torrents
