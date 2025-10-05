@@ -102,7 +102,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "If your account is inactive (u do not sign in) for more than 90 days, your account is disabled. Park your account if you are going away for long periods. If you need your account activated and email or one of the other methods do not work, contact us on IRC."
+    default: "If your account is inactive (you do not sign in) for more than 90 days, your account is disabled. Park your account if you are going away for long periods."
 
 login:
   method: get
@@ -192,7 +192,7 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.5
+      text: 1.0
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
