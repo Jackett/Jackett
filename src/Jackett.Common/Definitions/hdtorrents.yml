@@ -183,7 +183,7 @@ search:
         img[src$="no_ratio.png"]: 0
         "*": 1
     minimumratio:
-      text: 1.0
+      text: 0.7
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
