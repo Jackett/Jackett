@@ -209,7 +209,7 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 0.5
+      text: 1.0
     minimumseedtime:
       # 24 hours (as seconds = 24 x 60 x 60)
       text: 86400
