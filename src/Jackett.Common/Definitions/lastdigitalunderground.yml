@@ -97,7 +97,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in once every 60 days.You must download at least 1 item within your first month."
+    default: "You must log in once every 60 days. You must download at least 1 item within your first month."
 
 login:
   path: /api/torrents
