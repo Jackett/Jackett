@@ -1,7 +1,7 @@
 ---
 id: f1gp
 name: F1GP
-description: "F1GP is a Private Torrent Tracker for F1, F2, F3, FE, F1 Academy"
+description: "F1GP is a Private Torrent Tracker for F1, F2, F3, FE, F1 Academy Racing"
 language: en-US
 type: private
 encoding: UTF-8
@@ -150,7 +150,9 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.4
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
 #  xbtitFM v4.1.32
