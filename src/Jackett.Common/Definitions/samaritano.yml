@@ -13,7 +13,7 @@ caps:
     - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "Séries"}
     - {id: 3, cat: TV/Anime, desc: "Animes"}
-    - {id: 4, cat: Other, desc: "Cursos", default: false}
+    - {id: 4, cat: Other, desc: "Cursos"}
     - {id: 5, cat: Console, desc: "Games"}
     - {id: 6, cat: Books/EBook, desc: "Livros"}
     - {id: 7, cat: Books/Comics, desc: "HQs"}
