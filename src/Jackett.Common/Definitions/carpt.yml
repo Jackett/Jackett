@@ -1,7 +1,7 @@
 ---
 id: carpt
 name: CarPT
-description: "CarPT is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+description: "CarPT is a CHINESE Private Torrent Tracker for HD MOVIES / TV / MUSIC"
 language: zh-CN
 type: private
 encoding: UTF-8
