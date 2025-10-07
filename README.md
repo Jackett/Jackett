@@ -293,7 +293,7 @@ Prior versions of Jackett are no longer supported.
  * CapybaraBR
  * Carp-Hunter
  * Carpathians
- * CarPT [![(invite needed)][inviteneeded]](#)
+ * CarPT
  * Cathode-Ray.Tube (CRT)
  * CD File
  * CeskeForum
