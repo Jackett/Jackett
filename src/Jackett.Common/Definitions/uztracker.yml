@@ -10,8 +10,7 @@ links:
 
 caps:
   categorymappings:
-    # Кинофильмы
-    # Movies
+    # Кинофильмы # Movies
     - {id: 3, cat: Movies, desc: "Зарубежные кинофильмы"}
     - {id: 13, cat: Movies, desc: " |- Новинки 2025"}
     - {id: 12, cat: Movies, desc: " |- Фильмы 2021-2024"}
@@ -36,8 +35,7 @@ caps:
     - {id: 30, cat: Movies, desc: " |- Фильмы 2011-2024 годов"}
     - {id: 29, cat: Movies, desc: " |- Фильмы 2000-2010 годов"}
     - {id: 26, cat: Movies, desc: " |- Фильмы до 2000 года"}
-    # Сериалы, Видео и ТВ
-    # Series, Videos and TV
+    # Сериалы, Видео и ТВ # Series, Videos and TV
     - {id: 97, cat: TV, desc: "Сериалы"}
     - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
     - {id: 103, cat: TV, desc: " |- Зарубежные сериалы"}
@@ -46,8 +44,7 @@ caps:
     - {id: 100, cat: TV, desc: " |- Турецкие сериалы"}
     - {id: 99, cat: TV, desc: " |- Узбекские сериалы"}
     - {id: 98, cat: TV, desc: " |- Мультсериалы"}
-    # Мультфильмы
-    # Cartoons
+    # Мультфильмы # Cartoons
     - {id: 36, cat: TV, desc: "Зарубежные мультфильмы"}
     - {id: 48, cat: TV, desc: " |- Новинки 2025"}
     - {id: 46, cat: TV, desc: " |- Полнометражные мультфильмы"}
@@ -67,8 +64,7 @@ caps:
     - {id: 61, cat: TV, desc: " |- Мультфильмы 2011-2024 годов"}
     - {id: 60, cat: TV, desc: " |- Мультфильмы 2000-2010 годов"}
     - {id: 59, cat: TV, desc: " |- Мультфильмы до 2000 года"}
-    # Музыка
-    # Music
+    # Музыка # Music
     - {id: 225, cat: Audio, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
     - {id: 228, cat: Audio, desc: " |- Поп музыка России и стран бывшего СССР"}
     - {id: 229, cat: Audio, desc: " |- Русские поп сборники"}
@@ -130,7 +126,7 @@ caps:
     - {id: 236, cat: Audio, desc: " |- ♫ Джаз и Блюз	Hi-Res"}
     - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
     - {id: 328, cat: Audio, desc: " |- Советская и Российская эстрада (оцифровки)"}
-    - {id: 327, cat: Audio, desc: " |- Зарубежная поп музыка (оцифровки)"}
+    - {id: 331, cat: Audio, desc: " |- ♫ Русский рок (оцифровки)"}
     - {id: 326, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
     - {id: 325, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
@@ -147,8 +143,7 @@ caps:
     - {id: 295, cat: Audio, desc: " |- Рок музыка (Video)"}
     - {id: 294, cat: Audio, desc: " |- Музыкальные шоу"}
     - {id: 158, cat: Audio, desc: " |- Другие направления"}
-    # Литература
-    # Literature
+    # Литература # Literature
     - {id: 166, cat: Books, desc: "Книги FB2"}
     - {id: 173, cat: Books, desc: " |- Художественная литература"}
     - {id: 314, cat: Books, desc: " |- Учебно-техническая литература"}
@@ -160,8 +155,7 @@ caps:
     - {id: 175, cat: Audio/Audiobook, desc: " |- Любовно-фантастический роман (Audiobook)"}
     - {id: 174, cat: Audio, desc: " |- Аудиокниги на других языках (Audio)"}
     - {id: 319, cat: Books, desc: " |- Аудиокниги для детей"}
-    # Игры
-    # Games
+    # Игры # Games
     - {id: 105, cat: PC/Games, desc: "Игры для ПК"}
     - {id: 120, cat: PC/Games, desc: " |- Горячие новинки (License`s)"}
     - {id: 119, cat: PC/Games, desc: " |- Горячие новинки (Repack`s)"}
@@ -184,8 +178,7 @@ caps:
     - {id: 107, cat: PC/Games, desc: " |- Игровое видео"}
     - {id: 106, cat: PC/Games, desc: " |- Патчи, моды, дополнения, DLC и т.п."}
     - {id: 248, cat: PC/Games, desc: "Игры для Android"}
-    # Софт
-    # Software
+    # Софт # Software
     - {id: 76, cat: PC, desc: "Операционные системы"}
     - {id: 80, cat: PC, desc: " |- Windows 11"}
     - {id: 79, cat: PC, desc: " |- Windows 10"}
@@ -238,8 +231,7 @@ caps:
     - {id: 279, cat: PC, desc: " |- Разное (Графика и мультимедиа)"}
     - {id: 94, cat: PC, desc: " |- Утилиты"}
     - {id: 88, cat: PC, desc: " |- Мультимедия"}
-    # Графика и Дизайн
-    # Graphics and Design
+    # Графика и Дизайн # Graphics and Design
     - {id: 178, cat: Other, desc: "Графические изображения"}
     - {id: 184, cat: Other, desc: " |- Обои"}
     - {id: 183, cat: Other, desc: " |- Картинки"}
