@@ -109,8 +109,8 @@ If you use something else, please add it here for others.
   - About 2GB download, 8GB installed.
   -  Make sure it includes the following Workload and Individual Components:
      -  .NET desktop development
-     -  .Net Framework 4.6.2 SDK
-     -  .Net Framework 4.6.2 targeting pack
+     -  .Net Framework 4.7.1 SDK
+     -  .Net Framework 4.7.1 targeting pack
 - From the `Get Started` screen:
   - `Clone a repository -> Browse a repository -> GitHub -> Sign in -> clone your forked repository`
 - Double-click `Jackett.sln` in `Solution Explorer` to load your project
