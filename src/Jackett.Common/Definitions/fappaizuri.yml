@@ -12,10 +12,11 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 8, cat: TV/Anime, desc: "Hentai"}
-    - {id: 7, cat: Console, desc: "H-games"}
     - {id: 5, cat: XXX, desc: "JAV"}
     - {id: 6, cat: Books, desc: "Manga"}
+    - {id: 7, cat: Console, desc: "H-games"}
+    - {id: 8, cat: TV/Anime, desc: "Hentai"}
+    - {id: 9, cat: XXX, desc: "OFFS"}
 
   modes:
     search: [q]
