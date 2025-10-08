@@ -871,7 +871,7 @@ Setting up this service is optional; most indexers don't need it.
 
 ## Configuring OMDb
 This feature is used as a fallback (when using the aggregate Indexer) to get the movie/series title if only the IMDB ID is provided in the request.
-To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
+To use it, please just request a free API key on [OMDb](https://omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
 
 ## Command line switches
 
