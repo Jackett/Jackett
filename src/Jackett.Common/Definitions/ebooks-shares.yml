@@ -39,6 +39,8 @@ caps:
     - {id: 342, cat: Books/EBook, desc: "Collection: Multiple Authors"}
     - {id: 343, cat: Books/EBook, desc: "Collection: Fantasy"}
     - {id: 359, cat: Books/EBook, desc: "Collection: Same Series"}
+    - {id: 364, cat: Books/EBook, desc: "Collection: Multiple: Fiction"}
+    - {id: 365, cat: Books/EBook, desc: "Collection: Multiple:Non Fiction"}
     # Fiction
     - {id: 281, cat: Books/EBook, desc: "Horror"}
     - {id: 282, cat: Books/EBook, desc: "Sci-Fi/Fantasy"}
