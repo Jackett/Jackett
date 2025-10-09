@@ -537,6 +537,7 @@ Prior versions of Jackett are no longer supported.
  * SugoiMusic
  * Superbits (SBS)
  * Swarmazon
+ * Tangmen (唐门)
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
