@@ -84,11 +84,11 @@ login:
 search:
   # https://devil-torrents.pl/szukaj.php?search=%&typ=torrent&c4=1&c748=1
   paths:
-    - path: szukaj.php
+    - path: "{{ if .Keywords }}szukaj.php{{ else }}files-torrent{{ end }}"
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    typ: torrent
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}%{{ end }}"
+    typ: "{{ if .Keywords }}torrent{{ else }}{{ end }}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: table.test5 > tbody > tr > td > div[id]:has(a[href^="download/"])
