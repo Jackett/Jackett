@@ -312,20 +312,22 @@ namespace Jackett.Server.Services
 
                 if (variant == Variants.JackettVariant.Mono)
                 {
-                    var process = new Process
+                    const string Uname = "uname";
+
+                    using var process = new Process
                     {
                         StartInfo =
                         {
-                            FileName = "uname",
+                            FileName = Uname,
                             Arguments = "-m",
                             UseShellExecute = false,
                             RedirectStandardOutput = true
                         }
-                    };
+                    } ?? throw new InvalidOperationException($"Error while starting {Uname}");
                     process.Start();
                     var output = process.StandardOutput.ReadToEnd();
                     process.WaitForExit();
-                    logger.Debug($"uname output was: {output}");
+                    logger.Debug($"{Uname} output was: {output}");
 
                     output = output.ToLower();
                     if (output.Contains("armv7") || output.Contains("armv8") || output.Contains("x86_64"))

@@ -1747,18 +1747,25 @@ namespace Jackett.Common.Indexers.Definitions
 
                         if (SearchPath.Response is { Type: "xml" })
                         {
-                            var SearchResultParser = new XmlParser();
-                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            var searchResultParser = new XmlParser();
+                            var searchResultDocument = searchResultParser.ParseDocument(results);
 
-                            if (Search.Preprocessingfilters != null)
+                            try
                             {
-                                results = applyFilters(results, Search.Preprocessingfilters, variables);
-                                SearchResultDocument = SearchResultParser.ParseDocument(results);
-                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
-                            }
+                                if (Search.Preprocessingfilters != null)
+                                {
+                                    results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                    searchResultDocument = searchResultParser.ParseDocument(results);
+                                    logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                                }
 
-                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                                var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                                rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            }
+                            finally
+                            {
+                                searchResultDocument.Dispose();
+                            }
                         }
                         else
                         {
@@ -1791,17 +1798,24 @@ namespace Jackett.Common.Indexers.Definitions
                             var searchResultParser = new HtmlParser();
                             var searchResultDocument = searchResultParser.ParseDocument(results);
 
-                            checkForError(response, Definition.Search.Error);
-
-                            if (Search.Preprocessingfilters != null)
+                            try
                             {
-                                results = applyFilters(results, Search.Preprocessingfilters, variables);
-                                searchResultDocument = searchResultParser.ParseDocument(results);
-                                logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
-                            }
+                                checkForError(response, Definition.Search.Error);
 
-                            var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                                if (Search.Preprocessingfilters != null)
+                                {
+                                    results = applyFilters(results, Search.Preprocessingfilters, variables);
+                                    searchResultDocument = searchResultParser.ParseDocument(results);
+                                    logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
+                                }
+
+                                var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
+                                rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            }
+                            finally
+                            {
+                                searchResultDocument.Dispose();
+                            }
                         }
 
                         var Rows = rowsDom.ToList();

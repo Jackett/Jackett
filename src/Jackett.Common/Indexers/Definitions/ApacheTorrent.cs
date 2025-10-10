@@ -93,7 +93,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(indexerResponse.Content);
+            using var dom = parser.ParseDocument(indexerResponse.Content);
             var rows = dom.QuerySelectorAll("div.capaname");
 
             foreach (var row in rows)
@@ -114,7 +114,7 @@ namespace Jackett.Common.Indexers.Definitions
                 };
 
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
-                var detailsDom = parser.ParseDocument(detailsPage.ContentString);
+                using var detailsDom = parser.ParseDocument(detailsPage.ContentString);
 
                 var fileInfoDict = ExtractFileInfo(detailsDom);
                 var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
@@ -124,7 +124,7 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var magnetLink in magnetLinks)
                 {
                     var magnet = magnetLink.GetAttribute("href");
-                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    var release = releaseCommonInfo.Clone();
                     release.MagnetUri = new Uri(magnet ?? "");
                     release.DownloadVolumeFactor = 0;
                     release.UploadVolumeFactor = 1;

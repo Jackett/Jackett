@@ -130,7 +130,7 @@ namespace Jackett.Common.Models.Config
             return new UnSubscriber(observers, observer);
         }
 
-        private class UnSubscriber : IDisposable
+        private sealed class UnSubscriber : IDisposable
         {
             private readonly List<IObserver<ServerConfig>> lstObservers;
             private readonly IObserver<ServerConfig> observer;

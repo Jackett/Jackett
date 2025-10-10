@@ -80,7 +80,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
 
             var parser = new HtmlParser();
-            var dom = parser.ParseDocument(indexerResponse.Content);
+            using var dom = parser.ParseDocument(indexerResponse.Content);
             var rows = dom.QuerySelectorAll("div.post");
 
             foreach (var row in rows)
@@ -99,7 +99,7 @@ namespace Jackett.Common.Indexers.Definitions
                 };
 
                 var detailsPage = _webclient.GetResultAsync(new WebRequest(detailUrl.ToString())).Result;
-                var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
+                using var detailsDom = detailsParser.ParseDocument(detailsPage.ContentString);
 
                 var fileInfoDict = ExtractFileInfo(detailsDom);
                 var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
@@ -107,7 +107,7 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var downloadButton in detailsDom.QuerySelectorAll("a.customButton[href^=\"magnet:\"]"))
                 {
                     var magnet = downloadButton.ExtractMagnet();
-                    var release = releaseCommonInfo.Clone() as ReleaseInfo;
+                    var release = releaseCommonInfo.Clone();
                     release.Title = ExtractTitleOrDefault(downloadButton, release.Title);
                     release.Category = downloadButton.ExtractCategory(release.Title);
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;

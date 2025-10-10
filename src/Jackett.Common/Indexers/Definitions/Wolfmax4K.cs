@@ -163,11 +163,11 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 throw new Exception("Error, the Download link at the requested path does not exist.");
             }
-            var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
+            using var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
             var enlacitoUrl = wmDoc.QuerySelector(".app-message a:not(.buttonPassword)")?.GetAttribute("href");
 
             var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, referer: SiteLink);
-            var enlacitoDoc = new HtmlParser().ParseDocument(enlacitoPage.ContentString);
+            using var enlacitoDoc = new HtmlParser().ParseDocument(enlacitoPage.ContentString);
             var enlacitoFormUrl = enlacitoDoc.QuerySelector("form").GetAttribute("action");
             var enlacitoFormLinkser = enlacitoDoc.QuerySelector("input[name=\"linkser\"]").GetAttribute("value");
 
@@ -487,7 +487,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var password = Encoding.UTF8.GetBytes(passphrase);
             var currentHash = Array.Empty<byte>();
-            var md5 = MD5.Create();
+            using var md5 = MD5.Create();
             var enoughBytesForKey = false;
 
             // See http://www.openssl.org/docs/crypto/EVP_BytesToKey.html#KEY_DERIVATION_ALGORITHM
@@ -513,9 +513,6 @@ namespace Jackett.Common.Indexers.Definitions
             iv = new byte[16];
             concatenatedHashes.CopyTo(0, key, 0, 32);
             concatenatedHashes.CopyTo(32, iv, 0, 16);
-
-            md5.Clear();
-            md5 = null;
         }
 
         private string DecryptStringFromBytesAes(byte[] cipherText, byte[] key, byte[] iv)
@@ -535,41 +532,29 @@ namespace Jackett.Common.Indexers.Definitions
                 throw new ArgumentNullException(nameof(iv));
             }
 
-            // Declare the RijndaelManaged object
-            // used to decrypt the data.
-            RijndaelManaged aesAlg = null;
-
             // Declare the string used to hold
             // the decrypted text.
             string plaintext;
 
-            try
-            {
-                // Create a RijndaelManaged object
-                // with the specified key and IV.
-                aesAlg = new RijndaelManaged { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
+            // Create a RijndaelManaged object
+            // with the specified key and IV.
+            using RijndaelManaged aesAlg = new()  { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
 
-                // Create a decrytor to perform the stream transform.
-                var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                // Create the streams used for decryption.
-                using (var msDecrypt = new MemoryStream(cipherText))
+            // Create a decrytor to perform the stream transform.
+            var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+            // Create the streams used for decryption.
+            using (var msDecrypt = new MemoryStream(cipherText))
+            {
+                using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
                 {
-                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (var srDecrypt = new StreamReader(csDecrypt))
                     {
-                        using (var srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            // Read the decrypted bytes from the decrypting stream
-                            // and place them in a string.
-                            plaintext = srDecrypt.ReadToEnd();
-                            srDecrypt.Close();
-                        }
+                        // Read the decrypted bytes from the decrypting stream
+                        // and place them in a string.
+                        plaintext = srDecrypt.ReadToEnd();
+                        srDecrypt.Close();
                     }
                 }
-            }
-            finally
-            {
-                // Clear the RijndaelManaged object.
-                aesAlg?.Clear();
             }
 
             return plaintext;

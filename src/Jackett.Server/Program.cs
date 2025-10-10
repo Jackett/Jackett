@@ -116,7 +116,7 @@ namespace Jackett.Server
 
                 isWebHostRestart = false;
 
-                IWebHost webHost = null;
+                IWebHost? webHost = null;
 
                 try
                 {
@@ -139,7 +139,7 @@ namespace Jackett.Server
                 }
                 finally
                 {
-                    webHost.Dispose();
+                    webHost?.Dispose();
                 }
             } while (isWebHostRestart);
         }

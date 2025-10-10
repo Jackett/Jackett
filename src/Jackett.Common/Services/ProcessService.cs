@@ -1,3 +1,4 @@
+using System;
 using System.Diagnostics;
 using System.Text;
 using Jackett.Common.Services.Interfaces;
@@ -37,7 +38,7 @@ namespace Jackett.Common.Services
                 startInfo.RedirectStandardInput = false;
             }
             logger.Debug("Running " + startInfo.FileName + " " + startInfo.Arguments);
-            var proc = Process.Start(startInfo);
+            using var proc = Process.Start(startInfo) ?? throw new InvalidOperationException($"Error while starting {exe}");
 
             if (!asAdmin)
             {
