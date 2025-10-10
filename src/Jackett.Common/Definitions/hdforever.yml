@@ -11,11 +11,11 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Film"}
-    - {id: 2, cat: Movies, desc: "Dessin animé"}
-    - {id: 3, cat: Movies, desc: "Bonus BD"}
+    - {id: 2, cat: Movies, desc: "Film d'animation"}
+    - {id: 3, cat: Movies, desc: "Spectacle"}
     - {id: 4, cat: Movies, desc: "Concert"}
     - {id: 5, cat: TV, desc: "Série"}
-    - {id: 6, cat: TV/Anime, desc: "Série anim"}
+    - {id: 6, cat: TV/Anime, desc: "Série d'animation"}
     - {id: 7, cat: Movies, desc: "Documentaire"}
 
   modes:
@@ -117,11 +117,11 @@ search:
       selector: td.cats_col
       case:
         div.cats_film: 1
-        div.cats_dessinanimé: 2
-        div.cats_bonusbd: 3
+        div[class*="cats_filmd"]: 2
+        div.cats_spectacle: 3
         div.cats_concert: 4
         div.cats_série: 5
-        div.cats_sérieanim: 6
+        div[class*="cats_séried"]: 6
         div.cats_documentaire: 7
     details:
       selector: a[href^="torrents.php?id="]
@@ -309,8 +309,9 @@ search:
     description:
       selector: div.group_info
     minimumratio:
-      text: 0.6
-    minimumseedtime:
+# global MR is 0.6 but torrents must be seeded for 3 days regardless of ratio
+#      text: 0.6
+#    minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
 # Gazelle
