@@ -6,7 +6,7 @@ using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Newtonsoft.Json.Linq;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Models
 {

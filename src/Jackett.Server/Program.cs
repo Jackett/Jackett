@@ -20,7 +20,7 @@ namespace Jackett.Server
 {
     public static class Program
     {
-        public static IConfiguration Configuration { get; set; }
+        private static IConfiguration Configuration { get; set; }
         private static RuntimeSettings Settings { get; set; }
         public static bool isWebHostRestart = false;
 
@@ -28,7 +28,7 @@ namespace Jackett.Server
         {
             AppDomain.CurrentDomain.ProcessExit += CurrentDomain_ProcessExit;
 
-            var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
+            using var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
             var optionsResult = commandLineParser.ParseArguments<ConsoleOptions>(args);
             var runtimeDictionary = new Dictionary<string, string>();
             var consoleOptions = new ConsoleOptions();
@@ -116,13 +116,16 @@ namespace Jackett.Server
 
                 isWebHostRestart = false;
 
+                IWebHost webHost = null;
+
                 try
                 {
                     logger.Debug("Creating web host...");
                     var applicationFolder = configurationService.GetContentFolder();
                     logger.Debug($"Content root path is: {applicationFolder}");
 
-                    CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
+                    webHost = CreateWebHostBuilder(args, url, applicationFolder).Build();
+                    webHost.Run();
                 }
                 catch (Exception e)
                 {
@@ -133,6 +136,10 @@ namespace Jackett.Server
                     }
                     logger.Error(e);
                     throw;
+                }
+                finally
+                {
+                    webHost.Dispose();
                 }
             } while (isWebHostRestart);
         }

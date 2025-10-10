@@ -1,0 +1,46 @@
+<Project>
+  <PropertyGroup>
+    <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+    <CentralPackageTransitivePinningEnabled>false</CentralPackageTransitivePinningEnabled>
+  </PropertyGroup>
+  <ItemGroup>
+    <PackageVersion Include="AngleSharp" Version="1.3.0" />
+    <PackageVersion Include="AngleSharp.Xml" Version="1.0.0" />
+    <PackageVersion Include="Autofac" Version="8.4.0" />
+    <PackageVersion Include="Autofac.Extensions.DependencyInjection" Version="10.0.0" />
+    <PackageVersion Include="BencodeNET" Version="5.0.0" />
+    <PackageVersion Include="CommandLineParser" Version="2.9.1" />
+    <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
+    <PackageVersion Include="DotNet4.SocksProxy" Version="1.4.0.1" />
+    <PackageVersion Include="FlareSolverrSharp" Version="3.0.7" />
+    <PackageVersion Include="FluentAssertions" Version="8.7.1" />
+    <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
+    <PackageVersion Include="Microsoft.AspNetCore.DataProtection" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.AspNetCore.WebUtilities" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.CSharp" Version="4.7.0" />
+    <PackageVersion Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="18.0.0" />
+    <PackageVersion Include="MimeMapping" Version="3.1.0" />
+    <PackageVersion Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
+    <PackageVersion Include="MSTest.TestAdapter" Version="4.0.0" />
+    <PackageVersion Include="MSTest.TestFramework" Version="4.0.0" />
+    <PackageVersion Include="Newtonsoft.Json" Version="13.0.4" />
+    <PackageVersion Include="NLog" Version="6.0.5" />
+    <PackageVersion Include="NLog.Web.AspNetCore" Version="6.0.5" />
+    <PackageVersion Include="NUnit" Version="4.4.0" />
+    <PackageVersion Include="NUnit.ConsoleRunner" Version="3.20.1" />
+    <PackageVersion Include="NUnit3TestAdapter" Version="5.2.0" />
+    <PackageVersion Include="Polly" Version="8.6.4" />
+    <PackageVersion Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
+    <PackageVersion Include="Selenium.WebDriver" Version="4.36.0" />
+    <PackageVersion Include="SharpZipLib" Version="1.4.2" />
+    <PackageVersion Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
+    <PackageVersion Include="System.Security.Cryptography.ProtectedData" Version="9.0.9" />
+    <PackageVersion Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
+    <PackageVersion Include="System.Text.Encoding.CodePages" Version="9.0.9" />
+    <PackageVersion Include="System.Text.Json" Version="9.0.9" />
+    <PackageVersion Include="YamlDotNet" Version="16.3.0" />
+  </ItemGroup>
+</Project>

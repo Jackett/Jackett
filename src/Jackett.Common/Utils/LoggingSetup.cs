@@ -28,7 +28,7 @@ namespace Jackett.Common.Utils
                 ArchiveAboveSize = 2097152, // 2 MB
                 MaxArchiveFiles = 5,
                 KeepFileOpen = false,
-                ArchiveNumbering = ArchiveNumberingMode.DateAndSequence
+                ArchiveSuffixFormat = "_{1:yyyyMMdd}_{0:00}"
             };
             logConfig.AddTarget("file", logFile);
 

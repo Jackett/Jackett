@@ -22,9 +22,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-#if !NET471
 using Microsoft.Extensions.Hosting;
-#endif
 
 namespace Jackett.Server
 {
@@ -66,22 +64,12 @@ namespace Jackett.Server
                 options.KnownProxies.Clear();
             });
 
-#if NET471
-            services.AddMvc(
-                        config => config.Filters.Add(
-                            new AuthorizeFilter(
-                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
-                    .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
-                                        new DefaultContractResolver()); //Web app uses Pascal Case JSON);
-#else
-
             services.AddControllers(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
                                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
                     .AddNewtonsoftJson(
                         options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-#endif
 
             var runtimeSettings = new RuntimeSettings();
             Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);
@@ -117,45 +105,6 @@ namespace Jackett.Server
             return new AutofacServiceProvider(container);
         }
 
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-#if NET471
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
-        {
-            applicationLifetime.ApplicationStarted.Register(OnStarted);
-            applicationLifetime.ApplicationStopped.Register(OnStopped);
-            Helper.applicationLifetime = applicationLifetime;
-            app.UseResponseCompression();
-
-            app.UseDeveloperExceptionPage();
-
-            app.UseCustomExceptionHandler();
-
-            var serverBasePath = Helper.ServerService.BasePath() ?? string.Empty;
-
-            if (!string.IsNullOrEmpty(serverBasePath))
-            {
-                app.UsePathBase(serverBasePath);
-            }
-
-            app.UseForwardedHeaders();
-
-            var rewriteOptions = new RewriteOptions()
-                .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
-                .AddRewrite(@"^potato\/([\w-]*)", "api/v2.0/indexers/$1/results/potato", skipRemainingRules: true) //legacy potato route
-                .Add(RedirectRules.RedirectToDashboard);
-
-            app.UseRewriter(rewriteOptions);
-
-            app.UseStaticFiles();
-
-            app.UseAuthentication();
-
-            if (Helper.ServerConfiguration.AllowCORS)
-                app.UseCors(AllowAllOrigins);
-
-            app.UseMvc();
-        }
-#else
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IHostApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStarted.Register(OnStarted);
@@ -194,7 +143,6 @@ namespace Jackett.Server
 
             app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
-#endif
 
         private static void OnStarted()
         {

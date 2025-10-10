@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Jackett.Common.Models;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.TestHelpers
 {

@@ -191,8 +191,11 @@ namespace Jackett.Common.Indexers
             return filteredResults;
         }
 
-        protected virtual IEnumerable<ReleaseInfo> FixResults(TorznabQuery query, IEnumerable<ReleaseInfo> results)
+        protected virtual IEnumerable<ReleaseInfo> FixResults(TorznabQuery query, IEnumerable<ReleaseInfo> results, bool? skipPublishDateFix = null)
         {
+            //if not explicitly set, skip date in debug mode
+            skipPublishDateFix ??= EnvironmentUtil.IsDebug;
+
             var fixedResults = results.Select(r =>
             {
                 // add origin
@@ -200,7 +203,7 @@ namespace Jackett.Common.Indexers
 
                 // fix publish date
                 // some trackers do not keep their clocks up to date and can be ~20 minutes out!
-                if (!EnvironmentUtil.IsDebug && r.PublishDate > DateTime.Now)
+                if (!skipPublishDateFix.Value && r.PublishDate > DateTime.Now)
                 {
                     r.PublishDate = DateTime.Now;
                 }

@@ -3,6 +3,7 @@ using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Models;
 using Jackett.Test.TestHelpers;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Indexers
 {

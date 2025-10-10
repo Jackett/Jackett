@@ -2,6 +2,7 @@ using System;
 using Jackett.Common.Indexers;
 using Jackett.Common.Utils.FilterFuncs;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils.FilterFuncs
 {

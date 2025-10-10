@@ -65,7 +65,7 @@ namespace Jackett.Common.Models
             //   categories are updated frequently and the id must be fixed to work in 3rd party apps
             if (!int.TryParse(trackerCategory, out var trackerCategoryInt))
             {
-                var hashed = SHA1.Create().ComputeHash(Encoding.UTF8.GetBytes(trackerCategory));
+                var hashed = SHA1.HashData(Encoding.UTF8.GetBytes(trackerCategory));
                 trackerCategoryInt = BitConverter.ToUInt16(hashed, 0); // id between 0 and 65535 < 100000
             }
             var customCat = new TorznabCategory(trackerCategoryInt + 100000, trackerCategoryDesc);

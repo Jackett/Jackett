@@ -4,8 +4,8 @@ using System.Diagnostics.CodeAnalysis;
 using System.Net;
 using Jackett.Common.Utils;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
-using CollectionAssert = NUnit.Framework.CollectionAssert;
+using NUnit.Framework.Legacy;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils
 {
