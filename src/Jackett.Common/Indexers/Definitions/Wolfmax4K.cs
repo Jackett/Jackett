@@ -538,7 +538,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             // Create a RijndaelManaged object
             // with the specified key and IV.
-            using RijndaelManaged aesAlg = new()  { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
+            using RijndaelManaged aesAlg = new() { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
 
             // Create a decrytor to perform the stream transform.
             var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);

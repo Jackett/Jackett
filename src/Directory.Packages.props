@@ -13,7 +13,7 @@
     <PackageVersion Include="coverlet.msbuild" Version="6.0.4" />
     <PackageVersion Include="DotNet4.SocksProxy" Version="1.4.0.1" />
     <PackageVersion Include="FlareSolverrSharp" Version="3.0.7" />
-    <PackageVersion Include="FluentAssertions" Version="8.7.1" />
+    <PackageVersion Include="FluentAssertions" Version="7.2.0" />
     <PackageVersion Include="IDisposableAnalyzers" Version="4.0.8" />
     <PackageVersion Include="Microsoft.AspNetCore.DataProtection" Version="9.0.9" />
     <PackageVersion Include="Microsoft.AspNetCore.Http" Version="2.3.0" />

@@ -193,7 +193,7 @@ namespace Jackett.Common.Indexers
 
         protected virtual IEnumerable<ReleaseInfo> FixResults(TorznabQuery query, IEnumerable<ReleaseInfo> results, bool? skipPublishDateFix = null)
         {
-            //if not explicitly set, skip date in debug mode
+            //if not explicitly set, skip publish date fix in debug mode
             skipPublishDateFix ??= EnvironmentUtil.IsDebug;
 
             var fixedResults = results.Select(r =>

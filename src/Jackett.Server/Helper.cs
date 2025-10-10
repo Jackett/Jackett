@@ -1,8 +1,8 @@
 using Autofac;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
-using NLog;
 using Microsoft.Extensions.Hosting;
+using NLog;
 
 namespace Jackett.Server
 {

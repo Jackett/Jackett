@@ -20,7 +20,6 @@
     <PropertyGroup>
         <Nullable>enable</Nullable>
         <LangVersion>latest</LangVersion>
-        <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
         <CentralPackageTransitivePinningEnabled>true</CentralPackageTransitivePinningEnabled>
         <UseArtifactsOutput>true</UseArtifactsOutput>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
