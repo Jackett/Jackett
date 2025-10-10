@@ -11,6 +11,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -45,12 +46,12 @@ namespace Jackett.Common.Indexers.Definitions
             set => base.configData = value;
         }
         public ArabicSource(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataBasicLogin("For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The Default is <i>15</i>."))
         {
             configData.AddDynamic("thankyoutext", new StringConfigurationItem("Thank You Text"));
