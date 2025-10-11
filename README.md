@@ -515,6 +515,7 @@ Prior versions of Jackett are no longer supported.
  * Romanian Metal Torrents (RMT)
  * Rousi
  * SAMARITANO
+ * SBPT
  * SceneHD [![(invite needed)][inviteneeded]](#)
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
