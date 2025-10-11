@@ -140,7 +140,7 @@ namespace Jackett.Common.Indexers.Definitions
             var qc = new NameValueCollection { { "s", newQuery.SearchTerm } };
 
             var page = 1;
-            IHtmlDocument htmlDocument = null;
+            IHtmlDocument? htmlDocument = null;
             do
             {
                 var url = SiteLink + "page/" + page + "/?" + qc.GetQueryString();
@@ -159,6 +159,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 try
                 {
+                    htmlDocument?.Dispose();
                     htmlDocument = ParseHtmlIntoDocument(htmlString);
 
                     var table = htmlDocument.QuerySelector("table.table");
@@ -193,6 +194,8 @@ namespace Jackett.Common.Indexers.Definitions
                     releases.Count < MaxNrOfResults &&
                     !IsLastPageOfQueryResult(htmlDocument));
 
+            htmlDocument?.Dispose();
+
             return releases;
         }
 
@@ -225,7 +228,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (!downloadUrl.Contains(DownloadLink))
             {
                 var htmlString = await LoadWebPageAsync(downloadUrl);
-                var htmlDocument = ParseHtmlIntoDocument(htmlString);
+                using var htmlDocument = ParseHtmlIntoDocument(htmlString);
                 downloadUrl = GetDownloadLink(htmlDocument);
             }
             var content = await base.Download(new Uri(downloadUrl));
@@ -284,7 +287,7 @@ namespace Jackett.Common.Indexers.Definitions
             var seriesReleases = new List<ReleaseInfo>();
 
             var htmlString = await LoadWebPageAsync(detailsStr);
-            var htmlDocument = ParseHtmlIntoDocument(htmlString);
+            using var htmlDocument = ParseHtmlIntoDocument(htmlString);
 
             var tables = htmlDocument.QuerySelectorAll("table.rwd-table");
             foreach (var table in tables)

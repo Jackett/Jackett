@@ -2,10 +2,9 @@
 
   <PropertyGroup>
     <PackageId>$(MSBuildProjectName)</PackageId>
-    <TargetFrameworks>net9.0;net471</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <OutputType>Exe</OutputType>
-    <NoWarn></NoWarn>
     <ServerGarbageCollection>false</ServerGarbageCollection>
     <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISLINUXMUSL</DefineConstants>
   </PropertyGroup>
@@ -21,7 +20,7 @@
   </PropertyGroup>
 
   <Choose>
-    <When Condition="'$(TargetFramework)' != 'net471' and $(RuntimeIdentifier.Contains('win')) == 'false'">
+    <When Condition="$(RuntimeIdentifier.Contains('win')) == 'false'">
       <PropertyGroup>
         <AssemblyName>jackett</AssemblyName>
       </PropertyGroup>
@@ -33,34 +32,16 @@
     </Otherwise>
   </Choose>
 
-  <!-- Conditionally obtain references for the .NET 9.0 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.9" />
-  </ItemGroup>
-
-  <!-- Conditionally obtain references for the .NET471 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net471' ">
-    <PackageReference Include="Microsoft.AspNetCore" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.Cookies" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Mvc" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.ResponseCompression" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.Rewrite" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.StaticFiles" Version="2.3.0" />
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-  </ItemGroup>
-
   <ItemGroup>
-    <PackageReference Include="Autofac" Version="8.0.0" />
-    <PackageReference Include="Autofac.Extensions.DependencyInjection" Version="9.0.0" />
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
-    <PackageReference Include="NLog" Version="5.4.0" />
-    <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
+    <PackageReference Include="IDisposableAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
+    <PackageReference Include="Autofac.Extensions.DependencyInjection" />
+    <PackageReference Include="Mono.Posix" />
+    <PackageReference Include="NLog.Web.AspNetCore" />
+    <PackageReference Include="BencodeNET" />
   </ItemGroup>
 
   <ItemGroup>

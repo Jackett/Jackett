@@ -216,7 +216,7 @@ namespace Jackett.Common.Indexers.Definitions
             nsm.AddNamespace("erai", "https://www.erai-raws.info/rss-page/");
 
             // Parse to RssFeedItems
-            var xmlNodes = xmlDocument.GetElementsByTagName("item");
+            using var xmlNodes = xmlDocument.GetElementsByTagName("item");
             List<RssFeedItem> feedItems = new List<RssFeedItem>();
             foreach (var n in xmlNodes)
             {

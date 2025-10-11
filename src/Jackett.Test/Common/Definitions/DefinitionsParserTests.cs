@@ -5,7 +5,7 @@ using Jackett.Common.Models;
 using NUnit.Framework;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
-using Assert = NUnit.Framework.Assert;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Definitions
 {

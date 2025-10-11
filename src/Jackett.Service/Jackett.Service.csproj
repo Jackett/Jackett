@@ -5,9 +5,6 @@
     <OutputType>WinExe</OutputType>
     <AssemblyName>JackettService</AssemblyName>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
-    <NoWarn />
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
   </PropertyGroup>
 
   <ItemGroup>

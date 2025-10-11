@@ -112,7 +112,7 @@ namespace Jackett.Common.Utils.Clients
 
         protected override async Task<WebResult> Run(WebRequest webRequest)
         {
-            var request = new HttpRequestMessage();
+            using var request = new HttpRequestMessage();
             request.Headers.ExpectContinue = false;
             request.RequestUri = new Uri(webRequest.Url);
 

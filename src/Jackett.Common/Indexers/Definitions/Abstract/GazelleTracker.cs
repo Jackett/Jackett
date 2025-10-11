@@ -353,7 +353,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                                 continue;
                             }
 
-                            var release2 = (ReleaseInfo)release.Clone();
+                            var release2 = release.Clone();
                             FillReleaseInfoFromJson(release2, torrent);
                             if (ReleaseInfoPostParse(release2, torrent, r))
                             {

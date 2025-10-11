@@ -295,14 +295,14 @@ namespace Jackett.Common.Services
             {
                 var gzPath = Path.Combine(tempDir, "Update.tar.gz");
                 File.WriteAllBytes(gzPath, data.ContentBytes);
-                Stream inStream = File.OpenRead(gzPath);
-                Stream gzipStream = new GZipInputStream(inStream);
 
-                var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, null);
-                tarArchive.ExtractContents(tempDir);
-                tarArchive.Close();
-                gzipStream.Close();
-                inStream.Close();
+                using (var inStream = File.OpenRead(gzPath))
+                {
+                    using var gzipStream = new GZipInputStream(inStream);
+                    using var tarArchive = TarArchive.CreateInputTarArchive(gzipStream, null);
+
+                    tarArchive.ExtractContents(tempDir);
+                }
 
                 if (variant == Variants.JackettVariant.CoreMacOs || variant == Variants.JackettVariant.CoreMacOsArm64
                 || variant == Variants.JackettVariant.CoreLinuxAmdx64 || variant == Variants.JackettVariant.CoreLinuxArm32
@@ -402,7 +402,7 @@ namespace Jackett.Common.Services
             }
 
             logger.Info($"Starting updater: {startInfo.FileName} {startInfo.Arguments}");
-            var procInfo = Process.Start(startInfo);
+            using var procInfo = Process.Start(startInfo);
             logger.Info($"Updater started process id: {procInfo.Id}");
 
             if (!noRestart)

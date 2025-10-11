@@ -1,22 +1,14 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>net9.0;net471</TargetFrameworks>
+    <TargetFrameworks>net9.0</TargetFrameworks>
     <ApplicationIcon>jackett.ico</ApplicationIcon>
     <AssemblyName>JackettUpdater</AssemblyName>
     <OutputType>Exe</OutputType>
     <Version>0.0.0</Version>
     <ServerGarbageCollection>false</ServerGarbageCollection>
-    <NoWarn />
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
-    <WarningsAsErrors />
     <DefineConstants Condition="'$(RuntimeIdentifier)' == 'linux-musl-x64' or '$(RuntimeIdentifier)' == 'linux-musl-arm' or '$(RuntimeIdentifier)' == 'linux-musl-arm64'">ISLINUXMUSL</DefineConstants>
   </PropertyGroup>
-
-  <!-- Conditionally obtain references for the .NET471 target -->
-  <ItemGroup Condition=" '$(TargetFramework)' == 'net471' ">
-    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
-  </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Jackett.Common\Jackett.Common.csproj">

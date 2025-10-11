@@ -3,7 +3,7 @@ using Jackett.Common.Models.DTO;
 using Jackett.Test.TestHelpers;
 using NLog;
 using NUnit.Framework;
-using Assert = NUnit.Framework.Assert;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Models.DTO
 {

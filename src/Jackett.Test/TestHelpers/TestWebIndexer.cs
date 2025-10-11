@@ -49,7 +49,7 @@ namespace Jackett.Test.TestHelpers
             FilterResults(query, results);
 
         public IEnumerable<ReleaseInfo> _FixResults(TorznabQuery query, IEnumerable<ReleaseInfo> results) =>
-            FixResults(query, results);
+            FixResults(query, results, false);
 
         public void _AddCategoryMapping(string trackerCategory, TorznabCategory newznabCategory, string trackerCategoryDesc = null) =>
             AddCategoryMapping(trackerCategory, newznabCategory, trackerCategoryDesc);

@@ -1,5 +1,6 @@
 using NUnit.Framework;
 using static Jackett.Common.Utils.FilterFunc;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils.FilterFuncs
 {

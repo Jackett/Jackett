@@ -69,7 +69,7 @@ namespace Jackett.Common.Services
                 var trackerCacheQuery = new TrackerCacheQuery
                 {
                     Created = DateTime.Now,
-                    Results = releases.Select(r => (ReleaseInfo)r.Clone()).ToList()
+                    Results = releases.Select(r => r.Clone()).ToList()
                 };
 
                 var trackerCache = _cache[indexer.Id];

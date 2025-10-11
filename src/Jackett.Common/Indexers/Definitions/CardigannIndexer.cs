@@ -13,6 +13,7 @@ using AngleSharp.Html;
 using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using AngleSharp.Text;
+using AngleSharp.Xml.Dom;
 using AngleSharp.Xml.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
@@ -37,8 +38,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Description => Definition.Description;
 
         protected IndexerDefinition Definition;
-        protected WebResult landingResult;
-        protected IHtmlDocument landingResultDocument;
+        protected WebResult? landingResult;
+        protected IHtmlDocument? landingResultDocument;
 
         protected List<string> DefaultCategories = new List<string>();
 
@@ -772,6 +773,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 // clear landingResults/Document, otherwise we might use an old version for a new relogin (if GetConfigurationForSetup() wasn't called before)
                 landingResult = null;
+                landingResultDocument?.Dispose();
                 landingResultDocument = null;
 
                 WebResult loginResult = null;
@@ -983,7 +985,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
         }
 
-        public async Task<ConfigurationData> GetConfigurationForSetup(bool automaticlogin, string cookies = null)
+        public async Task<ConfigurationData?> GetConfigurationForSetup(bool automaticlogin, string cookies = null)
         {
             var Login = Definition.Login;
 
@@ -1009,6 +1011,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var hasCaptcha = false;
             var htmlParser = new HtmlParser();
+            landingResultDocument?.Dispose();
             landingResultDocument = htmlParser.ParseDocument(landingResult.ContentString);
 
             if (Login.Captcha != null)
@@ -1065,6 +1068,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 configData.LastError.Value = "Got captcha during automatic login, please reconfigure manually";
                 logger.Error(string.Format("CardigannIndexer ({0}): Found captcha during automatic login, aborting", Id));
+                landingResultDocument?.Dispose();
                 landingResultDocument = null;
                 return null;
             }
@@ -1747,18 +1751,23 @@ namespace Jackett.Common.Indexers.Definitions
 
                         if (SearchPath.Response is { Type: "xml" })
                         {
-                            var SearchResultParser = new XmlParser();
-                            var SearchResultDocument = SearchResultParser.ParseDocument(results);
+                            var searchResultParser = new XmlParser();
+                            IXmlDocument? searchResultDocument = null;
 
                             if (Search.Preprocessingfilters != null)
                             {
                                 results = applyFilters(results, Search.Preprocessingfilters, variables);
-                                SearchResultDocument = SearchResultParser.ParseDocument(results);
+                                searchResultDocument = searchResultParser.ParseDocument(results);
                                 logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Definition.Id, results));
+                            }
+                            else
+                            {
+                                searchResultDocument = searchResultParser.ParseDocument(results);
                             }
 
                             var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
-                            rowsDom = SearchResultDocument.QuerySelectorAll(rowsSelector);
+                            rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            searchResultDocument?.Dispose();
                         }
                         else
                         {
@@ -1789,7 +1798,7 @@ namespace Jackett.Common.Indexers.Definitions
                             }
 
                             var searchResultParser = new HtmlParser();
-                            var searchResultDocument = searchResultParser.ParseDocument(results);
+                            IHtmlDocument? searchResultDocument = null;
 
                             checkForError(response, Definition.Search.Error);
 
@@ -1799,9 +1808,14 @@ namespace Jackett.Common.Indexers.Definitions
                                 searchResultDocument = searchResultParser.ParseDocument(results);
                                 logger.Debug(string.Format("CardigannIndexer ({0}): result after preprocessingfilters: {1}", Id, results));
                             }
+                            else
+                            {
+                                searchResultDocument = searchResultParser.ParseDocument(results);
+                            }
 
                             var rowsSelector = applyGoTemplateText(Search.Rows.Selector, variables);
                             rowsDom = searchResultDocument.QuerySelectorAll(rowsSelector);
+                            searchResultDocument?.Dispose();
                         }
 
                         var Rows = rowsDom.ToList();

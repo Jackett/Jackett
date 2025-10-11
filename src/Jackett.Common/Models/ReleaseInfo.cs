@@ -6,7 +6,7 @@ using Newtonsoft.Json;
 namespace Jackett.Common.Models
 {
 
-    public class ReleaseInfo : ICloneable
+    public class ReleaseInfo
     {
         public string Title { get; set; }
         public Uri Guid { get; set; }
@@ -101,7 +101,7 @@ namespace Jackett.Common.Models
             Origin = copyFrom.Origin;
         }
 
-        public virtual object Clone() => new ReleaseInfo(this);
+        public virtual ReleaseInfo Clone() => new ReleaseInfo(this);
 
         public override string ToString() => $"[ReleaseInfo: Title={Title}, Guid={Guid}, Link={Link}, Details={Details}, PublishDate={PublishDate}, Category={Category}, Size={Size}, Files={Files}, Grabs={Grabs}, Description={Description}, RageID={RageID}, TVDBId={TVDBId}, Imdb={Imdb}, TMDb={TMDb}, TVMazeId={TVMazeId}, TraktId={TraktId}, DoubanId={DoubanId}, Seeders={Seeders}, Peers={Peers}, Poster={Poster}, InfoHash={InfoHash}, MagnetUri={MagnetUri}, MinimumRatio={MinimumRatio}, MinimumSeedTime={MinimumSeedTime}, DownloadVolumeFactor={DownloadVolumeFactor}, UploadVolumeFactor={UploadVolumeFactor}, Gain={Gain}]";
     }

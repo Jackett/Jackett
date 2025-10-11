@@ -8,6 +8,7 @@ using NLog;
 using NUnit.Framework;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 // todo: add all fields from the search block (poster, imdbid, ...)
 // todo: add definition with post

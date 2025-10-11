@@ -1,35 +1,31 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
+    <TargetFramework>net9.0</TargetFramework>
     <Version>0.0.0</Version>
-    <LangVersion>9</LangVersion>
-    <NoWarn />
-    <WarningsAsErrors />
-    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
-
+  
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.3.0" />
-    <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
-    <PackageReference Include="Autofac" Version="8.0.0" />
-    <PackageReference Include="BencodeNET" Version="4.0.0" />
-    <PackageReference Include="FlareSolverrSharp" Version="3.0.7" />
-    <PackageReference Include="CommandLineParser" Version="2.9.1" />
-    <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.0" />
-    <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
-    <PackageReference Include="MimeMapping" Version="1.0.1.50" />
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="NLog" Version="5.4.0" />
-    <PackageReference Include="Polly" Version="8.6.3" />
-    <PackageReference Include="SharpZipLib" Version="1.4.2" />
-    <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
-    <PackageReference Include="System.Text.Json" Version="9.0.9" />
-    <PackageReference Include="YamlDotNet" Version="16.3.0" />
+    <PackageReference Include="AngleSharp" />
+    <PackageReference Include="AngleSharp.Xml" />
+    <PackageReference Include="Autofac" />
+    <PackageReference Include="FlareSolverrSharp" />
+    <PackageReference Include="CommandLineParser" />
+    <PackageReference Include="DotNet4.SocksProxy" />
+    <PackageReference Include="IDisposableAnalyzers">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.AspNetCore.Http" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" />
+    <PackageReference Include="Microsoft.CSharp" />
+    <PackageReference Include="MimeMapping" />
+    <PackageReference Include="Newtonsoft.Json" />
+    <PackageReference Include="NLog" />
+    <PackageReference Include="Polly" />
+    <PackageReference Include="SharpZipLib" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" />
+    <PackageReference Include="YamlDotNet" />
   </ItemGroup>
 
   <ItemGroup>

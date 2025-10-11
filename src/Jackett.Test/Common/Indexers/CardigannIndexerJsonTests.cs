@@ -7,6 +7,7 @@ using NLog;
 using NUnit.Framework;
 using YamlDotNet.Serialization;
 using YamlDotNet.Serialization.NamingConventions;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 // todo: test download block
 // todo: test login block

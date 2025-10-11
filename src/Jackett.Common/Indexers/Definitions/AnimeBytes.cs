@@ -250,7 +250,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (cachedResult != null)
                 {
-                    return cachedResult.Results.Select(r => (ReleaseInfo)r.Clone()).ToArray();
+                    return cachedResult.Results.Select(r => r.Clone()).ToArray();
                 }
             }
 
@@ -638,7 +638,7 @@ namespace Jackett.Common.Indexers.Definitions
                 cache.Add(new CachedQueryResult(searchUrl, releases));
             }
 
-            return releases.Select(r => (ReleaseInfo)r.Clone());
+            return releases.Select(r => r.Clone());
         }
 
         private static int? ParseSeasonFromTitles(IReadOnlyCollection<string> titles)

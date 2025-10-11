@@ -2,6 +2,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Jackett.Test.TestHelpers;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils
 {

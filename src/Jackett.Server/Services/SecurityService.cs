@@ -29,14 +29,11 @@ namespace Jackett.Server.Services
                 return null;
 
             var ue = new UnicodeEncoding();
-#pragma warning disable SYSLIB0021
-            var hashString = new SHA512Managed();
-#pragma warning restore SYSLIB0021
 
             // Append key as salt
             input += _serverConfig.APIKey;
             var message = ue.GetBytes(input);
-            var hashValue = hashString.ComputeHash(message);
+            var hashValue = SHA512.HashData(message);
             return hashValue.Aggregate("", (current, x) => current + $"{x:x2}");
         }
     }

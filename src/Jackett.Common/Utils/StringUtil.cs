@@ -59,10 +59,8 @@ namespace Jackett.Common.Utils
         /// <returns>40-character hex string</returns>
         public static string HashSHA1(string s)
         {
-            var sha1 = SHA1.Create();
-
             var bytes = Encoding.UTF8.GetBytes(s);
-            var hashBytes = sha1.ComputeHash(bytes);
+            var hashBytes = SHA1.HashData(bytes);
 
             return HexStringFromBytes(hashBytes);
         }
@@ -70,10 +68,8 @@ namespace Jackett.Common.Utils
         public static string Hash(string s)
         {
             // Use input string to calculate MD5 hash
-            var md5 = System.Security.Cryptography.MD5.Create();
-
-            var inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
-            var hashBytes = md5.ComputeHash(inputBytes);
+            var inputBytes = Encoding.ASCII.GetBytes(s);
+            var hashBytes = MD5.HashData(inputBytes);
 
             return HexStringFromBytes(hashBytes);
         }
@@ -179,7 +175,7 @@ namespace Jackett.Common.Utils
                 return "<NULL>";
 
             var sb = new StringBuilder();
-            var sw = new StringWriter(sb);
+            using var sw = new StringWriter(sb);
             var formatter = new PrettyMarkupFormatter();
             element.ToHtml(sw, formatter);
             return sb.ToString();

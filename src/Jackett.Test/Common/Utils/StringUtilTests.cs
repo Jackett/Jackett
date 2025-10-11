@@ -4,6 +4,8 @@ using System.Collections.Specialized;
 using System.Text;
 using Jackett.Common.Utils;
 using NUnit.Framework;
+using NUnit.Framework.Legacy;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils
 {

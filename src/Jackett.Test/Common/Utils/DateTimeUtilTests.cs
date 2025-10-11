@@ -4,6 +4,7 @@ using System.Globalization;
 using System.Threading;
 using Jackett.Common.Utils;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Utils
 {

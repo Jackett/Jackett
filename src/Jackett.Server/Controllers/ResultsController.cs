@@ -445,7 +445,7 @@ namespace Jackett.Server.Controllers
                 });
 
                 var proxiedReleases = result.Releases
-                    .Select(r => (ReleaseInfo)r.Clone())
+                    .Select(r => r.Clone())
                     .Select(r =>
                     {
                         r.Link = serverService.ConvertToProxyLink(r.Link, serverUrl, r.Origin.Id, "dl", r.Title);

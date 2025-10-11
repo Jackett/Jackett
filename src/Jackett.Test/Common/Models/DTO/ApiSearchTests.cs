@@ -1,5 +1,6 @@
 using Jackett.Common.Models.DTO;
 using NUnit.Framework;
+using Assert = NUnit.Framework.Legacy.ClassicAssert;
 
 namespace Jackett.Test.Common.Models.DTO
 {
