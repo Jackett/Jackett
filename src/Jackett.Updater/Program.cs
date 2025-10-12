@@ -309,6 +309,7 @@ namespace Jackett.Updater
                 "Definitions/bit-titan.yml",
                 "Definitions/bitbr.yml",
                 "Definitions/bitcityreloaded.yml",
+                "Definitions/bithorlo.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bitnova.yml",

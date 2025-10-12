@@ -270,7 +270,6 @@ Prior versions of Jackett are no longer supported.
  * BIT-HDTV
  * Bitded
  * bitGAMER
- * Bithorlo (BHO)
  * BitHUmen
  * Bitpalace
  * BitPorn
