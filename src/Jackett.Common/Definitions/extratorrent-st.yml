@@ -37,6 +37,7 @@ caps:
     - {id: "Live Action [Non-English]", cat: TV/Anime, desc: "Live Action [Non-English]"}
     - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
     - {id: "Manga [English-translated]", cat: Books/Comics, desc: "Manga [English-translated]"}
+    - {id: "Manga [Raw]", cat: Books/Comics, desc: "Manga [Raw]"}
     - {id: MP3, cat: Audio/MP3, desc: Music MP3}
     - {id: MP4, cat: Movies, desc: Movies MP4}
     - {id: Mac, cat: PC/Mac, desc: Software Mac}
