@@ -35,6 +35,7 @@ caps:
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeAudioLossless, cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: AnimeEnglish-translated, cat: TV/Anime, desc: "Anime English-translated"}
+    - {id: AnimeLiveAction[Raw], cat: TV/Anime, desc: Anime Live Action Raw}
     - {id: AnimeRaw, cat: TV/Anime, desc: Anime Raw}
     - {id: AnimeSubs, cat: TV/Anime, desc: Anime Subs}
     - {id: Apps, cat: PC, desc: Apps}
