@@ -8,10 +8,9 @@ using System.Xml.Linq;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
-using Jackett.Common.Serializer;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -38,8 +37,8 @@ namespace Jackett.Common.Indexers.Definitions
         private ConfigurationDataAnilibria ConfigData => (ConfigurationDataAnilibria)configData;
         private const int DefaultRssLimit = 15;
         public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                            ICacheService cs) : base(
-            configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
+                            CacheManager cm) : base(
+            configService: configService, client: wc, logger: l, p: ps, cacheManager: cm,
             configData: new ConfigurationDataAnilibria())
         {
             // requestDelay to try to avoid DDoS-Guard and having to wait for Flaresolverr to resolve challenges
