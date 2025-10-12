@@ -86,7 +86,7 @@ login:
     ssl: yes
     trackerssl: yes
   error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    - selector: div > div.flex:has(div:contains("失败"))
   test:
     path: index.php
     selector: a[href="logout.php"]
