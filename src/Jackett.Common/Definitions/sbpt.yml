@@ -189,6 +189,9 @@ search:
         "*": 1
     minimumratio:
       text: 1.0
+    minimumseedtime:
+      # 5 hours (as seconds = 5 x 60 x 60)
+      text: 18000
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
