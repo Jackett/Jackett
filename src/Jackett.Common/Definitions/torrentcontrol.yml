@@ -65,7 +65,7 @@ search:
         - name: querystring
           args: dn
     title:
-      text: "{{ if or .Result.title_file_name  .Result.title_magnet }}{{ or .Result.title_file_name .Result.title_magnet }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      text: "{{ if or .Result.title_file_name .Result.title_magnet }}{{ or .Result.title_file_name .Result.title_magnet }}{{ else }}{{ .Result.title_default }}{{ end }}"
       filters:
         - name: append
           args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
