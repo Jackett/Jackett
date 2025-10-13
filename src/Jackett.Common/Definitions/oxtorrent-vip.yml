@@ -12,7 +12,7 @@ encoding: UTF-8
 links:
   - https://www.oxtorrent10.com/
   - https://www.zone-torrent.town/
-  - https://www.mega-torrent7.com/
+  - https://www.mega-torrent.town/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -28,7 +28,6 @@ legacylinks:
   - https://oxtorrent.blog/
   - https://www.site-torrent.com/
   # actual legacylinks
-  - https://www.oxtorrent1.com/
   - https://www.zone-torrent.com/
   - https://www.mega-torrent3.com/
   - https://www.oxtorrent2.com/
@@ -49,6 +48,7 @@ legacylinks:
   - https://www.mega-torrent.net/
   - https://www.oxtorrent.fyi/
   - https://www.zone-torrent4.com/
+  - https://www.mega-torrent7.com/
 
 caps:
   categorymappings:
