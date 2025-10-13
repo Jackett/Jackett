@@ -5,7 +5,6 @@ description: "TorrentControl (API) is a Public Torrent Tracker for MOVIES / TV"
 language: en-US
 type: public
 encoding: UTF-8
-# Status: https://ant.trackerstatus.info/
 links:
   - https://torrentcontrol.pw/
 
