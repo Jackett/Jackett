@@ -49,6 +49,7 @@ caps:
     - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Audio books"}
     - {id: BooksComics, cat: Books/Comics, desc: Comics}
     - {id: BooksEbooks, cat: Books/EBook, desc: Ebooks}
+    - {id: "BooksManga[Raw]", cat: Books/Comics, desc: "Books Manga [Raw]"}
     - {id: Comics, cat: Books/Comics, desc: Comics}
     - {id: DVD, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: Documentary, cat: Movies/Other, desc: "Movies Documentary"}
