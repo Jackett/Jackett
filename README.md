@@ -124,6 +124,7 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
+ * TorrentControl
  * TorrentDosFilmes
  * TorrentDownload
  * TorrentGalaxyClone

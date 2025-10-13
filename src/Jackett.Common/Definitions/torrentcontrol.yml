@@ -1,0 +1,108 @@
+---
+id: torrentcontrol
+name: TorrentControl (API)
+description: "TorrentControl (API) is a Public Torrent Tracker for MOVIES / TV"
+language: en-US
+type: public
+encoding: UTF-8
+# Status: https://ant.trackerstatus.info/
+links:
+  - https://torrentcontrol.pw/
+
+caps:
+  categorymappings:
+    - {id: movie, cat: Movies, desc: Movies}
+    - {id: series, cat: TV, desc: Series}
+
+  modes:
+    search: [q]
+    movie-search: [q]
+    tv-search: [q, season, ep]
+
+settings: []
+
+search:
+  paths:
+    # docs: https://torrentcontrol.pw/openapi.yaml
+    - path: api/v1/torrents
+      response:
+        type: json
+
+  inputs:
+    per_page: 100
+    search: "{{ .Keywords }}"
+
+  rows:
+    selector: data
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: type
+    _id:
+      selector: content_id
+    details:
+      text: "contents/{{ .Result._id }}"
+    magnet:
+      selector: magnet_uri
+      filters:
+        - name: htmldecode
+    _language:
+      selector: language
+      case:
+        fr: French
+        it: Italian
+        es: Spanish
+        ru: Russian
+        "*": ""
+    title:
+      text: "{{ .Result.magnet }}"
+      filters:
+        - name: querystring
+          args: dn
+        - name: append
+          args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
+    poster:
+      selector: poster_url
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    seeders_zero:
+      selector: seeders
+    seeders:
+      selector: seeders
+      filters:
+        - name: append
+          args: "{{ if eq .Result.seeders_zero \"0\" }}1{{ else }}{{ end }}"
+    leechers_zero:
+      selector: leechers
+    leechers:
+      selector: leechers
+      filters:
+        - name: append
+          args: "{{ if eq .Result.leechers_zero \"0\" }}1{{ else }}{{ end }}"
+    date:
+      # 2025-10-12T21:59:04.000000Z
+      selector: created_at
+    size_default:
+      selector: type
+      case:
+        movie: 9GB
+        series: 2GB
+    size_in_mb:
+      selector: size_in_mb
+      optional: true
+    size:
+      text: "{{ if .Result.size_in_mb }}{{ .Result.size_in_mb }}MB{{ else }}{{ .Result.size_default }}{{ end }}"
+    description:
+      selector: provider
+      filters:
+        - name: prepend
+          args: "provider: "
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api v1
