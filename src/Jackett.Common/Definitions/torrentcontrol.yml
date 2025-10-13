@@ -33,8 +33,8 @@ search:
 
   rows:
     selector: data
-    filters:
-      - name: andmatch
+#    filters:
+#      - name: andmatch
 
   fields:
     category:
@@ -43,25 +43,36 @@ search:
       selector: content_id
     details:
       text: "contents/{{ .Result._id }}"
-    magnet:
-      selector: magnet_uri
-      filters:
-        - name: htmldecode
     _language:
       selector: language
       case:
         fr: French
-        it: Italian
         es: Spanish
+        it: Italian
+        latino: Latino
         ru: Russian
         "*": ""
-    title:
-      text: "{{ .Result.magnet }}"
+    title_default:
+      selector: title
+    title_file_name:
+      selector: file_name
+      optional: true
+    title_magnet:
+      selector: magnet_uri:contains(&dn=)
+      optional: true
       filters:
+        - name: htmldecode
         - name: querystring
           args: dn
+    title:
+      text: "{{ if or .Result.title_file_name  .Result.title_magnet }}{{ or .Result.title_file_name .Result.title_magnet }}{{ else }}{{ .Result.title_default }}{{ end }}"
+      filters:
         - name: append
           args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
+    magnet:
+      selector: magnet_uri
+      filters:
+        - name: htmldecode
     poster:
       selector: poster_url
     imdbid:
