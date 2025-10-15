@@ -202,8 +202,6 @@ search:
     poster:
       selector: a[rel="fancybox"]
       attribute: href
-      filters:
-        - name: strdump
     downloadvolumefactor:
       case:
         "img[src$=\"/freedownload.gif\"]": 0
