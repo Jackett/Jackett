@@ -799,7 +799,7 @@ macOS 13.0+ (Ventura) or greater
 3. If the installation was a success, you can close the Terminal window.
 
 The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
-Logs are stored as usual under `~/.config/Jackett/log.txt`.
+Logs are stored as usual under `~/.config/Jackett/log.txt` or `/Users/your-user-name/Library/Application Support/Jackett/log.txt`.
 
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page and run Jackett with the command `./jackett`.
