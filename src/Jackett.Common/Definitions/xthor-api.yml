@@ -7,11 +7,12 @@ type: private
 encoding: windows-1252
 requestDelay: 2.5
 links:
-  - https://xthor.tk/
+  - https://xthor.help/
 legacylinks:
   - https://xthor.bz/
   - https://xthor.to/
   - https://xthor.tk
+  - https://xthor.tk/
 
 caps:
   categorymappings:
@@ -95,7 +96,7 @@ settings:
   - name: info_key
     type: info
     label: About your Passkey
-    default: "Find your Passkey on <a href=\"https://xthor.tk/api_doc.php\" target =_blank>Xthor > API page</a>."
+    default: "Find your Passkey on <a href=\"https://xthor.help/api_doc.php\" target =_blank>Xthor > API page</a>."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -121,7 +122,7 @@ settings:
     default: false
 
 login:
-  path: "https://api.xthor.tk/"
+  path: "https://api.xthor.help/"
   method: get
   inputs:
     passkey: "{{ .Config.passkey }}"
@@ -132,8 +133,8 @@ login:
 
 search:
   paths:
-    # https://api.xthor.tk/?passkey=<redacted>&search=&category=&freeleech=&tmdbid=&size=&accent=&price=&page=
-    - path: "https://api.xthor.tk/"
+    # https://api.xthor.help/?passkey=<redacted>&search=&category=&freeleech=&tmdbid=&size=&accent=&price=&page=
+    - path: "https://api.xthor.help/"
       inputs:
         passkey: "{{ .Config.passkey }}"
         category: "{{ if .Categories }}{{ range .Categories }}{{.}}+{{end}}{{ else }}{{ end }}"
