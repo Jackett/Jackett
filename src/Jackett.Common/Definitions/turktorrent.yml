@@ -1,7 +1,7 @@
 ---
 id: turktorrent
 name: TurkTorrent
-description: "TurkTorrent (TT) is a TURKISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "TurkTorrent (TT) is a TURKISH Private PAY2DL Torrent Tracker for MOVIES / TV / GENERAL"
 language: tr-TR
 type: private
 encoding: UTF-8
@@ -199,9 +199,6 @@ search:
       selector: a[rel="torrent_leechers"]
     grabs:
       selector: a[rel="times_completed"]
-    poster:
-      selector: a[rel="fancybox"]
-      attribute: href
     downloadvolumefactor:
       case:
         "img[src$=\"/freedownload.gif\"]": 0

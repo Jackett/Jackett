@@ -590,7 +590,7 @@ Prior versions of Jackett are no longer supported.
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
  * TurkSeed (Aturk)
- * TurkTorrent (TT)
+ * TurkTorrent (TT) [PAY2DL]
  * TV Chaos UK (TVCUK)
  * TVstore
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
