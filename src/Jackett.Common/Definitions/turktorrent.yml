@@ -117,7 +117,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: ?p=home&pid=1
-    selector: div#member_info_bar
+    selector: a#logout
 
 search:
   headers:
