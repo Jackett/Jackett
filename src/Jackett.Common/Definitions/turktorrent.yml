@@ -130,7 +130,7 @@ search:
     $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
     keywords: "{{ .Keywords }}"
     # name description both uploader
-    search_type: name
+    search_type: names
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
 
@@ -139,7 +139,7 @@ search:
       args: ["\\b(\\d{4})\\.(\\d{2})\\.(\\d{2})\\b", "$3.$2.$1"]
 
   rows:
-    selector: "table#torrents_table_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#torrents_tables_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
 
   fields:
     category:
@@ -202,6 +202,8 @@ search:
     poster:
       selector: a[rel="fancybox"]
       attribute: href
+      filters:
+        - name: strdump
     downloadvolumefactor:
       case:
         "img[src$=\"/freedownload.gif\"]": 0
