@@ -102,6 +102,7 @@ caps:
     - {id: 101, cat: TV/Sport, desc: "EuroCup"}
     - {id: 102, cat: TV/Sport, desc: "Ultimate Diskk"}
     - {id: 52, cat: TV/Sport, desc: "Field Hockey"}
+    - {id: 103, cat: TV/Sport, desc: "Basketball Champions"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
     - {id: 57, cat: TV/Sport, desc: "NRL"}
 
