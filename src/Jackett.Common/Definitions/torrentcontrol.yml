@@ -12,6 +12,7 @@ caps:
   categorymappings:
     - {id: movie, cat: Movies, desc: Movies}
     - {id: series, cat: TV, desc: Series}
+    - {id: anime, cat: TV/Anime, desc: Anime}
 
   modes:
     search: [q]
