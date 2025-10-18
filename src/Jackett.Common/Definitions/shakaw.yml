@@ -66,6 +66,7 @@ search:
     - path: torrents.php
   inputs:
     palavra_chave: "{{ .Keywords }}"
+    # selecione (default), Com seeders (has seeders), Sem seeders (without seeders), Golden, Sem Golden (not Golden)
     situacao: "{{ if .Config.freeleech }}golden{{ else }}selecione{{ end }}"
 
   rows:
@@ -113,6 +114,8 @@ search:
       filters:
         - name: regexp
           args: "\\[(.+?)\\]"
+    description:
+      selector: td:nth-child(10)
     downloadvolumefactor:
       case:
         span.icone_golden_torrent: 0
@@ -121,6 +124,4 @@ search:
       text: 1
     minimumratio:
       text: 0.6
-    description:
-      selector: td:nth-child(10)
 # engine n/a
