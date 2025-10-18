@@ -40,7 +40,7 @@ jobs:
 
       - name: Setup Environment Variables
         run: |
-          echo "CURRENT_RUDUB_DOMAIN=$(date +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.mom" >> $GITHUB_ENV
+          echo "CURRENT_RUDUB_DOMAIN=$(date +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.homes" >> $GITHUB_ENV
           echo "PREVIOUS_RUDUB_DOMAIN=$(date --date='yesterday' +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.mom" >> $GITHUB_ENV
 
       - name: Update rudub definition
