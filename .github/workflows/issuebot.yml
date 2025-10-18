@@ -24,7 +24,7 @@ jobs:
 
       # This step sets up Node.js. The script that this workflow will run uses Node.js.
       - name: Setup Node.js
-        uses: actions/setup-node@v5
+        uses: actions/setup-node@v6
         with:
           node-version: '18.x'
 
