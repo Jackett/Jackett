@@ -5,14 +5,15 @@ description: "TorrentControl (API) is a Public Torrent Tracker for MOVIES / TV"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://torrentcontrol.pw/
 
 caps:
   categorymappings:
-    - {id: movie, cat: Movies, desc: Movies}
-    - {id: series, cat: TV, desc: Series}
-    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: movie, cat: Movies, desc: Movies, default: true}
+    - {id: series, cat: TV, desc: Series, default: true}
+#    - {id: anime, cat: TV/Anime, desc: Anime}
 
   modes:
     search: [q]
@@ -22,20 +23,20 @@ caps:
 settings: []
 
 search:
+  # docs: https://torrentcontrol.pw/en/api-docs
   paths:
-    # docs: https://torrentcontrol.pw/openapi.yaml
-    - path: api/v1/torrents
+    - path: "api/v1/torrents?type=movie&search={{ .Keywords }}"
       response:
         type: json
+      categories: [movie]
 
-  inputs:
-    per_page: 100
-    search: "{{ .Keywords }}"
+    - path: "api/v1/torrents?type=series&search={{ .Keywords }}"
+      response:
+        type: json
+      categories: [series]
 
   rows:
     selector: data
-#    filters:
-#      - name: andmatch
 
   fields:
     category:
