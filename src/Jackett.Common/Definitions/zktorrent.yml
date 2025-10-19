@@ -7,8 +7,6 @@ description: "ZkTorrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-certificates:
-  - 6daab5aed021a47614f439584fc450bde16cb528 # cloudflare
 # to fetch current domain use https://www.rantop.my/
 links:
   - https://www.zktorrent6.com/
