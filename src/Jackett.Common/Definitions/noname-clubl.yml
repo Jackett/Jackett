@@ -252,9 +252,9 @@ caps:
     - {id: 1295, cat: TV, desc: " |- Общественно-политические и пропагандистские ток-шоу"}
     - {id: 614, cat: TV, desc: " |- Религии и культы (Док/TV)"}
     - {id: 603, cat: TV, desc: "Спорт и активный отдых"}
-    - {id: 1206, cat: TV, desc: " |- Футбол. Чемпионат Мира 2022"}
-    - {id: 1309, cat: TV, desc: " |- Футбол. Чемпионат Европы 2020-2021"}
-    - {id: 1308, cat: TV, desc: " |- Хоккей. Чемпионат мира 2021"}
+    - {id: 1308, cat: TV, desc: " |- Хоккей. Чемпионат мира"}
+    - {id: 1309, cat: TV, desc: " |- Футбол. Чемпионат Европы"}
+    - {id: 1206, cat: TV, desc: " |- Футбол. Чемпионат Мира"}
     - {id: 1194, cat: TV, desc: " |- Летние Олимпийские игры и Паралимпийские игры"}
     - {id: 1062, cat: TV, desc: " |- Зимние Олимпийские игры и Паралимпийские игры"}
     - {id: 974, cat: TV, desc: " |- Футбол"}
@@ -428,8 +428,10 @@ caps:
     - {id: 1255, cat: Audio/Lossless, desc: " |- Классика (сборники) (Lossless)"}
     - {id: 376, cat: Audio, desc: " |- Классика (сборники)"}
     - {id: 326, cat: Audio, desc: "Jazz, Blues, Soul"}
+    - {id: 1352, cat: Audio, desc: " |- Jazz (Hi-Res)"}
     - {id: 359, cat: Audio/Lossless, desc: " |- Jazz (Lossless)"}
     - {id: 358, cat: Audio, desc: " |- Jazz"}
+    - {id: 1353, cat: Audio, desc: " |- Blues, Soul (Hi-Res)"}
     - {id: 1188, cat: Audio/Lossless, desc: " |- Blues, Soul (Lossless)"}
     - {id: 1189, cat: Audio, desc: " |- Blues, Soul"}
     - {id: 328, cat: Audio, desc: "Шансон, Авторская и Военная песня"}
@@ -446,6 +448,7 @@ caps:
     - {id: 336, cat: Audio, desc: " |- Alternative, Punk"}
     - {id: 337, cat: Audio/Lossless, desc: " |- Hard Rock (Lossless)"}
     - {id: 338, cat: Audio, desc: " |- Hard Rock"}
+    - {id: 1351, cat: Audio, desc: " |- Metal (Hi-Res)"}
     - {id: 963, cat: Audio/Lossless, desc: " |- Metal (Lossless)"}
     - {id: 334, cat: Audio, desc: " |- Metal"}
     - {id: 961, cat: Audio/Lossless, desc: " |- Русский Рок (Lossless)"}
