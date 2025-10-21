@@ -1,7 +1,7 @@
 ---
 id: carpt
 name: CarPT
-description: "CarPT is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+description: "CarPT is a CHINESE Private Torrent Tracker for HD MOVIES / TV / MUSIC"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -65,7 +65,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account Retention Rules:<ol><li>Extreme User and above will be retained forever</li><li> Elite Users and above will not be banned after parking (in the Control Panel)</li><li>Users with a parked account will be banned if they do not log in for 360 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 150 consecutive days</li><li> Users with no traffic (i.e., upload/download data is 0) who do not log in for 60 consecutive days will be banned.</li></ol>"
+    default: "Account Retention Rules:<ol><li>Extreme User and above will be retained forever</li><li> Elite Users and above will not be banned after parking (in the Control Panel)</li><li>Users with a parked account will be banned if they do not log in for 150 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 90 consecutive days</li><li> Users with no traffic (i.e., upload/download data is 0) who do not log in for 14 consecutive days will be banned.</li></ol>"
 
 login:
   path: login.php
@@ -186,7 +186,7 @@ search:
         img.pro_2up: 2
         "*": 1
     minimumratio:
-      text: 1.0
+      text: 10
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400

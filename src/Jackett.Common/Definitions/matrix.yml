@@ -28,6 +28,7 @@ caps:
     - {id: 35, cat: Movies/BluRay, desc: "Film/HU/Blu-ray"}
     - {id: 26, cat: Movies/DVD, desc: "Film/HU/DVD-R"}
     - {id: 5, cat: Movies/SD, desc: "Film/HU/SD"}
+    - {id: 62, cat: Movies/UHD, desc: "Film/HU/UHD"}
     - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
     - {id: 39, cat: PC/Games, desc: "Játékok/Rip/Dox"}
 #    - {id: 47, cat: Other, desc: "Klippek"}
@@ -137,6 +138,7 @@ search:
         img[src="/pic/categories/5.png"]: 35
         img[src="/pic/categories/2.png"]: 26
         img[src="/pic/categories/1.png"]: 5
+        img[src="/pic/categories/uhd_hun.png"]: 62
         img[src="/pic/categories/021.png"]: 4
         img[src="/pic/categories/cat_games.gif"]: 39
 #        img[]: 47

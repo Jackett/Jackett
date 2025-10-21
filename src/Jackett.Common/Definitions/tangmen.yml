@@ -1,52 +1,31 @@
 ---
-id: freefarm
-name: Free Farm (自由农场)
-description: "Free Farm (自由农场) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: tangmen
+name: Tangmen (唐门)
+description: "Tangmen (唐门) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
-  - https://pt.0ff.cc/
+  - https://tmpt.top/
 
 caps:
-  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies|电影", default: true}
-    - {id: 402, cat: TV, desc: "TV Series|电视剧", default: true}
-    - {id: 403, cat: TV/Documentary, desc: "Documentaries|纪录片", default: true}
-    - {id: 404, cat: TV, desc: "TV Shows|综艺", default: true}
-    - {id: 405, cat: TV/Anime, desc: "Animations|动漫", default: true}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos|音乐视频", default: true}
-    - {id: 407, cat: Audio/Lossless, desc: "HD Music|无损音乐", default: true}
-    - {id: 408, cat: TV/Sport, desc: "Sports|体育", default: true}
-    - {id: 427, cat: Other/Misc, desc: "待定", default: true}
-    - {id: 412, cat: Other/Misc, desc: "待定", default: true}
-    - {id: 411, cat: Other/Misc, desc: "待定", default: true}
-    - {id: 410, cat: Other/Misc, desc: "待定", default: true}
-    - {id: 409, cat: Other/Misc, desc: "待定", default: true}
-    - {id: 428, cat: Other, desc: "Others|其他", default: true}
-    - {id: 413, cat: Other, desc: "Education|学习教育", default: false}
-    - {id: 414, cat: Other, desc: "Course|网络教程", default: false}
-    - {id: 415, cat: Books, desc: "book|书籍", default: false}
-    - {id: 416, cat: PC/0day, desc: "Resources|网络资源", default: false}
-    - {id: 417, cat: PC/Games, desc: "Game|游戏", default: false}
-    - {id: 425, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 424, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 423, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 422, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 421, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 420, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 419, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 418, cat: Other/Misc, desc: "待定", default: false}
-    - {id: 426, cat: Other, desc: "Others|其他", default: false}
+    - {id: 409, cat: TV/Other, desc: "Others/其他"}
+    - {id: 408, cat: Audio, desc: "Music/音轨"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos/MV"}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
+    - {id: 410, cat: TV, desc: "Playlet（短剧）"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 405, cat: TV/Anime, desc: "Animations/动漫"}
+    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
+    - {id: 401, cat: Movies, desc: "Movies/电影"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, doubanid]
-    movie-search: [q, imdbid, doubanid]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -61,7 +40,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Free Farm Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the cyanbug Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -82,8 +61,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_flaresolverr
-    type: info_flaresolverr
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -91,7 +68,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
   path: login.php
@@ -112,6 +89,8 @@ login:
     trackerssl: yes
   error:
     - selector: td.embedded:has(h2:contains("失败"))
+      message:
+        selector: td.text
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -119,9 +98,6 @@ login:
 search:
   paths:
     - path: torrents.php
-      categories: [401, 402, 403, 404, 405, 406, 407, 408, 427, 412, 411, 410, 409, 428]
-    - path: special.php
-      categories: [413, 414, 415, 416, 417, 425, 424, 423, 422, 421, 420, 419, 418, 426]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
@@ -138,7 +114,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
     category:
@@ -195,7 +171,7 @@ search:
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: td.rowfollow.rowfollow:nth-child(6)
     leechers:
       selector: td.rowfollow:nth-child(7)
     grabs:
@@ -214,21 +190,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    minimumratio:
+      text: 2.0
     minimumseedtime:
-      # special 7 days (as seconds = 7 x 24 x 60 x 60)
-      # normal 3 days (as seconds = 3 x 24 x 60 x 60)
-      case:
-        img[title="H&R"]: 604800
-        "*": 259200
-    description_verified:
-      case:
-        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
-        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
-        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-      filters:
-        - name: prepend
-          args: "{{ .Result.description_verified }} "
-# NexusPHP v1.9.9 2025-10-02
+# NexusPHP v1.9.6 2025-06-25

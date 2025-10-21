@@ -34,7 +34,10 @@ caps:
     - {id: Android, cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeAudioLossless, cat: Audio/Lossless, desc: "Anime Audio Lossless"}
+    - {id: "AnimeAudio[Lossless]", cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: AnimeEnglish-translated, cat: TV/Anime, desc: "Anime English-translated"}
+    - {id: "AnimeLiveAction[Non-English]", cat: TV/Anime, desc: "Anime Live Action Non-English"}
+    - {id: "AnimeLiveAction[Raw]", cat: TV/Anime, desc: "Anime Live Action Raw"}
     - {id: AnimeRaw, cat: TV/Anime, desc: Anime Raw}
     - {id: AnimeSubs, cat: TV/Anime, desc: Anime Subs}
     - {id: Apps, cat: PC, desc: Apps}
@@ -48,6 +51,8 @@ caps:
     - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Audio books"}
     - {id: BooksComics, cat: Books/Comics, desc: Comics}
     - {id: BooksEbooks, cat: Books/EBook, desc: Ebooks}
+    - {id: "BooksManga[English-translated]", cat: Books/Comics, desc: "Books Manga English-translated"}
+    - {id: "BooksManga[Raw]", cat: Books/Comics, desc: "Books Manga Raw"}
     - {id: Comics, cat: Books/Comics, desc: Comics}
     - {id: DVD, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: Documentary, cat: Movies/Other, desc: "Movies Documentary"}

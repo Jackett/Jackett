@@ -309,6 +309,7 @@ namespace Jackett.Updater
                 "Definitions/bit-titan.yml",
                 "Definitions/bitbr.yml",
                 "Definitions/bitcityreloaded.yml",
+                "Definitions/bithorlo.yml",
                 "Definitions/bithq.yml",
                 "Definitions/bitme.yml",
                 "Definitions/bitnova.yml",
@@ -406,7 +407,6 @@ namespace Jackett.Updater
                 "Definitions/epizod.yml",
                 "Definitions/erzsebet.yml",
                 "Definitions/erzsebetpl.yml",
-                "Definitions/esharenet.yml",
                 "Definitions/estrenosdtl.yml",
                 "Definitions/ethor.yml",
                 "Definitions/ettv.yml",
@@ -418,6 +418,7 @@ namespace Jackett.Updater
                 "Definitions/extratorrentclone.yml",
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
+                "Definitions/exttorrents.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
@@ -588,7 +589,6 @@ namespace Jackett.Updater
                 "Definitions/nextjav.yml",
                 "Definitions/nexttorrent.yml",
                 "Definitions/nforce.yml",
-                "Definitions/nirvana.yml",
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nntt.yml",
@@ -649,6 +649,7 @@ namespace Jackett.Updater
                 "Definitions/qxr.yml",
                 "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682
                 "Definitions/rapidetracker.yml",
+                "Definitions/rapidzona.yml",
                 "Definitions/rarbg.yml", // migrated to C#
                 "Definitions/rareshare2.yml",
                 "Definitions/redbits.yml", // switch to *-API #11540 #8682

@@ -155,8 +155,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -229,4 +227,4 @@ search:
     minimumseedtime:
       # 6 days (as seconds = 6 x 24 x 60 x 60)
       text: 518400
-# json UNIT3D 9.1.5 (custom)
+# json UNIT3D 9.1.7 (custom)

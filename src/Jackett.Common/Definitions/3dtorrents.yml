@@ -71,6 +71,10 @@ settings:
     type: info
     label: Account Inactivity
     default: "Inactivity grace period is three months which means that if you do not log in to the 3Dtorrents web site for 90 days, your account will be deleted. If you are VIP your will stay until the VIP period is over."
+  - name: info_captcha
+    type: info
+    label: About Captcha
+    default: "Note that the captcha on the 3Dtorrents login page is Case Sensitive."
 
 login:
   path: index.php?page=login

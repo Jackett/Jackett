@@ -23,7 +23,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "revolutiontt";
         public override string Name => "RevolutionTT";
         public override string Description => "RevolutionTT is a Private site. The Revolution has begun";
-        public override string SiteLink { get; protected set; } = "https://revolutiontt.me/";
+        public override string SiteLink { get; protected set; } = "https://revott.me/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://revolutiontt.me/",
+        };
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";
         public override string Type => "private";

@@ -7,11 +7,9 @@ description: "ZkTorrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-certificates:
-  - 6daab5aed021a47614f439584fc450bde16cb528 # cloudflare
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.zktorrent.net/
+  - https://www.zktorrent.town/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -27,8 +25,6 @@ legacylinks:
   - https://gktorrent.news/
   - https://www.site-torrent.com/
   # actual legacylinks
-  - https://www.gktorrent.uno/
-  - https://www.gktorrent.gy/
   - https://www.gktorrent.si/
   - https://www.gktorrent.my/
   - https://www.gktorrent.cz/
@@ -42,6 +38,8 @@ legacylinks:
   - https://www.zktorrent3.com/
   - https://www.zktorrent4.com/
   - https://www.zktorrent5.com/
+  - https://www.zktorrent.net/
+  - https://www.zktorrent6.com/
 
 caps:
   categorymappings:

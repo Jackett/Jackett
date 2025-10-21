@@ -16,26 +16,27 @@ caps:
     - {id: 80, cat: Audio, desc: "DMC: DMC"}
     - {id: 49, cat: Audio/MP3, desc: "KZN MP3 Weekly: Ex-Vip"}
     - {id: 76, cat: Audio, desc: "KZN-Exclusive: Exclusive "}
-    - {id: 77, cat: Audio, desc: "KZN  Ex VIP: Ex VIP"}
-    - {id: 98, cat: Audio/MP3, desc: "Other Mp3 Weely: Mp3"}
-    - {id: 99, cat: Audio/MP3, desc: "KZ Internal : KZ Internal"}
+    - {id: 77, cat: Audio, desc: "KZN: Out Of VIP"}
+    - {id: 98, cat: Audio/MP3, desc: "Other Mp3 Weeky: Mp3"}
+    - {id: 99, cat: Audio/MP3, desc: "KZ Internal: KZ Internal"}
     - {id: 74, cat: Audio, desc: "Discography: Collection"}
-    - {id: 82, cat: Audio/Lossless, desc: "Flac: Flac - Flac Packs"}
+    - {id: 82, cat: Audio/Lossless, desc: "Flac: Flac-Flac Packs"}
     - {id: 101, cat: Audio, desc: "Wav: Wav - Wav Packs"}
     - {id: 81, cat: Audio, desc: "Albums : Albums / Singles"}
     - {id: 78, cat: Audio, desc: "Dj-Only: Dj-Music"}
     - {id: 100, cat: Audio, desc: "Web Music: Flac - MP3"}
-    - {id: 46, cat: Audio/Video, desc: "Music Videos: Music Videos"}
+    - {id: 46, cat: Audio/Video, desc: "Music Video: Music Video"}
     - {id: 24, cat: Audio, desc: "Karaoke: All Karaoke"}
-    - {id: 52, cat: Movies, desc: "Classic Movies: Pre90s"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies: Bluray-HD"}
+    - {id: 52, cat: Movies, desc: "Pre 90s Movies: Pre90s"}
     - {id: 28, cat: Movies, desc: "Movies: 2025"}
     - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Web-DL"}
-    - {id: 48, cat: Movies/SD, desc: "Movies: AVI-XVID-Dvdrip"}
-    - {id: 41, cat: Movies/3D, desc: "Remux - 3D: Remux - 3D"}
-    - {id: 23, cat: Movies/Other, desc: "Movies: Kid-Anime-Family"}
+    - {id: 102, cat: Movies/HD, desc: "Movies MP4: Movie MP4"}
+    - {id: 48, cat: Movies/SD, desc: "Movies: Xvid-Dvd-Webrip"}
+    - {id: 23, cat: Movies/Other, desc: "Movie: Kids-Anime-Family"}
+    - {id: 41, cat: Movies/3D, desc: "Remux-3D: Remux-3D"}
     - {id: 86, cat: Movies/HD, desc: "1440P QHD: 1440P QHD"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies: Dvdr-ISO"}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: Ntsc Dvdr-ISO"}
     - {id: 22, cat: Movies/Foreign, desc: "Movies: Foreign"}
     - {id: 27, cat: Movies/UHD, desc: "Movies: 4K"}
     - {id: 53, cat: Movies, desc: "Movie Packs: Movie Pks"}
@@ -46,11 +47,11 @@ caps:
     - {id: 75, cat: TV/Documentary, desc: "TV: Documentary"}
     - {id: 26, cat: TV/Sport, desc: "TV: Sports"}
     - {id: 42, cat: Movies, desc: "TV Packs: Full Seasons"}
-    - {id: 50, cat: TV/Anime, desc: "TV Packs: Kids -  Packs"}
+    - {id: 50, cat: TV/Anime, desc: "TV Packs: Kids- Anime-Packs"}
     - {id: 83, cat: Movies, desc: "TV Packs: Pre90s"}
     - {id: 84, cat: Audio/Audiobook, desc: "Audio Books: A-Books"}
-    - {id: 85, cat: Books, desc: "Ebooks: Ebooks-Mags-Comics"}
-    - {id: 87, cat: PC/0day, desc: "Apps: windows-Linux"}
+    - {id: 85, cat: Books, desc: "Ebook: Ebook-Mag-Comic"}
+    - {id: 87, cat: PC/0day, desc: "Apps: Window-Linux-Mac"}
     - {id: 88, cat: TV/Anime, desc: "Anime: All Anime"}
     - {id: 89, cat: PC/Games, desc: "Games: Pc - Iso"}
     - {id: 90, cat: PC/Games, desc: "Games: Misc"}
@@ -58,7 +59,7 @@ caps:
     - {id: 92, cat: Other, desc: "Xmas Albums: Albums"}
     - {id: 93, cat: Movies/Other, desc: "Xmas Movies : Packs"}
     - {id: 94, cat: Audio/Other, desc: "Xmas Music Pack: Packs"}
-    - {id: 95, cat: Other, desc: "To Be Edited: Edit"}
+    - {id: 95, cat: Other, desc: "Misc: Misc"}
 
   modes:
     search: [q]
@@ -101,7 +102,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 3 months are deleted."
+    default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 30 days are deleted unless you have told staff in advance."
 
 login:
   path: account-login.php

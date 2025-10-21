@@ -4,14 +4,15 @@ replaces:
   - legacyhd
   - reelflix
 name: ReelFLiX (API)
-description: "ReelFLiX (HD4Free,LegacyHD) is a Private Torrent Tracker for HD MOVIES"
+description: "ReelFLiX (HD4Free, LegacyHD) is a Private Torrent Tracker for HD MOVIES"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://reelflix.xyz/
+  - https://reelflix.cc/
 legacylinks:
   - https://legacyhd.org/
+  - https://reelflix.xyz/
 
 caps:
   categorymappings:
@@ -19,10 +20,7 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -31,7 +29,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.xyz/\" target=\"_blank\">ReelFlix</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://reelflix.cc/\" target=\"_blank\">ReelFlix</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -59,7 +57,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "To avoid your account being disabled, you must login at least once every 90 days OR have a .torrent actively announcing to the tracker. Please be aware! If you are using any form of automation and it has been 90+ days since your last login, and your client stops seeding, your account will be immediately disabled at midnight UTC if you don't login or resume seeding. There is no 90-day grace period if seeding stops; only logging into the site counts. It is always a good idea to periodically login to check the status of your account."
+    default: "To avoid your account being disabled, you must login at least once every 90 days OR have a .torrent actively announcing to the tracker. Please be aware! If you are using any form of automation and it has been 90+ days since your last login, and your client stops seeding, your account will be immediately disabled at midnight UTC if you don't login or resume seeding. There is no 90-day grace period if seeding stops; only logging into the site counts. It is always a good idea to periodically login to check the status of your account. After being disabled for inactivity you must make an attempt to recover your account within 90 days (180 days total) or it will be pruned from our system automatically. Pruned accounts CANNOT be enabled and you will have to reapply or find a new invite"
 
 login:
   path: /api/torrents
@@ -89,7 +87,6 @@ search:
     episodeNumber: "{{ .Query.Ep }}"
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -188,5 +185,5 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
-      text: 1.0
-# json UNIT3D 9.1.6
+      text: 0.8
+# json UNIT3D 9.1.7

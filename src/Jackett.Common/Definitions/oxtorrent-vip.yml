@@ -10,9 +10,9 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.oxtorrent.fyi/
-  - https://www.zone-torrent4.com/
-  - https://www.mega-torrent.net/
+  - https://www.oxtorrent.town/
+  - https://www.zone-torrent.town/
+  - https://www.mega-torrent.town/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -28,13 +28,8 @@ legacylinks:
   - https://oxtorrent.blog/
   - https://www.site-torrent.com/
   # actual legacylinks
-  - https://www-oxtorrent.com/
-  - https://www.oxtorrent.ke/
-  - https://www-torrent911.com/
-  - https://www.oxtorrent1.com/
   - https://www.zone-torrent.com/
   - https://www.mega-torrent3.com/
-  - https://www.oxtorrent2.com/
   - https://www.mega-torrent4.com/
   - https://www.oxtorrent3.com/
   - https://www.oxtorrent4.com/
@@ -49,6 +44,11 @@ legacylinks:
   - https://www.oxtorrent8.com/
   - https://www.oxtorrent.diy/
   - https://www.zone-torrent.me/
+  - https://www.mega-torrent.net/
+  - https://www.oxtorrent.fyi/
+  - https://www.zone-torrent4.com/
+  - https://www.mega-torrent7.com/
+  - https://www.oxtorrent10.com/
 
 caps:
   categorymappings:

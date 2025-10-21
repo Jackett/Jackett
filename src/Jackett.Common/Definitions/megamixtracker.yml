@@ -5,6 +5,8 @@ description: "MegamixTracker is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: ISO-8859-2
+certificates:
+  - 00282e65048fabb713980ba1d7015a7512eb5224 # Expired 18th OCt 2025
 links:
   - https://megamixtracker.hu/
 

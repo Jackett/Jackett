@@ -62,7 +62,6 @@ Prior versions of Jackett are no longer supported.
  * EBook Bay (EBB)
  * Elitetorrent.wf
  * EpubLibre
- * EXT Torrents
  * ExtraTorrent.st
  * EZTV
  * FileMood
@@ -105,7 +104,6 @@ Prior versions of Jackett are no longer supported.
  * PornRips
  * Postman
  * Qbite (Hubite)
- * Rapidzona
  * RedeTorrent
  * RinTorNeT
  * RuTor
@@ -126,6 +124,7 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
+ * TorrentControl
  * TorrentDosFilmes
  * TorrentDownload
  * TorrentGalaxyClone
@@ -241,6 +240,7 @@ Prior versions of Jackett are no longer supported.
  * AGSVPT (Arctic Global Seed Vault)
  * Aidoru!Online
  * Aither
+ * alingPT
  * AlphaRatio (AR)
  * AmigosShareClub (ASC)
  * AnimeBytes (AB)
@@ -271,7 +271,6 @@ Prior versions of Jackett are no longer supported.
  * BIT-HDTV
  * Bitded
  * bitGAMER
- * Bithorlo (BHO)
  * BitHUmen
  * Bitpalace
  * BitPorn
@@ -292,10 +291,11 @@ Prior versions of Jackett are no longer supported.
  * BTSCHOOL
  * BWTorrents
  * BYRBT
+ * cangbaoge (CBG)
  * CapybaraBR
  * Carp-Hunter
  * Carpathians
- * CarPT [![(invite needed)][inviteneeded]](#)
+ * CarPT
  * Cathode-Ray.Tube (CRT)
  * CD File
  * CeskeForum
@@ -330,6 +330,7 @@ Prior versions of Jackett are no longer supported.
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
+ * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
@@ -353,7 +354,7 @@ Prior versions of Jackett are no longer supported.
  * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)
- * Generation-Free [![(invite needed)][inviteneeded]](#)
+ * Generation-Free
  * GGPT
  * GigaTorrents
  * GimmePeers (formerly ILT) [PAY2DL]
@@ -414,6 +415,7 @@ Prior versions of Jackett are no longer supported.
  * KrazyZone
  * Kufei (库非)
  * Kufirc
+ * lajidui
  * Last Digital Underground (LDU)
  * LastFiles (LF)
  * Lat-Team
@@ -453,6 +455,7 @@ Prior versions of Jackett are no longer supported.
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
+ * Nirvana
  * NorBits
  * NordicQuality
  * Nusanta(RA.RE)
@@ -470,7 +473,6 @@ Prior versions of Jackett are no longer supported.
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
  * Peers.FM
- * Phoenix Project
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
@@ -513,6 +515,7 @@ Prior versions of Jackett are no longer supported.
  * Romanian Metal Torrents (RMT)
  * Rousi
  * SAMARITANO
+ * SBPT
  * SceneHD [![(invite needed)][inviteneeded]](#)
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
@@ -522,6 +525,7 @@ Prior versions of Jackett are no longer supported.
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
  * SexTorrent
  * SFP (Share Friends Projekt)
+ * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland
  * Shazbat
  * SiamBIT
@@ -537,6 +541,7 @@ Prior versions of Jackett are no longer supported.
  * SugoiMusic
  * Superbits (SBS)
  * Swarmazon
+ * Tangmen (唐门)
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
@@ -586,7 +591,7 @@ Prior versions of Jackett are no longer supported.
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
  * TurkSeed (Aturk)
- * TurkTorrent (TT)
+ * TurkTorrent (TT) [PAY2DL]
  * TV Chaos UK (TVCUK)
  * TVstore
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
@@ -795,7 +800,7 @@ macOS 13.0+ (Ventura) or greater
 3. If the installation was a success, you can close the Terminal window.
 
 The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
-Logs are stored as usual under `~/.config/Jackett/log.txt`.
+Logs are stored as usual under `~/.config/Jackett/log.txt` or `/Users/your-user-name/Library/Application Support/Jackett/log.txt`.
 
 ### Run without installing as a service
 Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page and run Jackett with the command `./jackett`.
@@ -871,7 +876,7 @@ Setting up this service is optional; most indexers don't need it.
 
 ## Configuring OMDb
 This feature is used as a fallback (when using the aggregate Indexer) to get the movie/series title if only the IMDB ID is provided in the request.
-To use it, please just request a free API key on [OMDb](http://www.omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
+To use it, please just request a free API key on [OMDb](https://omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
 
 ## Command line switches
 

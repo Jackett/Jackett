@@ -186,5 +186,5 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
-      text: 0.5
+      text: 0.7
 # json UNIT3D 9.1.7
