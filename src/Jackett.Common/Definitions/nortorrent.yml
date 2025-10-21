@@ -10,7 +10,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.my/
 links:
-  - https://www.nortorrent.net/
+  - https://www.nortorrent.town/
 legacylinks:
   # latest domains list
   - https://www.rantop.my/
@@ -26,7 +26,6 @@ legacylinks:
   - https://torrent9.news/
   - https://www.site-torrent.com/
   # actual legacylinks
-  - https://www.torrent9.ing/
   - https://www.torrent9.run/
   - https://www.torrent9.cv/
   - https://www.torrent9.ke/
@@ -41,6 +40,7 @@ legacylinks:
   - https://www.nortorrent4.com/
   - https://www.nortorrent5.com/
   - https://www.nortorrent6.com/
+  - https://www.nortorrent.net/
 
 caps:
   categorymappings:
