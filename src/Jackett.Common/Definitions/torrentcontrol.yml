@@ -1,7 +1,7 @@
 ---
 id: torrentcontrol
 name: TorrentControl (API)
-description: "TorrentControl (API) is a Public Torrent Tracker for MOVIES / TV"
+description: "TorrentControl (API) is a Public Torrent Tracker for MOVIES / TV / ANIME"
 language: en-US
 type: public
 encoding: UTF-8
@@ -13,7 +13,7 @@ caps:
   categorymappings:
     - {id: movie, cat: Movies, desc: Movies, default: true}
     - {id: series, cat: TV, desc: Series, default: true}
-#    - {id: anime, cat: TV/Anime, desc: Anime}
+    - {id: anime, cat: TV/Anime, desc: Anime, default: true}
 
   modes:
     search: [q]
@@ -25,6 +25,7 @@ settings: []
 search:
   # docs: https://torrentcontrol.pw/en/api-docs
   paths:
+    # since per_page is only 20 we needs to query all 3 cats separately to ensure we get hits for keywordless
     - path: "api/v1/torrents?type=movie&search={{ .Keywords }}"
       response:
         type: json
@@ -34,6 +35,11 @@ search:
       response:
         type: json
       categories: [series]
+
+    - path: "api/v1/torrents?type=anime&search={{ .Keywords }}"
+      response:
+        type: json
+      categories: [anime]
 
   rows:
     selector: data
