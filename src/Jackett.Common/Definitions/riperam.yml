@@ -990,6 +990,7 @@ search:
       selector: dd.posts span.leech
     grabs:
       selector: dd.views span.complet
+      optional: true
     date:
       # 12 янв 2019, 11:26
       selector: dt
