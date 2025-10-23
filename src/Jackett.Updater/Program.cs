@@ -684,6 +684,7 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedoff.yml",
                 "Definitions/seedpeer.yml",
+                "Definitions/sextorrent.yml",
                 "Definitions/sexxi.yml",
                 "Definitions/shadowflow.yml",
                 "Definitions/sharefiles.yml",
