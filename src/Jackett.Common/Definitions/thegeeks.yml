@@ -5,6 +5,8 @@ description: "The Geeks is a Private Torrent Tracker for Technology E-LEARNING"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - edf52a95960cbd7ca3c992e634cc087fa47df8c5 # Expired 23rd OCt 2025
 links:
   - https://thegeeks.click/
 
