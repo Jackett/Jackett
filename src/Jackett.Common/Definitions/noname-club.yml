@@ -444,8 +444,10 @@ caps:
     - {id: 1179, cat: Audio/Lossless, desc: " |- Авторская и Военная песня (Lossless)"}
     - {id: 879, cat: Audio, desc: " |- Авторская и Военная песня"}
     - {id: 322, cat: Audio, desc: "Rock, Alternative, Punk, Metal"}
+    - {id: 1350, cat: Audio, desc: " |- Rock (Hi-Res)"}
     - {id: 962, cat: Audio/Lossless, desc: " |- Rock (Lossless)"}
     - {id: 333, cat: Audio, desc: " |- Rock"}
+    - {id: 1356, cat: Audio, desc: " |- Alternative, Punk (Hi-Res)"}
     - {id: 965, cat: Audio/Lossless, desc: " |- Alternative, Punk (Lossless)"}
     - {id: 336, cat: Audio, desc: " |- Alternative, Punk"}
     - {id: 337, cat: Audio/Lossless, desc: " |- Hard Rock (Lossless)"}
@@ -453,6 +455,7 @@ caps:
     - {id: 1351, cat: Audio, desc: " |- Metal (Hi-Res)"}
     - {id: 963, cat: Audio/Lossless, desc: " |- Metal (Lossless)"}
     - {id: 334, cat: Audio, desc: " |- Metal"}
+    - {id: 1357, cat: Audio, desc: " |- Русский Рок (Hi-Res)"}
     - {id: 961, cat: Audio/Lossless, desc: " |- Русский Рок (Lossless)"}
     - {id: 332, cat: Audio, desc: " |- Русский рок"}
     - {id: 325, cat: Audio, desc: "Pop"}
@@ -515,6 +518,7 @@ caps:
     - {id: 1213, cat: Audio/Lossless, desc: " |- Other Asian (Lossless)"}
     - {id: 367, cat: Audio, desc: " |- Other Asian"}
     - {id: 331, cat: Audio, desc: "Other Styles"}
+    - {id: 1358, cat: Audio, desc: " |- Instrumental (Hi-Res)"}
     - {id: 1157, cat: Audio/Lossless, desc: " |- Instrumental (Lossless)"}
     - {id: 711, cat: Audio, desc: " |- Instrumental"}
     - {id: 1159, cat: Audio/Lossless, desc: " |- New Age/Meditative/Relax (Lossless)"}
