@@ -19,6 +19,7 @@ caps:
     - {id: 8, cat: Books, desc: "Book"}
     - {id: 9, cat: Audio/Other, desc: "Podcast"}
     - {id: 10, cat: TV/Sport, desc: "Sport"}
+    - {id: 11, cat: Other, desc: "3D Printable"}
     - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
