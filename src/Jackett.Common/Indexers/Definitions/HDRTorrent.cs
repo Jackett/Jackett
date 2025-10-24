@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
@@ -10,6 +11,7 @@ using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -21,22 +23,20 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string SiteLink { get; protected set; } = "https://hdrtorrent.com/";
 
-        public HDRTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                          ICacheService cs) : base(configService, wc, l, ps, cs)
+        public HDRTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
+            : base(configService, wc, l, ps, cs)
         {
         }
 
-        public override IParseIndexerResponse GetParser() =>
-            new HDRTorrentParser(webclient);
+        public override IParseIndexerResponse GetParser() => new HDRTorrentParser(webclient);
 
-        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink,
-        searchQueryParamsKey: "index.php?s=");
+        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?s=");
     }
 
     public class HDRTorrentParser : PublicBrazilianParser
     {
         private readonly WebClient _webclient;
-        public string Tracker { get; }
+        protected string Tracker;
 
         public HDRTorrentParser(WebClient webclient)
         {
@@ -98,7 +98,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
             var releases = new List<ReleaseInfo>();
-
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(indexerResponse.Content);
             var rows = dom.QuerySelectorAll("div.capa-img");
@@ -135,24 +134,51 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var magnetLink in magnetLinks)
                 {
                     var magnet = magnetLink.GetAttribute("href");
+                    if (string.IsNullOrEmpty(magnet))
+                        continue;
+
                     var release = releaseCommonInfo.Clone() as ReleaseInfo;
-                    release.MagnetUri = new Uri(magnet ?? "");
-                    release.DownloadVolumeFactor = 0;
-                    release.UploadVolumeFactor = 1;
+                    release.Guid = release.MagnetUri = new Uri(magnet);
+
+                    var parentText = magnetLink.ParentElement?.TextContent?.Trim();
+                    if (!string.IsNullOrEmpty(parentText))
+                    {
+                        parentText = Regex.Replace(parentText, "DOWNLOAD TORRENT", "", RegexOptions.IgnoreCase)
+                                          .Replace("DUAL ÁUDIO", "Dual")
+                                          .Replace("DUAL AUDIO", "Dual")
+                                          .Replace("ÁUDIO", "Audio")
+                                          .Replace("AUDIO", "Audio")
+                                          .Replace("DUBLADO", "Dubbed")
+                                          .Replace("LEGENDADO", "Subbed")
+                                          .Replace("MKV", "")
+                                          .Replace("MP4", "")
+                                          .Replace("MAGNET", "")
+                                          .Replace("TORRENT", "")
+                                          .Replace("LINK", "")
+                                          .Trim();
+
+                        if (!string.IsNullOrEmpty(parentText))
+                        {
+                            release.Title = $"{release.Title} {parentText}".Trim();
+                        }
+                    }
 
                     var resolution = fileInfo.Quality ?? fileInfo.VideoQuality ?? string.Empty;
+                    if (!string.IsNullOrEmpty(resolution))
+                        release.Title = $"{release.Title} {resolution}".Trim();
 
-                    release.Title = $"{release.Title} {resolution}".Trim();
-                    release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
                     release.Category = magnetLink.ExtractCategory(release.Title);
+                    var size = RowParsingExtensions.GetBytes(fileInfo.Size ?? string.Empty);
+                    release.Size = size > 0 ? size : ExtractSizeByResolution(release.Title);
+
+                    release.DownloadVolumeFactor = 0;
+                    release.UploadVolumeFactor = 1;
 
                     release.Languages = fileInfo.Audio?.ToList() ?? release.Languages;
                     release.Genres = fileInfo.Genres?.ToList() ?? release.Genres;
                     release.Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? release.Subs : new[] { fileInfo.Subtitle };
-                    var size = RowParsingExtensions.GetBytes(fileInfo.Size ?? string.Empty);
-                    release.Size = size > 0 ? size : ExtractSizeByResolution(release.Title);
 
-                    if (!string.IsNullOrWhiteSpace(release.Title))
+                    if (release.Title.IsNotNullOrWhiteSpace())
                         releases.Add(release);
                 }
             }
