@@ -128,7 +128,16 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var fileInfoDict = ExtractFileInfo(detailsDom);
                 var fileInfo = PublicBrazilianIndexerBase.FileInfo.FromDictionary(fileInfoDict);
-                releaseCommonInfo.PublishDate = fileInfo.ReleaseYear != null ? DateTime.ParseExact(fileInfo.ReleaseYear, "yyyy", null) : DateTime.Today;
+
+                var publishedMeta = detailsDom.QuerySelector("meta[property='article:published_time']")?.GetAttribute("content");
+                if (!string.IsNullOrEmpty(publishedMeta) && DateTime.TryParse(publishedMeta, out var parsedDate))
+                {
+                    releaseCommonInfo.PublishDate = parsedDate;
+                }
+                else
+                {
+                    releaseCommonInfo.PublishDate = DateTime.Today;
+                }
 
                 var magnetLinks = detailsDom.QuerySelectorAll("a[href^='magnet:?']");
                 foreach (var magnetLink in magnetLinks)
