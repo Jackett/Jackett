@@ -70,6 +70,7 @@ Prior versions of Jackett are no longer supported.
  * Frozen Layer
  * GamesTorrents
  * GTorrent.pro
+ * HDRTorrent
  * Idope
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
