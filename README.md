@@ -527,7 +527,7 @@ Prior versions of Jackett are no longer supported.
  * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland
  * Shazbat
- * SiamBIT
+ * SiamBIT [PAY2DL]
  * SkipTheCommercials
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
