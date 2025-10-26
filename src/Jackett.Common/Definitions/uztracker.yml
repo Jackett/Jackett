@@ -37,6 +37,7 @@ caps:
     - {id: 26, cat: Movies, desc: " |- Фильмы до 2000 года"}
     # Сериалы, Видео и ТВ # Series, Videos and TV
     - {id: 97, cat: TV, desc: "Сериалы"}
+    - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
     - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
     - {id: 103, cat: TV, desc: " |- Зарубежные сериалы"}
     - {id: 102, cat: TV, desc: " |- Российские сериалы"}
