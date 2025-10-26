@@ -53,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts that have not logged in for 150 days will be disabled, and may be deleted shortly afterwards."
+    default: "Accounts that have not logged in for 60 days will be disabled, and may be deleted shortly afterwards."
 
 login:
   path: /api/torrents
