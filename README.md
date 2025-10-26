@@ -390,6 +390,7 @@ Prior versions of Jackett are no longer supported.
  * HDU
  * Hebits (HB)
  * HellasHut
+ * HELLENIC-HD
  * HHanClub
  * HHD
  * HomePornTorrents (HPT)
