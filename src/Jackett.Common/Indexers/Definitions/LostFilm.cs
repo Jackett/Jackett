@@ -696,8 +696,8 @@ namespace Jackett.Common.Indexers.Definitions
                 var meta = document.QuerySelector("meta");
                 var metaContent = meta.GetAttribute("content");
 
-                // Follow redirection defined by async url.replace
-                var redirectionUrl = metaContent.Substring(metaContent.IndexOf("http"));
+                // Follow redirection defined by async url.replace and prepend sitelink
+                var redirectionUrl = SiteLink + metaContent.Substring(metaContent.IndexOf("url=") + 5);
                 return await FollowTrackerRedirection(redirectionUrl, details);
             }
             catch (Exception ex)
