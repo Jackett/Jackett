@@ -203,7 +203,7 @@ search:
       attribute: href
     downloadvolumefactor:
       case:
-        "img[src$=\"/silver.gif\"]": 0.5 # not confirmed if there is a silver at this site
+        "img[src$=\"/silver.gif\"]": 0.5
         "img[src$=\"/freedownload.gif\"]": 0
         "*": 1
     uploadvolumefactor:
