@@ -67,6 +67,7 @@ caps:
     - {id: 347, cat: Books/EBook, desc: "Medical"}
     - {id: 348, cat: Books/EBook, desc: "Mathematics"}
     - {id: 363, cat: Books/EBook, desc: "Sheet Music"}
+    - {id: 366, cat: Books/EBook, desc: "Astronomy"}
     # Tech/Computers
     - {id: 331, cat: Books/EBook, desc: "Electronics"}
     - {id: 336, cat: Books/EBook, desc: "Video Games"}
