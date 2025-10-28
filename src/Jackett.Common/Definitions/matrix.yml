@@ -156,7 +156,7 @@ search:
         img[src="/pic/categories/6.png"]: 44
 #        img[src="/pic/categories/6.png"]: 43
     title:
-      selector: td:nth-child(2) > div > a
+      selector: a[onclick]
     _id:
       selector: a[onclick]
       attribute: onclick
@@ -177,20 +177,20 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:
-      selector: td:nth-child(3)
+      selector: td:nth-child(4)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     size:
-      selector: td:nth-child(4)
-    grabs:
       selector: td:nth-child(5)
-    seeders:
+    grabs:
       selector: td:nth-child(6)
-    leechers:
+    seeders:
       selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
     _verified:
       selector: span.torrent-ok, span.torrent-unchecked
       case:
