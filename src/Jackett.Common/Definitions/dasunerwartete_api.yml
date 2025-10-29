@@ -113,8 +113,6 @@ search:
           args:
             - "&amp;"
             - "&"
-    poster:
-      selector: cover
     size:
       selector: size
       type: integer
