@@ -4,7 +4,6 @@ name: Das Unerwartete (API)
 description: "Das Unerwartete (D-U) API-only Version for 2FA accounts. Uses /api.php with API Key access."
 language: de-DE
 type: private
-encoding: UTF-8
 links:
   - https://dasunerwartete.biz/
 
@@ -48,7 +47,7 @@ caps:
     - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
-    - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pics"}
     - {id: 129, cat: Movies/SD, desc: "Internal > Film SD"}
     - {id: 128, cat: Movies/HD, desc: "Internal > Film HD"}
     - {id: 131, cat: TV/SD, desc: "Internal > Serien SD"}
