@@ -110,9 +110,7 @@ search:
       type: torrent
       filters:
         - name: replace
-          args:
-            - "&amp;"
-            - "&"
+          args: ["&amp;", "&"]
     size:
       selector: size
       type: integer
@@ -137,11 +135,7 @@ search:
         - name: contains
           args: "yes"
       optional: true
-    downloadvolumefactor:
-      text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
-    uploadvolumefactor:
-      text: 1
-    minimumratio:
-      text: 1.0
-    minimumseedtime:
-      text: 129600
+    downloadvolumefactor: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
+    uploadvolumefactor: 1
+    minimumratio: 1.0
+    minimumseedtime: 129600
