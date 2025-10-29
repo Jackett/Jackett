@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -22,6 +23,7 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 #if !NET471
 using Microsoft.Extensions.Hosting;
 #endif
@@ -62,8 +64,9 @@ namespace Jackett.Server
                 // See https://github.com/Jackett/Jackett/issues/3517
                 options.ForwardLimit = 10;
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-                options.KnownNetworks.Clear();
-                options.KnownProxies.Clear();
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
             });
 
 #if NET471
