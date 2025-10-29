@@ -110,12 +110,9 @@ search:
     # can search by genre but you need to know the id. &mufaj[]=20 for Romantikus
 
   rows:
-    selector: table[align="center"][cellpadding="5"] > tbody > tr[id^="torrent-main-"]
+    selector: table.torrent-table > tbody > tr[id^="torrent-main-"]
 
   fields:
-    _id:
-      selector: a.download-link
-      attribute: data-id
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
@@ -123,13 +120,13 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="#details_tr_"]
-      attribute: title
+      selector: a.torrent-title-link
+    details:
+      selector: a.torrent-title-link
+      attribute: href
       filters:
         - name: replace
-          args: ["Név: ", ""]
-    details:
-      text: "details.php?id={{ .Result._id }}"
+          args: ["&hit=1", ""]
     download:
       selector: a.download-link
       attribute: href
@@ -139,9 +136,10 @@ search:
         - name: replace
           args: ["&please_wait=1", ""]
     genre:
-      selector: "span[style=\"font-size: 6pt; font-weight: bold;\"]"
+      selector: span[title]
+      attribute: title
     description:
-      selector: td:nth-child(2) div:nth-child(2)
+      selector: div.torrent-subtitle
       filters:
         - name: append
           args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
@@ -149,8 +147,8 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: a[href^="torrents_data/posters/"]
-      attribute: href
+      selector: img.torrent-hover-card-image
+      attribute: src
     date:
       selector: td:nth-last-child(5)
       filters:
@@ -159,11 +157,11 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
-      selector: td:nth-last-child(4) b
+      selector: td:nth-last-child(4)
     grabs:
       selector: td:nth-last-child(3)
     seeders:
-      selector: td:nth-last-child(2) a b
+      selector: td:nth-last-child(2)
     leechers:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
