@@ -1,0 +1,150 @@
+---
+id: dasunerwartete_api
+name: Das Unerwartete (API)
+description: "Das Unerwartete (D-U) API-only Version for 2FA accounts. Uses /api.php with API Key access."
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://dasunerwartete.biz/
+
+caps:
+  categorymappings:
+    - {id: 145, cat: Movies, desc: "Filme > DRG"}
+    - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
+    - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
+    - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}
+    - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
+    - {id: 143, cat: TV/Anime, desc: "Filme > Anime"}
+    - {id: 138, cat: Movies, desc: "Filme > Packs"}
+    - {id: 148, cat: Movies, desc: "Filme > Packs UHD"}
+    - {id: 60, cat: TV/SD, desc: "Serien > SD"}
+    - {id: 57, cat: TV/HD, desc: "Serien > HD"}
+    - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
+    - {id: 144, cat: TV/Anime, desc: "Serien > Anime"}
+    - {id: 59, cat: TV, desc: "Serien > Packs"}
+    - {id: 147, cat: TV, desc: "Serien > Packs UHD"}
+    - {id: 110, cat: Audio/MP3, desc: "Audio > MP3"}
+    - {id: 48, cat: Audio/Lossless, desc: "Audio > Flac"}
+    - {id: 52, cat: Audio, desc: "Audio > Pack"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audio > Hörbuch"}
+    - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
+    - {id: 12, cat: PC/0day, desc: "Apps > Windows"}
+    - {id: 125, cat: PC/Mac, desc: "Apps > Mac-OSX"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "Apps > Mobil"}
+    - {id: 141, cat: PC, desc: "Apps > Other"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
+    - {id: 123, cat: TV/Documentary, desc: "Doku > Reihe"}
+    - {id: 126, cat: PC/Mobile-Other, desc: "Spiel > Mobil"}
+    - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
+    - {id: 24, cat: Console, desc: "Spiel > Konsole"}
+    - {id: 121, cat: Console, desc: "Spiel > Wimmelbild"}
+    - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
+    - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
+    - {id: 96, cat: Books/Mags, desc: "ePaper > Zeitungen"}
+    - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
+    - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
+    - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
+    - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
+    - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
+    - {id: 129, cat: Movies/SD, desc: "Internal > Film SD"}
+    - {id: 128, cat: Movies/HD, desc: "Internal > Film HD"}
+    - {id: 131, cat: TV/SD, desc: "Internal > Serien SD"}
+    - {id: 130, cat: TV/HD, desc: "Internal > Serien HD"}
+    - {id: 132, cat: Other, desc: "Internal > Sonstiges"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_apikey
+    type: info
+    label: About API Access
+    default: "This version uses your D-U API key and bypasses login (works with 2FA)."
+  - name: apikey
+    type: text
+    label: API Key
+    default: ""
+  - name: onlyupload
+    type: checkbox
+    label: Search OnlyUpload (Freeleech)
+    default: false
+
+search:
+  paths:
+    - path: api.php
+      method: get
+      response:
+        type: xml
+      inputs:
+        q: "{{ .Query.Keywords }}"
+        imdbid: "{{ .Query.IMDBID }}"
+        tmdbid: "{{ .Query.TMDBID }}"
+        page: 1
+        free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
+        apikey: "{{ .Config.apikey }}"
+        $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+
+  rows:
+    selector: item
+
+  fields:
+    category:
+      selector: category
+      type: integer
+    categorydesc:
+      selector: categorydesc
+    title:
+      selector: title
+    _id:
+      selector: guid
+    details:
+      text: "details.php?id={{ .Result._id }}"
+    download:
+      selector: link
+      type: torrent
+      filters:
+        - name: replace
+          args:
+            - "&amp;"
+            - "&"
+    poster:
+      selector: cover
+    size:
+      selector: size
+      type: integer
+    date:
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss Z"
+    seeders:
+      selector: seeders
+      type: integer
+    leechers:
+      selector: leechers
+      type: integer
+    imdb:
+      selector: imdb
+    tmdb:
+      selector: tmdb
+    _onlyup:
+      selector: free
+      filters:
+        - name: contains
+          args: "yes"
+      optional: true
+    downloadvolumefactor:
+      text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      text: 129600
