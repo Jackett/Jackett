@@ -1,0 +1,196 @@
+---
+id: yggapi
+name: YggAPI
+description: Indexeur non-officiel pour YggTorrent (YGG) - MOVIES / TV
+language: fr-FR
+type: private
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://yggapi.eu/
+
+caps:
+  categorymappings:
+    - {id: 2145, cat: TV, desc: "Film/Vidéo"}
+    - {id: 2178, cat: Movies/Other, desc: "Film/Vidéo : Animation"} # changed to movies, see #3553
+    - {id: 2179, cat: TV/Anime, desc: "Film/Vidéo : Animation Série"}
+    - {id: 2180, cat: Audio/Video, desc: "Film/Vidéo : Concert"}
+    - {id: 2181, cat: TV/Documentary, desc: "Film/Vidéo : Documentaire"}
+    - {id: 2182, cat: TV, desc: "Film/Vidéo : Emission TV"}
+    - {id: 2183, cat: Movies, desc: "Film/Vidéo : Film"}
+    - {id: 2184, cat: TV, desc: "Film/Vidéo : Série TV"}
+    - {id: 2185, cat: TV, desc: "Film/Vidéo : Spectacle"}
+    - {id: 2186, cat: TV/Sport, desc: "Film/Vidéo : Sport"}
+    - {id: 2187, cat: TV/Other, desc: "Film/Vidéo : Vidéo-clips"}
+    - {id: 2139, cat: Audio, desc: "Audio"}
+    - {id: 2147, cat: Audio, desc: "Audio : Karaoké"}
+    - {id: 2148, cat: Audio, desc: "Audio : Musique"}
+    - {id: 2150, cat: Audio, desc: "Audio : Podcast Radio"}
+    - {id: 2149, cat: Audio/Other, desc: "Audio : Samples"}
+    - {id: 2144, cat: PC, desc: "Application"}
+    - {id: 2177, cat: PC/0day, desc: "Application : Autre"}
+    - {id: 2176, cat: PC, desc: "Application : Formation"}
+    - {id: 2171, cat: PC/ISO, desc: "Application : Linux"}
+    - {id: 2172, cat: PC/Mac, desc: "Application : MacOS"}
+    - {id: 2174, cat: PC/Mobile-Android, desc: "Application : Smartphone"}
+    - {id: 2175, cat: PC/Mobile-Android, desc: "Application : Tablette"}
+    - {id: 2173, cat: PC/0day, desc: "Application : Windows"}
+    - {id: 2142, cat: PC/Games, desc: "Jeu vidéo"}
+    - {id: 2167, cat: Console/Other, desc: "Jeu vidéo : Autre"}
+    - {id: 2159, cat: PC/Games, desc: "Jeu vidéo : Linux"}
+    - {id: 2160, cat: PC/Games, desc: "Jeu vidéo : MacOS"}
+    - {id: 2162, cat: Console/XBox One, desc: "Jeu vidéo : Microsoft"}
+    - {id: 2163, cat: Console/Wii, desc: "Jeu vidéo : Nintendo"}
+    - {id: 2165, cat: PC/Mobile-Android, desc: "Jeu vidéo : Smartphone"}
+    - {id: 2164, cat: Console/PS4, desc: "Jeu vidéo : Sony"}
+    - {id: 2166, cat: PC/Mobile-Android, desc: "Jeu vidéo : Tablette"}
+    - {id: 2161, cat: PC/Games, desc: "Jeu vidéo : Windows"}
+    - {id: 2140, cat: Books, desc: "eBook"}
+    - {id: 2151, cat: Audio/Audiobook, desc: "eBook : Audio"}
+    - {id: 2152, cat: Books/EBook, desc: "eBook : Bds"}
+    - {id: 2153, cat: Books/Comics, desc: "eBook : Comics"}
+    - {id: 2154, cat: Books/EBook, desc: "eBook : Livres"}
+    - {id: 2155, cat: Books/Comics, desc: "eBook : Mangas"}
+    - {id: 2156, cat: Books/Mags, desc: "eBook : Presse"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, year]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: website_domain
+    type: text
+    label: YGG website domain
+    default: www.yggtorrent.top
+  - name: passkey
+    type: password
+    label: Passkey
+  - name: info_key
+    type: info
+    label: About your passkey
+    default: "You will find your passkey on the <a href=\"https://www.yggtorrent.top/user/account\" target=\"_blank\">YGG</a> account page."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: uploaded_at
+    options:
+      uploaded_at: publish_date
+      seeders: seeders
+      downloads: downloads
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: strip_season
+    type: checkbox
+    label: Strip season-only (e.g. S01) from searches, as tracker does not support partial matches
+    default: true
+  - name: tracker_domain
+    type: select
+    label: Domaine du tracker à utiliser
+    default: tracker.p2p-world.net
+    options:
+      tracker.p2p-world.net: tracker.p2p-world.net
+      connect.maxp2p.org: connect.maxp2p.org
+  - name: info_downloads
+    type: info
+    label: About missing Downloads
+    default: "If the torrent has no seeder and no leecher then the torrent file may be missing and download may fail."
+
+search:
+  paths:
+    - path: torrents
+      response:
+        type: json
+      inputs:
+        page: 1
+    - path: torrents
+      response:
+        type: json
+      inputs:
+        page: 2
+    - path: torrents
+      response:
+        type: json
+      inputs:
+        page: 3
+
+  inputs:
+    $raw: "{{ range .Categories }}&category_id={{.}}{{end}}"
+    q: "{{ .Keywords }}"
+    season: "{{ .Query.Season }}"
+    episode: "{{ .Query.Ep }}"
+    per_page: 100
+    order_by: "{{ .Config.sort }}"
+
+  # https://github.com/Prowlarr/Indexers/blob/953aa766ef67c782f5aab1b563ce180f49eb9ea5/definitions/v10/yggtorrent.yml#L277
+  keywordsfilters:
+    - name: trim
+    # fix date search and workaround for internal YGG issues
+    - name: re_replace
+      args: ["[\\\\\\-\\.\\/!\\s]+", " "]
+    # strip season-only as tracker does not support partial matches
+    - name: re_replace
+      args: ["(?i)\\b(S\\d{1,3})\\b", "{{ if .Config.strip_season }}{{ else }}$1{{ end }}"]
+
+  rows:
+    selector: $
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    category:
+      selector: category_id
+    title_normal:
+      selector: title
+    title_multilang:
+      text: "{{ .Result.title_normal }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)[\\.](MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))[\\.]", ".{{ .Config.multilanguage }}."]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_normal }}{{ end }}"
+    _id:
+      selector: id
+    details:
+     selector: link
+    download:
+      text: "torrent/{{ .Result._id }}/download?passkey={{ .Config.passkey }}&tracker_domain={{ .Config.tracker_domain }}"
+    year:
+      selector: title
+      filters:
+        - name: regexp
+          args: (\b(19|20)\d{2}\b)
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: downloads
+      optional: true
+      default: 0
+    date:
+      # unix
+      selector: uploaded_at
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+
+# JSON 1.0.0
