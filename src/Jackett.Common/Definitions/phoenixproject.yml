@@ -49,6 +49,8 @@ settings:
       time: created
       seeders: seeders
       size: size
+      snatched: snatched
+      leechers: leechers
   - name: type
     type: select
     label: Order requested from site
@@ -108,6 +110,8 @@ search:
     poster:
       selector: div.group_image > img
       attribute: src
+    description:
+      text: "{{ .Result.genre }}"
     date:
       selector: span.time.tooltip
       attribute: title
