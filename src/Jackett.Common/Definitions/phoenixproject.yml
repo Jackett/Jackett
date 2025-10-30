@@ -21,7 +21,7 @@ caps:
 
   modes:
     search: [q]
-    music-search: [q, year, genre]
+    music-search: [q]
 
 settings:
   - name: username
@@ -81,9 +81,8 @@ search:
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     group_results: 0
     action: advanced
-    year: "{{ .Query.Year }}"
-    order_by: "{{ .Config.sort }}"
-    order_way: "{{ .Config.type }}"
+    order: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
     searchsubmit: 1
 
   rows:
@@ -113,15 +112,15 @@ search:
         - name: dateparse
           args: "MMM dd yyyy, HH:mm zzz"
     size:
-      selector: td.number_column.nobr
+      selector: td.td_size
     files:
-      selector: td:nth-last-child(6)
+      selector: td.td_file_count
     seeders:
-      selector: td:nth-last-child(2)
+      selector: td.td_seeders
     leechers:
-      selector: td:nth-last-child(1)
+      selector: td.td_leechers
     grabs:
-      selector: td:nth-last-child(3)
+      selector: td.td_snatched
     downloadvolumefactor:
       case:
         strong.torrent_label.tl_free: 0
@@ -132,9 +131,4 @@ search:
       text: 0.6
     title:
       selector: a[href^="torrents.php?id="]
-      remove: strong.torrent_label
-      filters:
-        - name: trim
-          args: "/"
-        - name: trim
 # Gazelle
