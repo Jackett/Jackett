@@ -105,6 +105,9 @@ search:
     download:
       selector: span > a[href^="torrents.php?action=download&id="]
       attribute: href
+    poster:
+      selector: div.group_image > img
+      attribute: src
     date:
       selector: span.time.tooltip
       attribute: title
