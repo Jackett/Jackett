@@ -95,6 +95,8 @@ search:
       filters:
         - name: regexp
           args: "\\[(\\d+?)\\]"
+    title:
+      selector: a[href^="torrents.php?id="]
     details:
       selector: a[href^="torrents.php?id="]
       attribute: href
@@ -129,6 +131,4 @@ search:
       text: 1
     minimumratio:
       text: 0.6
-    title:
-      selector: a[href^="torrents.php?id="]
 # Gazelle
