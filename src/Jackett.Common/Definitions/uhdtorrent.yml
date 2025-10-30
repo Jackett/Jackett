@@ -40,8 +40,8 @@ caps:
     - {id: 49, cat: TV, desc: "Yerli Diziler"}
     - {id: 50, cat: TV, desc: "Yerli Dizi Boxset"}
     - {id: 52, cat: Audio, desc: "Müzikler"}
-    - {id: 52, cat: Audio, desc: "Müzikler Yerli"}
-    - {id: 52, cat: Audio, desc: "Müzikler Yabancı"}
+    - {id: 53, cat: Audio, desc: "Müzikler Yerli"}
+    - {id: 54, cat: Audio, desc: "Müzikler Yabancı"}
     - {id: 55, cat: PC/0day, desc: "Programlar"}
     - {id: 56, cat: PC/0day, desc: "Programlar Windows"}
     - {id: 57, cat: PC/Games, desc: "Oyunlar"}
