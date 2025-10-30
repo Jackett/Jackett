@@ -27,6 +27,7 @@ caps:
     - {id: 23, cat: TV/Sport, desc: "Formula E"}
     - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
     - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
+    - {id: 82, cat: TV/Sport, desc: "Motorcycle Speedway"}
     - {id: 31, cat: TV/Sport, desc: "Nascar"}
     - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
     - {id: 69, cat: TV/Sport, desc: "Other Cars"}
