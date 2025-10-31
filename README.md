@@ -599,7 +599,6 @@ Prior versions of Jackett are no longer supported.
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
  * UHDBits
- * uHDTorrent
  * UltraHD
  * UnlimitZ
  * upload.cx (ULCX)
