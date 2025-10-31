@@ -49,8 +49,6 @@ settings:
       time: created
       seeders: seeders
       size: size
-      snatched: snatched
-      leechers: leechers
   - name: type
     type: select
     label: Order requested from site
