@@ -151,8 +151,10 @@ search:
       selector: td.rowfollow.rowfollow:nth-child(6)
     leechers:
       selector: td.rowfollow:nth-child(7)
+      optional: true
     grabs:
       selector: td.rowfollow:nth-child(8)
+      optional: true
     downloadvolumefactor:
       case:
         img.pro_free: 0
