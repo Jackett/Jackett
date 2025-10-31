@@ -130,16 +130,11 @@ search:
         - name: replace
           args: ["&hit=1", ""]
     download:
-      selector: a.download-link
+      selector: a[href^="download.php?"]
       attribute: href
-      filters:
-        - name: replace
-          args: ["please_wait=1&", ""]
-        - name: replace
-          args: ["&please_wait=1", ""]
     genre:
-      selector: span[title]
-      attribute: title
+      selector: a[data-mufaj]
+      attribute: data-mufaj
     description:
       selector: div.torrent-subtitle
       filters:
@@ -149,17 +144,19 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: img.torrent-hover-card-image
-      attribute: src
+      selector: a[data-poster]
+      attribute: data-poster
     date:
-      selector: td:nth-last-child(5)
+      selector: a[data-added]
+      attribute: data-added
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
+          args: "yyyy-MM-dd HH:mm zzz"
     size:
-      selector: td:nth-last-child(4)
+      selector: a[data-size]
+      attribute: data-size
     grabs:
       selector: td:nth-last-child(3)
     seeders:
