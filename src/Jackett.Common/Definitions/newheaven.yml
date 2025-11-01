@@ -150,8 +150,17 @@ search:
       filters:
         - name: querystring
           args: dir
-    title:
+    title_default:
       selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="]
+    title_optional:
+      selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="][onmouseover]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "return buildTable\\('([^']+)',"
+      optional: true
+    title:
+      text: "{{ if .Result.title_optional }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_default }}{{ end }}"
     details:
       selector: a[href*="index.php?strWebValue=torrent&strWebAction=details&id="]
       attribute: href
