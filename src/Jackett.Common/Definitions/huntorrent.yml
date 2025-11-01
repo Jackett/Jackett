@@ -5,6 +5,7 @@ description: "HunTorrent is a HUNGARIAN Semi-Private Torrent Tracker for MOVIES 
 language: hu-HU
 type: semi-private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://huntorrent.org/
 legacylinks:
@@ -12,36 +13,63 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 28, cat: Movies/SD, desc: "Cam/ENG"}
-    - {id: 27, cat: Movies/SD, desc: "Cam/HUN"}
-    - {id: 4, cat: Movies/DVD, desc: "DVDR/ENG"}
-    - {id: 3, cat: Movies/DVD, desc: "DVDR/HUN"}
-    - {id: 6, cat: Movies/HD, desc: "HD/ENG"}
-    - {id: 5, cat: Movies/HD, desc: "HD/HUN"}
-    - {id: 2, cat: Movies/SD, desc: "XviD/ENG"}
-    - {id: 1, cat: Movies/SD, desc: "XviD/HUN"}
-    - {id: 17, cat: PC/Games, desc: "Játék/ISO"}
-    - {id: 18, cat: PC/Games, desc: "Játék/RIP"}
-    - {id: 19, cat: Console, desc: "Konzol"}
-    - {id: 25, cat: Other, desc: "Kép"}
-    - {id: 24, cat: Books, desc: "eBook/ENG"}
-    - {id: 23, cat: Books, desc: "eBook/HUN"}
-    - {id: 38, cat: Audio/Audiobook, desc: "Hangoskönyv"}
-    - {id: 26, cat: PC/Mobile-Other, desc: "Mobil"}
-    - {id: 20, cat: PC/ISO, desc: "Program/ISO"}
-    - {id: 21, cat: PC/0day, desc: "Program/RIP"}
-    - {id: 31, cat: TV/HD, desc: "Sorozat/HD/ENG"}
-    - {id: 9, cat: TV/HD, desc: "Sorozat/HD/HUN"}
-    - {id: 8, cat: TV/SD, desc: "Sorozat/ENG"}
-    - {id: 7, cat: TV/SD, desc: "Sorozat/HUN"}
-    - {id: 13, cat: Audio/Video, desc: "Klip/ENG"}
-    - {id: 12, cat: Audio/Video, desc: "Klip/HUN"}
-    - {id: 11, cat: Audio/MP3, desc: "MP3/ENG"}
-    - {id: 10, cat: Audio/MP3, desc: "MP3/HUN"}
-    - {id: 16, cat: XXX/DVD, desc: "XXX/DVD"}
-    - {id: 32, cat: XXX/x264, desc: "XXX/HD"}
-    - {id: 14, cat: XXX/ImageSet, desc: "XXX/Kép"}
-    - {id: 15, cat: XXX/SD, desc: "XXX/XVID"}
+    - {id: 28, cat: Movies/SD, desc: "Cam/Külföldi", default: true}
+    - {id: 27, cat: Movies/SD, desc: "Cam/Magyar", default: true}
+    - {id: 4, cat: Movies/DVD, desc: "DVDR/Külföldi", default: true}
+    - {id: 3, cat: Movies/DVD, desc: "DVDR/Magyar", default: true}
+    - {id: 6, cat: Movies/HD, desc: "HD/Külföldi", default: true}
+    - {id: 5, cat: Movies/HD, desc: "HD/Magyar", default: true}
+    - {id: 2, cat: Movies/SD, desc: "XviD/Külföldi", default: true}
+    - {id: 1, cat: Movies/SD, desc: "XviD/Magyar", default: true}
+    - {id: 17, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 18, cat: PC/Games, desc: "Játék/RIP", default: true}
+    - {id: 19, cat: Console, desc: "Konzol", default: true}
+    - {id: 25, cat: Other, desc: "Kép", default: true}
+    - {id: 24, cat: Books, desc: "eBook/Külföldi", default: true}
+    - {id: 23, cat: Books, desc: "eBook/Magyar", default: true}
+    - {id: 38, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
+    - {id: 26, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 20, cat: PC/ISO, desc: "Program/ISO", default: true}
+    - {id: 21, cat: PC/0day, desc: "Program/RIP", default: true}
+    - {id: 31, cat: TV/HD, desc: "Sorozat/HD/Külföldi", default: true}
+    - {id: 9, cat: TV/HD, desc: "Sorozat/HD/Magyar", default: true}
+    - {id: 8, cat: TV/SD, desc: "Sorozat/Külföldi", default: true}
+    - {id: 7, cat: TV/SD, desc: "Sorozat/Magyar", default: true}
+    - {id: 13, cat: Audio/Video, desc: "Klip/Külföldi", default: true}
+    - {id: 12, cat: Audio/Video, desc: "Klip/Külföldi", default: true}
+    - {id: 11, cat: Audio/MP3, desc: "MP3/Külföldi", default: true}
+    - {id: 10, cat: Audio/MP3, desc: "MP3/Magyar", default: true}
+    - {id: 51bithorlo, cat: Movies/SD, desc: "Cam/Eng", default: true}
+    - {id: 50bithorlo, cat: Movies/SD, desc: "Cam/Hun", default: true}
+    - {id: 2bithorlo, cat: Movies/DVD, desc: "DVD/Eng", default: true}
+    - {id: 1bithorlo, cat: Movies/DVD, desc: "DVD/Hun", default: true}
+    - {id: 42bithorlo, cat: Movies/DVD, desc: "Dvd9/Eng", default: true}
+    - {id: 41bithorlo, cat: Movies/DVD, desc: "Dvd9/Hun", default: true}
+    - {id: 40bithorlo, cat: Books, desc: "E-book/Eng", default: true}
+    - {id: 19bithorlo, cat: Books, desc: "E-book/Hun", default: true}
+    - {id: 29bithorlo, cat: Movies/HD, desc: "HD/Eng", default: true}
+    - {id: 28bithorlo, cat: Movies/HD, desc: "HD/Hun", default: true}
+    - {id: 15bithorlo, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 38bithorlo, cat: Console, desc: "Játék/Konzol", default: true}
+    - {id: 37bithorlo, cat: PC/Games, desc: "Játék/Rip", default: true}
+    - {id: 20bithorlo, cat: Other, desc: "Képek", default: true}
+    - {id: 21bithorlo, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 54bithorlo, cat: PC/ISO, desc: "Prog/ISO", default: true}
+    - {id: 23bithorlo, cat: PC/0day, desc: "Prog/Rip", default: true}
+    - {id: 33bithorlo, cat: TV/SD, desc: "Sorozat/Eng", default: true}
+    - {id: 52bithorlo, cat: TV/HD, desc: "Sorozat/Eng/HD", default: true}
+    - {id: 5bithorlo, cat: TV/SD, desc: "Sorozat/Hun", default: true}
+    - {id: 53bithorlo, cat: TV/HD, desc: "Sorozat/Hun/HD", default: true}
+    - {id: 4bithorlo, cat: Movies/SD, desc: "Xvid/Eng", default: true}
+    - {id: 3bithorlo, cat: Movies/SD, desc: "Xvid/Hun", default: true}
+    - {id: 12bithorlo, cat: Audio, desc: "Zene/Eng", default: true}
+    - {id: 13bithorlo, cat: Audio, desc: "Zene/Hun", default: true}
+    - {id: 16xxx, cat: XXX/DVD, desc: "XXX/DVD", default: false}
+    - {id: 32xxx, cat: XXX/x264, desc: "XXX/HD", default: false}
+    - {id: 14xxx, cat: XXX/ImageSet, desc: "XXX/Kép", default: false}
+    - {id: 15xxx, cat: XXX/SD, desc: "XXX/XVID", default: false}
+    - {id: 9bithorloxxx, cat: XXX/x264, desc: "XXX/Film, default: false"}
+    - {id: 10bithorloxxx, cat: XXX/ImageSet, desc: "XXX/Kép", default: false}
 
   modes:
     search: [q]
@@ -95,11 +123,23 @@ search:
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
   paths:
-    # https://huntorrent.net/browse.php?time=1616615308&korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
+    # https://huntorrent.net/browse.php?&korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
     - path: browse.php
+      categories: [28, 27, 4, 3, 6, 5, 2, 1, 17, 18, 19, 25, 24, 23, 38, 26, 20, 21, 31, 9, 8, 7, 13, 12, 11, 10]
+    - path: browse.php
+      categories: [51bithorlo, 50bithorlo, 2bithorlo, 1bithorlo, 42bithorlo, 41bithorlo, 40bithorlo, 19bithorlo, 29bithorlo, 28bithorlo, 15bithorlo, 38bithorlo, 37bithorlo, 20bithorlo, 21bithorlo, 54bithorlo, 23bithorlo, 33bithorlo, 52bithorlo, 53bithorlo, 4bithorlo, 3bithorlo, 12bithorlo, 13bithorlo]
+      inputs:
+        viewMode: bithorlo
+    - path: browse.php
+      categories: [16xxx, 32xxx, 14xxx, 15xxx]
+      inputs:
+        viewMode: xxx
+    - path: browse.php
+      categories: [9bithorloxxx, 10bithorloxxx]
+      inputs:
+        viewMode: bithorloxxx
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    viewMode: ""
     xyz: yes
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # Age Limit: 0 all, 1 no, 5 6, 2 12, 3 16, 4 18
@@ -115,12 +155,25 @@ search:
     selector: table.torrent-table > tbody > tr[id^="torrent-main-"]
 
   fields:
+    category_view:
+      # browse.php?cat=9&viewMode=
+      # browse.php?cat=9&viewMode=xxx
+      # browse.php?cat=9&viewMode=bithorlo
+      # browse.php?cat=9&viewMode=bithorloxxx
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      optional: true
+      filters:
+        - name: querystring
+          args: viewMode
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+        - name: append
+          args: "{{ if .Result.category_view }}{{ .Result.category_view }}{{ else }}{{ end }}"
     title:
       selector: a.torrent-title-link
     details:
