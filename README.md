@@ -526,6 +526,7 @@ Prior versions of Jackett are no longer supported.
  * SeedFile (SF)
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
+ * SexTorrent
  * SFP (Share Friends Projekt)
  * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland

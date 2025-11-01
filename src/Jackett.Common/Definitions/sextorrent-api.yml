@@ -1,0 +1,207 @@
+---
+id: sextorrent-api
+name: SexTorrent (API)
+description: "SexTorrent is a Private Torrent Tracker for 3X"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://sextorrent.myds.me/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: XXX, desc: "Amateur"}
+    - {id: 4, cat: XXX, desc: "Anal"}
+    - {id: 5, cat: XXX, desc: "Asian"}
+    - {id: 6, cat: XXX, desc: "BDSM"}
+    - {id: 7, cat: XXX, desc: "Big-Tits"}
+    - {id: 8, cat: XXX, desc: "Busty"}
+    - {id: 9, cat: XXX, desc: "Creampie"}
+    - {id: 10, cat: XXX, desc: "Fetish"}
+    - {id: 11, cat: XXX, desc: "Mature"}
+    - {id: 12, cat: XXX, desc: "Hardcore"}
+    - {id: 13, cat: XXX, desc: "Old and Young"}
+    - {id: 14, cat: XXX, desc: "Milf"}
+    - {id: 15, cat: XXX, desc: "Oral"}
+    - {id: 16, cat: XXX, desc: "Orgy Gang Bang"}
+    - {id: 17, cat: XXX, desc: "Lesbian"}
+    - {id: 18, cat: XXX, desc: "Teen"}
+    - {id: 19, cat: XXX, desc: "HD - High.Definition"}
+    - {id: 20, cat: XXX, desc: "Hentai"}
+    - {id: 21, cat: XXX, desc: "Interracial"}
+    - {id: 22, cat: XXX, desc: "Masturbate"}
+    - {id: 23, cat: XXX, desc: "Music Video"}
+    - {id: 24, cat: XXX, desc: "POV"}
+    - {id: 25, cat: XXX, desc: "Shemale -TS- TransSex"}
+    - {id: 26, cat: XXX, desc: "Straight"}
+    - {id: 27, cat: XXX, desc: "Mega.Pack"}
+    - {id: 28, cat: XXX, desc: "V.R. -Porn-"}
+    - {id: 30, cat: XXX/ImageSet, desc: "Pictures"}
+    - {id: 29, cat: XXX, desc: "SiteRip"}
+    - {id: 31, cat: XXX, desc: "Foreign"}
+    - {id: 32, cat: XXX, desc: "Latina"}
+    - {id: 33, cat: XXX/Other, desc: "Games"}
+    - {id: 34, cat: XXX, desc: "Magazines"}
+    - {id: 35, cat: XXX, desc: "Feature"}
+    - {id: 36, cat: XXX, desc: "Big-Ass"}
+    - {id: 37, cat: XXX/Other, desc: "Other"}
+    - {id: 38, cat: XXX, desc: "Cumshot"}
+    - {id: 39, cat: XXX, desc: "Black"}
+    - {id: 40, cat: XXX, desc: "Piss"}
+    - {id: 41, cat: XXX, desc: "Homemade"}
+    - {id: 42, cat: XXX, desc: "Pregnant"}
+    - {id: 43, cat: XXX, desc: "Gay"}
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "TV Show"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://sextorrent.myds.me/\" target=\"_blank\">SexTorrent</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: /api/torrents
+  method: get
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("Account is Banned")
+
+search:
+  paths:
+    # https://hdinnovations.github.io/UNIT3D/torrent_api.html
+    # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
+    - path: api/torrents/filter
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: data
+    attribute: attributes
+
+  fields:
+    category:
+      selector: category_id
+    title_optional:
+      selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    poster:
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    description:
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
+      case:
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
+      selector: double_upload
+      case:
+        False: 1 # normal
+        True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json UNIT3D 9.1.7
