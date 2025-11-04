@@ -81,6 +81,7 @@ caps:
     - {id: 329, cat: Books/EBook, desc: "Motorcars/Repairs"}
     - {id: 330, cat: Books/EBook, desc: "D.I.Y"}
     - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
+    - {id: 367, cat: Books/EBook, desc: "Health & Fitness"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
     - {id: 289, cat: Books/EBook, desc: "Autobiography/Memoir"}
