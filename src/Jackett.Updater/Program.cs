@@ -508,6 +508,7 @@ namespace Jackett.Updater
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
                 "Definitions/ilcorsaroverde.yml",
+                "Definitions/ilolicon.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/inperil.yml",
