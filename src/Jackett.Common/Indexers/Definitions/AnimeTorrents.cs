@@ -130,7 +130,7 @@ namespace Jackett.Common.Indexers.Definitions
                 { "total", "146" }, // Assuming the total number of pages
                 { "cat", MapTorznabCapsToTrackers(query).FirstIfSingleOrDefault("0") },
                 { "page", page.ToString() },
-                { "searchin", "filename" },
+                { "searchin", "filedisc" },
                 { "search", searchString }
             };
 
