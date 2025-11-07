@@ -35,7 +35,7 @@ caps:
     - {id: 215, cat: Audio/Audiobook, desc: "Paranormal Romance"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
     - {id: 205, cat: Audio/Audiobook, desc: "Reference & Educational"}
-    - {id: 207, cat: Audio/Audiobook, desc: "Religion and Spirituality"}
+    - {id: 207, cat: Audio/Audiobook, desc: "Religion & Spirituality"}
     - {id: 210, cat: Audio/Audiobook, desc: "Romance"}
     - {id: 240, cat: Audio/Audiobook, desc: "Sci-Fi Apocalypse"}
     - {id: 220, cat: Audio/Audiobook, desc: "Science"}
