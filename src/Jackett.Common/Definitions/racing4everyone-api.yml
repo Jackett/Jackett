@@ -34,6 +34,7 @@ caps:
     - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
     - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
     - {id: 63, cat: TV/Sport, desc: "Supercars"}
+    - {id: 83, cat: TV/Sport, desc: "Super GT"}
     - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
     - {id: 57, cat: TV/Sport, desc: "WEC"}
     - {id: 50, cat: TV/Sport, desc: "WRC"}
