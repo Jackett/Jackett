@@ -128,7 +128,7 @@ search:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
       filters:
         - name: re_replace # replace special characters with " " (space)
-          args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          args: ["[\\[!\"#$%&'()*+,\\/:;<=>?@\\^`{|}~]", " "]
         - name: diacritics
           args: replace
         - name: re_replace # replace multiple spaces
