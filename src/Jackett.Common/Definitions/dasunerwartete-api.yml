@@ -1,0 +1,144 @@
+---
+id: dasunerwartete-api
+name: Das Unerwartete (API)
+description: "Das Unerwartete (D-U) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL. This is the API version."
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://dasunerwartete.biz/
+
+caps:
+  categorymappings:
+    - {id: 145, cat: Movies, desc: "Filme > DRG"}
+    - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
+    - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
+    - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}
+    - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
+    - {id: 143, cat: TV/Anime, desc: "Filme > Anime"}
+    - {id: 138, cat: Movies, desc: "Filme > Packs"}
+    - {id: 148, cat: Movies, desc: "Filme > Packs UHD"}
+    - {id: 60, cat: TV/SD, desc: "Serien > SD"}
+    - {id: 57, cat: TV/HD, desc: "Serien > HD"}
+    - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
+    - {id: 144, cat: TV/Anime, desc: "Serien > Anime"}
+    - {id: 59, cat: TV, desc: "Serien > Packs"}
+    - {id: 147, cat: TV, desc: "Serien > Packs UHD"}
+    - {id: 110, cat: Audio/MP3, desc: "Audio > MP3"}
+    - {id: 48, cat: Audio/Lossless, desc: "Audio > Flac"}
+    - {id: 52, cat: Audio, desc: "Audio > Pack"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Audio > Hörbuch"}
+    - {id: 120, cat: Audio/Video, desc: "Audio > Videos"}
+    - {id: 12, cat: PC/0day, desc: "Apps > Windows"}
+    - {id: 125, cat: PC/Mac, desc: "Apps > Mac-OSX"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "Apps > Mobil"}
+    - {id: 141, cat: PC, desc: "Apps > Other"}
+    - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
+    - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
+    - {id: 123, cat: TV/Documentary, desc: "Doku > Reihe"}
+    - {id: 126, cat: PC/Mobile-Other, desc: "Spiel > Mobil"}
+    - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
+    - {id: 24, cat: Console, desc: "Spiel > Konsole"}
+    - {id: 121, cat: Console, desc: "Spiel > Wimmelbild"}
+    - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
+    - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
+    - {id: 96, cat: Books/Mags, desc: "ePaper > Zeitungen"}
+    - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
+    - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
+    - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
+    - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
+    - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
+    - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
+    - {id: 129, cat: Movies/SD, desc: "Internal > Film SD"}
+    - {id: 128, cat: Movies/HD, desc: "Internal > Film HD"}
+    - {id: 131, cat: TV/SD, desc: "Internal > Serien SD"}
+    - {id: 130, cat: TV/HD, desc: "Internal > Serien HD"}
+    - {id: 132, cat: Other, desc: "Internal > Sonstiges"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find your API Key by accessing your <a href=\"https://dasunerwartete.biz/\" target=\"_blank\">Das Unerwartete</a> profile page and look for the <b>API-Key:</b> tag."
+  - name: onlyupload
+    type: checkbox
+    label: Search OnlyUpload
+    default: false
+  - name: info_free
+    type: info
+    label: About OnlyUpload at D-U
+    default: "OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech)."
+
+search:
+  paths:
+    - path: api.php
+      method: get
+      response:
+        type: xml
+      inputs:
+        apikey: "{{ .Config.apikey }}"
+        $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+        q: "{{ .Query.Keywords }}"
+        imdbid: "{{ .Query.IMDBID }}"
+        tmdbid: "{{ .Query.TMDBID }}"
+        free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
+        page: 1
+
+  rows:
+    selector: item
+
+  fields:
+    category:
+      selector: category
+    title:
+      selector: title
+    _id:
+      selector: guid
+    details:
+      text: "details.php?id={{ .Result._id }}"
+    download:
+      selector: link
+      filters:
+        - name: replace
+          args: ["&amp;", "&"]
+    size:
+      selector: size
+    date:
+      # Thu, 30 Oct 2025 00:19:02 +0100
+      selector: pubDate
+      filters:
+        - name: replace
+          args: ["+0100", "+01:00"]
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    imdbid:
+      selector: imdb
+    tmdbid:
+      selector: tmdb
+    _onlyup:
+      selector: free_button:contains(Only Upload)
+      optional: true
+    downloadvolumefactor:
+      text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
+      text: 129600
+# API XML
