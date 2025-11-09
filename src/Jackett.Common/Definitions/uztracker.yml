@@ -91,6 +91,7 @@ caps:
     - {id: 202, cat: Audio, desc: " |- Сборники Русского рока (mp3)"}
     - {id: 323, cat: Audio, desc: " |- Русский Rock, Metal (Lossless)"}
     - {id: 214, cat: Audio, desc: " |- Soft & Pop-Rock"}
+    - {id: 334, cat: Audio, desc: " |- Progressive & Art-Rock"}
     - {id: 156, cat: Audio, desc: " |- Progressive, Art, Classic & Hard Rock"}
     - {id: 213, cat: Audio, desc: " |- Melodic & Folk Rock"}
     - {id: 212, cat: Audio, desc: " |- Instrumental & Guitar Rock"}
@@ -150,11 +151,13 @@ caps:
     - {id: 173, cat: Books, desc: " |- Художественная литература"}
     - {id: 314, cat: Books, desc: " |- Учебно-техническая литература"}
     - {id: 167, cat: Books, desc: "Аудиокниги"}
-    - {id: 232, cat: Audio/Audiobook, desc: " |- Детективы, приключения, триллеры (Audiobook)"}
-    - {id: 210, cat: Audio/Audiobook, desc: " |- Романы, повести, рассказы (Audiobook)"}
-    - {id: 233, cat: Audio/Audiobook, desc: " |- Любовные романы (Audiobook)"}
-    - {id: 176, cat: Audio/Audiobook, desc: " |- Мистика, фантастика, ужасы (Audiobook)"}
-    - {id: 175, cat: Audio/Audiobook, desc: " |- Любовно-фантастический роман (Audiobook)"}
+    - {id: 335, cat: Audio/Audiobook, desc: " |- ♫ Русская литература ХХ-ХХI века"}
+    - {id: 232, cat: Audio/Audiobook, desc: " |- ♫ Детективы, приключения, триллеры"}
+    - {id: 337, cat: Audio/Audiobook, desc: " |- ♫ Детективы  Дарьи Донцовой"}
+    - {id: 210, cat: Audio/Audiobook, desc: " |- ♫ Зарубежные авторы. Романы, повести, рассказы"}
+    - {id: 233, cat: Audio/Audiobook, desc: " |- ♫ Любовные романы"}
+    - {id: 176, cat: Audio/Audiobook, desc: " |- ♫ Мистика, фантастика, ужасы"}
+    - {id: 175, cat: Audio/Audiobook, desc: " |- ♫ Любовно-фантастический роман"}
     - {id: 174, cat: Audio, desc: " |- Аудиокниги на других языках (Audio)"}
     - {id: 319, cat: Books, desc: " |- Аудиокниги для детей"}
     # Игры # Games
