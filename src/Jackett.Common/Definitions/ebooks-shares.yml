@@ -93,6 +93,7 @@ caps:
     - {id: 351, cat: Books/EBook, desc: "Religion"}
     - {id: 358, cat: Books/EBook, desc: "History"}
     - {id: 362, cat: Books/EBook, desc: "Politics"}
+    - {id: 368, cat: Books/EBook, desc: "Music"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}
