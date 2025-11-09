@@ -709,6 +709,7 @@ caps:
     # temp, archive
     - {id: 892, cat: Other, desc: " |- Архив Мультфильмов"}
     - {id: 91, cat: Other, desc: " |- Архив Видео. Кино, Театра"}
+    - {id: 150, cat: Other, desc: " |- Архив неактуальных Экранок и любого видео с Рекламой"}
     - {id: 668, cat: Other, desc: " |- Архив Классики кино и Старых фильмов до 90-х"}
     - {id: 1143, cat: Other, desc: " |- Архив Музыкального Видео"}
     - {id: 802, cat: Other, desc: " |- Архив Сериалов и Архив Старого многосерийного кино до 90-х"}
@@ -724,6 +725,15 @@ caps:
     - {id: 184, cat: Other, desc: " |- Архив КПК и Мобильных устройств"}
     - {id: 1080, cat: Other, desc: " |- Архив 4Apple"}
     - {id: 180, cat: Other, desc: " |- Архив Медиа-Диз-Графика"}
+    - {id: 145, cat: Other, desc: " |- Видео (temp)"}
+    - {id: 146, cat: Other, desc: " |- Аниме (temp)"}
+    - {id: 161, cat: Other, desc: " |- Книги (temp)"}
+    - {id: 147, cat: Other, desc: " |- Музыка (temp)"}
+    - {id: 148, cat: Other, desc: " |- Игры (temp)"}
+    - {id: 149, cat: Other, desc: " |- Программы (temp)"}
+    - {id: 183, cat: Other, desc: " |- КПК и Мобильные устройства (temp)"}
+    - {id: 1145, cat: Other, desc: " |- 4Apple (temp)"}
+    - {id: 171, cat: Other, desc: " |- Медиа-Диз-Графика (temp)"}
 
   modes:
     search: [q]
