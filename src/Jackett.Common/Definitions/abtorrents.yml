@@ -53,6 +53,7 @@ caps:
     - {id: 420, cat: Books/EBook, desc: "[E] Arts & Crafts (Hobbies)"}
     - {id: 430, cat: Books/EBook, desc: "[E] Biography & Memoirs"}
     - {id: 435, cat: Books/EBook, desc: "[E] Business"}
+    - {id: 720, cat: Books/EBook, desc: "[E] Childrens"}
     - {id: 450, cat: Books/EBook, desc: "[E] Computer Learning"}
     - {id: 460, cat: Books/EBook, desc: "[E] Cookery"}
     - {id: 470, cat: Books/EBook, desc: "[E] Crime & Thriller"}
@@ -80,7 +81,6 @@ caps:
     - {id: 690, cat: Books/EBook, desc: "[E] Urban Fantasy & Paranormal"}
     - {id: 700, cat: Books/EBook, desc: "[E] Western"}
     - {id: 710, cat: Books/EBook, desc: "[E] Young Adult"}
-    - {id: 720, cat: Books/EBook, desc: "[E] Young Children"}
 
   modes:
     search: [q]
