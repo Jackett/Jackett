@@ -83,6 +83,7 @@ Prior versions of Jackett are no longer supported.
  * Mac Torrents Download
  * Magnet Cat
  * MagnetDownload
+ * Magnetz
  * MegaPeer
  * MejorTorrent
  * Mikan
