@@ -44,6 +44,7 @@ caps:
     - {id: Magazines, cat: XXX/Other, desc: Adult Magazines}
     - {id: Movie clips, cat: Movies, desc: Movies clips}
     - {id: Movies, cat: Movies, desc: Movies}
+    - {id: Music, cat: Audio, desc: Music}
     - {id: Music videos, cat: Audio/Video, desc: Music Videos}
     - {id: NDS, cat: Console/NDS, desc: Games NDS}
     - {id: Other Applications, cat: PC, desc: Other Applications}
