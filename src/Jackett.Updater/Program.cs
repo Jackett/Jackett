@@ -782,6 +782,7 @@ namespace Jackett.Updater
                 "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml",
                 "Definitions/torrentseeds-api.yml",
+                "Definitions/torrentsir.yml",
                 "Definitions/torrentsmd.yml",
                 "Definitions/torrentssg.yml",
                 "Definitions/torrent-town.yml",
