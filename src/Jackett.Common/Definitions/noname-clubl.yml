@@ -252,9 +252,9 @@ caps:
     - {id: 1295, cat: TV, desc: " |- Общественно-политические и пропагандистские ток-шоу"}
     - {id: 614, cat: TV, desc: " |- Религии и культы (Док/TV)"}
     - {id: 603, cat: TV, desc: "Спорт и активный отдых"}
-    - {id: 1206, cat: TV, desc: " |- Футбол. Чемпионат Мира 2022"}
-    - {id: 1309, cat: TV, desc: " |- Футбол. Чемпионат Европы 2020-2021"}
-    - {id: 1308, cat: TV, desc: " |- Хоккей. Чемпионат мира 2021"}
+    - {id: 1308, cat: TV, desc: " |- Хоккей. Чемпионат мира"}
+    - {id: 1309, cat: TV, desc: " |- Футбол. Чемпионат Европы"}
+    - {id: 1206, cat: TV, desc: " |- Футбол. Чемпионат Мира"}
     - {id: 1194, cat: TV, desc: " |- Летние Олимпийские игры и Паралимпийские игры"}
     - {id: 1062, cat: TV, desc: " |- Зимние Олимпийские игры и Паралимпийские игры"}
     - {id: 974, cat: TV, desc: " |- Футбол"}
@@ -324,13 +324,12 @@ caps:
     - {id: 931, cat: Books, desc: " |- Собрания книг русскоязычных авторов"}
     - {id: 1152, cat: Books, desc: " |- Собрания книг иностранных авторов"}
     - {id: 455, cat: Books, desc: " |- Сатира, Юмор"}
-    - {id: 1153, cat: Books, desc: " |- Боевики"}
-    - {id: 453, cat: Books, desc: " |- Детективы"}
+    - {id: 453, cat: Books, desc: " |- Боевики, Детективы, Триллеры"}
     - {id: 1063, cat: Books, desc: " |- Приключенческая проза "}
-    - {id: 452, cat: Books, desc: " |- Исторические книги"}
-    - {id: 449, cat: Books, desc: " |- Классика, Проза, Поэзия"}
-    - {id: 1063, cat: Books, desc: " |- Приключенческая литература"}
+    - {id: 452, cat: Books, desc: " |- Историческая проза, Мифы и Легенды"}
     - {id: 451, cat: Books, desc: " |- Фантастика, Фэнтези"}
+    - {id: 449, cat: Books, desc: " |- Современная поэзия и проза"}
+    - {id: 1153, cat: Books, desc: " |- Классическая поэзия и проза"}
     - {id: 1347, cat: Books, desc: "Книги вне издательств, самиздат (все жанры)"}
     - {id: 482, cat: Books, desc: "Комиксы и Артбуки"}
     - {id: 483, cat: Books, desc: " |- Комиксы на русском языке"}
@@ -428,8 +427,10 @@ caps:
     - {id: 1255, cat: Audio/Lossless, desc: " |- Классика (сборники) (Lossless)"}
     - {id: 376, cat: Audio, desc: " |- Классика (сборники)"}
     - {id: 326, cat: Audio, desc: "Jazz, Blues, Soul"}
+    - {id: 1352, cat: Audio, desc: " |- Jazz (Hi-Res)"}
     - {id: 359, cat: Audio/Lossless, desc: " |- Jazz (Lossless)"}
     - {id: 358, cat: Audio, desc: " |- Jazz"}
+    - {id: 1353, cat: Audio, desc: " |- Blues, Soul (Hi-Res)"}
     - {id: 1188, cat: Audio/Lossless, desc: " |- Blues, Soul (Lossless)"}
     - {id: 1189, cat: Audio, desc: " |- Blues, Soul"}
     - {id: 328, cat: Audio, desc: "Шансон, Авторская и Военная песня"}
@@ -440,17 +441,23 @@ caps:
     - {id: 1179, cat: Audio/Lossless, desc: " |- Авторская и Военная песня (Lossless)"}
     - {id: 879, cat: Audio, desc: " |- Авторская и Военная песня"}
     - {id: 322, cat: Audio, desc: "Rock, Alternative, Punk, Metal"}
+    - {id: 1350, cat: Audio, desc: " |- Rock (Hi-Res)"}
     - {id: 962, cat: Audio/Lossless, desc: " |- Rock (Lossless)"}
     - {id: 333, cat: Audio, desc: " |- Rock"}
+    - {id: 1356, cat: Audio, desc: " |- Alternative, Punk (Hi-Res)"}
     - {id: 965, cat: Audio/Lossless, desc: " |- Alternative, Punk (Lossless)"}
     - {id: 336, cat: Audio, desc: " |- Alternative, Punk"}
+    - {id: 1362, cat: Audio, desc: " |- Hard Rock (Hi Res)"}
     - {id: 337, cat: Audio/Lossless, desc: " |- Hard Rock (Lossless)"}
     - {id: 338, cat: Audio, desc: " |- Hard Rock"}
+    - {id: 1351, cat: Audio, desc: " |- Metal (Hi-Res)"}
     - {id: 963, cat: Audio/Lossless, desc: " |- Metal (Lossless)"}
     - {id: 334, cat: Audio, desc: " |- Metal"}
+    - {id: 1357, cat: Audio, desc: " |- Русский Рок (Hi-Res)"}
     - {id: 961, cat: Audio/Lossless, desc: " |- Русский Рок (Lossless)"}
     - {id: 332, cat: Audio, desc: " |- Русский рок"}
     - {id: 325, cat: Audio, desc: "Pop"}
+    - {id: 1354, cat: Audio, desc: " |- Pop (Hi-Res)"}
     - {id: 1165, cat: Audio/Lossless, desc: " |- Eurodance, Euro-House, Technopop (Lossless)"}
     - {id: 1166, cat: Audio, desc: " |- Eurodance, Euro-House, Technopop"}
     - {id: 1168, cat: Audio, desc: " |- Disco, Italo-Disco, Euro-Disco, Hi-NRG"}
@@ -466,26 +473,32 @@ caps:
     - {id: 1328, cat: Audio, desc: " |- Psybient, Psychill, Psydub"}
     - {id: 1325, cat: Audio/Lossless, desc: " |- Downtempo, Trip-Hop, Lounge (Lossless)"}
     - {id: 1326, cat: Audio, desc: " |- Downtempo, Trip-Hop, Lounge"}
+    - {id: 1365, cat: Audio, desc: " |- Downtempo, Ambient (Hi-Res)"}
+    - {id: 1366, cat: Audio, desc: " |- Experimental, Industrial (Hi-Res)"}
     - {id: 1323, cat: Audio/Lossless, desc: " |- Ambient, Experimental, Modern Classical (Lossless)"}
     - {id: 1324, cat: Audio, desc: " |- Ambient, Experimental, Modern Classical"}
     - {id: 976, cat: Audio/Lossless, desc: " |- Trance (Lossless)"}
     - {id: 346, cat: Audio, desc: " |- Trance"}
-    - {id: 1243, cat: Audio, desc: " |- Label-Packs"}
+    - {id: 1363, cat: Audio, desc: " |- Trance, House, Techno (Hi-Res)"}
     - {id: 977, cat: Audio/Lossless, desc: " |- House, Techno, Electro, Minimal (Lossless)"}
     - {id: 345, cat: Audio, desc: " |- House"}
     - {id: 349, cat: Audio, desc: " |- Techno, Electro, Minimal"}
+    - {id: 1243, cat: Audio, desc: " |- Label-Packs"}
     - {id: 347, cat: Audio, desc: " |- Easy listening"}
     - {id: 979, cat: Audio/Lossless, desc: " |- Industrial, EBM, Dark Electro (Lossless)"}
     - {id: 673, cat: Audio, desc: " |- Experimental Electronic"}
     - {id: 671, cat: Audio, desc: " |- Industrial, EBM, Dark Electro"}
     - {id: 1224, cat: Audio/Lossless, desc: " |- IDM (Lossless)"}
     - {id: 1225, cat: Audio, desc: " |- IDM"}
+    - {id: 1367, cat: Audio, desc: " |- Synthpop, New Wave, Retro (Hi-Res)"}
     - {id: 980, cat: Audio/Lossless, desc: " |- Synthpop, New Wave (Lossless)"}
     - {id: 672, cat: Audio, desc: " |- Synthpop, New Wave"}
     - {id: 1316, cat: Audio/Lossless, desc: " |- Dubstep, Future Garage, Bass Music, UK Garage (Lossless)"}
     - {id: 1317, cat: Audio, desc: " |- Dubstep, Future Garage, Bass Music, UK Garage"}
+    - {id: 1364, cat: Audio, desc: " |- Drum'n'Bass, Breakbeat (Hi-Res)"}
     - {id: 981, cat: Audio/Lossless, desc: " |- Drum'n'Bass, Jungle, Breaks, Breakbeat (Lossless)"}
     - {id: 344, cat: Audio, desc: " |- Drum'n'Bass, Jungle, Breaks, Breakbeat"}
+    - {id: 1368, cat: Audio, desc: " |- Hardcore, Extreme (Hi-Res)"}
     - {id: 983, cat: Audio/Lossless, desc: " |- Hardstyle, Jumpstyle, Hardcore (Lossless)"}
     - {id: 984, cat: Audio, desc: " |- Hardstyle, Jumpstyle, Hardcore"}
     - {id: 982, cat: Audio/Lossless, desc: " |- Psychedelic, psytrance, fullon (Lossless)"}
@@ -499,6 +512,7 @@ caps:
     - {id: 1185, cat: Audio/Lossless, desc: " |- RnB, Reggae (Lossless)"}
     - {id: 341, cat: Audio, desc: " |- RnB, Reggae"}
     - {id: 329, cat: Audio, desc: "East Asian Music"}
+    - {id: 1361, cat: Audio, desc: " |- Asian Music (Hi-Res)"}
     - {id: 369, cat: Audio/Lossless, desc: " |- Asian Traditional, Ethnic (Lossless)"}
     - {id: 368, cat: Audio, desc: " |- Asian Traditional, Ethnic"}
     - {id: 1218, cat: Audio/Lossless, desc: " |- Asian Pop (Lossless)"}
@@ -510,14 +524,17 @@ caps:
     - {id: 1213, cat: Audio/Lossless, desc: " |- Other Asian (Lossless)"}
     - {id: 367, cat: Audio, desc: " |- Other Asian"}
     - {id: 331, cat: Audio, desc: "Other Styles"}
+    - {id: 1358, cat: Audio, desc: " |- Instrumental (Hi-Res)"}
     - {id: 1157, cat: Audio/Lossless, desc: " |- Instrumental (Lossless)"}
     - {id: 711, cat: Audio, desc: " |- Instrumental"}
     - {id: 1159, cat: Audio/Lossless, desc: " |- New Age/Meditative/Relax (Lossless)"}
     - {id: 378, cat: Audio, desc: " |- New Age/Meditative/Relax"}
+    - {id: 1359, cat: Audio, desc: " |- Folk (Hi-Res)"}
     - {id: 1158, cat: Audio/Lossless, desc: " |- Folk (Lossless)"}
     - {id: 379, cat: Audio, desc: " |- Folk"}
     - {id: 380, cat: Audio/Lossless, desc: " |- Other (Lossless)"}
     - {id: 1178, cat: Audio, desc: " |- Other"}
+    - {id: 1360, cat: Audio, desc: " |- OST (Hi-Res)"}
     - {id: 361, cat: Audio/Lossless, desc: " |- OST (Lossless)"}
     - {id: 360, cat: Audio, desc: " |- OST"}
     - {id: 327, cat: Audio, desc: "Неофициальные сборники"}

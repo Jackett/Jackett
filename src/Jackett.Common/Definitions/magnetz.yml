@@ -1,0 +1,61 @@
+---
+id: magnetz
+name: Magnetz
+description: "Magnetz is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://magnetz.eu/
+
+caps:
+  categorymappings:
+    - {id: Other, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: info_category_8000
+    type: info_category_8000
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: search
+  inputs:
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
+
+  rows:
+    selector: a.list-group-item
+
+  fields:
+    category:
+      text: Other
+    title:
+      selector: h5
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: small
+    seeders:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

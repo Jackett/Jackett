@@ -13,12 +13,12 @@ caps:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 6, cat: TV/Anime, desc: "Anime"}
-    - {id: 10, cat: TV, desc: "TV Pack"}
     - {id: 4, cat: PC/Games, desc: "Games"}
     - {id: 5, cat: PC/0day, desc: "Apps"}
+    - {id: 6, cat: TV/Anime, desc: "Anime"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
-    - {id: 11, cat: Other, desc: "Miscellaneous"}
+    - {id: 14, cat: Other, desc: "Tutorials"}
+    - {id: 11, cat: Other, desc: "Assorted"}
 
   modes:
     search: [q]

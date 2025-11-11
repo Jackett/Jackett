@@ -124,9 +124,14 @@ search:
     details:
       selector: a[href^="details.php?id="]
       attribute: href
-    download:
-      selector: a[href^="download.php?id="]
+    _id:
+      selector: a[href^="details.php?id="]
       attribute: href
+      filters:
+        - name: querystring
+          args: id
+    download:
+      text: "download.php?id={{ .Result._id }}"
     poster:
       selector: img[data-src]
       attribute: data-src

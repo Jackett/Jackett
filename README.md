@@ -70,6 +70,7 @@ Prior versions of Jackett are no longer supported.
  * Frozen Layer
  * GamesTorrents
  * GTorrent.pro
+ * HDRTorrent
  * Idope
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
@@ -82,6 +83,7 @@ Prior versions of Jackett are no longer supported.
  * Mac Torrents Download
  * Magnet Cat
  * MagnetDownload
+ * Magnetz
  * MegaPeer
  * MejorTorrent
  * Mikan
@@ -124,7 +126,6 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
- * TorrentControl
  * TorrentDosFilmes
  * TorrentDownload
  * TorrentGalaxyClone
@@ -132,9 +133,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentProject2
  * TorrentQQ (토렌트큐큐)
  * Torrents.csv
- * TorrentSir (토렌트썰)
  * Torrentsome (토렌트썸)
- * torrentssg (토렌트쓱)
  * Torrenttip (토렌트팁)
  * TrahT
  * U3C3
@@ -389,13 +388,13 @@ Prior versions of Jackett are no longer supported.
  * HDU
  * Hebits (HB)
  * HellasHut
+ * HELLENIC-HD
  * HHanClub
  * HHD
  * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
- * ilolicon PT
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
@@ -473,6 +472,7 @@ Prior versions of Jackett are no longer supported.
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
  * Peers.FM
+ * Phoenix Project
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
@@ -528,7 +528,7 @@ Prior versions of Jackett are no longer supported.
  * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland
  * Shazbat
- * SiamBIT
+ * SiamBIT [PAY2DL]
  * SkipTheCommercials
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
@@ -562,7 +562,6 @@ Prior versions of Jackett are no longer supported.
  * The Vault (TVBZ)
  * The-New-Fun
  * TheLeachZone (TLZ)
- * ThePiratedShip
  * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)

@@ -508,6 +508,7 @@ namespace Jackett.Updater
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
                 "Definitions/ilcorsaroverde.yml",
+                "Definitions/ilolicon.yml",
                 "Definitions/iloveclassics.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/inperil.yml",
@@ -684,6 +685,7 @@ namespace Jackett.Updater
                 "Definitions/secretcinema.yml", // migrated to C# gazelle base tracker
                 "Definitions/seedoff.yml",
                 "Definitions/seedpeer.yml",
+                "Definitions/sextorrent.yml",
                 "Definitions/sexxi.yml",
                 "Definitions/shadowflow.yml",
                 "Definitions/sharefiles.yml",
@@ -734,6 +736,7 @@ namespace Jackett.Updater
                 "Definitions/theleachzone.yml", // switch to *-API #11185
                 "Definitions/the-madhouse.yml",
                 "Definitions/themoviecave.yml",
+                "Definitions/thepiratedship.yml",
                 "Definitions/therebels-api.yml",
                 "Definitions/theresurrection.yml",
                 "Definitions/thesceneplace.yml",
@@ -759,6 +762,7 @@ namespace Jackett.Updater
                 "Definitions/torrent-paradise-ml.yml",
                 "Definitions/torrent4you.yml",
                 "Definitions/torrentbomb.yml",
+                "Definitions/torrentcontrol.yml",
                 "Definitions/torrentcouch.yml",
                 "Definitions/torrentdb.yml",
                 "Definitions/torrentfactory.yml",
@@ -778,7 +782,9 @@ namespace Jackett.Updater
                 "Definitions/torrentseed.yml", // renamed to latinop2p #9065
                 "Definitions/torrentseeds.yml",
                 "Definitions/torrentseeds-api.yml",
+                "Definitions/torrentsir.yml",
                 "Definitions/torrentsmd.yml",
+                "Definitions/torrentssg.yml",
                 "Definitions/torrent-town.yml",
                 "Definitions/torrentslocal.yml",
                 "Definitions/torrentsurf.yml", // renamed xtremebytes #9951
@@ -812,6 +818,7 @@ namespace Jackett.Updater
                 "Definitions/twisted-music.yml",
                 "Definitions/u-torrents.yml",
                 "Definitions/uhd-heaven.yml",
+                "Definitions/uhdtorrent.yml",
                 "Definitions/ultimategamerclub.yml",
                 "Definitions/ultra-hd.yml",
                 "Definitions/ultrahdclub.yml",

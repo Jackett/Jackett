@@ -5,6 +5,7 @@ description: "ilCorSaRoNeRo is an ITALIAN Public site for MOVIES / TV / GENERAL"
 language: it-IT
 type: public
 encoding: UTF-8
+# current (official?) domains list https://loiflix.shop/ilcorsaronero/
 links:
   - https://ilcorsaronero.link/
   - https://ilcorsaronero.torrentbay.st/

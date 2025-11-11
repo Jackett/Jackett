@@ -1,29 +1,22 @@
 ---
-id: darkpeers-api
-name: Darkpeers (API)
-description: "Darkpeers is a NORDIC Private Torrent Tracker for MOVIES / TV"
-language: en-US
+id: hellenic-hd-api
+name: HELLENIC-HD (API)
+description: "HELLENIC-HD is a GREEK Private Torrent Tracker for MOVIES / TV"
+language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://darkpeers.org/
+  - https://hellenic-hd.cc/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 4, cat: Console, desc: "Games"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 5, cat: PC, desc: "Software"}
-    - {id: 6, cat: XXX, desc: "XXX"}
-    - {id: 7, cat: Other, desc: "Assorted"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: apikey
@@ -32,7 +25,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://darkpeers.org/\" target=\"_blank\">Darkpeers</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://hellenic-hd.cc/\" target=\"_blank\">HELLENIC-HD</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -60,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Users must log in or be seeding for their account to be considered active. If the account is not active for a consecutive 90 days, the account will be deactivated. After a consecutive 120 days, the account will be pruned."
+    default: "Accounts that have not logged in for 60 days will be disabled, and may be deleted shortly afterwards."
 
 login:
   path: /api/torrents
@@ -188,10 +181,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.8 but torrents must be seeded for 6 days or 1:1
-    minimumratio:
-      text: 1.0
+# global MR is 0.4 but torrents must be seeded for 14 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
-      # 6 days (as seconds = 6 x 24 x 60 x 60)
-      text: 518400
-# json UNIT3D 9.1.7
+      # 14 days (as seconds = 14 x 24 x 60 x 60)
+      text: 1209600
+# json UNIT3D 9.1.6

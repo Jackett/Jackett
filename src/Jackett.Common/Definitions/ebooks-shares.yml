@@ -67,6 +67,7 @@ caps:
     - {id: 347, cat: Books/EBook, desc: "Medical"}
     - {id: 348, cat: Books/EBook, desc: "Mathematics"}
     - {id: 363, cat: Books/EBook, desc: "Sheet Music"}
+    - {id: 366, cat: Books/EBook, desc: "Astronomy"}
     # Tech/Computers
     - {id: 331, cat: Books/EBook, desc: "Electronics"}
     - {id: 336, cat: Books/EBook, desc: "Video Games"}
@@ -80,6 +81,7 @@ caps:
     - {id: 329, cat: Books/EBook, desc: "Motorcars/Repairs"}
     - {id: 330, cat: Books/EBook, desc: "D.I.Y"}
     - {id: 332, cat: Books/EBook, desc: "Trivia/Quiz"}
+    - {id: 367, cat: Books/EBook, desc: "Health & Fitness"}
     # Non Fict/Ref
     - {id: 285, cat: Books/EBook, desc: "General Non-fiction"}
     - {id: 289, cat: Books/EBook, desc: "Autobiography/Memoir"}
@@ -91,6 +93,7 @@ caps:
     - {id: 351, cat: Books/EBook, desc: "Religion"}
     - {id: 358, cat: Books/EBook, desc: "History"}
     - {id: 362, cat: Books/EBook, desc: "Politics"}
+    - {id: 368, cat: Books/EBook, desc: "Music"}
     # Military
     - {id: 287, cat: Books/EBook, desc: "WW1"}
     - {id: 288, cat: Books/EBook, desc: "WW2"}

@@ -27,12 +27,14 @@ caps:
     - {id: 23, cat: TV/Sport, desc: "Formula E"}
     - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
     - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
+    - {id: 82, cat: TV/Sport, desc: "Motorcycle Speedway"}
     - {id: 31, cat: TV/Sport, desc: "Nascar"}
     - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
     - {id: 69, cat: TV/Sport, desc: "Other Cars"}
     - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
     - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
     - {id: 63, cat: TV/Sport, desc: "Supercars"}
+    - {id: 83, cat: TV/Sport, desc: "Super GT"}
     - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
     - {id: 57, cat: TV/Sport, desc: "WEC"}
     - {id: 50, cat: TV/Sport, desc: "WRC"}
@@ -196,6 +198,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-    minimumratio:
-      text: 1.0
+# global MR is 0.4 but torrents must be seeded for 2 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # json UNIT3D 9.1.7 (custom)

@@ -17,11 +17,10 @@ caps:
     - {id: 2, cat: TV, desc: "Serie TV"}
     - {id: 15, cat: Books/EBook, desc: "Ebook"}
     - {id: 17, cat: Books/Mags, desc: "Riviste e Giornali"}
-    - {id: 19, cat: XXX, desc: "XXX"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 7, cat: PC/Games, desc: "Games"}
     - {id: 23, cat: PC, desc: "Software"}
-    - {id: 24, cat: TV/Sport, desc: "EVENTI SPORTIVI"}
+    - {id: 24, cat: TV/Sport, desc: "Eventi Sportivi"}
     - {id: 25, cat: Other, desc: "Misc"}
 
   modes:
@@ -129,7 +128,7 @@ search:
       text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
       filters:
         - name: re_replace # replace special characters with " " (space)
-          args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
+          args: ["[\\[!\"#$%&'()*+,\\/:;<=>?@\\^`{|}~]", " "]
         - name: diacritics
           args: replace
         - name: re_replace # replace multiple spaces

@@ -9,11 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrenttip198.top/
+  - https://torrenttip201.top/
 legacylinks:
-  - https://torrenttip183.top/
-  - https://torrenttip184.top/
-  - https://torrenttip185.top/
   - https://torrenttip186.top/
   - https://torrenttip187.top/
   - https://torrenttip188.top/
@@ -26,6 +23,9 @@ legacylinks:
   - https://torrenttip195.top/
   - https://torrenttip196.top/
   - https://torrenttip197.top/
+  - https://torrenttip198.top/
+  - https://torrenttip199.top/
+  - https://torrenttip200.top/
 
 caps:
   categorymappings:
