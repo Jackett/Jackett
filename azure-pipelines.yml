@@ -44,7 +44,7 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               framework: $(netCoreFramework)
               runtime: win-x86
               archiveType: zip
@@ -65,49 +65,49 @@ stages:
               artifactName: Jackett.Binaries.macOSARM64.tar.gz
             LinuxAMDx64:
               buildDescription: Linux AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
             LinuxARM32:
               buildDescription: Linux ARM32
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM32.tar.gz
             LinuxARM64:
               buildDescription: Linux ARM64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: net471
               runtime: linux-x64
               archiveType: tar
@@ -329,7 +329,7 @@ stages:
       - job: Linting_Dotnet
         displayName: Linting Dotnet
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -362,7 +362,7 @@ stages:
       - job: Linting_YAML
         displayName: Linting YAML
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -382,7 +382,7 @@ stages:
       - job: Validate_YAML_Schema
         displayName: Validate YAML Schema
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -421,7 +421,7 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               framework: $(netCoreFramework)
               runtime: win-x86
             macOS:
@@ -431,12 +431,12 @@ stages:
               runtime: osx-x64
             LinuxAMDx64:
               buildDescription: LinuxAMDx64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-x64
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: net471
               runtime: linux-x64
         pool:
@@ -514,7 +514,7 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               artifactName: Jackett.Binaries.Windows.zip
               framework: $(netCoreFramework)
               runtime: win-x86
@@ -526,13 +526,13 @@ stages:
               runtime: osx-x64
             LinuxAMDx64:
               buildDescription: Linux AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
               framework: $(netCoreFramework)
               runtime: linux-x64
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               artifactName: Jackett.Binaries.Mono.tar.gz
               framework: net471
               runtime: linux-x64
@@ -596,7 +596,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         steps:
           - checkout: self
 
