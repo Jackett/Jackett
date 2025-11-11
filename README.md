@@ -399,6 +399,7 @@ Prior versions of Jackett are no longer supported.
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
  * INFINITY [PAY2DL] [![(invite needed)][inviteneeded]](#)
+ * InfinityHD
  * Infire
  * Insane Tracker
  * IPTorrents (IPT)
