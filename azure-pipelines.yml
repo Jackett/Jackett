@@ -231,7 +231,7 @@ stages:
 
           - task: CopyFiles@2
             displayName: Copy Mono Specific Scripts
-            condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
             inputs:
               SourceFolder: $(Build.SourcesDirectory)
               contents: |
@@ -269,7 +269,7 @@ stages:
           # https://github.com/Jackett/Jackett/issues/3547
           - task: PowerShell@2
             displayName: Patch Mono Build (Mono only)
-            condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
             inputs:
               workingDirectory: $(Build.BinariesDirectory)/Jackett
               targetType: inline
@@ -445,6 +445,15 @@ stages:
         steps:
           - checkout: self
 
+          - task: Bash@3
+            displayName: Install Mono (Mono only)
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
+            inputs:
+              targetType: inline
+              script: |
+                sudo apt update
+                sudo apt install mono-complete
+
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
             inputs:
@@ -541,6 +550,15 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+
+          - task: Bash@3
+            displayName: Install Mono (Mono only)
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
+            inputs:
+              targetType: inline
+              script: |
+                sudo apt update
+                sudo apt install mono-complete
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
