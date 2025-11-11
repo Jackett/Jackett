@@ -38,9 +38,9 @@
 
   <!-- Conditionally obtain references for the .NET 9.0 target -->
   <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
-    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.9" />
-    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.9" />
-    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="9.0.11" />
+    <PackageReference Include="Microsoft.Extensions.Configuration" Version="9.0.11" />
+    <PackageReference Include="System.Security.Cryptography.ProtectedData" Version="9.0.11" />
   </ItemGroup>
 
   <!-- Conditionally obtain references for the .NET471 target -->
@@ -62,8 +62,8 @@
     <PackageReference Include="Mono.Posix" Version="7.1.0-final.1.21458.1" />
     <PackageReference Include="NLog" Version="5.4.0" />
     <PackageReference Include="NLog.Web.AspNetCore" Version="5.4.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.9" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.11" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.11" />
   </ItemGroup>
 
   <ItemGroup>

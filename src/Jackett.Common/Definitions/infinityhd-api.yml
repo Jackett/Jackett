@@ -1,18 +1,19 @@
 ---
-id: hd-unit3d-api
-name: HD-UNiT3D (API)
-description: "HD-UNiT3D is a Private Torrent Tracker for HD MOVIES / TV"
+id: infinityhd-api
+name: InfinityHD (API)
+description: "InfinityHD is a Private Torrent Tracker for MOVIES / TV / ANIME"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://hd-united.vn/
+  - https://infinityhd.net/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Audio"}
+    - {id: 3, cat: TV/Anime, desc: "Anime"}
+    - {id: 4, cat: Movies/Other, desc: "Anime Movie"}
 
   modes:
     search: [q]
@@ -27,7 +28,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://hd-united.vn/\" target=\"_blank\">HD-UNiT3D</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://infinityhd.net/\" target=\"_blank\">InfinityHD</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -55,7 +56,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Inactive accounts will be deleted as scheduled by Staff."
+    default: "Your account will be automatically disabled after 90 days of inactivity. After 120 days your account will be pruned and is permanently deleted."
 
 login:
   path: /api/torrents
@@ -183,10 +184,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 3 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 5 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
 # json UNIT3D 9.1.7

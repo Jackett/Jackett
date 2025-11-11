@@ -44,70 +44,70 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               framework: $(netCoreFramework)
               runtime: win-x86
               archiveType: zip
               artifactName: Jackett.Binaries.Windows.zip
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15
               framework: $(netCoreFramework)
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
             macOSARM64:
               buildDescription: macOS ARM64
-              imageName: macOS-13
+              imageName: macOS-15
               framework: $(netCoreFramework)
               runtime: osx-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.macOSARM64.tar.gz
             LinuxAMDx64:
               buildDescription: Linux AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
             LinuxARM32:
               buildDescription: Linux ARM32
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM32.tar.gz
             LinuxARM64:
               buildDescription: Linux ARM64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxARM64.tar.gz
             LinuxMuslAMDx64:
               buildDescription: Linux musl AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-x64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslAMDx64.tar.gz
             LinuxMuslARM32:
               buildDescription: Linux musl ARM32
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM32.tar.gz
             LinuxMuslARM64:
               buildDescription: Linux musl ARM64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-musl-arm64
               archiveType: tar
               artifactName: Jackett.Binaries.LinuxMuslARM64.tar.gz
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: net471
               runtime: linux-x64
               archiveType: tar
@@ -231,7 +231,7 @@ stages:
 
           - task: CopyFiles@2
             displayName: Copy Mono Specific Scripts
-            condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
             inputs:
               SourceFolder: $(Build.SourcesDirectory)
               contents: |
@@ -269,7 +269,7 @@ stages:
           # https://github.com/Jackett/Jackett/issues/3547
           - task: PowerShell@2
             displayName: Patch Mono Build (Mono only)
-            condition: and(succeeded(), startsWith(variables['buildDescription'], 'Mono'))
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
             inputs:
               workingDirectory: $(Build.BinariesDirectory)/Jackett
               targetType: inline
@@ -329,7 +329,7 @@ stages:
       - job: Linting_Dotnet
         displayName: Linting Dotnet
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -362,7 +362,7 @@ stages:
       - job: Linting_YAML
         displayName: Linting YAML
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -382,7 +382,7 @@ stages:
       - job: Validate_YAML_Schema
         displayName: Validate YAML Schema
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         workspace:
           clean: all
         steps:
@@ -421,22 +421,22 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               framework: $(netCoreFramework)
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15
               framework: $(netCoreFramework)
               runtime: osx-x64
             LinuxAMDx64:
               buildDescription: LinuxAMDx64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: $(netCoreFramework)
               runtime: linux-x64
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               framework: net471
               runtime: linux-x64
         pool:
@@ -444,6 +444,15 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+
+          - task: Bash@3
+            displayName: Install Mono (Mono only)
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
+            inputs:
+              targetType: inline
+              script: |
+                sudo apt update
+                sudo apt install mono-complete
 
           - task: UseDotNet@2
             displayName: Install .NET Core SDK
@@ -514,25 +523,25 @@ stages:
           matrix:
             Windows:
               buildDescription: Windows
-              imageName: windows-2022
+              imageName: windows-2025
               artifactName: Jackett.Binaries.Windows.zip
               framework: $(netCoreFramework)
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15
               artifactName: Jackett.Binaries.macOS.tar.gz
               framework: $(netCoreFramework)
               runtime: osx-x64
             LinuxAMDx64:
               buildDescription: Linux AMD x64
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               artifactName: Jackett.Binaries.LinuxAMDx64.tar.gz
               framework: $(netCoreFramework)
               runtime: linux-x64
             Mono:
               buildDescription: Mono
-              imageName: ubuntu-22.04
+              imageName: ubuntu-24.04
               artifactName: Jackett.Binaries.Mono.tar.gz
               framework: net471
               runtime: linux-x64
@@ -541,6 +550,15 @@ stages:
         displayName: ${{ variables.buildDescription }}
         steps:
           - checkout: self
+
+          - task: Bash@3
+            displayName: Install Mono (Mono only)
+            condition: and(succeeded(), eq(variables['buildDescription'], 'Mono'))
+            inputs:
+              targetType: inline
+              script: |
+                sudo apt update
+                sudo apt install mono-complete
 
           - task: DownloadBuildArtifacts@0
             displayName: Download artifacts for integration tests
@@ -596,7 +614,7 @@ stages:
         workspace:
           clean: all
         pool:
-          vmImage: ubuntu-22.04
+          vmImage: ubuntu-24.04
         steps:
           - checkout: self
 

@@ -7,12 +7,13 @@ description: "ZkTorrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.my/
+# to fetch current domain use https://www.rantop.org/
 links:
   - https://www.zktorrent.town/
+  - https://zktorrent-proxy.site/
 legacylinks:
   # latest domains list
-  - https://www.rantop.my/
+  - https://www.rantop.org/
   - https://www.site-torrent.cc/
   - https://www.torrent-site.com/
   # domain lists no longer working
@@ -21,9 +22,9 @@ legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
   - https://www.torrent.onl/
-  - https://www.rantop.org/
   - https://gktorrent.news/
   - https://www.site-torrent.com/
+  - https://www.rantop.my/
   # actual legacylinks
   - https://www.gktorrent.si/
   - https://www.gktorrent.my/
@@ -100,7 +101,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
