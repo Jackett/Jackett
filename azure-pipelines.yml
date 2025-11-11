@@ -51,14 +51,14 @@ stages:
               artifactName: Jackett.Binaries.Windows.zip
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15-intel
               framework: $(netCoreFramework)
               runtime: osx-x64
               archiveType: tar
               artifactName: Jackett.Binaries.macOS.tar.gz
             macOSARM64:
               buildDescription: macOS ARM64
-              imageName: macOS-13
+              imageName: macOS-15
               framework: $(netCoreFramework)
               runtime: osx-arm64
               archiveType: tar
@@ -426,7 +426,7 @@ stages:
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15-intel
               framework: $(netCoreFramework)
               runtime: osx-x64
             LinuxAMDx64:
@@ -520,7 +520,7 @@ stages:
               runtime: win-x86
             macOS:
               buildDescription: macOS
-              imageName: macOS-13
+              imageName: macOS-15-intel
               artifactName: Jackett.Binaries.macOS.tar.gz
               framework: $(netCoreFramework)
               runtime: osx-x64
