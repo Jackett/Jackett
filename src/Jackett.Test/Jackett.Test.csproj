@@ -25,14 +25,14 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="FluentAssertions" Version="6.12.1" />
-    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="9.0.9" />
+    <PackageReference Include="Microsoft.AspNetCore.DataProtection" Version="9.0.11" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.14.1" />
     <PackageReference Include="MSTest.TestAdapter" Version="3.10.4" />
     <PackageReference Include="MSTest.TestFramework" Version="3.10.4" />
     <PackageReference Include="NUnit" Version="3.14.0" />
     <PackageReference Include="NUnit.ConsoleRunner" Version="3.17.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.9" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.11" />
   </ItemGroup>
 
   <ItemGroup>
