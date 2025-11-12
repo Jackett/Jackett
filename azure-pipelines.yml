@@ -2,7 +2,7 @@
 name: $(majorVersion).$(minorVersion).$(patchVersion)
 variables:
   majorVersion: 0
-  minorVersion: 24
+  minorVersion: 25
   patchVersion: $[counter(variables['minorVersion'], 1)]  # this will reset when we bump minor
   jackettVersion: $(majorVersion).$(minorVersion).$(patchVersion)
   buildConfiguration: Release
