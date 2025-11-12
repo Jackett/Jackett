@@ -610,6 +610,7 @@ namespace Jackett.Updater
                 "Definitions/onlyscene.yml",
                 "Definitions/ostwiki.yml",
                 "Definitions/oxtorrent.yml",
+                "Definitions/oxtorrent-vip.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/pandahd.yml",
                 "Definitions/parabellumhd.yml",
