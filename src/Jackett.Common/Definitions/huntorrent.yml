@@ -68,7 +68,7 @@ caps:
     - {id: 32xxx, cat: XXX/x264, desc: "XXX/HD", default: false}
     - {id: 14xxx, cat: XXX/ImageSet, desc: "XXX/Kép", default: false}
     - {id: 15xxx, cat: XXX/SD, desc: "XXX/XVID", default: false}
-    - {id: 9bithorloxxx, cat: XXX/x264, desc: "XXX/Film, default: false"}
+    - {id: 9bithorloxxx, cat: XXX/x264, desc: "XXX/Film", default: false}
     - {id: 10bithorloxxx, cat: XXX/ImageSet, desc: "XXX/Kép", default: false}
 
   modes:
@@ -126,30 +126,32 @@ search:
     # https://huntorrent.net/browse.php?&korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
     - path: browse.php
       categories: [28, 27, 4, 3, 6, 5, 2, 1, 17, 18, 19, 25, 24, 23, 38, 26, 20, 21, 31, 9, 8, 7, 13, 12, 11, 10]
+      inputs:
+        $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+        search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     - path: browse.php
       categories: [51bithorlo, 50bithorlo, 2bithorlo, 1bithorlo, 42bithorlo, 41bithorlo, 40bithorlo, 19bithorlo, 29bithorlo, 28bithorlo, 15bithorlo, 38bithorlo, 37bithorlo, 20bithorlo, 21bithorlo, 54bithorlo, 23bithorlo, 33bithorlo, 52bithorlo, 53bithorlo, 4bithorlo, 3bithorlo, 12bithorlo, 13bithorlo]
       inputs:
         viewMode: bithorlo
+        search: "{{ .Keywords }}"
     - path: browse.php
       categories: [16xxx, 32xxx, 14xxx, 15xxx]
       inputs:
         viewMode: xxx
+        search: "{{ .Keywords }}"
     - path: browse.php
       categories: [9bithorloxxx, 10bithorloxxx]
       inputs:
         viewMode: bithorloxxx
+        search: "{{ .Keywords }}"
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     xyz: yes
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # Age Limit: 0 all, 1 no, 5 6, 2 12, 3 16, 4 18
     korhatar: 0
     # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4  waiting for seed, 7 my bookmarks, 12 reseeded by me
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    # no freeleech atm
-    # can search by genre but you need to know the id. &mufaj[]=20 for Romantikus
 
   rows:
     selector: table.torrent-table > tbody > tr[id^="torrent-main-"]
