@@ -831,7 +831,7 @@ Detailed instructions are available at [Jackett's Wiki](https://github.com/Jacke
 
 
 ## Running Jackett behind a reverse proxy
-When running jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base path override" Jackett option accordingly.
+When running Jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base path override" Jackett option accordingly.
 
 Example config for apache:
 ```
