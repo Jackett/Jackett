@@ -26,6 +26,8 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_category_8000
     type: info_category_8000
   - name: hidef
