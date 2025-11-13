@@ -51,8 +51,10 @@ caps:
     - {id: 41, cat: XXX, desc: "Homemade"}
     - {id: 42, cat: XXX, desc: "Pregnant"}
     - {id: 43, cat: XXX, desc: "Gay"}
-    - {id: 1, cat: Movies, desc: "Movie"}
-    - {id: 2, cat: TV, desc: "TV Show"}
+    - {id: 45, cat: XXX, desc: "Classic"}
+    - {id: 44, cat: XXX, desc: "SiteFan"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
 
   modes:
     search: [q]
