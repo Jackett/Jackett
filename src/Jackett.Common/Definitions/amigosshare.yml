@@ -152,7 +152,7 @@ search:
   keywordsfilters:
     # drop the year from searches since site titles do not include year
     - name: re_replace
-      args: ["(\\b((19|20)\\d{2})\\b)", ""]
+      args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
 
   rows:
     selector: "div#fancy-list-group ul.list-group li.list-group-item{{ if .Config.freeleech }}:has(span.badge-success:contains(\"FREE\")){{ else }}{{ end }}"
