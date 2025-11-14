@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.ServiceProcess;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
@@ -9,6 +10,9 @@ using NLog;
 
 namespace Jackett.Common.Services
 {
+#if NET5_0_OR_GREATER
+    [SupportedOSPlatform("windows")]
+#endif
     public class WindowsServiceConfigService : IServiceConfigService
     {
         private const string NAME = "Jackett";
