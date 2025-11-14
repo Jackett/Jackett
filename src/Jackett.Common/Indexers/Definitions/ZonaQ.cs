@@ -4,12 +4,11 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -253,11 +252,13 @@ namespace Jackett.Common.Indexers.Definitions
             if (string.IsNullOrWhiteSpace(sessionId))
                 throw new ExceptionWithConfigData("Error getting the Session ID", configData);
 
+            await Task.Delay(3000);
+
             // The second page send the login with the hash
             // The hash is reverse engineering from https://www.zonaq.pw/retorno/2/smf/Themes/smf_ZQ/scripts/script.js
             // doForm.hash_passwrd.value = hex_sha1(hex_sha1(doForm.user.value.php_to8bit().php_strtolower() + doForm.passwrd.value.php_to8bit()) + cur_session_id);
-            Thread.Sleep(3000);
-            var hashPassword = Sha1Hash(Sha1Hash(configData.Username.Value.ToLower() + configData.Password.Value) + sessionId);
+            var hashPassword = $"{(configData.Username.Value.ToLowerInvariant() + configData.Password.Value).SHA1Hash()}{sessionId}".SHA1Hash();
+
             var pairs = new Dictionary<string, string> {
                 { "user", configData.Username.Value },
                 { "passwrd", configData.Password.Value },
@@ -287,12 +288,6 @@ namespace Jackett.Common.Indexers.Definitions
             // The forth page sets the last cookie
             Thread.Sleep(3000);
             await RequestWithCookiesAsync(Login4Url);
-        }
-
-        private static string Sha1Hash(string input)
-        {
-            var hash = new SHA1Managed().ComputeHash(Encoding.UTF8.GetBytes(input));
-            return string.Concat(hash.Select(b => b.ToString("x2")));
         }
     }
 }
