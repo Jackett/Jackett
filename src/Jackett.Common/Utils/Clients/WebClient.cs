@@ -220,11 +220,7 @@ namespace Jackett.Common.Utils.Clients
             return result;
         }
 
-#pragma warning disable CS1998 // Async method lacks 'await' operators and will run synchronously
-        protected virtual async Task<WebResult> Run(WebRequest webRequest) => throw new NotImplementedException();
-#pragma warning restore CS1998 // Async method lacks 'await' operators and will run synchronously
-
-        public virtual void Init() => ServicePointManager.DefaultConnectionLimit = 1000;
+        protected virtual Task<WebResult> Run(WebRequest webRequest) => throw new NotImplementedException();
 
         public virtual void OnCompleted() => throw new NotImplementedException();
 
