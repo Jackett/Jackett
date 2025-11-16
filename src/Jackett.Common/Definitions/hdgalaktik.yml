@@ -16,20 +16,20 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 13, cat: Movies, desc: "Фильмы (Movies)"}
-    - {id: 6, cat: TV, desc: "Мультфильмы (Cartoons)"}
-    - {id: 10, cat: Audio, desc: "Музыка (Music)"}
-    - {id: 26, cat: PC, desc: "Программы (Programs)"}
-    - {id: 5, cat: Console, desc: "Игры (Games)"}
-    - {id: 25, cat: Other, desc: "Картинки (Pictures)"}
-    - {id: 11, cat: TV, desc: "Сериалы (TV Series)"}
-    - {id: 12, cat: TV/Anime, desc: "Аниме (Anime)"}
-    - {id: 16, cat: Books, desc: "Книги (Books)"}
-    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики (Clips / Trailers)"}
-    - {id: 22, cat: TV, desc: "ТВ / Передачи (TV)"}
-    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК (Mobile)"}
-    - {id: 1, cat: PC/ISO, desc: "Образы (ISO)"}
-    - {id: 4, cat: Other, desc: "Другое (Other)"}
+    - {id: 13, cat: Movies, desc: "Фильмы"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
+    - {id: 6, cat: TV, desc: "Мультфильмы"}
+    - {id: 10, cat: Audio, desc: "Музыка"}
+    - {id: 26, cat: PC, desc: "Программы"}
+    - {id: 5, cat: Console, desc: "Игры"}
+    - {id: 25, cat: Other, desc: "Картинки"}
+    - {id: 12, cat: TV/Anime, desc: "Аниме"}
+    - {id: 16, cat: Books, desc: "Книги"}
+    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики"}
+    - {id: 22, cat: TV, desc: "ТВ / Передачи"}
+    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК"}
+    - {id: 1, cat: PC/ISO, desc: "Образы"}
+    - {id: 4, cat: Other, desc: "Другое"}
 
   modes:
     search: [q]
@@ -117,24 +117,20 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: table.table > tbody > tr.torcontduo
+    selector: div.torrent-card
 
   fields:
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
+    categorydesc:
+      selector: div.category-badge
       optional: true
-      default: 4
+      default: Другое
       filters:
-        - name: querystring
-          args: cat
+        - name: replace
+          args: ["---", "Другое"]
     title:
-      selector: a[href^="details.php?id="]
+      selector: a.torrent-title-link
       attribute: title
       filters:
-        - name: regexp
-          args: \'>(.+?)</div
-        - name: htmldecode
         # normalize to SXXEYY format
         - name: re_replace
           args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
@@ -193,16 +189,19 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a.torrent-title-link
       attribute: href
+    # there is either a magnet or a download link
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
     download:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
-      filters:
-        - name: replace
-          args: ["details", "download"]
+      optional: true
     poster:
-      selector: img.s
+      selector: img.torrent-poster
       attribute: src
     imdbid:
       selector: a[href^="browse.php?imdb="]
@@ -211,46 +210,26 @@ search:
         - name: querystring
           args: imdb
     size:
-      selector: td:nth-child(4)
+      selector: a.download-link
     seeders:
-      selector: span[title="Раздают"]
+      selector: span.peers-seeders
     leechers:
-      selector: span[title="Качают"]
-    date_day:
-      # Сегодня в 18:22
-      # Вчера в 20:52
-      selector: a[href^="browse.php?date="]:contains("Сегодня"), a[href^="browse.php?date="]:contains("Вчера")
-      optional: true
-      filters:
-        - name: regexp
-          args: "((Вчера в|Сегодня в)( \\d{2}:\\d{2}))"
-        - name: replace
-          args: ["Сегодня в", "Today"]
-        - name: replace
-          args: ["Вчера в", "Yesterday"]
-        - name: fuzzytime
-    date_year:
-      # 23:48 24/07
-      selector: a[href^="browse.php?date="]:contains("/")
-      optional: true
-      filters:
-        - name: regexp
-          args: "(\\d{2}:\\d{2} \\d{2}/\\d{2})"
-        - name: append
-          args: " +03:00" # MSK
-        - name: dateparse
-          args: "HH:mm dd/MM zzz"
+      selector: span.peers-leechers
+    grabs:
+      selector: span:has(i.fa-download)
     date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      selector: div.added-date
+      filters:
+        - name: timeago
     downloadvolumefactor:
       case:
-        img[src="/pic/freedownload.gif"]: 0
+        span.bg-success: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: a[href*="?tag="]
+      selector: a.tag
       attribute: title
 # engine n/a
