@@ -39,6 +39,7 @@ caps:
     - {id: "AnimeLiveAction[English-translated]", cat: TV/Anime, desc: "Anime Live Action English-translated"}
     - {id: "AnimeLiveAction[Non-English]", cat: TV/Anime, desc: "Anime Live Action Non-English"}
     - {id: "AnimeLiveAction[Raw]", cat: TV/Anime, desc: "Anime Live Action Raw"}
+    - {id: AnimePictures, cat: Other, desc: Anime Pictures}
     - {id: AnimeRaw, cat: TV/Anime, desc: Anime Raw}
     - {id: AnimeSubs, cat: TV/Anime, desc: Anime Subs}
     - {id: Apps, cat: PC, desc: Apps}
