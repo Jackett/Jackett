@@ -29,8 +29,13 @@ namespace Jackett.Common.Utils.Clients
         }
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        public static bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public bool ValidateCertificate(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+            {
+                return true;
+            }
+
             if (sender.GetType() != typeof(HttpWebRequest))
                 return sslPolicyErrors == SslPolicyErrors.None;
 
@@ -51,24 +56,11 @@ namespace Jackett.Common.Utils.Clients
 
         public override void SetTimeout(int seconds) => ClientTimeout = seconds;
 
-        public override void Init()
-        {
-            base.Init();
-
-            // custom handler for our own internal certificates
-            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
-                ServicePointManager.ServerCertificateValidationCallback += (sender, certificate, chain, sslPolicyErrors) => true;
-            else
-                ServicePointManager.ServerCertificateValidationCallback += ValidateCertificate;
-        }
-
         protected override async Task<WebResult> Run(WebRequest webRequest)
         {
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
-
             var cookies = new CookieContainer
             {
-                PerDomainCapacity = 100 // By default only 20 cookies are allowed per domain
+                PerDomainCapacity = 100 // By default, only 20 cookies are allowed per domain
             };
             if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
             {
@@ -86,14 +78,17 @@ namespace Jackett.Common.Utils.Clients
                 clearanceHandlr.ProxyUrl = serverConfig.GetProxyUrl(false);
                 clearanceHandlr.ProxyUsername = serverConfig.ProxyUsername;
                 clearanceHandlr.ProxyPassword = serverConfig.ProxyPassword;
+
                 using (var clientHandlr = new HttpClientHandler
                 {
                     CookieContainer = cookies,
                     AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                     UseCookies = true,
                     Proxy = webProxy,
-                    UseProxy = (webProxy != null),
-                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                    UseProxy = webProxy != null,
+                    AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                    MaxConnectionsPerServer = 20,
+                    ServerCertificateCustomValidationCallback = ValidateCertificate,
                 })
                 {
                     clearanceHandlr.InnerHandler = clientHandlr;

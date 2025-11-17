@@ -31,10 +31,8 @@ caps:
     - {id: 190, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
     - {id: 34, cat: Movies, desc: " |- Перевод на узбекский"}
     - {id: 25, cat: Movies, desc: "Узбекские кинофильмы"}
-    - {id: 32, cat: Movies, desc: " |- Новинки"}
-    - {id: 30, cat: Movies, desc: " |- Фильмы 2011-2024 годов"}
-    - {id: 29, cat: Movies, desc: " |- Фильмы 2000-2010 годов"}
-    - {id: 26, cat: Movies, desc: " |- Фильмы до 2000 года"}
+    - {id: 32, cat: Movies, desc: " |- Пр-во Узбекфильм (на русском)"}
+    - {id: 30, cat: Movies, desc: " |- Пр-во Узбекфильм (на узбекском языке)"}
     # Сериалы, Видео и ТВ # Series, Videos and TV
     - {id: 97, cat: TV, desc: "Сериалы"}
     - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
@@ -85,6 +83,7 @@ caps:
     - {id: 132, cat: Audio, desc: " |- Классическая музыа"}
     - {id: 125, cat: Audio, desc: " |- New Age, Relax, Meditative & Flamenco"}
     - {id: 124, cat: Audio, desc: " |- Фольклор, Народная и Этническая музыка"}
+    - {id: 338, cat: Audio, desc: " |- Country"}
     - {id: 231, cat: Audio, desc: " |- Сборники и альбомы выходившие неофициальными изданиями."}
     - {id: 144, cat: Audio, desc: "♫ ROCK & METAL ♫"}
     - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal (mp3)"}
@@ -170,6 +169,7 @@ caps:
     - {id: 289, cat: PC/Games, desc: " |- Horror"}
     - {id: 307, cat: PC/Games, desc: " |- Logic"}
     - {id: 304, cat: PC/Games, desc: " |- Lifestyle"}
+    - {id: 336, cat: PC/Games, desc: " |- Sports"}
     - {id: 306, cat: PC/Games, desc: " |- Exploration"}
     - {id: 305, cat: PC/Games, desc: " |- Management"}
     - {id: 115, cat: PC/Games, desc: " |- Аркады"}

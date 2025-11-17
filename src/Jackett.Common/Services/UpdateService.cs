@@ -74,8 +74,6 @@ namespace Jackett.Common.Services
             }
         }
 
-        private bool AcceptCert(object sender, X509Certificate certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors) => true;
-
         private async Task CheckForUpdates()
         {
             logger.Info($"Checking for updates... Jackett variant: {variant}");
@@ -180,14 +178,7 @@ namespace Jackett.Common.Services
             }
             catch (Exception e)
             {
-                logger.Error($"Error checking for updates.\n{e}");
-            }
-            finally
-            {
-                if (!isWindows)
-                {
-                    System.Net.ServicePointManager.ServerCertificateValidationCallback -= AcceptCert;
-                }
+                logger.Error(e, $"Error checking for updates.\n{e}");
             }
         }
 

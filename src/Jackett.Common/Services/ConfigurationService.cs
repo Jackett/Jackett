@@ -51,7 +51,8 @@ namespace Jackett.Common.Services
                 if (!Directory.Exists(GetAppDataFolder()))
                 {
                     var dir = Directory.CreateDirectory(GetAppDataFolder());
-                    if (Environment.OSVersion.Platform != PlatformID.Unix)
+
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         var access = dir.GetAccessControl();
                         var directorySecurity = new DirectorySecurity(GetAppDataFolder(), AccessControlSections.All);
@@ -126,7 +127,7 @@ namespace Jackett.Common.Services
                 if (!Directory.Exists(destFolder))
                 {
                     var dir = Directory.CreateDirectory(destFolder);
-                    if (Environment.OSVersion.Platform != PlatformID.Unix)
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         var directorySecurity = new DirectorySecurity(destFolder, AccessControlSections.All);
                         directorySecurity.AddAccessRule(new FileSystemAccessRule(new SecurityIdentifier(WellKnownSidType.WorldSid, null), FileSystemRights.FullControl, InheritanceFlags.ObjectInherit | InheritanceFlags.ContainerInherit, PropagationFlags.None, AccessControlType.Allow));
@@ -137,7 +138,7 @@ namespace Jackett.Common.Services
                 {
                     File.Copy(file, destPath);
                     // The old files were created when running as admin so make sure they are editable by normal users / services.
-                    if (Environment.OSVersion.Platform != PlatformID.Unix)
+                    if (RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
                     {
                         var fileInfo = new FileInfo(destFolder);
                         var fileSecurity = new FileSecurity(destPath, AccessControlSections.All);

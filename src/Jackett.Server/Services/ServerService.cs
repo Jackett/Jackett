@@ -343,7 +343,6 @@ namespace Jackett.Server.Services
 
             // Load indexers
             indexerService.InitIndexers(configService.GetCardigannDefinitionsFolders());
-            client.Init();
 
             updater.CleanupTempDir();
             updater.CheckUpdaterLock();

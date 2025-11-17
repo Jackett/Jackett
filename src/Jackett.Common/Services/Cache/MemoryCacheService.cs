@@ -1,8 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
+using Jackett.Common.Extensions;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
@@ -35,8 +34,7 @@ namespace Jackett.Common.Services.Cache
     {
         private readonly Logger _logger;
         private readonly ServerConfig _serverConfig;
-        private readonly SHA256Managed _sha256 = new SHA256Managed();
-        private readonly Dictionary<string, TrackerCache> _cache = new Dictionary<string, TrackerCache>();
+        private readonly Dictionary<string, TrackerCache> _cache = new();
 
         public MemoryCacheService(Logger logger, ServerConfig serverConfig)
         {
@@ -254,11 +252,11 @@ namespace Jackett.Common.Services.Cache
 
         }
 
-        private string GetQueryHash(TorznabQuery query)
+        private static string GetQueryHash(TorznabQuery query)
         {
             var json = GetSerializedQuery(query);
-            // Compute the hash
-            return BitConverter.ToString(_sha256.ComputeHash(Encoding.UTF8.GetBytes(json)));
+
+            return json.SHA256Hash();
         }
 
         private static string GetSerializedQuery(TorznabQuery query)
