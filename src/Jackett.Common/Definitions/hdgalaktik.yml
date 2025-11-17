@@ -208,7 +208,7 @@ search:
         - name: querystring
           args: imdb
     size:
-      selector: span.size-value
+      selector: a.download-link
     seeders:
       selector: span.peers-seeders
     leechers:
