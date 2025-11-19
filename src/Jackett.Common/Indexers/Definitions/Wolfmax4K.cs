@@ -163,14 +163,17 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 throw new Exception("Error, the Download link at the requested path does not exist.");
             }
-            var wmDoc = new HtmlParser().ParseDocument(wmPage.ContentString);
+
+            var wmHtmlParser = new HtmlParser();
+            var wmDoc = await wmHtmlParser.ParseDocumentAsync(wmPage.ContentString);
             var enlacitoUrl = wmDoc.QuerySelector(".app-message a:not(.buttonPassword)")?.GetAttribute("href");
 
             var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, referer: SiteLink);
-            var enlacitoDoc = new HtmlParser().ParseDocument(enlacitoPage.ContentString);
+
+            var enlacitoHtmlParser = new HtmlParser();
+            var enlacitoDoc = await enlacitoHtmlParser.ParseDocumentAsync(enlacitoPage.ContentString);
             var enlacitoFormUrl = enlacitoDoc.QuerySelector("form").GetAttribute("action");
             var enlacitoFormLinkser = enlacitoDoc.QuerySelector("input[name=\"linkser\"]").GetAttribute("value");
-
 
             var body = new Dictionary<string, string>
             {
@@ -182,7 +185,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var linkOut = v.Groups[1].ToString();
             var slink = Encoding.UTF8.GetString(Convert.FromBase64String(linkOut));
-            var ulink = OpenSSLDecrypt(slink, TorrentLinkEncryptionKey);
+            var ulink = await OpenSSLDecryptAsync(slink, TorrentLinkEncryptionKey);
 
             var result = await RequestWithCookiesAndRetryAsync(ulink);
             return result.ContentBytes;
@@ -463,7 +466,7 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         // Thanks to https://stackoverflow.com/a/5454692/2078070 !!!
-        private string OpenSSLDecrypt(string encrypted, string passphrase)
+        private async Task<string> OpenSSLDecryptAsync(string encrypted, string passphrase)
         {
             // base 64 decode
             var encryptedBytesWithSalt = Convert.FromBase64String(encrypted);
@@ -477,7 +480,7 @@ namespace Jackett.Common.Indexers.Definitions
             // get key and iv
             DeriveKeyAndIV(passphrase, salt, out var key, out var iv);
 
-            return DecryptStringFromBytesAes(encryptedBytes, key, iv);
+            return await DecryptStringFromBytesAesAsync(encryptedBytes, key, iv);
         }
 
         private void DeriveKeyAndIV(string passphrase, byte[] salt, out byte[] key, out byte[] iv)
@@ -518,7 +521,7 @@ namespace Jackett.Common.Indexers.Definitions
             md5 = null;
         }
 
-        private string DecryptStringFromBytesAes(byte[] cipherText, byte[] key, byte[] iv)
+        private static async Task<string> DecryptStringFromBytesAesAsync(byte[] cipherText, byte[] key, byte[] iv)
         {
             if (cipherText == null || cipherText.Length <= 0)
             {
@@ -535,44 +538,17 @@ namespace Jackett.Common.Indexers.Definitions
                 throw new ArgumentNullException(nameof(iv));
             }
 
-            // Declare the RijndaelManaged object
-            // used to decrypt the data.
-            RijndaelManaged aesAlg = null;
+            using var aesAlg = Aes.Create();
+            aesAlg.Key = key;
+            aesAlg.IV = iv;
 
-            // Declare the string used to hold
-            // the decrypted text.
-            string plaintext;
+            var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
 
-            try
-            {
-                // Create a RijndaelManaged object
-                // with the specified key and IV.
-                aesAlg = new RijndaelManaged { Mode = CipherMode.CBC, KeySize = 256, BlockSize = 128, Key = key, IV = iv };
+            using var msDecrypt = new MemoryStream(cipherText);
+            using var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using var srDecrypt = new StreamReader(csDecrypt);
 
-                // Create a decrytor to perform the stream transform.
-                var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                // Create the streams used for decryption.
-                using (var msDecrypt = new MemoryStream(cipherText))
-                {
-                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
-                    {
-                        using (var srDecrypt = new StreamReader(csDecrypt))
-                        {
-                            // Read the decrypted bytes from the decrypting stream
-                            // and place them in a string.
-                            plaintext = srDecrypt.ReadToEnd();
-                            srDecrypt.Close();
-                        }
-                    }
-                }
-            }
-            finally
-            {
-                // Clear the RijndaelManaged object.
-                aesAlg?.Clear();
-            }
-
-            return plaintext;
+            return await srDecrypt.ReadToEndAsync();
         }
     }
 
