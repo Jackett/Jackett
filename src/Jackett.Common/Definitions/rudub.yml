@@ -9,10 +9,8 @@ type: semi-private
 encoding: windows-1251
 followredirect: true
 links:
-  - https://nov18.rudub.pics/
+  - https://nov19.rudub.pics/
 legacylinks:
-  - https://nov03.rudub.homes/
-  - http://nov04.rudub.homes/
   - https://nov04.rudub.homes/
   - http://nov05.rudub.homes/
   - https://nov05.rudub.homes/
@@ -41,6 +39,8 @@ legacylinks:
   - http://nov17.rudub.pics/
   - https://nov17.rudub.pics/
   - http://nov18.rudub.pics/
+  - https://nov18.rudub.pics/
+  - http://nov19.rudub.pics/
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}
