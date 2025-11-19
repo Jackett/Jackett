@@ -48,7 +48,7 @@ namespace Jackett.Common.Indexers.Definitions
             set => base.configData = value;
         }
 
-        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "genre", "description" };
+        protected readonly string[] OptionalFields = { "imdb", "imdbid", "tmdbid", "rageid", "tvdbid", "tvmazeid", "traktid", "doubanid", "poster", "genre", "languages", "subs", "description" };
 
         private static readonly string[] _SupportedLogicFunctions =
         {
@@ -2366,6 +2366,20 @@ namespace Jackett.Common.Indexers.Definitions
                     var releaseGenres = release.Genres.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
                     release.Genres = releaseGenres.Select(x => x.Replace("_", " ")).ToList();
                     value = string.Join(",", release.Genres);
+                    break;
+                case "languages":
+                    release.Languages ??= new List<string>();
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseLanguages = release.Languages.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                    release.Languages = releaseLanguages.Select(x => x.Replace("_", " ")).ToList();
+                    value = string.Join(",", release.Languages);
+                    break;
+                case "subs":
+                    release.Subs ??= new List<string>();
+                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseSubs = release.Subs.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                    release.Subs = releaseSubs.Select(x => x.Replace("_", " ")).ToList();
+                    value = string.Join(",", release.Subs);
                     break;
                 case "year":
                     release.Year = ParseUtil.CoerceLong(value);
