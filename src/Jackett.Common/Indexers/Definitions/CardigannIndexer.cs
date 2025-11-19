@@ -2362,22 +2362,22 @@ namespace Jackett.Common.Indexers.Definitions
                     break;
                 case "genre":
                     release.Genres ??= new List<string>();
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseGenres = release.Genres.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                    char[] delimitersG = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseGenres = release.Genres.Union(value.Split(delimitersG, StringSplitOptions.RemoveEmptyEntries));
                     release.Genres = releaseGenres.Select(x => x.Replace("_", " ")).ToList();
                     value = string.Join(",", release.Genres);
                     break;
                 case "languages":
                     release.Languages ??= new List<string>();
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseLanguages = release.Languages.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                    char[] delimitersL = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseLanguages = release.Languages.Union(value.Split(delimitersL, StringSplitOptions.RemoveEmptyEntries));
                     release.Languages = releaseLanguages.Select(x => x.Replace("_", " ")).ToList();
                     value = string.Join(",", release.Languages);
                     break;
                 case "subs":
                     release.Subs ??= new List<string>();
-                    char[] delimiters = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
-                    var releaseSubs = release.Subs.Union(value.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                    char[] delimitersS = { ',', ' ', '/', ')', '(', '.', ';', '[', ']', '"', '|', ':' };
+                    var releaseSubs = release.Subs.Union(value.Split(delimitersS, StringSplitOptions.RemoveEmptyEntries));
                     release.Subs = releaseSubs.Select(x => x.Replace("_", " ")).ToList();
                     value = string.Join(",", release.Subs);
                     break;
