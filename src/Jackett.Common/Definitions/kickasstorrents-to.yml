@@ -35,6 +35,7 @@ caps:
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: AnimeAudioLossless, cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: "AnimeAudio[Lossless]", cat: Audio/Lossless, desc: "Anime Audio Lossless"}
+    - {id: "AnimeAudio[Lossy]", cat: Audio/MP3, desc: "Anime Audio Lossy"}
     - {id: AnimeEnglish-translated, cat: TV/Anime, desc: "Anime English-translated"}
     - {id: "AnimeLiveAction[English-translated]", cat: TV/Anime, desc: "Anime Live Action English-translated"}
     - {id: "AnimeLiveAction[Non-English]", cat: TV/Anime, desc: "Anime Live Action Non-English"}
