@@ -8,10 +8,8 @@ using System.Xml.Linq;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
-using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -204,27 +202,19 @@ namespace Jackett.Common.Indexers.Definitions
             seasonPart = Regex.Replace(seasonPart, @"\b\d{4}\b$", "");
             var hasPartNumber = Regex.IsMatch(seasonPart, @"\bPart\s+\d+\b", RegexOptions.IgnoreCase);
             var seasonMatch = Regex.Match(seasonPart,
-                @"\b(?:Season|S|Series)\s*(\d+)|\b(\d+)(?:st|nd|rd|th)?\s*Season\b|\b([IVXLCDM]+)\b|\b(\d+)\b",
+                @"\b(?:Season|S|Series)\s*(?<season_number>\d+)|\b(?<season_number>\d+)(?:st|nd|rd|th)?\s*Season\b|\b(?<roman_number>M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))\b|\b(?<season_number>\d+)\b",
                 RegexOptions.IgnoreCase);
             var season = "S01";
 
             if (seasonMatch.Success && !hasPartNumber)
             {
-                if (!string.IsNullOrEmpty(seasonMatch.Groups[1].Value))
+                if (seasonMatch.Groups["season_number"].Success && !string.IsNullOrWhiteSpace(seasonMatch.Groups["season_number"].Value))
                 {
-                    season = $"S{int.Parse(seasonMatch.Groups[1].Value):D2}";
+                    season = $"S{int.Parse(seasonMatch.Groups["season_number"].Value):D2}";
                 }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[2].Value))
-                {
-                    season = $"S{int.Parse(seasonMatch.Groups[2].Value):D2}";
-                }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[3].Value))
+                else if (seasonMatch.Groups["roman_number"].Success && !string.IsNullOrWhiteSpace(seasonMatch.Groups["roman_number"].Value))
                 {
                     season = $"S{RomanToArabic(seasonMatch.Groups[3].Value):D2}";
-                }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[4].Value))
-                {
-                    season = $"S{int.Parse(seasonMatch.Groups[4].Value):D2}";
                 }
             }
 
@@ -250,11 +240,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static int RomanToArabic(string roman)
         {
-            int[] values = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-            string[] numerals = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+            roman = roman.ToUpperInvariant();
+
+            var values = new[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+            var numerals = new[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
             var result = 0;
             var i = 0;
-            roman = roman.ToUpper();
             while (roman.Length > 0)
             {
                 if (roman.StartsWith(numerals[i]))
