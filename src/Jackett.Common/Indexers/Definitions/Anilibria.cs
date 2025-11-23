@@ -208,9 +208,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (seasonMatch.Success && !hasPartNumber)
             {
-                if (seasonMatch.Groups["season_number"].Success && !string.IsNullOrWhiteSpace(seasonMatch.Groups["season_number"].Value))
+                if (seasonMatch.Groups["season_number"].Success
+                    && !string.IsNullOrWhiteSpace(seasonMatch.Groups["season_number"].Value)
+                    && int.TryParse(seasonMatch.Groups["season_number"].Value, out var seasonNumber))
                 {
-                    season = $"S{int.Parse(seasonMatch.Groups["season_number"].Value):D2}";
+                    season = $"S{seasonNumber:D2}";
                 }
                 else if (seasonMatch.Groups["roman_number"].Success && !string.IsNullOrWhiteSpace(seasonMatch.Groups["roman_number"].Value))
                 {
@@ -221,17 +223,15 @@ namespace Jackett.Common.Indexers.Definitions
             var episodes = string.Empty;
             var epMatch = Regex.Match(episodesPart, @"(\d+)(?:[-–—](\d+))?");
 
-            if (epMatch.Success)
+            if (epMatch.Success && int.TryParse(epMatch.Groups[1].Value, out var episodeStartNumber))
             {
-                var start = int.Parse(epMatch.Groups[1].Value);
                 if (epMatch.Groups[2].Success)
                 {
-                    var end = int.Parse(epMatch.Groups[2].Value);
-                    episodes = $"E{start:D2}-E{end:D2}";
+                    episodes = $"E{episodeStartNumber:D2}-E{int.Parse(epMatch.Groups[2].Value):D2}";
                 }
                 else
                 {
-                    episodes = $"E{start:D2}";
+                    episodes = $"E{episodeStartNumber:D2}";
                 }
             }
 
