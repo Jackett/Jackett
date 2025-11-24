@@ -31,7 +31,7 @@ caps:
     - {id: 62, cat: Movies/UHD, desc: "Film/HU/UHD"}
     - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
     - {id: 39, cat: PC/Games, desc: "Játékok/Rip/Dox"}
-#    - {id: 47, cat: Other, desc: "Klippek"}
+    - {id: 47, cat: Other, desc: "Klippek"}
     - {id: 30, cat: Audio/Lossless, desc: "Lossless/EN"}
 #    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
     - {id: 25, cat: Audio/MP3, desc: "MP3/EN"}
@@ -141,7 +141,7 @@ search:
         img[src="/pic/categories/uhd_hun.png"]: 62
         img[src="/pic/categories/021.png"]: 4
         img[src="/pic/categories/cat_games.gif"]: 39
-#        img[]: 47
+        img[src="/pic/categories/026.png"]: 47
         img[src="/pic/categories/024.png"]: 30
 #        img[]: 29
         img[src="/pic/categories/023.png"]: 25
