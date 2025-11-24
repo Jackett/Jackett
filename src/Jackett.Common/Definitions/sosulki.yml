@@ -6,10 +6,11 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://sosulki.com/
+  - https://sosulki.hlom.ru/
 legacylinks:
   - http://sosulki.net/
   - http://sosulki.com/ # site forces https
+  - https://sosulki.com/
 caps:
   categorymappings:
     - {id: 12, cat: XXX, desc: "Порно категории"}
@@ -46,7 +47,7 @@ search:
     - path: "{{ if .Keywords }}?do=search&subaction=search&search_start=0&full_search=1&result_from=1&story={{ .Keywords }}&titleonly=3&catlist[]=0&searchdate=0&resorder=desc{{ else }}lastnews/{{ end }}"
 
   rows:
-    selector: tr.fr_viewn_in:has(td.frs:contains("B"))
+    selector: tr.fr_viewn_in
 
   fields:
     category:
