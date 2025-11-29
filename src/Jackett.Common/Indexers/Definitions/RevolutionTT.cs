@@ -101,7 +101,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("41", TorznabCatType.TVSD, "TV/SDx264");
             caps.Categories.AddCategoryMapping("7", TorznabCatType.TVSD, "TV/XViD");
             caps.Categories.AddCategoryMapping("9", TorznabCatType.XXX, "XXX");
-            caps.Categories.AddCategoryMapping("49", TorznabCatType.XXX, ">XXX/0DAY");
+            caps.Categories.AddCategoryMapping("49", TorznabCatType.XXX, "XXX/0DAY");
             caps.Categories.AddCategoryMapping("47", TorznabCatType.XXXDVD, "XXX/DVDR");
             caps.Categories.AddCategoryMapping("48", TorznabCatType.XXX, "XXX/HDx264");
 
