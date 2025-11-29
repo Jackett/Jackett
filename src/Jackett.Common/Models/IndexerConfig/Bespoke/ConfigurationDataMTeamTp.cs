@@ -12,7 +12,7 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
         public ConfigurationDataMTeamTp()
         {
             ApiKey = new StringConfigurationItem("API Key");
-            ApiKeyInfo = new DisplayInfoConfigurationItem("ApiKey Info", "The API key can be obtained by accessing your M-Team-TP User Control Panel > Security > Laboratory.");
+            ApiKeyInfo = new DisplayInfoConfigurationItem("ApiKey Info", "The API key can be obtained by accessing your M-Team - TP User CP > Laboratory.");
             FreeleechOnly = new BoolConfigurationItem("Search freeleech only") { Value = false };
         }
     }
