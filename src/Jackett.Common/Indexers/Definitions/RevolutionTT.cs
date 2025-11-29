@@ -104,6 +104,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("49", TorznabCatType.XXX);
             caps.Categories.AddCategoryMapping("47", TorznabCatType.XXXDVD);
             caps.Categories.AddCategoryMapping("48", TorznabCatType.XXX);
+            caps.Categories.AddCategoryMapping("52", TorznabCatType.MoviesUHD);
 
             return caps;
         }
