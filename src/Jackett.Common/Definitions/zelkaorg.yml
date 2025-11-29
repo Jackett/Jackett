@@ -5,6 +5,8 @@ description: "Zelka (Zamunda) is a BULGARIAN Private Torrent Tracker for 0DAY / 
 language: bg-BG
 type: private
 encoding: windows-1251
+certificates:
+  - 996dbb1ef245699bdd5ea796b704c220c684b626 # Expired 29th Nov 2025
 links:
   - https://zelka.org/
   - https://zamunda.se/
