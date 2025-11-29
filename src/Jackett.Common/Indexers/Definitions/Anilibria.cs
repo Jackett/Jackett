@@ -104,8 +104,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var releaseId in torrentIds)
             {
-                var torrentsResponse = await RequestWithCookiesAsync($"{ApiBase}anime/torrents/{releaseId}");
-                releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                var url = $"{ApiBase}anime/torrents/{releaseId}";
+                try
+                {
+                    var torrentsResponse = await RequestWithCookiesAsync(url);
+                    releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Anilibria: Failed to load url [{0}]: {1}", url, ex.Message);
+                }
             }
 
             return releases;
