@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml.Linq;
+using AngleSharp.Dom;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -121,8 +122,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var releaseId in releaseIds)
             {
-                var torrentsResponse = await RequestWithCookiesAsync($"{ApiBase}anime/torrents/release/{releaseId}");
-                releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                var url = $"{ApiBase}anime/torrents/release/{releaseId}";
+                try
+                {
+                    var torrentsResponse = await RequestWithCookiesAsync(url);
+                    releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Anilibria: Failed to load url [{0}]: {1}", url, ex.Message);
+                }
             }
 
             return releases;
