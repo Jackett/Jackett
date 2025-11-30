@@ -92,8 +92,8 @@ search:
 #    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     shw_incl_cats: 0
-    # 1 active, 2 dead, 3 gold, 4 sticky, lots of others
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
