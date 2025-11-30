@@ -14,22 +14,20 @@ legacylinks:
 
 caps:
   categorymappings:
-# there are no cats in results and searching with cats gives no results
-#    - {id: 13, cat: Movies, desc: "Фильмы"}
-#    - {id: 11, cat: TV, desc: "Сериалы"}
-#    - {id: 6, cat: TV, desc: "Мультфильмы"}
-#    - {id: 10, cat: Audio, desc: "Музыка"}
-#    - {id: 26, cat: PC, desc: "Программы"}
-#    - {id: 5, cat: Console, desc: "Игры"}
-#    - {id: 25, cat: Other, desc: "Картинки"}
-#    - {id: 12, cat: TV/Anime, desc: "Аниме"}
-#    - {id: 16, cat: Books, desc: "Книги"}
-#    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики"}
-#    - {id: 22, cat: TV, desc: "ТВ / Передачи"}
-#    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК"}
-#    - {id: 1, cat: PC/ISO, desc: "Образы"}
-#    - {id: 4, cat: Other, desc: "Другое"}
-    - {id: Other, cat: Other, desc: Other}
+    - {id: 13, cat: Movies, desc: "Фильмы"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
+    - {id: 6, cat: TV, desc: "Мультфильмы"}
+    - {id: 10, cat: Audio, desc: "Музыка"}
+    - {id: 26, cat: PC, desc: "Программы"}
+    - {id: 5, cat: Console, desc: "Игры"}
+    - {id: 25, cat: Other, desc: "Картинки"}
+    - {id: 12, cat: TV/Anime, desc: "Аниме"}
+    - {id: 16, cat: Books, desc: "Книги"}
+    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики"}
+    - {id: 22, cat: TV, desc: "ТВ / Передачи"}
+    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК"}
+    - {id: 1, cat: PC/ISO, desc: "Образы"}
+    - {id: 4, cat: Other, desc: "Другое"}
 
   modes:
     search: [q]
@@ -44,8 +42,6 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
-  - name: info_category_8000
-    type: info_category_8000
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -58,23 +54,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-# sort is not working
-#  - name: sort
-#    type: select
-#    label: Sort requested from site
-#    default: 4
-#    options:
-#      4: created
-#      1: title
-#      5: size
-#      8: seeders
-#  - name: type
-#    type: select
-#    label: Order requested from site
-#    default: desc
-#    options:
-#      desc: desc
-#      asc: asc
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      1: title
+      5: size
+      7: seeders
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -90,19 +85,17 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  #https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=3&search=&tag=#results
+  # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
   paths:
     - path: browse.php
   inputs:
-    # searching with cats gives no results
-    # $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
+#    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
     shw_incl_cats: 0
     # 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
-    search: "{{ .Keywords }}"
-    # sort is not working
-    #sort: "{{ .Config.sort }}"
-    #type: "{{ .Config.type }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
 
   keywordsfilters:
     - name: re_replace # S01 to сезон 1
@@ -115,20 +108,26 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: tr.torrent-row
+    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
+    dateheaders:
+      selector: a[href*="date="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: date
+        - name: dateparse
+          args: "yyyy-MM-dd"
 
   fields:
-#    categorydesc:
-#      selector: div.category-badge
-#      optional: true
-#      default: Другое
-#      filters:
-#        - name: replace
-#          args: ["---", "Другое"]
     category:
-      text: Other
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
-      selector: a.torrent-title
+      selector: a.tr-title-link-compact
+      attribute: title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -188,87 +187,32 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.torrent-title
+      selector: a.tr-title-link-compact
       attribute: href
-# now only DL in results
-    # there is either a magnet or a download link
-#    magnet:
-#      selector: a[href^="magnet:?xt="]
-#      attribute: href
-#      optional: true
-#    download:
-#      selector: a[href^="download.php?id="]
-#      attribute: href
-#      optional: true
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+      optional: true # for users that do not have DL access
     poster:
-      selector: img.torrent-poster
+      selector: img.tr-main-poster-compact
       attribute: src
-# no imdb anymore
-#    imdbid:
-#      selector: a[href^="browse.php?imdb="]
-#      attribute: href
-#      filters:
-#        - name: querystring
-#          args: imdb
     size:
-      selector: td:nth-child(5)
+      selector: div.tr-stat-block-compact:nth-child(3)
     seeders:
-      selector: td:nth-child(6) > div > span
+      selector: div.tr-stat-block-compact:nth-child(4)
     leechers:
-      selector: td:nth-child(6) > div > span:nth-child(2)
-# no grabs anymore
-#    grabs:
-#      selector: span:has(i.fa-download)
-    date:
-      selector: td:nth-child(8)
-      filters:
-        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
-        - name: re_replace
-          args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前|sedan)", " ago"]
-        - name: re_replace
-          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
-        - name: re_replace
-          args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten|minuter)", "minutes"]
-        - name: re_replace
-          args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
-        - name: re_replace
-          args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden|timmar)", "hours"]
-        - name: re_replace
-          args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时|時間|timme)", " hour"]
-        - name: re_replace
-          args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen|dagar)", "days"]
-        - name: re_replace
-          args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天|日)", " day"]
-        - name: re_replace
-          args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken|veckor)", "weeks"]
-        - name: re_replace
-          args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周|週間|vecka)", " week"]
-        - name: re_replace
-          args: ["(?i) (ay)", "month"]
-        - name: re_replace
-          args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden|månader)", "months"]
-        - name: re_replace
-          args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月|ヶ月|månad)", " month"]
-        - name: re_replace
-          args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
-        - name: re_replace
-          args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
-        - name: re_replace
-          args: ["(?i) (an)", "year"]
-        - name: re_replace
-          args: ["(?i)(För |und)", ""] # Misc removals
-        - name: timeago
+      selector: div.tr-stat-block-compact:nth-child(5)
+    grabs:
+      selector: div.tr-meta-info-compact span:has(i.fa-download)
     downloadvolumefactor:
       case:
-        span.bg-warning: 0
+        span.tr-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: td:nth-child(2) > div > div > div
+      selector: a.tr-tag-item-compact
+      attribute: title
 # engine n/a
