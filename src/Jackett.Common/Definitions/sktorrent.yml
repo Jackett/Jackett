@@ -74,14 +74,9 @@ login:
     path: torrent/index.php
     selector: a[href^="usercp.php"]
 
-download:
-  selectors:
-    - selector: a[href^="download.php?id="]
-      attribute: href
-
 search:
   paths:
-    - path: torrent/torrents_v2.php
+    - path: torrent/torrents.php
   inputs:
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
@@ -93,17 +88,18 @@ search:
       args: replace
 
   rows:
-    selector: table.lista > tbody > tr > td > table.lista > tbody > tr > td:has(a[href^="details.php?name="])
+    selector: tr:has(a[href^="download.php?id="])
 
   fields:
     category:
-      selector: a[href^="torrents_v2.php?category="]
+      selector: a[href^="torrents.php?category="]
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: a[href^="details.php?name="]
+      selector: a[href^="details.php?id="]
+      attribute: title
       filters:
         - name: re_replace
           args: ["^VA\\s*\\|", "VA -"]
@@ -188,40 +184,43 @@ search:
         - name: re_replace
           args: ["(?i)komplet (\\d{1})\\-(\\d{1})", "komplet S0$1-S0$2"]
     details:
-      selector: a[href^="details.php?name="]
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[class="lozad"]
-      attribute: data-src
-    download:
-      selector: a[href^="details.php?name="]
-      attribute: href
+      selector: a[href^="#"]
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: "src=(.+?) width"
+        - name: prepend
+          args: "https:"
     size:
-      selector: div:has(a)
+      selector: td:nth-child(3)
       filters:
         - name: regexp
           args: "Velkost (.+?) \\|"
     date:
-      selector: div:has(a)
+      selector: td:nth-child(3)
       filters:
         - name: regexp
-          args: "Pridany (\\d{2}/\\d{2}/\\d{4})"
+          args: "Pridany (\\d{2}/\\d{2}/\\d{4} o \\d{2}:\\d{2})"
+        - name: replace
+          args: [" o ", " "]
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "dd/MM/yyyy zzz"
+          args: "dd/MM/yyyy HH:mm zzz"
     seeders:
-      selector: div:has(a)
-      filters:
-        - name: regexp
-          args: "Odosielaju : (\\d+)"
+      selector: td:nth-child(5)
     leechers:
-      selector: div:has(a)
-      filters:
-        - name: regexp
-          args: "Stahuju : (\\d+)"
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
     genre:
-      selector: div:has(a)
+      selector: td:nth-child(3)
       filters:
         - name: replace
           args: ["\n", ""]
