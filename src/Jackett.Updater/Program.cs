@@ -643,6 +643,7 @@ namespace Jackett.Updater
                 "Definitions/ptorrent.yml", // renamed to pornxlab
                 "Definitions/purovicio.yml",
                 "Definitions/puurhollands.yml",
+                "Definitions/qbite.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682

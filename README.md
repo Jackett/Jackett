@@ -104,7 +104,6 @@ Prior versions of Jackett are no longer supported.
  * PornoTorrent
  * PornRips
  * Postman
- * Qbite (Hubite)
  * RedeTorrent
  * RinTorNeT
  * RuTor
