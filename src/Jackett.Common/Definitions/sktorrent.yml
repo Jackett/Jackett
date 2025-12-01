@@ -1,7 +1,7 @@
 ---
 id: sktorrent
-name: SkTorrent
-description: "SkTorrent is a CZECH/SLOVAK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+name: Sk-CzTorrent
+description: "Sk-CzTorrent is a CZECH/SLOVAK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: cs-CZ
 type: semi-private
 encoding: UTF-8
@@ -203,12 +203,13 @@ search:
           args: "Velkost (.+?) \\|"
     date:
       selector: div:has(a)
-      # auto adjusted by site account profile
       filters:
         - name: regexp
           args: "Pridany (\\d{2}/\\d{2}/\\d{4})"
+        - name: append
+          args: " +01:00" # CET
         - name: dateparse
-          args: "dd/MM/yyyy"
+          args: "dd/MM/yyyy zzz"
     seeders:
       selector: div:has(a)
       filters:
