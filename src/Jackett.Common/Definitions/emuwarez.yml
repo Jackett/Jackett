@@ -6,7 +6,7 @@ language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://emuwarez.it/
+  - https://emuwarez.com/
 
 caps:
   categorymappings:
@@ -30,7 +30,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://emuwarez.it/\" target=\"_blank\">eMuwarez</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://emuwarez.com/\" target=\"_blank\">eMuwarez</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
