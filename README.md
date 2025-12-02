@@ -207,7 +207,7 @@ Prior versions of Jackett are no longer supported.
  * RuTracker.org
  * seleZen
  * Sharewood
- * SkTorrent
+ * Sk-CzTorrent
  * SkTorrent-org
  * themixingbowl (TMB)
  * Toloka
