@@ -125,6 +125,8 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_activity
     type: info
     label: Account Inactivity
