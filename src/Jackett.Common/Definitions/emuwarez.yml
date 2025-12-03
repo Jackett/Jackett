@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://emuwarez.com/
+legacylinks:
+  - https://emuwarez.it/
 
 caps:
   categorymappings:
