@@ -10,7 +10,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://ww1-nortorrent.me/
+  - https://www.nortorrent.rent/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -41,6 +41,7 @@ legacylinks:
   - https://www.nortorrent.net/
   - https://www.nortorrent.town/
   - https://nortorrent-proxy.site/
+  - https://ww1-nortorrent.me/
 
 caps:
   categorymappings:
