@@ -15,7 +15,7 @@ caps:
     - {id: 23, cat: Movies/Other, desc: "Animációk"}
 #    - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
     - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
-#    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
+    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
     - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
 #    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
     - {id: 48, cat: Movies/HD, desc: "Film/EN/1080p"}
@@ -125,7 +125,7 @@ search:
         img[src="/pic/categories/cat_anime.gif"]: 23
 #        img[src="/pic/categories/061.png"]: 61
         img[src="/pic/categories/061.png"]: 60
-#        img[]: 45
+        img[src="/pic/categories/017.png"]: 45
         img[src="/pic/categories/016.png"]: 40
 #        img[]: 20
         img[src="/pic/categories/010.png"]: 48
