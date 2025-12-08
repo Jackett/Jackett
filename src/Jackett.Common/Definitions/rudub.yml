@@ -8,6 +8,7 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 followredirect: true
+# alternate TLDs are: buzz, homes, mom, online, shop, top and xyz
 links:
   - https://dec08.rudub.bet/
 legacylinks:
