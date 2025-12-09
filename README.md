@@ -388,7 +388,6 @@ Prior versions of Jackett are no longer supported.
  * HELLENIC-HD
  * HHanClub
  * HHD
- * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
