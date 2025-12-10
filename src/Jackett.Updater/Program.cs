@@ -646,6 +646,7 @@ namespace Jackett.Updater
                 "Definitions/ptorrent.yml", // renamed to pornxlab
                 "Definitions/purovicio.yml",
                 "Definitions/puurhollands.yml",
+                "Definitions/ptvicomo.yml",
                 "Definitions/qbite.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
