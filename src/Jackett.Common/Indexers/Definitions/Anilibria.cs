@@ -38,7 +38,7 @@ namespace Jackett.Common.Indexers.Definitions
         private const int DefaultRssLimit = 15;
         public Anilibria(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             CacheManager cm) : base(
-            configService: configService, client: wc, logger: l, p: ps, CacheManager: cm,
+            configService: configService, client: wc, logger: l, p: ps, cacheManager: cm,
             configData: new ConfigurationDataAnilibria())
         {
             // requestDelay to try to avoid DDoS-Guard and having to wait for Flaresolverr to resolve challenges
