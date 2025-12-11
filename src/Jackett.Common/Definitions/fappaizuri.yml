@@ -92,7 +92,7 @@ search:
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 all, 1 notfree, 2 onlyfree
-    freeleech: "{{ if .Config.freeleech }}{{ .Config.freeleech }}2{{ else }}0{{ end }}"
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     lang: "{{ .Config.lang }}"
     sort: "{{ .Config.sort }}"
     order: "{{ .Config.type }}"

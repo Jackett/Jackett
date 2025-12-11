@@ -40,6 +40,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: tmdbidonly
+    type: checkbox
+    label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -110,9 +114,9 @@ search:
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
     episodeNumber: "{{ .Query.Ep }}"
-    imdbId: "{{ .Query.IMDBIDShort }}"
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
+    tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"

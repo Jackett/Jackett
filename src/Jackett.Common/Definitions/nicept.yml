@@ -23,19 +23,11 @@ caps:
     search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: 2facode
-    type: text
-    label: 2FA code
-  - name: info_2fa
-    type: info
-    label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the NicePT Web Site. Otherwise just leave it empty."
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -66,20 +58,10 @@ settings:
     default: "Account retention rules:<ol><li>Veteran Users users and above will be retained forever</li><li>Elite Users and above will not have their account deleted after parking (in the Control Panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 40 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will be banned if they do not log in for 7 consecutive days.</li></ol>"
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: imagestring
+  # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
+  method: cookie
   inputs:
-    secret: ""
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    two_step_code: "{{ .Config.2facode }}"
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -187,4 +169,4 @@ search:
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "
-# NexusPHP v1.9.4 2025-06-01
+# NexusPHP v1.9.11 2025-11-02

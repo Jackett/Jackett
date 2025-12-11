@@ -8,39 +8,40 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 followredirect: true
+# alternate TLDs are: buzz, homes, mom, online, shop, top and xyz
 links:
-  - https://nov17.rudub.pics/
+  - https://dec10.rudub.bet/
 legacylinks:
-  - https://nov02.rudub.homes/
-  - http://nov03.rudub.homes/
-  - https://nov03.rudub.homes/
-  - http://nov04.rudub.homes/
-  - https://nov04.rudub.homes/
-  - http://nov05.rudub.homes/
-  - https://nov05.rudub.homes/
-  - http://nov06.rudub.homes/
-  - https://nov06.rudub.homes/
-  - http://nov07.rudub.pics/
-  - https://nov07.rudub.pics/
-  - http://nov08.rudub.pics/
-  - https://nov08.rudub.pics/
-  - http://nov09.rudub.pics/
-  - https://nov09.rudub.pics/
-  - http://nov10.rudub.pics/
-  - https://nov10.rudub.pics/
-  - http://nov11.rudub.pics/
-  - https://nov11.rudub.pics/
-  - http://nov12.rudub.pics/
-  - https://nov12.rudub.pics/
-  - http://nov13.rudub.pics/
-  - https://nov13.rudub.pics/
-  - http://nov14.rudub.pics/
-  - https://nov14.rudub.pics/
-  - http://nov15.rudub.pics/
-  - https://nov15.rudub.pics/
-  - http://nov16.rudub.pics/
-  - https://nov16.rudub.pics/
-  - http://nov17.rudub.pics/
+  - http://nov26.rudub.world/
+  - https://nov26.rudub.world/
+  - http://nov27.rudub.world/
+  - https://nov27.rudub.world/
+  - http://nov28.rudub.world/
+  - https://nov28.rudub.world/
+  - http://nov29.rudub.world/
+  - https://nov29.rudub.world/
+  - http://nov30.rudub.world/
+  - https://nov30.rudub.world/
+  - http://dec01.rudub.world/
+  - https://dec01.rudub.world/
+  - http://dec02.rudub.world/
+  - https://dec02.rudub.world/
+  - http://dec03.rudub.world/
+  - https://dec03.rudub.world/
+  - http://dec04.rudub.world/
+  - https://dec04.rudub.world/
+  - http://dec05.rudub.world/
+  - https://dec05.rudub.world/
+  - http://dec06.rudub.world/
+  - https://dec06.rudub.world/
+  - http://dec07.rudub.world/
+  - https://dec07.rudub.world/
+  - http://dec08.rudub.world/
+  - https://dec08.rudub.world/
+  - https://dec08.rudub.bet/
+  - http://dec09.rudub.bet/
+  - https://dec09.rudub.bet/
+  - http://dec10.rudub.bet/
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}

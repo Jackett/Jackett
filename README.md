@@ -104,7 +104,6 @@ Prior versions of Jackett are no longer supported.
  * PornoTorrent
  * PornRips
  * Postman
- * Qbite (Hubite)
  * RedeTorrent
  * RinTorNeT
  * RuTor
@@ -208,7 +207,7 @@ Prior versions of Jackett are no longer supported.
  * RuTracker.org
  * seleZen
  * Sharewood
- * SkTorrent
+ * Sk-CzTorrent
  * SkTorrent-org
  * themixingbowl (TMB)
  * Toloka
@@ -242,7 +241,6 @@ Prior versions of Jackett are no longer supported.
  * AlphaRatio (AR)
  * AmigosShareClub (ASC)
  * AnimeBytes (AB)
- * AnimeLovers
  * AnimeTorrents (AnT)
  * AnimeTorrents.ro (Anime Torrents Romania)
  * AnimeWorld (AW)
@@ -272,7 +270,6 @@ Prior versions of Jackett are no longer supported.
  * BitHUmen
  * Bitpalace
  * BitPorn
- * BitSexy
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
@@ -390,7 +387,6 @@ Prior versions of Jackett are no longer supported.
  * HELLENIC-HD
  * HHanClub
  * HHD
- * HomePornTorrents (HPT)
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
@@ -431,7 +427,7 @@ Prior versions of Jackett are no longer supported.
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
  * LuckPT [![(invite needed)][inviteneeded]](#)
- * M-Team TP (MTTP) [![(invite needed)][inviteneeded]](#)
+ * M-Team - TP (MTTP)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
  * Making Off
@@ -486,7 +482,6 @@ Prior versions of Jackett are no longer supported.
  * PT GTK
  * PT分享站 (itzmx)
  * PTCafe (咖啡)
- * PTChina (铂金学院)
  * PTerClub (PT之友俱乐部)
  * PTFans
  * PTFiles (PTF)
@@ -494,7 +489,6 @@ Prior versions of Jackett are no longer supported.
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
  * PTtime
- * PTVicomo
  * Punk's Horror Tracker
  * PuntoTorrent [![(invite needed)][inviteneeded]](#)
  * PuTao (葡萄)

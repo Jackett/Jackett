@@ -36,7 +36,7 @@ settings:
 
 search:
   paths:
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}/"
 
   rows:
     selector: table#archiveResult tbody tr:has(a[href^="magnet:?xt="])

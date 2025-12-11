@@ -30,6 +30,7 @@ caps:
     - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
     - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
     - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
+    - {id: Episodes HD, cat: TV/HD, desc: Episodes HD}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}

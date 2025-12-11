@@ -10,20 +10,20 @@ links:
 
 caps:
   categorymappings:
-    - {id: 129, cat: Movies/HD, desc: "Hd DVD"}
-    - {id: 123, cat: Movies/HD, desc: "MKV/X265"}
+    - {id: 129, cat: Movies/HD, desc: "HD MKV"}
+    - {id: 123, cat: Movies/HD, desc: "X265/HEVC"}
     - {id: 130, cat: Movies/UHD, desc: "4K Films"}
-    - {id: 10, cat: Movies/DVD, desc: "Dvd rip"}
+    - {id: 10, cat: Movies/DVD, desc: "Dvd Retail"}
     - {id: 111, cat: Movies/SD, desc: "HD2DVD / BR2DVD"}
-    - {id: 125, cat: Movies/SD, desc: "Xvid rip"}
-    - {id: 143, cat: Movies/HD, desc: "Divx 720P"}
+    - {id: 125, cat: Movies/SD, desc: "HD rip"}
+    - {id: 143, cat: Movies/HD, desc: "Bluray/UHD"}
     - {id: 132, cat: TV, desc: "complete seizoen serie"}
     - {id: 139, cat: TV, desc: "Losse afleveringen"}
     - {id: 140, cat: Books/EBook, desc: "E-Book"}
     - {id: 114, cat: Audio/MP3, desc: "Muziek MP3"}
+    - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
     - {id: 142, cat: Audio/Lossless, desc: "Muziek Flac"}
     - {id: 115, cat: PC, desc: "pc apps"}
-    - {id: 105, cat: TV/Documentary, desc: "Documentaire"}
     - {id: 120, cat: PC/Games, desc: "Pc Games"}
     - {id: 106, cat: Other, desc: "Overig"}
     - {id: 131, cat: Books/Comics, desc: "Stripboeken"}

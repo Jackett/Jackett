@@ -189,16 +189,11 @@ namespace Jackett.Common.Utils
         {
             var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             var randBytes = new byte[length];
-            using (var rngCsp = new RNGCryptoServiceProvider())
-            {
-                rngCsp.GetBytes(randBytes);
-                var key = "";
-                foreach (var b in randBytes)
-                {
-                    key += chars[b % chars.Length];
-                }
-                return key;
-            }
+
+            using var rngCsp = RandomNumberGenerator.Create();
+            rngCsp.GetBytes(randBytes);
+
+            return randBytes.Aggregate(string.Empty, (current, b) => current + chars[b % chars.Length]);
         }
 
         public static IEnumerable<int> AllIndexesOf(this string source, char value)

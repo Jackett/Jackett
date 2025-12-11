@@ -32,7 +32,7 @@ search:
   paths:
     - path: search
   inputs:
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
 
   rows:
     selector: a.list-group-item

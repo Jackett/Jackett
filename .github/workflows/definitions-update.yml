@@ -15,7 +15,7 @@ concurrency:
 jobs:
   update-rudub:
     name: Update rudub
-    if: github.repository == 'Jackett/Jackett'
+    if: (github.repository == 'Jackett/Jackett' && github.actor != 'dependabot[bot]')
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -34,14 +34,14 @@ jobs:
           GH_TOKEN: ${{ steps.app-token.outputs.token }}
 
       - name: Checkout
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
         with:
           token: ${{ steps.app-token.outputs.token }}
 
       - name: Setup Environment Variables
         run: |
-          echo "CURRENT_RUDUB_DOMAIN=$(date +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.pics" >> $GITHUB_ENV
-          echo "PREVIOUS_RUDUB_DOMAIN=$(date --date='yesterday' +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.pics" >> $GITHUB_ENV
+          echo "CURRENT_RUDUB_DOMAIN=$(date +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.bet" >> $GITHUB_ENV
+          echo "PREVIOUS_RUDUB_DOMAIN=$(date --date='yesterday' +'%b%d' | tr '[:upper:]' '[:lower:]').rudub.bet" >> $GITHUB_ENV
 
       - name: Update rudub definition
         uses: mikefarah/yq@master

@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "mteamtp";
         public override string[] Replaces => new[] { "mteamtp2fa" };
         public override string Name => "M-Team - TP";
-        public override string Description => "M-Team TP (MTTP) is a CHINESE Private Torrent Tracker for HD MOVIES / TV / 3X";
+        public override string Description => "M-Team - TP (MTTP) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://kp.m-team.cc/";
         public override string[] AlternativeSiteLinks => new[]
         {
@@ -40,7 +40,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private readonly int[] _trackerAdultCategories = { 410, 429, 424, 430, 426, 437, 431, 432, 436, 425, 433, 411, 412, 413, 440 };
+        private readonly int[] _trackerAdultCategories = { 410, 424, 437, 431, 429, 430, 426, 432, 436, 440, 425, 433, 411, 412, 413 };
 
         private new ConfigurationDataMTeamTp configData => (ConfigurationDataMTeamTp)base.configData;
 
@@ -84,39 +84,37 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(439, TorznabCatType.MoviesHD, "Movie(電影)/Remux");
             caps.Categories.AddCategoryMapping(403, TorznabCatType.TVSD, "TV Series(影劇/綜藝)/SD");
             caps.Categories.AddCategoryMapping(402, TorznabCatType.TVHD, "TV Series(影劇/綜藝)/HD");
-            caps.Categories.AddCategoryMapping(435, TorznabCatType.TVSD, "TV Series(影劇/綜藝)/DVDiSo");
             caps.Categories.AddCategoryMapping(438, TorznabCatType.TVHD, "TV Series(影劇/綜藝)/BD");
+            caps.Categories.AddCategoryMapping(435, TorznabCatType.TVSD, "TV Series(影劇/綜藝)/DVDiSo");
             caps.Categories.AddCategoryMapping(404, TorznabCatType.TVDocumentary, "紀錄教育");
+            caps.Categories.AddCategoryMapping(434, TorznabCatType.Audio, "Music(無損)");
+            caps.Categories.AddCategoryMapping(406, TorznabCatType.AudioVideo, "MV(演唱)");
+            caps.Categories.AddCategoryMapping(423, TorznabCatType.PCGames, "PCGame(PC遊戲)");
+            caps.Categories.AddCategoryMapping(448, TorznabCatType.ConsoleOther, "TvGame(TV遊戲)");
             caps.Categories.AddCategoryMapping(405, TorznabCatType.TVAnime, "Anime(動畫)");
             caps.Categories.AddCategoryMapping(407, TorznabCatType.TVSport, "Sports(運動)");
-            caps.Categories.AddCategoryMapping(422, TorznabCatType.PC0day, "Software(軟體)");
-            caps.Categories.AddCategoryMapping(423, TorznabCatType.PCGames, "PCGame(PC遊戲)");
             caps.Categories.AddCategoryMapping(427, TorznabCatType.BooksEBook, "Study/Edu ebook(教育書面)");
-            caps.Categories.AddCategoryMapping(441, TorznabCatType.BooksOther, "Study/Edu video(教育影片)");
+            caps.Categories.AddCategoryMapping(422, TorznabCatType.PC0day, "Software(軟體)");
             caps.Categories.AddCategoryMapping(442, TorznabCatType.AudioAudiobook, "Study/Edu audio(教育音檔)");
+            caps.Categories.AddCategoryMapping(451, TorznabCatType.MoviesOther, "教育影片");
             caps.Categories.AddCategoryMapping(409, TorznabCatType.Other, "Misc(其他)");
-
-            // music
-            caps.Categories.AddCategoryMapping(406, TorznabCatType.AudioVideo, "MV(演唱)");
-            caps.Categories.AddCategoryMapping(408, TorznabCatType.AudioOther, "Music(AAC/ALAC)");
-            caps.Categories.AddCategoryMapping(434, TorznabCatType.Audio, "Music(無損)");
 
             // adult
             caps.Categories.AddCategoryMapping(410, TorznabCatType.XXX, "AV(有碼)/HD Censored");
-            caps.Categories.AddCategoryMapping(429, TorznabCatType.XXX, "AV(無碼)/HD Uncensored");
             caps.Categories.AddCategoryMapping(424, TorznabCatType.XXXSD, "AV(有碼)/SD Censored");
-            caps.Categories.AddCategoryMapping(430, TorznabCatType.XXXSD, "AV(無碼)/SD Uncensored");
-            caps.Categories.AddCategoryMapping(426, TorznabCatType.XXXDVD, "AV(無碼)/DVDiSo Uncensored");
             caps.Categories.AddCategoryMapping(437, TorznabCatType.XXXDVD, "AV(有碼)/DVDiSo Censored");
             caps.Categories.AddCategoryMapping(431, TorznabCatType.XXX, "AV(有碼)/Blu-Ray Censored");
+            caps.Categories.AddCategoryMapping(429, TorznabCatType.XXX, "AV(無碼)/HD Uncensored");
+            caps.Categories.AddCategoryMapping(430, TorznabCatType.XXXSD, "AV(無碼)/SD Uncensored");
+            caps.Categories.AddCategoryMapping(426, TorznabCatType.XXXDVD, "AV(無碼)/DVDiSo Uncensored");
             caps.Categories.AddCategoryMapping(432, TorznabCatType.XXX, "AV(無碼)/Blu-Ray Uncensored");
             caps.Categories.AddCategoryMapping(436, TorznabCatType.XXX, "AV(網站)/0Day");
+            caps.Categories.AddCategoryMapping(440, TorznabCatType.XXX, "AV(Gay)/HD");
             caps.Categories.AddCategoryMapping(425, TorznabCatType.XXX, "IV(寫真影集)/Video Collection");
             caps.Categories.AddCategoryMapping(433, TorznabCatType.XXXImageSet, "IV(寫真圖集)/Picture Collection");
             caps.Categories.AddCategoryMapping(411, TorznabCatType.XXX, "H-Game(遊戲)");
             caps.Categories.AddCategoryMapping(412, TorznabCatType.XXX, "H-Anime(動畫)");
             caps.Categories.AddCategoryMapping(413, TorznabCatType.XXX, "H-Comic(漫畫)");
-            caps.Categories.AddCategoryMapping(440, TorznabCatType.XXX, "AV(Gay)/HD");
 
             return caps;
         }

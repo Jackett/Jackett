@@ -62,7 +62,7 @@ settings:
       4: created
       1: title
       5: size
-      8: seeders
+      7: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -85,22 +85,16 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  # https://www.trackerpmr.com/browse.php?search=&stype=0&s=0&cat=0&gr=0&kp=0&im=0&incldead=1&sort=0&type=desc
+  # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
-    # 0 title, 1 descr, 2 filename, 4 infohash
-    stype: 0
-    # 0 AND 1 OR
-    s: 0
-    # release group
-    gr: 0
-    # ratings
-    kp: 0
-    # 1 active, 2 dead, 3 gold, 4 sticky, lots of others
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+#    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
+    cat[]: 0
+    shw_incl_cats: 0
+    # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -115,18 +109,25 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: div.torrent-card
+    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
+    dateheaders:
+      selector: a[href*="date="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: date
+        - name: dateparse
+          args: "yyyy-MM-dd"
 
   fields:
-    categorydesc:
-      selector: div.category-badge
-      optional: true
-      default: Другое
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
       filters:
-        - name: replace
-          args: ["---", "Другое"]
+        - name: querystring
+          args: cat
     title:
-      selector: a.torrent-title-link
+      selector: a.tr-title-link-compact
       attribute: title
       filters:
         # normalize to SXXEYY format
@@ -187,47 +188,32 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.torrent-title-link
+      selector: a.tr-title-link-compact
       attribute: href
-    # there is either a magnet or a download link
-    magnet:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
-      optional: true
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-      optional: true
+      optional: true # for users that do not have DL access
     poster:
-      selector: img.torrent-poster
+      selector: img.tr-main-poster-compact
       attribute: src
-    imdbid:
-      selector: a[href^="browse.php?imdb="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: imdb
     size:
-      selector: span.size-value
+      selector: div.tr-stat-block-compact:nth-child(3)
     seeders:
-      selector: span.peers-seeders
+      selector: div.tr-stat-block-compact:nth-child(4)
     leechers:
-      selector: span.peers-leechers
+      selector: div.tr-stat-block-compact:nth-child(5)
     grabs:
-      selector: span:has(i.fa-download)
-    date:
-      selector: div.added-date
-      filters:
-        - name: timeago
+      selector: div.tr-meta-info-compact span:has(i.fa-download)
     downloadvolumefactor:
       case:
-        span.bg-success: 0
+        span.tr-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: a.tag
+      selector: a.tr-tag-item-compact
       attribute: title
 # engine n/a

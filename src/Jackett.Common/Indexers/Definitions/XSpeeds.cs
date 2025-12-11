@@ -97,6 +97,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(112, TorznabCatType.MoviesOther, "Anime Movies");
             caps.Categories.AddCategoryMapping(111, TorznabCatType.MoviesOther, "Anime TV");
             caps.Categories.AddCategoryMapping(150, TorznabCatType.PC, "Apps");
+            caps.Categories.AddCategoryMapping(166, TorznabCatType.PCMac, "Apps MacOS");
             caps.Categories.AddCategoryMapping(153, TorznabCatType.Books, "Books");
             caps.Categories.AddCategoryMapping(154, TorznabCatType.AudioAudiobook, "Books Audiobooks");
             caps.Categories.AddCategoryMapping(155, TorznabCatType.Books, "Books eBooks & Magazines");

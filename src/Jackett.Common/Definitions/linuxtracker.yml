@@ -281,6 +281,7 @@ caps:
     - {id: 2281, cat: PC/ISO, desc: "Web Security Dojo"}
     - {id: 2246, cat: PC/ISO, desc: "Whonix"}
     - {id: 2155, cat: PC/ISO, desc: "Wifislax"}
+    - {id: 2229, cat: PC/ISO, desc: "XiVa Studio"}
     - {id: 2251, cat: PC/ISO, desc: "XigmaNAS"}
     - {id: 607, cat: PC/ISO, desc: "Xubuntu"}
     - {id: 612, cat: PC/ISO, desc: "Zen"}

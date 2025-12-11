@@ -2,6 +2,7 @@ using System;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
@@ -15,7 +16,6 @@ namespace Jackett.Updater
     public class Program
     {
         private IProcessService processService;
-        private IServiceConfigService windowsService;
         public static Logger logger;
         private Variants.JackettVariant variant = Variants.JackettVariant.NotFound;
 
@@ -27,7 +27,7 @@ namespace Jackett.Updater
 
         private void Run(string[] args)
         {
-            var runtimeSettings = new RuntimeSettings()
+            var runtimeSettings = new RuntimeSettings
             {
                 CustomLogFileName = "updater.txt"
             };
@@ -42,7 +42,8 @@ namespace Jackett.Updater
             variant = variants.GetVariant();
             logger.Info("Jackett variant: " + variant.ToString());
 
-            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
+
             if (isWindows)
             {
                 //The updater starts before Jackett closes
@@ -51,18 +52,13 @@ namespace Jackett.Updater
             }
 
             processService = new ProcessService(logger);
-            windowsService = new WindowsServiceConfigService(processService, logger);
 
             var commandLineParser = new Parser(settings => settings.CaseSensitive = false);
 
             try
             {
                 var optionsResult = commandLineParser.ParseArguments<UpdaterConsoleOptions>(args);
-                optionsResult.WithParsed(options =>
-                {
-                    ProcessUpdate(options);
-                }
-                );
+                optionsResult.WithParsed(ProcessUpdate);
                 optionsResult.WithNotParsed(errors =>
                 {
                     logger.Error(HelpText.AutoBuild(optionsResult));
@@ -135,10 +131,10 @@ namespace Jackett.Updater
             if (options.KillPids != null)
             {
                 var pidsStr = options.KillPids.Split(',').Where(pid => !string.IsNullOrWhiteSpace(pid)).ToArray();
-                pids = Array.ConvertAll(pidsStr, pid => int.Parse(pid));
+                pids = Array.ConvertAll(pidsStr, int.Parse);
             }
 
-            var isWindows = Environment.OSVersion.Platform == PlatformID.Win32NT;
+            var isWindows = RuntimeInformation.IsOSPlatform(OSPlatform.Windows);
             var trayRunning = false;
             var trayProcesses = Process.GetProcessesByName("JackettTray");
             if (isWindows)
@@ -281,6 +277,7 @@ namespace Jackett.Updater
                 "Definitions/anime-timel.yml",
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
+                "Definitions/animelovers-api.yml",
                 "Definitions/animetime.yml",
                 "Definitions/animetracker.yml",
                 "Definitions/animeworld.yml", // switch to *-API #8682
@@ -315,6 +312,7 @@ namespace Jackett.Updater
                 "Definitions/bitnova.yml",
                 "Definitions/bitofvalor.yml",
                 "Definitions/bitsexy.yml",
+                "Definitions/bitsexy-api.yml",
                 "Definitions/bitspyder.yml",
                 "Definitions/bitstream.yml",
                 "Definitions/bittorrentam.yml",
@@ -495,6 +493,7 @@ namespace Jackett.Updater
                 "Definitions/heavens-hell.yml",
                 "Definitions/hellastz.yml",
                 "Definitions/hidden-palace.yml",
+                "Definitions/homeporntorrents.yml",
                 "Definitions/hon3yhd-net.yml",
                 "Definitions/hon3yhd.yml",
                 "Definitions/horriblesubs.yml",
@@ -642,11 +641,14 @@ namespace Jackett.Updater
                 "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
+                "Definitions/ptchina.yml",
                 "Definitions/ptlsp.yml",
                 "Definitions/ptmsg.yml",
                 "Definitions/ptorrent.yml", // renamed to pornxlab
                 "Definitions/purovicio.yml",
                 "Definitions/puurhollands.yml",
+                "Definitions/ptvicomo.yml",
+                "Definitions/qbite.yml",
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682
@@ -897,7 +899,9 @@ namespace Jackett.Updater
 
             // kill pids after the update on UNIX
             if (!isWindows)
+            {
                 KillPids(pids);
+            }
 
             if (!options.NoRestart)
             {
@@ -913,6 +917,8 @@ namespace Jackett.Updater
                     logger.Info("Starting Tray: " + startInfo.FileName + " " + startInfo.Arguments);
                     Process.Start(startInfo);
 
+                    var windowsService = new WindowsServiceConfigService(processService, logger);
+
                     if (!windowsService.ServiceExists())
                     {
                         //User was running the tray icon, but not using the Windows service, starting Tray icon will start JackettConsole as well
@@ -920,9 +926,11 @@ namespace Jackett.Updater
                     }
                 }
 
-                if (string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
+                if (isWindows && string.Equals(options.Type, "WindowsService", StringComparison.OrdinalIgnoreCase))
                 {
                     logger.Info("Starting Windows service");
+
+                    var windowsService = new WindowsServiceConfigService(processService, logger);
 
                     try
                     {

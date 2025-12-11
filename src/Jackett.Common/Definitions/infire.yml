@@ -125,6 +125,8 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -187,7 +189,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "dd/MM/yyyy HH:mm:ss"
+          args: "dd/MM/yyyyHH:mm:ss"
     seeders:
       selector: td:nth-last-child(3)
     leechers:

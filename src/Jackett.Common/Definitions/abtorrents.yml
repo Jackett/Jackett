@@ -128,7 +128,7 @@ search:
     only_free: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
 
   rows:
-    selector: table.table-striped > tbody > tr:has(a[href^="download.php?torrent="])
+    selector: table.browse.table.striped > tbody > tr:has(a[href^="download.php?torrent="])
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
     categorydesc:

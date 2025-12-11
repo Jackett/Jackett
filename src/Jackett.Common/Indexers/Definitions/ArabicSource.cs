@@ -250,13 +250,14 @@ namespace Jackett.Common.Indexers.Definitions
                     var details = new Uri(qDetailsLink.GetAttribute("href"));
 
                     var qPosterLink = row.QuerySelector("img[src*=\"/torrents/images/\"]");
+                    var qMagnetLink = row.QuerySelector("a[href^=\"magnet:?xt=\"]");
                     var size = ParseUtil.GetBytes(row.QuerySelector("td:nth-last-child(5)").TextContent);
                     var matchDateAdded = Regex.Match(row.QuerySelector(" td:nth-child(2)").TextContent, @"(\d{2}-\d{2}-\d{4} \d{2}:\d{2})", RegexOptions.IgnoreCase);
                     var publishDate = matchDateAdded.Groups[1].Success && DateTime.TryParseExact(matchDateAdded.Groups[1].Value, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal, out var parsedDate) ? parsedDate : DateTime.Now;
 
-                    var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(4)").TextContent);
-                    var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(3)").TextContent);
-                    var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-last-child(2)").TextContent) + seeders;
+                    var grabs = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(4)").TextContent);
+                    var seeders = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(3)").TextContent);
+                    var leechers = ParseUtil.CoerceLong(row.QuerySelector("td:nth-last-child(2)").TextContent) + seeders;
 
                     var dlVolumeFactor = 1.0;
                     var upVolumeFactor = 1.0;
@@ -287,6 +288,10 @@ namespace Jackett.Common.Indexers.Definitions
                     if (qPosterLink != null)
                     {
                         release.Poster = new Uri(qPosterLink.GetAttribute("src"));
+                    }
+                    if (qMagnetLink != null)
+                    {
+                        release.MagnetUri = new Uri(qMagnetLink.GetAttribute("href"));
                     }
 
                     releases.Add(release);

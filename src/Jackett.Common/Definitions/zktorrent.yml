@@ -9,8 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.zktorrent.town/
-  - https://zktorrent-proxy.site/
+  - https://ww1-zktorrent.town/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -26,10 +25,6 @@ legacylinks:
   - https://www.site-torrent.com/
   - https://www.rantop.my/
   # actual legacylinks
-  - https://www.gktorrent.si/
-  - https://www.gktorrent.my/
-  - https://www.gktorrent.cz/
-  - https://www.gktorrent.ke/
   - https://www.gktorrent.cv/
   - https://wvw-gktorrent.com/
   - https://www-gktorrent.com/
@@ -41,6 +36,10 @@ legacylinks:
   - https://www.zktorrent5.com/
   - https://www.zktorrent.net/
   - https://www.zktorrent6.com/
+  - https://www.zktorrent.town/
+  - https://zktorrent-proxy.site/
+  - https://ww1-zktorrent.me/
+  - https://www.zktorrent.rent/
 
 caps:
   categorymappings:
@@ -101,7 +100,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
   keywordsfilters:
     # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace

@@ -20,7 +20,7 @@ jobs:
     steps:
       # This workflow will run a script that is stored in the repository. This step checks out the repository contents so that the workflow can access the script.
       - name: Check out repo content
-        uses: actions/checkout@v5
+        uses: actions/checkout@v6
 
       # This step sets up Node.js. The script that this workflow will run uses Node.js.
       - name: Setup Node.js
