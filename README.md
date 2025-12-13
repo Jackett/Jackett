@@ -453,7 +453,6 @@ Prior versions of Jackett are no longer supported.
  * Nirvana
  * NorBits
  * NordicQuality
- * Nusanta(RA.RE)
  * OKPT
  * Old Greek Tracker (OGT)
  * Old Toons World (OTW)
