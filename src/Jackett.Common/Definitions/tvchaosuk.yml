@@ -11,14 +11,15 @@ links:
 caps:
   categorymappings:
     - {id: 29, cat: TV, desc: "Comedy"}
+    - {id: 45, cat: TV, desc: "Current Affairs"}
     - {id: 5, cat: TV/Documentary, desc: "Documentary"}
     - {id: 11, cat: TV, desc: "Drama"}
     - {id: 14, cat: TV, desc: "Entertainment"}
     - {id: 19, cat: TV, desc: "Factual"}
     - {id: 43, cat: TV, desc: "Foreign"}
-    - {id: 32, cat: TV, desc: "Kids/Family"}
+    - {id: 32, cat: TV, desc: "Kids & Family"}
     - {id: 44, cat: Movies, desc: "Movies"}
-    - {id: 45, cat: TV, desc: "News & Current Affairs"}
+    - {id: 54, cat: TV, desc: "News"}
     - {id: 51, cat: Audio, desc: "Radio"}
     - {id: 52, cat: TV, desc: "Reality"}
     - {id: 30, cat: TV, desc: "Soaps"}
