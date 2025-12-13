@@ -168,11 +168,12 @@ settings:
 login:
   method: form
   path: /auth/login
-  form: form.login-form
+  form: form.auth-form
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
   error:
+    - selector: :root:contains("Bad credentials.")
     - selector: p.error-form
     - selector: a[href$="/user/disabled"]
       message:
