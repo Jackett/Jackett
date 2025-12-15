@@ -721,7 +721,7 @@ Jackett can also be run from the command line if you would like to see log messa
 
 
 ## Installation on Linux (AMDx64)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to the [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md) page.
 
 ### Install as service
 A) Command to download and install the latest package and run the Jackett service:
@@ -741,7 +741,7 @@ If you want to run it with a user without a /home directory you need to add `Env
 
 
 ## Installation on Linux (ARMv7 or above)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to this page https://github.com/dotnet/core/blob/master/Documentation/linux-prereqs.md
+On most operating systems all the required dependencies will already be present. In case they are not, you can refer to the [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md) page.
 
 ### Install as service
 1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
