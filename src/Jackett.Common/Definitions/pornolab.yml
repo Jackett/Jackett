@@ -21,16 +21,16 @@ caps:
     - {id: 508, cat: XXX, desc: "Классические фильмы / Classic"}
     - {id: 555, cat: XXX, desc: "Фильмы с сюжетом / Feature & Vignettes"}
     - {id: 1845, cat: XXX, desc: "Гонзо-фильмы 1991-2010 / Gonzo 1991-2010"}
-    - {id: 1673, cat: XXX, desc: "Гонзо-фильмы 2011-2025 / Gonzo 2011-2025"}
+    - {id: 1673, cat: XXX, desc: "Гонзо-фильмы 2011-2026 / Gonzo 2011-2026"}
     - {id: 1112, cat: XXX, desc: "Фильмы без сюжета 1991-2010 / All Sex & Amateur 1991-2010"}
-    - {id: 1718, cat: XXX, desc: "Фильмы без сюжета 2011-2025 / All Sex & Amateur 2011-2025"}
+    - {id: 1718, cat: XXX, desc: "Фильмы без сюжета 2011-2026 / All Sex & Amateur 2011-2026"}
     - {id: 553, cat: XXX, desc: "Лесбо-фильмы / All Girl & Solo"}
     - {id: 1143, cat: XXX, desc: "Этнические фильмы / Ethnic-Themed"}
     - {id: 1646, cat: XXX, desc: "Видео для телефонов и КПК / Pocket РС & Phone Video"}
 
     - {id: 1717, cat: XXX, desc: "Зарубежные фильмы в высоком качестве (DVD&HD) / Full Length Movies High-Quality"}
     - {id: 1851, cat: XXX/DVD, desc: "Эротические и Документальные видео (DVD) / Erotic, Documentary & Reality (DVD)"}
-    - {id: 1713, cat: XXX/DVD, desc: "Фильмы с сюжетом, Классические (DVD) / Feature & Vignetts, Classic (DVD)"}
+    - {id: 1713, cat: XXX/DVD, desc: "Фильмы с сюжетом, Классические (DVD) / Feature & Vignettes, Classic (DVD)"}
     - {id: 512, cat: XXX/DVD, desc: "Гонзо, Лесбо и Фильмы без сюжета (DVD) / Gonzo, All Girl & Solo, All Sex (DVD)"}
     - {id: 1712, cat: XXX, desc: "Эротические и Документальные видео (HD Video) / Erotic, Documentary & Reality (HD Video)"}
     - {id: 1775, cat: XXX, desc: "Фильмы с сюжетом, Классические (HD Video) / Feature & Vignettes, Classic (HD Video)"}
@@ -67,6 +67,7 @@ caps:
     - {id: 1861, cat: XXX, desc: "Сайтрипы 2023 (HD Video) / SiteRip's 2023 (HD Video)"}
     - {id: 1867, cat: XXX, desc: "Сайтрипы 2024 (HD Video) / SiteRip's 2024 (HD Video)"}
     - {id: 1872, cat: XXX, desc: "Сайтрипы 2025 (HD Video) / SiteRip's 2025 (HD Video)"}
+    - {id: 1875, cat: XXX, desc: "Сайтрипы 2026 (HD Video) / SiteRip's 2026 (HD Video)"}
     - {id: 1451, cat: XXX, desc: "Сайтрипы 1991-2010 / SiteRip's 1991-2010"}
     - {id: 1788, cat: XXX, desc: "Сайтрипы 2011-2012 / SiteRip's 2011-2012"}
     - {id: 1789, cat: XXX, desc: "Сайтрипы 2013 / SiteRip's 2013"}
@@ -84,6 +85,7 @@ caps:
     - {id: 1873, cat: XXX, desc: "Сайтрипы 2025 / SiteRip's 2025"}
     - {id: 1876, cat: XXX, desc: "Сайтрипы 2026 / SiteRip's 2026"}
     - {id: 1707, cat: XXX, desc: "Сцены из фильмов / Movie Scenes (кроме SiteRip)"}
+    - {id: 1874, cat: XXX, desc: "Порноролики с переводом / Clips with translation"}
     - {id: 284, cat: XXX, desc: "Порноролики Разное / Clips (various)"}
     - {id: 1853, cat: XXX, desc: "Компиляции и Музыкальные порно клипы / Compilations & Porn Music Video (PMV)"}
     - {id: 1823, cat: XXX, desc: "Порноролики в 3D и Virtual Reality (VR) / 3D & Virtual Reality Videos"}
@@ -92,9 +94,8 @@ caps:
     - {id: 1801, cat: XXX/Pack, desc: "Паки японских фильмов и сайтрипов / Full Length Japanese Movies Packs & SiteRip's Packs"}
     - {id: 1719, cat: XXX, desc: "Японские фильмы и сайтрипы (DVD и HD Video) / Japanese Movies & SiteRip's (DVD & HD Video)"}
     - {id: 997, cat: XXX, desc: "Японские фильмы и сайтрипы 1991-2014 / Japanese Movies & SiteRip's 1991-2014"}
-    - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2025 / Japanese Movies & SiteRip's 2015-2025"}
+    - {id: 1818, cat: XXX, desc: "Японские фильмы и сайтрипы 2015-2026 / Japanese Movies & SiteRip's 2015-2026"}
     - {id: 1849, cat: XXX, desc: "Китайские фильмы и сайтрипы (DVD и HD Video) / Chinese Movies & SiteRip's (DVD & HD Video)"}
-    - {id: 1815, cat: XXX, desc: "Архив (Японское и китайское порно)"}
 
     - {id: 1723, cat: XXX, desc: "Фото и журналы / Photos & Magazines"}
     - {id: 1726, cat: XXX, desc: "MetArt & MetModels"}
@@ -105,7 +106,6 @@ caps:
     - {id: 1757, cat: XXX/ImageSet, desc: "Подборки сетов / Picture Sets Packs"}
     - {id: 1735, cat: XXX/ImageSet, desc: "Тематическое и нетрадиционное фото / Misc & Special Interest Picture Packs"}
     - {id: 1731, cat: XXX/ImageSet, desc: "Журналы / Magazines"}
-    - {id: 1802, cat: XXX, desc: "Архив (Фото)"}
 
     - {id: 1745, cat: XXX, desc: "Хентай и Манга, Мультфильмы и Комиксы, Рисунки, Аудио / Hentai & Manga, Cartoons & Comics, Artwork & Audio"}
     - {id: 1679, cat: XXX, desc: "Хентай: основной подраздел / Hentai: main subsection"}
@@ -117,19 +117,17 @@ caps:
     - {id: 1711, cat: XXX, desc: "Мультфильмы / Cartoons"}
     - {id: 1296, cat: XXX, desc: "Комиксы, рисунки, аудио / Comics, Artwork & Audio"}
     - {id: 1863, cat: XXX, desc: "Обсуждение / Discussion"}
-    - {id: 1864, cat: XXX, desc: "Архив (Хентай и Манга, Мультфильмы и Комиксы, Рисунки, А.."}
 
     - {id: 1838, cat: XXX, desc: "Игры / Games"}
     - {id: 1750, cat: XXX, desc: "Игры: основной подраздел / Games: main subsection"}
     - {id: 1756, cat: XXX, desc: "Игры: визуальные новеллы (профессиональная студия) / Games: Visual Novels (Pro)"}
     - {id: 1869, cat: XXX, desc: "Игры: визуальные новеллы (независимый разработчик) / Games: Visual Novels (Indie)"}
-    - {id: 1785, cat: XXX, desc: "Игры: ролевые / Games: role-playing (RPG Maker and WOLF RPG Editor)"}
+    - {id: 1785, cat: XXX, desc: "Игры: ролевые / Games: role-playing [RPG Maker / WOLF RPG Editor]"}
     - {id: 1790, cat: XXX, desc: "Игры и Софт: Анимация / Software: Animation"}
     - {id: 1827, cat: XXX, desc: "Игры: В разработке и Демо (основной подраздел) / Games: In Progress and Demo (main subsection)"}
     - {id: 1870, cat: XXX, desc: "Игры: В разработке и Демо (визуальные новеллы - независимый разработчик) / Games: In Progress and Demo (visual novels - Indie)"}
-    - {id: 1828, cat: XXX, desc: "Игры: В разработке и Демо (ролевые) / Games: In Progress and Demo (role-playing - RPG Maker and WOLF RPG Editor)"}
+    - {id: 1828, cat: XXX, desc: "Игры: В разработке и Демо (ролевые) / Games: In Progress and Demo (role-playing) [RPG Maker / WOLF RPG Editor]"}
     - {id: 1829, cat: XXX, desc: "Обсуждение игр / Games Discussion"}
-    - {id: 1865, cat: XXX, desc: "Архив (Игры)"}
 
     - {id: 11, cat: XXX, desc: "Нетрадиционное порно / Special Interest Movies & Clips"}
     - {id: 1715, cat: XXX, desc: "Транссексуалы (DVD и HD) / Transsexual (DVD & HD)"}
@@ -145,11 +143,10 @@ caps:
     - {id: 1685, cat: XXX, desc: "Мочеиспускание / Peeing"}
     - {id: 1762, cat: XXX, desc: "Фетиш / Fetish"}
     - {id: 1681, cat: XXX, desc: "Дефекация / Scat"}
-    - {id: 1683, cat: XXX, desc: "Архив (общий)"}
 
     - {id: 1688, cat: XXX, desc: "Гей-порно / Gay Forum"}
     - {id: 903, cat: XXX, desc: "Полнометражные гей-фильмы / Full Length Movies (Gay)"}
-    - {id: 1765, cat: XXX, desc: "Полнометражные азиатские гей-фильмы / Full-length Asian (Gay)"}
+    - {id: 1765, cat: XXX, desc: "Полнометражные азиатские гей-фильмы / Full-length Asian Films (Gay)"}
     - {id: 1767, cat: XXX, desc: "Классические гей-фильмы (до 1990 года) / Classic Gay Films (Pre-1990's)"}
     - {id: 1755, cat: XXX, desc: "Гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Movies (Gay DVD & HD)"}
     - {id: 1787, cat: XXX, desc: "Азиатские гей-фильмы в высоком качестве (DVD и HD) / High-Quality Full Length Asian Movies (Gay DVD & HD)"}
@@ -157,7 +154,6 @@ caps:
     - {id: 1777, cat: XXX, desc: "Гей-ролики в высоком качестве (HD Video) / Gay Clips (HD Video)"}
     - {id: 1691, cat: XXX, desc: "Ролики, SiteRip'ы и сцены из гей-фильмов / Clips & Movie Scenes (Gay)"}
     - {id: 1692, cat: XXX/ImageSet, desc: "Гей-журналы, фото, разное / Magazines, Photo, Rest (Gay)"}
-    - {id: 1720, cat: XXX, desc: "Архив (Гей-порно)"}
 
   modes:
     search: [q]
