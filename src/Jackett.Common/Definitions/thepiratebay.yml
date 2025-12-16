@@ -203,6 +203,9 @@ search:
       selector: added
     size:
       selector: size
+    files:
+      selector: num_files
+      optional: true
     seeders:
       selector: seeders
     leechers:
