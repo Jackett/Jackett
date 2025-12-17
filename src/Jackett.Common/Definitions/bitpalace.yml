@@ -6,6 +6,7 @@ language: hu-HU
 type: private
 encoding: UTF-8
 links:
+  - https://bitpalace.hu/
   - https://bitpalace.cc/
 
 caps:
