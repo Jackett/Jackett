@@ -165,12 +165,6 @@ search:
         - name: re_replace
           args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
         - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
-        - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
-        - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
-        - name: re_replace
           args: ["\\[\\s*\\]", ""]
         - name: re_replace
           args: ["(?<=\\S)(\\[)", " $1"]
