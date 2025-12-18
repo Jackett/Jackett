@@ -124,6 +124,20 @@ search:
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
     # does not support imdbid search or provide imdb link in results
+  keywordsfilters:
+    # Keep SxxEyy format for tv-search (Sonarr/Radarr). ArabP2P search does not reliably match
+    # when we convert to the Arabic bracket format unless the Arabic title is also present.
+    - name: re_replace # normalize "1x09" => "S1E09" (then pad below)
+      args: ["(?i)\\b(\\d{1,2})x(\\d{1,3})\\b", "S$1E$2"]
+    - name: re_replace # normalize "S01 E09" => "S01E09"
+      args: ["(?i)\\bS(\\d{1,2})\\s+E(\\d{1,3})\\b", "S$1E$2"]
+    - name: re_replace # pad season: S1E09 => S01E09
+      args: ["(?i)\\bS(\\d)(?=E)", "S0$1"]
+    - name: re_replace # pad episode: S01E9 => S01E09
+      args: ["(?i)E(\\d)\\b", "E0$1"]
+    - name: re_replace
+      args: ["\\s{2,}", " "]
+    - name: trim
 
   rows:
     selector: table#torrents_list_p > tbody > tr:has(a[href^="download.php?id="]), table#torrents_list_p > tbody > tr:has(a[href^="magnet:?xt="])
@@ -139,6 +153,34 @@ search:
           args: category
     title:
       selector: a[href^="index.php?page=torrent-details"]
+      filters:
+        - name: re_replace
+          args: ["(?<=\\d)\\s+(?=\\d)", " "]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[(\\d{4})\\]\\s*\\[م(\\d+)\\]", "S$3E$1 [$2]"]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
+        - name: re_replace
+          args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["\\[\\s*\\]", ""]
+        - name: re_replace
+          args: ["(?<=\\S)(\\[)", " $1"]
+        - name: re_replace
+          args: ["S(\\d)(?=E)", "S0$1"]
+        - name: re_replace
+          args: ["E(\\d)(?=\\D)", "E0$1"]
+        - name: re_replace
+          args: ["\\s{2,}", " "]
+        - name: trim
     details:
       selector: a[href^="index.php?page=torrent-details"]
       attribute: href
