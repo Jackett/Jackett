@@ -1,7 +1,7 @@
 ---
 id: arabp2p
 name: ArabP2P
-description: "ArabP2P is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL with enhanced episode parsing"
+description: "ArabP2P is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ar-AE
 type: private
 encoding: UTF-8
@@ -87,7 +87,6 @@ caps:
     - {id: 65, cat: Other, desc: "صور (Images)"}
     - {id: 56, cat: Other, desc: "رياضي (Sport)"}
     - {id: 46, cat: Other, desc: "منوع (Misc)"}
-
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -120,10 +119,16 @@ search:
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
   keywordsfilters:
-    - name: re_replace
-      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "[$2][م$1]"]
-    - name: re_replace
-      args: ["(?i)\\b(\\d+)x(\\d+)\\b", "[$2][م$1]"]
+    # Keep SxxEyy format for tv-search (Sonarr/Radarr). ArabP2P search does not reliably match
+    # when we convert to the Arabic bracket format unless the Arabic title is also present.
+    - name: re_replace # normalize "1x09" => "S1E09" (then pad below)
+      args: ["(?i)\\b(\\d{1,2})x(\\d{1,3})\\b", "S$1E$2"]
+    - name: re_replace # normalize "S01 E09" => "S01E09"
+      args: ["(?i)\\bS(\\d{1,2})\\s+E(\\d{1,3})\\b", "S$1E$2"]
+    - name: re_replace # pad season: S1E09 => S01E09
+      args: ["(?i)\\bS(\\d)(?=E)", "S0$1"]
+    - name: re_replace # pad episode: S01E9 => S01E09
+      args: ["(?i)E(\\d)\\b", "E0$1"]
     - name: re_replace
       args: ["\\s{2,}", " "]
     - name: trim
