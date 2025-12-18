@@ -87,6 +87,7 @@ caps:
     - {id: 65, cat: Other, desc: "صور (Images)"}
     - {id: 56, cat: Other, desc: "رياضي (Sport)"}
     - {id: 46, cat: Other, desc: "منوع (Misc)"}
+
   modes:
     search: [q]
     tv-search: [q, season, ep]
@@ -109,15 +110,20 @@ login:
 
 search:
   paths:
+    # https://www.arabp2p.net/index.php?page=torrents&search=&category=0&active=0&internel=0&order=3&by=2
     - path: index.php
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
+    # does not support multi categories, default to All
     category: 0
+    # 0 all 1 activeonly 2 deadonly
     active: 0
+    # 0 all 1 internal 2 external
     internel: 0
     order: "{{ .Config.sort }}"
     by: "{{ .Config.type }}"
+    # does not support imdbid search or provide imdb link in results
   keywordsfilters:
     # Keep SxxEyy format for tv-search (Sonarr/Radarr). ArabP2P search does not reliably match
     # when we convert to the Arabic bracket format unless the Arabic title is also present.
@@ -189,6 +195,7 @@ search:
     date:
       selector: span.upload-date > span
       attribute: title
+      # auto adjusted by site account profile
       filters:
         - name: dateparse
           args: "MM-yy-dd HH:mm:ss tt"
@@ -208,3 +215,4 @@ search:
       text: 0.8
     minimumseedtime:
       text: 259200 # 3 days
+# xbtit
