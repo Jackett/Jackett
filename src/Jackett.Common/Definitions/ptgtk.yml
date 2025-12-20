@@ -6,8 +6,10 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://pt.gtk.pw/
+# backup domain - https://pt1.gtkpw.xyz/
   - https://pt.gtkpw.xyz/
+legacylinks:
+  - https://pt.gtk.pw/
 
 caps:
   categorymappings:
@@ -44,7 +46,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Uploads Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the PT GTK Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -195,4 +197,4 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.8.15 2024-12-23
+# NexusPHP v1.9.11 2025-11-02

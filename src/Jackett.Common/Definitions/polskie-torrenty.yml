@@ -143,7 +143,7 @@ search:
     # does not support sorting results, or imdbid searching, or have imdb in results
 
   rows:
-    selector: div.boxcontent > table > tbody > tr:has(a.link1)
+    selector: div.boxcontent > table:has(a.link2)
 
   fields:
     categorydesc:
@@ -151,13 +151,7 @@ search:
       optional: true
       default: Pozostale
     title_phase1:
-      selector: a.link1
-      attribute: href
-      filters:
-        - name: regexp
-          args: f=(.+?)\.torrent
-        - name: urldecode
-        - name: htmldecode
+      selector: a.link2[href^="details.php?id="]
     title_multilang:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -171,10 +165,13 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a.link1
+      selector: a[href^="details.php?id="]
       attribute: href
+      filters:
+        - name: replace
+          args: ["details.php?id=", "download.php?torrent="]
     poster:
-      selector: img
+      selector: img.poster-torrent
       attribute: src
     date:
       selector: td.pole
@@ -187,7 +184,7 @@ search:
       selector: td.pole
       filters:
         - name: regexp
-          args: "Rozmiar: (\\d+\\.\\d+ [T|G|M|K|k]B)"
+          args: "(\\d+\\.\\d+ [T|G|M|K|k]B)"
     seeders:
       selector: td.pole
       filters:

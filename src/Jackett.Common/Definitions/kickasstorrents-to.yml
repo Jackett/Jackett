@@ -87,6 +87,7 @@ caps:
     - {id: MoviesHighresMovies, cat: Movies/HD, desc: "Movies Highres"}
     - {id: MoviesMP4, cat: Movies/HD, desc: "Movies MP4"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Music videos"}
+    - {id: MoviesMovieclips, cat: Other, desc: "Movies Movie clips"}
     - {id: MoviesOtherMovies, cat: Movies/Other, desc: "Movies Other"}
     - {id: MoviesUltraHD, cat: Movies/UHD, desc: "Movies UltraHD"}
     - {id: Music, cat: Audio, desc: Music}

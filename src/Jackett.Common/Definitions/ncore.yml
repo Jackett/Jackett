@@ -57,6 +57,7 @@ caps:
     movie-search: [q, imdbid, genre]
     music-search: [q, genre]
     book-search: [q, genre]
+  allowrawsearch: true
 
 settings:
   - name: username

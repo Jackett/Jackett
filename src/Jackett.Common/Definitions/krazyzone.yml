@@ -16,8 +16,8 @@ caps:
     - {id: 80, cat: Audio, desc: "DMC: DMC"}
     - {id: 49, cat: Audio/MP3, desc: "KZN MP3 Weekly: Ex-Vip"}
     - {id: 76, cat: Audio, desc: "KZN-Exclusive: Exclusive "}
-    - {id: 77, cat: Audio, desc: "KZN: Out Of VIP"}
     - {id: 98, cat: Audio/MP3, desc: "Other Mp3 Weeky: Mp3"}
+    - {id: 77, cat: Audio, desc: "KZN: Out Of VIP"}
     - {id: 99, cat: Audio/MP3, desc: "KZ Internal: KZ Internal"}
     - {id: 74, cat: Audio, desc: "Discography: Collection"}
     - {id: 82, cat: Audio/Lossless, desc: "Flac: Flac-Flac Packs"}
@@ -29,16 +29,17 @@ caps:
     - {id: 24, cat: Audio, desc: "Karaoke: All Karaoke"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies: Bluray-HD"}
     - {id: 52, cat: Movies, desc: "Pre 90s Movies: Pre90s"}
-    - {id: 28, cat: Movies, desc: "Movies: 2025"}
-    - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Web-DL"}
+    - {id: 28, cat: Movies, desc: "Movies: 2026"}
     - {id: 102, cat: Movies/HD, desc: "Movies MP4: Movie MP4"}
+    - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Web-DL"}
+    - {id: 105, cat: Movies, desc: "Pre 2000 MP4 Movies: Pre 2000 Mp4"}
     - {id: 48, cat: Movies/SD, desc: "Movies: Xvid-Dvd-Webrip"}
     - {id: 23, cat: Movies/Other, desc: "Movie: Kids-Anime-Family"}
     - {id: 41, cat: Movies/3D, desc: "Remux-3D: Remux-3D"}
     - {id: 86, cat: Movies/HD, desc: "1440P QHD: 1440P QHD"}
     - {id: 9, cat: Movies/DVD, desc: "Movies: Ntsc Dvdr-ISO"}
-    - {id: 22, cat: Movies/Foreign, desc: "Movies: Foreign"}
     - {id: 27, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 22, cat: Movies/Foreign, desc: "Movies: Foreign"}
     - {id: 53, cat: Movies, desc: "Movie Packs: Movie Pks"}
     - {id: 54, cat: Movies, desc: "Movie Pack: Pre-90s"}
     - {id: 6, cat: Movies/Other, desc: "Kids Movie Pk: Movie Pks"}

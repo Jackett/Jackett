@@ -24,12 +24,13 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "anilibria";
         public override string Name => "Anilibria";
         public override string Description => "Anilibria is a russian-language anime distribution platform";
-        public override string SiteLink { get; protected set; } = "https://anilibria.top/";
+        public override string SiteLink { get; protected set; } = "https://aniliberty.top/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.anilibria.tv/",
+            "https://anilibria.top/",
         };
-        // API DOCS at https://anilibria.top/api/docs/v1
+        // API DOCS at https://aniliberty.top/api/docs/v1
         private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";

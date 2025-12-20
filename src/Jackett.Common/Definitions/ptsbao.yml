@@ -91,33 +91,33 @@ search:
 
   fields:
     category:
-      selector: a[href^="torrents.php?cat="]
+      selector: a[href*="torrents.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title_default:
-      selector: table.torrentname td a[href^="details.php?id="]
+      selector: table.torrentname td a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     poster:
-      selector: img.tooltip
-      attribute: src
+      selector: img[data-src]
+      attribute: data-src
       filters:
         - name: replace
           args: ["pic/imdb_pic/nophoto.gif", ""]
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(5) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -127,7 +127,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(5):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -137,13 +137,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(6)
+      selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td.rowfollow:nth-child(7)
+      selector: td.rowfollow:nth-child(6)
     leechers:
-      selector: td.rowfollow:nth-child(8)
+      selector: td.rowfollow:nth-child(7)
     grabs:
-      selector: td.rowfollow:nth-child(9)
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -158,4 +158,4 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP custom 22082802
+# NexusPHP v1.9.11 2025-11-02

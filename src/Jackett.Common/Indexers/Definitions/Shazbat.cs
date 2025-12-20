@@ -80,8 +80,8 @@ namespace Jackett.Common.Indexers.Definitions
                 { "referer", "" },
                 { "query", "" },
                 { "tv_timezone", "0" },
-                { "tv_login", configData.Username.Value },
-                { "tv_password", configData.Password.Value }
+                { "username", configData.Username.Value },
+                { "password", configData.Password.Value }
             };
 
             // Get cookie
@@ -197,6 +197,8 @@ namespace Jackett.Common.Indexers.Definitions
 
             var publishDate = DateTime.Now;
 
+            var infoRegex = new Regex(@"\((?<size>\d+)\)\s*:(?<seeders>\d+) \/ :(?<leechers>\d+)$", RegexOptions.Compiled);
+
             var rows = dom.QuerySelectorAll("#torrent-table tr.eprow, table tr.eprow");
             foreach (var row in rows)
             {
@@ -209,14 +211,15 @@ namespace Jackett.Common.Indexers.Definitions
                 var details = new Uri(SiteLink + row.QuerySelector("td:nth-of-type(5) [href^=\"torrent_info?\"]")?.GetAttribute("href"));
 
                 var infoString = row.QuerySelector("td:nth-of-type(4)")?.TextContent.Trim() ?? string.Empty;
-                var infoRegex = new Regex(@"\((?<size>\d+)\):(?<seeders>\d+) \/ :(?<leechers>\d+)$", RegexOptions.Compiled);
                 var matchInfo = infoRegex.Match(infoString);
                 var size = matchInfo.Groups["size"].Success && long.TryParse(matchInfo.Groups["size"].Value, out var outSize) ? outSize : 0;
                 var seeders = matchInfo.Groups["seeders"].Success && int.TryParse(matchInfo.Groups["seeders"].Value, out var outSeeders) ? outSeeders : 0;
                 var leechers = matchInfo.Groups["leechers"].Success && int.TryParse(matchInfo.Groups["leechers"].Value, out var outLeechers) ? outLeechers : 0;
 
                 var dateTimestamp = row.QuerySelector(".datetime[data-timestamp]")?.GetAttribute("data-timestamp");
-                publishDate = dateTimestamp != null && ParseUtil.TryCoerceDouble(dateTimestamp, out var timestamp) ? DateTimeUtil.UnixTimestampToDateTime(timestamp) : publishDate.AddMinutes(-1);
+                publishDate = dateTimestamp != null && ParseUtil.TryCoerceLong(dateTimestamp, out var timestamp)
+                    ? DateTimeUtil.UnixTimestampToDateTime(timestamp)
+                    : publishDate.AddMinutes(-1);
 
                 var release = new ReleaseInfo
                 {
@@ -269,8 +272,10 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task<WebResult> ReloginIfNecessaryAsync(WebResult response)
         {
-            if (response.ContentString.IndexOf("sign in now", StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (!(response.IsRedirect && response.RedirectingTo.Contains("login")) || response.ContentString.IndexOf("sign in now", StringComparison.InvariantCultureIgnoreCase) == -1)
+            {
                 return response;
+            }
 
             logger.Debug("Session expired. Relogin.");
 

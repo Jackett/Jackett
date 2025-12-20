@@ -7,10 +7,10 @@ type: private
 encoding: UTF-8
 followredirect: true
 requestDelay: 4
+# status https://www.yggtorrent.org/engine/domains
 links:
-  - https://www.yggtorrent.top/
+  - https://www.yggtorrent.org/
 legacylinks:
-  - https://www2.yggtorrent.si/
   - https://www.yggtorrent.li/
   - https://www4.yggtorrent.li/
   - https://www3.yggtorrent.nz/
@@ -25,6 +25,7 @@ legacylinks:
   - https://www3.yggtorrent.qa/
   - https://www3.yggtorrent.cool/
   - https://www.ygg.re/
+  - https://www.yggtorrent.top/
 
 caps:
   # dont forget to update the search fields category case block
@@ -168,11 +169,12 @@ settings:
 login:
   method: form
   path: /auth/login
-  form: form.login-form
+  form: form.auth-form
   inputs:
     id: "{{ .Config.username }}"
     pass: "{{ .Config.password }}"
   error:
+    - selector: :root:contains("Bad credentials.")
     - selector: p.error-form
     - selector: a[href$="/user/disabled"]
       message:
