@@ -12,34 +12,23 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 506, cat: Movies/BluRay, desc: "Movies 8K UHD BD"}
+    - {id: 499, cat: Movies/BluRay, desc: "Movies UHD Blu-ray"}
+    - {id: 518, cat: Movies/UHD, desc: "Movies UHD REMUX"}
+    - {id: 450, cat: Movies/BluRay, desc: "Movies Bluray"}
+    - {id: 415, cat: Movies/HD, desc: "Movies REMUX"}
+    - {id: 505, cat: Movies/UHD, desc: "Movies 8K/4320p"}
+    - {id: 416, cat: Movies/UHD, desc: "Movies 2160p"}
+    - {id: 414, cat: Movies/HD, desc: "Movies 1080p"}
+    - {id: 413, cat: Movies/HD, desc: "Movies 720p"}
     - {id: 411, cat: Movies/SD, desc: "Movies SD"}
     - {id: 412, cat: Movies/SD, desc: "Movies IPad"}
-    - {id: 413, cat: Movies/HD, desc: "Movies 720p"}
-    - {id: 414, cat: Movies/HD, desc: "Movies 1080p"}
-    - {id: 415, cat: Movies/HD, desc: "Movies REMUX"}
-    - {id: 450, cat: Movies/BluRay, desc: "Movies Bluray"}
-    - {id: 499, cat: Movies/BluRay, desc: "Movies UHD Blu-ray"}
-    - {id: 416, cat: Movies/UHD, desc: "Movies 2160p"}
-    - {id: 417, cat: TV/Documentary, desc: "Doc SD"}
-    - {id: 418, cat: TV/Documentary, desc: "Doc IPad"}
-    - {id: 419, cat: TV/Documentary, desc: "Doc 720p"}
-    - {id: 420, cat: TV/Documentary, desc: "Doc 1080p"}
-    - {id: 421, cat: TV/Documentary, desc: "Doc REMUX"}
+    - {id: 523, cat: TV/UHD, desc: "TVSeries 8KUHD"}
+    - {id: 502, cat: TV/UHD, desc: "TVSeries 4K Bluray"}
     - {id: 451, cat: TV/Documentary, desc: "Doc Bluray"}
-    - {id: 500, cat: TV/Documentary, desc: "Doc UHD Blu-ray"}
-    - {id: 422, cat: TV/Documentary, desc: "Doc 2160p"}
-    - {id: 423, cat: TV/HD, desc: "TVMusic 720p"}
-    - {id: 424, cat: TV/HD, desc: "TVMusic 1080i"}
-    - {id: 425, cat: TV/SD, desc: "TVShow SD"}
-    - {id: 426, cat: TV/SD, desc: "TVShow IPad"}
-    - {id: 471, cat: TV/SD, desc: "TVShow IPad"}
-    - {id: 427, cat: TV/HD, desc: "TVShow 720p"}
-    - {id: 428, cat: TV/HD, desc: "TVShow 1080i"}
-    - {id: 429, cat: TV/HD, desc: "TVShow 1080p"}
-    - {id: 430, cat: TV/HD, desc: "TVShow REMUX"}
-    - {id: 452, cat: TV/HD, desc: "TVShows Bluray"}
+    - {id: 421, cat: TV/Documentary, desc: "Doc REMUX"}
+    - {id: 526, cat: TV/UHD, desc: "TVSeries 4320p"}
     - {id: 431, cat: TV/HD, desc: "TVShow 2160p"}
-    - {id: 432, cat: TV/SD, desc: "TVSeries SD"}
     - {id: 433, cat: TV/SD, desc: "TVSeries IPad"}
     - {id: 434, cat: TV/HD, desc: "TVSeries 720p"}
     - {id: 435, cat: TV/HD, desc: "TVSeries 1080i"}
@@ -47,11 +36,13 @@ caps:
     - {id: 437, cat: TV/HD, desc: "TVSeries REMUX"}
     - {id: 453, cat: TV/HD, desc: "TVSereis Bluray"}
     - {id: 438, cat: TV/UHD, desc: "TVSeries 2160p"}
-    - {id: 502, cat: TV/UHD, desc: "TVSeries 4K Bluray"}
     - {id: 439, cat: Audio/Other, desc: "Musics APE"}
+    - {id: 432, cat: TV/SD, desc: "TVSeries SD"}
     - {id: 440, cat: Audio/Lossless, desc: "Musics FLAC"}
     - {id: 441, cat: Audio/Video, desc: "Musics MV"}
+    - {id: 503, cat: Audio/Video, desc: "Musics Bluray"}
     - {id: 442, cat: TV/Sport, desc: "Sports 720p"}
+    - {id: 510, cat: TV/Anime, desc: "Anime 8K UHD BD"}
     - {id: 443, cat: TV/Sport, desc: "Sports 1080i"}
     - {id: 444, cat: TV/Anime, desc: "Anime SD"}
     - {id: 445, cat: TV/Anime, desc: "Anime IPad"}
@@ -59,9 +50,31 @@ caps:
     - {id: 447, cat: TV/Anime, desc: "Anime 1080p"}
     - {id: 448, cat: TV/Anime, desc: "Anime REMUX"}
     - {id: 454, cat: TV/Anime, desc: "Anime Bluray"}
+    - {id: 531, cat: TV/Anime, desc: "Anime UHD REMUX"}
     - {id: 409, cat: Other, desc: "Misc"}
     - {id: 449, cat: TV/Anime, desc: "Anime 2160p"}
+    - {id: 509, cat: TV/Anime, desc: "Anime 8K/4320p"}
     - {id: 501, cat: TV/Anime, desc: "Anime UHD Blu-ray"}
+    - {id: 504, cat: TV/Sport, desc: "Sports 2160p"}
+    - {id: 511, cat: TV/Sport, desc: "Sport 8K/4320p"}
+    - {id: 508, cat: TV/Documentary, desc: "Doc 8K UHD BD"}
+    - {id: 529, cat: TV/Documentary, desc: "Doc 8K UHD BD REMUX"}
+    - {id: 500, cat: TV/Documentary, desc: "Doc UHD Blu-ray"}
+    - {id: 507, cat: TV/Documentary, desc: "Doc 8K/4320p"}
+    - {id: 422, cat: TV/Documentary, desc: "Doc 2160p"}
+    - {id: 420, cat: TV/Documentary, desc: "Doc 1080p"}
+    - {id: 419, cat: TV/Documentary, desc: "Doc 720p"}
+    - {id: 417, cat: TV/Documentary, desc: "Doc SD"}
+    - {id: 418, cat: TV/Documentary, desc: "Doc IPad"}
+    - {id: 424, cat: TV/HD, desc: "TVMusic 1080i"}
+    - {id: 423, cat: TV/HD, desc: "TVMusic 720p"}
+    - {id: 452, cat: TV/HD, desc: "TVShows Bluray"}
+    - {id: 430, cat: TV/HD, desc: "TVShow REMUX"}
+    - {id: 429, cat: TV/HD, desc: "TVShow 1080p"}
+    - {id: 428, cat: TV/HD, desc: "TVShow 1080i"}
+    - {id: 427, cat: TV/HD, desc: "TVShow 720p"}
+    - {id: 425, cat: TV/SD, desc: "TVShow SD"}
+    - {id: 426, cat: TV/SD, desc: "TVShow IPad"}
 
   modes:
     search: [q]
@@ -109,20 +122,24 @@ search:
     selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
-    title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: table.torrentname td a[href*="details.php?id="]
+    title:
+      selector: a[title][href*="details.php?id="]
+      attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     size:
       selector: td.rowfollow:nth-child(5)
