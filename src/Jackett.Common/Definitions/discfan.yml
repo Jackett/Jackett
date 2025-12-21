@@ -109,24 +109,27 @@ search:
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title_default:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
