@@ -6,6 +6,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -84,7 +85,8 @@ namespace Jackett.Common.Indexers.Definitions
             };
 
             // Get cookie
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, string.Empty, true, null, LoginUrl);
+
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("glyphicon-log-out") == true, () =>
             {
                 throw new ExceptionWithConfigData("The username and password entered do not match.", configData);
@@ -271,12 +273,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task<WebResult> ReloginIfNecessaryAsync(WebResult response)
         {
-            if (!(response.IsRedirect && response.RedirectingTo.Contains("login")) || response.ContentString.IndexOf("sign in now", StringComparison.InvariantCultureIgnoreCase) == -1)
+            if (!(response.IsRedirect && response.RedirectingTo.Contains("login")) && !response.ContentString.ContainsIgnoreCase("sign in now"))
             {
                 return response;
             }
 
-            logger.Debug("Session expired. Relogin.");
+            logger.Debug("Shazbat session expired. Relogin.");
 
             await ApplyConfiguration(null);
             response.Request.Cookies = CookieHeader;
