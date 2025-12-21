@@ -13,10 +13,10 @@ caps:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
     - {id: 6, cat: Other, desc: "Varios"}
-    - {id: 7, cat: Movies/Other, desc: "Películas de dibujos"}
-    - {id: 8, cat: TV/Other, desc: "Series de dibujos"}
-    - {id: 9, cat: Movies/Other, desc: "Películas anime"}
-    - {id: 10, cat: TV/Anime, desc: "Series anime"}
+    - {id: 7, cat: Movies/Other, desc: "Películas Animació"}
+    - {id: 8, cat: TV/Other, desc: "Series Animació"}
+    - {id: 9, cat: Movies/Other, desc: "Películas Anime"}
+    - {id: 10, cat: TV/Anime, desc: "Series Anime"}
     - {id: 11, cat: Movies/UHD, desc: "Películas 4K"}
 
   modes:
