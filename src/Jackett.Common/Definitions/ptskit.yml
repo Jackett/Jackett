@@ -6,6 +6,8 @@ language: zh-CN
 type: private
 encoding: UTF-8
 requestDelay: 2
+certificates:
+  - d75fe84f07c8361b4f6a266bd3e61e5662581cf3 # CN=test.ptskit.org
 links:
   - https://www.ptskit.org/
 
