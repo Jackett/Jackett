@@ -1,0 +1,259 @@
+---
+id: nekobt-api
+name: nekoBT (API)
+description: "nekoBT is a Private Anime Torrent Tracker specializing in anime content with subtitle and fansub filtering (JSON API)"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://nekobt.to/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Anime, desc: "Anime", default: true}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key (Optional)
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
+  - name: info_filters
+    type: info
+    label: Advanced Filters
+    default: "Configure optional filters below. Leave empty to disable filtering."
+  - name: levels
+    type: select
+    label: Subtitle Level
+    default: ""
+    options:
+      "": "All"
+      "0": "Level 0"
+      "1": "Level 1"
+      "2": "Level 2"
+      "3": "Level 3"
+      "4": "Level 4"
+  - name: video_codec
+    type: select
+    label: Video Codec
+    default: ""
+    options:
+      "": "All"
+      "1": "H264"
+      "2": "H265"
+      "3": "AV1"
+      "4": "VP9"
+      "5": "MPEG-2"
+      "6": "MPEG-4"
+      "7": "WMV"
+      "8": "VC1"
+      "0": "Other"
+  - name: video_type
+    type: select
+    label: Video Type
+    default: ""
+    options:
+      "": "All"
+      "15": "Hybrid"
+      "14": "BD - Remux"
+      "13": "BD - Encode"
+      "12": "BD - Mini"
+      "11": "BD - Disc"
+      "9": "WEB-DL"
+      "8": "WEB - Encode"
+      "7": "WEB - Mini"
+      "6": "DVD - Encode"
+      "5": "DVD - Remux"
+      "16": "DVD - Disc"
+      "4": "TV - Raw"
+      "3": "TV - Encode"
+      "2": "LaserDisc"
+      "1": "VHS"
+      "0": "Other"
+  - name: audio_lang
+    type: text
+    label: Audio Language (comma-separated codes, e.g. en,ja)
+    default: ""
+  - name: fansub_lang
+    type: text
+    label: Fansub Language (comma-separated codes, e.g. en,ja)
+    default: ""
+  - name: sub_lang
+    type: text
+    label: Subtitle Language (comma-separated codes, e.g. en,ja)
+    default: ""
+  - name: hardsub
+    type: select
+    label: Hardcoded Subtitles
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: otl
+    type: select
+    label: OTL Subtitles
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: mtl
+    type: select
+    label: MTL Subtitles
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: group_id
+    type: text
+    label: Group ID
+    default: ""
+  - name: group_primary
+    type: select
+    label: Primary Group Uploader
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: group_secondary
+    type: select
+    label: Secondary Group Uploader
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: group_childs
+    type: select
+    label: Include Child Groups
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: group_parents
+    type: select
+    label: Include Parent Groups
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: uploader_id
+    type: text
+    label: Uploader ID
+    default: ""
+  - name: uploader_uploads
+    type: select
+    label: Uploader is Primary
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: uploader_contributions
+    type: select
+    label: Uploader Contributions Only
+    default: ""
+    options:
+      "": "No Filter"
+      "true": "Yes"
+      "false": "No"
+  - name: limit
+    type: text
+    label: Results Limit (1-100)
+    default: "50"
+  - name: sort_by
+    type: select
+    label: Sort Results By
+    default: "latest"
+    options:
+      "best": "Best"
+      "latest": "Latest"
+      "oldest": "Oldest"
+      "seeders": "Seeders"
+      "downloads": "Downloads"
+
+search:
+  paths:
+    - path: /api/v1/torrents/search
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    query: "{{ .Keywords }}"
+    limit: "{{ .Config.limit }}"
+    sort_by: "{{ .Config.sort_by }}"
+    levels: "{{ .Config.levels }}"
+    video_codec: "{{ .Config.video_codec }}"
+    video_type: "{{ .Config.video_type }}"
+    audio_lang: "{{ .Config.audio_lang }}"
+    fansub_lang: "{{ .Config.fansub_lang }}"
+    sub_lang: "{{ .Config.sub_lang }}"
+    hardsub: "{{ .Config.hardsub }}"
+    otl: "{{ .Config.otl }}"
+    mtl: "{{ .Config.mtl }}"
+    group_id: "{{ .Config.group_id }}"
+    group_primary: "{{ .Config.group_primary }}"
+    group_secondary: "{{ .Config.group_secondary }}"
+    group_childs: "{{ .Config.group_childs }}"
+    group_parents: "{{ .Config.group_parents }}"
+    uploader_id: "{{ .Config.uploader_id }}"
+    uploader_uploads: "{{ .Config.uploader_uploads }}"
+    uploader_contributions: "{{ .Config.uploader_contributions }}"
+
+  rows:
+    selector: data.results
+
+  fields:
+    title:
+      selector: title
+
+    details:
+      selector: id
+      filters:
+        - name: prepend
+          args: "https://nekobt.to/torrents/"
+
+    download:
+      selector: magnet
+
+    infohash:
+      selector: infohash
+
+    size:
+      selector: filesize
+
+    seeders:
+      selector: seeders
+
+    leechers:
+      selector: leechers
+
+    grabs:
+      selector: completed
+
+    date:
+      text: now
+
+    category:
+      selector: category
+
+    downloadvolumefactor:
+      text: 0
+
+    uploadvolumefactor:
+      text: 1
