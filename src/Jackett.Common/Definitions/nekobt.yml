@@ -32,9 +32,16 @@ settings:
     label: Advanced Filters
     default: "Configure optional filters below. Leave empty to disable filtering."
   - name: levels
-    type: text
-    label: Subtitle Levels (comma-separated, e.g. L0,L1)
+    type: select
+    label: Subtitle Level
     default: ""
+    options:
+      "": "All"
+      "0": "Level 0"
+      "1": "Level 1"
+      "2": "Level 2"
+      "3": "Level 3"
+      "4": "Level 4"
   - name: video_codec
     type: select
     label: Video Codec
