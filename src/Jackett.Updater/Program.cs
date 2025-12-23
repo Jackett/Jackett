@@ -859,6 +859,8 @@ namespace Jackett.Updater
                 "Definitions/xxxtorrents.yml",
                 "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",
+                "Definitions/yggcookie.yml",
+                "Definitions/yggtorrent.yml",
                 "Definitions/yourbittorrent.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Definitions/zomb.yml",
