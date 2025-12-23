@@ -418,6 +418,7 @@ Prior versions of Jackett are no longer supported.
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
+ * LemonHD.net
  * Lesbians4u
  * LetSeed
  * Libble
