@@ -1,7 +1,7 @@
 ---
 id: nekobt
 name: nekoBT
-description: "nekoBT is a Private Anime Torrent Tracker specializing in anime content with subtitle and fansub filtering"
+description: "nekoBT is a Public Torrent Tracker for ANIME"
 language: en-US
 type: public
 encoding: UTF-8
@@ -10,9 +10,8 @@ links:
 
 caps:
   categorymappings:
-    - {id: 5000, cat: TV, desc: "TV"}
     - {id: 5070, cat: TV/Anime, desc: "Anime"}
-    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2000, cat: Movies/Other, desc: "Movies"}
 
   modes:
     search: [q]
@@ -27,10 +26,6 @@ settings:
     type: info
     label: About your API key
     default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
-  - name: info_filters
-    type: info
-    label: Advanced Filters
-    default: "Configure optional filters below. Leave empty to disable filtering."
   - name: levels
     type: select
     label: Subtitle Level
@@ -202,6 +197,7 @@ search:
     uploader_id: "{{ .Config.uploader_id }}"
     uploader_uploads: "{{ .Config.uploader_uploads }}"
     uploader_contributions: "{{ .Config.uploader_contributions }}"
+    limit: 100
 
   rows:
     selector: rss > channel > item
@@ -209,42 +205,36 @@ search:
   fields:
     title:
       selector: title
-
+      filters:
+        - name: re_replace
+          args: ["(.+?) {Tags:.+", "$1"]
+    description:
+      selector: title
+      filters:
+        - name: re_replace
+          args: [".+ {(Tags:.+?)}", "$1"]
     details:
       selector: comments
-
-    download:
+    magnet:
       selector: enclosure
       attribute: url
-
     date:
       selector: pubDate
-
     category:
       selector: '[name="category"]'
       attribute: value
-
     size:
       selector: size
-
     seeders:
       selector: '[name="seeders"]'
       attribute: value
-
     leechers:
       selector: '[name="leechers"]'
       attribute: value
-
     grabs:
       selector: '[name="grabs"]'
       attribute: value
-
-    infohash:
-      selector: '[name="infohash"]'
-      attribute: value
-
     downloadvolumefactor:
       text: 0
-
     uploadvolumefactor:
       text: 1
