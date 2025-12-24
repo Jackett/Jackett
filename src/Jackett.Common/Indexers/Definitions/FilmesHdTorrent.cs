@@ -7,8 +7,8 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -32,7 +32,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://www.filmeshdtorrent.vip/",
         };
 
-        public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs) : base(configService, wc, l, ps, cs)
+        public FilmesHdTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, CacheManager cm) : base(configService, wc, l, ps, cm)
         {
         }
 
