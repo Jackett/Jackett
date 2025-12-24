@@ -102,8 +102,20 @@ search:
   fields:
     category:
       selector: category_id
+    _resolution:
+      selector: resolution
+    _type:
+      selector: type
+      filters:
+        - name: replace
+          args: ["Encode", "BluRay"]
+        - name: replace
+          args: ["Full Disc", "BR-DISK"]
     title_optional:
       selector: name
+      filters:
+        - name: append
+          args: " {{ .Result._resolution }} {{ .Result._type }}"
     title_filename:
       selector: "files[0].name"
       optional: true
@@ -137,9 +149,9 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)(Ciencia ficción)", "Ciencia_ficción"]
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
-          args: ["(?i)(Película de TV)", "Película_de_TV"]
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     _internal:
