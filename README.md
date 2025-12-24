@@ -608,6 +608,7 @@ Prior versions of Jackett are no longer supported.
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
+ * YggTorrent (YGG)
  * YOiNKED
  * YUSCENE
  * Zamunda.net
