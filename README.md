@@ -91,6 +91,7 @@ Prior versions of Jackett are no longer supported.
  * MoviesDVDR
  * MyPornClub
  * NewStudio
+ * nekoBT
  * Nipponsei
  * NoNaMe Club (NNM-Club)
  * NorTorrent
