@@ -29,9 +29,9 @@ settings:
   - name: levels
     type: select
     label: Subtitle Level
-    default: ""
+    default: _
     options:
-      "": "All"
+      _: "All"
       "0": "Level 0"
       "1": "Level 1"
       "2": "Level 2"
@@ -40,37 +40,34 @@ settings:
   - name: audio_lang
     type: text
     label: Audio Language (comma-separated codes, e.g. en,ja)
-    default: ""
   - name: fansub_lang
     type: text
     label: Fansub Language (comma-separated codes, e.g. en,ja)
-    default: ""
   - name: sub_lang
     type: text
     label: Subtitle Language (comma-separated codes, e.g. en,ja)
-    default: ""
   - name: hardsub
     type: select
     label: Hardcoded Subtitles
-    default: ""
+    default: _
     options:
-      "": "No Filter"
+      _: "No Filter"
       "true": "Include Only"
       "false": "Exclude"
   - name: otl
     type: select
     label: OTL Subtitles
-    default: ""
+    default: _
     options:
-      "": "No Filter"
+      _: "No Filter"
       "true": "Include Only"
       "false": "Exclude"
   - name: mtl
     type: select
     label: MTL Subtitles
-    default: ""
+    default: _
     options:
-      "": "No Filter"
+      _: "No Filter"
       "true": "Include Only"
       "false": "Exclude"
   - name: group_id
@@ -91,13 +88,13 @@ search:
     tvdbid: "{{ .Query.TVDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
-    levels: "{{ .Config.levels }}"
+    levels: "{{ re_replace .Config.levels \"_\" \"\" }}"
     audio_lang: "{{ .Config.audio_lang }}"
     fansub_lang: "{{ .Config.fansub_lang }}"
     sub_lang: "{{ .Config.sub_lang }}"
-    hardsub: "{{ .Config.hardsub }}"
-    otl: "{{ .Config.otl }}"
-    mtl: "{{ .Config.mtl }}"
+    hardsub: "{{ re_replace .Config.hardsub \"_\" \"\" }}"
+    otl: "{{ re_replace .Config.otl \"_\" \"\" }}"
+    mtl: "{{ re_replace .Config.mtl \"_\" \"\" }}"
     group_id: "{{ .Config.group_id }}"
     limit: 100
 
