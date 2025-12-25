@@ -8,13 +8,9 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 followredirect: true
-# alternate TLDs are: buzz, homes, mom, online, shop, top and xyz
 links:
-  - https://dec25.rudub.bet/
+  - https://r2.rudub.world/
 legacylinks:
-  - https://dec10.rudub.bet/
-  - http://dec11.rudub.bet/
-  - https://dec11.rudub.bet/
   - http://dec12.rudub.bet/
   - https://dec12.rudub.bet/
   - http://dec13.rudub.bet/
@@ -42,6 +38,9 @@ legacylinks:
   - http://dec24.rudub.bet/
   - https://dec24.rudub.bet/
   - http://dec25.rudub.bet/
+  - https://dec25.rudub.bet/
+  - http://dec26.rudub.bet/
+  - https://dec26.rudub.bet/
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}
