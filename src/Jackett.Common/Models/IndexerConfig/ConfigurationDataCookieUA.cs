@@ -1,11 +1,22 @@
+using System.Text.Json.Serialization;
+
 namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataCookieUA : ConfigurationData
     {
+        [JsonPropertyOrder(1)]
         public StringConfigurationItem Cookie { get; private set; }
+
+        [JsonPropertyOrder(2)]
         public DisplayInfoConfigurationItem CookieInstructions { get; private set; }
+
+        [JsonPropertyOrder(3)]
         public StringConfigurationItem UserAgent { get; private set; }
+
+        [JsonPropertyOrder(4)]
         public DisplayInfoConfigurationItem UserAgentInstructions { get; private set; }
+
+        [JsonPropertyOrder(5)]
         public DisplayInfoConfigurationItem Instructions { get; private set; }
 
         public ConfigurationDataCookieUA(string instructionMessageOptional = null)

@@ -1,9 +1,16 @@
+using System.Text.Json.Serialization;
+
 namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataCookie : ConfigurationData
     {
+        [JsonPropertyOrder(1)]
         public StringConfigurationItem Cookie { get; private set; }
+
+        [JsonPropertyOrder(2)]
         public DisplayInfoConfigurationItem CookieInstructions { get; private set; }
+
+        [JsonPropertyOrder(3)]
         public DisplayInfoConfigurationItem Instructions { get; private set; }
 
         public ConfigurationDataCookie(string instructionMessageOptional = null)

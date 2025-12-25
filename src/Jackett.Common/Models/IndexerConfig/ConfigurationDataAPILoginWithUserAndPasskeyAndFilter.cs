@@ -1,12 +1,25 @@
+using System.Text.Json.Serialization;
+
 namespace Jackett.Common.Models.IndexerConfig
 {
     public class ConfigurationDataAPILoginWithUserAndPasskeyAndFilter : ConfigurationData
     {
+        [JsonPropertyOrder(1)]
         public DisplayInfoConfigurationItem KeyHint { get; private set; }
+
+        [JsonPropertyOrder(2)]
         public StringConfigurationItem User { get; private set; }
+
+        [JsonPropertyOrder(3)]
         public StringConfigurationItem Key { get; private set; }
+
+        [JsonPropertyOrder(4)]
         public BoolConfigurationItem AddAttributesToTitle { get; private set; }
+
+        [JsonPropertyOrder(5)]
         public DisplayInfoConfigurationItem FilterExample { get; private set; }
+
+        [JsonPropertyOrder(6)]
         public StringConfigurationItem FilterString { get; private set; }
 
         public ConfigurationDataAPILoginWithUserAndPasskeyAndFilter(string filterInstructions)
