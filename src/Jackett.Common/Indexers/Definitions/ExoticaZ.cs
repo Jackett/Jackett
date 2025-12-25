@@ -27,7 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
+        private new ConfigurationDataAvistaZTracker configData => (ConfigurationDataAvistaZTracker)base.configData;
 
         public ExoticaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
             ICacheService cs)
