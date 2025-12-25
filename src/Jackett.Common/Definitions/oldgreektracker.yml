@@ -12,84 +12,86 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 3, cat: PC, desc: "Apps"}
-    - {id: 7, cat: PC/Mobile-Android, desc: "Apps: Android"}
+    # Apps
+    - {id: 4, cat: PC/0day, desc: "Apps: Windows"}
     - {id: 5, cat: PC/0day, desc: "Apps: Linux"}
     - {id: 6, cat: PC/Mac, desc: "Apps: MacOS"}
-    - {id: 4, cat: PC/0day, desc: "Apps: Windows"}
-    - {id: 22, cat: Books, desc: "Books"}
-    - {id: 27, cat: Books/Comics, desc: "Books: Comics"}
-    - {id: 114, cat: Audio/Audiobook, desc: "Books: Foreign Audio Books"}
-    - {id: 23, cat: Books/EBook, desc: "Books: Foreign Books"}
-    - {id: 69, cat: Audio/Audiobook, desc: "Books: Greek Audio Books"}
-    - {id: 24, cat: Books/EBook, desc: "Books: Greek Books"}
-    - {id: 73, cat: Console, desc: "Games"}
-    - {id: 74, cat: PC/Games, desc: "Games: PC Games"}
-    - {id: 15, cat: Movies/SD, desc: "Movies"}
-    - {id: 132, cat: Movies/SD, desc: "Movies: CAM / TS / TC"}
+    - {id: 7, cat: PC/Mobile-Android, desc: "Apps: Android"}
+    # Music
+    - {id: 9, cat: Audio/MP3, desc: "Music: Greek MP3"}
+    - {id: 10, cat: Audio/Lossless, desc: "Music: Greek FLAC"}
+    - {id: 11, cat: Audio/MP3, desc: "Music: Foreign MP3"}
+    - {id: 12, cat: Audio/Lossless, desc: "Music: Foreign FLAC"}
+    - {id: 68, cat: Audio, desc: "Music:Discographies"}
+    - {id: 71, cat: Audio, desc: "Music: Collections"}
+    - {id: 72, cat: Audio/Other, desc: "Music: Foreign Soundtracks"}
+    - {id: 86, cat: Audio, desc: "Music: Greek Discographies"}
+    - {id: 87, cat: Audio, desc: "Music: Greek Collections"}
+    - {id: 92, cat: Audio/Other, desc: "Music: Greek Soundtracks"}
+    - {id: 115, cat: Audio/Video, desc: "Music: Foreign Music Videos"}
+    - {id: 116, cat: Audio/Video, desc: "Music: Greek Music Videos"}
+    # Movies
+    - {id: 16, cat: Movies/SD, desc: "Movies: Foreign Movies Non HD"}
     - {id: 20, cat: Movies/SD, desc: "Movies: Filmographies"}
     - {id: 105, cat: Movies, desc: "Movies: Animation"}
     - {id: 106, cat: Movies, desc: "Movies: Cartoons"}
-    - {id: 133, cat: Movies/DVD, desc: "Movies: Foreign DVD5/DVD9"}
-    - {id: 138, cat: Movies/DVD, desc: "Movies: Foreign DVDRip"}
+    - {id: 112, cat: Movies/HD, desc: "Movies: Movie Packs"}
+    - {id: 119, cat: Movies/SD, desc: "Movies: Greek Movies Non HD"}
     - {id: 122, cat: Movies/HD, desc: "Movies: Foreign HDRip / BRRip"}
-    - {id: 16, cat: Movies/SD, desc: "Movies: Foreign Movies Non HD"}
+    - {id: 129, cat: Movies/SD, desc: "Movies: Greek VHS"}
     - {id: 130, cat: Movies/SD, desc: "Movies: Foreign VHS"}
-    - {id: 145, cat: Movies/WEB-DL, desc: "Movies: Foreign WEBRip"}
-    - {id: 141, cat: Movies, desc: "Movies: Greek Audio Animation"}
-    - {id: 140, cat: Movies, desc: "Movies: Greek Audio Cartoons"}
+    - {id: 132, cat: Movies/SD, desc: "Movies: CAM / TS / TC"}
+    - {id: 133, cat: Movies/DVD, desc: "Movies: Foreign DVD5/DVD9"}
     - {id: 134, cat: Movies/DVD, desc: "Movies: Greek DVD5/DVD9"}
     - {id: 136, cat: Movies/DVD, desc: "Movies: Greek DVDRip"}
+    - {id: 138, cat: Movies/DVD, desc: "Movies: Foreign DVDRip"}
     - {id: 139, cat: Movies/HD, desc: "Movies: Greek HDRip / BRRip"}
-    - {id: 119, cat: Movies/SD, desc: "Movies: Greek Movies Non HD"}
-    - {id: 129, cat: Movies/SD, desc: "Movies: Greek VHS"}
+    - {id: 140, cat: Movies, desc: "Movies: Greek Audio Cartoons"}
+    - {id: 141, cat: Movies, desc: "Movies: Greek Audio Animation"}
+    - {id: 145, cat: Movies/WEB-DL, desc: "Movies: Foreign WEBRip"}
     - {id: 146, cat: Movies/WEB-DL, desc: "Movies: Greek WEBRip"}
-    - {id: 112, cat: Movies/HD, desc: "Movies: Movie Packs"}
-    - {id: 41, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 50, cat: Movies/HD, desc: "Movies HD: BluRay / 1080p"}
-    - {id: 51, cat: Movies/UHD, desc: "Movies HD: BluRay / 4K (UHD)"}
-    - {id: 49, cat: Movies/HD, desc: "Movies HD: BluRay / 720p"}
-    - {id: 45, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 1080p"}
-    - {id: 66, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 4K (UHD)"}
+    # Books
+    - {id: 23, cat: Books/EBook, desc: "Books: Foreign Books"}
+    - {id: 24, cat: Books/EBook, desc: "Books: Greek Books"}
+    - {id: 27, cat: Books/Comics, desc: "Books: Comics"}
+    - {id: 69, cat: Audio/Audiobook, desc: "Books: Greek Audio Books"}
+    - {id: 114, cat: Audio/Audiobook, desc: "Books: Foreign Audio Books"}
+    # TV
+    - {id: 29, cat: TV/Anime, desc: "TV: Foreign Animation"}
+    - {id: 31, cat: TV/Other, desc: "TV: Foreign Cartoons"}
+    - {id: 35, cat: TV, desc: "TV: Greek TV Series"}
+    - {id: 36, cat: TV, desc: "TV: Greek TV Packs"}
+    - {id: 40, cat: TV, desc: "TV: Greek TV Shows"}
+    - {id: 67, cat: TV/Sport, desc: "TV: Sports"}
+    - {id: 75, cat: TV, desc: "TV: Foreign TV Series"}
+    - {id: 76, cat: TV, desc: "TV: Foreign TV Shows"}
+    - {id: 77, cat: TV, desc: "TV: Foreign TV Episodes"}
+    - {id: 79, cat: TV/Documentary, desc: "TV: Foreign Documentaries"}
+    - {id: 127, cat: TV/Other, desc: "TV: Tutorials"}
+    - {id: 142, cat: TV/Other, desc: "TV: Greek Audio Cartoons"}
+    - {id: 143, cat: TV/Anime, desc: "TV: Greek Audio Animation"}
+    - {id: 144, cat: TV/Documentary, desc: "TV: Greek Audio Documentaries"}
+    - {id: 147, cat: TV, desc: "TV: Foreign Packs"}
+    # Movies HD
     - {id: 42, cat: Movies/HD, desc: "Movies HD: Remux / 1080p"}
+    - {id: 43, cat: Movies/WEB-DL, desc: "Movies HD: WEB-DL / 720p"}
+    - {id: 45, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 1080p"}
     - {id: 46, cat: Movies/UHD, desc: "Movies HD: Remux / 4K (UHD)"}
     - {id: 47, cat: Movies/WEB-DL, desc: "Movies HD: WEB-DL / 1080p"}
     - {id: 48, cat: Movies/UHD, desc: "Movies HD: WEB-DL / 4K (UHD)"}
-    - {id: 43, cat: Movies/WEB-DL, desc: "Movies HD: WEB-DL / 720p"}
-    - {id: 8, cat: Audio, desc: "Music"}
-    - {id: 71, cat: Audio, desc: "Music: Collections"}
-    - {id: 68, cat: Audio, desc: "Music:Discographies"}
-    - {id: 12, cat: Audio/Lossless, desc: "Music: Foreign FLAC"}
-    - {id: 11, cat: Audio/MP3, desc: "Music: Foreign MP3"}
-    - {id: 115, cat: Audio/Video, desc: "Music: Foreign Music Videos"}
-    - {id: 72, cat: Audio/Other, desc: "Music: Foreign Soundtracks"}
-    - {id: 87, cat: Audio, desc: "Music: Greek Collections"}
-    - {id: 86, cat: Audio, desc: "Music: Greek Discographies"}
-    - {id: 10, cat: Audio/Lossless, desc: "Music: Greek FLAC"}
-    - {id: 9, cat: Audio/MP3, desc: "Music: Greek MP3"}
-    - {id: 116, cat: Audio/Video, desc: "Music: Greek Music Videos"}
-    - {id: 92, cat: Audio/Other, desc: "Music: Greek Soundtracks"}
-    - {id: 28, cat: TV, desc: "TV"}
-    - {id: 29, cat: TV/Anime, desc: "TV: Foreign Animation"}
-    - {id: 31, cat: TV/Other, desc: "TV: Foreign Cartoons"}
-    - {id: 79, cat: TV/Documentary, desc: "TV: Foreign Documentaries"}
-    - {id: 147, cat: TV, desc: "TV: Foreign Packs"}
-    - {id: 77, cat: TV, desc: "TV: Foreign TV Episodes"}
-    - {id: 75, cat: TV, desc: "TV: Foreign TV Series"}
-    - {id: 76, cat: TV, desc: "TV: Foreign TV Shows"}
-    - {id: 143, cat: TV/Anime, desc: "TV: Greek Audio Animation"}
-    - {id: 142, cat: TV/Other, desc: "TV: Greek Audio Cartoons"}
-    - {id: 144, cat: TV/Documentary, desc: "TV: Greek Audio Documentaries"}
-    - {id: 36, cat: TV, desc: "TV: Greek TV Packs"}
-    - {id: 35, cat: TV, desc: "TV: Greek TV Series"}
-    - {id: 40, cat: TV, desc: "TV: Greek TV Shows"}
-    - {id: 67, cat: TV/Sport, desc: "TV: Sports"}
-    - {id: 127, cat: TV/Other, desc: "TV: Tutorials"}
+    - {id: 49, cat: Movies/HD, desc: "Movies HD: BluRay / 720p"}
+    - {id: 50, cat: Movies/HD, desc: "Movies HD: BluRay / 1080p"}
+    - {id: 51, cat: Movies/UHD, desc: "Movies HD: BluRay / 4K (UHD)"}
+    - {id: 66, cat: Movies/BluRay, desc: "Movies HD: BluRay Disk / 4K (UHD)"}
+    # Games
+    - {id: 74, cat: PC/Games, desc: "Games: PC Games"}
+    # the following are not selectable from the site's category pull down but exist as categories in results
+    - {id: 3, cat: PC, desc: "Apps"}
 
   modes:
     search: [q]
     tv-search: [q]
-    movie-search: [q, imdbid]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
@@ -123,114 +125,106 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>40</b> on your account profile. The Default is <i>15</i>.
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. The Default is <i>15</i>.
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "To keep records updated regularly, all inactive accounts will be deleted after 60 days of inactivity."
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img#regimage
-    input: imagestring
+  path: index.php?page=login
+  method: post
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
   error:
-    - selector: table:contains("error has occured")
+    - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href*="/logout.php?logouthash="]
-
-download:
-  before:
-    path: takethanks.php
-    method: post
-    inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
-  selectors:
-    - selector: a[href*="download-torrent-"]
-      attribute: href
+    selector: a[href="logout.php"]
 
 search:
   paths:
-    - path: browse.php
-      method: post
+    # https://oldgreektracker.xyz/index.php?page=torrents&search=&category=0&active=0
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ range .Categories }}{{.}};{{end}}"
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
   keywordsfilters:
     - name: re_replace
-      args: ["[\\s]+", "%"]
-  inputs:
-    do: search
-    keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    # t_name, t_description, t_both, t_uploader, t_genre
-    search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
-    # does not support multi category searching so defaulting to all.
-    category: 0
-    # yes, no
-    include_dead_torrents: yes
-    sort: "{{ if .Config.freeleech }}free{{ else }}{{ .Config.sort }}{{ end }}"
-    order: "{{ if .Config.freeleech }}asc{{ else }}{{ .Config.type }}{{ end }}"
+      args: ["\\.", " "]
 
   rows:
-    selector: "table.sortable tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="]):not(td.block)
 
   fields:
     category:
-      selector: a[href*="torrent-category-"]
+      selector: a[href^="index.php?page=torrents&category="]
       attribute: href
       filters:
-        - name: regexp
-          args: torrent-category-(\d+)
-    title_default:
-      # is usually abbreaviated
-      selector: a[href*="torrent-details-"]
+        - name: querystring
+          args: category
     title:
-      # while still abbreviated, is usually longer than the default
-      selector: div.tooltip-content div
-      optional: true
-      default: "{{ .Result.title_default }}"
+      selector: a[href^="index.php?page=torrent-details&id="]
     details:
-      selector: a[href*="torrent-details-"]
+      selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href*="torrent-details-"]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[src*="/torrents/images/"]
-      attribute: src
-    date:
-      selector: td:nth-child(2)
-      # auto adjusted by site account profile
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
       filters:
         - name: regexp
-          args: "(\\d{2}-\\d{2}-\\d{2} \\d{2}:\\d{2})"
-        - name: dateparse
-          args: "dd-MM-yy HH:mm"
+          args: src=(.+?) width
+        - name: replace
+          args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-last-child(5)
-    grabs:
-      selector: td:nth-last-child(4)
+      selector: td:nth-child(12)
+    date:
+      # auto adjusted by site account profile
+      selector: td:nth-child(8)
+      filters:
+        - name: dateparse
+          args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-last-child(3)
+      selector: td:nth-child(8)
+      optional: true
+      default: 0
     leechers:
-      selector: td:nth-last-child(2)
+      optional: true
+      selector: td:nth-child(10)
+      default: 0
+    grabs:
+      optional: true
+      selector: td:nth-child(11)
+      default: 0
+    description:
+      selector: td:nth-child(1)
+      case:
+        img[src="/images/mod/ok.png"]: Verified
+        "*": Not Verified
     downloadvolumefactor:
       case:
-        img[src$="/freedownload.gif"]: 0
-        img[src$="/silverdownload.gif"]: 0.5
+        img[src="images/freeleech.gif"]: 0
+        img[src="images/gold.gif"]: 0
+        img[src="images/silver.gif"]: 0.5
+        img[src="images/bronze.gif"]: 0.75
         "*": 1
     uploadvolumefactor:
-      case:
-        img[src$="/x2.gif"]: 2
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# TS Special Edition v.8.0
+#  xbtitFM v4.2.12
