@@ -155,6 +155,7 @@ caps:
     - {id: 343, cat: PC/ISO, desc: "MidnightBSD"}
     - {id: 2075, cat: PC/ISO, desc: "Minino"}
     - {id: 2076, cat: PC/ISO, desc: "Minix"}
+    - {id: 2300, cat: PC/ISO, desc: "MocaccinoOS"}
     - {id: 2241, cat: PC/ISO, desc: "MorpheusArch Linux"}
     - {id: 373, cat: PC/ISO, desc: "Mythbuntu"}
     - {id: 2078, cat: PC/ISO, desc: "NAS4Free"}
@@ -187,7 +188,6 @@ caps:
     - {id: 419, cat: PC/ISO, desc: "Pardus"}
     - {id: 2162, cat: PC/ISO, desc: "Parrot"}
     - {id: 422, cat: PC/ISO, desc: "Pcbsd"}
-    - {id: 429, cat: PC/ISO, desc: "Pentoo"}
     - {id: 430, cat: PC/ISO, desc: "Peppermint"}
     - {id: 432, cat: PC/ISO, desc: "Pfsense"}
     - {id: 2101, cat: PC/ISO, desc: "Pinguy OS"}
@@ -291,7 +291,7 @@ caps:
     - {id: 2193, cat: PC/ISO, desc: "Zevenet"}
     - {id: 1233, cat: PC/ISO, desc: "Zorin"}
     # undocumented categories
-    - {id: 531, cat: PC/ISO, desc: "Super Grub2 Disk"}
+    - {id: 531, cat: PC/ISO, desc: "no category"}
 
   modes:
     search: [q]
