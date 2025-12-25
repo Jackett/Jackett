@@ -1,7 +1,7 @@
 ---
-id: fappaizuri
-name: Fappaizuri
-description: "Fappaizuri is a Private Torrent Tracker for HENTAI / JAV"
+id: fappaizuri2fa
+name: Fappaizuri2FA
+description: "Fappaizuri is a Private Torrent Tracker for HENTAI / JAV. This indexer uses cookie login for 2FA."
 language: en-US
 type: private
 encoding: UTF-8
@@ -24,16 +24,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_2fa
-    type: info
-    label: "About 2FA"
-    default: "If you want to enable 2FA then use the Fappaizuri2FA indexer instead."
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -69,13 +64,10 @@ settings:
     type: info_flaresolverr
 
 login:
-  method: post
-  path: account-login.php
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: b:contains("The specified username or password was incorrect.")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="account-logout.php"]
