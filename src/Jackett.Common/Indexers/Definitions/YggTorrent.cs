@@ -347,8 +347,12 @@ namespace Jackett.Common.Indexers.Definitions
                 var queryString = string.Join(
                     "&", form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 var url = $"{SiteLink}engine/search?{queryString}";
+
+                var flareOk = await RequestWithCookiesAndRetryAsync(
+                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
+
                 var resp = await RequestWithCookiesAndRetryAsync(
-                    url, method: RequestType.POST, data: null, referer: SiteLink);
+                    url : url, method: RequestType.POST, data: new Dictionary<string, string>(), referer: SiteLink);
                 var html = resp.ContentString ?? "";
 
                 // parse results table
