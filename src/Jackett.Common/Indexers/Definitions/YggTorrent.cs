@@ -119,8 +119,8 @@ namespace Jackett.Common.Indexers.Definitions
         private const string CfgStripSeason = "strip_season";
         private const string CfgEnhancedAnime = "enhancedAnime";
         private const string CfgEnhancedAnime4 = "enhancedAnime4";
-        private const string CfgSort = "sort"; // publish_date/seed/size/name
-        private const string CfgOrder = "type"; // desc/asc
+        private const string CfgSort = "sort";
+        private const string CfgOrder = "type";
 
         private new ConfigurationData configData => base.configData;
 
@@ -311,10 +311,9 @@ namespace Jackett.Common.Indexers.Definitions
                 trackerCats.Add(-1);
             }
 
-            // build keywords like YAML keywordfilters (quotes, strip season, etc.)
             var keywords = BuildKeywords(query);
 
-            // Sorting / ordering from config (YAML: inputs do/search order/sort)
+            // Sorting / ordering from config
             var order = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgOrder)).Value;
             var sortKey = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgSort)).Value;
 
@@ -330,12 +329,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             var isPage2 = query.Offset > 0;
 
-            // We do: 1 request per root-category to avoid duplicates, with sub_category when needed.
+            // 1 request per root-category to avoid duplicates, with sub_category when needed.
             foreach (var request in BuildSearchRequests(trackerCats))
             {
                 var form = new Dictionary<string, string> { ["do"] = "search", ["order"] = order, ["sort"] = siteSort };
 
-                // YGG expects "category" to be either "all" or a root numeric category.
                 form["category"] = request.RootCategory;
                 if (!string.IsNullOrEmpty(request.SubCategory))
                     form["sub_category"] = request.SubCategory;
@@ -607,7 +605,6 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var doc = parser.ParseDocument(html);
 
-                // YAML: table.table > tbody > tr
                 var rows = doc.QuerySelectorAll("table.table > tbody > tr");
                 foreach (var row in rows)
                 {
@@ -662,7 +659,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         private ICollection<int> MapTrackerCatToNewznab(int trackerCat)
         {
-            // Use TorznabCaps mappings when available
             return TorznabCaps.Categories.MapTrackerCatToNewznab(trackerCat.ToString());
         }
 
@@ -705,7 +701,7 @@ namespace Jackett.Common.Indexers.Definitions
                 keywords = _stripSeasonRegex.Replace(keywords, "");
             keywords = keywords.Trim();
 
-            // quote each word (YAML: exact phrase workaround)
+            // quote each word
             keywords = _quoteWordsRegex.Replace(keywords, "\"$1\"");
             return keywords;
         }
@@ -728,7 +724,7 @@ namespace Jackett.Common.Indexers.Definitions
             t = _saisonToSxx1.Replace(t, enhancedAnime4 ? "S$2" : "$1$2");
             t = _saisonToSxx2.Replace(t, "S$1");
 
-            // Episode 1 -> E01 (YAML has a typo that maps to S$2 in one rule; we keep a sane behavior)
+            // Episode 1 -> E01
             t = _episodeToEyy1.Replace(t, enhancedAnime4 ? "E$2" : "$1$2");
             t = _episodeToEyy2.Replace(t, "E$1");
 
@@ -760,7 +756,7 @@ namespace Jackett.Common.Indexers.Definitions
                     t = _multiReplaceRegex.Replace(t, lang);
             }
 
-            // final enhanced replacements like YAML (digits -> E### if enabled)
+            // final enhanced replacements
             if (enhancedAnime4)
                 t = Regex.Replace(t, @"\b(\d{4})\b", "E$1", RegexOptions.Compiled);
             if (enhancedAnime)
