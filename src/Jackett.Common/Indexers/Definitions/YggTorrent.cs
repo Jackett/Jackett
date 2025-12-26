@@ -287,7 +287,6 @@ namespace Jackett.Common.Indexers.Definitions
             var post = new Dictionary<string, string> { ["id"] = username, ["pass"] = password };
             var loginPage = await RequestWithCookiesAsync(SiteLink, string.Empty);
             var resp = await RequestLoginAndFollowRedirect(processLogin, post, loginPage.Cookies, true, SiteLink, loginUrl);
-            logger.Info($"resp: {resp.ContentString}");
             if (resp.Status == HttpStatusCode.OK)
             {
                 IsConfigured = true;
@@ -350,7 +349,6 @@ namespace Jackett.Common.Indexers.Definitions
                 var url = $"{SiteLink}engine/search?{queryString}";
                 var resp = await RequestWithCookiesAndRetryAsync(
                     url, method: RequestType.POST, data: null, referer: SiteLink);
-                logger.Info($"response search: {resp.ContentString}");
                 var html = resp.ContentString ?? "";
 
                 // parse results table
