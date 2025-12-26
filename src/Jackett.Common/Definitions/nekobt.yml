@@ -82,7 +82,7 @@ search:
         type: xml
 
   inputs:
-    t: "{{ .Query.Type }}"
+    t: "{{ re_replace .Query.Type \"^movie$\" \"movie-search\" }}"
     q: "{{ .Keywords }}"
     apikey: "{{ .Config.apikey }}"
     tvdbid: "{{ .Query.TVDBID }}"
