@@ -15,6 +15,7 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using NLog.Fluent;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
@@ -338,8 +339,7 @@ namespace Jackett.Common.Indexers.Definitions
                     form["sub_category"] = request.SubCategory;
 
                 // keywords
-                if (!keywords.IsNullOrWhiteSpace())
-                    form["name"] = request.UseSaisonRewrite ? RewriteSxxToSaison(keywords) : keywords;
+                form["name"] = keywords;
 
                 // page
                 if (isPage2)
@@ -375,10 +375,31 @@ namespace Jackett.Common.Indexers.Definitions
                 return await base.Download(link);
 
             // POST /engine/start_download_timer  { torrent_id }
+            await RequestWithCookiesAsync(SiteLink, string.Empty);
             var timerUrl = SiteLink + "engine/start_download_timer";
-            var timerPost = new Dictionary<string, string> { ["torrent_id"] = torrentId };
+
+            var payload = new JObject
+            {
+                ["torrent_id"] = torrentId
+            }.ToString(Newtonsoft.Json.Formatting.None);
+
+            var headers = new Dictionary<string, string>
+            {
+                ["Content-Type"] = "application/json",
+                ["Accept"] = "application/json"
+            };
+
+
             var timerResp = await RequestWithCookiesAndRetryAsync(
-                timerUrl, method: RequestType.POST, data: timerPost, referer: SiteLink);
+                url: timerUrl,
+                method: RequestType.POST,
+                referer: SiteLink,
+                data: null,
+                headers: headers,
+                rawbody: payload
+                );
+            logger.Info("RESPONSE : " + timerResp.ContentString);
+            logger.Info("RESPONSE STA : " + timerResp.Status);
             var timerBody = timerResp.ContentString ?? "";
             string token;
             try
@@ -765,11 +786,6 @@ namespace Jackett.Common.Indexers.Definitions
                 t = Regex.Replace(t, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
             t = _normalizeSpacesRegex.Replace(t, " ").Trim();
             return t;
-        }
-
-        private static string RewriteSxxToSaison(string keywords)
-        {
-            return Regex.Replace(keywords, @"(?i)S0?(\d{1,2})", "Saison $1", RegexOptions.Compiled);
         }
 
         // ----------------- Utils -----------------
