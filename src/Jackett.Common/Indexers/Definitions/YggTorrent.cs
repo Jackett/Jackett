@@ -704,10 +704,10 @@ namespace Jackett.Common.Indexers.Definitions
             if (token.IsNullOrWhiteSpace())
                 throw new Exception("Token is missing from start_download_timer response.");
 
-            // Wait 30 seconds if no Turbo account
+            // Wait 31 seconds if no Turbo account
             if (!GetTurboAccount())
             {
-                await Task.Delay(TimeSpan.FromSeconds(30));
+                await Task.Delay(TimeSpan.FromSeconds(31));
             }
 
             var final = new Uri(
