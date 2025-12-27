@@ -57,7 +57,7 @@ settings:
       MULTi.ENGLISH: MULTi.ENGLISH
       VOSTFR: VOSTFR
       MULTi.VOSTFR: MULTi.VOSTFR
-  - name: vostfr
+  - name: VOSTFR
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
@@ -294,13 +294,14 @@ search:
           args: [".VFQ.MULTI", ".MULTI.VFQ"]
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
-    title_vostfr:
+
+    title_VOSTFR:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+          args: ["(?i)\\b(VOSTFR|SUBFRENCH)\\b", "ENGLISH"]
     title_phase2:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+      text: "{{ if .Config.VOSTFR }}{{ .Result.title_VOSTFR }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
     title_multilang:
       text: "{{ .Result.title_phase2 }}"
       filters:
