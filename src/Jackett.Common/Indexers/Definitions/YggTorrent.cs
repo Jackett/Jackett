@@ -144,7 +144,10 @@ namespace Jackett.Common.Indexers.Definitions
                         ["MULTi.ENGLISH"] = "MULTi.ENGLISH",
                         ["VOSTFR"] = "VOSTFR",
                         ["MULTi.VOSTFR"] = "MULTi.VOSTFR"
-                    }) { Value = "FRENCH" });
+                    })
+                    {
+                        Value = "FRENCH"
+                    });
             configData.AddDynamic(
                 CfgVostfr, new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH") { Value = false });
             configData.AddDynamic(
@@ -180,7 +183,10 @@ namespace Jackett.Common.Indexers.Definitions
                         ["seed"] = "seeders",
                         ["size"] = "size",
                         ["name"] = "title"
-                    }) { Value = "publish_date" });
+                    })
+                    {
+                        Value = "publish_date"
+                    });
             configData.AddDynamic(
                 CfgOrder,
                 new SingleSelectConfigurationItem(
@@ -693,7 +699,10 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (long.TryParse(unix, NumberStyles.Integer, CultureInfo.InvariantCulture, out var ts))
             {
-                try { return DateTimeOffset.FromUnixTimeSeconds(ts).UtcDateTime; }
+                try
+                {
+                    return DateTimeOffset.FromUnixTimeSeconds(ts).UtcDateTime;
+                }
                 catch
                 {
                     /* ignore */
