@@ -15,7 +15,6 @@ using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
-using NLog.Fluent;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
@@ -58,58 +57,58 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private static readonly Regex _idRegex = new Regex(@"/(\d+)-", RegexOptions.Compiled);
+        private static readonly Regex _IdRegex = new Regex(@"/(\d+)-", RegexOptions.Compiled);
 
-        private static readonly Regex _multiReplaceRegex = new Regex(
+        private static readonly Regex _MultiReplaceRegex = new Regex(
             @"\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex _vostfrRegex = new Regex(
+        private static readonly Regex _VostfrRegex = new Regex(
             @"\b(vostfr|subfrench)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex _separatorsRegex = new Regex(@"[\\\-\./!\s]+", RegexOptions.Compiled);
+        private static readonly Regex _SeparatorsRegex = new Regex(@"[\\\-\./!\s]+", RegexOptions.Compiled);
 
-        private static readonly Regex _stripSeasonRegex = new Regex(
+        private static readonly Regex _StripSeasonRegex = new Regex(
             @"\b(S\d{1,3})\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static readonly Regex _quoteWordsRegex = new Regex(@"([^\s]+)", RegexOptions.Compiled);
+        private static readonly Regex _QuoteWordsRegex = new Regex(@"([^\s]+)", RegexOptions.Compiled);
 
-        private static readonly Regex _saisonToSxxEyy1 = new Regex(
+        private static readonly Regex _SaisonToSxxEyy1 = new Regex(
             @"(?i)\b(Saisons?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)([\s\.]*[EÉ]pisodes?[\s\.]*)(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b",
             RegexOptions.Compiled);
 
-        private static readonly Regex _saisonToSxxEyy2 = new Regex(
+        private static readonly Regex _SaisonToSxxEyy2 = new Regex(
             @"(?i)\bSaisons?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)[\s\.]*[EÉ]pisodes?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b",
             RegexOptions.Compiled);
 
-        private static readonly Regex _saisonToSxx1 = new Regex(
+        private static readonly Regex _SaisonToSxx1 = new Regex(
             @"(?i)\b(Saisons?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)\b", RegexOptions.Compiled);
 
-        private static readonly Regex _saisonToSxx2 = new Regex(
+        private static readonly Regex _SaisonToSxx2 = new Regex(
             @"(?i)\bSaisons?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b", RegexOptions.Compiled);
 
-        private static readonly Regex _episodeToEyy1 = new Regex(
+        private static readonly Regex _EpisodeToEyy1 = new Regex(
             @"(?i)\b([EÉ]pisodes?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)\b", RegexOptions.Compiled);
 
-        private static readonly Regex _episodeToEyy2 = new Regex(
+        private static readonly Regex _EpisodeToEyy2 = new Regex(
             @"(?i)\b[EÉ]pisodes?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b", RegexOptions.Compiled);
 
-        private static readonly Regex _range4Digits = new Regex(
+        private static readonly Regex _Range4Digits = new Regex(
             @"(?i)\b(S?\d*[SE])(\d{4})([\s\.\-aà]+)(\d{4})\b", RegexOptions.Compiled);
 
-        private static readonly Regex _range1To3Digits = new Regex(
+        private static readonly Regex _Range1To3Digits = new Regex(
             @"(?i)\b(S?\d*[SE])(\d{1,3})[\s\.\-aà]+(\d{1,3})\b", RegexOptions.Compiled);
 
-        private static readonly Regex _frenchDateToIso = new Regex(
+        private static readonly Regex _FrenchDateToIso = new Regex(
             @"\b(\d{2})[\-_\.](\d{2})[\-_\.](\d{4})\b", RegexOptions.Compiled);
 
-        private static readonly Regex _moveYearRegex = new Regex(
+        private static readonly Regex _MoveYearRegex = new Regex(
             @"(?i)^(?:(.+?)((?:[\.\-\s_\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\-?rip)?|720\s*p?|1080\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\.\-\s_\]]*)*)([\(\[]?(?:20|1[7-9])\d{2}[\)\]]?)(.*)$|(.*))$",
             RegexOptions.Compiled);
 
-        private static readonly Regex _removeExtRegex = new Regex(
+        private static readonly Regex _RemoveExtRegex = new Regex(
             @"(?i)(.\b(mkv|avi|divx|xvid|mp4)\b)$", RegexOptions.Compiled);
 
-        private static readonly Regex _normalizeSpacesRegex = new Regex(@"\s+", RegexOptions.Compiled);
+        private static readonly Regex _NormalizeSpacesRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
         private const string CfgUsername = "username";
         private const string CfgPassword = "password";
@@ -122,8 +121,6 @@ namespace Jackett.Common.Indexers.Definitions
         private const string CfgEnhancedAnime4 = "enhancedAnime4";
         private const string CfgSort = "sort";
         private const string CfgOrder = "type";
-
-        private new ConfigurationData configData => base.configData;
 
         public YggTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                           ICacheService cs) : base(
@@ -157,9 +154,9 @@ namespace Jackett.Common.Indexers.Definitions
                 CfgStripSeason,
                 new BoolConfigurationItem(
                     "Strip season only (e.g. S01) from searches, as tracker does not support partial matches")
-                    {
-                        Value = true
-                    });
+                {
+                    Value = true
+                });
             configData.AddDynamic(
                 CfgEnhancedAnime,
                 new BoolConfigurationItem("Enhance Sonarr compatibility with anime by renaming episodes (xxx > Exxx)")
@@ -170,24 +167,27 @@ namespace Jackett.Common.Indexers.Definitions
                 CfgEnhancedAnime4,
                 new BoolConfigurationItem(
                     "Extend the Sonarr compatibility with anime up to 4 digits (WILL break titles containing years)")
-                    {
-                        Value = false
-                    });
+                {
+                    Value = false
+                });
             configData.AddDynamic(
                 CfgSort,
                 new SingleSelectConfigurationItem(
                     "Sort requested from site",
                     new Dictionary<string, string>
                     {
-                        ["publish_date"] = "created", ["seed"] = "seeders", ["size"] = "size", ["name"] = "title"
+                        ["publish_date"] = "created",
+                        ["seed"] = "seeders",
+                        ["size"] = "size",
+                        ["name"] = "title"
                     }) { Value = "publish_date" });
             configData.AddDynamic(
                 CfgOrder,
                 new SingleSelectConfigurationItem(
                     "Order requested from site", new Dictionary<string, string> { ["desc"] = "desc", ["asc"] = "asc" })
-                    {
-                        Value = "desc"
-                    });
+                {
+                    Value = "desc"
+                });
             configData.AddDynamic(
                 "categories_info",
                 new DisplayInfoConfigurationItem(
@@ -349,10 +349,17 @@ namespace Jackett.Common.Indexers.Definitions
                 var url = $"{SiteLink}engine/search?{queryString}";
 
                 await RequestWithCookiesAndRetryAsync(
-                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
+                    url: url,
+                    method: RequestType.GET,
+                    data: null,
+                    referer: SiteLink);
 
                 var resp = await RequestWithCookiesAndRetryAsync(
-                    url : url, method: RequestType.POST, data: new Dictionary<string, string>(), referer: SiteLink);
+                    url: url,
+                    method: RequestType.POST,
+                    data: new Dictionary<string, string>(),
+                    referer: SiteLink);
+
                 var html = resp.ContentString ?? "";
 
                 // parse results table
@@ -384,15 +391,14 @@ namespace Jackett.Common.Indexers.Definitions
                 ["Content-Type"] = "application/x-www-form-urlencoded"
             };
 
-
             var timerResp = await RequestWithCookiesAndRetryAsync(
                 url: timerUrl,
                 method: RequestType.POST,
                 referer: SiteLink,
                 data: null,
                 headers: headers,
-                rawbody: payload
-                );
+                rawbody: payload);
+
             var timerBody = timerResp.ContentString ?? "";
             string token;
             try
@@ -633,7 +639,7 @@ namespace Jackett.Common.Indexers.Definitions
                     if (a == null)
                         continue;
                     var detailsHref = a.GetAttribute("href") ?? "";
-                    var idMatch = _idRegex.Match(detailsHref);
+                    var idMatch = _IdRegex.Match(detailsHref);
                     if (!idMatch.Success)
                         continue;
                     var id = idMatch.Groups[1].Value;
@@ -715,15 +721,15 @@ namespace Jackett.Common.Indexers.Definitions
                 keywords = Regex.Replace(keywords, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
 
             // fix separators
-            keywords = _separatorsRegex.Replace(keywords, " ");
+            keywords = _SeparatorsRegex.Replace(keywords, " ");
 
             // strip season if configured
             if (((BoolConfigurationItem)configData.GetDynamic(CfgStripSeason)).Value)
-                keywords = _stripSeasonRegex.Replace(keywords, "");
+                keywords = _StripSeasonRegex.Replace(keywords, "");
             keywords = keywords.Trim();
 
             // quote each word
-            keywords = _quoteWordsRegex.Replace(keywords, "\"$1\"");
+            keywords = _QuoteWordsRegex.Replace(keywords, "\"$1\"");
             return keywords;
         }
 
@@ -738,43 +744,43 @@ namespace Jackett.Common.Indexers.Definitions
             var t = title;
 
             // Saison 1 Episode 2 -> S01E02 (or keep as-is unless enhancedAnime4)
-            t = _saisonToSxxEyy1.Replace(t, enhancedAnime4 ? "S$2E$4" : "$1$2$3$4");
-            t = _saisonToSxxEyy2.Replace(t, "S$1E$2");
+            t = _SaisonToSxxEyy1.Replace(t, enhancedAnime4 ? "S$2E$4" : "$1$2$3$4");
+            t = _SaisonToSxxEyy2.Replace(t, "S$1E$2");
 
             // Saison 1 -> S01
-            t = _saisonToSxx1.Replace(t, enhancedAnime4 ? "S$2" : "$1$2");
-            t = _saisonToSxx2.Replace(t, "S$1");
+            t = _SaisonToSxx1.Replace(t, enhancedAnime4 ? "S$2" : "$1$2");
+            t = _SaisonToSxx2.Replace(t, "S$1");
 
             // Episode 1 -> E01
-            t = _episodeToEyy1.Replace(t, enhancedAnime4 ? "E$2" : "$1$2");
-            t = _episodeToEyy2.Replace(t, "E$1");
+            t = _EpisodeToEyy1.Replace(t, enhancedAnime4 ? "E$2" : "$1$2");
+            t = _EpisodeToEyy2.Replace(t, "E$1");
 
             // S1 à 2 -> S1-2
-            t = _range4Digits.Replace(t, enhancedAnime4 ? "$1$2-$4" : "$1$2$3$4");
-            t = _range1To3Digits.Replace(t, "$1$2-$3");
+            t = _Range4Digits.Replace(t, enhancedAnime4 ? "$1$2-$4" : "$1$2$3$4");
+            t = _Range1To3Digits.Replace(t, "$1$2-$3");
 
             // dd-mm-yyyy -> yyyy.mm.dd
-            t = _frenchDateToIso.Replace(t, "$3.$2.$1");
+            t = _FrenchDateToIso.Replace(t, "$3.$2.$1");
 
             // title_filtered (filter_title option): move year after title
             if (((BoolConfigurationItem)configData.GetDynamic(CfgFilterTitle)).Value)
             {
-                t = _moveYearRegex.Replace(t, "$1 $3 $2 $4 $5");
+                t = _MoveYearRegex.Replace(t, "$1 $3 $2 $4 $5");
                 t = t.Trim();
-                t = _removeExtRegex.Replace(t, "");
-                t = _normalizeSpacesRegex.Replace(t, " ").Trim();
+                t = _RemoveExtRegex.Replace(t, "");
+                t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
             }
 
             // vostfr replacement
             if (((BoolConfigurationItem)configData.GetDynamic(CfgVostfr)).Value)
-                t = _vostfrRegex.Replace(t, "ENGLISH");
+                t = _VostfrRegex.Replace(t, "ENGLISH");
 
             // multilang replacement
             if (((BoolConfigurationItem)configData.GetDynamic(CfgMultiLang)).Value)
             {
                 var lang = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgMultiLanguageValue)).Value;
                 if (!lang.IsNullOrWhiteSpace())
-                    t = _multiReplaceRegex.Replace(t, lang);
+                    t = _MultiReplaceRegex.Replace(t, lang);
             }
 
             // final enhanced replacements
@@ -782,7 +788,7 @@ namespace Jackett.Common.Indexers.Definitions
                 t = Regex.Replace(t, @"\b(\d{4})\b", "E$1", RegexOptions.Compiled);
             if (enhancedAnime)
                 t = Regex.Replace(t, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
-            t = _normalizeSpacesRegex.Replace(t, " ").Trim();
+            t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
             return t;
         }
 
