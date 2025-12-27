@@ -185,8 +185,6 @@ namespace Jackett.Common.Utils.Clients
 
             PrepareRequest(request);
             await DelayRequest(request);
-            logger.Info("Before final - url: " + request.Url);
-            logger.Info("Before final - cookies: " + request.Cookies);
             var result = await Run(request);
             lastRequest = DateTime.Now;
             result.Request = request;

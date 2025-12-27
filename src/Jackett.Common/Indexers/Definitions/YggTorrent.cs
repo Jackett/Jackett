@@ -390,8 +390,6 @@ namespace Jackett.Common.Indexers.Definitions
                 headers: headers,
                 rawbody: payload
                 );
-            logger.Info("RESPONSE : " + timerResp.ContentString);
-            logger.Info("RESPONSE STA : " + timerResp.Status);
             var timerBody = timerResp.ContentString ?? "";
             string token;
             try
