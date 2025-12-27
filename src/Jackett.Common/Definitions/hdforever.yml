@@ -182,10 +182,10 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.group_info:contains(\"/ Free\")": 0
-        "div.group_info:contains(\"↓75%\")": 0.75
-        "div.group_info:contains(\"↓50%\")": 0.50
-        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "div.torrent_info .tl_free": 0
+        "div.torrent_info .tl_notice[title=\"-75%\"]": 0.75
+        "div.torrent_info .tl_notice[title=\"-50%\"]": 0.50
+        "div.torrent_info .tl_notice[title=\"-25%\"]": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
         "*": 1
     uploadvolumefactor:
       text: 1
