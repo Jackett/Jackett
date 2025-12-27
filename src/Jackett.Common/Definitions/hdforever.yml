@@ -147,8 +147,6 @@ search:
     poster:
       selector: div.group_image img
       attribute: src
-    files:
-      selector: td:nth-child(3)
     date:
       selector: td:nth-child(4)
       filters:
