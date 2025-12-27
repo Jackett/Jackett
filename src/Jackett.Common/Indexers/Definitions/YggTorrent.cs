@@ -301,6 +301,12 @@ namespace Jackett.Common.Indexers.Definitions
                 new DisplayInfoConfigurationItem(
                     "Categories",
                     "To avoid unnecessary additional requests, it's recommended to only use indexer-specific categories (>=100000) when configuring this indexer in Sonarr/Radarr/Lidarr."));
+
+            configData.AddDynamic(
+                "flaresolverr_info",
+                new DisplayInfoConfigurationItem(
+                    "FlareSolverr",
+                    "This site may use Cloudflare DDoS Protection, therefore Jackett requires FlareSolverr to access it."));
         }
 
         /// <summary>
