@@ -132,6 +132,7 @@ namespace Jackett.Common.Indexers.Definitions
         private const string CfgEnhancedAnime4 = "enhancedAnime4";
         private const string CfgSort = "sort";
         private const string CfgOrder = "type";
+        private const string CfgTurboAccount = "turbo_account";
 
         public YggTorrent(
             IIndexerConfigurationService configService,
@@ -149,6 +150,8 @@ namespace Jackett.Common.Indexers.Definitions
         {
             configData.AddDynamic(CfgUsername, new StringConfigurationItem("Username") { Value = "" });
             configData.AddDynamic(CfgPassword, new PasswordConfigurationItem("Password") { Value = "" });
+
+            configData.AddDynamic(CfgTurboAccount, new BoolConfigurationItem("I have a Turbo account") { Value = false });
 
             configData.AddDynamic(
                 CfgMultiLang,
@@ -480,8 +483,9 @@ namespace Jackett.Common.Indexers.Definitions
             if (token.IsNullOrWhiteSpace())
                 throw new Exception("Token is missing from start_download_timer response.");
 
-            // Wait 30 seconds (YGG rule)
-            await Task.Delay(TimeSpan.FromSeconds(30));
+            // Wait 30 seconds if not Turbo Account (YGG rule)
+            if (!((BoolConfigurationItem)configData.GetDynamic(CfgTurboAccount)).Value)
+                await Task.Delay(TimeSpan.FromSeconds(30));
 
             var final = new Uri(
                 $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={torrentId}&token={token}");
