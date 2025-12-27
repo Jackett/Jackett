@@ -348,6 +348,9 @@ namespace Jackett.Common.Indexers.Definitions
                     "&", form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 var url = $"{SiteLink}engine/search?{queryString}";
 
+                await RequestWithCookiesAndRetryAsync(
+                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
+
                 var resp = await RequestWithCookiesAndRetryAsync(
                     url : url, method: RequestType.POST, data: new Dictionary<string, string>(), referer: SiteLink);
                 var html = resp.ContentString ?? "";
@@ -404,6 +407,10 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (token.IsNullOrWhiteSpace())
                 throw new Exception("Token is missing from start_download_timer response.");
+
+            // Wait 30 seconds (YGG rule)
+            await Task.Delay(TimeSpan.FromSeconds(30));
+
             var final = new Uri(
                 $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={torrentId}&token={token}");
 
