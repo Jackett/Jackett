@@ -49,10 +49,15 @@ namespace Jackett.Server.Controllers
                     return Forbid("This indexer is not configured.");
                 }
 
+                _logger.Info($"Downloading on {path}...");
+
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = _protectionService.UnProtect(path);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
+
+                _logger.Info($"Downloading on target {target}...");
+
                 var downloadBytes = await indexer.Download(target);
 
                 // handle magnet URLs
@@ -91,6 +96,7 @@ namespace Jackett.Server.Controllers
             }
             catch (Exception e)
             {
+                _logger.Error(e);
                 _logger.Error($"Error downloading. " +
                               $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
                               $"path: {path.Replace(Environment.NewLine, "")}\n{e}");

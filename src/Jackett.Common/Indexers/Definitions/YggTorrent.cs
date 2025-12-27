@@ -286,8 +286,8 @@ namespace Jackett.Common.Indexers.Definitions
             var processLogin = SiteLink + "auth/process_login";
             var loginUrl = SiteLink + "auth/login";
             var post = new Dictionary<string, string> { ["id"] = username, ["pass"] = password };
-            var loginPage = await RequestWithCookiesAsync(SiteLink, string.Empty);
-            var resp = await RequestLoginAndFollowRedirect(processLogin, post, loginPage.Cookies, true, SiteLink, loginUrl);
+            await RequestWithCookiesAsync(SiteLink, string.Empty);
+            var resp = await RequestLoginAndFollowRedirect(processLogin, post, null, false, SiteLink, loginUrl);
             if (resp.Status == HttpStatusCode.OK)
             {
                 IsConfigured = true;
@@ -348,9 +348,6 @@ namespace Jackett.Common.Indexers.Definitions
                     "&", form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
                 var url = $"{SiteLink}engine/search?{queryString}";
 
-                var flareOk = await RequestWithCookiesAndRetryAsync(
-                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
-
                 var resp = await RequestWithCookiesAndRetryAsync(
                     url : url, method: RequestType.POST, data: new Dictionary<string, string>(), referer: SiteLink);
                 var html = resp.ContentString ?? "";
@@ -375,18 +372,13 @@ namespace Jackett.Common.Indexers.Definitions
                 return await base.Download(link);
 
             // POST /engine/start_download_timer  { torrent_id }
-            await RequestWithCookiesAsync(SiteLink, string.Empty);
             var timerUrl = SiteLink + "engine/start_download_timer";
 
-            var payload = new JObject
-            {
-                ["torrent_id"] = torrentId
-            }.ToString(Newtonsoft.Json.Formatting.None);
+            var payload = $"torrent_id={Uri.EscapeDataString(torrentId)}";
 
             var headers = new Dictionary<string, string>
             {
-                ["Content-Type"] = "application/json",
-                ["Accept"] = "application/json"
+                ["Content-Type"] = "application/x-www-form-urlencoded"
             };
 
 
@@ -415,7 +407,8 @@ namespace Jackett.Common.Indexers.Definitions
             if (token.IsNullOrWhiteSpace())
                 throw new Exception("Token is missing from start_download_timer response.");
             var final = new Uri(
-                $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={Uri.EscapeDataString(torrentId)}&token={Uri.EscapeDataString(token)}");
+                $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={torrentId}&token={token}");
+
             return await base.Download(final);
         }
 
