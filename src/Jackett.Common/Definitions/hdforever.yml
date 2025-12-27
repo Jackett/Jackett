@@ -253,39 +253,39 @@ search:
           args: [" / ", "."]
         - name: trim
         - name: replace
-          args: [".VFF.VFQ.StFr.MULTI", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.StFR.MULTI", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFF.VFQ.VO.StFr.MULTI", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.VO.StFR.MULTI", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFF.VFQ.VO.StFr", ".MULTI.VFF.VFQ"]
+          args: [".VFF.VFQ.VO.StFR", ".MULTI.VFF.VFQ"]
         - name: replace
-          args: [".VFQ.VO.StFr", ".MULTI.VFQ"]
+          args: [".VFQ.VO.StFR", ".MULTI.VFQ"]
         - name: replace
-          args: [".VO.VFI.StFr", ".MULTI"]
+          args: [".VO.VFI.StFR", ".MULTI"]
         - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
+          args: [".VO.VF?.StFR", ".MULTI"]
         - name: replace
-          args: [".VFF.VO.StFr", ".MULTI.VFF"]
+          args: [".VFF.VO.StFR", ".MULTI.VFF"]
         - name: replace
-          args: [".VOF.StFr", ".FRENCH"]
+          args: [".VOF.StFR", ".FRENCH"]
         - name: replace
-          args: [".VFQ.StFr", ".FRENCH"]
+          args: [".VFQ.StFR", ".FRENCH"]
         - name: replace
-          args: [".VFF.StFr.MULTI", ".MULTI.VFF"]
+          args: [".VFF.StFR.MULTI", ".MULTI.VFF"]
         - name: replace
-          args: [".VFF.StFr", ".FRENCH"]
+          args: [".VFF.StFR", ".FRENCH"]
         - name: replace
           args: [".VFI.MULTI", ".MULTI"]
         - name: replace
-          args: [".VO.StFr", ".VOSTFR"]
+          args: [".VO.StFR", ".VOSTFR"]
         - name: replace
           args: [".VFQ.VO", ".MULTI.VFQ"]
         - name: replace
           args: [".VFF.VO", ".MULTI.VFF"]
         - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
+          args: [".VO.VF?.StFR", ".MULTI"]
         - name: replace
-          args: [".VFI.StFr", ".FRENCH"]
+          args: [".VFI.StFR", ".FRENCH"]
         - name: replace
           args: [".VOF.MULTI", ".MULTI.FRENCH"]
         - name: replace
