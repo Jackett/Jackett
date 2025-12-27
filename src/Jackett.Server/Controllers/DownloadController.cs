@@ -53,7 +53,6 @@ namespace Jackett.Server.Controllers
                 path = _protectionService.UnProtect(path);
 
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
-
                 var downloadBytes = await indexer.Download(target);
 
                 // handle magnet URLs
