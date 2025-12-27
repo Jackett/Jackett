@@ -60,20 +60,23 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex _IdRegex = new Regex(@"/(\d+)-", RegexOptions.Compiled);
 
         private static readonly Regex _MultiReplaceRegex = new Regex(
-            @"\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            @"\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex _VostfrRegex = new Regex(
-            @"\b(vostfr|subfrench)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            @"\b(vostfr|subfrench)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex _SeparatorsRegex = new Regex(@"[\\\-\./!\s]+", RegexOptions.Compiled);
 
         private static readonly Regex _StripSeasonRegex = new Regex(
-            @"\b(S\d{1,3})\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            @"\b(S\d{1,3})\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex _QuoteWordsRegex = new Regex(@"([^\s]+)", RegexOptions.Compiled);
 
         private static readonly Regex _SaisonToSxxEyy1 = new Regex(
-            @"(?i)\b(Saisons?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)([\s\.]*[EÉ]pisodes?[\s\.]*)(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b",
+            @"(?i)\b(Saisons?[\s\.]*)((?:\d{4})(?:[\s\.\-aà]+\d{4})?)([\s\.]*[EÉ]pisodes?[\s\.]*)((?:\d{1,3})(?:[\s\.\-aà]+\d{1,3})?)\b",
             RegexOptions.Compiled);
 
         private static readonly Regex _SaisonToSxxEyy2 = new Regex(
@@ -81,32 +84,40 @@ namespace Jackett.Common.Indexers.Definitions
             RegexOptions.Compiled);
 
         private static readonly Regex _SaisonToSxx1 = new Regex(
-            @"(?i)\b(Saisons?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)\b", RegexOptions.Compiled);
+            @"(?i)\b(Saisons?[\s\.]*)((?:\d{4})(?:[\s\.\-aà]+\d{4})?)\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _SaisonToSxx2 = new Regex(
-            @"(?i)\bSaisons?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b", RegexOptions.Compiled);
+            @"(?i)\bSaisons?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _EpisodeToEyy1 = new Regex(
-            @"(?i)\b([EÉ]pisodes?[\s\.]*)(\d{4}(?:[\s\.\-aà]+\d{4})?)\b", RegexOptions.Compiled);
+            @"(?i)\b([EÉ]pisodes?[\s\.]*)((?:\d{4})(?:[\s\.\-aà]+\d{4})?)\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _EpisodeToEyy2 = new Regex(
-            @"(?i)\b[EÉ]pisodes?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b", RegexOptions.Compiled);
+            @"(?i)\b[EÉ]pisodes?[\s\.]*(\d{1,3}(?:[\s\.\-aà]+\d{1,3})?)\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _Range4Digits = new Regex(
-            @"(?i)\b(S?\d*[SE])(\d{4})([\s\.\-aà]+)(\d{4})\b", RegexOptions.Compiled);
+            @"(?i)\b(S?\d*[SE])(\d{4})([\s\.\-aà]+)(\d{4})\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _Range1To3Digits = new Regex(
-            @"(?i)\b(S?\d*[SE])(\d{1,3})[\s\.\-aà]+(\d{1,3})\b", RegexOptions.Compiled);
+            @"(?i)\b(S?\d*[SE])(\d{1,3})[\s\.\-aà]+(\d{1,3})\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _FrenchDateToIso = new Regex(
-            @"\b(\d{2})[\-_\.](\d{2})[\-_\.](\d{4})\b", RegexOptions.Compiled);
+            @"\b(\d{2})[\-_\.](\d{2})[\-_\.](\d{4})\b",
+            RegexOptions.Compiled);
 
         private static readonly Regex _MoveYearRegex = new Regex(
             @"(?i)^(?:(.+?)((?:[\.\-\s_\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\-?rip)?|720\s*p?|1080\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\.\-\s_\]]*)*)([\(\[]?(?:20|1[7-9])\d{2}[\)\]]?)(.*)$|(.*))$",
             RegexOptions.Compiled);
 
         private static readonly Regex _RemoveExtRegex = new Regex(
-            @"(?i)(.\b(mkv|avi|divx|xvid|mp4)\b)$", RegexOptions.Compiled);
+            @"(?i)(.\b(mkv|avi|divx|xvid|mp4)\b)$",
+            RegexOptions.Compiled);
 
         private static readonly Regex _NormalizeSpacesRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
@@ -122,16 +133,27 @@ namespace Jackett.Common.Indexers.Definitions
         private const string CfgSort = "sort";
         private const string CfgOrder = "type";
 
-        public YggTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                          ICacheService cs) : base(
-            configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
-            configData: new ConfigurationData())
+        public YggTorrent(
+            IIndexerConfigurationService configService,
+            WebClient wc,
+            Logger l,
+            IProtectionService ps,
+            ICacheService cs)
+            : base(
+                configService: configService,
+                client: wc,
+                logger: l,
+                p: ps,
+                cacheService: cs,
+                configData: new ConfigurationData())
         {
             configData.AddDynamic(CfgUsername, new StringConfigurationItem("Username") { Value = "" });
             configData.AddDynamic(CfgPassword, new PasswordConfigurationItem("Password") { Value = "" });
+
             configData.AddDynamic(
                 CfgMultiLang,
                 new BoolConfigurationItem("Replace MULTi by another language in release name") { Value = false });
+
             configData.AddDynamic(
                 CfgMultiLanguageValue,
                 new SingleSelectConfigurationItem(
@@ -145,14 +167,18 @@ namespace Jackett.Common.Indexers.Definitions
                         ["VOSTFR"] = "VOSTFR",
                         ["MULTi.VOSTFR"] = "MULTi.VOSTFR"
                     })
-                    {
-                        Value = "FRENCH"
-                    });
+                {
+                    Value = "FRENCH"
+                });
+
             configData.AddDynamic(
-                CfgVostfr, new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH") { Value = false });
+                CfgVostfr,
+                new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH") { Value = false });
+
             configData.AddDynamic(
                 CfgFilterTitle,
                 new BoolConfigurationItem("Normalize release names by moving year after the title") { Value = false });
+
             configData.AddDynamic(
                 CfgStripSeason,
                 new BoolConfigurationItem(
@@ -160,12 +186,14 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     Value = true
                 });
+
             configData.AddDynamic(
                 CfgEnhancedAnime,
                 new BoolConfigurationItem("Enhance Sonarr compatibility with anime by renaming episodes (xxx > Exxx)")
                 {
                     Value = false
                 });
+
             configData.AddDynamic(
                 CfgEnhancedAnime4,
                 new BoolConfigurationItem(
@@ -173,6 +201,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     Value = false
                 });
+
             configData.AddDynamic(
                 CfgSort,
                 new SingleSelectConfigurationItem(
@@ -184,16 +213,23 @@ namespace Jackett.Common.Indexers.Definitions
                         ["size"] = "size",
                         ["name"] = "title"
                     })
-                    {
-                        Value = "publish_date"
-                    });
+                {
+                    Value = "publish_date"
+                });
+
             configData.AddDynamic(
                 CfgOrder,
                 new SingleSelectConfigurationItem(
-                    "Order requested from site", new Dictionary<string, string> { ["desc"] = "desc", ["asc"] = "asc" })
+                    "Order requested from site",
+                    new Dictionary<string, string>
+                    {
+                        ["desc"] = "desc",
+                        ["asc"] = "asc"
+                    })
                 {
                     Value = "desc"
                 });
+
             configData.AddDynamic(
                 "categories_info",
                 new DisplayInfoConfigurationItem(
@@ -205,7 +241,12 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var caps = new TorznabCapabilities
             {
-                TvSearchParams = new List<TvSearchParam> { TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep },
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q,
+                    TvSearchParam.Season,
+                    TvSearchParam.Ep
+                },
                 MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
                 MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
                 BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
@@ -285,15 +326,21 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+
             var username = ((StringConfigurationItem)configData.GetDynamic(CfgUsername)).Value;
             var password = ((PasswordConfigurationItem)configData.GetDynamic(CfgPassword)).Value;
+
             if (username.IsNullOrWhiteSpace() || password.IsNullOrWhiteSpace())
                 throw new Exception("Username / Password is required.");
+
             var processLogin = SiteLink + "auth/process_login";
             var loginUrl = SiteLink + "auth/login";
             var post = new Dictionary<string, string> { ["id"] = username, ["pass"] = password };
+
             await RequestWithCookiesAsync(SiteLink, string.Empty);
+
             var resp = await RequestLoginAndFollowRedirect(processLogin, post, null, false, SiteLink, loginUrl);
+
             if (resp.Status == HttpStatusCode.OK)
             {
                 IsConfigured = true;
@@ -311,6 +358,7 @@ namespace Jackett.Common.Indexers.Definitions
             // Map requested torznab categories -> YGG tracker categories
             var trackerCatsStr = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var trackerCats = trackerCatsStr.Select(x => int.TryParse(x, out var id) ? id : -1).ToList();
+
             if (!trackerCats.Any())
             {
                 // default "all"
@@ -338,7 +386,12 @@ namespace Jackett.Common.Indexers.Definitions
             // 1 request per root-category to avoid duplicates, with sub_category when needed.
             foreach (var request in BuildSearchRequests(trackerCats))
             {
-                var form = new Dictionary<string, string> { ["do"] = "search", ["order"] = order, ["sort"] = siteSort };
+                var form = new Dictionary<string, string>
+                {
+                    ["do"] = "search",
+                    ["order"] = order,
+                    ["sort"] = siteSort
+                };
 
                 form["category"] = request.RootCategory;
                 if (!string.IsNullOrEmpty(request.SubCategory))
@@ -350,8 +403,11 @@ namespace Jackett.Common.Indexers.Definitions
                 // page
                 if (isPage2)
                     form["page"] = "50";
+
                 var queryString = string.Join(
-                    "&", form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                    "&",
+                    form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+
                 var url = $"{SiteLink}engine/search?{queryString}";
 
                 await RequestWithCookiesAndRetryAsync(
@@ -383,6 +439,7 @@ namespace Jackett.Common.Indexers.Definitions
             // Only intercept YGG download endpoint
             if (link.AbsoluteUri.IndexOf("/engine/download_torrent", StringComparison.OrdinalIgnoreCase) < 0)
                 return await base.Download(link);
+
             var torrentId = GetQueryParam(link, "id");
             if (torrentId.IsNullOrWhiteSpace())
                 return await base.Download(link);
@@ -406,6 +463,7 @@ namespace Jackett.Common.Indexers.Definitions
                 rawbody: payload);
 
             var timerBody = timerResp.ContentString ?? "";
+
             string token;
             try
             {
@@ -414,7 +472,9 @@ namespace Jackett.Common.Indexers.Definitions
             }
             catch (Exception ex)
             {
-                throw new Exception("Failed to parse start_download_timer response as JSON: " + Take(timerBody, 200), ex);
+                throw new Exception(
+                    "Failed to parse start_download_timer response as JSON: " + Take(timerBody, 200),
+                    ex);
             }
 
             if (token.IsNullOrWhiteSpace())
@@ -443,11 +503,17 @@ namespace Jackett.Common.Indexers.Definitions
             // If no category specified -> Tous (category=all, no sub)
             if (trackerCats.Count == 1 && trackerCats[0] == -1)
             {
-                yield return new SearchRequest { RootCategory = "all", SubCategory = null, UseSaisonRewrite = true };
+                yield return new SearchRequest
+                {
+                    RootCategory = "all",
+                    SubCategory = null,
+                    UseSaisonRewrite = true
+                };
                 yield break;
             }
 
             var produced = new HashSet<string>(StringComparer.Ordinal);
+
             foreach (var c in trackerCats)
             {
                 // TV/Anime (2179) & Movies/Other (2178) & Movies (2183) are sub_categories of 2145
@@ -475,7 +541,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2145", SubCategory = null, UseSaisonRewrite = true
+                            RootCategory = "2145",
+                            SubCategory = null,
+                            UseSaisonRewrite = true
                         };
                     }
 
@@ -489,7 +557,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2139", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2139",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -503,7 +573,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2144", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2144",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -517,7 +589,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2142", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2142",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -531,7 +605,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2140", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2140",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -545,7 +621,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2300", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2300",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -559,7 +637,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2200", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2200",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -573,7 +653,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2141", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2141",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -587,7 +669,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2143", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2143",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -601,7 +685,9 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2188", SubCategory = null, UseSaisonRewrite = false
+                            RootCategory = "2188",
+                            SubCategory = null,
+                            UseSaisonRewrite = false
                         };
                     }
 
@@ -612,27 +698,65 @@ namespace Jackett.Common.Indexers.Definitions
                 var fallbackKey = "all|";
                 if (produced.Add(fallbackKey))
                 {
-                    yield return new SearchRequest { RootCategory = "all", SubCategory = null, UseSaisonRewrite = true };
+                    yield return new SearchRequest
+                    {
+                        RootCategory = "all",
+                        SubCategory = null,
+                        UseSaisonRewrite = true
+                    };
                 }
             }
         }
 
-        private static bool IsFilmVideoCategory(int c) => c == 2145 || (c >= 2178 && c <= 2187);
-        private static bool IsAudioCategory(int c) => c == 2139 || (c >= 2147 && c <= 2150);
-        private static bool IsApplicationCategory(int c) => c == 2144 || (c >= 2171 && c <= 2177);
-        private static bool IsGameCategory(int c) => c == 2142 || (c >= 2159 && c <= 2167);
-        private static bool IsEbookCategory(int c) => c == 2140 || (c >= 2151 && c <= 2156);
-        private static bool IsNulledCategory(int c) => c >= 2300 && c <= 2304;
-        private static bool IsPrinter3DCategory(int c) => c >= 2200 && c <= 2202;
-        private static bool IsEmulationCategory(int c) => c == 2141 || c == 2157 || c == 2158;
-        private static bool IsGpsCategory(int c) => c == 2143 || (c >= 2168 && c <= 2170);
-        private static bool IsXxxCategory(int c) => c == 2188 || (c >= 2189 && c <= 2191) || c == 2401 || c == 2402;
+        private static bool IsFilmVideoCategory(int c) =>
+            c == 2145
+            || (c >= 2178 && c <= 2187);
+
+        private static bool IsAudioCategory(int c) =>
+            c == 2139
+            || (c >= 2147 && c <= 2150);
+
+        private static bool IsApplicationCategory(int c) =>
+            c == 2144
+            || (c >= 2171 && c <= 2177);
+
+        private static bool IsGameCategory(int c) =>
+            c == 2142
+            || (c >= 2159 && c <= 2167);
+
+        private static bool IsEbookCategory(int c) =>
+            c == 2140
+            || (c >= 2151 && c <= 2156);
+
+        private static bool IsNulledCategory(int c) =>
+            c >= 2300
+            && c <= 2304;
+
+        private static bool IsPrinter3DCategory(int c) =>
+            c >= 2200
+            && c <= 2202;
+
+        private static bool IsEmulationCategory(int c) =>
+            c == 2141
+            || c == 2157
+            || c == 2158;
+
+        private static bool IsGpsCategory(int c) =>
+            c == 2143
+            || (c >= 2168 && c <= 2170);
+
+        private static bool IsXxxCategory(int c) =>
+            c == 2188
+            || (c >= 2189 && c <= 2191)
+            || c == 2401
+            || c == 2402;
 
         // ----------------- Parsing -----------------
 
         private IEnumerable<ReleaseInfo> ParseSearchResults(string html)
         {
             var releases = new List<ReleaseInfo>();
+
             try
             {
                 var parser = new HtmlParser();
@@ -644,26 +768,35 @@ namespace Jackett.Common.Indexers.Definitions
                     var a = row.QuerySelector("td:nth-child(2) > a");
                     if (a == null)
                         continue;
+
                     var detailsHref = a.GetAttribute("href") ?? "";
                     var idMatch = _IdRegex.Match(detailsHref);
                     if (!idMatch.Success)
                         continue;
+
                     var id = idMatch.Groups[1].Value;
                     var titleRaw = a.TextContent?.Trim() ?? "";
                     var title = NormalizeTitle(titleRaw);
+
                     var catHidden = row.QuerySelector("td:nth-child(1) > div.hidden")?.TextContent?.Trim() ?? "";
                     var catId = ParseUtil.CoerceInt(catHidden);
                     var category = MapTrackerCatToNewznab(catId);
+
                     var unix = row.QuerySelector("td:nth-child(5) > div.hidden")?.TextContent?.Trim() ?? "";
                     var publishDate = ParseUnix(unix);
+
                     var sizeText = row.QuerySelector("td:nth-child(6)")?.TextContent?.Trim() ?? "";
                     sizeText = sizeText.Replace("o", "B");
                     var size = ParseUtil.GetBytes(sizeText);
+
                     var grabs = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(7)")?.TextContent);
                     var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)")?.TextContent);
                     var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)")?.TextContent);
+
                     var details = new Uri(SiteLink + detailsHref.TrimStart('/'));
-                    var link = new Uri($"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={Uri.EscapeDataString(id)}");
+                    var link = new Uri(
+                        $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={Uri.EscapeDataString(id)}");
+
                     releases.Add(
                         new ReleaseInfo
                         {
@@ -705,7 +838,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
                 catch
                 {
-                    /* ignore */
+                    // ignore
                 }
             }
 
@@ -718,6 +851,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var keywords = query.GetQueryString() ?? "";
             keywords = keywords.Trim();
+
             if (keywords.IsNullOrWhiteSpace())
                 return "";
 
@@ -735,6 +869,7 @@ namespace Jackett.Common.Indexers.Definitions
             // strip season if configured
             if (((BoolConfigurationItem)configData.GetDynamic(CfgStripSeason)).Value)
                 keywords = _StripSeasonRegex.Replace(keywords, "");
+
             keywords = keywords.Trim();
 
             // quote each word
@@ -746,6 +881,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (title.IsNullOrWhiteSpace())
                 return title ?? "";
+
             var enhancedAnime = ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime)).Value;
             var enhancedAnime4 = ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime4)).Value;
 
@@ -795,8 +931,10 @@ namespace Jackett.Common.Indexers.Definitions
             // final enhanced replacements
             if (enhancedAnime4)
                 t = Regex.Replace(t, @"\b(\d{4})\b", "E$1", RegexOptions.Compiled);
+
             if (enhancedAnime)
                 t = Regex.Replace(t, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
+
             t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
             return t;
         }
@@ -808,22 +946,17 @@ namespace Jackett.Common.Indexers.Definitions
             var q = uri.Query;
             if (string.IsNullOrWhiteSpace(q))
                 return null;
+
             if (q.StartsWith("?"))
                 q = q.Substring(1);
-            foreach (var part in q.Split(
-                         new[]
-                         {
-                             '&'
-                         }, StringSplitOptions.RemoveEmptyEntries))
+
+            foreach (var part in q.Split(new[] { '&' }, StringSplitOptions.RemoveEmptyEntries))
             {
-                var kv = part.Split(
-                    new[]
-                    {
-                        '='
-                    }, 2);
+                var kv = part.Split(new[] { '=' }, 2);
                 var key = Uri.UnescapeDataString(kv[0] ?? "");
                 if (!key.Equals(name, StringComparison.OrdinalIgnoreCase))
                     continue;
+
                 var val = kv.Length > 1 ? kv[1] : "";
                 return Uri.UnescapeDataString(val);
             }
@@ -835,6 +968,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (string.IsNullOrEmpty(s))
                 return s ?? "";
+
             return s.Length <= max ? s : s.Substring(0, max);
         }
     }
