@@ -191,12 +191,12 @@ search:
       text: 1
     title_phase1:
       selector: div.group_info
-      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img
+      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img, .tl_free, .tl_notice
       filters:
         - name: replace
           args: ["\n", " "]
         - name: re_replace
-          args: ["\\s+", " "]
+          args: ["\\[(?:Concert|Film|Film d'animation|Spectacle|Série|Série d'animation|Documentaire)\\]", ""]
         - name: replace
           args: ["Blu-ray Original", "Complete.BluRay"]
         - name: replace
@@ -206,50 +206,28 @@ search:
         - name: replace
           args: ["mHD", "mHD.BluRay.Rip"]
         - name: replace
-          args: ["/ DC", "/ Directors.Cut"]
+          args: ["DC", "Directors.Cut"]
         - name: replace
-          args: ["/ VL", "/ Extended"]
+          args: ["VL", "Extended"]
         - name: replace
-          args: ["/ RM", "/ Remastered"]
+          args: ["RM", "Remastered"]
         - name: replace
-          args: ["/ UC", "/ Uncut"]
+          args: ["UC", "Uncut"]
         - name: replace
-          args: ["/ ES", "/ Special.Edition"]
+          args: ["UR", "Unrated"]
         - name: replace
-          args: [" / Cust_sub", ""]
+          args: ["ES", "Special.Edition"]
         - name: replace
-          args: [" / Cust", ""]
+          args: ["Crit", "Criterion"]
         - name: replace
-          args: ["/ UN", "/ Unrated"]
-        - name: replace
-          args: [" / Crit", ""]
-        - name: replace
-          args: [" / WAC", ""]
-        - name: replace
-          args: [" / MoC", ""]
-        - name: replace
-          args: [" / BFI", ""]
-        - name: replace
-          args: [" / MUET", ""]
-        - name: replace
-          args: ["/ Exc NF", "/ NF"]
-        - name: replace
-          args: ["/ Exc AMZ", "/ AMZ"]
-        - name: replace
-          args: ["/ Exc YOU", "/ YT"]
-        - name: replace
-          args: [" / ↓25%", ""]
-        - name: replace
-          args: [" / ↓50%", ""]
-        - name: replace
-          args: [" / ↓75%", ""]
-        - name: replace
-          args: [" / Free", ""]
-        - name: replace
-          args: [" / Complété!", ""]
-        - name: replace
-          args: [" / ", "."]
+          args: ["! Note Modo !", ""]
+        - name: re_replace
+          args: ["(?:\\/ )?(?:Remplaçable|Complété!|Bonus|[2-9]+ème partie|Cust(?:_sub)?|WAC|BFI|MUET)(?: \\/)?", ""]
         - name: trim
+        - name: re_replace
+          args: ["[\\[\\]\\/\\s]+", "."]
+        - name: trim
+          args: "."
         - name: replace
           args: [".VFF.VFQ.StFR.MULTI", ".MULTI.VFF.VFQ"]
         - name: replace
