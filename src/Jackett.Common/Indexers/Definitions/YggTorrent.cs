@@ -792,16 +792,26 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static (string rootCat, bool usesSaison) GetRootCategory(int c)
         {
-            if (IsFilmVideoCategory(c)) return ("2145", true);
-            if (IsAudioCategory(c)) return ("2139", false);
-            if (IsApplicationCategory(c)) return ("2144", false);
-            if (IsGameCategory(c)) return ("2142", false);
-            if (IsEbookCategory(c)) return ("2140", false);
-            if (IsNulledCategory(c)) return ("2300", false);
-            if (IsPrinter3DCategory(c)) return ("2200", false);
-            if (IsEmulationCategory(c)) return ("2141", false);
-            if (IsGpsCategory(c)) return ("2143", false);
-            if (IsXxxCategory(c)) return ("2188", false);
+            if (IsFilmVideoCategory(c))
+                return ("2145", true);
+            if (IsAudioCategory(c))
+                return ("2139", false);
+            if (IsApplicationCategory(c))
+                return ("2144", false);
+            if (IsGameCategory(c))
+                return ("2142", false);
+            if (IsEbookCategory(c))
+                return ("2140", false);
+            if (IsNulledCategory(c))
+                return ("2300", false);
+            if (IsPrinter3DCategory(c))
+                return ("2200", false);
+            if (IsEmulationCategory(c))
+                return ("2141", false);
+            if (IsGpsCategory(c))
+                return ("2143", false);
+            if (IsXxxCategory(c))
+                return ("2188", false);
             return (null, false);
         }
 
