@@ -259,6 +259,7 @@ Prior versions of Jackett are no longer supported.
  * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
  * Back-ups
  * BakaBT
+ * baoziPT
  * Beload
  * Best-Core
  * BeyondHD (BHD)
