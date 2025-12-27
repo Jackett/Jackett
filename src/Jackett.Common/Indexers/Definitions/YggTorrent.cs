@@ -57,6 +57,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
+        #region Compiled Regexes
+
         private static readonly Regex _IdRegex = new Regex(@"/(\d+)-", RegexOptions.Compiled);
 
         private static readonly Regex _MultiReplaceRegex = new Regex(
@@ -70,7 +72,7 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex _SeparatorsRegex = new Regex(@"[\\\-\./!\s]+", RegexOptions.Compiled);
 
         private static readonly Regex _StripSeasonRegex = new Regex(
-            @"\b(S\d{1,3})\b",
+            @"\bS\d{1,3}\b(?!E\d)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static readonly Regex _QuoteWordsRegex = new Regex(@"([^\s]+)", RegexOptions.Compiled);
@@ -112,14 +114,36 @@ namespace Jackett.Common.Indexers.Definitions
             RegexOptions.Compiled);
 
         private static readonly Regex _MoveYearRegex = new Regex(
-            @"(?i)^(?:(.+?)((?:[\.\-\s_\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\-?rip)?|720\s*p?|1080\s*p?|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\.\-\s_\]]*)*)([\(\[]?(?:20|1[7-9])\d{2}[\)\]]?)(.*)$|(.*))$",
+            @"(?i)^(?:(.+?)((?:[\.\-\s_\[]+(?:imax|(?:dvd|bd|tv)(?:rip|scr)|bluray(?:\-?rip)?|720\s*p?|1080\s*p?|2160\s*p?|4k|uhd|hdr|vof?|vost(?:fr)?|multi|vf(?:f|q)?[1-3]?|(?:true)?french|eng?)[\.\-\s_\]]*)*)([\(\[]?(?:20|1[7-9])\d{2}[\)\]]?)(.*)$|(.*))$",
             RegexOptions.Compiled);
 
         private static readonly Regex _RemoveExtRegex = new Regex(
-            @"(?i)(.\b(mkv|avi|divx|xvid|mp4)\b)$",
+            @"(?i)(.\b(mkv|avi|divx|xvid|mp4|wmv|mov)\b)$",
             RegexOptions.Compiled);
 
         private static readonly Regex _NormalizeSpacesRegex = new Regex(@"\s+", RegexOptions.Compiled);
+
+        // Regex to detect the years (to avoid turning them into episodes)
+        private static readonly Regex _YearRegex = new Regex(
+            @"(?:^|[\s\.\-\[\(])((?:19|20)\d{2})(?:[\s\.\-\]\)]|$)",
+            RegexOptions.Compiled);
+
+        // Regex for isolated episode numbers (not preceded by S or E)
+        private static readonly Regex _StandaloneEpisode3Digits = new Regex(
+            @"(?<![SE\d])(?<=[\s\.\-\[\(]|^)(\d{3})(?=[\s\.\-\]\)]|$)",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex _StandaloneEpisode2Digits = new Regex(
+            @"(?<![SE\d])(?<=[\s\.\-\[\(]|^)(\d{2})(?=[\s\.\-\]\)]|$)",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        private static readonly Regex _StandaloneEpisode4Digits = new Regex(
+            @"(?<![SE\d])(?<=[\s\.\-\[\(]|^)(\d{4})(?=[\s\.\-\]\)]|$)",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+        #endregion
+
+        #region Configuration Keys
 
         private const string CfgUsername = "username";
         private const string CfgPassword = "password";
@@ -133,6 +157,18 @@ namespace Jackett.Common.Indexers.Definitions
         private const string CfgSort = "sort";
         private const string CfgOrder = "type";
         private const string CfgTurboAccount = "turbo_account";
+
+        #endregion
+
+        // Cache for configuration options (prevents repeated access)
+        private bool? _cachedTurboAccount;
+        private bool? _cachedMultiLang;
+        private string _cachedMultiLangValue;
+        private bool? _cachedVostfr;
+        private bool? _cachedFilterTitle;
+        private bool? _cachedStripSeason;
+        private bool? _cachedEnhancedAnime;
+        private bool? _cachedEnhancedAnime4;
 
         public YggTorrent(
             IIndexerConfigurationService configService,
@@ -148,14 +184,30 @@ namespace Jackett.Common.Indexers.Definitions
                 cacheService: cs,
                 configData: new ConfigurationData())
         {
+            InitializeConfiguration();
+        }
+
+        private void InitializeConfiguration()
+        {
+            // Authentification
             configData.AddDynamic(CfgUsername, new StringConfigurationItem("Username") { Value = "" });
             configData.AddDynamic(CfgPassword, new PasswordConfigurationItem("Password") { Value = "" });
 
-            configData.AddDynamic(CfgTurboAccount, new BoolConfigurationItem("I have a Turbo account") { Value = false });
+            // Turbo Account - skip the 30-second delay
+            configData.AddDynamic(
+                CfgTurboAccount,
+                new BoolConfigurationItem("I have a Turbo account (skips 30s download delay)")
+                {
+                    Value = false
+                });
 
+            // Language replacement options
             configData.AddDynamic(
                 CfgMultiLang,
-                new BoolConfigurationItem("Replace MULTi by another language in release name") { Value = false });
+                new BoolConfigurationItem("Replace MULTi by another language in release name")
+                {
+                    Value = false
+                });
 
             configData.AddDynamic(
                 CfgMultiLanguageValue,
@@ -176,23 +228,33 @@ namespace Jackett.Common.Indexers.Definitions
 
             configData.AddDynamic(
                 CfgVostfr,
-                new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH") { Value = false });
+                new BoolConfigurationItem("Replace VOSTFR and SUBFRENCH with ENGLISH")
+                {
+                    Value = false
+                });
 
+            // Standardization of titles
             configData.AddDynamic(
                 CfgFilterTitle,
-                new BoolConfigurationItem("Normalize release names by moving year after the title") { Value = false });
+                new BoolConfigurationItem("Normalize release names by moving year after the title")
+                {
+                    Value = false
+                });
 
+            // Search option
             configData.AddDynamic(
                 CfgStripSeason,
                 new BoolConfigurationItem(
-                    "Strip season only (e.g. S01) from searches, as tracker does not support partial matches")
+                    "Strip season only (e.g. S01) from searches - keeps S01E01 intact")
                 {
                     Value = true
                 });
 
+            // Animes option
             configData.AddDynamic(
                 CfgEnhancedAnime,
-                new BoolConfigurationItem("Enhance Sonarr compatibility with anime by renaming episodes (xxx > Exxx)")
+                new BoolConfigurationItem(
+                    "Enhance Sonarr compatibility with anime (2-3 digit episodes → Exxx)")
                 {
                     Value = false
                 });
@@ -200,11 +262,12 @@ namespace Jackett.Common.Indexers.Definitions
             configData.AddDynamic(
                 CfgEnhancedAnime4,
                 new BoolConfigurationItem(
-                    "Extend the Sonarr compatibility with anime up to 4 digits (WILL break titles containing years)")
+                    "Extend anime compatibility to 4 digits")
                 {
                     Value = false
                 });
 
+            // Sorting options
             configData.AddDynamic(
                 CfgSort,
                 new SingleSelectConfigurationItem(
@@ -240,6 +303,74 @@ namespace Jackett.Common.Indexers.Definitions
                     "To avoid unnecessary additional requests, it's recommended to only use indexer-specific categories (>=100000) when configuring this indexer in Sonarr/Radarr/Lidarr."));
         }
 
+        /// <summary>
+        /// Invalidates the configuration options cache.
+        /// Call this after each configuration change.
+        /// </summary>
+        private void InvalidateConfigCache()
+        {
+            _cachedTurboAccount = null;
+            _cachedMultiLang = null;
+            _cachedMultiLangValue = null;
+            _cachedVostfr = null;
+            _cachedFilterTitle = null;
+            _cachedStripSeason = null;
+            _cachedEnhancedAnime = null;
+            _cachedEnhancedAnime4 = null;
+        }
+
+        #region Configuration Accessors (avec cache)
+
+        private bool GetTurboAccount()
+        {
+            _cachedTurboAccount ??= ((BoolConfigurationItem)configData.GetDynamic(CfgTurboAccount)).Value;
+            return _cachedTurboAccount.Value;
+        }
+
+        private bool GetMultiLangEnabled()
+        {
+            _cachedMultiLang ??= ((BoolConfigurationItem)configData.GetDynamic(CfgMultiLang)).Value;
+            return _cachedMultiLang.Value;
+        }
+
+        private string GetMultiLangValue()
+        {
+            _cachedMultiLangValue ??= ((SingleSelectConfigurationItem)configData.GetDynamic(CfgMultiLanguageValue)).Value;
+            return _cachedMultiLangValue;
+        }
+
+        private bool GetVostfrEnabled()
+        {
+            _cachedVostfr ??= ((BoolConfigurationItem)configData.GetDynamic(CfgVostfr)).Value;
+            return _cachedVostfr.Value;
+        }
+
+        private bool GetFilterTitleEnabled()
+        {
+            _cachedFilterTitle ??= ((BoolConfigurationItem)configData.GetDynamic(CfgFilterTitle)).Value;
+            return _cachedFilterTitle.Value;
+        }
+
+        private bool GetStripSeasonEnabled()
+        {
+            _cachedStripSeason ??= ((BoolConfigurationItem)configData.GetDynamic(CfgStripSeason)).Value;
+            return _cachedStripSeason.Value;
+        }
+
+        private bool GetEnhancedAnimeEnabled()
+        {
+            _cachedEnhancedAnime ??= ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime)).Value;
+            return _cachedEnhancedAnime.Value;
+        }
+
+        private bool GetEnhancedAnime4Enabled()
+        {
+            _cachedEnhancedAnime4 ??= ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime4)).Value;
+            return _cachedEnhancedAnime4.Value;
+        }
+
+        #endregion
+
         private TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
@@ -255,7 +386,7 @@ namespace Jackett.Common.Indexers.Definitions
                 BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
             };
 
-            // We map those strings to TorznabCatType enums.
+            // Movies/Tv Shows Categories
             AddCat(caps, 2145, TorznabCatType.TV, "Film/Vidéo");
             AddCat(caps, 2178, TorznabCatType.MoviesOther, "Film/Vidéo : Animation");
             AddCat(caps, 2179, TorznabCatType.TVAnime, "Film/Vidéo : Animation Série");
@@ -267,11 +398,15 @@ namespace Jackett.Common.Indexers.Definitions
             AddCat(caps, 2185, TorznabCatType.TV, "Film/Vidéo : Spectacle");
             AddCat(caps, 2186, TorznabCatType.TVSport, "Film/Vidéo : Sport");
             AddCat(caps, 2187, TorznabCatType.TVOther, "Film/Vidéo : Vidéo-clips");
+
+            // Audio Categories
             AddCat(caps, 2139, TorznabCatType.Audio, "Audio");
             AddCat(caps, 2147, TorznabCatType.AudioOther, "Audio : Karaoké");
             AddCat(caps, 2148, TorznabCatType.Audio, "Audio : Musique");
             AddCat(caps, 2150, TorznabCatType.AudioOther, "Audio : Podcast Radio");
             AddCat(caps, 2149, TorznabCatType.AudioOther, "Audio : Samples");
+
+            // Application Categories
             AddCat(caps, 2144, TorznabCatType.PC, "Application");
             AddCat(caps, 2177, TorznabCatType.PC0day, "Application : Autre");
             AddCat(caps, 2176, TorznabCatType.PC0day, "Application : Formation");
@@ -280,6 +415,8 @@ namespace Jackett.Common.Indexers.Definitions
             AddCat(caps, 2174, TorznabCatType.PCMobileAndroid, "Application : Smartphone");
             AddCat(caps, 2175, TorznabCatType.PCMobileAndroid, "Application : Tablette");
             AddCat(caps, 2173, TorznabCatType.PC0day, "Application : Windows");
+
+            // Games Categories
             AddCat(caps, 2142, TorznabCatType.PCGames, "Jeu vidéo");
             AddCat(caps, 2167, TorznabCatType.ConsoleOther, "Jeu vidéo : Autre");
             AddCat(caps, 2159, TorznabCatType.PCGames, "Jeu vidéo : Linux");
@@ -290,6 +427,8 @@ namespace Jackett.Common.Indexers.Definitions
             AddCat(caps, 2164, TorznabCatType.ConsolePS4, "Jeu vidéo : Sony");
             AddCat(caps, 2166, TorznabCatType.PCMobileAndroid, "Jeu vidéo : Tablette");
             AddCat(caps, 2161, TorznabCatType.PCGames, "Jeu vidéo : Windows");
+
+            // eBook Categories
             AddCat(caps, 2140, TorznabCatType.Books, "eBook");
             AddCat(caps, 2151, TorznabCatType.AudioAudiobook, "eBook : Audio");
             AddCat(caps, 2152, TorznabCatType.BooksEBook, "eBook : Bds");
@@ -297,6 +436,8 @@ namespace Jackett.Common.Indexers.Definitions
             AddCat(caps, 2154, TorznabCatType.BooksEBook, "eBook : Livres");
             AddCat(caps, 2155, TorznabCatType.BooksComics, "eBook : Mangas");
             AddCat(caps, 2156, TorznabCatType.BooksMags, "eBook : Presse");
+
+            // Others categories
             AddCat(caps, 2300, TorznabCatType.Other, "Nulled");
             AddCat(caps, 2301, TorznabCatType.Other, "Nulled : Wordpress");
             AddCat(caps, 2302, TorznabCatType.Other, "Nulled : Scripts PHP & CMS");
@@ -312,12 +453,15 @@ namespace Jackett.Common.Indexers.Definitions
             AddCat(caps, 2168, TorznabCatType.Other, "GPS : Applications");
             AddCat(caps, 2169, TorznabCatType.Other, "GPS : Cartes");
             AddCat(caps, 2170, TorznabCatType.Other, "GPS : Divers");
+
+            // XXX Categories
             AddCat(caps, 2188, TorznabCatType.XXX, "XXX");
             AddCat(caps, 2401, TorznabCatType.XXXOther, "XXX : Ebooks");
             AddCat(caps, 2189, TorznabCatType.XXX, "XXX : Films");
             AddCat(caps, 2190, TorznabCatType.XXX, "XXX : Hentai");
             AddCat(caps, 2191, TorznabCatType.XXXImageSet, "XXX : Images");
             AddCat(caps, 2402, TorznabCatType.XXXOther, "XXX : Jeux");
+
             return caps;
         }
 
@@ -329,6 +473,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
+            InvalidateConfigCache();
 
             var username = ((StringConfigurationItem)configData.GetDynamic(CfgUsername)).Value;
             var password = ((PasswordConfigurationItem)configData.GetDynamic(CfgPassword)).Value;
@@ -358,23 +503,23 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
 
-            // Map requested torznab categories -> YGG tracker categories
             var trackerCatsStr = MapTorznabCapsToTrackers(query).Distinct().ToList();
             var trackerCats = trackerCatsStr.Select(x => int.TryParse(x, out var id) ? id : -1).ToList();
 
             if (!trackerCats.Any())
             {
-                // default "all"
                 trackerCats.Add(-1);
             }
 
-            var keywords = BuildKeywords(query);
+            var rawQuery = query.GetQueryString() ?? "";
 
-            // Sorting / ordering from config
+            rawQuery = NormalizeFrenchSeasonInRawQuery(rawQuery);
+
+            var keywords = BuildKeywordsFromRaw(rawQuery);
+
             var order = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgOrder)).Value;
             var sortKey = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgSort)).Value;
 
-            // the config stores key like "publish_date", we must map to site value "created"
             var siteSort = sortKey switch
             {
                 "publish_date" => "created",
@@ -384,28 +529,24 @@ namespace Jackett.Common.Indexers.Definitions
                 _ => "created"
             };
 
-            var isPage2 = query.Offset > 0;
+            var pageNumber = query.Offset > 0 ? (query.Offset / 50) + 1 : 1;
 
-            // 1 request per root-category to avoid duplicates, with sub_category when needed.
             foreach (var request in BuildSearchRequests(trackerCats))
             {
                 var form = new Dictionary<string, string>
                 {
                     ["do"] = "search",
                     ["order"] = order,
-                    ["sort"] = siteSort
+                    ["sort"] = siteSort,
+                    ["category"] = request.RootCategory,
+                    ["name"] = keywords
                 };
 
-                form["category"] = request.RootCategory;
                 if (!string.IsNullOrEmpty(request.SubCategory))
                     form["sub_category"] = request.SubCategory;
 
-                // keywords
-                form["name"] = keywords;
-
-                // page
-                if (isPage2)
-                    form["page"] = "50";
+                if (pageNumber > 1)
+                    form["page"] = pageNumber.ToString();
 
                 var queryString = string.Join(
                     "&",
@@ -413,25 +554,100 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var url = $"{SiteLink}engine/search?{queryString}";
 
-                await RequestWithCookiesAndRetryAsync(
-                    url: url,
-                    method: RequestType.GET,
-                    data: null,
-                    referer: SiteLink);
-
                 var resp = await RequestWithCookiesAndRetryAsync(
                     url: url,
                     method: RequestType.POST,
-                    data: new Dictionary<string, string>(),
+                    data: form,
                     referer: SiteLink);
 
                 var html = resp.ContentString ?? "";
-
-                // parse results table
                 releases.AddRange(ParseSearchResults(html));
             }
 
             return releases;
+        }
+
+        /// <summary>
+        /// Standardizes French Season/episode terms to the standard format Sxx/Exx.
+        /// Adds a zero before single-digit numbers (Season 1 -> S01)
+        /// </summary>
+        private static string NormalizeFrenchSeasonInRawQuery(string rawQuery)
+        {
+            if (string.IsNullOrWhiteSpace(rawQuery))
+                return rawQuery;
+
+            var normalized = rawQuery.Trim();
+
+            // Saison 1 Episode 2 → S01E02
+            normalized = Regex.Replace(
+                normalized,
+                @"(?i)\bSaisons?\s+(\d{1,3})\s+[EÉ]pisodes?\s+(\d{1,3})\b",
+                m => $"S{PadNumber(m.Groups[1].Value)}E{PadNumber(m.Groups[2].Value)}");
+
+            // Saison 1 → S01
+            normalized = Regex.Replace(
+                normalized,
+                @"(?i)\bSaisons?\s+(\d{1,3})\b",
+                m => $"S{PadNumber(m.Groups[1].Value)}");
+
+            // Episode 2 → E02
+            normalized = Regex.Replace(
+                normalized,
+                @"(?i)\b[EÉ]pisodes?\s+(\d{1,3})\b",
+                m => $"E{PadNumber(m.Groups[1].Value)}");
+
+            return normalized.Trim();
+        }
+
+        /// <summary>
+        /// Enter a number with a zero if necessary ( 1 -> 01, 12 -> 12, 123 -> 123)
+        /// </summary>
+        private static string PadNumber(string number)
+        {
+            if (int.TryParse(number, out var n))
+            {
+                return n < 10 ? $"0{n}" : number;
+            }
+            return number;
+        }
+
+        /// <summary>
+        /// Constructs search keywords from the raw query.
+        /// Applies configuration options (strip season, enhanced anime)
+        /// </summary>
+        private string BuildKeywordsFromRaw(string rawQuery)
+        {
+            var keywords = rawQuery.Trim();
+
+            if (keywords.IsNullOrWhiteSpace())
+                return "";
+
+            var enhancedAnime = GetEnhancedAnimeEnabled();
+            var enhancedAnime4 = GetEnhancedAnime4Enabled();
+
+            if (enhancedAnime4)
+            {
+                keywords = _StandaloneEpisode4Digits.Replace(keywords, "E$1");
+            }
+
+            if (enhancedAnime)
+            {
+                keywords = _StandaloneEpisode3Digits.Replace(keywords, "E$1");
+                keywords = _StandaloneEpisode2Digits.Replace(keywords, "E$1");
+            }
+
+            keywords = _SeparatorsRegex.Replace(keywords, " ");
+
+            if (GetStripSeasonEnabled())
+            {
+                keywords = _StripSeasonRegex.Replace(keywords, "");
+            }
+
+            keywords = keywords.Trim();
+
+            keywords = _QuoteWordsRegex.Replace(keywords, "\"$1\"");
+
+            return keywords;
         }
 
         public override async Task<byte[]> Download(Uri link)
@@ -439,7 +655,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
 
-            // Only intercept YGG download endpoint
+            // Interceptonly the YGG download endpoint
             if (link.AbsoluteUri.IndexOf("/engine/download_torrent", StringComparison.OrdinalIgnoreCase) < 0)
                 return await base.Download(link);
 
@@ -447,9 +663,8 @@ namespace Jackett.Common.Indexers.Definitions
             if (torrentId.IsNullOrWhiteSpace())
                 return await base.Download(link);
 
-            // POST /engine/start_download_timer  { torrent_id }
+            // POST /engine/start_download_timer { torrent_id }
             var timerUrl = SiteLink + "engine/start_download_timer";
-
             var payload = $"torrent_id={Uri.EscapeDataString(torrentId)}";
 
             var headers = new Dictionary<string, string>
@@ -483,9 +698,11 @@ namespace Jackett.Common.Indexers.Definitions
             if (token.IsNullOrWhiteSpace())
                 throw new Exception("Token is missing from start_download_timer response.");
 
-            // Wait 30 seconds if not Turbo Account (YGG rule)
-            if (!((BoolConfigurationItem)configData.GetDynamic(CfgTurboAccount)).Value)
+            // Wait 30 seconds if no Turbo account
+            if (!GetTurboAccount())
+            {
                 await Task.Delay(TimeSpan.FromSeconds(30));
+            }
 
             var final = new Uri(
                 $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={torrentId}&token={token}");
@@ -493,18 +710,18 @@ namespace Jackett.Common.Indexers.Definitions
             return await base.Download(final);
         }
 
-        // ----------------- Search request mapping (based on YAML paths) -----------------
+        #region Search Request Building
 
         private sealed class SearchRequest
         {
-            public string RootCategory { get; set; } // "all" or numeric string
-            public string SubCategory { get; set; } // optional
-            public bool UseSaisonRewrite { get; set; } // for TV groups which use "Saison X"
+            public string RootCategory { get; set; }
+            public string SubCategory { get; set; }
+            public bool UseSaisonRewrite { get; set; }
         }
 
         private IEnumerable<SearchRequest> BuildSearchRequests(List<int> trackerCats)
         {
-            // If no category specified -> Tous (category=all, no sub)
+            // Pas de catégorie spécifiée -> Tous (category=all)
             if (trackerCats.Count == 1 && trackerCats[0] == -1)
             {
                 yield return new SearchRequest
@@ -520,7 +737,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var c in trackerCats)
             {
-                // TV/Anime (2179) & Movies/Other (2178) & Movies (2183) are sub_categories of 2145
+                // Sous-catégories spécifiques de Film/Vidéo (2145)
                 if (c == 2179 || c == 2178 || c == 2183)
                 {
                     var key = $"2145|{c}";
@@ -533,172 +750,27 @@ namespace Jackett.Common.Indexers.Definitions
                             UseSaisonRewrite = true
                         };
                     }
-
                     continue;
                 }
 
-                // Any other Film/Vidéo leaf -> root 2145 without sub_category
-                if (IsFilmVideoCategory(c))
+                // Mapping catégorie -> root category
+                var (rootCat, usesSaison) = GetRootCategory(c);
+                if (rootCat != null)
                 {
-                    var key = "2145|";
+                    var key = $"{rootCat}|";
                     if (produced.Add(key))
                     {
                         yield return new SearchRequest
                         {
-                            RootCategory = "2145",
+                            RootCategory = rootCat,
                             SubCategory = null,
-                            UseSaisonRewrite = true
+                            UseSaisonRewrite = usesSaison
                         };
                     }
-
                     continue;
                 }
 
-                if (IsAudioCategory(c))
-                {
-                    var key = "2139|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2139",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsApplicationCategory(c))
-                {
-                    var key = "2144|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2144",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsGameCategory(c))
-                {
-                    var key = "2142|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2142",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsEbookCategory(c))
-                {
-                    var key = "2140|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2140",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsNulledCategory(c))
-                {
-                    var key = "2300|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2300",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsPrinter3DCategory(c))
-                {
-                    var key = "2200|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2200",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsEmulationCategory(c))
-                {
-                    var key = "2141|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2141",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsGpsCategory(c))
-                {
-                    var key = "2143|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2143",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                if (IsXxxCategory(c))
-                {
-                    var key = "2188|";
-                    if (produced.Add(key))
-                    {
-                        yield return new SearchRequest
-                        {
-                            RootCategory = "2188",
-                            SubCategory = null,
-                            UseSaisonRewrite = false
-                        };
-                    }
-
-                    continue;
-                }
-
-                // fallback: all
+                // Fallback: all
                 var fallbackKey = "all|";
                 if (produced.Add(fallbackKey))
                 {
@@ -712,50 +784,35 @@ namespace Jackett.Common.Indexers.Definitions
             }
         }
 
-        private static bool IsFilmVideoCategory(int c) =>
-            c == 2145
-            || (c >= 2178 && c <= 2187);
+        private static (string rootCat, bool usesSaison) GetRootCategory(int c)
+        {
+            if (IsFilmVideoCategory(c)) return ("2145", true);
+            if (IsAudioCategory(c)) return ("2139", false);
+            if (IsApplicationCategory(c)) return ("2144", false);
+            if (IsGameCategory(c)) return ("2142", false);
+            if (IsEbookCategory(c)) return ("2140", false);
+            if (IsNulledCategory(c)) return ("2300", false);
+            if (IsPrinter3DCategory(c)) return ("2200", false);
+            if (IsEmulationCategory(c)) return ("2141", false);
+            if (IsGpsCategory(c)) return ("2143", false);
+            if (IsXxxCategory(c)) return ("2188", false);
+            return (null, false);
+        }
 
-        private static bool IsAudioCategory(int c) =>
-            c == 2139
-            || (c >= 2147 && c <= 2150);
+        private static bool IsFilmVideoCategory(int c) => c == 2145 || (c >= 2178 && c <= 2187);
+        private static bool IsAudioCategory(int c) => c == 2139 || (c >= 2147 && c <= 2150);
+        private static bool IsApplicationCategory(int c) => c == 2144 || (c >= 2171 && c <= 2177);
+        private static bool IsGameCategory(int c) => c == 2142 || (c >= 2159 && c <= 2167);
+        private static bool IsEbookCategory(int c) => c == 2140 || (c >= 2151 && c <= 2156);
+        private static bool IsNulledCategory(int c) => c >= 2300 && c <= 2304;
+        private static bool IsPrinter3DCategory(int c) => c >= 2200 && c <= 2202;
+        private static bool IsEmulationCategory(int c) => c == 2141 || c == 2157 || c == 2158;
+        private static bool IsGpsCategory(int c) => c == 2143 || (c >= 2168 && c <= 2170);
+        private static bool IsXxxCategory(int c) => c == 2188 || (c >= 2189 && c <= 2191) || c == 2401 || c == 2402;
 
-        private static bool IsApplicationCategory(int c) =>
-            c == 2144
-            || (c >= 2171 && c <= 2177);
+        #endregion
 
-        private static bool IsGameCategory(int c) =>
-            c == 2142
-            || (c >= 2159 && c <= 2167);
-
-        private static bool IsEbookCategory(int c) =>
-            c == 2140
-            || (c >= 2151 && c <= 2156);
-
-        private static bool IsNulledCategory(int c) =>
-            c >= 2300
-            && c <= 2304;
-
-        private static bool IsPrinter3DCategory(int c) =>
-            c >= 2200
-            && c <= 2202;
-
-        private static bool IsEmulationCategory(int c) =>
-            c == 2141
-            || c == 2157
-            || c == 2158;
-
-        private static bool IsGpsCategory(int c) =>
-            c == 2143
-            || (c >= 2168 && c <= 2170);
-
-        private static bool IsXxxCategory(int c) =>
-            c == 2188
-            || (c >= 2189 && c <= 2191)
-            || c == 2401
-            || c == 2402;
-
-        // ----------------- Parsing -----------------
+        #region Parsing
 
         private IEnumerable<ReleaseInfo> ParseSearchResults(string html)
         {
@@ -801,22 +858,21 @@ namespace Jackett.Common.Indexers.Definitions
                     var link = new Uri(
                         $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={Uri.EscapeDataString(id)}");
 
-                    releases.Add(
-                        new ReleaseInfo
-                        {
-                            Guid = details,
-                            Details = details,
-                            Link = link,
-                            Title = title,
-                            Category = category,
-                            Size = size,
-                            Grabs = grabs,
-                            Seeders = seeders,
-                            Peers = seeders + leechers,
-                            PublishDate = publishDate,
-                            DownloadVolumeFactor = 1,
-                            UploadVolumeFactor = 1
-                        });
+                    releases.Add(new ReleaseInfo
+                    {
+                        Guid = details,
+                        Details = details,
+                        Link = link,
+                        Title = title,
+                        Category = category,
+                        Size = size,
+                        Grabs = grabs,
+                        Seeders = seeders,
+                        Peers = seeders + leechers,
+                        PublishDate = publishDate,
+                        DownloadVolumeFactor = 1,
+                        UploadVolumeFactor = 1
+                    });
                 }
             }
             catch (Exception ex)
@@ -845,54 +901,66 @@ namespace Jackett.Common.Indexers.Definitions
                     // ignore
                 }
             }
-
             return DateTime.UtcNow;
         }
 
-        // ----------------- Keyword & Title filters (from YAML) -----------------
-
-        private string BuildKeywords(TorznabQuery query)
-        {
-            var keywords = query.GetQueryString() ?? "";
-            keywords = keywords.Trim();
-
-            if (keywords.IsNullOrWhiteSpace())
-                return "";
-
-            // enhancedAnime4: 1234 -> E1234
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime4)).Value)
-                keywords = Regex.Replace(keywords, @"\b(\d{4})\b", "E$1", RegexOptions.Compiled);
-
-            // enhancedAnime: 123 -> E123
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime)).Value)
-                keywords = Regex.Replace(keywords, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
-
-            // fix separators
-            keywords = _SeparatorsRegex.Replace(keywords, " ");
-
-            // strip season if configured
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgStripSeason)).Value)
-                keywords = _StripSeasonRegex.Replace(keywords, "");
-
-            keywords = keywords.Trim();
-
-            // quote each word
-            keywords = _QuoteWordsRegex.Replace(keywords, "\"$1\"");
-            return keywords;
-        }
-
+        /// <summary>
+        /// Normalize the title of a torrent according to the configuration options.
+        /// </summary>
         private string NormalizeTitle(string title)
         {
             if (title.IsNullOrWhiteSpace())
                 return title ?? "";
 
-            var enhancedAnime = ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime)).Value;
-            var enhancedAnime4 = ((BoolConfigurationItem)configData.GetDynamic(CfgEnhancedAnime4)).Value;
+            var enhancedAnime = GetEnhancedAnimeEnabled();
+            var enhancedAnime4 = GetEnhancedAnime4Enabled();
 
-            // title_normal: apply season/episode transforms
             var t = title;
 
-            // Saison 1 Episode 2 -> S01E02 (or keep as-is unless enhancedAnime4)
+            t = NormalizeFrenchSeasonEpisode(t, enhancedAnime4);
+
+            t = NormalizeRanges(t, enhancedAnime4);
+
+            t = _FrenchDateToIso.Replace(t, "$3.$2.$1");
+
+            if (GetFilterTitleEnabled())
+            {
+                t = NormalizeTitleWithYear(t);
+            }
+
+            if (GetVostfrEnabled())
+            {
+                t = _VostfrRegex.Replace(t, "ENGLISH");
+            }
+
+            if (GetMultiLangEnabled())
+            {
+                var lang = GetMultiLangValue();
+                if (!lang.IsNullOrWhiteSpace())
+                {
+                    t = _MultiReplaceRegex.Replace(t, lang);
+                }
+            }
+
+            if (enhancedAnime4)
+            {
+                t = ConvertStandaloneNumbersToEpisodes(t, includeYears: true);
+            }
+            else if (enhancedAnime)
+            {
+                t = ConvertStandaloneNumbersToEpisodes(t, includeYears: false);
+            }
+
+            t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
+            return t;
+        }
+
+        /// <summary>
+        /// Standardizes French season/episode formats.
+        /// </summary>
+        private static string NormalizeFrenchSeasonEpisode(string t, bool enhancedAnime4)
+        {
+            // Saison 1 Episode 2 -> S01E02
             t = _SaisonToSxxEyy1.Replace(t, enhancedAnime4 ? "S$2E$4" : "$1$2$3$4");
             t = _SaisonToSxxEyy2.Replace(t, "S$1E$2");
 
@@ -904,46 +972,44 @@ namespace Jackett.Common.Indexers.Definitions
             t = _EpisodeToEyy1.Replace(t, enhancedAnime4 ? "E$2" : "$1$2");
             t = _EpisodeToEyy2.Replace(t, "E$1");
 
-            // S1 à 2 -> S1-2
-            t = _Range4Digits.Replace(t, enhancedAnime4 ? "$1$2-$4" : "$1$2$3$4");
-            t = _Range1To3Digits.Replace(t, "$1$2-$3");
-
-            // dd-mm-yyyy -> yyyy.mm.dd
-            t = _FrenchDateToIso.Replace(t, "$3.$2.$1");
-
-            // title_filtered (filter_title option): move year after title
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgFilterTitle)).Value)
-            {
-                t = _MoveYearRegex.Replace(t, "$1 $3 $2 $4 $5");
-                t = t.Trim();
-                t = _RemoveExtRegex.Replace(t, "");
-                t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
-            }
-
-            // vostfr replacement
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgVostfr)).Value)
-                t = _VostfrRegex.Replace(t, "ENGLISH");
-
-            // multilang replacement
-            if (((BoolConfigurationItem)configData.GetDynamic(CfgMultiLang)).Value)
-            {
-                var lang = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgMultiLanguageValue)).Value;
-                if (!lang.IsNullOrWhiteSpace())
-                    t = _MultiReplaceRegex.Replace(t, lang);
-            }
-
-            // final enhanced replacements
-            if (enhancedAnime4)
-                t = Regex.Replace(t, @"\b(\d{4})\b", "E$1", RegexOptions.Compiled);
-
-            if (enhancedAnime)
-                t = Regex.Replace(t, @"\b(\d{2,3})\b", "E$1", RegexOptions.Compiled);
-
-            t = _NormalizeSpacesRegex.Replace(t, " ").Trim();
             return t;
         }
 
-        // ----------------- Utils -----------------
+        private static string NormalizeRanges(string t, bool enhancedAnime4)
+        {
+            // S1 à 2 -> S1-2
+            t = _Range4Digits.Replace(t, enhancedAnime4 ? "$1$2-$4" : "$1$2$3$4");
+            t = _Range1To3Digits.Replace(t, "$1$2-$3");
+            return t;
+        }
+
+        /// <summary>
+        /// Normalize the title by moving the year after the main title.
+        /// </summary>
+        private static string NormalizeTitleWithYear(string t)
+        {
+            t = _MoveYearRegex.Replace(t, "$1 $3 $2 $4 $5");
+            t = t.Trim();
+            t = _RemoveExtRegex.Replace(t, "");
+            return _NormalizeSpacesRegex.Replace(t, " ").Trim();
+        }
+
+        private static string ConvertStandaloneNumbersToEpisodes(string t, bool includeYears)
+        {
+            if (includeYears)
+            {
+                t = _StandaloneEpisode4Digits.Replace(t, "E$1");
+            }
+
+            t = _StandaloneEpisode3Digits.Replace(t, "E$1");
+            t = _StandaloneEpisode2Digits.Replace(t, "E$1");
+
+            return t;
+        }
+
+        #endregion
+
+        #region Utils
 
         private static string GetQueryParam(Uri uri, string name)
         {
@@ -975,5 +1041,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             return s.Length <= max ? s : s.Substring(0, max);
         }
+
+        #endregion
     }
 }
