@@ -146,9 +146,12 @@ search:
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
-    magnet:
-      selector: td:nth-of-type(2) a[href^="magnet:?xt="]
+    infohash:
+      selector: a[href^="magnet:?xt="]
       attribute: href
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     date:
       # 27 Окт 17
       selector: td:nth-of-type(1)
