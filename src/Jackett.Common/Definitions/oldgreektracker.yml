@@ -163,7 +163,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista > tbody > tr:has(a[href^="download.php?id="]):not(td.block)
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="]):has(strong img)
 
   fields:
     category:
