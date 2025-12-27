@@ -148,7 +148,7 @@ search:
       selector: div.group_image img
       attribute: src
     date:
-      selector: td:nth-child(4)
+      selector: span.time
       filters:
         - name: replace
           args: ["Il y a ", ""]
