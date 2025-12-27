@@ -55,6 +55,8 @@ caps:
     - {id: 44, cat: XXX, desc: "SiteFan"}
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 47, cat: XXX, desc: "Threesome"}
+    - {id: 46, cat: XXX, desc: "Ai Generated"}
 
   modes:
     search: [q]
