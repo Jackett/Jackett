@@ -200,11 +200,11 @@ search:
         - name: re_replace
           args: ["\\s+", " "]
         - name: replace
-          args: ["Blu-Ray Original", "Complete.BluRay"]
+          args: ["Blu-ray Original", "Complete.BluRay"]
         - name: replace
-          args: ["Blu-Ray Remux", "Remux"]
+          args: ["Blu-ray Remux", "Remux"]
         - name: replace
-          args: ["Blu-Ray Rip", "BluRay.Rip"]
+          args: ["Blu-ray Rip", "BluRay.Rip"]
         - name: replace
           args: ["mHD", "mHD.BluRay.Rip"]
         - name: replace
