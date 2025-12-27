@@ -134,6 +134,7 @@ caps:
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
     - {id: 203, cat: Audio, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
     - {id: 139, cat: Audio, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}
+    - {id: 339, cat: Audio, desc: " |- Rock (Lossless)"}
     - {id: 141, cat: Audio, desc: " |- Электронная музыка (lossless)"}
     - {id: 142, cat: Audio, desc: " |- Джаз и блюз (lossless)"}
     - {id: 138, cat: Audio, desc: " |- Шансон и Военная песня (lossless)"}
