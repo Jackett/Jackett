@@ -6,6 +6,8 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
+  - https://pt.hdclone.top/
+legacylinks:
   - https://pt.hdclone.org/
 
 caps:
