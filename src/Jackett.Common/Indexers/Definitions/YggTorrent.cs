@@ -664,7 +664,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (link == null)
                 throw new ArgumentNullException(nameof(link));
 
-            // Interceptonly the YGG download endpoint
+            // Intercept only the YGG download endpoint
             if (link.AbsoluteUri.IndexOf("/engine/download_torrent", StringComparison.OrdinalIgnoreCase) < 0)
                 return await base.Download(link);
 
