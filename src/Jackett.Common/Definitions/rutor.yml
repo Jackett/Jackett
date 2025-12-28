@@ -71,26 +71,10 @@ search:
     selector: tr:has(td:has(a.downgif))
 
   fields:
-#    category:
-#      text: 3
-#    title_is_rus:
-#      selector: td:nth-of-type(2) a[href^="/torrent/"]
-#      filters:
-#        - name: re_replace
-#          args: ["[^А-Яа-яЁё]+", ""]
+    category:
+      text: 3
     title:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
-#      filters:
-#        - name: re_replace
-#          args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)", "$1 - S$2E$3 - rus - $4 - $5"]
-#        - name: replace
-#          args: ["E -", "E01-99 -"]
-#        - name: replace
-#          args: ["Кураж-Бамбей", "kurazh"]
-#        - name: append
-#          args: "{{ if .Result.title_is_rus }} - RUSSIAN{{ else }}{{ end }}"
-#        - name: re_replace
-#          args: ["(.+?) - RUSSIAN", "{{ if .Config.addrussian }}$1 - RUSSIAN{{ else }}$1{{ end }}"]
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
@@ -134,7 +118,7 @@ search:
         - name: replace
           args: ["Дек", "Dec"]
         - name: append
-          args: " 00:00:00 +03:00" # MSK
+          args: "00:00:00 +03:00" # MSK
         - name: dateparse
           args: "02 Jan 06 15:04:05 -07:00"
     # some results don't have comments which throws off td count. So we go fishing for the following fields
