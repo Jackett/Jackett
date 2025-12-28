@@ -118,9 +118,9 @@ search:
         - name: replace
           args: ["Дек", "Dec"]
         - name: append
-          args: "00:00:00 +03:00" # MSK
+          args: " 00:00:00 +03:00" # MSK
         - name: dateparse
-          args: "02 Jan 06 15:04:05 -07:00"
+          args: "dd MMM yy HH:mm:ss zzz"
     # some results don't have comments which throws off td count. So we go fishing for the following fields
     size:
       optional: true
