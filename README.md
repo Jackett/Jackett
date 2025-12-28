@@ -455,6 +455,7 @@ Prior versions of Jackett are no longer supported.
  * NicePT
  * Nirvana
  * NorBits
+ * NORDiCHD
  * NordicQuality
  * OKPT
  * Old Greek Tracker (OGT)
