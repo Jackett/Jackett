@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
   - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
-  - http://6tor.org/
+  - http://6tor.org/ # IPv6-only
 legacylinks:
   - https://rutor.uk-unblock.xyz/
   - https://rutor.ind-unblock.xyz/
