@@ -79,7 +79,7 @@ settings:
   - name: info_radarr
     type: info
     label: About Radarr
-    default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr v4 Indexer remember to tick the <i>Remove year from search string</i> checkbox.
+    default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr Indexer remember to tick the <i>Remove year from search string</i> checkbox.
 
 login:
   path: login.php
