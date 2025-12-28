@@ -196,7 +196,7 @@ namespace Jackett.Common.Indexers.Definitions
             // Turbo Account - skip the 30-second delay
             configData.AddDynamic(
                 CfgTurboAccount,
-                new BoolConfigurationItem("I have a Turbo account (skips 30s download delay)")
+                new BoolConfigurationItem("I have a Turbo account")
                 {
                     Value = false
                 });
