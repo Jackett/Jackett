@@ -560,6 +560,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var url = $"{SiteLink}engine/search?{queryString}";
 
+                await RequestWithCookiesAndRetryAsync(
+                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
+
                 var resp = await RequestWithCookiesAndRetryAsync(
                     url: url,
                     method: RequestType.POST,
