@@ -205,24 +205,24 @@ search:
           args: ["Blu-ray Rip", "BluRay.Rip"]
         - name: replace
           args: ["mHD", "mHD.BluRay.Rip"]
-        - name: replace
-          args: ["DC", "Directors.Cut"]
-        - name: replace
-          args: ["VL", "Extended"]
-        - name: replace
-          args: ["RM", "Remastered"]
-        - name: replace
-          args: ["UC", "Uncut"]
-        - name: replace
-          args: ["UR", "Unrated"]
-        - name: replace
-          args: ["ES", "Special.Edition"]
-        - name: replace
-          args: ["Crit", "Criterion"]
+        - name: re_replace
+          args: ["\\bDC\\b", "Directors.Cut"]
+        - name: re_replace
+          args: ["\\bVL\\b", "Extended"]
+        - name: re_replace
+          args: ["\\bRM\\b", "Remastered"]
+        - name: re_replace
+          args: ["\\bUC\\b", "Uncut"]
+        - name: re_replace
+          args: ["\\bUR\\b", "Unrated"]
+        - name: re_replace
+          args: ["\\bES\\b", "Special.Edition"]
+        - name: re_replace
+          args: ["\\bCrit\\b", "Criterion"]
         - name: replace
           args: ["! Note Modo !", ""]
         - name: re_replace
-          args: ["(?:\\/ )?(?:Remplaçable|Complété!|Bonus|[2-9]+ème partie|Cust(?:_sub)?|WAC|BFI|MUET)(?: \\/)?", ""]
+          args: ["(?:\\/ )?(?:Remplaçable|Complété!|Bonus|[2-9]+ème partie|\\b(?:Cust(?:_sub)?|WAC|BFI|MUET)\\b)(?: \\/)?", ""]
         - name: trim
         - name: re_replace
           args: ["[\\[\\]\\/\\s]+", "."]
