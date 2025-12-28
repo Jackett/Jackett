@@ -146,6 +146,9 @@ search:
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
+    download:
+      selector: a.downgif
+      attribute: href
     infohash:
       selector: a[href^="magnet:?xt="]
       attribute: href
