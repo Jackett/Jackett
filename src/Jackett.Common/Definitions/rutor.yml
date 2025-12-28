@@ -6,9 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://rutor.info/
-  - https://rutor.is/
-  - http://6tor.org/ # IPv6-only
+  - http://rutor.info/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://rutor.is/ # site does not support https ERR_CONNECTION_REFUSED
+  - http://6tor.org/
 legacylinks:
   - https://rutor.uk-unblock.xyz/
   - https://rutor.ind-unblock.xyz/
@@ -35,18 +35,14 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q]
+    movie-search: [q]
     music-search: [q]
 
 settings:
-  - name: stripcyrillic
+  - name: addrussian
     type: checkbox
-    label: Strip Cyrillic Letters
-    default: false
-  - name: addrussiantotitle
-    type: checkbox
-    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    label: Add RUSSIAN to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: false
   - name: info
     type: info
@@ -68,90 +64,43 @@ settings:
 
 search:
   paths:
-    # http://rutor.info/search/0/0/010/0/tt10288566 # search title and descr for imdb
-    # http://rutor.info/search/0/0/100/0/gotham%2004x01 # search title for query
-    # http://rutor.info/ # search keywordless
-    - path: "{{ if .Query.IMDBID }}search/0/0/010/{{ .Config.sort }}/{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}{{ end }}{{ if or .Keywords .Query.IMDBID }}{{ else }}/{{ end }}"
+    # http://rutor.info/search/0/0/100/0/gotham%2004x01
+    - path: "{{ if .Keywords }}search/0/0/100/{{ .Config.sort }}/{{ .Keywords }}/{{ else }}top/{{ end }}"
 
   rows:
-    selector: tr:has(td:has(a[href^="magnet:?xt="]))
+    selector: tr:has(td:has(a.downgif))
 
   fields:
-    category:
-      text: 3
+#    category:
+#      text: 3
+#    title_is_rus:
+#      selector: td:nth-of-type(2) a[href^="/torrent/"]
+#      filters:
+#        - name: re_replace
+#          args: ["[^А-Яа-яЁё]+", ""]
     title:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
-      filters:
-        # normalize to SXXEYY format
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ери[ияй]|Эпизод|Выпуски?)[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?)\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?)\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(\\d+(?:-\\d+)?)[хx](\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:[CС]ери[ияй]|Эпизод|Выпуски?)[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
-        - name: re_replace
-          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езоны?", "S$1"]
-        - name: re_replace
-          args: ["(?i)(?:[CС]ери[ияй]|Эпизод|Выпуски?)[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1 of $2"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)\\s+из\\s*(\\w?)", "E$1 of $2"]
-        - name: re_replace
-          args: ["(?i)(?:[CС]ери[ияй]|Эпизод|Выпуски?)[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
-        - name: re_replace
-          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:[CС]ери[ияй]|Эпизод|Выпуски?)", "E$1"]
-        - name: re_replace
-          args: ["(?i)\\bFiles-х\\b", "Files-x"]
-        - name: re_replace
-          args: ["(?i)\\s\\|\\sот\\s([\\w\\p{P}\\p{S}]+)$", "-$1"]
-        - name: re_replace
-          args: ["\\s\\|\\s(\\w{4,})$", "-$1"]
-        - name: re_replace
-          args: ["(?i)\\sот\\s([\\w\\p{P}\\p{S}]+)$", "-$1"]
-        - name: re_replace
-          args: ["\\s\\|\\s(\\w{4,})$", "-$1"]
-        - name: re_replace
-          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
-        - name: re_replace
-          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
-        - name: re_replace
-          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
-        - name: re_replace
-          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
-        - name: re_replace
-          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
-        - name: re_replace
-          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
-        - name: re_replace
-          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
-        - name: re_replace
-          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
-        - name: append
-          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
+#      filters:
+#        - name: re_replace
+#          args: [".+\\/\\s([^а-яА-я\\/]+)\\s.*\\[(?:S*(\\d+))(?:x*(\\d+-*\\d*).*)*\\].*\\)\\s+(.+)\\s+(?:\\||от)\\s*(.+)", "$1 - S$2E$3 - rus - $4 - $5"]
+#        - name: replace
+#          args: ["E -", "E01-99 -"]
+#        - name: replace
+#          args: ["Кураж-Бамбей", "kurazh"]
+#        - name: append
+#          args: "{{ if .Result.title_is_rus }} - RUSSIAN{{ else }}{{ end }}"
+#        - name: re_replace
+#          args: ["(.+?) - RUSSIAN", "{{ if .Config.addrussian }}$1 - RUSSIAN{{ else }}$1{{ end }}"]
     details:
       selector: td:nth-of-type(2) a[href^="/torrent/"]
       attribute: href
-    infohash:
-      selector: a[href^="magnet:?xt="]
+    download:
+      selector: td:nth-of-type(2) a.downgif
       attribute: href
-      filters:
-        - name: regexp
-          args: ([A-F|a-f|0-9]{40})
+    magnet:
+      optional: true
+      selector: td:nth-of-type(2) a[href^="magnet:?xt="]
+      attribute: href
     date:
       # 27 Окт 17
       selector: td:nth-of-type(1)
@@ -187,11 +136,11 @@ search:
         - name: append
           args: " 00:00:00 +03:00" # MSK
         - name: dateparse
-          args: "dd MMM yy HH:mm:ss zzz"
+          args: "02 Jan 06 15:04:05 -07:00"
     # some results don't have comments which throws off td count. So we go fishing for the following fields
     size:
       optional: true
-      selector: td:contains(\00a0TB), td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
+      selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0kB), td:contains(\00a0B)
     seeders:
       selector: td span.green
     leechers:
@@ -200,6 +149,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
-    description:
-      selector: td:nth-of-type(2) a[href^="/torrent/"]
 # engine n/a
