@@ -1,7 +1,7 @@
 ---
-id: yggcookie
-name: YGG cookie
-description: "YggTorrent (YGG) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses cookie login."
+id: yggcookie-turbo
+name: YGG cookie (Turbo)
+description: "YggTorrent (YGG) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses cookie login. This indexer is only for users with Turbo Mode access (Uploaders and donors)."
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -112,6 +112,10 @@ settings:
     label: User-Agent
   - name: info_useragent
     type: info_useragent
+  - name: info_turbo
+    type: info
+    label: Turbo Mode
+    default: This indexer is only for users with Turbo Mode access (Uploaders and donors). This indexer does not bypass site requirements.
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
