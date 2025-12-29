@@ -253,6 +253,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 1 x 24 x 60 x 60)
-      text: 86400
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TSUE 2.2
