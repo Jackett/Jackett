@@ -139,10 +139,10 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_results
+  - name: info_activity
     type: info
-    label: Search results
-    default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
+    label: Account Inactivity
+    default: "Account retention rules: Inactive accounts over 30 days will be warned by email about their inactivity. If within 24h a person does not log in to their account, they will lose them without the possibility of returning."
 
 login:
   path: ?p=home&pid=1
