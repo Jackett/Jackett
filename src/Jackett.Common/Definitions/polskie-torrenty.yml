@@ -107,11 +107,12 @@ caps:
     book-search: [q]
 
 settings:
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -125,10 +126,15 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
-  # using cookie to prevent FlareSolverrSharp invalid-charset-exception after picking up `charset=utf8mb4` #15835
-  method: cookie
+  path: login.php
+  method: form
+  form: form[name="login"]
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+    keeplogged: 1
+  error:
+    - selector: font[color="#FF0000"]
   test:
     path: index.php
     selector: a[href="logout.php"]

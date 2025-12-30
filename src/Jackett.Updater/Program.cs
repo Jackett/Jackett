@@ -240,15 +240,6 @@ namespace Jackett.Updater
 
             // delete old files
             var oldFiles = new string[] {
-                "appsettings.Development.json",
-                "Autofac.Integration.WebApi.dll",
-                "Content/congruent_outline.png",
-                "Content/crissXcross.png",
-                "Content/css/jquery.dataTables.css",
-                "Content/css/jquery.dataTables_themeroller.css",
-                "CsQuery.dll",
-                "CurlSharp.dll",
-                "CurlSharp.pdb",
                 "Definitions/01torrent.yml",
                 "Definitions/2fast4you.yml",
                 "Definitions/2xfree.yml",
@@ -592,7 +583,6 @@ namespace Jackett.Updater
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nntt.yml",
-                "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/ntelogo.yml",
@@ -864,18 +854,7 @@ namespace Jackett.Updater
                 "Definitions/yourbittorrent.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
                 "Definitions/zomb.yml",
-                "Definitions/zooqle.yml",
-                "Microsoft.Owin.dll",
-                "Microsoft.Owin.FileSystems.dll",
-                "Microsoft.Owin.Host.HttpListener.dll",
-                "Microsoft.Owin.Hosting.dll",
-                "Microsoft.Owin.StaticFiles.dll",
-                "Owin.dll",
-                "System.ServiceModel.dll",
-                "System.Web.Http.dll",
-                "System.Web.Http.Owin.dll",
-                "System.Web.Http.Tracing.dll",
-                "System.Xml.XPath.XmlDocument.dll"
+                "Definitions/zooqle.yml"
             };
 
             foreach (var oldFile in oldFiles)

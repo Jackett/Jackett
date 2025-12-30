@@ -17,7 +17,7 @@ caps:
     - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
     - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
     - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
-#    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
+    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
     - {id: 48, cat: Movies/HD, desc: "Film/EN/1080p"}
     - {id: 32, cat: Movies/HD, desc: "Film/EN/720p"}
     - {id: 38, cat: Movies/BluRay, desc: "Film/EN/Blu-ray"}
@@ -127,7 +127,7 @@ search:
         img[src="/pic/categories/061.png"]: 60
         img[src="/pic/categories/017.png"]: 45
         img[src="/pic/categories/016.png"]: 40
-#        img[]: 20
+        img[src="/pic/categories/cat_movies.gif"]: 20
         img[src="/pic/categories/010.png"]: 48
         img[src="/pic/categories/9.png"]: 32
         img[src="/pic/categories/011.png"]: 38

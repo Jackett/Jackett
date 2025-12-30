@@ -125,7 +125,6 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
- * TorrentDosFilmes
  * TorrentDownload
  * TorrentGalaxyClone
  * TorrentKitty
@@ -259,10 +258,12 @@ Prior versions of Jackett are no longer supported.
  * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
  * Back-ups
  * BakaBT
+ * baoziPT
  * Beload
  * Best-Core
  * BeyondHD (BHD)
  * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigBBS
  * BigCore
  * Bit-Bázis
  * BIT-HDTV
@@ -454,6 +455,7 @@ Prior versions of Jackett are no longer supported.
  * NicePT
  * Nirvana
  * NorBits
+ * NORDiCHD
  * NordicQuality
  * OKPT
  * Old Greek Tracker (OGT)
