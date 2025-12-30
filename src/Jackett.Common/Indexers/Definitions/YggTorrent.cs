@@ -535,42 +535,41 @@ namespace Jackett.Common.Indexers.Definitions
                 _ => "created"
             };
 
-            var pageNumber = query.Offset > 0 ? (query.Offset / 50) + 1 : 1;
+            var pageOffsets = new int?[] { null, 50 };
 
             foreach (var request in BuildSearchRequests(trackerCats))
             {
-                var form = new Dictionary<string, string>
+                foreach (var pageOffset in pageOffsets)
                 {
-                    ["do"] = "search",
-                    ["order"] = order,
-                    ["sort"] = siteSort,
-                    ["category"] = request.RootCategory,
-                    ["name"] = keywords
-                };
+                    var form = new Dictionary<string, string>
+                    {
+                        ["do"] = "search",
+                        ["order"] = order,
+                        ["sort"] = siteSort,
+                        ["category"] = request.RootCategory,
+                        ["name"] = keywords
+                    };
 
-                if (!string.IsNullOrEmpty(request.SubCategory))
-                    form["sub_category"] = request.SubCategory;
+                    if (!string.IsNullOrEmpty(request.SubCategory))
+                        form["sub_category"] = request.SubCategory;
 
-                if (pageNumber > 1)
-                    form["page"] = pageNumber.ToString();
+                    if (pageOffset.HasValue)
+                        form["page"] = pageOffset.Value.ToString();
 
-                var queryString = string.Join(
-                    "&",
-                    form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
+                    var queryString = string.Join(
+                        "&",
+                        form.Select(kvp => $"{Uri.EscapeDataString(kvp.Key)}={Uri.EscapeDataString(kvp.Value)}"));
 
-                var url = $"{SiteLink}engine/search?{queryString}";
+                    var url = $"{SiteLink}engine/search?{queryString}";
 
-                await RequestWithCookiesAndRetryAsync(
-                    url : url, method: RequestType.GET, data: null, referer: SiteLink);
+                    var resp = await RequestWithCookiesAndRetryAsync(
+                        url: url,
+                        method: RequestType.GET,
+                        referer: SiteLink);
 
-                var resp = await RequestWithCookiesAndRetryAsync(
-                    url: url,
-                    method: RequestType.POST,
-                    data: form,
-                    referer: SiteLink);
-
-                var html = resp.ContentString ?? "";
-                releases.AddRange(ParseSearchResults(html));
+                    var html = resp.ContentString ?? "";
+                    releases.AddRange(ParseSearchResults(html));
+                }
             }
 
             return releases;
@@ -730,7 +729,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private IEnumerable<SearchRequest> BuildSearchRequests(List<int> trackerCats)
         {
-            // Pas de catégorie spécifiée -> Tous (category=all)
+            // No category specified -> Tous (category=all)
             if (trackerCats.Count == 1 && trackerCats[0] == -1)
             {
                 yield return new SearchRequest
@@ -746,7 +745,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var c in trackerCats)
             {
-                // Sous-catégories spécifiques de Film/Vidéo (2145)
+                // Specific subcategories of Film/Video (2145)
                 if (c == 2179 || c == 2178 || c == 2183)
                 {
                     var key = $"2145|{c}";
