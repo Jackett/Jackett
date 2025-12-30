@@ -853,6 +853,7 @@ namespace Jackett.Updater
                 "Definitions/yggtorrent.yml",
                 "Definitions/yourbittorrent.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
+                "Definitions/zetorrents.yml", // renamed to world-torrent #7574
                 "Definitions/zomb.yml",
                 "Definitions/zooqle.yml"
             };

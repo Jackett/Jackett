@@ -1,7 +1,9 @@
 ---
-id: zetorrents
-name: zetorrents
-description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
+id: world-torrent
+replaces:
+  - zetorrents
+name: World-torrent
+description: "World-torrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
