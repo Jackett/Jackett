@@ -1,0 +1,183 @@
+---
+id: lacale-api
+name: La Cale (API)
+description: "La Cale is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2.1
+links:
+  - https://la-cale.space/
+
+caps:
+  categorymappings:
+    # Movies / Films
+    - {id: films-hd, cat: Movies/HD, desc: "Films HD"}
+    - {id: films-4k, cat: Movies/UHD, desc: "Films 4K"}
+    - {id: animation, cat: Movies/Other, desc: "Animation"}
+    - {id: documentaires, cat: TV/Documentary, desc: "Documentaires"}
+    # TV Series / Séries
+    - {id: series, cat: TV, desc: "Séries"}
+    - {id: s-ries-hd, cat: TV/HD, desc: "Séries HD"}
+    - {id: s-ries-vostfr, cat: TV/Other, desc: "Séries VOSTFR"}
+    # Books / Livres
+    - {id: ebooks, cat: Books/EBook, desc: "Ebooks"}
+    - {id: romans, cat: Books/EBook, desc: "Romans"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    # Audio / Musique
+    - {id: music, cat: Audio, desc: "Musique"}
+    - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: mp3, cat: Audio/MP3, desc: "MP3"}
+    # Software / Logiciels
+    - {id: software, cat: PC, desc: "Logiciels"}
+    - {id: windows, cat: PC, desc: "Windows"}
+    - {id: linux, cat: PC, desc: "Linux"}
+    - {id: mac, cat: PC/Mac, desc: "Mac"}
+    - {id: pc, cat: PC, desc: "PC"}
+    # Games / Jeux
+    - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: consoles, cat: Console, desc: "Consoles"}
+    # XXX
+    - {id: xxx, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_key
+    type: info
+    label: About your Passkey
+    default: "Find your Passkey on <a href=\"https://la-cale.space/faq/api\" target=\"_blank\">La Cale > API page</a>."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: api/external
+  method: get
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+  error:
+    - selector: ":root:contains(\"Invalid passkey\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+    - selector: ":root:contains(\"Unauthorized\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+
+
+search:
+  paths:
+    - path: api/external
+      inputs:
+        passkey: "{{ .Config.passkey }}"
+        cat: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}{{ end }}"
+        q: "{{ .Keywords }}"
+      response:
+        type: json
+  rows:
+    selector: $
+
+  fields:
+    category:
+      selector: category
+      case:
+        "Films": "films"
+        "Films HD": "films-hd"
+        "Films 4K": "films-4k"
+        "Animation": "animation"
+        "Documentaires": "documentaires"
+        "Séries": "series"
+        "Séries HD": "s-ries-hd"
+        "Séries VOSTFR": "s-ries-vostfr"
+        "Ebooks": "ebooks"
+        "Romans": "romans"
+        "BD": "bd"
+        "Musique": "music"
+        "FLAC": "flac"
+        "MP3": "mp3"
+        "Logiciels": "software"
+        "Windows": "windows"
+        "Linux": "linux"
+        "Mac": "mac"
+        "PC": "pc"
+        "Jeux": "games"
+        "Consoles": "consoles"
+        "XXX": "xxx"
+    title_phase1:
+      selector: title
+    _title:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: guid
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}torrents/"
+    infohash:
+      selector: infoHash
+    _infohash:
+      selector: infoHash
+    size:
+      selector: size
+    date:
+      selector: pubDate
+    magnet:
+      text: "magnet:?xt=urn:btih:{{ .Result._infohash}}&dn={{ .Result._title}}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      optional: true
+      selector: grabs
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# json API
