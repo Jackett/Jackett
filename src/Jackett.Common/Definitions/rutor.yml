@@ -54,7 +54,7 @@ settings:
   - name: info
     type: info
     label: A note about RuTor
-    default: RuTor does not display categories in its search results page. This definition is probably only suitable for Prowlarr Dashboard Manual searches.
+    default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Search with Keywords)
