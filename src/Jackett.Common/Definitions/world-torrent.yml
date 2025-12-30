@@ -1,7 +1,10 @@
 ---
 id: world-torrent
 replaces:
+  - torrent9clone
+  - torrent9-tel
   - zetorrents
+  - nortorrent
 name: World-torrent
 description: "World-torrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
@@ -10,6 +13,13 @@ encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
   - https://www.world-torrent1.com/
+  - https://www.nortorrent8.com/
+  - https://www.frenchtorrent1.com/
+  - https://www.mania-torrent.com/
+  - https://www.magnet-torrent1.com/
+  - https://www.mega-torrent9.com/
+  - https://www.zone-torrent6.com/
+  - https://www.warez-torrent1.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -24,6 +34,21 @@ legacylinks:
   - https://www.site-torrent.com/
   - https://www.rantop.my/
   # actual legacylinks
+  - https://www-torrent9.com/
+  - https://www.nortorrent.com/
+  - https://www.nortorrent1.com/
+  - https://www.nortorrent2.com/
+  - https://www.nortorrent3.com/
+  - https://www.nortorrent4.com/
+  - https://www.nortorrent5.com/
+  - https://www.nortorrent6.com/
+  - https://www.nortorrent.net/
+  - https://www.nortorrent.town/
+  - https://nortorrent-proxy.site/
+  - https://ww1-nortorrent.me/
+  - https://www.nortorrent.rent/
+  - https://ww1-nortorrent.town/
+  - https://www.nortorrent7.com/
   - https://www.zetorrents.vg/
   - https://www.zetorrents.vc/
   - https://www.zetorrents.sk/

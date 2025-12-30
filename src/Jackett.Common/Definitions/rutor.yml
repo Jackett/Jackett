@@ -48,10 +48,6 @@ settings:
     type: checkbox
     label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
     default: false
-  - name: info
-    type: info
-    label: A note about RuTor
-    default: RuTor does not display categories in its search results page. This definition is probably only suitable for Jackett Dashboard Manual searches.
   - name: sort
     type: select
     label: Sort requested from site (Applies only to Search with Keywords)
@@ -65,6 +61,8 @@ settings:
       7: "size asc"
       8: "title desc"
       9: "title asc"
+  - name: info_category_8000
+    type: info_category_8000
 
 search:
   paths:
