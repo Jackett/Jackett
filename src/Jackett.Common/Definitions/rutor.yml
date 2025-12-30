@@ -29,12 +29,12 @@ caps:
   # albeit you can select a single category in its search options
   # so I've opted not to support categories
   categorymappings:
-  - {id: 1, cat: Movies, desc: "Movies"}
-  - {id: 2, cat: TV, desc: "TV"}
-  # Mapping ID 3 to Movies, TV, and Other simultaneously
-  - {id: 3, cat: Movies, desc: "Movies"}
-  - {id: 3, cat: TV, desc: "TV"}
-  - {id: 3, cat: Other, desc: "Other"}
+      - {id: 1, cat: Movies, desc: "Movies"}
+      - {id: 2, cat: TV, desc: "TV"}
+     # Mapping ID 3 to Movies, TV, and Other simultaneously
+      - {id: 3, cat: Movies, desc: "Movies"}
+      - {id: 3, cat: TV, desc: "TV"}
+      - {id: 3, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
