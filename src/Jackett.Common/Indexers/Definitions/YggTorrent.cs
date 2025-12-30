@@ -123,11 +123,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static readonly Regex _NormalizeSpacesRegex = new Regex(@"\s+", RegexOptions.Compiled);
 
-        // Regex to detect the years (to avoid turning them into episodes)
-        private static readonly Regex _YearRegex = new Regex(
-            @"(?:^|[\s\.\-\[\(])((?:19|20)\d{2})(?:[\s\.\-\]\)]|$)",
-            RegexOptions.Compiled);
-
         // Regex for isolated episode numbers (not preceded by S or E)
         private static readonly Regex _StandaloneEpisode3Digits = new Regex(
             @"(?<![SE\d])(?<=[\s\.\-\[\(]|^)(\d{3})(?=[\s\.\-\]\)]|$)",
