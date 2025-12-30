@@ -106,31 +106,8 @@ search:
     selector: $
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Films": "films"
-        "Films HD": "films-hd"
-        "Films 4K": "films-4k"
-        "Animation": "animation"
-        "Documentaires": "documentaires"
-        "Séries": "series"
-        "Séries HD": "s-ries-hd"
-        "Séries VOSTFR": "s-ries-vostfr"
-        "Ebooks": "ebooks"
-        "Romans": "romans"
-        "BD": "bd"
-        "Musique": "music"
-        "FLAC": "flac"
-        "MP3": "mp3"
-        "Logiciels": "software"
-        "Windows": "windows"
-        "Linux": "linux"
-        "Mac": "mac"
-        "PC": "pc"
-        "Jeux": "games"
-        "Consoles": "consoles"
-        "XXX": "xxx"
     title_phase1:
       selector: title
     _title:
