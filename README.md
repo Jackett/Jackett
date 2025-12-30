@@ -141,10 +141,10 @@ Prior versions of Jackett are no longer supported.
  * VST Torrentz
  * VSTorrent
  * Wolfmax4K
+ * World-torrent
  * XXXClub
  * xxxtor
  * YTS.ag
- * zetorrents
  * ZkTorrent
 </details>
 
