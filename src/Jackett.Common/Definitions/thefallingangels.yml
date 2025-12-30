@@ -62,6 +62,7 @@ caps:
     - {id: 160, cat: Movies/Other, desc: "Anime Movies SD"}
     - {id: 168, cat: TV/Anime, desc: "Anime Serien HD"}
     - {id: 169, cat: TV/Anime, desc: "Anime Serien SD"}
+    - {id: 170, cat: TV/Anime, desc: "Anime Serien Pack"}
     - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
     - {id: 118, cat: Other, desc: "Other Mobile"}
     - {id: 119, cat: Other, desc: "Other Hörbücher"}
