@@ -228,46 +228,20 @@ search:
           args: ["[\\[\\]\\/\\s\\?,:'!]+", "."]
         - name: trim
           args: "."
-        - name: replace
-          args: [".VFF.VFQ.StFR.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.StFR.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.StFR", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFQ.VO.StFR", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VO.VFI.StFR", ".MULTI"]
-        - name: replace
-          args: [".VO.VF?.StFR", ".MULTI"]
-        - name: replace
-          args: [".VFF.VO.StFR", ".MULTI.VFF"]
-        - name: replace
-          args: [".VOF.StFR", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.StFR", ".FRENCH"]
-        - name: replace
-          args: [".VFF.StFR.MULTI", ".MULTI.VFF"]
-        - name: replace
-          args: [".VFF.StFR", ".FRENCH"]
-        - name: replace
-          args: [".VFI.MULTI", ".MULTI"]
-        - name: replace
-          args: [".VO.StFR", ".VOSTFR"]
-        - name: replace
-          args: [".VFQ.VO", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VFF.VO", ".MULTI.VFF"]
-        - name: replace
-          args: [".VO.VF?.StFR", ".MULTI"]
-        - name: replace
-          args: [".VFI.StFR", ".FRENCH"]
-        - name: replace
-          args: [".VOF.MULTI", ".MULTI.FRENCH"]
-        - name: replace
-          args: [".VOF", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: re_replace
+          args: ["(?i)\\.VFF\\.VFQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VF2"]
+        - name: re_replace
+          args: ["(?i)\\.VFF\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFF"]
+        - name: re_replace
+          args: ["(?i)\\.VFQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFQ"]
+        - name: re_replace
+          args: ["(?i)\\.VOQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VOQ"]
+        - name: re_replace
+          args: ["(?i)\\.VFI\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFI"]
+        - name: re_replace
+          args: ["(?i)\\.VOF\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VOF"]
+        - name: re_replace
+          args: ["(?i)\\.(?:VO\\.)?StFR", ".VOSTFR"]
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
     title_vostfr:
