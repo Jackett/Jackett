@@ -12,7 +12,6 @@ links:
 caps:
   categorymappings:
     # Movies / Films
-    - {id: films, cat: Movies, desc: "Films"}
     - {id: films-hd, cat: Movies/HD, desc: "Films HD"}
     - {id: films-4k, cat: Movies/UHD, desc: "Films 4K"}
     - {id: animation, cat: Movies/Other, desc: "Animation"}
@@ -93,6 +92,7 @@ login:
       message:
         text: "The Passkey was not accepted by {{ .Config.sitelink }}."
 
+
 search:
   paths:
     - path: api/external
@@ -102,37 +102,15 @@ search:
         q: "{{ .Keywords }}"
       response:
         type: json
-
   rows:
     selector: $
 
   fields:
-    category:
+    categorydesc:
       selector: category
-      case:
-        "Films": "films"
-        "Films HD": "films-hd"
-        "Films 4K": "films-4k"
-        "Animation": "animation"
-        "Documentaires": "documentaires"
-        "Séries": "series"
-        "Séries HD": "s-ries-hd"
-        "Séries VOSTFR": "s-ries-vostfr"
-        "Ebooks": "ebooks"
-        "Romans": "romans"
-        "BD": "bd"
-        "Musique": "music"
-        "FLAC": "flac"
-        "MP3": "mp3"
-        "Logiciels": "software"
-        "Windows": "windows"
-        "Linux": "linux"
-        "Mac": "mac"
-        "PC": "pc"
-        "Jeux": "games"
-        "Consoles": "consoles"
-        "XXX": "xxx"
     title_phase1:
+      selector: title
+    _title:
       selector: title
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
@@ -153,14 +131,16 @@ search:
       filters:
         - name: prepend
           args: "{{ .Config.sitelink }}torrents/"
-    download:
-      selector: link
     infohash:
+      selector: infoHash
+    _infohash:
       selector: infoHash
     size:
       selector: size
     date:
       selector: pubDate
+    magnet:
+      text: "magnet:?xt=urn:btih:{{ .Result._infohash}}&dn={{ .Result._title}}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}"
     seeders:
       selector: seeders
     leechers:
