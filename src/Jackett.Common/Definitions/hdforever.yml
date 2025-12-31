@@ -225,7 +225,7 @@ search:
           args: ["(?:\\/ )?(?:Remplaçable|Complété!|Bonus|[2-9]+ème partie|\\b(?:Cust(?:_sub)?|WAC|BFI|MUET)\\b)(?: \\/)?", ""]
         - name: trim
         - name: re_replace
-          args: ["[\\[\\]\\/\\s\\?,:'!]+", "."]
+          args: ["[\\[\\]\\/\\s?.,:'!]+", "."]
         - name: trim
           args: "."
         - name: re_replace
