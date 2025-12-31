@@ -289,6 +289,8 @@ search:
       filters:
         - name: replace
           args: ["\n", " "]
+        - name: re_replace
+          args: ["\\s+", " "]
     minimumratio:
 # global MR is 0.6 but torrents must be seeded for 3 days regardless of ratio
 #      text: 0.6
