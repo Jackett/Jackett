@@ -437,7 +437,6 @@ Prior versions of Jackett are no longer supported.
  * Malayabits
  * Mansão dos Animes (MDAN)
  * Matrix
- * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * Milkie (ME)
