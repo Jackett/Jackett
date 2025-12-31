@@ -92,7 +92,6 @@ login:
       message:
         text: "The Passkey was not accepted by {{ .Config.sitelink }}."
 
-
 search:
   paths:
     - path: api/external
