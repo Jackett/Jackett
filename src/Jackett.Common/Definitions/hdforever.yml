@@ -225,10 +225,8 @@ search:
           args: ["(?:\\]|\\/\\s)ES", ".Special.Edition"]
         - name: re_replace
           args: ["(?:\\]|\\/\\s)Crit", "Criterion"]
-        - name: replace
-          args: ["! Note Modo !", ""]
         - name: re_replace
-          args: ["(?:\\/ )?(?:Remplaçable|Complété!|Bonus|[2-9]+ème partie|\\b(?:Cust(?:_sub)?|WAC|BFI|MUET)\\b)(?: \\/)?", ""]
+          args: ["(?:\\/ )?(?:Remplaçable|Complété|Bonus|Note Modo|[2-9]+ème partie|\\b(?:Cust(?:_sub)?|WAC|BFI|MUET)\\b)(?: \\/)?", ""]
         - name: trim
         - name: re_replace
           args: ["[\\[\\]\\/\\s?.,:'!]+", "."]
