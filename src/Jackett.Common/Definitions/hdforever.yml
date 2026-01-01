@@ -100,7 +100,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
-    groupname: "{{ .Keywords }}"
+    searchstr: "{{ .Keywords }}"
     year: "{{ .Query.Year }}"
     order_by: "{{ .Config.sort }}"
     order_way: "{{ .Config.type }}"
