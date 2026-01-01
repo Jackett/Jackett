@@ -407,7 +407,6 @@ namespace Jackett.Updater
                 "Definitions/extratorrentclone.yml",
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
-                "Definitions/exttorrents.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
