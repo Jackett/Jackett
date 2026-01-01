@@ -95,7 +95,7 @@ login:
     selector: a[href^="logout.php?auth="]
 
 search:
-  # https://hdf.world/torrents.php?groupname=Un+Singe+en+hiver&freetorrent=1&year=1962&order_by=time&order_way=desc&action=advanced&searchsubmit=1
+  # https://hdf.world/torrents.php?searchstr=Un+Singe+en+hiver+1962&freetorrent=1&order_by=time&order_way=desc&action=advanced&searchsubmit=1
   paths:
     - path: torrents.php
   inputs:
