@@ -147,6 +147,12 @@ search:
     poster:
       selector: div.group_image img
       attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"], a[href*="themoviedb.org/tv/"]
+      attribute: href
     date:
       selector: span.time
       filters:
