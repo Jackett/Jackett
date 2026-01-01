@@ -189,6 +189,7 @@ search:
     downloadvolumefactor:
       case:
         "div.torrent_info .tl_free": 0
+        "div.torrent_info .tl_notice[title*=\"Freeleech\"]": 0 # Global freeleech enabled
         "div.torrent_info .tl_notice[title=\"-75%\"]": 0.75
         "div.torrent_info .tl_notice[title=\"-50%\"]": 0.50
         "div.torrent_info .tl_notice[title=\"-25%\"]": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
