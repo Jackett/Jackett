@@ -212,19 +212,19 @@ search:
         - name: replace
           args: ["mHD", "mHD.BluRay.Rip"]
         - name: re_replace
-          args: ["\\bDC\\b", "Directors.Cut"]
+          args: ["(?:\\]|\\/\\s)DC", ".Directors.Cut"]
         - name: re_replace
-          args: ["\\bVL\\b", "Extended"]
+          args: ["(?:\\]|\\/\\s)VL", ".Extended"]
         - name: re_replace
-          args: ["\\bRM\\b", "Remastered"]
+          args: ["(?:\\]|\\/\\s)RM", ".Remastered"]
         - name: re_replace
-          args: ["\\bUC\\b", "Uncut"]
+          args: ["(?:\\]|\\/\\s)UC", ".Uncut"]
         - name: re_replace
-          args: ["\\bUR\\b", "Unrated"]
+          args: ["(?:\\]|\\/\\s)UR", ".Unrated"]
         - name: re_replace
-          args: ["\\bES\\b", "Special.Edition"]
+          args: ["(?:\\]|\\/\\s)ES", ".Special.Edition"]
         - name: re_replace
-          args: ["\\bCrit\\b", "Criterion"]
+          args: ["(?:\\]|\\/\\s)Crit", "Criterion"]
         - name: replace
           args: ["! Note Modo !", ""]
         - name: re_replace
