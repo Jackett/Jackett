@@ -122,6 +122,9 @@
                 },
                 "allowrawsearch": {
                     "type": "boolean"
+                },
+                "allowtvsearchimdb": {
+                    "type": "boolean"
                 }
             },
             "required": [
