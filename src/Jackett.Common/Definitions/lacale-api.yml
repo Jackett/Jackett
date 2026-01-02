@@ -97,7 +97,7 @@ search:
     - path: api/external
       inputs:
         passkey: "{{ .Config.passkey }}"
-        cat: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}{{ end }}"
+        # cat: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}{{ end }}" # currently not supported in API
         q: "{{ .Keywords }}"
       response:
         type: json
