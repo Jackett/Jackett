@@ -127,7 +127,7 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      text:  "{{ .Config.sitelink }}"
+      text: "{{ .Config.sitelink }}"
     infohash:
       selector: infoHash
     _infohash:
