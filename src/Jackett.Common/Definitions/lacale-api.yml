@@ -54,7 +54,7 @@ settings:
   - name: info_key
     type: info
     label: About your Passkey
-    default: "Find your Passkey on <a href=\"https://la-cale.space/faq/api\" target=\"_blank\">La Cale > API page</a>."
+    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
