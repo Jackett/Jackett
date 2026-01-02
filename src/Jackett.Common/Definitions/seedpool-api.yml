@@ -145,7 +145,7 @@ search:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
     imdbid:
-      selector: imdb_id      
+      selector: imdb_id
     tmdbid:
       selector: tmdb_id
     tvdbid:
