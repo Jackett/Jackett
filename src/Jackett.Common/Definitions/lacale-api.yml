@@ -144,9 +144,6 @@ search:
       selector: seeders
     leechers:
       selector: leechers
-    grabs:
-      optional: true
-      selector: grabs
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
