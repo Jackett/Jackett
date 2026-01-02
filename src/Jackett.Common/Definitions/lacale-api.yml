@@ -154,6 +154,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # json API
