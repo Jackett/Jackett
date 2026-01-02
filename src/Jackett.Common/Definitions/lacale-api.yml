@@ -85,7 +85,7 @@ login:
   inputs:
     passkey: "{{ .Config.passkey }}"
   error:
-    - selector: ":root:contains(\"Invalid passkey\")"
+    - selector: ":root:contains(\"Passkey invalide\")"
       message:
         text: "The Passkey was not accepted by {{ .Config.sitelink }}."
     - selector: ":root:contains(\"Unauthorized\")"
