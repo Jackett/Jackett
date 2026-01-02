@@ -1,42 +1,40 @@
 <!DOCTYPE html>
 
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
 <head>
     <meta charset="utf-8" />
-    <meta name="robots" content="noindex, nofollow"/>
+    <meta name="robots" content="noindex, nofollow" />
 
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
-
-    <script src="../libs/jquery.min.js"></script>
-    <script src="../libs/jquery.dataTables.min.js"></script>
-    <script src="../libs/handlebars.min.js"></script>
-    <script src="../libs/moment.min.js"></script>
-    <script src="../libs/handlebarsmoment.js"></script>
-    <script src="../bootstrap/bootstrap.min.js"></script>
-    <script src="../libs/bootstrap-notify.js"></script>
-
-    <link href="../bootstrap/bootstrap.min.css" rel="stylesheet">
-    <link href="../animate.css" rel="stylesheet">
-    <link href="../custom.css?changed=20220721002" rel="stylesheet">
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+    <link rel="stylesheet" type="text/css" href="./main.css">
 
     <title>Jackett</title>
 </head>
-<body>
-    <div id="page">
 
-        <img id="logo" src="../jacket_medium.png" /><span id="header-title">Jackett</span>
+<body>
+    <div id="page" style="width: fit-content;">
+
+        <img id="logo" src="/jacket_medium.png" alt="Logo">
+        <span id="jackett-title">Jackett</span>
 
         <hr />
-        <h1>Login</h1>
         <form action="Dashboard" method="post">
-            <div class="input-area">
-                <span class="input-header">Admin password</span>
-                <input id="password" name="password" class="form-control input-right" type="password">
-            </div>
-            <div class="input-area">
-               <input type="submit" value="Login" />
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label class="col-form-label">Admin password</label>
+                </div>
+                <div class="col-auto">
+                    <input id="password" name="password" class="form-control" type="password">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" value="Login" class="btn btn-primary">Login</button>
+                </div>
             </div>
         </form>
     </div>
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x mb-4"></div>
 </body>
+
 </html>
