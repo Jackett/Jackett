@@ -159,9 +159,12 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    details:
+    details_keywordless:
       selector: td:nth-child(1) a
       attribute: href
+    details:
+      # details links broken for search results, but not homepage
+      text: "{{ if .Keywords }}{{ .Config.sitelink }}{{ else }}{{ .Result.details_keywordless }}{{ end }}"
     download:
       selector: td:nth-child(1) a
       attribute: href

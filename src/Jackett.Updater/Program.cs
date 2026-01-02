@@ -407,7 +407,6 @@ namespace Jackett.Updater
                 "Definitions/extratorrentclone.yml",
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
-                "Definitions/exttorrents.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
@@ -551,6 +550,7 @@ namespace Jackett.Updater
                 "Definitions/manicomioshare.yml",
                 "Definitions/mediamaatjes.yml",
                 "Definitions/megabliz.yml",
+                "Definitions/megamixtracker.yml",
                 "Definitions/mendigosdaweb.yml",
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/metalwrks.yml",
@@ -853,6 +853,7 @@ namespace Jackett.Updater
                 "Definitions/yggtorrent.yml",
                 "Definitions/yourbittorrent.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
+                "Definitions/zetorrents.yml", // renamed to world-torrent #7574
                 "Definitions/zomb.yml",
                 "Definitions/zooqle.yml"
             };

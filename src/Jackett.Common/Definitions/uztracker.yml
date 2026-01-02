@@ -12,7 +12,8 @@ caps:
   categorymappings:
     # Кинофильмы # Movies
     - {id: 3, cat: Movies, desc: "Зарубежные кинофильмы"}
-    - {id: 13, cat: Movies, desc: " |- Новинки 2025"}
+    - {id: 13, cat: Movies, desc: " |- Новинки 2026"}
+    - {id: 342, cat: Movies, desc: " |- Фильмы 2025"}
     - {id: 12, cat: Movies, desc: " |- Фильмы 2021-2024"}
     - {id: 11, cat: Movies, desc: " |- Фильмы 2011-2020 годов"}
     - {id: 10, cat: Movies, desc: " |- Зарубежные фильмы до 2011 года"}

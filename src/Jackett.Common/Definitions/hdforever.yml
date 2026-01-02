@@ -20,8 +20,9 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+  allowtvsearchimdb: true
 
 settings:
   - name: username
@@ -79,7 +80,7 @@ settings:
   - name: info_radarr
     type: info
     label: About Radarr
-    default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr v3 Indexer remember to tick the <i>Remove year from search string</i> checkbox.
+    default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr Indexer remember to tick the <i>Remove year from search string</i> checkbox.
 
 login:
   path: login.php
@@ -107,7 +108,8 @@ search:
     searchsubmit: 1
     # 1 freeleech, 2 neutral, 3 both, 0 normal
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    # site does not support imdbid search or display imdb links in results
+    tmdbid: "{{ .Query.TMDBID }}"
+    imdbid: "{{ .Query.IMDBID }}"
 
   rows:
     selector: table#torrent_table > tbody > tr.torrent:has(a[href^="torrents.php?action=download&"])
@@ -145,10 +147,14 @@ search:
     poster:
       selector: div.group_image img
       attribute: src
-    files:
-      selector: td:nth-child(3)
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"], a[href*="themoviedb.org/tv/"]
+      attribute: href
     date:
-      selector: td:nth-child(4)
+      selector: span.time
       filters:
         - name: replace
           args: ["Il y a ", ""]
@@ -182,114 +188,65 @@ search:
       selector: td:nth-child(8)
     downloadvolumefactor:
       case:
-        "div.group_info:contains(\"/ Free\")": 0
-        "div.group_info:contains(\"↓75%\")": 0.75
-        "div.group_info:contains(\"↓50%\")": 0.50
-        "div.group_info:contains(\"↓25%\")": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "div.torrent_info .tl_free": 0
+        "div.torrent_info .tl_notice[title*=\"Freeleech\"]": 0 # Global freeleech enabled
+        "div.torrent_info .tl_notice[title=\"-75%\"]": 0.75
+        "div.torrent_info .tl_notice[title=\"-50%\"]": 0.50
+        "div.torrent_info .tl_notice[title=\"-25%\"]": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
         "*": 1
     uploadvolumefactor:
       text: 1
     title_phase1:
       selector: div.group_info
-      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img
+      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img, .tl_free, .tl_notice
       filters:
         - name: replace
           args: ["\n", " "]
         - name: re_replace
-          args: ["\\s+", " "]
+          args: ["\\[(?:Concert|Film|Film d'animation|Spectacle|Série|Série d'animation|Documentaire)\\]", ""]
         - name: replace
-          args: ["Blu-Ray Original", "Complete.BluRay"]
+          args: ["Blu-ray Original", "Complete.BluRay"]
         - name: replace
-          args: ["Blu-Ray Remux", "Remux"]
+          args: ["Blu-ray Remux", "Remux"]
         - name: replace
-          args: ["Blu-Ray Rip", "BluRay.Rip"]
+          args: ["Blu-ray Rip", "BluRay.Rip"]
         - name: replace
           args: ["mHD", "mHD.BluRay.Rip"]
-        - name: replace
-          args: ["/ DC", "/ Directors.Cut"]
-        - name: replace
-          args: ["/ VL", "/ Extended"]
-        - name: replace
-          args: ["/ RM", "/ Remastered"]
-        - name: replace
-          args: ["/ UC", "/ Uncut"]
-        - name: replace
-          args: ["/ ES", "/ Special.Edition"]
-        - name: replace
-          args: [" / Cust_sub", ""]
-        - name: replace
-          args: [" / Cust", ""]
-        - name: replace
-          args: ["/ UN", "/ Unrated"]
-        - name: replace
-          args: [" / Crit", ""]
-        - name: replace
-          args: [" / WAC", ""]
-        - name: replace
-          args: [" / MoC", ""]
-        - name: replace
-          args: [" / BFI", ""]
-        - name: replace
-          args: [" / MUET", ""]
-        - name: replace
-          args: ["/ Exc NF", "/ NF"]
-        - name: replace
-          args: ["/ Exc AMZ", "/ AMZ"]
-        - name: replace
-          args: ["/ Exc YOU", "/ YT"]
-        - name: replace
-          args: [" / ↓25%", ""]
-        - name: replace
-          args: [" / ↓50%", ""]
-        - name: replace
-          args: [" / ↓75%", ""]
-        - name: replace
-          args: [" / Free", ""]
-        - name: replace
-          args: [" / Complété!", ""]
-        - name: replace
-          args: [" / ", "."]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)DC", ".Directors.Cut"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)VL", ".Extended"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)RM", ".Remastered"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)UC", ".Uncut"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)UR", ".Unrated"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)ES", ".Special.Edition"]
+        - name: re_replace
+          args: ["(?:\\]|\\/\\s)Crit", ".Criterion"]
+        - name: re_replace
+          args: ["(?:\\/ )?(?:Remplaçable|Complété|Bonus|Note Modo|[2-9]+ème partie|\\b(?:Cust(?:_sub)?|WAC|BFI|MUET)\\b)(?: \\/)?", ""]
         - name: trim
-        - name: replace
-          args: [".VFF.VFQ.StFr.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.StFr.MULTI", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFF.VFQ.VO.StFr", ".MULTI.VFF.VFQ"]
-        - name: replace
-          args: [".VFQ.VO.StFr", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VO.VFI.StFr", ".MULTI"]
-        - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
-        - name: replace
-          args: [".VFF.VO.StFr", ".MULTI.VFF"]
-        - name: replace
-          args: [".VOF.StFr", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.StFr", ".FRENCH"]
-        - name: replace
-          args: [".VFF.StFr.MULTI", ".MULTI.VFF"]
-        - name: replace
-          args: [".VFF.StFr", ".FRENCH"]
-        - name: replace
-          args: [".VFI.MULTI", ".MULTI"]
-        - name: replace
-          args: [".VO.StFr", ".VOSTFR"]
-        - name: replace
-          args: [".VFQ.VO", ".MULTI.VFQ"]
-        - name: replace
-          args: [".VFF.VO", ".MULTI.VFF"]
-        - name: replace
-          args: [".VO.VF?.StFr", ".MULTI"]
-        - name: replace
-          args: [".VFI.StFr", ".FRENCH"]
-        - name: replace
-          args: [".VOF.MULTI", ".MULTI.FRENCH"]
-        - name: replace
-          args: [".VOF", ".FRENCH"]
-        - name: replace
-          args: [".VFQ.MULTI", ".MULTI.VFQ"]
+        - name: re_replace
+          args: ["[\\[\\]\\/\\s?.,:'!]+", "."]
+        - name: trim
+          args: "."
+        - name: re_replace
+          args: ["(?i)\\.VFF\\.VFQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VF2"]
+        - name: re_replace
+          args: ["(?i)\\.VFF\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFF"]
+        - name: re_replace
+          args: ["(?i)\\.VFQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFQ"]
+        - name: re_replace
+          args: ["(?i)\\.VOQ\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VOQ"]
+        - name: re_replace
+          args: ["(?i)\\.VFI\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VFI"]
+        - name: re_replace
+          args: ["(?i)\\.VOF\\.(?:MULTI|StFR(?:\\.MULTI)?|VO(?:\\.StFR)?)", ".MULTI.VOF"]
+        - name: re_replace
+          args: ["(?i)\\.(?:VO\\.)?StFR", ".VOSTFR"]
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
     title_vostfr:
@@ -303,15 +260,20 @@ search:
       text: "{{ .Result.title_phase2 }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     description:
       selector: div.group_info
-    minimumratio:
+      filters:
+        - name: replace
+          args: ["\n", " "]
+        - name: re_replace
+          args: ["\\s+", " "]
 # global MR is 0.6 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
 #      text: 0.6
-#    minimumseedtime:
+    minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
 # Gazelle

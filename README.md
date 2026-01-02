@@ -62,6 +62,7 @@ Prior versions of Jackett are no longer supported.
  * EBook Bay (EBB)
  * Elitetorrent.wf
  * EpubLibre
+ * EXT Torrents
  * ExtraTorrent.st
  * EZTV
  * FileMood
@@ -141,10 +142,10 @@ Prior versions of Jackett are no longer supported.
  * VST Torrentz
  * VSTorrent
  * Wolfmax4K
+ * World-torrent
  * XXXClub
  * xxxtor
  * YTS.ag
- * zetorrents
  * ZkTorrent
 </details>
 
@@ -437,7 +438,6 @@ Prior versions of Jackett are no longer supported.
  * Malayabits
  * Mansão dos Animes (MDAN)
  * Matrix
- * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * Milkie (ME)
