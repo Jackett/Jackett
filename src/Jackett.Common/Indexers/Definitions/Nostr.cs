@@ -131,6 +131,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             [JsonProperty("#t", NullValueHandling = NullValueHandling.Ignore)]
             public List<string>? Hashtags { get; set; }
+
+            [JsonProperty("#i", NullValueHandling = NullValueHandling.Ignore)]
+            public List<string>? Identifiers { get; set; }
         }
 
         class NostrEvent
@@ -186,9 +189,16 @@ namespace Jackett.Common.Indexers.Definitions
                     filter.Search = query.SearchTerm;
                 }
 
-                if (query.IsTVSearch)
+                // Map query categories to tcat or hashtag filters
+                var (tcats, hashtags) = MapQueryToFilters(query);
+                if (tcats.Count > 0)
                 {
-                    filter.Hashtags = new List<string> { "tv" };
+                    filter.Identifiers = tcats.Select(t => $"tcat:{t}").ToList();
+                }
+
+                if (hashtags.Count > 0)
+                {
+                    filter.Hashtags = hashtags;
                 }
 
                 var reqMessage = JsonConvert.SerializeObject(
@@ -206,7 +216,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var msg = await client.ReceiveAsync(buf, cts.Token);
                     var json = Encoding.UTF8.GetString(buf.Array!, 0, msg.Count);
-                    logger.Info($"[{relayUri}]: {json}");
+                    logger.Debug($"[{relayUri}]: {json}");
                     try
                     {
                         if (json.StartsWith("[\"EVENT\","))
@@ -376,10 +386,11 @@ namespace Jackett.Common.Indexers.Definitions
                 return null;
             }
 
-            string? title = null, infoHash = null, imdbId = null;
+            string? title = null, infoHash = null, imdbId = null, tcat = null;
             long? size = null;
             var categories = new List<int>();
             var trackers = new List<string>();
+            var legacyTags = new List<string>();
             foreach (var tag in evt.Tags)
             {
                 switch (tag[0])
@@ -410,9 +421,7 @@ namespace Jackett.Common.Indexers.Definitions
                         // Identifier tags for categories and external IDs
                         if (tag[1].StartsWith("tcat:"))
                         {
-                            var catPath = tag[1].Substring(5);
-                            var mappedCats = MapCategory(catPath);
-                            categories.AddRange(mappedCats);
+                            tcat = tag[1].Substring(5);
                         }
                         else if (tag[1].StartsWith("newznab:"))
                         {
@@ -428,10 +437,29 @@ namespace Jackett.Common.Indexers.Definitions
 
                         break;
                     case "t":
-                        // General tags - try to map to categories
-                        var tagCats = MapTag(tag[1]);
-                        categories.AddRange(tagCats);
+                        // Collect legacy tags for later processing
+                        legacyTags.Add(tag[1]);
                         break;
+                }
+            }
+
+            // Process categories: prefer tcat if set, otherwise parse legacy tags
+            if (!string.IsNullOrEmpty(tcat))
+            {
+                // Use tcat exactly as-is
+                var mappedCat = MapCategory(tcat);
+                if (mappedCat.HasValue)
+                {
+                    categories.Add(mappedCat.Value);
+                }
+            }
+            else if (legacyTags.Any())
+            {
+                // No tcat found, parse legacy tags into tcat format
+                var legacyCat = MapLegacyTagsToCategory(legacyTags);
+                if (legacyCat.HasValue)
+                {
+                    categories.Add(legacyCat.Value);
                 }
             }
 
@@ -487,133 +515,109 @@ namespace Jackett.Common.Indexers.Definitions
             return new Uri($"magnet:?{string.Join("&", magnetParams)}");
         }
 
-        private IEnumerable<int> MapCategory(string categoryPath)
+        /// <summary>
+        /// Maps a tcat path to Torznab category IDs.
+        /// Uses Contains matching to handle tags in any order.
+        /// Checks top-level categories first to avoid mismatches (e.g., porn,movies -> XXX not Movies).
+        /// </summary>
+        private static int? MapCategory(string tcat)
         {
-            var normalized = categoryPath.ToLowerInvariant();
-            if (normalized.Contains("movie"))
+            var parts = tcat.ToLowerInvariant().Split(',').Select(p => p.Trim()).ToHashSet();
+
+            // Porn (check first - has subcategory "movies" that shouldn't match Video)
+            if (parts.Contains("porn") || parts.Contains("xxx") || parts.Contains("adult"))
             {
-                if (normalized.Contains("4k") || normalized.Contains("uhd"))
-                {
-                    yield return TorznabCatType.MoviesUHD.ID;
-                }
-                else if (normalized.Contains("hd") || normalized.Contains("1080") || normalized.Contains("720"))
-                {
-                    yield return TorznabCatType.MoviesHD.ID;
-                }
-                else if (normalized.Contains("sd") || normalized.Contains("dvd"))
-                {
-                    yield return TorznabCatType.MoviesSD.ID;
-                }
-                else
-                {
-                    yield return TorznabCatType.Movies.ID;
-                }
+                if (parts.Contains("pictures") || parts.Contains("imageset"))
+                    return TorznabCatType.XXXImageSet.ID;
+                return TorznabCatType.XXX.ID;
             }
-            else if (normalized.Contains("tv") || normalized.Contains("series") || normalized.Contains("show"))
+
+            // Games (check before video - has subcategories)
+            if (parts.Contains("games") || parts.Contains("game"))
             {
-                if (normalized.Contains("4k") || normalized.Contains("uhd"))
-                {
-                    yield return TorznabCatType.TVUHD.ID;
-                }
-                else if (normalized.Contains("hd") || normalized.Contains("1080") || normalized.Contains("720"))
-                {
-                    yield return TorznabCatType.TVHD.ID;
-                }
-                else if (normalized.Contains("sd"))
-                {
-                    yield return TorznabCatType.TVSD.ID;
-                }
-                else
-                {
-                    yield return TorznabCatType.TV.ID;
-                }
+                if (parts.Contains("psx") || parts.Contains("playstation") || parts.Contains("ps4") || parts.Contains("ps5"))
+                    return TorznabCatType.ConsolePS4.ID;
+                if (parts.Contains("xbox"))
+                    return TorznabCatType.ConsoleXBoxOne.ID;
+                if (parts.Contains("wii") || parts.Contains("nintendo"))
+                    return TorznabCatType.ConsoleWii.ID;
+                if (parts.Contains("mac"))
+                    return TorznabCatType.PCMac.ID;
+                if (parts.Contains("ios"))
+                    return TorznabCatType.PCMobileiOS.ID;
+                if (parts.Contains("android"))
+                    return TorznabCatType.PCMobileAndroid.ID;
+                return TorznabCatType.PCGames.ID;
             }
-            else if (normalized.Contains("anime"))
+
+            // Applications
+            if (parts.Contains("applications") || parts.Contains("software") || parts.Contains("app"))
             {
-                yield return TorznabCatType.TVAnime.ID;
+                if (parts.Contains("mac"))
+                    return TorznabCatType.PCMac.ID;
+                if (parts.Contains("ios"))
+                    return TorznabCatType.PCMobileiOS.ID;
+                if (parts.Contains("android"))
+                    return TorznabCatType.PCMobileAndroid.ID;
+                return TorznabCatType.PC.ID;
             }
-            else if (normalized.Contains("audio") || normalized.Contains("music"))
+
+            // Audio
+            if (parts.Contains("audio"))
             {
-                if (normalized.Contains("lossless") || normalized.Contains("flac"))
-                {
-                    yield return TorznabCatType.AudioLossless.ID;
-                }
-                else if (normalized.Contains("audiobook"))
-                {
-                    yield return TorznabCatType.AudioAudiobook.ID;
-                }
-                else
-                {
-                    yield return TorznabCatType.Audio.ID;
-                }
+                if (parts.Contains("audiobooks") || parts.Contains("audiobook"))
+                    return TorznabCatType.AudioAudiobook.ID;
+                if (parts.Contains("flac") || parts.Contains("lossless"))
+                    return TorznabCatType.AudioLossless.ID;
+                return TorznabCatType.Audio.ID;
             }
-            else if (normalized.Contains("software") || normalized.Contains("app"))
+
+            // Other (check before video for e-books, comics)
+            if (parts.Contains("other"))
             {
-                if (normalized.Contains("game"))
-                {
-                    yield return TorznabCatType.PCGames.ID;
-                }
-                else
-                {
-                    yield return TorznabCatType.PC.ID;
-                }
+                if (parts.Contains("e-books") || parts.Contains("ebooks") || parts.Contains("ebook"))
+                    return TorznabCatType.BooksEBook.ID;
+                if (parts.Contains("comics") || parts.Contains("comic"))
+                    return TorznabCatType.BooksComics.ID;
+                return TorznabCatType.Other.ID;
             }
-            else if (normalized.Contains("book") || normalized.Contains("ebook"))
+
+            // Video - Movies
+            if (parts.Contains("video"))
             {
-                yield return TorznabCatType.BooksEBook.ID;
+                if (parts.Contains("movie") || parts.Contains("movies"))
+                {
+                    if (parts.Contains("4k") || parts.Contains("uhd"))
+                        return TorznabCatType.MoviesUHD.ID;
+                    if (parts.Contains("hd"))
+                        return TorznabCatType.MoviesHD.ID;
+                    if (parts.Contains("dvdr"))
+                        return TorznabCatType.MoviesDVD.ID;
+                    return TorznabCatType.Movies.ID;
+                }
+
+                if (parts.Contains("tv"))
+                {
+                    if (parts.Contains("4k") || parts.Contains("uhd"))
+                        return TorznabCatType.TVUHD.ID;
+                    if (parts.Contains("hd"))
+                        return TorznabCatType.TVHD.ID;
+                    return TorznabCatType.TV.ID;
+                }
+
+                // Generic video defaults to Movies
+                return TorznabCatType.Movies.ID;
             }
-            else if (normalized.Contains("xxx") || normalized.Contains("adult"))
-            {
-                yield return TorznabCatType.XXX.ID;
-            }
+
+            return null;
         }
 
-        private IEnumerable<int> MapTag(string tag)
-        {
-            var normalized = tag.ToLowerInvariant();
-            return normalized switch
-            {
-                "movie" or "movies" or "film" => new[]
-                {
-                    TorznabCatType.Movies.ID
-                },
-                "tv" or "television" or "series" or "show" => new[]
-                {
-                    TorznabCatType.TV.ID
-                },
-                "anime" => new[]
-                {
-                    TorznabCatType.TVAnime.ID
-                },
-                "music" or "audio" => new[]
-                {
-                    TorznabCatType.Audio.ID
-                },
-                "game" or "games" => new[]
-                {
-                    TorznabCatType.PCGames.ID
-                },
-                "software" or "app" or "apps" => new[]
-                {
-                    TorznabCatType.PC.ID
-                },
-                "book" or "books" or "ebook" or "ebooks" => new[]
-                {
-                    TorznabCatType.BooksEBook.ID
-                },
-                "4k" or "uhd" or "2160p" => new[]
-                {
-                    TorznabCatType.MoviesUHD.ID,
-                    TorznabCatType.TVUHD.ID
-                },
-                "hd" or "1080p" or "720p" => new[]
-                {
-                    TorznabCatType.MoviesHD.ID,
-                    TorznabCatType.TVHD.ID
-                },
-                _ => Enumerable.Empty<int>()
-            };
-        }
+        /// <summary>
+        /// Maps legacy tags (v0 format before tcat proposal) to Torznab category.
+        /// Uses the same matching logic as MapCategory by joining tags.
+        /// </summary>
+        private static int? MapLegacyTagsToCategory(List<string> tags) =>
+            MapCategory(string.Join(",", tags));
 
         private static long? ParseImdbId(string? imdbId)
         {
@@ -629,6 +633,167 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             return null;
+        }
+
+        /// <summary>
+        /// Maps a TorznabQuery to tcat and hashtag filters for Nostr relay queries.
+        /// Returns exact tcat matches when available, otherwise falls back to hashtags.
+        /// </summary>
+        private static (List<string> Tcats, List<string> Hashtags) MapQueryToFilters(TorznabQuery query)
+        {
+            var tcats = new List<string>();
+            var hashtags = new List<string>();
+            if (query.Categories == null || query.Categories.Length == 0)
+            {
+                return (tcats, hashtags);
+            }
+
+            foreach (var cat in query.Categories)
+            {
+                var (tcat, tags) = MapCategoryToFilter(cat);
+                if (tcat != null)
+                {
+                    tcats.Add(tcat);
+                }
+                else if (tags != null)
+                {
+                    hashtags.AddRange(tags);
+                }
+            }
+
+            return (tcats.Distinct().ToList(), hashtags.Distinct().ToList());
+        }
+
+        /// <summary>
+        /// Maps a category to either an exact tcat match or fallback hashtags.
+        /// </summary>
+        private static (string? Tcat, string[]? Hashtags) MapCategoryToFilter(int cat)
+        {
+            // Movies - exact tcat matches
+            if (cat == TorznabCatType.MoviesHD.ID)
+                return ("video,movie,hd", null);
+            if (cat == TorznabCatType.MoviesUHD.ID)
+                return ("video,movie,4k", null);
+            if (cat == TorznabCatType.MoviesDVD.ID)
+                return ("video,movie,dvdr", null);
+
+            // Movies - hashtag fallback
+            if (cat == TorznabCatType.Movies.ID ||
+                cat == TorznabCatType.MoviesForeign.ID ||
+                cat == TorznabCatType.MoviesOther.ID ||
+                cat == TorznabCatType.MoviesSD.ID ||
+                cat == TorznabCatType.MoviesBluRay.ID ||
+                cat == TorznabCatType.Movies3D.ID ||
+                cat == TorznabCatType.MoviesWEBDL.ID)
+                return (null, new[] { "movie" });
+
+            // TV - exact tcat matches
+            if (cat == TorznabCatType.TVHD.ID)
+                return ("video,tv,hd", null);
+            if (cat == TorznabCatType.TVUHD.ID)
+                return ("video,tv,4k", null);
+
+            // TV - hashtag fallback
+            if (cat == TorznabCatType.TV.ID ||
+                cat == TorznabCatType.TVWEBDL.ID ||
+                cat == TorznabCatType.TVForeign.ID ||
+                cat == TorznabCatType.TVSD.ID ||
+                cat == TorznabCatType.TVOther.ID ||
+                cat == TorznabCatType.TVSport.ID ||
+                cat == TorznabCatType.TVDocumentary.ID)
+                return (null, new[] { "tv" });
+            if (cat == TorznabCatType.TVAnime.ID)
+                return (null, new[] { "anime" });
+
+            // Audio - exact tcat matches
+            if (cat == TorznabCatType.AudioLossless.ID)
+                return ("audio,music,flac", null);
+            if (cat == TorznabCatType.AudioAudiobook.ID)
+                return ("audio,audiobooks", null);
+
+            // Audio - hashtag fallback
+            if (cat == TorznabCatType.Audio.ID || cat == TorznabCatType.AudioOther.ID)
+                return (null, new[] { "audio" });
+            if (cat == TorznabCatType.AudioMP3.ID ||
+                cat == TorznabCatType.AudioVideo.ID ||
+                cat == TorznabCatType.AudioForeign.ID)
+                return (null, new[] { "audio", "music" });
+
+            // PC - exact tcat matches
+            if (cat == TorznabCatType.PCMac.ID)
+                return ("applications,mac", null);
+            if (cat == TorznabCatType.PCMobileiOS.ID)
+                return ("applications,ios", null);
+            if (cat == TorznabCatType.PCMobileAndroid.ID)
+                return ("applications,android", null);
+            if (cat == TorznabCatType.PCGames.ID)
+                return ("games,pc", null);
+
+            // PC - hashtag fallback
+            if (cat == TorznabCatType.PC.ID ||
+                cat == TorznabCatType.PC0day.ID ||
+                cat == TorznabCatType.PCISO.ID ||
+                cat == TorznabCatType.PCMobileOther.ID)
+                return (null, new[] { "software" });
+
+            // Console - exact tcat matches
+            if (cat == TorznabCatType.ConsolePSP.ID ||
+                cat == TorznabCatType.ConsolePS3.ID ||
+                cat == TorznabCatType.ConsolePSVita.ID ||
+                cat == TorznabCatType.ConsolePS4.ID)
+                return ("games,psx", null);
+            if (cat == TorznabCatType.ConsoleWii.ID ||
+                cat == TorznabCatType.ConsoleWiiware.ID ||
+                cat == TorznabCatType.ConsoleWiiU.ID)
+                return ("games,wii", null);
+            if (cat == TorznabCatType.ConsoleXBox.ID ||
+                cat == TorznabCatType.ConsoleXBox360.ID ||
+                cat == TorznabCatType.ConsoleXBoxOne.ID)
+                return ("games,xbox", null);
+
+            // Console - hashtag fallback
+            if (cat == TorznabCatType.Console.ID ||
+                cat == TorznabCatType.ConsoleNDS.ID ||
+                cat == TorznabCatType.ConsoleOther.ID ||
+                cat == TorznabCatType.Console3DS.ID)
+                return (null, new[] { "games" });
+
+            // XXX - exact tcat matches
+            if (cat == TorznabCatType.XXXImageSet.ID)
+                return ("porn,pictures", null);
+
+            // XXX - hashtag fallback
+            if (cat == TorznabCatType.XXX.ID ||
+                cat == TorznabCatType.XXXx264.ID ||
+                cat == TorznabCatType.XXXUHD.ID ||
+                cat == TorznabCatType.XXXPack.ID ||
+                cat == TorznabCatType.XXXOther.ID ||
+                cat == TorznabCatType.XXXSD.ID ||
+                cat == TorznabCatType.XXXWEBDL.ID ||
+                cat == TorznabCatType.XXXDVD.ID)
+                return (null, new[] { "xxx" });
+
+            // Books - exact tcat matches
+            if (cat == TorznabCatType.BooksEBook.ID)
+                return ("other,e-books", null);
+            if (cat == TorznabCatType.BooksComics.ID)
+                return ("other,comics", null);
+
+            // Books - hashtag fallback
+            if (cat == TorznabCatType.Books.ID ||
+                cat == TorznabCatType.BooksMags.ID ||
+                cat == TorznabCatType.BooksTechnical.ID ||
+                cat == TorznabCatType.BooksOther.ID ||
+                cat == TorznabCatType.BooksForeign.ID)
+                return (null, new[] { "ebook" });
+
+            // Other - hashtag fallback only
+            if (cat == TorznabCatType.Other.ID ||
+                cat == TorznabCatType.OtherMisc.ID ||
+                cat == TorznabCatType.OtherHashed.ID)
+                return (null, new[] { "other" });
+
+            return (null, null);
         }
     }
 }
