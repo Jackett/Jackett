@@ -59,14 +59,15 @@ caps:
     - {id: 118, cat: Audio, desc: "Disco Polo"}
     - {id: 119, cat: Audio, desc: "Clubbing"}
     - {id: 120, cat: Audio, desc: "House"}
-    - {id: 125, cat: Audio, desc: "Tranc"}
-    - {id: 127, cat: Audio, desc: "Dance"}
-    - {id: 128, cat: Audio, desc: "Opus"}
-    - {id: 130, cat: Audio, desc: "Pop"}
-    - {id: 129, cat: Audio, desc: "Italo"}
-    - {id: 131, cat: Audio, desc: "ClubDance"}
-    - {id: 133, cat: Audio, desc: "Retro Remixes"}
-    - {id: 134, cat: Audio, desc: "Techno"}
+    - {id: 125, cat: Audio, desc: "Elektro"}
+    - {id: 127, cat: Audio, desc: "Tranc"}
+    - {id: 128, cat: Audio, desc: "Dance"}
+    - {id: 130, cat: Audio, desc: "Opus"}
+    - {id: 129, cat: Audio, desc: "Pop"}
+    - {id: 131, cat: Audio, desc: "Italo"}
+    - {id: 133, cat: Audio, desc: "ClubDance"}
+    - {id: 134, cat: Audio, desc: "Retro Remixes"}
+    - {id: 146, cat: Audio, desc: "Techno"}
     - {id: 132, cat: Audio, desc: "eurodance"}
     - {id: 145, cat: Audio, desc: "Chillout"}
     - {id: 83, cat: Audio, desc: "BLUES / REGGAE/ ROCK / METAL/CLASSIC/"}
