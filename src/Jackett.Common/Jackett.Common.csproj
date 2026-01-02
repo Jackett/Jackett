@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFrameworks>netstandard2.0;net9.0</TargetFrameworks>
+    <TargetFrameworks>netstandard2.1;net9.0</TargetFrameworks>
     <Version>0.0.0</Version>
     <LangVersion>9</LangVersion>
     <NoWarn />
@@ -21,6 +21,8 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.0" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
+    <PackageReference Include="NBitcoin" Version="9.0.4" />
+    <PackageReference Include="NBitcoin.Secp256k1" Version="3.2.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.4.0" />
     <PackageReference Include="Polly" Version="8.6.5" />

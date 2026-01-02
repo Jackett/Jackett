@@ -13,6 +13,8 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using NBitcoin.DataEncoders;
+using NBitcoin.Secp256k1;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -25,16 +27,15 @@ namespace Jackett.Common.Indexers.Definitions
     /// See: https://github.com/nostr-protocol/nips/blob/master/35.md
     /// </summary>
     [ExcludeFromCodeCoverage]
-    public class NostrTorrents : IndexerBase
+    public class Nostr : IndexerBase
     {
-        public override string Id => "nostrtorrents";
-        public override string Name => "Nostr Torrents";
+        public override string Id => "nostr";
+        public override string Name => "Nostr";
 
         public override string Description =>
-            "Nostr Torrents is a decentralized torrent index using the Nostr protocol (NIP-35)";
+            "Nostr torrents is a decentralized torrent index using the Nostr protocol (NIP-35)";
 
-        public override string SiteLink { get; protected set; } = "https://github.com/nostr-protocol/nips/";
-        public override string[] LegacySiteLinks => Array.Empty<string>();
+        public override string SiteLink { get; protected set; } = "https://dtan.xyz/";
         public override string Language => "en-US";
         public override string Type => "public";
 
@@ -42,14 +43,14 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string RelayUrl => ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("relayUrl")).Value;
 
-        public NostrTorrents(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                             ICacheService cs) : base(
+        public Nostr(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
+                     ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
             configData: new ConfigurationData())
         {
             var relayUrl = new ConfigurationData.StringConfigurationItem("Nostr Relay URL (must support NIP-50 search)")
             {
-                Value = "wss://relay.noswhere.com/"
+                Value = "wss://relay.dtan.xyz/"
             };
             configData.AddDynamic("relayUrl", relayUrl);
             var timeout = new ConfigurationData.StringConfigurationItem("Search Timeout (seconds)") { Value = "15" };
@@ -205,6 +206,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var msg = await client.ReceiveAsync(buf, cts.Token);
                     var json = Encoding.UTF8.GetString(buf.Array!, 0, msg.Count);
+                    logger.Info($"[{relayUri}]: {json}");
                     try
                     {
                         if (json.StartsWith("[\"EVENT\","))
@@ -257,7 +259,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                     catch (Exception ex)
                     {
-                        logger.Debug($"Failed to parse Nostr event {evt.Id}: {ex.Message}");
+                        logger.Warn($"Failed to parse Nostr event {evt.Id}: {ex.Message}");
                     }
                 }
 
@@ -277,10 +279,100 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
+        /// From internal <see cref="Bech32Encoder.ConvertBits"/>
+        private byte[] ConvertBits(ReadOnlySpan<byte> data, int fromBits, int toBits, bool pad = true)
+        {
+            var acc = 0;
+            var bits = 0;
+            var maxv = (1 << toBits) - 1;
+            var ret = new List<byte>(64);
+            foreach (var value in data)
+            {
+                if ((value >> fromBits) > 0)
+                    throw new FormatException("Invalid Bech32 string");
+                acc = (acc << fromBits) | value;
+                bits += fromBits;
+                while (bits >= toBits)
+                {
+                    bits -= toBits;
+                    ret.Add((byte)((acc >> bits) & maxv));
+                }
+            }
+
+            if (pad)
+            {
+                if (bits > 0)
+                {
+                    ret.Add((byte)((acc << (toBits - bits)) & maxv));
+                }
+            }
+            else if (bits >= fromBits || (byte)(((acc << (toBits - bits)) & maxv)) != 0)
+            {
+                throw new FormatException("Invalid Bech32 string");
+            }
+
+            return ret.ToArray();
+        }
+
+        private string EventIdToNEvent(string eventId)
+        {
+            var hex = new HexEncoder();
+            // NIP-19 encoded entity (https://github.com/nostr-protocol/nips/blob/master/19.md)
+            var enc = new Bech32Encoder(
+                new[]
+                {
+                    (byte)'n',
+                    (byte)'e',
+                    (byte)'v',
+                    (byte)'e',
+                    (byte)'n',
+                    (byte)'t'
+                });
+            var payload = new List<byte>
+            {
+                0x0, // special
+                32, // ID length
+            };
+            payload.AddRange(hex.DecodeData(eventId));
+            var relayBytes = Encoding.ASCII.GetBytes(RelayUrl);
+            if (relayBytes.Length <= byte.MaxValue)
+            {
+                payload.AddRange(
+                    new byte[]
+                    {
+                        0x01, // relay type
+                        (byte)relayBytes.Length
+                    });
+                payload.AddRange(relayBytes);
+            }
+
+            var encodeBytes = payload.ToArray();
+            var bits = ConvertBits(encodeBytes.AsSpan(), 8, 5);
+            return enc.EncodeData(bits, Bech32EncodingType.BECH32);
+        }
+
         private ReleaseInfo? ParseNostrEvent(NostrEvent evt)
         {
-            if (evt.Tags.Count == 0)
+            if (evt.Tags.Count == 0 || string.IsNullOrEmpty(evt.Id) || string.IsNullOrEmpty(evt.Signature) ||
+                string.IsNullOrEmpty(evt.Pubkey))
             {
+                return null;
+            }
+
+            var hex = new HexEncoder();
+            if (!SecpSchnorrSignature.TryCreate(hex.DecodeData(evt.Signature), out var sig))
+            {
+                throw new Exception("Invalid signature, not a valid schnorr signature");
+            }
+
+            if (!ECXOnlyPubKey.TryCreate(hex.DecodeData(evt.Pubkey), out var key))
+            {
+                throw new Exception("Invalid event, not a valid schnorr pubkey");
+            }
+
+            if (!key.SigVerifyBIP340(sig, hex.DecodeData(evt.Id)))
+            {
+                logger.Warn($"Invalid signature, skipping event {evt.Id}");
                 return null;
             }
 
@@ -362,14 +454,14 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 Title = title,
                 Guid = new Uri($"magnet:?xt=urn:btih:{infoHash}"),
-                Details = new Uri($"{SiteLink}e/{evt.Id}"),
+                Details = new Uri($"{SiteLink}e/{EventIdToNEvent(evt.Id)}"),
                 MagnetUri = magnetUri,
                 InfoHash = infoHash,
                 Category = categories.Distinct().ToList(),
                 PublishDate = DateTimeOffset.FromUnixTimeSeconds((long)evt.CreatedAt).DateTime,
                 Size = size ?? 0,
                 Description = evt.Content,
-                Seeders = 0, // Nostr doesn't track seeders
+                Seeders = 1, // Nostr doesn't track seeders
                 Peers = 0,
                 DownloadVolumeFactor = 0,
                 UploadVolumeFactor = 1,
@@ -380,13 +472,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static bool IsValidInfoHash(string hash)
         {
-            if (string.IsNullOrEmpty(hash))
-            {
-                return false;
-            }
-
             // V1 info hash is 40 hex characters
-            return hash.Length == 40 && Regex.IsMatch(hash, "^[a-fA-F0-9]+$");
+            return Regex.IsMatch(hash, "^[a-fA-F0-9]{40}$");
         }
 
         private static Uri BuildMagnetUri(string infoHash, string title, List<string> trackers)
