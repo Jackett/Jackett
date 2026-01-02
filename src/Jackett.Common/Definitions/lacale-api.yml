@@ -127,10 +127,7 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      selector: guid
-      filters:
-        - name: prepend
-          args: "{{ .Config.sitelink }}torrents/"
+      text:  "{{ .Config.sitelink }}"
     infohash:
       selector: infoHash
     _infohash:
