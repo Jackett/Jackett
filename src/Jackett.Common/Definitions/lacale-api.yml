@@ -101,6 +101,7 @@ search:
         q: "{{ .Keywords }}"
       response:
         type: json
+
   rows:
     selector: $
 
