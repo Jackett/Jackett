@@ -3,6 +3,8 @@
 <html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 
 <head>
+  <script type="module" crossorigin src="/assets/polyfills.js"></script>
+
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0" />
     <meta name="mobile-web-app-capable" content="yes" />
@@ -17,14 +19,18 @@
     <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
 
     <!-- Vite bundle -->
-    <link rel="stylesheet" type="text/css" href="./main.css">
     <title>Jackett</title>
+  <script type="module" crossorigin src="/assets/index.js"></script>
+  <link rel="modulepreload" crossorigin href="/assets/datatables-bs5.js">
+  <link rel="stylesheet" crossorigin href="/assets/main.css">
+  <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();window.__vite_is_modern_browser=true</script>
+  <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
 </head>
 
 <body>
     <div id="page" class="container">
 
-        <div class="d-flex flex-wrap align-items-center justify-content-between">
+        <div class="d-flex flex-wrap align-items-center justify-content-between gap-2">
             <div class="d-flex align-items-center gap-2">
                 <img id="logo" src="/jacket_medium.png" alt="Logo">
                 <span id="jackett-title">Jackett</span>
@@ -64,24 +70,22 @@
             Benefits include: increased performance, improved stability and no dependency on Mono.
         </div>
 
-        <div class="d-flex flex-wrap align-items-center justify-content-between">
-            <h3>Configured Indexers</h3>
-            <div class="d-flex flex-wrap align-items-center gap-2">
-                <div id="filters" class="btn-group btn-group-sm"></div>
-                <button id="jackett-add-indexer" class="btn btn-success btn-sm">
-                    <span class="fa fa-plus" aria-hidden="true"></span> Add indexer
-                </button>
-                <button id="jackett-show-search" class="btn btn-success btn-sm">
-                    <span class="fa fa-search" aria-hidden="true"></span> Manual Search
-                </button>
-                <button id="jackett-show-releases" class="btn btn-primary btn-sm">
-                    <span class="fa fa-database"></span> View cached releases
-                </button>
-                <button id="jackett-test-all" class="btn btn-warning btn-sm">
-                    <span class="fa fa-crosshairs" aria-hidden="true"></span> Test All
-                </button>
-            </div>
+        <div class="d-flex flex-wrap justify-content-end gap-2 mb-2">
+            <div id="filters" class="btn-group btn-group-sm"></div>
+            <button id="jackett-add-indexer" class="btn btn-success btn-sm">
+                <span class="fa fa-plus" aria-hidden="true"></span> Add indexer
+            </button>
+            <button id="jackett-show-search" class="btn btn-success btn-sm">
+                <span class="fa fa-search" aria-hidden="true"></span> Manual Search
+            </button>
+            <button id="jackett-show-releases" class="btn btn-primary btn-sm">
+                <span class="fa fa-database"></span> View cached releases
+            </button>
+            <button id="jackett-test-all" class="btn btn-warning btn-sm">
+                <span class="fa fa-crosshairs" aria-hidden="true"></span> Test All
+            </button>
         </div>
+        <h3>Configured Indexers</h3>
 
         <div id="indexers" class="mt-3 text-center"></div>
         <hr />
@@ -91,12 +95,11 @@
             <ol>
                 <li>Go to <b>Settings > Indexers > Add > Torznab > Custom</b>.</li>
                 <li>
-                    Click on the indexers corresponding
-                    <button class="disabled btn btn-sm btn-info">
-                        <div class="desktop">Copy Torznab Feed</div>
-                        <div class="mobile"><span class="fa fa-copy"></span> T</div>
-                    </button>
-                    button and paste it into the Sonarr/Radarr <b>URL</b> field.
+                    Click on the indexers corresponding <button type="button" class="disabled btn btn-sm btn-info">
+                        Copy
+                        Torznab Feed
+                    </button> button
+                    and paste it into the Sonarr/Radarr <b>URL</b> field.
                 </li>
                 <li>For the <b>API key</b> use <b class="api-key-text"></b>.</li>
                 <li>
@@ -109,12 +112,11 @@
                 <li>Go to <b>Settings > Searchers</b>.</li>
                 <li>Enable <b>TorrentPotato</b>.
                 <li>
-                    Click on the indexers corresponding
-                    <button class="disabled btn btn-sm btn-info">
-                        <div class="desktop">Copy Potato Feed</div>
-                        <div class="mobile"><span class="fa fa-copy"></span> P</div>
-                    </button>
-                    button and paste it into the CouchPotato <b>host</b> field.
+                    Click on the indexers corresponding <button type="button" class="disabled btn btn-sm btn-info">
+                        Copy
+                        Potato Feed
+                    </button> button
+                    and paste it into the CouchPotato <b>host</b> field.
                 </li>
                 <li>
                     For the <b>Passkey</b> use <b class="api-key-text"></b>. Leave the
@@ -124,12 +126,11 @@
             <h4>Adding a Jackett indexer to RSS clients (RSS feed)</h4>
             <ol>
                 <li>
-                    Click on the indexers corresponding
-                    <button class="disabled btn btn-sm btn-info">
-                        <div class="desktop">Copy RSS Feed</div>
-                        <div class="mobile"><span class="fa fa-copy"></span> <span class="fa fa-rss"></span></div>
-                    </button>
-                    button and paste it into the URL field of the RSS client.
+                    Click on the indexers corresponding <button type="button" class="disabled btn btn-sm btn-info">
+                        Copy
+                        RSS Feed
+                    </button> button and
+                    paste it into the URL field of the RSS client.
                 </li>
                 <li>
                     You can adjust the <b>q</b> (search string) and <b>cat</b> (categories)
@@ -192,8 +193,11 @@
                 <option value="2">SOCKS5</option>
             </select>
         </div>
-        <div id="proxy-warning" class="text-center text-danger" style="display: none;">
-            <span> WARNING: The proxy option potentially leaks requests. Recommendation is to use a VPN. </span>
+        <div id="proxy-warning" class="text-center" style="display: none;">
+            <span>
+                WARNING: The proxy option potentially leaks requests. Recommendation is to use a
+                VPN.
+            </span>
         </div>
         <div class="m-2 row">
             <span class="col-4 col-form-label">Proxy URL: </span>
@@ -379,18 +383,10 @@
                         <td><a target="_blank" rel="noopener noreferrer" href="{{site_link}}" title="{{description}}">{{name}}</a> <span title="{{type}}" class="badge bg-{{type_label}}" style="text-transform: capitalize;">{{type}}</span>{{#each tags}} <span title="{{this}}" class="badge bg-secondary">{{this}}</span>{{/each}}</td>
                         <td class="fit">
                             <div class="indexer-buttons">
-                                <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info">
-                                   <div class="desktop">Copy RSS Feed</div>
-                                   <div class="mobile"><span class="fa fa-copy"></span> <span class="fa fa-rss"></span></div>
-                                </a>
-                                <a href="{{torznab_host}}" title="{{torznab_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info">
-                                    <div class="desktop">Copy Torznab Feed</div>
-                                    <div class="mobile"><span class="fa fa-copy"></span> T</div>
-                                </a>
-                                <a href="{{potato_host}}" title="{{potato_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info{{#unless potatoenabled}} disabled{{/unless}}">
-                                    <div class="desktop">Copy Potato Feed</div>
-                                    <div class="mobile"><span class="fa fa-copy"></span> P</div>
-                                </a>
+                                <a href="{{rss_host}}" title="{{rss_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info">Copy RSS Feed</a>
+                                <a href="{{torznab_host}}" title="{{torznab_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info">Copy Torznab Feed</a>
+                                <a href="{{potato_host}}" title="{{potato_host}}" role="button" class="indexer-button-copy btn btn-sm btn-info{{#unless potatoenabled}} disabled{{/unless}}">Copy Potato Feed</a>
+
                                 <button title="Search" class="btn btn-success btn-sm indexer-button-search" data-id="{{id}}">
                                     <span class="fa fa-search" aria-hidden="true"></span>
                                 </button>
@@ -716,7 +712,7 @@
     </script>
     <script id="select-indexer" type="text/x-handlebars-template">
         <div id="select-indexer-modal" class="modal fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-dialog modal-lg modal-fillwidth">
+            <div class="modal-dialog modal-lg">
                 <div class="modal-content">
                     <div class="modal-header">
                         <h4 class="modal-title">Select an indexer to setup</h4>
@@ -832,7 +828,9 @@
     </script>
 
     <!-- Vite bundle -->
-    <script type="module" src="./custom.js"></script>
+  <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+  <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy.js"></script>
+  <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/index-legacy.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
 </body>
 
 </html>
