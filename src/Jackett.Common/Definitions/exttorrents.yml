@@ -24,6 +24,7 @@ caps:
     - {id: "/anime/", cat: TV/Anime, desc: Anime}
     - {id: "/anime//anime/audio-lossless/", cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: "/anime//anime/english-translated/", cat: TV/Anime, desc: "Anime English Translated"}
+    - {id: "/anime//anime/live-action-raw", cat: TV/Anime, desc: Anime Live Action Raw}
     - {id: "/anime//anime/raw", cat: TV/Anime, desc: Anime Raw}
     - {id: "/anime//anime/subs/", cat: TV/Anime, desc: Anime Subs}
     - {id: "/anime/raw", cat: TV/Anime, desc: Anime Raw}
@@ -38,6 +39,7 @@ caps:
     - {id: "/books//books/audio-books/", cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: "/books//books/comics/", cat: Books/Comics, desc: "Books Comics"}
     - {id: "/books//books/ebooks/", cat: Books/EBook, desc: "Books Ebooks"}
+    - {id: "/books//books/manga-raw/", cat: Books/Comics, desc: "Books Manga Raw"}
     - {id: "/games/", cat: PC/Games, desc: Games}
     - {id: "/games//games/mac/", cat: PC/Mac, desc: "Games Mac"}
     - {id: "/games//games/nds/", cat: Console/NDS, desc: "Games NDS"}
@@ -122,6 +124,7 @@ search:
     # familysafe 0=enabled, 1=disabled
     with_adult: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
     imdb_id: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    user_sort: 1
 
   rows:
     selector: table.table-striped > tbody > tr
