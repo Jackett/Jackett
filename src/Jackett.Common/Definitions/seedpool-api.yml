@@ -108,7 +108,7 @@ search:
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
     episodeNumber: "{{ .Query.Ep }}"
-    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBShort }}{{ end }}"
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
