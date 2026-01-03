@@ -120,8 +120,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     seeders:
       selector: seeders
     leechers:
@@ -166,4 +164,4 @@ search:
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 9.1.5 (custom)
+# json UNIT3D 9.2.0 (custom)
