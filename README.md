@@ -39,6 +39,7 @@ Prior versions of Jackett are no longer supported.
  * AniRena
  * AniSource
  * ApacheTorrent
+ * arab-torrents.com
  * AudioBook Bay (ABB)
  * Bangumi Moe
  * BigFANGroup
