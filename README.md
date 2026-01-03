@@ -289,6 +289,7 @@ Prior versions of Jackett are no longer supported.
  * BTSCHOOL
  * BWTorrents
  * BYRBT
+ * C411
  * cangbaoge (CBG)
  * CapybaraBR
  * Carp-Hunter
