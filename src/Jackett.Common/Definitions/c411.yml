@@ -48,7 +48,8 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q, imdbid]
+#    movie-search: [q, imdbid] # c411 api caps shows imdbid is supported but it currently does not work
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
@@ -97,10 +98,16 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
+#    t: "{{ .Query.Type }}"
     t: search
     q: "{{ .Keywords }}"
-    imtbid: "{{ .Query.IMDBID }}"
+#    imdbid: "{{ .Query.IMDBID }}"
     limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
 
   rows:
     selector: rss > channel > item
