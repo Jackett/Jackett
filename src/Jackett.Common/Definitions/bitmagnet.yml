@@ -38,7 +38,24 @@ caps:
     music-search: [q]
     book-search: [q]
 
-settings: []
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: published_at
+    options:
+      relevance: relevance
+      published_at: added
+      size: size
+      seeders: seeders
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 1
+    options:
+      1: desc
+      0: asc
 
 search:
   paths:
@@ -53,6 +70,8 @@ search:
     tmdbid: "{{ .Query.TMDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
+    order: "{{ .Config.sort }}"
+    desc: "{{ .Config.type }}"
     limit: 100
 
   rows:
