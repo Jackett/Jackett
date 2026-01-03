@@ -22,12 +22,13 @@ legacylinks:
 caps:
   categorymappings:
     - {id: "/anime/", cat: TV/Anime, desc: Anime}
+    - {id: "/anime//anime/audio-lossy/", cat: Audio, desc: "Anime Audio Lossy"}
     - {id: "/anime//anime/audio-lossless/", cat: Audio/Lossless, desc: "Anime Audio Lossless"}
     - {id: "/anime//anime/english-translated/", cat: TV/Anime, desc: "Anime English Translated"}
-    - {id: "/anime//anime/live-action-raw", cat: TV/Anime, desc: Anime Live Action Raw}
-    - {id: "/anime//anime/raw", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/anime//anime/live-action-raw/", cat: TV/Anime, desc: Anime Live Action Raw}
+    - {id: "/anime//anime/raw/", cat: TV/Anime, desc: Anime Raw}
     - {id: "/anime//anime/subs/", cat: TV/Anime, desc: Anime Subs}
-    - {id: "/anime/raw", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/anime/raw/", cat: TV/Anime, desc: Anime Raw}
     - {id: "/applications/", cat: PC, desc: Apps}
     - {id: "/applications//applications/android/", cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: "/applications//applications/ios/", cat: PC/Mobile-iOS, desc: "Apps iOS"}
@@ -39,6 +40,7 @@ caps:
     - {id: "/books//books/audio-books/", cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: "/books//books/comics/", cat: Books/Comics, desc: "Books Comics"}
     - {id: "/books//books/ebooks/", cat: Books/EBook, desc: "Books Ebooks"}
+    - {id: "/books//books/manga-english/", cat: Books/Comics, desc: "Books Manga English"}
     - {id: "/books//books/manga-raw/", cat: Books/Comics, desc: "Books Manga Raw"}
     - {id: "/games/", cat: PC/Games, desc: Games}
     - {id: "/games//games/mac/", cat: PC/Mac, desc: "Games Mac"}
@@ -71,6 +73,9 @@ caps:
     - {id: "/music//music/radio-shows/", cat: Audio, desc: "Music Radio Shows"}
     - {id: "/other/", cat: Other, desc: Other}
     - {id: "/tv/", cat: TV, desc: TV}
+    - {id: "/tv//tv/episodes-hd/", cat: TV/HD, desc: TV Episodes HD}
+    - {id: "/tv//tv/episodes-sd/", cat: TV/SD, desc: TV Episodes SD}
+    - {id: "/tv//tv/season-packs/", cat: TV/HD, desc: TV Season Packs}
     - {id: "/video/", cat: XXX, desc: "XXX Video"}
     - {id: "/xxx/", cat: XXX, desc: XXX}
     - {id: "/xxx//xxx/games/", cat: XXX/Other, desc: "XXX Games"}
