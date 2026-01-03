@@ -114,6 +114,7 @@ search:
 
   rows:
     selector: $
+    missingAttributeEqualsNoResults: true
 
   fields:
     categorydesc:
