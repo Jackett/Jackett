@@ -11,34 +11,44 @@ links:
 
 caps:
   categorymappings:
-    # Movies / Films
-    - {id: films-hd, cat: Movies/HD, desc: "Films HD"}
-    - {id: films-4k, cat: Movies/UHD, desc: "Films 4K"}
-    - {id: animation, cat: Movies/Other, desc: "Animation"}
-    - {id: documentaires, cat: TV/Documentary, desc: "Documentaires"}
-    # TV Series / Séries
-    - {id: series, cat: TV, desc: "Séries"}
-    - {id: s-ries-hd, cat: TV/HD, desc: "Séries HD"}
-    - {id: s-ries-vostfr, cat: TV/Other, desc: "Séries VOSTFR"}
-    # Books / Livres
-    - {id: ebooks, cat: Books/EBook, desc: "Ebooks"}
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    # Audio
+    - {id: audio, cat: Audio, desc: "Audio"}
+    - {id: music, cat: Audio, desc: "Musique"}
+    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
+    # Autres
+    - {id: autres, cat: Other, desc: "Autres"}
+    - {id: divers, cat: Other/Misc, desc: "Divers"}
+    # E-books
+    - {id: ebooks, cat: Books/EBook, desc: "E-books"}
     - {id: romans, cat: Books/EBook, desc: "Romans"}
     - {id: bd, cat: Books/Comics, desc: "BD"}
-    # Audio / Musique
-    - {id: music, cat: Audio, desc: "Musique"}
-    - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
-    - {id: mp3, cat: Audio/MP3, desc: "MP3"}
-    # Software / Logiciels
-    - {id: software, cat: PC, desc: "Logiciels"}
-    - {id: windows, cat: PC, desc: "Windows"}
-    - {id: linux, cat: PC, desc: "Linux"}
-    - {id: mac, cat: PC/Mac, desc: "Mac"}
-    - {id: pc, cat: PC, desc: "PC"}
-    # Games / Jeux
+    - {id: documentaires, cat: Books/EBook, desc: "Documentaires"}
+    # E-books & Documents
+    - {id: ebooks-documents, cat: Books/EBook, desc: "E-books & Documents"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
+    - {id: education, cat: Books/Other, desc: "Éducation"}
+    # Jeux
     - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: pc, cat: PC/Games, desc: "PC"}
     - {id: consoles, cat: Console, desc: "Consoles"}
+    - {id: jeux-mobiles, cat: PC/Mobile-Other, desc: "Jeux mobiles"}
+    # Vidéo
+    - {id: video, cat: Movies, desc: "Vidéo"}
+    - {id: video, cat: TV, desc: "Vidéo"}
+    - {id: films, cat: Movies, desc: "Films"}
+    - {id: series, cat: TV, desc: "Séries TV"}
+    - {id: spectacles, cat: TV/Other, desc: "Spectacles"}
     # XXX
     - {id: xxx, cat: XXX, desc: "XXX"}
+    - {id: xxx-hetero, cat: XXX, desc: "Hétéro"}
+    - {id: xxx-gay, cat: XXX, desc: "Gay"}
+    - {id: xxx-lesbien, cat: XXX, desc: "Lesbien"}
+    - {id: xxx-trans, cat: XXX, desc: "Trans"}
 
   modes:
     search: [q]
