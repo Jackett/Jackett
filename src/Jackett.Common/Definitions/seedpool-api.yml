@@ -38,13 +38,10 @@ caps:
     - {id: 20, cat: TV/Foreign, desc: "Deprecated - JPTV"}
     - {id: 4, cat: Console/Other, desc: "Deprecated - NSW Game"}
 
-# Seedpool does not require ids other than tmdbid when uploading
-# adding the tvdbid and imdbid fields can exclude results that do not have those ids attached to the torrent metadata
-# Do not add them back to query modes without permission from SP staff
   modes:
     search: [q]
-    tv-search: [q, season, ep, tmdbid]
-    movie-search: [q, tmdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -60,6 +57,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: tmdbidonly
+    type: checkbox
+    label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
+    default: true
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
@@ -107,7 +108,9 @@ search:
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
     episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
