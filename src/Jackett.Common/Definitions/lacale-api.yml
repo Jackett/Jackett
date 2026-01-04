@@ -121,8 +121,6 @@ search:
       selector: category
     title_phase1:
       selector: title
-    _title:
-      selector: title
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -139,16 +137,15 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}"
-    infohash:
-      selector: infoHash
-    _infohash:
-      selector: infoHash
+    download:
+      selector: link
+      filters:
+        - name: append
+          args: "?passkey={{ .Config.passkey }}"
     size:
       selector: size
     date:
       selector: pubDate
-    magnet:
-      text: "magnet:?xt=urn:btih:{{ .Result._infohash}}&dn={{ .Result._title}}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}"
     seeders:
       selector: seeders
     leechers:
