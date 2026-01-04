@@ -1,0 +1,162 @@
+---
+id: lacale-api
+name: La Cale (API)
+description: "La Cale is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2.1
+links:
+  - https://la-cale.space/
+
+caps:
+  categorymappings:
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    # Audio
+    - {id: audio, cat: Audio, desc: "Audio"}
+    - {id: music, cat: Audio, desc: "Musique"}
+    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
+    # Autres
+    - {id: autres, cat: Other, desc: "Autres"}
+    - {id: divers, cat: Other/Misc, desc: "Divers"}
+    # E-books
+    - {id: ebooks, cat: Books/EBook, desc: "E-books"}
+    - {id: romans, cat: Books/EBook, desc: "Romans"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: documentaires, cat: Books/EBook, desc: "Documentaires"}
+    # E-books & Documents
+    - {id: ebooks-documents, cat: Books/EBook, desc: "E-books & Documents"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
+    - {id: education, cat: Books/Other, desc: "Éducation"}
+    # Jeux
+    - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: pc, cat: PC/Games, desc: "PC"}
+    - {id: consoles, cat: Console, desc: "Consoles"}
+    - {id: jeux-mobiles, cat: PC/Mobile-Other, desc: "Jeux mobiles"}
+    # Vidéo
+    - {id: video, cat: Movies, desc: "Vidéo"}
+    - {id: video, cat: TV, desc: "Vidéo"}
+    - {id: films, cat: Movies, desc: "Films"}
+    - {id: series, cat: TV, desc: "Séries TV"}
+    - {id: spectacles, cat: TV/Other, desc: "Spectacles"}
+    # XXX
+    - {id: xxx, cat: XXX, desc: "XXX"}
+    - {id: xxx-hetero, cat: XXX, desc: "Hétéro"}
+    - {id: xxx-gay, cat: XXX, desc: "Gay"}
+    - {id: xxx-lesbien, cat: XXX, desc: "Lesbien"}
+    - {id: xxx-trans, cat: XXX, desc: "Trans"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_key
+    type: info
+    label: About your Passkey
+    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: api/external
+  method: get
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+  error:
+    - selector: ":root:contains(\"Passkey invalide\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+    - selector: ":root:contains(\"Passkey manquant\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    - path: api/external
+      inputs:
+        passkey: "{{ .Config.passkey }}"
+        # cat: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}{{ end }}" # currently not supported in API
+        q: "{{ .Keywords }}"
+      response:
+        type: json
+
+  rows:
+    selector: $
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    categorydesc:
+      selector: category
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      text: "{{ .Config.sitelink }}"
+    download:
+      selector: link
+      filters:
+        - name: append
+          args: "?passkey={{ .Config.passkey }}"
+    size:
+      selector: size
+    date:
+      selector: pubDate
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json API
