@@ -79,13 +79,12 @@ settings:
       asc: asc
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  path: takelogin.php
+  method: post
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    submit: "Log In"
+    returnto: /browse.php
   error:
     - selector: td:contains("Login failed!")
       message:
