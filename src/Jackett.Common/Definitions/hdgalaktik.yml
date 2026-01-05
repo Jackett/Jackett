@@ -89,9 +89,6 @@ search:
   paths:
     - path: browse.php
   inputs:
-#    $raw: "{{ range .Categories }}cat[]={{.}}&{{end}}"
-    cat[]: 0
-    shw_incl_cats: 0
     # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
