@@ -30,7 +30,6 @@ namespace Jackett.Common.Utils
         {
             var normalizedString = s.Normalize(NormalizationForm.FormD);
             var stringBuilder = new StringBuilder();
-
             for (var i = 0; i < normalizedString.Length; i++)
             {
                 var c = normalizedString[i];
@@ -41,16 +40,46 @@ namespace Jackett.Common.Utils
             return stringBuilder.ToString();
         }
 
-        public static string FromBase64(string str) =>
-            Encoding.UTF8.GetString(Convert.FromBase64String(str));
+        public static string FromBase64(string str) => Encoding.UTF8.GetString(Convert.FromBase64String(str));
 
         /// <summary>
         /// Convert an array of bytes to a string of hex digits
         /// </summary>
         /// <param name="bytes">array of bytes</param>
         /// <returns>String of hex digits</returns>
-        public static string HexStringFromBytes(byte[] bytes) =>
-            string.Join("", bytes.Select(b => b.ToString("X2")));
+        public static string HexStringFromBytes(byte[] bytes) => string.Join("", bytes.Select(b => b.ToString("X2")));
+
+        /// <summary>
+        /// Converts a hex string to a byte[]
+        /// </summary>
+        /// <param name="hex">Hexideciaml string</param>
+        /// <returns>Parsed bytes from hex</returns>
+        /// <exception cref="Exception">Invalid hex string</exception>
+        public static byte[] HexToBytes(string hex)
+        {
+#if !NETCOREAPP
+            int GetHexVal(char hex)
+            {
+                var val = (int)hex;
+                return val - (val < 58 ? 48 : (val < 97 ? 55 : 87));
+            }
+
+            if (hex.Length % 2 == 1)
+            {
+                throw new Exception("The binary key cannot have an odd number of digits");
+            }
+
+            var arr = new byte[hex.Length >> 1];
+            for (var i = 0; i < hex.Length >> 1; ++i)
+            {
+                arr[i] = (byte)((GetHexVal(hex[i << 1]) << 4) + (GetHexVal(hex[(i << 1) + 1])));
+            }
+
+            return arr;
+#else
+            return Convert.FromHexString(hex);
+#endif
+        }
 
         /// <summary>
         /// Compute hash for string encoded as UTF8
@@ -60,10 +89,8 @@ namespace Jackett.Common.Utils
         public static string HashSHA1(string s)
         {
             var sha1 = SHA1.Create();
-
             var bytes = Encoding.UTF8.GetBytes(s);
             var hashBytes = sha1.ComputeHash(bytes);
-
             return HexStringFromBytes(hashBytes);
         }
 
@@ -71,10 +98,8 @@ namespace Jackett.Common.Utils
         {
             // Use input string to calculate MD5 hash
             var md5 = System.Security.Cryptography.MD5.Create();
-
             var inputBytes = System.Text.Encoding.ASCII.GetBytes(s);
             var hashBytes = md5.ComputeHash(inputBytes);
-
             return HexStringFromBytes(hashBytes);
         }
 
@@ -82,19 +107,11 @@ namespace Jackett.Common.Utils
         // remove in favor of Exception.ToString() ?
         public static string GetExceptionDetails(this Exception exception)
         {
-            var properties = exception.GetType()
-                                    .GetProperties();
+            var properties = exception.GetType().GetProperties();
             var fields = properties
-                             .Select(property => new
-                             {
-                                 Name = property.Name,
-                                 Value = property.GetValue(exception, null)
-                             })
-                             .Select(x => string.Format(
-                                 "{0} = {1}",
-                                 x.Name,
-                                 x.Value != null ? x.Value.ToString() : string.Empty
-                             ));
+                         .Select(property => new { Name = property.Name, Value = property.GetValue(exception, null) })
+                         .Select(x => string.Format(
+                                     "{0} = {1}", x.Name, x.Value != null ? x.Value.ToString() : string.Empty));
             return string.Join("\n", fields);
         }
 
@@ -127,12 +144,14 @@ namespace Jackett.Common.Utils
                         else if (c == '/')
                             repl = '⁄'; // U+2044 fraction slash
                     }
+
                     if (repl != '\0')
                         sb.Append(repl);
                 }
                 else
                     sb.Append(c);
             }
+
             if (sb.Length == 0)
                 return "_";
             return changed ? sb.ToString() : text;
@@ -153,11 +172,11 @@ namespace Jackett.Common.Utils
             collection.ToEnumerable(duplicateKeysIfMulti).GetQueryString(encoding, separator);
 
         public static string GetQueryString(this IEnumerable<KeyValuePair<string, string>> collection,
-                                            Encoding encoding = null, string separator = "&") =>
-            string.Join(separator,
-                        collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
+                                            Encoding encoding = null, string separator = "&") => string.Join(
+            separator, collection.Select(a => $"{a.Key}={WebUtilityHelpers.UrlEncode(a.Value, encoding ?? Encoding.UTF8)}"));
 
-        public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) => collection.Add(new KeyValuePair<string, string>(key, value));
+        public static void Add(this ICollection<KeyValuePair<string, string>> collection, string key, string value) =>
+            collection.Add(new KeyValuePair<string, string>(key, value));
 
         public static IEnumerable<KeyValuePair<string, string>> ToEnumerable(
             this NameValueCollection collection, bool duplicateKeysIfMulti = false)
@@ -177,7 +196,6 @@ namespace Jackett.Common.Utils
         {
             if (element == null)
                 return "<NULL>";
-
             var sb = new StringBuilder();
             var sw = new StringWriter(sb);
             var formatter = new PrettyMarkupFormatter();
@@ -189,10 +207,8 @@ namespace Jackett.Common.Utils
         {
             var chars = "abcdefghijklmnopqrstuvwxyz0123456789";
             var randBytes = new byte[length];
-
             using var rngCsp = RandomNumberGenerator.Create();
             rngCsp.GetBytes(randBytes);
-
             return randBytes.Aggregate(string.Empty, (current, b) => current + chars[b % chars.Length]);
         }
 
@@ -219,17 +235,16 @@ namespace Jackett.Common.Utils
         /// <summary>
         /// Finds all substrings between two specified characters. If nested, both the parent and child substring are returned.
         /// </summary>
-        public static IEnumerable<string> FindSubstringsBetween(this string source, char opening, char closing, bool includeOpeningAndClosing)
+        public static IEnumerable<string> FindSubstringsBetween(this string source, char opening, char closing,
+                                                                bool includeOpeningAndClosing)
         {
             var openingIndexes = source.AllIndexesOf(opening).OrderByDescending(_ => _).ToList();
             var closingIndexes = source.AllIndexesOf(closing);
-
             foreach (var closingIndex in closingIndexes.OrderBy(_ => _))
             {
                 var potentialOpeningIndex = openingIndexes.Where(x => x < closingIndex).Cast<int?>().FirstOrDefault();
                 if (!potentialOpeningIndex.HasValue)
                     continue;
-
                 var openingIndex = potentialOpeningIndex.Value;
                 var substringIndex = openingIndex + 1;
                 var substringLength = closingIndex - substringIndex;
@@ -238,8 +253,8 @@ namespace Jackett.Common.Utils
                     substringIndex -= 1;
                     substringLength += 2;
                 }
-                yield return source.Substring(substringIndex, substringLength);
 
+                yield return source.Substring(substringIndex, substringLength);
                 openingIndexes.RemoveAll(x => x == openingIndex);
             }
         }
@@ -251,6 +266,7 @@ namespace Jackett.Common.Utils
             {
                 result = result.Replace(substring, string.Empty);
             }
+
             return result;
         }
     }
