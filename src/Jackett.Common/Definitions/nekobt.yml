@@ -118,7 +118,13 @@ search:
       selector: enclosure
       attribute: url
     date:
+      # Sat, 03 Jan 2026 01:27:58 GMT
       selector: pubDate
+      filters:
+        - name: replace
+          args: ["GMT", "+00:00"]
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     category:
       selector: '[name="category"]'
       attribute: value

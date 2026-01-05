@@ -144,6 +144,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(138, TorznabCatType.TV, "TOTW (x2 upload)");
             caps.Categories.AddCategoryMapping(139, TorznabCatType.Movies, "TOTM (Freeleech)");
             caps.Categories.AddCategoryMapping(138, TorznabCatType.Movies, "TOTW (x2 upload)");
+            caps.Categories.AddCategoryMapping(167, TorznabCatType.Movies, "Weekend Deluxe 4K pack");
             caps.Categories.AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
             caps.Categories.AddCategoryMapping(88, TorznabCatType.TVSport, "Sports/Football");
             caps.Categories.AddCategoryMapping(86, TorznabCatType.TVSport, "Sports/MotorSports");

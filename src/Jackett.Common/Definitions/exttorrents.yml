@@ -1,0 +1,179 @@
+---
+id: exttorrents
+name: EXT Torrents
+description: "EXT Torrents is a Public torrent site for MOVIES / TV / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+requestDelay: 5
+links:
+  - https://ext.to/
+  - https://search.extto.com/
+  - https://extranet.torrentbay.st/
+legacylinks:
+  - https://ext.unblockninja.com/
+  - https://t.extto.com/
+  - https://torrent.extto.com/
+  - https://site.extto.com/
+  - https://ext.torrentbay.to/
+  - https://extranet.torrentbay.to/
+  - https://extranet.torrentbay.net/
+
+caps:
+  categorymappings:
+    - {id: "/anime/", cat: TV/Anime, desc: Anime}
+    - {id: "/anime//anime/audio-lossy/", cat: Audio, desc: Anime Audio Lossy}
+    - {id: "/anime//anime/audio-lossless/", cat: Audio/Lossless, desc: Anime Audio Lossless}
+    - {id: "/anime//anime/english-translated/", cat: TV/Anime, desc: Anime English Translated}
+    - {id: "/anime//anime/live-action-english/", cat: TV/Anime, desc: Anime Live Action English}
+    - {id: "/anime//anime/live-action-raw/", cat: TV/Anime, desc: Anime Live Action Raw}
+    - {id: "/anime//anime/raw/", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/anime//anime/subs/", cat: TV/Anime, desc: Anime Subs}
+    - {id: "/anime//raw/", cat: TV/Anime, desc: Anime Raw}
+    - {id: "/applications/", cat: PC, desc: Apps}
+    - {id: "/applications//applications/android/", cat: PC/Mobile-Android, desc: Apps Android}
+    - {id: "/applications//applications/ios/", cat: PC/Mobile-iOS, desc: Apps iOS}
+    - {id: "/applications//applications/linux/", cat: PC, desc: Apps Linux}
+    - {id: "/applications//applications/mac/", cat: PC/Mac, desc: Apps Mac}
+    - {id: "/applications//applications/other-applications/", cat: PC/Mobile-Other, desc: Apps Other}
+    - {id: "/applications//applications/windows/", cat: PC/0day, desc: Apps Windows}
+    - {id: "/books/", cat: Books, desc: Books}
+    - {id: "/books//books/audio-books/", cat: Audio/Audiobook, desc: Books Audiobooks}
+    - {id: "/books//books/comics/", cat: Books/Comics, desc: Books Comics}
+    - {id: "/books//books/ebooks/", cat: Books/EBook, desc: Books Ebooks}
+    - {id: "/books//books/manga-english/", cat: Books/Comics, desc: Books Manga English}
+    - {id: "/books//books/manga-raw/", cat: Books/Comics, desc: Books Manga Raw}
+    - {id: "/games/", cat: PC/Games, desc: Games}
+    - {id: "/games//games/mac/", cat: PC/Mac, desc: Games Mac}
+    - {id: "/games//games/nds/", cat: Console/NDS, desc: Games NDS}
+    - {id: "/games//games/other-games/", cat: Console/Other, desc: Games Other}
+    - {id: "/games//games/pc-games/", cat: PC/Games, desc: Games PC}
+    - {id: "/games//games/ps3/", cat: Console/PS3, desc: Games PS3}
+    - {id: "/games//games/ps4/", cat: Console/PS4, desc: Games PS4}
+    - {id: "/games//games/psp/", cat: Console/PSP, desc: Games PSP}
+    - {id: "/games//games/switch/", cat: Console/Other, desc: Games Switch}
+    - {id: "/games//games/wii/", cat: Console/Wii, desc: Games Wii}
+    - {id: "/games//games/xbox360/", cat: Console/XBox 360, desc: Games Xbox360}
+    - {id: "/movies/", cat: Movies, desc: Movies}
+    - {id: "/movies//movies/3d-movies/", cat: Movies/3D, desc: Movies 3D}
+    - {id: "/movies//movies/bollywood/", cat: Movies, desc: Movies Bollywood}
+    - {id: "/movies//movies/documentary/", cat: Movies, desc: Movies Documentary}
+    - {id: "/movies//movies/dubbed-movies/", cat: Movies, desc: Movies Dubbed}
+    - {id: "/movies//movies/dvd/", cat: Movies/DVD, desc: Movies DVD}
+    - {id: "/movies//movies/highres-movies/", cat: Movies/HD, desc: Movies Highres}
+    - {id: "/movies//movies/movie-clips/", cat: Movies/Other, desc: Movies Movie clips}
+    - {id: "/movies//movies/mp4/", cat: Movies, desc: Movies MP4}
+    - {id: "/movies//movies/music-videos/", cat: Audio/Video, desc: Movies Music videos}
+    - {id: "/movies//movies/other-movies/", cat: Movies, desc: Movies Other Movies}
+    - {id: "/movies//movies/ultrahd/", cat: Movies/UHD, desc: Movies UltraHD}
+    - {id: "/music/", cat: Audio, desc: Music}
+    - {id: "/music//music/aac/", cat: Audio, desc: Music AAC}
+    - {id: "/music//music/lossless/", cat: Audio/Lossless, desc: Music Lossless}
+    - {id: "/music//music/mp3/", cat: Audio/MP3, desc: Music MP3}
+    - {id: "/music//music/other-music/", cat: Audio/Other, desc: Music Other}
+    - {id: "/music//music/radio-shows/", cat: Audio, desc: Music Radio Shows}
+    - {id: "/other/", cat: Other, desc: Other}
+    - {id: "/tv/", cat: TV, desc: TV}
+    - {id: "/tv//tv/episodes-hd/", cat: TV/HD, desc: TV Episodes HD}
+    - {id: "/tv//tv/episodes-sd/", cat: TV/SD, desc: TV Episodes SD}
+    - {id: "/tv//tv/episodes-4k-uhd/", cat: TV/UHD, desc: TV Episodes 4K}
+    - {id: "/tv//tv/big-season-packs/", cat: TV, desc: TV Big Season Packs}
+    - {id: "/tv//tv/season-packs/", cat: TV, desc: TV Season Packs}
+    - {id: "/tv//tv/sports/", cat: TV/Sport, desc: TV Sports}
+    - {id: "/video/", cat: XXX, desc: XXX Video}
+    - {id: "/xxx/", cat: XXX, desc: XXX}
+    - {id: "/xxx//xxx/games/", cat: XXX/Other, desc: XXX Games}
+    - {id: "/xxx//xxx/hentai/", cat: XXX/Other, desc: XXX Hentai}
+    - {id: "/xxx//xxx/magazines/", cat: XXX/Other, desc: XXX Magazines}
+    - {id: "/xxx//xxx/pictures/", cat: XXX/ImageSet, desc: XXX Pictures}
+    - {id: "/xxx//xxx/video/", cat: XXX, desc: XXX Video}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: age
+    options:
+      age: created
+      seed: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+search:
+  paths:
+    # https://ext.to/browse/?sort=age&order=desc&age=4&user_sort=1&with_adult=1
+    # https://ext.to/browse/?sort=age&order=desc&user_sort=1&q=wipeout&with_adult=1
+    # https://ext.to/browse/?imdb_id=tt2693776
+    - path: browse/
+    - path: browse/
+      inputs:
+        page: 2
+      followredirect: true
+  inputs:
+    q: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    # 0=last 24 hours, 1=last 3 days, 2=last week, 3=last 2 weeks, 4=last month
+    age: "{{ if or .Keywords .Query.IMDBID }}{{ else }}0{{ end }}"
+    # familysafe 0=enabled, 1=disabled
+    with_adult: "{{ if .Query.IMDBID }}{{ else }}1{{ end }}"
+    imdb_id: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    user_sort: 1
+
+  rows:
+    selector: table.table-striped > tbody > tr
+
+  fields:
+    category_part1:
+      selector: td:nth-child(1) div div a:nth-child(2)
+      attribute: href
+      optional: true
+    category_part2:
+      selector: td:nth-child(1) div div a:nth-child(3)
+      attribute: href
+      optional: true
+    category_combined:
+      text: "{{ .Result.category_part1 }}{{ .Result.category_part2 }}"
+      optional: true
+    category:
+      text: "{{ if .Result.category_combined }}{{ .Result.category_combined }}{{ else }}/other/{{ end }}"
+    title:
+      selector: td:nth-child(1) div a
+    details:
+      selector: td:nth-child(1) div a
+      attribute: href
+    infohash:
+      selector: a.search-magnet-btn
+      attribute: data-hash
+    size:
+      selector: td:nth-child(2)
+    files:
+      selector: td:nth-child(3)
+      optional: true
+      default: 1
+    date:
+      selector: td:nth-child(4)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

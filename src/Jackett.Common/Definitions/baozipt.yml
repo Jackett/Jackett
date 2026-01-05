@@ -19,6 +19,7 @@ caps:
     - {id: 407, cat: TV/Sport, desc: "体育运动/Sports"}
     - {id: 408, cat: Audio, desc: "高品质音频/HQ Audio"}
     - {id: 409, cat: Other, desc: "其他/Other"}
+    - {id: 410, cat: TV, desc: "短剧/Playlet"}
 
   modes:
     search: [q]

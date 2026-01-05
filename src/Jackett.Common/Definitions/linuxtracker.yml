@@ -39,6 +39,7 @@ caps:
     - {id: 2237, cat: PC/ISO, desc: "Batocera Linux"}
     - {id: 2272, cat: PC/ISO, desc: "BeeFree OS"}
     - {id: 2017, cat: PC/ISO, desc: "Berry Linux"}
+    - {id: 2301, cat: PC/ISO, desc: "Berserk Arch"}
     - {id: 2243, cat: PC/ISO, desc: "BicomSystems PBXware"}
     - {id: 2275, cat: PC/ISO, desc: "BigLinux"}
     - {id: 2286, cat: PC/ISO, desc: "BitKey"}

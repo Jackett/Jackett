@@ -57,6 +57,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: tmdbidonly
+    type: checkbox
+    label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
+    default: true
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
@@ -104,9 +108,9 @@ search:
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
     episodeNumber: "{{ .Query.Ep }}"
-    imdbId: "{{ .Query.IMDBIDShort }}"
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
+    tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -212,4 +216,4 @@ search:
     minimumseedtime:
       # 10 days (as seconds = 10 x 24 x 60 x 60)
       text: 864000
-# json UNIT3D 9.1.5
+# json UNIT3D 9.1.5 (custom)

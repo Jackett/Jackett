@@ -84,8 +84,8 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    seasonNumber: "{{ .Query.Season }}"
-    episodeNumber: "{{ .Query.Ep }}"
+    # seasonNumber: "{{ .Query.Season }}" # not supported
+    # episodeNumber: "{{ .Query.Ep }}" # not supported
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
@@ -155,4 +155,4 @@ search:
       text: 1
     minimumratio:
       text: 0.4
-# json UNIT3D 6.4.1 (Custom)
+# json UNIT3D 6.4.1 (custom)

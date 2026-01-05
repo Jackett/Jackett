@@ -20,6 +20,7 @@ caps:
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey

@@ -28,8 +28,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, tvdbid, tmdbid]
-    movie-search: [q, tmdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -44,6 +44,10 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+    default: false
+  - name: tmdbidonly
+    type: checkbox
+    label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
     default: false
   - name: single_file_release_use_filename
     type: checkbox
@@ -94,11 +98,11 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    # seasonNumber: "{{ .Query.Season }}" # disabled due to Prowlarr/Indexers#486
-    # episodeNumber: "{{ .Query.Ep }}" # disabled due to Prowlarr/Indexers#486
-    # imdbId: "{{ .Query.IMDBIDShort }}" # disabled due to #14776
+    # seasonNumber: "{{ .Query.Season }}" # not supported
+    # episodeNumber: "{{ .Query.Ep }}" # not supported
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
+    tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"

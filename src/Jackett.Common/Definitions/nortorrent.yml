@@ -1,21 +1,16 @@
 ---
-id: world-torrent
+id: nortorrent
 replaces:
-  - zetorrents
-name: World-torrent
-description: "World-torrent is a FRENCH Public site for MOVIES / TV / GENERAL"
+  - torrent9clone
+  - torrent9-tel
+name: NorTorrent
+description: "NorTorrent is a FRENCH Public tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.world-torrent1.com/
-  - https://www.cine-torrent1.com/
-  - https://ww1-mania-torrent.com/
-  - https://www.magnet-torrent1.com/
-  - https://www.mega-torrent9.com/
-  - https://www.zone-torrent6.com/
-  - https://www.warez-torrent1.com/
+  - https://www.nortorrent8.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -27,25 +22,25 @@ legacylinks:
   - https://www.protege-liens.com/
   - https://www.protege-liens.net/
   - https://www.torrent.onl/
+  - https://torrent9.news/
   - https://www.site-torrent.com/
   - https://www.rantop.my/
   # actual legacylinks
-  - https://www.zetorrents.vg/
-  - https://www.zetorrents.vc/
-  - https://www.zetorrents.sk/
-  - https://www.zetorrents.my/
-  - https://wvw-zetorrents.com/
-  - https://www-zetorrents.com/
-  - https://www.zetorrents1.com/
-  - https://www.zetorrents.diy/
-  - https://www.zetorrents2.com/
-  - https://www.zetorrents.town/
-  - https://zetorrents-proxy.site/
-  - https://ww1-zetorrents.me/
-  - https://www.zetorrents.rent/
-  - https://ww1-zetorrents.town/
-  - https://www.world-torrent.com/
-  - https://www.mania-torrent.com/
+  - https://www-torrent9.com/
+  - https://www.nortorrent.com/
+  - https://www.nortorrent1.com/
+  - https://www.nortorrent2.com/
+  - https://www.nortorrent3.com/
+  - https://www.nortorrent4.com/
+  - https://www.nortorrent5.com/
+  - https://www.nortorrent6.com/
+  - https://www.nortorrent.net/
+  - https://www.nortorrent.town/
+  - https://nortorrent-proxy.site/
+  - https://ww1-nortorrent.me/
+  - https://www.nortorrent.rent/
+  - https://ww1-nortorrent.town/
+  - https://www.nortorrent7.com/
 
 caps:
   categorymappings:
@@ -75,6 +70,8 @@ caps:
   allowrawsearch: true
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -97,31 +94,29 @@ settings:
 
 download:
   selectors:
-    - selector: a[href^="magnet:?"]
+    - selector: a[href^="/get_torrents/"]
       attribute: href
 
 search:
   paths:
     - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
-    # if searching for season packs switch S01 to saison 1 #9712
+    # if searching for season packs swith S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
     - name: re_replace
       args: ["(?i)(S)(\\d{1,3})$", "saison $2"]
 
   rows:
-    selector: table.table > tbody > tr:has(a[href^="/detail/"])
+    selector: table.table-striped > tbody > tr
 
   fields:
     category:
-      selector: i
+      selector: td:nth-child(1) i
       attribute: class
     title_phase1:
-      selector: a[href^="/detail/"]
+      selector: td:nth-child(1) a
       filters:
-        - name: replace
-          args: ["WEBRIP", "WEBDL"]
         - name: re_replace
           args: ["(?i)\\b(FRENCH|MULTI|TRUEFRENCH|VOSTFR|SUBFRENCH)\\b(.+?)(\\b((19|20)\\d{2})\\b)$", "$3 $1$2"]
     title_vostfr:
@@ -138,20 +133,36 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details_href:
+      selector: td:nth-child(1) a[href]
+      attribute: href
+      optional: true
+      filters:
+        - name: regexp
+          args: (/?detail/\d+)
+    details_onclick:
+      selector: td:nth-child(1) a[onclick]
+      attribute: onclick
+      optional: true
+      filters:
+        - name: regexp
+          args: (/?detail/\d+)
     details:
-      selector: a[href^="/detail/"]
-      attribute: href
+      text: "{{ or .Result.details_href .Result.details_onclick }}"
     download:
-      selector: a[href^="/detail/"]
-      attribute: href
+      text: "{{ .Result.details }}"
     date:
       text: now
     size:
       selector: td:nth-child(2)
     seeders:
       selector: td:nth-child(3)
+      optional: true
+      default: 0
     leechers:
       selector: td:nth-child(4)
+      optional: true
+      default: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
