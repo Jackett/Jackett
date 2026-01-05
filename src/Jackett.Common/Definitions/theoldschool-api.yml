@@ -3,7 +3,7 @@ id: theoldschool-api
 name: The Old School (API)
 description: "The Old School (TOS) is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://theoldschool.cc/

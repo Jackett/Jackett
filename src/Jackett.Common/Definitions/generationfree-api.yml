@@ -3,7 +3,7 @@ id: generationfree-api
 name: Generation-Free (API)
 description: "Generation-Free (GF-Free) is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
-type: private
+type: semi-private
 encoding: UTF-8
 links:
   - https://generation-free.org/
