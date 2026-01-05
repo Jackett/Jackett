@@ -65,10 +65,6 @@ settings:
     type: info
     label: About your Passkey
     default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -104,13 +100,15 @@ login:
 
 search:
   paths:
+    # docs at https://la-cale.space/faq/api
     - path: api/external
-      inputs:
-        passkey: "{{ .Config.passkey }}"
-        # cat: "{{ if .Categories }}{{ join .Categories \",\" }}{{ else }}{{ end }}" # currently not supported in API
-        q: "{{ .Keywords }}"
       response:
         type: json
+
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+    $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
+    q: "{{ .Keywords }}"
 
   rows:
     selector: $
