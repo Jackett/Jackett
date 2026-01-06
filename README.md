@@ -430,6 +430,7 @@ Prior versions of Jackett are no longer supported.
  * LibraNet (LN)
  * LinkoManija
  * Locadora
+ * LongPT
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
  * LuckPT [![(invite needed)][inviteneeded]](#)
