@@ -543,6 +543,7 @@ Prior versions of Jackett are no longer supported.
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
+ * TangPT (躺平)
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
