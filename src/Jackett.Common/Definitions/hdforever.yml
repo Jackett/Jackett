@@ -81,6 +81,10 @@ settings:
     type: info
     label: About Radarr
     default: The HD-F web site cannot find movies if you use the release year in a title search. When you define your Radarr Indexer remember to tick the <i>Remove year from search string</i> checkbox.
+  - name: info_release_name
+    type: info
+    label: About release names
+    default: For more stable release names, enable <b>Afficher les noms de fichiers</b> in your HD-F profile settings.
 
 login:
   path: login.php
@@ -196,9 +200,14 @@ search:
         "*": 1
     uploadvolumefactor:
       text: 1
-    title_phase1:
+    title_torrent_filename:
+      selector: div.torrent_filename_row
+      optional: true
+      filters:
+        - name: trim
+    title_parsed:
       selector: div.group_info
-      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img, .tl_free, .tl_notice
+      remove: span.team_name, span:has(a[href^="torrents.php?action=download"]), div.tags, div.vote_controls, div.stats-content, .add_bookmark, img, .tl_free, .tl_notice, .torrent_filename_row
       filters:
         - name: replace
           args: ["\n", " "]
@@ -249,6 +258,8 @@ search:
           args: ["(?i)\\.(?:VO\\.)?StFR", ".VOSTFR"]
         - name: append
           args: "{{ if .Result._release_group }}-{{ .Result._release_group }}{{ else }}{{ end }}"
+    title_phase1:
+      text: "{{ if .Result.title_torrent_filename }}{{ .Result.title_torrent_filename }}{{ else }}{{ .Result.title_parsed }}{{ end }}"
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
