@@ -185,7 +185,15 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    description_verified:
+      case:
+        span[title="通过"]: "Verified:"
+        span[title="未审"]: "Unverified:"
+        span[title="拒绝"]: "Banned:"
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
 # NexusPHP v1.9.6 2025-06-25
