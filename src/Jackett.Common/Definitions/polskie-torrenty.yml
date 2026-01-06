@@ -107,12 +107,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -126,15 +125,9 @@ settings:
       MULTi POLISH: MULTi POLISH
 
 login:
-  path: login.php
-  method: form
-  form: form[name="login"]
+  method: cookie
   inputs:
-    uid: "{{ .Config.username }}"
-    pwd: "{{ .Config.password }}"
-    keeplogged: 1
-  error:
-    - selector: font[color="#FF0000"]
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
