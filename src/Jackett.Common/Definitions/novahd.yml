@@ -29,7 +29,6 @@ caps:
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: cookie
