@@ -140,7 +140,7 @@ search:
     - name: trim
 
   rows:
-    selector: table#torrents_list_p > tbody > tr:has(a[href^="download.php?id="]), table#torrents_list_p > tbody > tr:has(a[href^="magnet:?xt="])
+    selector: table#torrents_list_p > tr:has(a[href^="download.php?id="]), table#torrents_list_p > tr:has(a[href^="magnet:?xt="])
     filters:
       - name: andmatch
 
@@ -192,13 +192,13 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "MM-yy-dd HH:mm:ss tt"
+          args: "yy-MM-dd hh:mm:ss tt"
     size:
       selector: span.size
     seeders:
-      selector: span[title="Seeders"]
+      selector: span[title="Seeders"] a
     leechers:
-      selector: span[title="Leechers"]
+      selector: span[title="Leechers"] a
     downloadvolumefactor:
       case:
         span.free: 0
