@@ -25,7 +25,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "cinecalidad";
         public override string Name => "Cinecalidad";
         public override string Description => "Cinecalidad is a Public site for Películas Full UHD/HD en Latino Dual.";
-        public override string SiteLink { get; protected set; } = "https://www.cinecalidad.vg/";
+        public override string SiteLink { get; protected set; } = "https://www.cinecalidad.ec/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://wv.cinecalidad.foo/",
@@ -43,6 +43,7 @@ namespace Jackett.Common.Indexers.Definitions
             "https://vvvv.cinecalidad.so/",
             "https://wvvv.cinecalidad.so/",
             "https://cinecalidad.fi/",
+            "https://www.cinecalidad.vg/",
         };
         public override string Language => "es-419";
         public override string Type => "public";
@@ -144,6 +145,39 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 using var dom = await parser.ParseDocumentAsync(results.ContentString);
 
+                var is4K = link.Query.Contains("type=4k");
+                var hrefDownloadLinks = dom.QuerySelectorAll("#sbss > a:not([href*='acortalink'])");                if (hrefDownloadLinks.Length > 0)
+                {
+                    var selected = hrefDownloadLinks.FirstOrDefault(a => a.TextContent.IndexOf("uTorrent", StringComparison.OrdinalIgnoreCase) >= 0);
+                    selected ??= is4K
+                        ? hrefDownloadLinks.FirstOrDefault(a => a.TextContent.IndexOf("4k", StringComparison.OrdinalIgnoreCase) >= 0 || a.TextContent.IndexOf("2160", StringComparison.OrdinalIgnoreCase) >= 0)
+                        : hrefDownloadLinks.FirstOrDefault(a => a.TextContent.IndexOf("4k", StringComparison.OrdinalIgnoreCase) < 0 && a.TextContent.IndexOf("2160", StringComparison.OrdinalIgnoreCase) < 0);
+
+                    selected ??= hrefDownloadLinks.FirstOrDefault();
+
+                    var href = selected?.GetAttribute("href");
+                    if (!href.IsNullOrWhiteSpace())
+                    {
+                        href = GetAbsoluteUrl(href);
+                        var dlResult = await RequestWithCookiesAsync(href);
+                        dlResult = await FollowIfRedirect(dlResult, referrer: link.ToString());
+
+                        if (!dlResult.RedirectingTo.IsNullOrWhiteSpace() && new Uri(dlResult.RedirectingTo).Scheme == "magnet")
+                        {
+                            return await base.Download(new Uri(dlResult.RedirectingTo));
+                        }
+
+                        using var dlDom = parser.ParseDocument(dlResult.ContentString);
+                        var magnetUrlFromDownloadPage = dlDom.QuerySelector("a.link[data-href^='magnet:']")?.GetAttribute("data-href");
+                        if (magnetUrlFromDownloadPage.IsNullOrWhiteSpace())
+                        {
+                            throw new Exception($"Invalid magnet link for {link}");
+                        }
+
+                        return await base.Download(new Uri(magnetUrlFromDownloadPage));
+                    }
+                }
+
                 var downloadLink = link.Query.Contains("type=4k")
                     ? dom.QuerySelector("ul.links a:contains('Bittorrent 4K')")
                     : dom.QuerySelector("ul.links a:contains('Torrent')");
@@ -170,9 +204,9 @@ namespace Jackett.Common.Indexers.Definitions
                 results = await RequestWithCookiesAsync(protectedLink);
 
                 using var document = parser.ParseDocument(results.ContentString);
-                var magnetUrl = document.QuerySelector("a[href^=magnet]").GetAttribute("href");
+                var magnetUrlFromProtectedPage = document.QuerySelector("a[href^=magnet]").GetAttribute("href");
 
-                return await base.Download(new Uri(magnetUrl));
+                return await base.Download(new Uri(magnetUrlFromProtectedPage));
             }
             catch (Exception ex)
             {
@@ -182,95 +216,141 @@ namespace Jackett.Common.Indexers.Definitions
             return null;
         }
 
-        private List<ReleaseInfo> ParseReleases(WebResult response, TorznabQuery query)
+private List<ReleaseInfo> ParseReleases(WebResult response, TorznabQuery query)
+{
+    var releases = new List<ReleaseInfo>();
+
+    try
+    {
+        var parser = new HtmlParser();
+        using var dom = parser.ParseDocument(response.ContentString);
+
+        // Get all movie items - updated selector to match the actual structure
+        var movieItems = dom.QuerySelectorAll("article, div[class*='post-']");
+
+        foreach (var item in movieItems)
         {
-            var releases = new List<ReleaseInfo>();
+            var seltText = item.QuerySelector("div.selt")?.TextContent?.Trim();
+            if (!string.IsNullOrEmpty(seltText) && seltText.IndexOf("Series", StringComparison.OrdinalIgnoreCase) >= 0)
+                continue;
+
+            var titleElement = item.QuerySelector(".in_title") ?? item.QuerySelector("h3") ?? item.QuerySelector("h2") ?? item.QuerySelector(".entry-title");
+            var linkElement = item.QuerySelector("a[href*='/ver-pelicula/']") ??
+                             item.QuerySelector("a[href*='/pelicula/']") ??
+                             item.QuerySelector("h3 a[href]") ??
+                             item.QuerySelector("h2 a[href]") ??
+                             item.QuerySelector(".entry-title a[href]");
+
+            var imgElement = item.QuerySelector("img.lazy") ??
+                            item.QuerySelector("img[data-src]") ??
+                            item.QuerySelector("img[src]");
+
+            // Try to find year in various places
+            var yearElement = item.QuerySelector("span.year") ??
+                             item.QuerySelector(".year") ??
+                             item.QuerySelector(".date") ??
+                             item.QuerySelector("time") ??
+                             item.QuerySelector(".entry-meta");
+
+            if (titleElement == null || linkElement == null)
+                continue;
+
+            var title = titleElement.TextContent.Trim();
+            var year = yearElement?.TextContent.Trim();
+
+            // Extract year if it's in format like (2023) or [2023]
+            if (!string.IsNullOrEmpty(year))
+            {
+                var yearMatch = System.Text.RegularExpressions.Regex.Match(year, @"\(?(\d{4})\)?");
+                if (yearMatch.Success)
+                {
+                    year = yearMatch.Groups[1].Value;
+                    title = $"{title.Trim()} ({year})";
+                }
+            }
+
+            if (!CheckTitleMatchWords(query.GetQueryString(), title))
+                continue;
+
+            var posterUrl = imgElement?.GetAttribute("data-src") ??
+                           imgElement?.GetAttribute("src");
+
+            var detailsUrl = linkElement.GetAttribute("href");
+
+            if (string.IsNullOrEmpty(detailsUrl) ||
+                detailsUrl.Contains("wp-json") ||
+                detailsUrl.Contains("wp-admin"))
+                continue;
+
+            // Skip if it's not a movie URL
+            if (!detailsUrl.Contains("/ver-pelicula/") && !detailsUrl.Contains("/pelicula/"))
+                continue;
 
             try
             {
-                var parser = new HtmlParser();
-                using var dom = parser.ParseDocument(response.ContentString);
+                var poster = !string.IsNullOrEmpty(posterUrl) ?
+                    new Uri(GetAbsoluteUrl(posterUrl)) : null;
+                var link = new Uri(detailsUrl);
 
-                var rows = dom.QuerySelectorAll("article:has(a.absolute):has(img.rounded)");
+                // Check for 4K version
+                var is4K = item.TextContent.IndexOf("4K", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                           item.TextContent.IndexOf("2160p", StringComparison.OrdinalIgnoreCase) >= 0 ||
+                           detailsUrl.IndexOf("4k", StringComparison.OrdinalIgnoreCase) >= 0;
 
-                foreach (var row in rows)
+                // Add HD version (1080p)
+                releases.Add(new ReleaseInfo
                 {
-                    if (row.QuerySelector("div.selt") != null)
-                    {
-                        // we only support movies
-                        continue;
-                    }
+                    Guid = link,
+                    Details = link,
+                    Link = link,
+                    Title = $"{title} MULTi/LATiN SPANiSH 1080p BDRip x264",
+                    Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                    Poster = poster,
+                    Size = 2147483648, // 2 GB
+                    Files = 1,
+                    Seeders = 1,
+                    Peers = 2,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
+                    PublishDate = DateTime.Today
+                });
 
-                    var qLink = row.QuerySelector("a.absolute");
-                    var qImg = row.QuerySelector("img.rounded");
-                    if (qLink == null || qImg == null)
-                    {
-                        // skip results without image
-                        continue;
-                    }
-
-                    var title = qLink.TextContent.Trim();
-                    if (!CheckTitleMatchWords(query.GetQueryString(), title))
-                    {
-                        // skip if it doesn't contain all words
-                        continue;
-                    }
-
-                    var yearDiv = row.QuerySelector("div[style*='left: 5px']");
-                    var yearText = yearDiv?.TextContent?.Trim(); // e.g., "2024"
-                    if (!string.IsNullOrEmpty(yearText))
-                    {
-                        title = $"{title} ({yearText})";
-                    }
-
-                    var poster = new Uri(GetAbsoluteUrl(qImg.GetAttribute("data-src") ?? qImg.GetAttribute("src")));
-                    var link = new Uri(qLink.GetAttribute("href"));
-
+                // Add 4K version if available
+                if (is4K)
+                {
+                    var link4K = link.AddQueryParameter("type", "4k");
                     releases.Add(new ReleaseInfo
                     {
-                        Guid = link,
+                        Guid = link4K,
                         Details = link,
-                        Link = link,
-                        Title = $"{title} MULTi/LATiN SPANiSH 1080p BDRip x264",
-                        Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                        Link = link4K,
+                        Title = $"{title} MULTi/LATiN SPANiSH 2160p BDRip x265",
+                        Category = new List<int> { TorznabCatType.MoviesUHD.ID },
                         Poster = poster,
-                        Size = 2147483648, // 2 GB
+                        Size = 10737418240, // 10 GB
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
                         DownloadVolumeFactor = 0,
-                        UploadVolumeFactor = 1
+                        UploadVolumeFactor = 1,
+                        PublishDate = DateTime.Today
                     });
-
-                    if (row.QuerySelector("a[aria-label=\"4K\"]") != null)
-                    {
-                        var link4K = link.AddQueryParameter("type", "4k");
-
-                        releases.Add(new ReleaseInfo
-                        {
-                            Guid = link4K,
-                            Details = link,
-                            Link = link4K,
-                            Title = $"{title} MULTi/LATiN SPANiSH 2160p BDRip x265",
-                            Category = new List<int> { TorznabCatType.MoviesUHD.ID },
-                            Poster = poster,
-                            Size = 10737418240, // 10 GB
-                            Files = 1,
-                            Seeders = 1,
-                            Peers = 2,
-                            DownloadVolumeFactor = 0,
-                            UploadVolumeFactor = 1
-                        });
-                    }
                 }
             }
             catch (Exception ex)
             {
-                OnParseError(response.ContentString, ex);
+                // Skip this item if there's an error with URL parsing
+                continue;
             }
-
-            return releases;
         }
+    }
+    catch (Exception ex)
+    {
+        OnParseError(response.ContentString, ex);
+    }
+
+    return releases;
+}
 
         // TODO: merge this method with query.MatchQueryStringAND
         private static bool CheckTitleMatchWords(string queryStr, string title)
