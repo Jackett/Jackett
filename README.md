@@ -327,6 +327,7 @@ Prior versions of Jackett are no longer supported.
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
  * Drugari
+ * dubhe (天枢)
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
