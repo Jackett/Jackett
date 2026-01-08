@@ -31,11 +31,11 @@ download:
         - name: replace
           args: ["/download?", "/download/?"]
   selectors:
-    - selector: script:contains("downloadLink")
+    - selector: script:contains("torrentLink")
       usebeforeresponse: true
       filters:
         - name: regexp
-          args: "downloadLink = '(.+?)';"
+          args: "torrentLink = '(.+?)';"
 
 search:
   paths:
