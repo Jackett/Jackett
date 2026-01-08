@@ -8,6 +8,7 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 
@@ -284,6 +285,27 @@ namespace Jackett.Server.Controllers
         {
             Helper.SetLogLevel(enabled ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = enabled;
+        }
+
+        [AllowAnonymous]
+        [HttpPost]
+        public IActionResult Shutdown()
+        {
+            logger.Warn("Shutdown requested via API");
+
+            var shutdownThread = new Thread(() =>
+            {
+                Thread.Sleep(200);
+                Helper.applicationLifetime.StopApplication();
+            });
+
+            shutdownThread.Start();
+
+            return Ok(new
+            {
+                status = "ok",
+                message = "Jackett shutdown initiated"
+            });
         }
     }
 }
