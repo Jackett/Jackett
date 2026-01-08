@@ -288,23 +288,17 @@ namespace Jackett.Server.Controllers
         }
 
         [AllowAnonymous]
+        [TypeFilter(typeof(RequiresApiKey))]
         [HttpPost]
         public IActionResult Shutdown()
         {
             logger.Warn("Shutdown requested via API");
 
-            var shutdownThread = new Thread(() =>
-            {
-                Thread.Sleep(200);
-                Helper.applicationLifetime.StopApplication();
-            });
-
-            shutdownThread.Start();
+            Task.Factory.StartNew(() => Helper.applicationLifetime.StopApplication());
 
             return Ok(new
             {
-                status = "ok",
-                message = "Jackett shutdown initiated"
+                ShuttingDown = true
             });
         }
     }
