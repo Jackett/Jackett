@@ -6,7 +6,7 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  -  https://dubhe.site/
+  - https://dubhe.site/
 
 caps:
   categorymappings:
