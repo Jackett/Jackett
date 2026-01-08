@@ -1,28 +1,24 @@
 ---
-id: novahd
-name: NovaHD
-description: "NovaHD is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: tangpt
+name: TangPT (躺平)
+description: "TangPT (躺平) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://pt.novahd.top/
-  - https://tracker.novahd.top/
+  - https://www.tangpt.top/
 
 caps:
   categorymappings:
-    - {id: 413, cat: TV/Anime, desc: "Anime Series/番剧"}
-    - {id: 412, cat: TV/Anime, desc: "Anime/动漫"}
-    - {id: 411, cat: TV, desc: "Playlet/短剧"}
-    - {id: 401, cat: Movies, desc: "Movies/电影"}
-    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
-    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentary/纪录片"}
-    - {id: 405, cat: TV/Anime, desc: "Animations/动画"}
-    - {id: 406, cat: Audio/Video, desc: "MV/演唱会"}
-    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
-    - {id: 409, cat: Audio, desc: "Music/音乐"}
-    - {id: 410, cat: Other/Misc, desc: "Misc/其他"}
+    - {id: 401, cat: Movies, desc: "电影"}
+    - {id: 402, cat: TV, desc: "电视剧"}
+    - {id: 403, cat: TV, desc: "综艺"}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片"}
+    - {id: 405, cat: TV/Anime, desc: "动漫"}
+    - {id: 406, cat: Audio/Video, desc: "MV"}
+    - {id: 407, cat: TV/Sport, desc: "体育"}
+    - {id: 409, cat: Audio/Lossless, desc: "音乐"}
+    - {id: 414, cat: Other, desc: "其他"}
 
   modes:
     search: [q]
@@ -63,13 +59,15 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted</li><li>Elite User or above would never be deleted if parked (at User CP)</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row</li><li>Un-parked accounts would be deleted if users have not logged in for more than 150 days in a row</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
 
 login:
   # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
+  error:
+    - selector: td.embedded:has(h2:contains("失败"))
   test:
     path: index.php
     selector: a[href="logout.php"]
@@ -169,12 +167,15 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 2.0
-    minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
-      text: 172800
+    description_verified:
+      case:
+        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
+        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
+        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.9.9 2025-10-02
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
+# NexusPHP v1.9.11 2025-11-02

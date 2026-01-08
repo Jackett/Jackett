@@ -327,6 +327,7 @@ Prior versions of Jackett are no longer supported.
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
  * Drugari
+ * dubhe (天枢)
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
@@ -407,6 +408,7 @@ Prior versions of Jackett are no longer supported.
  * JME-REUNIT3D
  * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
  * JPopsuki
+ * JPTV4us
  * KamePT [![(invite needed)][inviteneeded]](#)
  * Karagarga [![(invite needed)][inviteneeded]](#)
  * Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
@@ -430,6 +432,7 @@ Prior versions of Jackett are no longer supported.
  * LibraNet (LN)
  * LinkoManija
  * Locadora
+ * LongPT
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
  * LuckPT [![(invite needed)][inviteneeded]](#)
@@ -439,6 +442,7 @@ Prior versions of Jackett are no longer supported.
  * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
+ * March
  * Matrix
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
@@ -542,6 +546,7 @@ Prior versions of Jackett are no longer supported.
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
+ * TangPT (躺平)
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)

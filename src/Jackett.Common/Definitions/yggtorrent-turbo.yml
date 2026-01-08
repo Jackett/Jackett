@@ -362,7 +362,7 @@ search:
       args: ["([^\\s]+)", "\"$1\""]
 
   rows:
-    selector: table.table > tbody > tr
+    selector: table.table > tbody > tr:not(tr.ygg-promo-row-lc)
 
   fields:
     _id:
