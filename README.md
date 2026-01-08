@@ -408,6 +408,7 @@ Prior versions of Jackett are no longer supported.
  * JME-REUNIT3D
  * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
  * JPopsuki
+ * JPTV4us
  * KamePT [![(invite needed)][inviteneeded]](#)
  * Karagarga [![(invite needed)][inviteneeded]](#)
  * Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
