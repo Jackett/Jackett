@@ -10,23 +10,17 @@ links:
 
 caps:
   categorymappings:
-    - {id: "apps", cat: PC/Mac, desc: "Applications"}
-    - {id: "apps/adobe-apps", cat: PC/Mac, desc: "Adobe"}
-    - {id: "apps/apple", cat: PC/Mac, desc: "Apple"}
-    - {id: "apps/office", cat: PC/Mac, desc: "Office"}
-    - {id: "apps/photography", cat: PC/Mac, desc: "Photography"}
-    - {id: "apps/graphics-design", cat: PC/Mac, desc: "Graphics & Design"}
-    - {id: "apps/utilities-tools", cat: PC/Mac, desc: "Tools & Utilities"}
-    - {id: "games", cat: PC/Games, desc: "Games"}
-    - {id: "apps/audio-editors", cat: PC/Mac, desc: "Audio & Music"}
-    - {id: "apps/productivity", cat: PC/Mac, desc: "Productivity"}
-    - {id: "apps/finance", cat: PC/Mac, desc: "Finance"}
-    - {id: "apps/business", cat: PC/Mac, desc: "Business"}
+    - {id: "apps", cat: PC/Mac, desc: "Apps"}
+    - {id: "games", cat: PC/Games, desc: Games}
+    - {id: "design-assets", cat: Other, desc: Design Assets}
+    - {id: "uncategorized", cat: Other, desc: Uncategorized}
 
   modes:
     search: [q]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   before:
@@ -41,7 +35,7 @@ download:
       usebeforeresponse: true
       filters:
         - name: regexp
-          args: "const torrentLink = '(.+?)';"
+          args: "torrentLink = '(.+?)';"
 
 search:
   paths:
@@ -56,35 +50,35 @@ search:
 
   fields:
     category:
-      selector: a[rel="category tag"]
+      selector: a[href*="/category/"]
       attribute: href
       filters:
         - name: split
           args: ["/", 4]
     title:
-      selector: h2.post-title a
+      selector: a
       attribute: title
     details:
-      selector: h2.post-title a
+      selector: a
       attribute: href
     download:
-      selector: h2.post-title a
+      selector: a
       attribute: href
     poster:
       selector: img
       attribute: src
     description:
-      selector: .post_content p
+      selector: section p
     date:
-      selector: p.meta time
+      selector: time
       attribute: datetime
       filters:
         - name: append
-          args: " -07:00"
+          args: " -07:00" # PDT
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      text: "Unknown"
+      text: "512 MB"
     seeders:
       text: 1
     leechers:
@@ -93,3 +87,4 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+# WordPress 4.9.18
