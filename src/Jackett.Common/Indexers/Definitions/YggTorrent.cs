@@ -24,6 +24,9 @@ namespace Jackett.Common.Indexers.Definitions
     public class YggTorrent : IndexerBase
     {
         public override string Id => "yggtorrent";
+
+        public override string[] Replaces => new[] { "yggtorrent-turbo" };
+
         public override string Name => "YggTorrent";
 
         public override string Description =>
@@ -836,7 +839,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var doc = parser.ParseDocument(html);
 
-                var rows = doc.QuerySelectorAll("table.table > tbody > tr");
+                var rows = doc.QuerySelectorAll("table.table > tbody > tr:not(tr.ygg-promo-row-lc)");
                 foreach (var row in rows)
                 {
                     var a = row.QuerySelector("td:nth-child(2) > a");
