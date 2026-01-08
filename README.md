@@ -440,6 +440,7 @@ Prior versions of Jackett are no longer supported.
  * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
+ * March
  * Matrix
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
