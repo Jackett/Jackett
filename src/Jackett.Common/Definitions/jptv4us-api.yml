@@ -154,6 +154,7 @@ search:
     grabs:
       selector: times_completed
     date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
       selector: created_at
       filters:
         - name: append
