@@ -21,6 +21,7 @@ caps:
     - {id: 17, cat: Movies/WEB-DL, desc: "WEB-DL/DTH"}
     - {id: 14, cat: Movies/DVD, desc: "DVD-Rips"}
     - {id: 15, cat: Movies/HD, desc: "DTH/HD-Rip"}
+    - {id: 45, cat: Movies/Other, desc: "AI Encodes"}
     - {id: 20, cat: Movies/SD, desc: "VHS/TV-Rip"}
     - {id: 21, cat: Movies, desc: "Video CDs"}
     - {id: 19, cat: Movies, desc: "Pre Releases "}
@@ -138,48 +139,56 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table#tottest[width=\"100%\"] tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(img[title=\"Allready Grabbed !!\"]))"
+    selector: "table.torrents tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(img[title=\"Allready Grabbed !!\"]))"
 
   fields:
     category:
-      selector: td a[href^="index.php?page=torrents&category="]
+      selector: td.category > a
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td.torrent-first a
     details:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td.torrent-first a
       attribute: href
     download:
-      selector: td a[href^="index.php?page=torrent-details"]
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: td.download > a
       attribute: href
     poster:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td.torrent-first a
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?)  width"
+          args: "src=(.+?) border"
     date:
       # 6 weeks ago
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: td.torrent-first a
       attribute: onmouseover
       filters:
         - name: regexp
           args: "Added\\:(\\d+ \\w+ \\w+)<"
         - name: timeago
     size:
-      selector: td:nth-child(5)
+      selector: td.size
     grabs:
-      selector: td:nth-child(6)
+      selector: td.torrent-first div div
+      filters:
+        - name: regexp
+          args: "^\\d+\\s+\\d+\\s+(.+)"
+        - name: replace
+          args: ["---", "0"]
     seeders:
-      selector: td:nth-child(7)
+      selector: td.torrent-first div div
+      filters:
+        - name: regexp
+          args: "^(\\d+)\\s+\\d+\\s+.+"
     leechers:
-      selector: td:nth-child(8)
+      selector: td.torrent-first div div
+      filters:
+        - name: regexp
+          args: "^\\d+\\s+(\\d+)\\s+.+"
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0
