@@ -108,6 +108,9 @@ search:
       filters:
         - name: querystring
           args: category
+        # change broken/missing cat 0 to Others
+        - name: re_replace
+          args: ["\\b0\\b", "38"]
     title_default:
       selector: td a[href^="index.php?page=torrent-details"]
       filters:
