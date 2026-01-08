@@ -12,9 +12,17 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 1, cat: Books/Mags, desc: "Revistas"}
+    - {id: 2, cat: TV, desc: "Seriado"}
+    - {id: 3, cat: Audio/Audiobook, desc: "Música"}
+    - {id: 4, cat: Console, desc: "Jogo"}
+    - {id: 5, cat: PC, desc: "Aplicativo"}
     - {id: 6, cat: Books/EBook, desc: "E-Books"}
     - {id: 7, cat: Other, desc: "Cursos"}
-    - {id: 9, cat: Audio/Audiobook, desc: "Audio E-Book"}
+    - {id: 8, cat: XXX/ImageSet, desc: "Fotos Adultas"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audio livro"}
+    - {id: 10, cat: Books/Comics, desc: "HQs/Mangas"}
+    - {id: 11, cat: TV, desc: "Shows"}
 
   modes:
     search: [q]
