@@ -72,7 +72,6 @@ Prior versions of Jackett are no longer supported.
  * GamesTorrents
  * GTorrent.pro
  * HDRTorrent
- * Idope
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
  * Isohunt2
