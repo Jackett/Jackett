@@ -18,13 +18,14 @@ caps:
     - {id: 6, cat: TV, desc: "مسلسلات رسوم مترجمة (Subtitled Animated Series)"}
     - {id: 7, cat: TV, desc: "مسلسلات عربية (Arabic Series)"}
     - {id: 8, cat: TV, desc: "مسرحيات (Plays)"}
-    - {id: 9, cat: TV/Documentary, desc: "وثائقيات (Documentaries)"}
     - {id: 10, cat: Other, desc: "إسلاميات (Islamic Content)"}
     - {id: 11, cat: Other, desc: "رمضانيات (Ramadan Content)"}
     - {id: 12, cat: Other, desc: "منوعات (Variety)"}
     - {id: 13, cat: Audio, desc: "صوتيات (Audio)"}
     - {id: 14, cat: Movies, desc: "كرتون كلاسيك (Classic Cartoons)"}
     - {id: 15, cat: Other, desc: "تورنت خام (Raw Torrents)"}
+    - {id: 20, cat: TV/Documentary, desc: "مسلسلات وثائقيات (Documentary Series)"}
+    - {id: 9, cat: Movies, desc: "أفلام وثائقيات (Documentary Films)"}
     - {id: 19, cat: Other, desc: "تورينتات ضائعة (Lost Torrents)"}
 
   modes:
