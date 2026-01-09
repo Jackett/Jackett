@@ -524,15 +524,6 @@ namespace Jackett.Common.Indexers.Definitions
             var order = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgOrder)).Value;
             var sortKey = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgSort)).Value;
 
-            var siteSort = sortKey switch
-            {
-                "publish_date" => "created",
-                "seed" => "seeders",
-                "size" => "size",
-                "name" => "title",
-                _ => "created"
-            };
-
             var pageOffsets = new int?[] { null, 50 };
 
             foreach (var request in BuildSearchRequests(trackerCats))
@@ -543,7 +534,7 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         ["do"] = "search",
                         ["order"] = order,
-                        ["sort"] = siteSort,
+                        ["sort"] = sortKey,
                         ["category"] = request.RootCategory,
                         ["name"] = keywords
                     };
