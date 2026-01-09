@@ -130,29 +130,31 @@ search:
     # sort is done via do=quick_sort, and freeleech sorting is part of that set
 
   rows:
-    selector: "table#sortabletable > tbody > tr:has(a[href*=\"/details.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
         args: 66
 
   fields:
     category:
-      selector: a[href*="/browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: category-(\d+)
     title_default:
-      selector: a[href*="/details.php?id="]
+      # is often abbreviated
+      selector: a[href*="torrent-details-"]
     title:
+      # can be abbreviated but usually longer than title_default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="/details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="/download.php?id="]
+      selector: a[href*="download-torrent-"]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
@@ -185,4 +187,9 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "dd-MM-yyyy HH:mm zzz"
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TS Special Edition v.8.0
