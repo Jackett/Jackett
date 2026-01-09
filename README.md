@@ -253,6 +253,7 @@ Prior versions of Jackett are no longer supported.
  * AsianDVDClub (ADC)
  * Audiences
  * AudioNews (AN)
+ * AURA4K
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
  * AvistaZ (AsiaTorrents)
  * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
