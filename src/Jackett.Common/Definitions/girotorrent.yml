@@ -40,11 +40,6 @@ caps:
     - {id: 28, cat: Movies/Foreign, desc: "Movie Subbed-ita"}
     - {id: 73, cat: Movies/SD, desc: "Movie MP4"}
     - {id: 29, cat: Movies/Foreign, desc: "Movie Lingua Originale"}
-    # ANIMAZIONE
-    - {id: 32, cat: TV/Anime, desc: "Anime Disney"}
-    - {id: 33, cat: TV/Anime, desc: "Anime"}
-    - {id: 34, cat: TV/Anime, desc: "Anime Altri Cartoni"}
-    - {id: 62, cat: TV/Anime, desc: "Anime Natale Bimbi Girotor"}
     # TELEVISIONE
     - {id: 36, cat: TV, desc: "TV Serie"}
     - {id: 99, cat: TV/HD, desc: "TV Serie Hevc"}
@@ -54,6 +49,11 @@ caps:
     - {id: 38, cat: TV, desc: "TV Concerti-Spettacoli"}
     - {id: 39, cat: TV, desc: "TV Teatro-Cabaret"}
     - {id: 40, cat: TV/Documentary, desc: "Tv Documentario"}
+    # ANIMAZIONE
+    - {id: 32, cat: TV/Anime, desc: "Anime Disney"}
+    - {id: 33, cat: TV/Anime, desc: "Anime"}
+    - {id: 34, cat: TV/Anime, desc: "Anime Altri Cartoni"}
+    - {id: 62, cat: TV/Anime, desc: "Anime Natale Bimbi Girotor"}
     # MUSICA
     - {id: 42, cat: Audio, desc: "Musica CD Singoli"}
     - {id: 43, cat: Audio, desc: "Musica Italiana"}
@@ -149,13 +149,12 @@ download:
 
 search:
   paths:
-    # 15 results per page fetch 5 (site is slow, dont be greedy and fetch more)
     - path: index.php
   inputs:
     page: torrents
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
-    # 0 name, 1 name&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
+    # 0 filename, 1 file&descr, 2 descr, 3 uploader, 5 gold, 6 silver, 7 bronze
     # note the options are exclusive, so searching for gold means the search keywords are ignored
     options: 0
     # 0 all, 1 activeonly, 2 deadonly
@@ -252,4 +251,4 @@ search:
           args: ["x Upload Multiplier", ""]
     minimumratio:
       text: 0.5
-# xbtitFM 3.1.00
+# xbtitFM v4.2.12
