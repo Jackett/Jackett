@@ -605,7 +605,6 @@ Prior versions of Jackett are no longer supported.
  * Upscale Vault
  * UTOPIA
  * Vault network
- * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)

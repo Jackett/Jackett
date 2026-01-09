@@ -834,6 +834,7 @@ namespace Jackett.Updater
                 "Definitions/vizuk.yml",
                 "Definitions/vtorrent.yml",
                 "Definitions/waffles.yml",
+                "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
