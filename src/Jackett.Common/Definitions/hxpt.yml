@@ -10,17 +10,15 @@ links:
 
 caps:
   categorymappings:
-    - {id: 401, cat: TV/Other, desc: "学前教育 (Preschool)"}
-    - {id: 402, cat: TV/Other, desc: "小学部 (Primary School)"}
-    - {id: 403, cat: TV/Other, desc: "初中部 (Middle School)"}
-    - {id: 404, cat: TV/Other, desc: "高职部 (Vocational High School)"}
-    - {id: 405, cat: TV/Other, desc: "高中部 (High School)"}
-    - {id: 406, cat: TV/Documentary, desc: "教育影音 (Educational Video)"}
+    - {id: 401, cat: Other, desc: "学前教育 (Preschool)"}
+    - {id: 402, cat: Other, desc: "小学部 (Primary School)"}
+    - {id: 403, cat: Other, desc: "初中部 (Middle School)"}
+    - {id: 404, cat: Other, desc: "高职部 (Vocational High School)"}
+    - {id: 405, cat: Other, desc: "高中部 (High School)"}
+    - {id: 406, cat: Other, desc: "教育影音 (Educational Video)"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
     book-search: [q]
 
 settings:
@@ -71,13 +69,13 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    search_area: 0
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -110,9 +108,6 @@ search:
     poster:
       selector: img[data-src]
       attribute: data-src
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
