@@ -201,24 +201,32 @@ namespace Jackett.Common.Indexers.Definitions
                 using var dom = parser.ParseDocument(results.ContentString);
 
                 var rows = dom.QuerySelectorAll("table.mainframe table[cellpadding=\"2\"] > tbody > tr:has(td.row3)");
+                logger.Debug("completed rows extraction, begin row parsing");
                 foreach (var row in rows)
                 {
+                    logger.Debug(row.ToHtmlPretty);
                     var qDownloadLink = row.QuerySelector("a[href^=\"download.php\"]");
                     if (qDownloadLink == null)
                         throw new Exception("Download links not found. Make sure you can download from the website.");
 
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-
+                    logger.Debug("link="+link.ToString());
                     var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var title = qDetailsLink?.GetAttribute("title")?.Trim();
+                    logger.Debug("title="+title.ToString());
                     var details = new Uri(SiteLink + qDetailsLink?.GetAttribute("href")?.Replace("&hit=1", ""));
-
+                    logger.Debug("details="+details.ToString());
                     var categoryLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]")?.GetAttribute("href");
                     var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
-
+                    logger.Debug("cat="+cat.ToString());
                     var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
+                    logger.Debug("seeders="+seeders.ToString());
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
-
+                    logger.Debug("leechers="+leechers.ToString());
+                    logger.Debug("Size="+ParseUtil.GetBytes(row.Children[7].TextContent).ToString());
+                    logger.Debug("Files="+ParseUtil.CoerceInt(row.Children[3].TextContent).ToString());
+                    logger.Debug("Grabs="+ParseUtil.CoerceInt(row.Children[8].TextContent).ToString());
+                    logger.Debug("PublishDate="+DateTimeUtil.FromTimeAgo(row.Children[5].TextContent).ToString());
                     var release = new ReleaseInfo
                     {
                         Guid = link,
@@ -241,15 +249,21 @@ namespace Jackett.Common.Indexers.Definitions
                     var nextRow = row.NextElementSibling;
                     if (nextRow != null)
                     {
+                        logger.Debug("found row.NextElementSibling");
+                        logger.Debug(nextRow.ToHtmlPretty);
                         var qStats = nextRow.QuerySelector("table > tbody > tr:nth-child(3)");
                         release.UploadVolumeFactor = ParseUtil.CoerceDouble(qStats?.Children[0].TextContent.Replace("X", ""));
+                        logger.Debug("UploadVolumeFactor=" + release.UploadVolumeFactor.ToString());
                         release.DownloadVolumeFactor = ParseUtil.CoerceDouble(qStats?.Children[1].TextContent.Replace("X", ""));
-
+                        logger.Debug("DownloadVolumeFactor=" + release.DownloadVolumeFactor.ToString());
                         release.Description = nextRow.QuerySelector("span[style=\"float:left\"]")?.TextContent.Trim();
+                        logger.Debug("Description=" + release.Description.ToString());
                         var genres = release.Description.ToLower().Replace(" & ", "_&_").Replace(" and ", "_and_");
 
                         var releaseGenres = validList.Intersect(genres.Split(delimiters, StringSplitOptions.RemoveEmptyEntries));
+                        logger.Debug("extracting releaseGenres");
                         release.Genres = releaseGenres.Select(x => x.Trim().Replace("_", " ")).ToList();
+                        logger.Debug("Genres=" + string.Join(",", release.Genres));
                     }
 
                     releases.Add(release);
