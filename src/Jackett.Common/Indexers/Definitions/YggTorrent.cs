@@ -861,7 +861,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(8)")?.TextContent);
                     var leechers = ParseUtil.CoerceInt(row.QuerySelector("td:nth-child(9)")?.TextContent);
 
-                    var details = new Uri(SiteLink + detailsHref.TrimStart('/'));
+                    var details = detailsHref;
                     var link = new Uri(
                         $"{SiteLink.TrimEnd('/')}/engine/download_torrent?id={Uri.EscapeDataString(id)}");
 
