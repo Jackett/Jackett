@@ -395,6 +395,7 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
+ * HxPT (好学) [![(invite needed)][inviteneeded]](#) |
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
