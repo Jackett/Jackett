@@ -210,23 +210,23 @@ namespace Jackett.Common.Indexers.Definitions
                         throw new Exception("Download links not found. Make sure you can download from the website.");
 
                     var link = new Uri(SiteLink + qDownloadLink.GetAttribute("href"));
-                    logger.Debug("link="+link.ToString());
+                    logger.Debug("link=" + link.ToString());
                     var qDetailsLink = row.QuerySelector("a[href^=\"details.php?id=\"]");
                     var title = qDetailsLink?.GetAttribute("title")?.Trim();
-                    logger.Debug("title="+title.ToString());
+                    logger.Debug("title=" + title.ToString());
                     var details = new Uri(SiteLink + qDetailsLink?.GetAttribute("href")?.Replace("&hit=1", ""));
-                    logger.Debug("details="+details.ToString());
+                    logger.Debug("details=" + details.ToString());
                     var categoryLink = row.QuerySelector("a[href^=\"browse.php?cat=\"]")?.GetAttribute("href");
                     var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "cat");
-                    logger.Debug("cat="+cat.ToString());
+                    logger.Debug("cat=" + cat.ToString());
                     var seeders = ParseUtil.CoerceInt(row.Children[9].TextContent);
-                    logger.Debug("seeders="+seeders.ToString());
+                    logger.Debug("seeders=" + seeders.ToString());
                     var leechers = ParseUtil.CoerceInt(row.Children[10].TextContent);
-                    logger.Debug("leechers="+leechers.ToString());
-                    logger.Debug("Size="+ParseUtil.GetBytes(row.Children[7].TextContent).ToString());
-                    logger.Debug("Files="+ParseUtil.CoerceInt(row.Children[3].TextContent).ToString());
-                    logger.Debug("Grabs="+ParseUtil.CoerceInt(row.Children[8].TextContent).ToString());
-                    logger.Debug("PublishDate="+DateTimeUtil.FromTimeAgo(row.Children[5].TextContent).ToString());
+                    logger.Debug("leechers=" + leechers.ToString());
+                    logger.Debug("Size=" + ParseUtil.GetBytes(row.Children[7].TextContent).ToString());
+                    logger.Debug("Files=" + ParseUtil.CoerceInt(row.Children[3].TextContent).ToString());
+                    logger.Debug("Grabs=" + ParseUtil.CoerceInt(row.Children[8].TextContent).ToString());
+                    logger.Debug("PublishDate=" + DateTimeUtil.FromTimeAgo(row.Children[5].TextContent).ToString());
                     var release = new ReleaseInfo
                     {
                         Guid = link,
