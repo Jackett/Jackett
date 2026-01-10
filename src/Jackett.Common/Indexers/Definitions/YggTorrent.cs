@@ -557,6 +557,17 @@ namespace Jackett.Common.Indexers.Definitions
                         referer: SiteLink);
 
                     var html = resp.ContentString ?? "";
+
+                    if (!html.Contains("/user/logout"))
+                    {
+                        await ApplyConfiguration(null);
+                        resp = await RequestWithCookiesAndRetryAsync(
+                            url: url,
+                            method: RequestType.GET,
+                            referer: SiteLink);
+                        html = resp.ContentString ?? "";
+                    }
+
                     releases.AddRange(ParseSearchResults(html));
                 }
             }
