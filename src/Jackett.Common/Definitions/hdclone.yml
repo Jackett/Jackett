@@ -17,9 +17,9 @@ caps:
     - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
     - {id: 403, cat: TV, desc: "TV Shows/综艺"}
     - {id: 405, cat: TV/Anime, desc: "Animations/动漫、动画"}
-    - {id: 408, cat: Audio/Video, desc: "Playlet/短剧"}
+    - {id: 409, cat: Audio/Video, desc: "Playlet/短剧"}
     - {id: 410, cat: Audio/Video, desc: "MV/演唱会"}
-    - {id: 406, cat: Audio, desc: "Music/音乐"}
+    - {id: 408, cat: Audio, desc: "Music/音乐"}
     - {id: 407, cat: Other, desc: "Others/其他（慎选）"}
 
   modes:
