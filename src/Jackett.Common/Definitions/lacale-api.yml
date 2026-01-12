@@ -10,45 +10,50 @@ links:
   - https://la-cale.space/
 
 caps:
+  # use https://la-cale.space/api/external/meta?passkey=YOUR-PASSKEY for cat mappings, slug is id, name is desc
   categorymappings:
-    # Applications
-    - {id: applications, cat: PC, desc: "Applications"}
-    - {id: systemes, cat: PC, desc: "Systèmes"}
-    - {id: software, cat: PC, desc: "Logiciels"}
-    # Audio
-    - {id: audio, cat: Audio, desc: "Audio"}
-    - {id: music, cat: Audio, desc: "Musique"}
-    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
     # Autres
     - {id: autres, cat: Other, desc: "Autres"}
-    - {id: divers, cat: Other/Misc, desc: "Divers"}
-    # E-books
-    - {id: ebooks, cat: Books/EBook, desc: "E-books"}
-    - {id: romans, cat: Books/EBook, desc: "Romans"}
-    - {id: bd, cat: Books/Comics, desc: "BD"}
-    - {id: documentaires, cat: Books/EBook, desc: "Documentaires"}
-    # E-books & Documents
-    - {id: ebooks-documents, cat: Books/EBook, desc: "E-books & Documents"}
-    - {id: livres, cat: Books/EBook, desc: "Livres"}
-    - {id: presse, cat: Books/Mags, desc: "Presse"}
-    - {id: education, cat: Books/Other, desc: "Éducation"}
-    # Jeux
-    - {id: games, cat: PC/Games, desc: "Jeux"}
-    - {id: pc, cat: PC/Games, desc: "PC"}
-    - {id: consoles, cat: Console, desc: "Consoles"}
-    - {id: jeux-mobiles, cat: PC/Mobile-Other, desc: "Jeux mobiles"}
     # Vidéo
     - {id: video, cat: Movies, desc: "Vidéo"}
     - {id: video, cat: TV, desc: "Vidéo"}
     - {id: films, cat: Movies, desc: "Films"}
+    - {id: animation, cat: Movies/Other, desc: "Animation"}
+    - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
+    - {id: sports, cat: TV, desc: "Sports"}
     - {id: series, cat: TV, desc: "Séries TV"}
-    - {id: spectacles, cat: TV/Other, desc: "Spectacles"}
+    - {id: s-ries-hd, cat: TV, desc: "Séries HD"}
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    - {id: linux, cat: PC, desc: "Linux"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    # Jeux
+    - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
+    - {id: pc, cat: PC/Games, desc: "PC"}
+    - {id: playstation, cat: Console/PS4, desc: "Playstation"}
+    - {id: sega, cat: Console/Other, desc: "Sega"}
+    - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
+    - {id: xbox, cat: Console/XBox, desc: "Xbox"}
+    # E-books
+    - {id: ebooks, cat: Books/EBook, desc: "E-books"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: comics, cat: Books/Comics, desc: "Comics"}
+    - {id: divers, cat: Books/Other, desc: "Divers"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: mangas, cat: Books/Mags, desc: "Mangas"}
+    # Audio
+    - {id: audio, cat: Audio, desc: "Audio"}
+    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
+    - {id: audiobooks, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: music, cat: Audio, desc: "Musique"}
+    - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: M4A, cat: Audio, desc: "m4a"}
+    - {id: MP3, cat: Audio/MP3, desc: "mp3"}
+    - {id: podcast, cat: Audio/Other, desc: "Podcast"}
     # XXX
     - {id: xxx, cat: XXX, desc: "XXX"}
-    - {id: xxx-hetero, cat: XXX, desc: "Hétéro"}
-    - {id: xxx-gay, cat: XXX, desc: "Gay"}
-    - {id: xxx-lesbien, cat: XXX, desc: "Lesbien"}
-    - {id: xxx-trans, cat: XXX, desc: "Trans"}
 
   modes:
     search: [q]
