@@ -1,13 +1,13 @@
 ---
 id: pornotorrent
 name: PornoTorrent
-description: "PornoTorrent is a SPANISH Public Torrent Tracker for 3X"
-language: en-US
+description: "PornoTorrent is a BRAZILIAN Public Torrent Tracker for 3X"
+language: pt-BR
 type: public
 encoding: UTF-8
 testlinktorrent: false
 links:
-  - https://www.pornotorrent.eu/
+  - https://pornotorrent.net.br/
 
 caps:
   categorymappings:
@@ -24,7 +24,7 @@ download:
       attribute: href
       filters:
         - name: replace
-          args: ["////", "//"]
+          args: ["https://mundohot.net.br/magnet/index.php?", ""]
 
 search:
   paths:
@@ -41,17 +41,16 @@ search:
     category:
       text: XXX
     title:
-      selector: a
-      attribute: title
+      selector: a.absolute-capa
     details:
-      selector: a
+      selector: a.absolute-capa
       attribute: href
     download:
-      selector: a
+      selector: a.absolute-capa
       attribute: href
     poster:
       selector: img
-      attribute: data-lazy-src
+      attribute: src
     date:
       text: now
     size:
