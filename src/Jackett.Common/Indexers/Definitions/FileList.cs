@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<WebResult> CallProviderAsync(TorznabQuery query)
         {
             var searchUrl = ApiUrl;
-            var searchQuery = query.SanitizedSearchTerm.Trim();
+            var searchQuery = query.SanitizedSearchTerm.Replace(":", " ").Trim();
 
             var queryCollection = new NameValueCollection
             {
