@@ -203,7 +203,7 @@ search:
       text: 1.0
     minimumseedtime:
       # 12 hours (as seconds = 12 x 60 x 60) - normal
-      # 2 days (as seconds = 7 x 24 x 60 x 60) - freeleech
+      # 2 days (as seconds = 7 x 24 x 60 x 60) - freeleech/promotion
       case:
         img[src="images/freeleech.gif"]: 172800
         img[src="images/gold.gif"]: 172800
