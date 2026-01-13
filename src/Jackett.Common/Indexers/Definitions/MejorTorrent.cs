@@ -129,7 +129,7 @@ namespace Jackett.Common.Indexers.Definitions
             // we remove parts from the original query
             query = ParseQuery(query);
 
-            var releases = string.IsNullOrEmpty(query.SearchTerm) ?
+            var releases = string.IsNullOrWhiteSpace(query.SearchTerm) ?
                 await PerformQueryNewest(query) :
                 await PerformQuerySearch(query, matchWords);
 
@@ -203,14 +203,20 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
         {
             var releases = new List<ReleaseInfo>();
-            var qc = new NameValueCollection { { "q", query.SearchTerm } };
+
+            var qc = new NameValueCollection
+            {
+                { "q", Regex.Replace(query.SearchTerm.Trim(), @"[\W]+", "%") }
+            };
 
             // We search in the first "PagesToSearch" pages
-            for (int i = 1; i <= PagesToSearch; i++)
+            for (var i = 1; i <= PagesToSearch; i++)
             {
                 var url = SiteLink + SearchUrl + i + "?" + qc.GetQueryString();
                 var result = await RequestWithCookiesAsync(url);
+
                 if (result.Status != HttpStatusCode.OK)
+                {
                     if (result.Status == HttpStatusCode.InternalServerError)
                     {
                         throw new ExceptionWithConfigData("HTTP 500 Internal Server Error", configData);
@@ -219,10 +225,12 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         throw new ExceptionWithConfigData(result.ContentString, configData);
                     }
+                }
+
                 try
                 {
                     var searchResultParser = new HtmlParser();
-                    using var doc = searchResultParser.ParseDocument(result.ContentString);
+                    using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
                     var table = doc.QuerySelector(".w-11\\/12");
                     // check the search term is valid
@@ -244,6 +252,12 @@ namespace Jackett.Common.Indexers.Definitions
                     else
                     {
                         i = PagesToSearch;
+                    }
+
+                    // Avoid extraneous requests if the next page link is missing.
+                    if (doc.QuerySelector("span.relative a.relative[rel=\"next\"]") == null)
+                    {
+                        break;
                     }
                 }
                 catch (Exception ex)
