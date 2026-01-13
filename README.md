@@ -471,6 +471,7 @@ Prior versions of Jackett are no longer supported.
  * OpenCD [![(invite needed)][inviteneeded]](#)
  * Orpheus
  * OnlyEncodes+
+ * Oscar World
  * OshenPT
  * OurBits (HDPter)
  * P2PBG
