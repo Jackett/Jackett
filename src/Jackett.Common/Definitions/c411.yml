@@ -6,6 +6,8 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
+  - https://c411.org/
+links:
   - https://staging-68d548c5bd4.c411.org/
 
 caps:
@@ -60,7 +62,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "You can find or generate a new API Key by accessing the <a href=\"https://staging-68d548c5bd4.c411.org/user/integrations\" target=\"_blank\">C411 Intégrations API</a> page."
+    default: "You can find or generate a new API Key by accessing the <a href=\"https://c411.org/user/integrations\" target=\"_blank\">C411 Intégrations API</a> page."
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -83,7 +85,7 @@ settings:
   - name: info_3x
     type: info
     label: Including 3X
-    default: "IF you want to see 3x torrents access your <a href=\"https://staging-68d548c5bd4.c411.org/user/settings\" target=\"_blank\">C411 Paramètres</a> page and tick the <b>Afficher le contenu XXX</b> checkbox."
+    default: "IF you want to see 3x torrents access your <a href=\"https://c411.org/user/settings\" target=\"_blank\">C411 Paramètres</a> page and tick the <b>Afficher le contenu XXX</b> checkbox."
 
 login:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
