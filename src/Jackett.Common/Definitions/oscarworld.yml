@@ -1,0 +1,216 @@
+---
+id: oscarworld
+name: Oscar World
+description: "Oscar World is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://oscarworld.xyz/
+
+caps:
+  categorymappings:
+    - {id: 56, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 22, cat: Audio, desc: "VIP"}
+    - {id: 23, cat: Audio/MP3, desc: "Music/MP3"}
+    - {id: 24, cat: Audio, desc: "Mastermix"}
+    - {id: 26, cat: Audio, desc: "DMC"}
+    - {id: 27, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: 28, cat: Audio, desc: "Artist Albums"}
+    - {id: 30, cat: Audio, desc: "Mastermix Other"}
+    - {id: 31, cat: Audio, desc: "Compilation Albums"}
+    - {id: 41, cat: Audio, desc: "DMC Commercial"}
+    - {id: 44, cat: Audio, desc: "Music Packs"}
+    - {id: 45, cat: Audio, desc: "UntraMix - DJ Music"}
+    - {id: 46, cat: Audio, desc: "Christmas Music"}
+    - {id: 47, cat: Audio, desc: "Classical"}
+    - {id: 48, cat: Audio, desc: "Discography"}
+    - {id: 54, cat: Audio/Other, desc: "Karaoke"}
+    - {id: 49, cat: TV/Sport, desc: "Sports"}
+    - {id: 57, cat: Audio, desc: "Educational"}
+    - {id: 58, cat: TV, desc: "TV Series"}
+    - {id: 5, cat: Movies/Other, desc: "Animated"}
+    - {id: 32, cat: Movies/BluRay, desc: "BluRay"}
+    - {id: 33, cat: Movies/DVD, desc: "DVD"}
+    - {id: 34, cat: Movies/SD, desc: "VHS-Rip"}
+    - {id: 35, cat: Movies/SD, desc: "DVD-Rip"}
+    - {id: 36, cat: Movies/SD, desc: "MPG"}
+    - {id: 37, cat: Movies/HD, desc: "AV1"}
+    - {id: 38, cat: Movies, desc: "Box Sets"}
+    - {id: 39, cat: Movies, desc: "TV Movies Rip"}
+    - {id: 40, cat: Movies/Other, desc: "Documentary"}
+    - {id: 42, cat: Movies/HD, desc: "HD Rip"}
+    - {id: 55, cat: Movies/Foreign, desc: "Non-English"}
+    - {id: 59, cat: Movies/UHD, desc: "HEVC 10-Bit"}
+    - {id: 60, cat: Movies, desc: "Netflix"}
+    - {id: 61, cat: Movies, desc: "Amazon"}
+    - {id: 3, cat: PC/Games, desc: "Games"}
+    - {id: 52, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 53, cat: Books/EBook, desc: "eBooks"}
+    - {id: 4, cat: Other, desc: "Other"}
+    - {id: 50, cat: PC/Mobile-Android, desc: "Andriod Mobile Apps"}
+    - {id: 7, cat: PC/0day, desc: "Apps Win"}
+    - {id: 8, cat: PC/ISO, desc: "Apps Linux"}
+    - {id: 51, cat: PC/Mobile-iOS, desc: "iOS Mobile Apps"}
+    - {id: 9, cat: PC/Mac, desc: "Apps Mac"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 3
+    options:
+      3: created
+      5: seeders
+      4: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile. Default is <i>20</i>.
+
+login:
+  path: index.php?page=login
+  method: post
+  inputs:
+    uid: "{{ .Config.username }}"
+    pwd: "{{ .Config.password }}"
+  error:
+    - selector: tr td span[style="color:#FF0000;"]
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+      rndval: "1487013827343"
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "^(.+?)&key="
+
+search:
+  paths:
+    # https://oscarworld.xyz/index.php?page=torrents&search=&category=0&active=0
+    - path: index.php
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    category: "{{ range .Categories }}{{.}};{{end}}"
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 5 gold, 6 silver, 7 bronze
+    options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
+    # 0 all, 1 active only, 2 dead only
+    active: 0
+    order: "{{ .Config.sort }}"
+    by: "{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: table.lista > tbody > tr:has(a[href^="index.php?page=torrent-details&id="])
+
+  fields:
+    category:
+      selector: a[href^="index.php?page=torrents&category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href^="index.php?page=torrent-details&id="]
+    details:
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: href
+    download:
+      selector: a[href^="index.php?page=downloadcheck&id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrentimg/"]
+      attribute: href
+    size:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "Size:[\\s\\\xA0]+(.+?B)"
+    date:
+      # auto adjusted by site account profile
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "AddDate:[\\s\\\xA0]+(.+?)\\\n"
+        - name: dateparse
+          args: "HH:mm:ss dd/MM/yyyy"
+    seeders:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "Seeds:[\\s\\\xA0]+(\\d+)\\\xA0"
+    leechers:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "Leechers:[\\s\\\xA0]+(\\d+)\\\xA0"
+    grabs:
+      selector: td:nth-child(2)
+      filters:
+        - name: regexp
+          args: "Complete:[\\s\\\xA0]+(.+?)\\s"
+        - name: replace
+          args: ["---", "0"]
+    downloadvolumefactor:
+      case:
+        img[src="images/freeleech.gif"]: 0
+        img[src="images/gold.gif"]: 0
+        img[src="images/silver.gif"]: 0.5
+        img[src="images/bronze.gif"]: 0.75
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 12 hours (as seconds = 12 x 60 x 60) - normal
+      # 2 days (as seconds = 7 x 24 x 60 x 60) - freeleech
+      case:
+        img[src="images/freeleech.gif"]: 172800
+        img[src="images/gold.gif"]: 172800
+        img[src="images/silver.gif"]: 172800
+        img[src="images/bronze.gif"]: 172800
+        "*": 43200
+    description:
+      selector: img[src="images/downloaded.gif"]
+      attribute: title
+#  xbtitFM v2.1.08
