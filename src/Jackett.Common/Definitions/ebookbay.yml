@@ -10,7 +10,7 @@ certificates:
   - 1dad798f690521cfb37d6817b66f1f08fe8c8f36 # using CA from audiobookbay.lu (sister site)
 links:
   - https://ebb.la/
-links:
+legacylinks:
   - http://ebb.la/
 
 caps:
