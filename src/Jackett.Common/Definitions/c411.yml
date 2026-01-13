@@ -7,7 +7,7 @@ type: private
 encoding: UTF-8
 links:
   - https://c411.org/
-links:
+legacylinks:
   - https://staging-68d548c5bd4.c411.org/
 
 caps:
