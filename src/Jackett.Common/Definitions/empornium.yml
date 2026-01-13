@@ -5,12 +5,13 @@ description: "Empornium (EMP) is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
 encoding: UTF-8
+# status: http://about.empornium.ph/
 links:
-  - https://www.empornium.is/
   - https://www.empornium.sx/ # site forces www.
 legacylinks:
   - https://www.empornium.me/
   - https://empornium.sx/
+  - https://www.empornium.is/
 
 caps:
   categorymappings:
