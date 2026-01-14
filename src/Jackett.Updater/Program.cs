@@ -599,6 +599,7 @@ namespace Jackett.Updater
                 "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
+                "Definitions/oscarworld.yml",
                 "Definitions/ostwiki.yml",
                 "Definitions/oxtorrent.yml",
                 "Definitions/oxtorrent-vip.yml",
