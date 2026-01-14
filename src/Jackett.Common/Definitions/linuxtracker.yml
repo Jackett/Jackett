@@ -160,6 +160,7 @@ caps:
     - {id: 2241, cat: PC/ISO, desc: "MorpheusArch Linux"}
     - {id: 373, cat: PC/ISO, desc: "Mythbuntu"}
     - {id: 2078, cat: PC/ISO, desc: "NAS4Free"}
+    - {id: 2302, cat: PC/ISO, desc: "NakeDeb"}
     - {id: 2217, cat: PC/ISO, desc: "Namib GNU/Linux"}
     - {id: 2079, cat: PC/ISO, desc: "Neptune"}
     - {id: 2080, cat: PC/ISO, desc: "Nethserver"}
