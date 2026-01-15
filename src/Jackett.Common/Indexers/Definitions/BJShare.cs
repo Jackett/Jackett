@@ -278,7 +278,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
+            var results = await RequestWithCookiesAsync(searchUrl, configData.Cookie.Value, headers: headers);
             if (IsSessionIsClosed(results))
             {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
@@ -446,7 +446,7 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
         {
             var releases = new List<ReleaseInfo>();
-            var results = await RequestWithCookiesAsync(TodayUrl);
+            var results = await RequestWithCookiesAsync(TodayUrl, configData.Cookie.Value);
             if (IsSessionIsClosed(results))
             {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
