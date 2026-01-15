@@ -237,6 +237,7 @@ caps:
     - {id: 493, cat: PC/ISO, desc: "Slackel"}
     - {id: 495, cat: PC/ISO, desc: "Slackware"}
     - {id: 499, cat: PC/ISO, desc: "Slax"}
+    - {id: 2303, cat: PC/ISO, desc: "Slimbook OS"}
     - {id: 2124, cat: PC/ISO, desc: "SmartOS"}
     - {id: 2125, cat: PC/ISO, desc: "Smeserver"}
     - {id: 505, cat: PC/ISO, desc: "Smoothwall Express"}
