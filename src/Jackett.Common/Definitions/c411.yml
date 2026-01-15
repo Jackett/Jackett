@@ -12,46 +12,74 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1000, cat: Console, desc: "Emulation & Jeux Vidéo"}
-    - {id: 1030, cat: Console/Wii, desc: "Nintendo"}
-    - {id: 1040, cat: Console/XBox, desc: "Microsoft"}
-    - {id: 1080, cat: Console/PS4, desc: "Sony"}
-    - {id: 1090, cat: Console/Other, desc: "Autre & ROM/ISO"}
+    # from https://c411.org/api/torznab?apikey=YOUR-API-KEY&t=caps
     - {id: 2000, cat: Movies, desc: "Films & Vidéos"}
-    - {id: 2060, cat: Movies, desc: "Animation & Vidéo-clips"}
-    - {id: 2070, cat: Movies, desc: "Documentaire"}
-    - {id: 2090, cat: Movies/Other, desc: "Concert & Spectacle"}
-    - {id: 3000, cat: Audio, desc: "Audio"}
-    - {id: 3010, cat: Audio/MP3, desc: "Musique"}
-    - {id: 3030, cat: Audio/Audiobook, desc: "Audio"}
-    - {id: 3050, cat: Audio/Other, desc: "Karaoké & Podcast Radio & Samples"}
-    - {id: 4000, cat: PC/0day, desc: "Applications & Nulled * Windows"}
-    - {id: 4030, cat: PC, desc: "Linux & MacOS"}
-    - {id: 4040, cat: PC, desc: "Formation"}
-    - {id: 4050, cat: PC, desc: "Autre & Divers & Scripts PHP & CMS & PC/GAMES"}
-    - {id: 4060, cat: PC/Mobile-Android, desc: "Applications"}
-    - {id: 4070, cat: PC/Mobile-iOS, desc: "Smartphone & Tablette"}
-    - {id: 5000, cat: TV, desc: "Série TV"}
-    - {id: 5060, cat: TV/Sport, desc: "Sport"}
+    - {id: 2060, cat: Movies/Anime, desc: "Animation"}
     - {id: 5070, cat: TV/Anime, desc: "Animation Série"}
+    - {id: 2090, cat: Movies/Other, desc: "Concert"}
+    - {id: 2070, cat: Movies/Documentary, desc: "Documentaire"}
     - {id: 5080, cat: TV/Documentary, desc: "Emission TV"}
-    - {id: 6000, cat: XXX, desc: "XXX"}
-    - {id: 6010, cat: XXX/DVD, desc: "Films"}
-    - {id: 6050, cat: XXX/Other, desc: "Ebooks"}
-    - {id: 6060, cat: XXX/ImageSet, desc: "Images"}
-    - {id: 6070, cat: XXX/Other, desc: "Hentai"}
-    - {id: 6080, cat: XXX/Other, desc: "Jeux"}
+    - {id: 2000, cat: Movies, desc: "Film"}
+    - {id: 5000, cat: TV, desc: "Série TV"}
+    - {id: 2090, cat: Movies/Other, desc: "Spectacle"}
+    - {id: 5060, cat: TV/Sport, desc: "Sport"}
+    - {id: 2060, cat: Movies/Other, desc: "Vidéo-clips"}
     - {id: 7000, cat: Books, desc: "Ebook"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audio"}
+    - {id: 7030, cat: Books/Comics, desc: "BDs"}
+    - {id: 7030, cat: Books/Comics, desc: "Comics"}
+    - {id: 7020, cat: Books/Ebook, desc: "Livres"}
+    - {id: 7030, cat: Books/Comics, desc: "Manga"}
     - {id: 7010, cat: Books/Mags, desc: "Presse"}
-    - {id: 7020, cat: Books/EBook, desc: "Livres"}
-    - {id: 7030, cat: Books/Comics, desc: "BDs & Comics & Manga"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3050, cat: Audio/Other, desc: "Karaoké"}
+    - {id: 3010, cat: Audio/MP3, desc: "Musique"}
+    - {id: 3050, cat: Audio/Other, desc: "Podcast Radio"}
+    - {id: 3050, cat: Audio/Other, desc: "Samples"}
+    - {id: 4000, cat: PC, desc: "Applications"}
+    - {id: 4050, cat: PC/Other, desc: "Autre"}
+    - {id: 4040, cat: PC/Other, desc: "Formation"}
+    - {id: 4030, cat: PC/0day, desc: "Linux"}
+    - {id: 4030, cat: PC/Mac, desc: "MacOS"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Smartphone"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Tablette"}
+    - {id: 4000, cat: PC, desc: "Windows"}
+    - {id: 1000, cat: Console, desc: "Jeux Vidéo"}
+    - {id: 1090, cat: Console/Other, desc: "Autre"}
+    - {id: 4050, cat: PC/Games, desc: "Linux"}
+    - {id: 4050, cat: PC/Games, desc: "MacOS"}
+    - {id: 1040, cat: Console/Xbox, desc: "Microsoft"}
+    - {id: 1030, cat: Console/Wii, desc: "Nintendo"}
+    - {id: 4070, cat: PC/Mobile-iOS, desc: "Smartphone"}
+    - {id: 1080, cat: Console/PS4, desc: "Sony"}
+    - {id: 4070, cat: PC/Mobile-iOS, desc: "Tablette"}
+    - {id: 4050, cat: PC/Games, desc: "Windows"}
+    - {id: 1000, cat: Console, desc: "Emulation"}
+    - {id: 4050, cat: PC/Games, desc: "Émulateur"}
+    - {id: 1090, cat: Console/Other, desc: "ROM/ISO"}
+    - {id: 4050, cat: PC/Mobile-Other, desc: "GPS"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Applications"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Cartes"}
+    - {id: 4050, cat: PC/Other, desc: "Divers"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6050, cat: XXX/Other, desc: "Ebooks"}
+    - {id: 6010, cat: XXX/DVD, desc: "Films"}
+    - {id: 6070, cat: XXX/Anime, desc: "Hentai"}
+    - {id: 6060, cat: XXX/Imageset, desc: "Images"}
+    - {id: 6080, cat: XXX/Other, desc: "Jeux"}
+    - {id: 4000, cat: PC, desc: "Nulled"}
+    - {id: 4050, cat: PC/Other, desc: "Divers"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Mobile"}
+    - {id: 4050, cat: PC/Other, desc: "Scripts PHP & CMS"}
+    - {id: 4050, cat: PC/Other, desc: "Wordpress"}
     - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D"}
+    - {id: 8010, cat: Other/Misc, desc: "Objets"}
+    - {id: 8010, cat: Other/Misc, desc: "Personnages"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
-#    movie-search: [q, imdbid] # c411 api caps shows imdbid is supported but it currently does not work
-    movie-search: [q]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -100,10 +128,9 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-#    t: "{{ .Query.Type }}"
-    t: search
+    t: "{{ if .Query.IMDBID }}movie{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
-#    imdbid: "{{ .Query.IMDBID }}"
+    imdbid: "{{ .Query.IMDBID }}"
     limit: 100
 
   keywordsfilters:
