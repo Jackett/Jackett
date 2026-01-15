@@ -574,6 +574,7 @@ Prior versions of Jackett are no longer supported.
  * Toca Share
  * Tormac
  * Tornado
+ * Torr9
  * Torrent Heaven (Dutch)
  * Torrent Network (TN)
  * Torrent Trader [![(invite needed)][inviteneeded]](#)
