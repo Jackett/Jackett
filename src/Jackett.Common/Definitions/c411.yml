@@ -102,6 +102,7 @@ search:
     apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.IMDBID }}movie{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
     imdbid: "{{ .Query.IMDBID }}"
     limit: 100
 
