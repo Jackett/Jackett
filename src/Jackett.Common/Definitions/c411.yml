@@ -103,6 +103,8 @@ search:
     t: "{{ if .Query.IMDBID }}movie{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBID }}"
     limit: 100
 
