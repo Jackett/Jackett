@@ -100,7 +100,7 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-    t: "{{ if .Query.IMDBID }}movie{{ else }}search{{ end }}"
+    t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     season: "{{ .Query.Season }}"
