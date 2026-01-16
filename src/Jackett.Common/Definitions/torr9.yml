@@ -75,6 +75,8 @@ search:
     t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if .Query.TVDBID }}tvsearch{{ else }}{{ end }}{{ if or .Query.TVDBID .Query.IMDBID }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
+#    season: "{{ .Query.Season }}"
+#    ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBID }}"
     tvdbid: "{{ .Query.TVDBID }}"
     limit: 100
