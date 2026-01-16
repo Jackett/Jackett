@@ -37,12 +37,13 @@ caps:
     - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
     - {id: xbox, cat: Console/XBox, desc: "Xbox"}
     # E-books
-    - {id: ebooks, cat: Books/EBook, desc: "E-books"}
+    - {id: e-books, cat: Books/EBook, desc: "E-books"}
     - {id: bd, cat: Books/Comics, desc: "BD"}
     - {id: comics, cat: Books/Comics, desc: "Comics"}
     - {id: divers, cat: Books/Other, desc: "Divers"}
     - {id: livres, cat: Books/EBook, desc: "Livres"}
-    - {id: mangas, cat: Books/Mags, desc: "Mangas"}
+    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
     # Audio
     - {id: audio, cat: Audio, desc: "Audio"}
     - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
@@ -57,8 +58,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, tmdbid]
+    movie-search: [q, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -110,10 +111,33 @@ search:
       response:
         type: json
 
+  keywordsfilters:
+    - name: trim
+    - name: re_replace
+      # Mark CJK so we can detect "CJK-only" queries
+      args: ["[\\p{IsHiragana}\\p{IsKatakana}\\p{IsCJKUnifiedIdeographs}]", "__CJK__"]
+    - name: re_replace
+      # If query is only CJK, force no-match
+      args: ["^\\s*__CJK__\\s*(?:__CJK__\\s*)*$", "nomatch_please_ignore"]
+    - name: re_replace
+      # If CJK + year only, force no-match
+      args: ["^\\s*__CJK__\\s*(?:__CJK__\\s*)*(19|20)\\d{2}\\s*$", "nomatch_please_ignore"]
+    - name: re_replace
+      # If year + CJK only, force no-match
+      args: ["^\\s*(19|20)\\d{2}\\s*__CJK__\\s*(?:__CJK__\\s*)*$", "nomatch_please_ignore"]
+    - name: re_replace
+      # Remove CJK tokens for mixed queries
+      args: ["\\b__CJK__\\b", ""]
+    - name: re_replace
+      # Normalize multiple spaces after replacements
+      args: ["\\s+", " "]
+    - name: trim
+
   inputs:
     passkey: "{{ .Config.passkey }}"
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
     q: "{{ .Keywords }}"
+    tmdbId: "{{ .Query.TMDBID }}"
 
   rows:
     selector: $
@@ -140,6 +164,8 @@ search:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       text: "{{ .Config.sitelink }}"
+    infohash:
+      selector: infoHash
     download:
       selector: link
       filters:
