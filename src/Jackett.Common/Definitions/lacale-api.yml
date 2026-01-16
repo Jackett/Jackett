@@ -111,28 +111,6 @@ search:
       response:
         type: json
 
-  keywordsfilters:
-    - name: trim
-    - name: re_replace
-      # Mark CJK so we can detect "CJK-only" queries
-      args: ["[\\p{IsHiragana}\\p{IsKatakana}\\p{IsCJKUnifiedIdeographs}]", "__CJK__"]
-    - name: re_replace
-      # If query is only CJK, force no-match
-      args: ["^\\s*__CJK__\\s*(?:__CJK__\\s*)*$", "nomatch_please_ignore"]
-    - name: re_replace
-      # If CJK + year only, force no-match
-      args: ["^\\s*__CJK__\\s*(?:__CJK__\\s*)*(19|20)\\d{2}\\s*$", "nomatch_please_ignore"]
-    - name: re_replace
-      # If year + CJK only, force no-match
-      args: ["^\\s*(19|20)\\d{2}\\s*__CJK__\\s*(?:__CJK__\\s*)*$", "nomatch_please_ignore"]
-    - name: re_replace
-      # Remove CJK tokens for mixed queries
-      args: ["\\b__CJK__\\b", ""]
-    - name: re_replace
-      # Normalize multiple spaces after replacements
-      args: ["\\s+", " "]
-    - name: trim
-
   inputs:
     passkey: "{{ .Config.passkey }}"
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
