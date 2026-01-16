@@ -50,8 +50,8 @@ caps:
     - {id: audiobooks, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: music, cat: Audio, desc: "Musique"}
     - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
-    - {id: M4A, cat: Audio, desc: "m4a"}
-    - {id: MP3, cat: Audio/MP3, desc: "mp3"}
+    - {id: m4a, cat: Audio, desc: "M4A"}
+    - {id: mp3, cat: Audio/MP3, desc: "MP3"}
     - {id: podcast, cat: Audio/Other, desc: "Podcast"}
     # XXX
     - {id: xxx, cat: XXX, desc: "XXX"}
@@ -152,7 +152,13 @@ search:
     size:
       selector: size
     date:
+      # "pubDate": "2026-01-16T16:32:19.243Z" is returned by Newtonsoft.Json.Linq as 16/01/2026 16:32:19
       selector: pubDate
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     seeders:
       selector: seeders
     leechers:
