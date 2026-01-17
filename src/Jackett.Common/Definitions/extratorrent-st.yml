@@ -61,6 +61,7 @@ caps:
     - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
     - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
     - {id: Raw, cat: TV/Anime, desc: Anime Raw}
+    - {id: Season Packs, cat: TV, desc: Season Packs}
     - {id: Software, cat: PC/0day, desc: Software}
     - {id: Subs, cat: TV/Anime, desc: Anime Subs}
     - {id: Switch, cat: Console/Other, desc: Games Switch}
