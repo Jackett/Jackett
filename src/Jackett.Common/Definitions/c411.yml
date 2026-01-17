@@ -11,41 +11,49 @@ legacylinks:
   - https://staging-68d548c5bd4.c411.org/
 
 caps:
+  # Get latest categories: https://c411.org/api/torznab?apikey=YOUR-API-KEY&t=caps
   categorymappings:
-    # from https://c411.org/api/torznab?apikey=YOUR-API-KEY&t=caps
+    # Jeux Vidéo & Emulation
     - {id: 1000, cat: Console, desc: "Jeux Vidéo & Emulation"}
     - {id: 1030, cat: Console/Wii, desc: "Nintendo"}
     - {id: 1040, cat: Console/XBox, desc: "Xbox"}
     - {id: 1080, cat: Console/PS4, desc: "Sony"}
     - {id: 1090, cat: Console/Other, desc: "Jeux Autre & ROM/ISO"}
+    # Films & Vidéos
     - {id: 2000, cat: Movies, desc: "Films & Vidéos"}
     - {id: 2060, cat: Movies/Other, desc: "Animation Films & Vidéo-clips"}
-    - {id: 2070, cat: Movies, desc: "Films Documentaire"}
+    - {id: 2070, cat: Movies/Documentary, desc: "Films Documentaire"}
     - {id: 2090, cat: Movies/Other, desc: "Films Concert & Spectacle"}
+    # Audio
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3010, cat: Audio/MP3, desc: "Musique"}
     - {id: 3030, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 3050, cat: Audio/Other, desc: "Karaoké & Podcast Radio & Samples"}
+    # Applications
     - {id: 4000, cat: PC/0day, desc: "Applications & Windows & Nulled"}
     - {id: 4030, cat: PC/0day, desc: "Linux & MacOS"}
     - {id: 4040, cat: PC, desc: "Formation"}
     - {id: 4050, cat: PC, desc: "Games-Linux & Games-MacOS & Games-Divers & Autre & Émulateur & GPS & Scripts PHP & CMS & Wordpress"}
     - {id: 4060, cat: PC/Mobile-Android, desc: "Android Mobile & Smartphone & Tablette & Applications & Cartes"}
     - {id: 4070, cat: PC/Mobile-iOS, desc: "iOS Smartphone & Tablette"}
+    # Série TV
     - {id: 5000, cat: TV, desc: "Série TV"}
     - {id: 5060, cat: TV/Sport, desc: "Sport"}
     - {id: 5070, cat: TV/Anime, desc: "Animation Série"}
     - {id: 5080, cat: TV/Documentary, desc: "Emission TV"}
-    - {id: 6000, cat: XXX, desc: "XXX"}
-    - {id: 6010, cat: XXX/DVD, desc: "3X Films"}
-    - {id: 6050, cat: XXX/Other, desc: "3X Ebooks"}
-    - {id: 6060, cat: XXX/ImageSet, desc: "3X Images"}
-    - {id: 6070, cat: XXX/Other, desc: "Hentai"}
-    - {id: 6080, cat: XXX/Other, desc: "3X Jeux"}
+    # XXX
+    - {id: 6000, cat: XXX, desc: "XXX", default: false}
+    - {id: 6010, cat: XXX/DVD, desc: "XXX Films", default: false}
+    - {id: 6050, cat: XXX/Other, desc: "XXX Ebooks", default: false}
+    - {id: 6060, cat: XXX/ImageSet, desc: "XXX Images", default: false}
+    - {id: 6070, cat: XXX/Other, desc: "Hentai", default: false}
+    - {id: 6080, cat: XXX/Other, desc: "XXX Jeux", default: false}
+    # Ebook
     - {id: 7000, cat: Books, desc: "Ebook"}
     - {id: 7010, cat: Books/Mags, desc: "Presse"}
     - {id: 7020, cat: Books/EBook, desc: "Livres"}
     - {id: 7030, cat: Books/Comics, desc: "BDs & Comics & Manga"}
+    # Autres
     - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets & Personnages"}
 
   modes:
@@ -57,12 +65,12 @@ caps:
 
 settings:
   - name: apikey
-    type: text
+    type: password
     label: API Key
   - name: info_key
     type: info
-    label: About your API key
-    default: "You can find or generate a new API Key by accessing the <a href=\"https://c411.org/user/integrations\" target=\"_blank\">C411 Intégrations API</a> page."
+    label: About your API Key
+    default: "Find or generate a new API Key on your <a href=\"https://c411.org/user/integrations\" target=\"_blank\">C411 Integrations page</a>. Never share it!"
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -84,13 +92,30 @@ settings:
     default: false
   - name: info_3x
     type: info
-    label: Including 3X
-    default: "IF you want to see 3x torrents access your <a href=\"https://c411.org/user/settings\" target=\"_blank\">C411 Paramètres</a> page and tick the <b>Afficher le contenu XXX</b> checkbox."
+    label: Including XXX Content
+    default: "To see XXX torrents, enable <b>Afficher le contenu XXX</b> on your <a href=\"https://c411.org/user/settings\" target=\"_blank\">C411 Settings page</a>."
+  - name: info_ratio
+    type: info
+    label: Ratio Requirements
+    default: "Minimum ratio: 1.0 | Minimum seed time: 48 hours | Check your profile for current freeleech status."
 
 login:
-  # returns "401 Unauthorized, check your credentials" if apikey is invalid
-  path: "api/torznab?apikey={{ .Config.apikey }}&t=caps"
+  path: "api/torznab"
   method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: caps
+  error:
+    - selector: error
+      attribute: description
+      message:
+        text: "{{ .Result }}"
+    - selector: :contains("401")
+      message:
+        text: "API Key invalid. Check your credentials."
+    - selector: :contains("Unauthorized")
+      message:
+        text: "API Key invalid or unauthorized. Get your key from https://c411.org/user/integrations"
 
 search:
   paths:
@@ -100,16 +125,13 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-    t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    t: "{{ if .Query.IMDBID }}movie{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
-    cat: "{{ join .Categories \",\" }}"
-    season: "{{ .Query.Season }}"
-    ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBID }}"
     limit: 100
 
   keywordsfilters:
-    # replace spaces between words with percent wildcard
+    # Replace spaces between words with percent wildcard
     - name: re_replace
       args: ["\\W+", "%"]
 
@@ -141,6 +163,9 @@ search:
       filters:
         - name: prepend
           args: "{{ .Config.sitelink }}torrents/"
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
     download:
       selector: enclosure
       attribute: url
@@ -150,11 +175,9 @@ search:
         - name: regexp
           args: src=\"(.+?)\"
     date:
-      # Sat, 03 Jan 2026 01:27:58 GMT
+      # Format: Wed, 14 Jan 2026 20:43:35 +0000
       selector: pubDate
       filters:
-        - name: replace
-          args: ["GMT", "+00:00"]
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
@@ -177,6 +200,5 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# torznab xml
+# Torznab XML API
