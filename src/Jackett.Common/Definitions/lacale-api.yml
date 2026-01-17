@@ -10,51 +10,49 @@ links:
   - https://la-cale.space/
 
 caps:
-  # use https://la-cale.space/api/external/meta?passkey=YOUR-PASSKEY for cat mappings, slug is id, name is desc
+  # Get latest categories: https://la-cale.space/api/external/meta?passkey=YOUR-PASSKEY
   categorymappings:
-    # Autres
-    - {id: autres, cat: Other, desc: "Autres"}
-    # Vidéo
-    - {id: video, cat: Movies, desc: "Vidéo"}
-    - {id: video, cat: TV, desc: "Vidéo"}
-    - {id: films, cat: Movies, desc: "Films"}
-    - {id: animation, cat: Movies/Other, desc: "Animation"}
-    - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
-    - {id: sports, cat: TV, desc: "Sports"}
-    - {id: series, cat: TV, desc: "Séries TV"}
-    - {id: s-ries-hd, cat: TV, desc: "Séries HD"}
-    # Applications
-    - {id: applications, cat: PC, desc: "Applications"}
-    - {id: software, cat: PC, desc: "Logiciels"}
-    - {id: linux, cat: PC, desc: "Linux"}
-    - {id: systemes, cat: PC, desc: "Systèmes"}
-    # Jeux
-    - {id: games, cat: PC/Games, desc: "Jeux"}
-    - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
-    - {id: pc, cat: PC/Games, desc: "PC"}
-    - {id: playstation, cat: Console/PS4, desc: "Playstation"}
-    - {id: sega, cat: Console/Other, desc: "Sega"}
-    - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
-    - {id: xbox, cat: Console/XBox, desc: "Xbox"}
-    # E-books
-    - {id: e-books, cat: Books/EBook, desc: "E-books"}
-    - {id: bd, cat: Books/Comics, desc: "BD"}
-    - {id: comics, cat: Books/Comics, desc: "Comics"}
-    - {id: divers, cat: Books/Other, desc: "Divers"}
-    - {id: livres, cat: Books/EBook, desc: "Livres"}
-    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
-    - {id: presse, cat: Books/Mags, desc: "Presse"}
-    # Audio
-    - {id: audio, cat: Audio, desc: "Audio"}
-    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
-    - {id: audiobooks, cat: Audio/Audiobook, desc: "Audiobooks"}
-    - {id: music, cat: Audio, desc: "Musique"}
-    - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
-    - {id: m4a, cat: Audio, desc: "M4A"}
-    - {id: mp3, cat: Audio/MP3, desc: "MP3"}
-    - {id: podcast, cat: Audio/Other, desc: "Podcast"}
-    # XXX
-    - {id: xxx, cat: XXX, desc: "XXX"}
+    # Video (parent + children)
+    - {id: video, cat: Movies, desc: 'Vidéo'}
+    - {id: films, cat: Movies, desc: 'Films'}
+    - {id: animation, cat: Movies, desc: 'Animation'}
+    - {id: series, cat: TV, desc: 'Séries TV'}
+    - {id: s-ries-hd, cat: TV/HD, desc: 'Séries HD'}
+    - {id: spectacles-concerts, cat: TV/Other, desc: 'Spectacles & Concerts'}
+    - {id: sports, cat: TV/Sport, desc: 'Sports'}
+    # Audio (parent + children)
+    - {id: audio, cat: Audio, desc: 'Audio'}
+    - {id: music, cat: Audio, desc: 'Musique'}
+    - {id: flac, cat: Audio/Lossless, desc: 'FLAC'}
+    - {id: MP3, cat: Audio/MP3, desc: 'MP3'}
+    - {id: M4A, cat: Audio/Other, desc: 'M4A'}
+    - {id: audio-divers, cat: Audio/Other, desc: 'Audio divers'}
+    - {id: audiobooks, cat: Audio/Audiobook, desc: 'Audiobooks'}
+    - {id: podcast, cat: Audio/Other, desc: 'Podcast'}
+    # Games (parent + children)
+    - {id: games, cat: PC/Games, desc: 'Jeux'}
+    - {id: pc, cat: PC/Games, desc: 'PC'}
+    - {id: nintendo, cat: Console/NDS, desc: 'Nintendo'}
+    - {id: playstation, cat: Console/PS4, desc: 'Playstation'}
+    - {id: sega, cat: Console/Other, desc: 'Sega'}
+    - {id: xbox, cat: Console/XBox, desc: 'Xbox'}
+    - {id: t-l-phones, cat: PC/Mobile-Other, desc: 'Téléphones'}
+    # Applications (parent + children)
+    - {id: applications, cat: PC/0day, desc: 'Applications'}
+    - {id: software, cat: PC/0day, desc: 'Logiciels'}
+    - {id: linux, cat: PC/0day, desc: 'Linux'}
+    - {id: systemes, cat: PC/ISO, desc: 'Systèmes'}
+    # E-books (parent + children)
+    - {id: ebooks, cat: Books/EBook, desc: 'E-books'}
+    - {id: livres, cat: Books/EBook, desc: 'Livres'}
+    - {id: bd, cat: Books/Comics, desc: 'BD'}
+    - {id: comics, cat: Books/Comics, desc: 'Comics'}
+    - {id: mangas, cat: Books/Comics, desc: 'Mangas'}
+    - {id: divers, cat: Books/Other, desc: 'Divers'}
+    # XXX (default: false)
+    - {id: xxx, cat: XXX, desc: 'XXX', default: false}
+    # Other
+    - {id: autres, cat: Other/Misc, desc: 'Autres'}
 
   modes:
     search: [q]
@@ -65,12 +63,12 @@ caps:
 
 settings:
   - name: passkey
-    type: text
+    type: password
     label: Passkey
   - name: info_key
     type: info
     label: About your Passkey
-    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
+    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>. Never share it!"
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -90,12 +88,21 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
+  - name: info_freeleech
+    type: info
+    label: Freeleech Detection
+    default: "⚠️ This API does not provide freeleech status. Ratio 1.0 is assumed. Check <a href='https://la-cale.space' target='_blank'>La Cale</a> for site-wide freeleech events."
+  - name: info_ratio
+    type: info
+    label: Ratio Requirements
+    default: "Minimum ratio: 1.0 | Minimum seed time: 48 hours"
 
 login:
   path: api/external
   method: get
   inputs:
     passkey: "{{ .Config.passkey }}"
+    q: test
   error:
     - selector: ":root:contains(\"Passkey invalide\")"
       message:
@@ -106,22 +113,24 @@ login:
 
 search:
   paths:
-    # docs at https://la-cale.space/faq/api
     - path: api/external
       response:
         type: json
+        noResultsMessage: '[]'
 
   inputs:
     passkey: "{{ .Config.passkey }}"
-    $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
     q: "{{ .Keywords }}"
     tmdbId: "{{ .Query.TMDBID }}"
+    $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
 
   rows:
     selector: $
     missingAttributeEqualsNoResults: true
 
   fields:
+    _id:
+      selector: guid
     categorydesc:
       selector: category
     title_phase1:
@@ -141,7 +150,7 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}"
+      selector: link
     infohash:
       selector: infoHash
     download:
@@ -152,13 +161,10 @@ search:
     size:
       selector: size
     date:
-      # "pubDate": "2026-01-16T16:32:19.243Z" is returned by Newtonsoft.Json.Linq as 16/01/2026 16:32:19
       selector: pubDate
       filters:
-        - name: append
-          args: " +00:00" # GMT
         - name: dateparse
-          args: "MM/dd/yyyy HH:mm:ss zzz"
+          args: "2006-01-02T15:04:05.999Z"
     seeders:
       selector: seeders
     leechers:
@@ -170,6 +176,5 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json API
+# JSON API
