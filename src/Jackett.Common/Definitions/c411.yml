@@ -22,7 +22,7 @@ caps:
     # Films & Vidéos
     - {id: 2000, cat: Movies, desc: "Films & Vidéos"}
     - {id: 2060, cat: Movies/Other, desc: "Animation Films & Vidéo-clips"}
-    - {id: 2070, cat: Movies/Documentary, desc: "Films Documentaire"}
+    - {id: 2070, cat: Movies, desc: "Films Documentaire"}
     - {id: 2090, cat: Movies/Other, desc: "Films Concert & Spectacle"}
     # Audio
     - {id: 3000, cat: Audio, desc: "Audio"}
