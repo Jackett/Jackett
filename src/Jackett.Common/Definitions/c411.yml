@@ -107,9 +107,8 @@ login:
     t: caps
   error:
     - selector: error
-      attribute: description
       message:
-        text: "{{ .Result }}"
+        selector: description
     - selector: :contains("401")
       message:
         text: "API Key invalid. Check your credentials."
