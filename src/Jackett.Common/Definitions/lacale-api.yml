@@ -163,8 +163,10 @@ search:
     date:
       selector: pubDate
       filters:
+        - name: append
+          args: " +00:00"
         - name: dateparse
-          args: "2006-01-02T15:04:05.999Z"
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     seeders:
       selector: seeders
     leechers:
