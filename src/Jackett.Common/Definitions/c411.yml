@@ -137,24 +137,17 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      selector: guid
-      filters:
-        - name: prepend
-          args: "{{ .Config.sitelink }}torrents/"
+      selector: link
     download:
       selector: enclosure
       attribute: url
-    poster:
-      selector: description
-      filters:
-        - name: regexp
-          args: src=\"(.+?)\"
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
     date:
-      # Sat, 03 Jan 2026 01:27:58 GMT
+      # Sun, 18 Jan 2026 04:05:41 +0000
       selector: pubDate
       filters:
-        - name: replace
-          args: ["GMT", "+00:00"]
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
