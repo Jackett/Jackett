@@ -15,6 +15,7 @@ caps:
     - {id: 35, cat: TV/Anime, desc: "Anime"}
     - {id: 51, cat: PC/Mac, desc: "Apple"}
     - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 109, cat: PC, desc: "Attract-Mode"}
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 71, cat: Console, desc: "Batocera"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
@@ -34,7 +35,8 @@ caps:
     - {id: 84, cat: TV, desc: "GOG DRM FREE"}
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
-    - {id: 43, cat: Console, desc: "LB No Intro"}
+    - {id: 107, cat: Console, desc: "KinHanK"}
+    - {id: 43, cat: Console, desc: "LaunchBox"}
     - {id: 85, cat: PC, desc: "MAME Rom Sets"}
     - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
     - {id: 32, cat: Movies, desc: "Movie Pack"}
@@ -59,6 +61,7 @@ caps:
     - {id: 76, cat: Console, desc: "RGS"}
     - {id: 27, cat: PC, desc: "Roms and Emulators"}
     - {id: 68, cat: PC, desc: "Schmoomer's"}
+    - {id: 110, cat: Console, desc: "ScummVM"}
     - {id: 57, cat: Console, desc: "Sega"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
@@ -130,31 +133,31 @@ search:
     # sort is done via do=quick_sort, and freeleech sorting is part of that set
 
   rows:
-    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
         args: 66
 
   fields:
     category:
-      selector: a[href*="torrent-category-"]
+      selector: a[href*="browse.php?category="]
       attribute: href
       filters:
-        - name: regexp
-          args: category-(\d+)
+        - name: querystring
+          args: category
     title_default:
       # is often abbreviated
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="details.php?id="]
     title:
       # can be abbreviated but usually longer than title_default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href*="download-torrent-"]
+      selector: a[href*="download.php?id="]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
