@@ -20,9 +20,9 @@ caps:
     - {id: films, cat: Movies, desc: "Films"}
     - {id: animation, cat: Movies/Other, desc: "Animation"}
     - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
-    - {id: sports, cat: TV, desc: "Sports"}
+    - {id: sports, cat: TV/Sport, desc: "Sports"}
     - {id: series, cat: TV, desc: "Séries TV"}
-    - {id: s-ries-hd, cat: TV, desc: "Séries HD"}
+    - {id: s-ries-hd, cat: TV/HD, desc: "Séries HD"}
     # Applications
     - {id: applications, cat: PC, desc: "Applications"}
     - {id: software, cat: PC, desc: "Logiciels"}
