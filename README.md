@@ -395,7 +395,7 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
- * HxPT (好学) [![(invite needed)][inviteneeded]](#) |
+ * HxPT (好学) [![(invite needed)][inviteneeded]](#)
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
@@ -614,6 +614,7 @@ Prior versions of Jackett are no longer supported.
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * x-ite.me (XM)
+ * Xloli (ilolicon PT)
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)
