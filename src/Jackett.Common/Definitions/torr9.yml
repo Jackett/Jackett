@@ -109,17 +109,16 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
-    _id:
-      selector: enclosure
-      attribute: url
-      filters:
-        - name: regexp
-          args: torrents/(\d+)/download
     details:
-      text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
+      selector: comments
+      filters:
+        - name: replace
+          args: ["//api.", "//"]
     download:
-      selector: enclosure
-      attribute: url
+      selector: link
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
     date:
       # Thu, 15 Jan 2026 16:24:34 +0000
       selector: pubDate
