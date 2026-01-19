@@ -614,7 +614,7 @@ Prior versions of Jackett are no longer supported.
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * x-ite.me (XM)
- * Xloli (ilolicon PT)
+ * xloli (ilolicon PT)
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)
