@@ -1,7 +1,9 @@
 ---
 id: xloli
-name: Xloli
-description: "Xloli (ilolicon PT) is a CHINESE Private Torrent Tracker for LOLICON / MOVIES / 3X"
+replaces:
+  - ilolicon
+name: xloli
+description: "xloli (ilolicon PT) is a CHINESE Private Torrent Tracker for LOLICON / MOVIES / 3X"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -78,7 +80,7 @@ settings:
     default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
 
 login:
-  # using cookie method because login page has embedded Google reCAPTCHA
+  # using cookie method because login page has embedded Cloudflare CAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
