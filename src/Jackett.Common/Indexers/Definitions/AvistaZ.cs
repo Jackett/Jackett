@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheManager: cm,
+                   cm: cm,
                    configData: new ConfigurationDataAvistaZ())
         {
         }
