@@ -1,0 +1,146 @@
+---
+id: nekobt
+name: nekoBT
+description: "nekoBT is a Public Torrent Tracker for ANIME"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://nekobt.to/
+
+caps:
+  categorymappings:
+    - {id: 5070, cat: TV/Anime, desc: "Anime"}
+    - {id: 2000, cat: Movies/Other, desc: "Movies"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tvdbid]
+    movie-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key (Optional)
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
+  - name: levels
+    type: select
+    label: Subtitle Level
+    default: _
+    options:
+      _: "All"
+      "0": "Level 0"
+      "1": "Level 1"
+      "2": "Level 2"
+      "3": "Level 3"
+      "4": "Level 4"
+  - name: audio_lang
+    type: text
+    label: Audio Language (comma-separated codes, e.g. en,ja)
+  - name: fansub_lang
+    type: text
+    label: Fansub Language (comma-separated codes, e.g. en,ja)
+  - name: sub_lang
+    type: text
+    label: Subtitle Language (comma-separated codes, e.g. en,ja)
+  - name: hardsub
+    type: select
+    label: Hardcoded Subtitles
+    default: _
+    options:
+      _: "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: otl
+    type: select
+    label: OTL Subtitles
+    default: _
+    options:
+      _: "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: mtl
+    type: select
+    label: MTL Subtitles
+    default: _
+    options:
+      _: "No Filter"
+      "true": "Include Only"
+      "false": "Exclude"
+  - name: group_id
+    type: text
+    label: Group ID
+    default: ""
+
+search:
+  paths:
+    - path: api/torznab/api
+      response:
+        type: xml
+
+  inputs:
+    t: "search"
+    q: "{{ .Keywords }}"
+    apikey: "{{ .Config.apikey }}"
+    tvdbid: "{{ .Query.TVDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    levels: "{{ re_replace .Config.levels \"_\" \"\" }}"
+    audio_lang: "{{ .Config.audio_lang }}"
+    fansub_lang: "{{ .Config.fansub_lang }}"
+    sub_lang: "{{ .Config.sub_lang }}"
+    hardsub: "{{ re_replace .Config.hardsub \"_\" \"\" }}"
+    otl: "{{ re_replace .Config.otl \"_\" \"\" }}"
+    mtl: "{{ re_replace .Config.mtl \"_\" \"\" }}"
+    group_id: "{{ .Config.group_id }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    title:
+      selector: title
+      filters:
+        - name: re_replace
+          args: ["(.+?) {Tags:.+", "$1"]
+    description:
+      selector: title
+      filters:
+        - name: re_replace
+          args: [".+ {(Tags:.+?)}", "$1"]
+    details:
+      selector: comments
+    magnet:
+      selector: enclosure
+      attribute: url
+    date:
+      # Sat, 03 Jan 2026 01:27:58 GMT
+      selector: pubDate
+      filters:
+        - name: replace
+          args: ["GMT", "+00:00"]
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    size:
+      selector: size
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="leechers"]'
+      attribute: value
+    grabs:
+      selector: '[name="grabs"]'
+      attribute: value
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml

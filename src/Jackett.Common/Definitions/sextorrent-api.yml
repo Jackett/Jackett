@@ -5,6 +5,8 @@ description: "SexTorrent is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 473e65bfd1884f2904b09ac811d0d88355f618b1 # expired 19 Jan 2025
 links:
   - https://sextorrent.myds.me/
 
@@ -55,6 +57,8 @@ caps:
     - {id: 44, cat: XXX, desc: "SiteFan"}
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 47, cat: XXX, desc: "Threesome"}
+    - {id: 46, cat: XXX, desc: "Ai Generated"}
 
   modes:
     search: [q]
@@ -206,4 +210,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.1.7
+# json UNIT3D 9.1.7 (custom)

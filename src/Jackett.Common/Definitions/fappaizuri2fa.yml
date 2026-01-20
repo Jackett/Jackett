@@ -1,0 +1,154 @@
+---
+id: fappaizuri2fa
+name: Fappaizuri2FA
+description: "Fappaizuri is a Private Torrent Tracker for HENTAI / JAV. This indexer uses cookie login for 2FA."
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.fappaizuri.me/
+legacylinks:
+  - https://fappaizuri.me/
+
+caps:
+  categorymappings:
+    - {id: 5, cat: XXX, desc: "JAV"}
+    - {id: 6, cat: Books, desc: "Manga"}
+    - {id: 7, cat: Console, desc: "H-games"}
+    - {id: 8, cat: TV/Anime, desc: "Hentai"}
+    - {id: 9, cat: XXX, desc: "OFFS"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: lang
+    type: select
+    label: Language
+    default: 0
+    options:
+      0: All
+      4: Japanese
+      5: Chinese
+      6: Malaysia
+      7: North Korea
+      8: English
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+login:
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href="account-logout.php"]
+
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
+search:
+  paths:
+    # https://fappaizuri.me/torrents-search.php?search=&c8=1&c6=1&incldead=1&freeleech=0&lang=0
+    - path: torrents-search.php
+
+  inputs:
+    $raw: "{{ range .Categories }}&c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    lang: "{{ .Config.lang }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: tr.t-row
+
+  fields:
+    category:
+      selector: a[href^="torrents-search.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="] > b
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: onMouseover
+      filters:
+        - name: regexp
+          args: src=(.+?)>
+    _language:
+      selector: img[src*="images/languages/"]
+      attribute: alt
+      optional: true
+    description:
+      selector: font[color="red"]
+      filters:
+        - name: append
+          args: "{{ if .Result._language }} - {{ .Result._language }}{{ else }}{{ end }}"
+    size:
+      selector: td:nth-child(3)
+    seeders:
+      selector: td:nth-child(5)
+    leechers:
+      selector: td:nth-child(6)
+    grabs:
+      selector: td:nth-child(7)
+    date:
+      selector: td:nth-child(8)
+      filters:
+        - name: timeago
+    downloadvolumefactor:
+      case:
+        img[src="images/free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="images/doubleupload.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# evolution

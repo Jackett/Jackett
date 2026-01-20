@@ -1,0 +1,175 @@
+---
+id: lacale-api
+name: La Cale (API)
+description: "La Cale is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2.1
+links:
+  - https://la-cale.space/
+
+caps:
+  # use https://la-cale.space/api/external/meta?passkey=YOUR-PASSKEY for cat mappings, slug is id, name is desc
+  categorymappings:
+    # Autres
+    - {id: autres, cat: Other, desc: "Autres"}
+    # Vidéo
+    - {id: video, cat: Movies, desc: "Vidéo"}
+    - {id: video, cat: TV, desc: "Vidéo"}
+    - {id: films, cat: Movies, desc: "Films"}
+    - {id: animation, cat: Movies/Other, desc: "Animation"}
+    - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
+    - {id: sports, cat: TV/Sport, desc: "Sports"}
+    - {id: series, cat: TV, desc: "Séries TV"}
+    - {id: s-ries-hd, cat: TV/HD, desc: "Séries HD"}
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    - {id: linux, cat: PC, desc: "Linux"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    # Jeux
+    - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
+    - {id: pc, cat: PC/Games, desc: "PC"}
+    - {id: playstation, cat: Console/PS4, desc: "Playstation"}
+    - {id: sega, cat: Console/Other, desc: "Sega"}
+    - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
+    - {id: xbox, cat: Console/XBox, desc: "Xbox"}
+    # E-books
+    - {id: e-books, cat: Books/EBook, desc: "E-books"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: comics, cat: Books/Comics, desc: "Comics"}
+    - {id: divers, cat: Books/Other, desc: "Divers"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
+    # Audio
+    - {id: audio, cat: Audio, desc: "Audio"}
+    - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
+    - {id: audiobooks, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: music, cat: Audio, desc: "Musique"}
+    - {id: flac, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: m4a, cat: Audio, desc: "M4A"}
+    - {id: mp3, cat: Audio/MP3, desc: "MP3"}
+    - {id: podcast, cat: Audio/Other, desc: "Podcast"}
+    # XXX
+    - {id: xxx, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tmdbid]
+    movie-search: [q, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_key
+    type: info
+    label: About your Passkey
+    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: api/external
+  method: get
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+  error:
+    - selector: ":root:contains(\"Passkey invalide\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+    - selector: ":root:contains(\"Passkey manquant\")"
+      message:
+        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    # docs at https://la-cale.space/faq/api
+    - path: api/external
+      response:
+        type: json
+
+  inputs:
+    passkey: "{{ .Config.passkey }}"
+    $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
+    q: "{{ .Keywords }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+
+  rows:
+    selector: $
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    categorydesc:
+      selector: category
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      text: "{{ .Config.sitelink }}"
+    infohash:
+      selector: infoHash
+    download:
+      selector: link
+      filters:
+        - name: append
+          args: "?passkey={{ .Config.passkey }}"
+    size:
+      selector: size
+    date:
+      # "pubDate": "2026-01-16T16:32:19.243Z" is returned by Newtonsoft.Json.Linq as 16/01/2026 16:32:19
+      selector: pubDate
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json API

@@ -6,8 +6,12 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
+certificates:
+  - 1dad798f690521cfb37d6817b66f1f08fe8c8f36 # using CA from audiobookbay.lu (sister site)
 links:
-  - http://ebb.la/ # site does not support https SSL_ERROR_BAD_CERT_DOMAIN
+  - https://ebb.la/
+legacylinks:
+  - http://ebb.la/
 
 caps:
   categorymappings:
@@ -85,8 +89,8 @@ download:
 search:
   paths:
     # with just 5 results per page, try to grab up to 25 results
-    # http://ebb.la/?s=teeth
-    # http://ebb.la/page/2/?s=teeth
+    # https://ebb.la/?s=teeth
+    # https://ebb.la/page/2/?s=teeth
     - path: /
     - path: "page/2/"
     - path: "page/3/"
@@ -116,9 +120,15 @@ search:
     details:
       selector: a.detail
       attribute: href
+      filters:
+        - name: replace
+          args: ["http:", "https:"]
     download:
       selector: a.detail
       attribute: href
+      filters:
+        - name: replace
+          args: ["http:", "https:"]
     poster:
       selector: img[src^="http"]:not(img[src*="images/default_cover.jpg"])
       attribute: src

@@ -6,6 +6,8 @@ language: en-US
 type: semi-private
 encoding: UTF-8
 links:
+  - https://musebootlegs.com/
+legacylinks:
   - https://www.musebootlegs.com/
 
 caps:
@@ -34,6 +36,9 @@ caps:
     - {id: 58, cat: Audio/Lossless, desc: "Audio Lossless 2019"}
     - {id: 61, cat: Audio/Lossless, desc: "Audio Lossless 2022"}
     - {id: 63, cat: Audio/Lossless, desc: "Audio Lossless 2023"}
+    - {id: 66, cat: Audio/Lossless, desc: "Audio Lossless 2024"}
+    - {id: 65, cat: Audio/Lossless, desc: "Audio Lossless 2025"}
+    - {id: 67, cat: Audio/Lossless, desc: "Audio Lossless 2026"}
     - {id: 28, cat: Audio/Lossless, desc: "Audio Lossless Misc"}
     - {id: 8, cat: Audio/Video, desc: "DVD Amateur"}
     - {id: 3, cat: Audio/Video, desc: "DVD Pro-Shot"}
@@ -59,6 +64,10 @@ caps:
     - {id: 59, cat: Audio/Video, desc: "DVD Pro-Shot 2018"}
     - {id: 60, cat: Audio/Video, desc: "DVD Pro-Shot 2019"}
     - {id: 62, cat: Audio/Video, desc: "DVD Pro-Shot 2022"}
+    - {id: 68, cat: Audio/Video, desc: "DVD Pro-Shot 2023"}
+    - {id: 69, cat: Audio/Video, desc: "DVD Pro-Shot 2024"}
+    - {id: 70, cat: Audio/Video, desc: "DVD Pro-Shot 2025"}
+    - {id: 71, cat: Audio/Video, desc: "DVD Pro-Shot 2026"}
     - {id: 44, cat: Audio/Video, desc: "DVD Pro-Shot Compilations"}
     - {id: 45, cat: Audio/Video, desc: "DVD Pro-Shot Music Videos"}
     - {id: 7, cat: Audio/Video, desc: "High-Definition"}

@@ -37,6 +37,7 @@ caps:
     - {id: 80, cat: TV, desc: "Paketi"}
     - {id: 49, cat: PC, desc: "Programi"}
     - {id: 28, cat: Other, desc: "Razno"}
+    - {id: 85, cat: Movies, desc: "Remux"}
     - {id: 62, cat: TV/SD, desc: "SD Boxset"}
     - {id: 38, cat: TV/Sport, desc: "Sport"}
     - {id: 39, cat: Audio/Video, desc: "Spotovi DVD"}

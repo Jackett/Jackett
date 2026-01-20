@@ -7,6 +7,7 @@ using Jackett.Common.Services.Interfaces;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Jackett.Server.Controllers
@@ -30,7 +31,8 @@ namespace Jackett.Server.Controllers
         {
             if (string.IsNullOrEmpty(cookiesChecked))
             {
-                HttpContext.Response.Cookies.Append("TestCookie", "1");
+                Response.Cookies.Append("TestCookie", "1", new CookieOptions { Secure = Request.IsHttps });
+
                 return Redirect("TestCookie");
             }
 
@@ -77,8 +79,8 @@ namespace Jackett.Server.Controllers
         [HttpGet]
         public IActionResult Dashboard()
         {
-            var logout = HttpContext.Request.Query.Where(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase)
-                                                            && string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase)).Any();
+            var logout = HttpContext.Request.Query.Any(x => string.Equals(x.Key, "logout", StringComparison.OrdinalIgnoreCase) &&
+                                                            string.Equals(x.Value, "true", StringComparison.OrdinalIgnoreCase));
 
             if (logout)
             {

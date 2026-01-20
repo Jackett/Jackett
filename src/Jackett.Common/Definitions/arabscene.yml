@@ -1,0 +1,220 @@
+---
+id: arabscene
+name: ArabScene
+description: "ArabScene is an ARABIC Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ar-AE
+type: private
+encoding: UTF-8
+links:
+  - https://arabscene.me/
+
+caps:
+  categorymappings:
+    - {id: 103, cat: Other, desc: "منوعات"}
+    - {id: 105, cat: Other, desc: "  |-- مسرحيات"}
+    - {id: 104, cat: TV/Other, desc: "  |-- اسلاميات "}
+    - {id: 120, cat: TV/Other, desc: "  |-- توك شــو"}
+    - {id: 106, cat: PC/0day, desc: "  |-- دورات تعليمية "}
+    - {id: 117, cat: TV/Foreign, desc: "مسلسلات مترجمة "}
+    - {id: 122, cat: TV/Foreign, desc: "  |--  beIN "}
+    - {id: 123, cat: TV/Foreign, desc: "  |-- OSN"}
+    - {id: 128, cat: TV/Foreign, desc: "  |-- اجنبى"}
+    - {id: 160, cat: TV/Foreign, desc: "  |-- تركى"}
+    - {id: 174, cat: TV/Foreign, desc: "  |-- حلقات منفردة"}
+    - {id: 133, cat: TV/Foreign, desc: "مسلسلات مدبلجة"}
+    - {id: 136, cat: TV/Foreign, desc: "  |-- هندى"}
+    - {id: 140, cat: TV/Foreign, desc: "  |-- اجنبى"}
+    - {id: 173, cat: TV/Foreign, desc: "  |-- تركى"}
+    - {id: 175, cat: TV/Foreign, desc: "  |-- حلقات منفردة"}
+    - {id: 56, cat: TV, desc: "VIP"}
+    - {id: 81, cat: TV, desc: "  |-- Full-Pack"}
+    - {id: 53, cat: TV/Foreign, desc: "  |-- مسلسلات مدبلجة "}
+    - {id: 55, cat: TV, desc: "  |-- مسلسلات عربية "}
+    - {id: 57, cat: Movies, desc: "  |-- افلام عربية "}
+    - {id: 54, cat: TV/Anime, desc: "  |-- الكرتون والانمى "}
+    - {id: 58, cat: TV/WEB-DL, desc: "Web-DL"}
+    - {id: 65, cat: Movies/WEB-DL, desc: "  |-- Arabic Movies"}
+    - {id: 66, cat: TV/WEB-DL, desc: "  |-- Arabic Series"}
+    - {id: 67, cat: TV/WEB-DL, desc: "  |-- Dubbed Series"}
+    - {id: 73, cat: TV/WEB-DL, desc: "  |-- Full-Pack "}
+    - {id: 113, cat: Movies/Foreign, desc: "افلام مترجمة "}
+    - {id: 121, cat: Movies/Foreign, desc: "  |-- beIN"}
+    - {id: 125, cat: Movies/Foreign, desc: "  |-- OSN"}
+    - {id: 115, cat: Movies/Foreign, desc: "  |-- هندى  "}
+    - {id: 114, cat: Movies/Foreign, desc: "  |-- اجنبى"}
+    - {id: 161, cat: Movies/Foreign, desc: "  |-- تركى"}
+    - {id: 143, cat: Movies/Foreign, desc: "افلام مدبلجة"}
+    - {id: 149, cat: Movies/Foreign, desc: "  |-- beIN"}
+    - {id: 148, cat: Movies/Foreign, desc: "  |-- OSN"}
+    - {id: 145, cat: Movies/Foreign, desc: "  |-- هندى"}
+    - {id: 146, cat: Movies/Foreign, desc: "  |-- اجنبى"}
+    - {id: 144, cat: Movies/Foreign, desc: "  |-- تركى"}
+    - {id: 109, cat: Audio, desc: "الموسيقى العربية "}
+    - {id: 110, cat: Audio/Lossless, desc: "  |-- FLAC"}
+    - {id: 111, cat: Audio/MP3, desc: "  |-- Mp3"}
+    - {id: 112, cat: Audio, desc: "  |-- كليبات"}
+    - {id: 99, cat: TV, desc: "المسلسلات العربية"}
+    - {id: 100, cat: TV, desc: "  |-- مصرية"}
+    - {id: 139, cat: TV, desc: "  |-- مغربية"}
+    - {id: 138, cat: TV, desc: "  |-- تونسية"}
+    - {id: 172, cat: TV, desc: "  |-- حلقات منفردة"}
+    - {id: 101, cat: TV, desc: "  |-- خليجية"}
+    - {id: 102, cat: TV, desc: "  |-- سورية"}
+    - {id: 84, cat: TV/Documentary, desc: "الوثائقيات "}
+    - {id: 85, cat: TV/Documentary, desc: "  |-- مترجمة"}
+    - {id: 87, cat: TV/Documentary, desc: "  |-- عربية "}
+    - {id: 89, cat: Movies, desc: "الافلام العربية"}
+    - {id: 95, cat: Movies, desc: "  |-- 2000s"}
+    - {id: 137, cat: Movies, desc: "  |-- 2010s"}
+    - {id: 49, cat: Movies, desc: "  |-- 2020s"}
+    - {id: 98, cat: Movies, desc: "  |-- 40s"}
+    - {id: 90, cat: Movies, desc: "  |-- 50s"}
+    - {id: 91, cat: Movies, desc: "  |-- 60s"}
+    - {id: 92, cat: Movies, desc: "  |-- 70s"}
+    - {id: 93, cat: Movies, desc: "  |-- 80s"}
+    - {id: 94, cat: Movies, desc: "  |-- 90s"}
+    - {id: 4, cat: Movies/Other, desc: "الرسوم المتحركة"}
+    - {id: 5, cat: Movies/Other, desc: "  |-- مترجم"}
+    - {id: 6, cat: Movies/Other, desc: "  |-- مدبلج"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All inactive accounts will be deleted after 60 days of inactivity."
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: table:has(td.thead:contains("error"))
+  test:
+    path: index.php
+    selector: a[href*="logout.php"]
+
+download:
+  before:
+    path: takethanks.php
+    method: post
+    inputs:
+      torrentid: "{{ .DownloadUri.Query.id }}"
+
+search:
+  paths:
+    - path: browse.php
+
+  inputs:
+    do: search
+    keywords: "{{ .Keywords }}"
+    # t_name, t_description, t_both, t_uploader, t_genre
+    search_type: t_both
+    # does not support multi category searching so defaulting to all.
+    category: 0
+    include_dead_torrents: yes
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: table#sortabletable > tbody > tr:has(span > a[href*="details.php?id="])
+
+  fields:
+    category:
+      selector: a[href*="?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
+    title:
+      selector: a[href*="/details.php?id="]
+      filters:
+        - name: re_replace
+          args: ["(?<=\\d)\\s+(?=\\d)", " "]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[(\\d{4})\\]\\s*\\[م(\\d+)\\]", "S$3E$1 [$2]"]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
+        - name: re_replace
+          args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["\\[\\s*\\]", ""]
+        - name: re_replace
+          args: ["(?<=\\S)(\\[)", " $1"]
+        - name: re_replace
+          args: ["S(\\d)(?=E)", "S0$1"]
+        - name: re_replace
+          args: ["E(\\d)(?=\\D)", "E0$1"]
+        - name: re_replace
+          args: ["\\s{2,}", " "]
+        - name: trim
+    details:
+      selector: a[href*="/details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="/download.php?id="]
+      attribute: href
+    date:
+      selector: td:nth-child(2) > div:nth-child(3)
+      filters:
+        - name: regexp
+          args: "(\\d{2}-\\d{2}-\\d{4} \\d{2}:\\d{2})"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    poster:
+      selector: div.tooltip-content > img[src*="/torrents/"]
+      attribute: src
+    downloadvolumefactor:
+      case:
+        img[src$="torrent_flags/freedownload.gif"]: 0
+        img[src$="torrent_flags/silverdownload.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src$="torrent_flags/x2.gif"]: 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# TS Special Edition v.7.5

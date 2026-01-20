@@ -68,12 +68,15 @@ login:
     - selector: form#loginform > span.warning, font[color="red"]
   test:
     path: index.php
-    selector: a[href^="logout.php?auth="]
+    selector: a[href^="logout.php?auth="], a[href^="torrents.php?action=download&id="]
 
 search:
     # https://jpopsuki.eu/ajax.php?section=torrents&artistname=&action=advanced&torrentname=snow+man&remastertitle=&filelist=&bitrate=&format=&media=&year=&freeleech=&remastered=&searchtags=&tags_type=0&order_by=s3&order_way=desc&enablegrouping=1
   paths:
     - path: ajax.php
+  keywordsfilters:
+    - name: re_replace # replace special characters with " " (space)
+      args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if or .Query.Album .Query.Artist .Keywords }}action=advanced{{ else }}searchtags=japanese&tags_type=0{{ end }}"
     artistname: "{{ .Query.Artist }}"

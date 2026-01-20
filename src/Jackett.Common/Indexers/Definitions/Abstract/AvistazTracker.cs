@@ -1,7 +1,6 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
-using System.Globalization;
 using System.Linq;
 using System.Net;
 using System.Threading.Tasks;
@@ -36,7 +35,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
         private string _token;
 
-        private new ConfigurationDataAvistazTracker configData => (ConfigurationDataAvistazTracker)base.configData;
+        private new ConfigurationDataAvistaZTracker configData => (ConfigurationDataAvistaZTracker)base.configData;
 
         // hook to adjust the search term
         protected virtual string GetSearchTerm(TorznabQuery query) => $"{query.SearchTerm} {GetEpisodeSearchTerm(query)}".Trim();
@@ -96,13 +95,19 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 qc.Add("search", GetEpisodeSearchTerm(query));
             }
             else
+            {
                 qc.Add("search", GetSearchTerm(query).Trim());
+            }
 
             if (!string.IsNullOrWhiteSpace(query.Genre))
+            {
                 qc.Add("tags", query.Genre);
+            }
 
             if (configData.Freeleech.Value)
+            {
                 qc.Add("discount[]", "1");
+            }
 
             return qc;
         }
@@ -145,7 +150,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                    logger: logger,
                    p: p,
                    cacheManager: cm,
-                   configData: new ConfigurationDataAvistazTracker())
+                   configData: new ConfigurationDataAvistaZTracker())
         {
             webclient.requestDelay = 6;
         }
@@ -172,10 +177,19 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 { "pid", configData.Pid.Value.Trim() }
             };
             var result = await RequestWithCookiesAsync(AuthUrl, method: RequestType.POST, data: body, headers: AuthHeaders);
+
+            if ((int)result.Status == 429)
+            {
+                throw new TooManyRequestsException("Rate limited", result);
+            }
+
             var json = JObject.Parse(result.ContentString);
             _token = json.Value<string>("token");
+
             if (_token == null)
+            {
                 throw new Exception(json.Value<string>("message"));
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)

@@ -5,11 +5,13 @@ using System.Linq;
 using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using NLog;
 
@@ -292,6 +294,21 @@ namespace Jackett.Server.Controllers
         {
             Helper.SetLogLevel(enabled ? LogLevel.Debug : LogLevel.Info);
             serverConfig.RuntimeSettings.TracingEnabled = enabled;
+        }
+
+        [AllowAnonymous]
+        [TypeFilter(typeof(RequiresApiKey))]
+        [HttpPost]
+        public IActionResult Shutdown()
+        {
+            logger.Warn("Shutdown requested via API");
+
+            Task.Factory.StartNew(() => Helper.applicationLifetime.StopApplication());
+
+            return Ok(new
+            {
+                ShuttingDown = true
+            });
         }
     }
 }

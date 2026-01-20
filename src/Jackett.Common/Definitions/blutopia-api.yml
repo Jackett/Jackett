@@ -24,6 +24,7 @@ caps:
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey

@@ -39,6 +39,7 @@ Prior versions of Jackett are no longer supported.
  * AniRena
  * AniSource
  * ApacheTorrent
+ * arab-torrents.com
  * AudioBook Bay (ABB)
  * Bangumi Moe
  * BigFANGroup
@@ -71,7 +72,6 @@ Prior versions of Jackett are no longer supported.
  * GamesTorrents
  * GTorrent.pro
  * HDRTorrent
- * Idope
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
  * Isohunt2
@@ -90,6 +90,7 @@ Prior versions of Jackett are no longer supported.
  * MixTapeTorrent
  * MoviesDVDR
  * MyPornClub
+ * nekoBT
  * NewStudio
  * Nipponsei
  * NoNaMe Club (NNM-Club)
@@ -101,7 +102,6 @@ Prior versions of Jackett are no longer supported.
  * PC-torrent
  * Pirate's Paradise
  * plugintorrent
- * PornoTorrent
  * PornRips
  * Postman
  * RedeTorrent
@@ -124,7 +124,6 @@ Prior versions of Jackett are no longer supported.
  * torrent.by
  * torrent-pirat
  * Torrent9
- * TorrentDosFilmes
  * TorrentDownload
  * TorrentGalaxyClone
  * TorrentKitty
@@ -141,10 +140,10 @@ Prior versions of Jackett are no longer supported.
  * VST Torrentz
  * VSTorrent
  * Wolfmax4K
+ * World-torrent
  * XXXClub
  * xxxtor
  * YTS.ag
- * zetorrents
  * ZkTorrent
 </details>
 
@@ -248,20 +247,24 @@ Prior versions of Jackett are no longer supported.
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
  * ArabicSource
  * ArabP2P
+ * ArabScene [![(invite needed)][inviteneeded]](#)
  * ArabTorrents [![(invite needed)][inviteneeded]](#)
  * AsianCinema
  * AsianDVDClub (ADC)
  * Audiences
  * AudioNews (AN)
+ * AURA4K
  * Aussierul.es [![(invite needed)][inviteneeded]](#)
  * AvistaZ (AsiaTorrents)
  * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
  * Back-ups
  * BakaBT
+ * baoziPT
  * Beload
  * Best-Core
  * BeyondHD (BHD)
  * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigBBS
  * BigCore
  * Bit-Bázis
  * BIT-HDTV
@@ -286,6 +289,7 @@ Prior versions of Jackett are no longer supported.
  * BTSCHOOL
  * BWTorrents
  * BYRBT
+ * C411
  * cangbaoge (CBG)
  * CapybaraBR
  * Carp-Hunter
@@ -322,6 +326,7 @@ Prior versions of Jackett are no longer supported.
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
  * Drugari
+ * dubhe (天枢)
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
@@ -390,6 +395,7 @@ Prior versions of Jackett are no longer supported.
  * House of Devil
  * HQMusic
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
+ * HxPT (好学) [![(invite needed)][inviteneeded]](#)
  * ImmortalSeed (iS)
  * Immortuos
  * Indietorrents [![(invite needed)][inviteneeded]](#)
@@ -402,6 +408,7 @@ Prior versions of Jackett are no longer supported.
  * JME-REUNIT3D
  * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
  * JPopsuki
+ * JPTV4us
  * KamePT [![(invite needed)][inviteneeded]](#)
  * Karagarga [![(invite needed)][inviteneeded]](#)
  * Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
@@ -410,6 +417,7 @@ Prior versions of Jackett are no longer supported.
  * KrazyZone
  * Kufei (库非)
  * Kufirc
+ * Kunlun (昆仑)
  * lajidui
  * Last Digital Underground (LDU)
  * LastFiles (LF)
@@ -418,23 +426,25 @@ Prior versions of Jackett are no longer supported.
  * LearnFlakes
  * Leech24
  * LemonHD [![(invite needed)][inviteneeded]](#)
+ * LemonHD.net
  * Lesbians4u
  * LetSeed
  * Libble
  * LibraNet (LN)
  * LinkoManija
  * Locadora
+ * LongPT
  * LosslessClub [![(invite needed)][inviteneeded]](#)
  * LST
  * LuckPT [![(invite needed)][inviteneeded]](#)
- * M-Team - TP (MTTP)
+ * M-Team - TP (MTTP) [![(invite needed)][inviteneeded]](#)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
  * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
+ * March
  * Matrix
- * MegamixTracker
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * Milkie (ME)
@@ -452,7 +462,9 @@ Prior versions of Jackett are no longer supported.
  * NicePT
  * Nirvana
  * NorBits
+ * NORDiCHD
  * NordicQuality
+ * NovaHD
  * OKPT
  * Old Greek Tracker (OGT)
  * Old Toons World (OTW)
@@ -535,6 +547,7 @@ Prior versions of Jackett are no longer supported.
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
+ * TangPT (躺平)
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
@@ -561,6 +574,7 @@ Prior versions of Jackett are no longer supported.
  * Toca Share
  * Tormac
  * Tornado
+ * Torr9
  * Torrent Heaven (Dutch)
  * Torrent Network (TN)
  * Torrent Trader [![(invite needed)][inviteneeded]](#)
@@ -595,12 +609,12 @@ Prior versions of Jackett are no longer supported.
  * Upscale Vault
  * UTOPIA
  * Vault network
- * WDT (Wrestling Desires Torrents / Ultimate Wrestling Torrents)
  * White Angel
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * x-ite.me (XM)
+ * xloli (ilolicon PT)
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)
@@ -608,7 +622,6 @@ Prior versions of Jackett are no longer supported.
  * XWT-Classics
  * XWTorrents (XWT)
  * YggTorrent (YGG)
- * YOiNKED
  * YUSCENE
  * Zamunda.net
  * Zappateers

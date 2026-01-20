@@ -51,6 +51,7 @@ caps:
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey
@@ -167,8 +168,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -241,6 +240,6 @@ search:
 #    minimumratio:
 #      text: 0.7
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 9.1.5 (custom)
+      # 10 days (as seconds = 10 x 24 x 60 x 60)
+      text: 864000
+# json UNIT3D 9.2.0 (custom)

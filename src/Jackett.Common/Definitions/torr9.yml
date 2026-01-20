@@ -1,0 +1,142 @@
+---
+id: torr9
+name: Torr9
+description: "Torr9 is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://torr9.com/
+
+caps:
+  categorymappings:
+    # from https://api.torr9.com/api/v1/torznab?apikey=YOUR-PASSKEY&t=caps
+    - {id: 1000, cat: Console, desc: "Console/Games"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 4000, cat: PC, desc: "PC/Applications"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 7000, cat: Books, desc: "Books/eBook"}
+    - {id: 8000, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tvdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: PassKey
+  - name: info_key
+    type: info
+    label: About your PassKey
+    default: "You can find the API PassKey by accessing your <a href=\"https://torr9.com/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: info_3x
+    type: info
+    label: Including 3X
+    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.com/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if passkey is invalid
+  path: "https://api.torr9.com/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
+  method: get
+
+search:
+  paths:
+    - path: https://api.torr9.com/api/v1/torznab
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.passkey }}"
+    t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if .Query.TVDBID }}tvsearch{{ else }}{{ end }}{{ if or .Query.TVDBID .Query.IMDBID }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+#    season: "{{ .Query.Season }}"
+#    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tvdbid: "{{ .Query.TVDBID }}"
+    limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: comments
+      filters:
+        - name: replace
+          args: ["//api.", "//"]
+    download:
+      selector: link
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
+    date:
+      # Thu, 15 Jan 2026 16:24:34 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# torznab xml

@@ -1,10 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Text.RegularExpressions;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-
 using Newtonsoft.Json.Linq;
 
 namespace Jackett.Common.Models.IndexerConfig
@@ -66,8 +66,15 @@ namespace Jackett.Common.Models.IndexerConfig
                 .GetProperties()
                 .Where(p => p.CanRead)
                 .Where(p => p.PropertyType.IsSubclassOf(typeof(ConfigurationItem)))
+                .OrderBy(x =>
+                {
+                    var attrib = x.GetCustomAttributes(typeof(JsonPropertyOrderAttribute), true).OfType<JsonPropertyOrderAttribute>().FirstOrDefault();
+
+                    return attrib?.Order ?? int.MaxValue;
+                })
                 .Where(p => p.GetValue(this) != null)
-                .Select(p => (ConfigurationItem)p.GetValue(this)).ToList();
+                .Select(p => (ConfigurationItem)p.GetValue(this))
+                .ToList();
 
             // remove/insert Site Link manualy to make sure it shows up first
             properties.Remove(SiteLink);

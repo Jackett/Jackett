@@ -240,15 +240,6 @@ namespace Jackett.Updater
 
             // delete old files
             var oldFiles = new string[] {
-                "appsettings.Development.json",
-                "Autofac.Integration.WebApi.dll",
-                "Content/congruent_outline.png",
-                "Content/crissXcross.png",
-                "Content/css/jquery.dataTables.css",
-                "Content/css/jquery.dataTables_themeroller.css",
-                "CsQuery.dll",
-                "CurlSharp.dll",
-                "CurlSharp.pdb",
                 "Definitions/01torrent.yml",
                 "Definitions/2fast4you.yml",
                 "Definitions/2xfree.yml",
@@ -504,6 +495,7 @@ namespace Jackett.Updater
                 "Definitions/ibit.yml",
                 "Definitions/icc2022.yml",
                 "Definitions/icetorrent.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/idope.yml",
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
                 "Definitions/ilcorsaroverde.yml",
@@ -553,13 +545,13 @@ namespace Jackett.Updater
                 "Definitions/lusthive.yml",
                 "Definitions/mactorrents.yml",
                 "Definitions/magicheaven.yml",
-                "Definitions/magico.yml", // renamed to trellas
                 "Definitions/magnet4you.yml",
                 "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/mediamaatjes.yml",
                 "Definitions/megabliz.yml",
+                "Definitions/megamixtracker.yml",
                 "Definitions/mendigosdaweb.yml",
                 "Definitions/metal-iplay-ro.yml", // renamed to romanianmetaltorrents
                 "Definitions/metalwrks.yml",
@@ -592,7 +584,6 @@ namespace Jackett.Updater
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
                 "Definitions/nntt.yml",
-                "Definitions/nordichd.yml",
                 "Definitions/nordicplus.yml",
                 "Definitions/nostalgic.yml", // renamed to vhstapes
                 "Definitions/ntelogo.yml",
@@ -608,6 +599,7 @@ namespace Jackett.Updater
                 "Definitions/oncesearch.yml",
                 "Definitions/onlineselfeducation.yml",
                 "Definitions/onlyscene.yml",
+                "Definitions/oscarworld.yml",
                 "Definitions/ostwiki.yml",
                 "Definitions/oxtorrent.yml",
                 "Definitions/oxtorrent-vip.yml",
@@ -635,6 +627,7 @@ namespace Jackett.Updater
                 "Definitions/pornorip.yml",
                 "Definitions/pornoslab.yml",
                 "Definitions/pornotor.yml",
+                "Definitions/pornotorrent.yml",
                 "Definitions/pornxlab.yml",
                 "Definitions/portugas.yml", // switch to *-API #13542
                 "Definitions/potuk.yml",
@@ -809,8 +802,9 @@ namespace Jackett.Updater
                 "Definitions/totheglorycookie.yml", // renamed totheglory2fa
                 "Definitions/trackeros-api.yml",
                 "Definitions/trackeros.yml", // switch to *-API #12807
-                "Definitions/tspate.yml",
+                "Definitions/trellas.yml", // renamed to magico
                 "Definitions/trupornolabs.yml",
+                "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
                 "Definitions/turknova.yml",
@@ -842,6 +836,7 @@ namespace Jackett.Updater
                 "Definitions/vizuk.yml",
                 "Definitions/vtorrent.yml",
                 "Definitions/waffles.yml",
+                "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
@@ -859,21 +854,15 @@ namespace Jackett.Updater
                 "Definitions/xxxtorrents.yml",
                 "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",
+                "Definitions/yggcookie.yml",
+                "Definitions/yggtorrent.yml",
+                "Definitions/yggtorrent-turbo.yml",
+                "Definitions/yoinked.yml",
                 "Definitions/yourbittorrent.yml",
                 "Definitions/yourexotic.yml", // renamed to exoticaz
+                "Definitions/zetorrents.yml", // renamed to world-torrent #7574
                 "Definitions/zomb.yml",
-                "Definitions/zooqle.yml",
-                "Microsoft.Owin.dll",
-                "Microsoft.Owin.FileSystems.dll",
-                "Microsoft.Owin.Host.HttpListener.dll",
-                "Microsoft.Owin.Hosting.dll",
-                "Microsoft.Owin.StaticFiles.dll",
-                "Owin.dll",
-                "System.ServiceModel.dll",
-                "System.Web.Http.dll",
-                "System.Web.Http.Owin.dll",
-                "System.Web.Http.Tracing.dll",
-                "System.Xml.XPath.XmlDocument.dll"
+                "Definitions/zooqle.yml"
             };
 
             foreach (var oldFile in oldFiles)

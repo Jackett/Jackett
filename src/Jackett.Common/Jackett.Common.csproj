@@ -44,7 +44,7 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
     <PackageReference Include="SQLitePCLRaw.Core" Version="2.1.9" />
-    <PackageReference Include="AngleSharp" Version="1.3.1" />
+    <PackageReference Include="AngleSharp" Version="1.4.0" />
     <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />

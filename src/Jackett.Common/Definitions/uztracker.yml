@@ -12,7 +12,8 @@ caps:
   categorymappings:
     # Кинофильмы # Movies
     - {id: 3, cat: Movies, desc: "Зарубежные кинофильмы"}
-    - {id: 13, cat: Movies, desc: " |- Новинки 2025"}
+    - {id: 13, cat: Movies, desc: " |- Новинки 2026"}
+    - {id: 342, cat: Movies, desc: " |- Фильмы 2025"}
     - {id: 12, cat: Movies, desc: " |- Фильмы 2021-2024"}
     - {id: 11, cat: Movies, desc: " |- Фильмы 2011-2020 годов"}
     - {id: 10, cat: Movies, desc: " |- Зарубежные фильмы до 2011 года"}
@@ -134,6 +135,7 @@ caps:
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
     - {id: 203, cat: Audio, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
     - {id: 139, cat: Audio, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}
+    - {id: 339, cat: Audio, desc: " |- Rock (Lossless)"}
     - {id: 141, cat: Audio, desc: " |- Электронная музыка (lossless)"}
     - {id: 142, cat: Audio, desc: " |- Джаз и блюз (lossless)"}
     - {id: 138, cat: Audio, desc: " |- Шансон и Военная песня (lossless)"}

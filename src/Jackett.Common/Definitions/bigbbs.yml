@@ -1,0 +1,259 @@
+---
+id: bigbbs
+name: BigBBS
+description: "BigBBS is a POLISH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pl-PL
+type: private
+encoding: UTF-8
+links:
+  - https://bigbbs.eu/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Filmi"}
+    - {id: 14, cat: Movies/SD, desc: "Filmi DivX / XviD"}
+    - {id: 41, cat: Movies/HD, desc: "Filmi x264"}
+    - {id: 40, cat: Movies, desc: "Filmi Al / Lektor Amatorski"}
+    - {id: 39, cat: Movies/BluRay, desc: "Filmi BluRay"}
+    - {id: 147, cat: Movies, desc: "Filmi Xmas"}
+    - {id: 37, cat: Movies/DVD, desc: "Filmi DVD 5 / 9"}
+    - {id: 52, cat: Movies/3D, desc: "Filmi 3D"}
+    - {id: 17, cat: Movies/HD, desc: "Filmi HD 1080p , 720p"}
+    - {id: 99, cat: Movies/HD, desc: "Filmi x265"}
+    - {id: 62, cat: XXX, desc: "Filmi XXX"}
+    - {id: 16, cat: Movies/SD, desc: "Filmi CAM / TS"}
+    - {id: 65, cat: Movies/HD, desc: "Filmi Rmvb"}
+    - {id: 66, cat: Movies, desc: "Filmi TV RIP"}
+    - {id: 84, cat: TV/Documentary, desc: "Filmi Dokumentalne"}
+    - {id: 100, cat: Movies, desc: "Filmi Seriale"}
+    - {id: 103, cat: Movies, desc: "Filmi FILMY GSM / PDA"}
+    - {id: 107, cat: Movies/UHD, desc: "Filmi 4K-UHD"}
+    - {id: 109, cat: Movies, desc: "Filmi Biblijny"}
+    - {id: 113, cat: Movies, desc: "Filmi Prawniczy"}
+    - {id: 61, cat: Movies, desc: "Bajki"}
+    - {id: 106, cat: Books/Comics, desc: "Manga"}
+    - {id: 53, cat: TV/Anime, desc: "Anime"}
+    - {id: 56, cat: TV, desc: "TV"}
+    - {id: 57, cat: TV, desc: "TV BOXSETS"}
+    - {id: 58, cat: TV, desc: "TV EPIZODY"}
+    - {id: 6, cat: PC, desc: "Aplikacje"}
+    - {id: 18, cat: PC/0day, desc: "Aplikacje Windows"}
+    - {id: 64, cat: PC/Mobile-Other, desc: "Aplikacje GSM/PDA"}
+    - {id: 19, cat: PC/Mac, desc: "Aplikacje Macintosh"}
+    - {id: 42, cat: PC, desc: "Aplikacje Linux"}
+    - {id: 63, cat: TV/Sport, desc: "Sport"}
+    - {id: 7, cat: Audio, desc: "Muzyka"}
+    - {id: 20, cat: Audio/Video, desc: "Koncert"}
+    - {id: 144, cat: Audio, desc: "BiGBBS RMG (Rellase Music Group)"}
+    - {id: 21, cat: Audio/MP3, desc: "MP3"}
+    - {id: 38, cat: Audio/Lossless, desc: "FLAC"}
+    - {id: 135, cat: Audio, desc: "RetroRemix,ClubDance"}
+    - {id: 43, cat: Audio, desc: "Soundtrack"}
+    - {id: 136, cat: Audio, desc: "Rock"}
+    - {id: 80, cat: Audio/Lossless, desc: "lossless"}
+    - {id: 81, cat: Audio, desc: "MusicVid"}
+    - {id: 82, cat: Audio, desc: "Radio"}
+    - {id: 138, cat: Audio, desc: "Dyskografie Płytowe"}
+    - {id: 117, cat: Audio, desc: "Metal  Rock"}
+    - {id: 139, cat: Audio, desc: "Kolekcje Muzyczne"}
+    - {id: 118, cat: Audio, desc: "Disco Polo"}
+    - {id: 119, cat: Audio, desc: "Clubbing"}
+    - {id: 120, cat: Audio, desc: "House"}
+    - {id: 125, cat: Audio, desc: "Elektro"}
+    - {id: 127, cat: Audio, desc: "Tranc"}
+    - {id: 128, cat: Audio, desc: "Dance"}
+    - {id: 130, cat: Audio, desc: "Opus"}
+    - {id: 129, cat: Audio, desc: "Pop"}
+    - {id: 131, cat: Audio, desc: "Italo"}
+    - {id: 133, cat: Audio, desc: "ClubDance"}
+    - {id: 134, cat: Audio, desc: "Retro Remixes"}
+    - {id: 146, cat: Audio, desc: "Techno"}
+    - {id: 132, cat: Audio, desc: "eurodance"}
+    - {id: 145, cat: Audio, desc: "Chillout"}
+    - {id: 83, cat: Audio, desc: "BLUES / REGGAE/ ROCK / METAL/CLASSIC/"}
+    - {id: 2, cat: Console, desc: "Gry"}
+    - {id: 3, cat: Console/PS3, desc: "Sony PS"}
+    - {id: 4, cat: Console/Wii, desc: "Wii"}
+    - {id: 26, cat: Console/XBox, desc: "XboX"}
+    - {id: 28, cat: PC/Games, desc: "Gry PC"}
+    - {id: 28, cat: Console/NDS, desc: "Nintendo"}
+    - {id: 47, cat: Books/EBook, desc: "EEbooki"}
+    - {id: 48, cat: Audio/Audiobook, desc: "Audio Book"}
+    - {id: 50, cat: Books/EBook, desc: "Ebook Pdf"}
+    - {id: 67, cat: Books/Comics, desc: "Komiksy"}
+    - {id: 59, cat: Other, desc: "BBRG"}
+    - {id: 39, cat: Movies/BluRay, desc: "Filmy BluRay 50/25/9"}
+    - {id: 88, cat: Movies/3D, desc: "Filmi 3D"}
+    - {id: 108, cat: Movies/BluRay, desc: "Filmi BluRay"}
+    - {id: 89, cat: Movies/HD, desc: "Filmi HD x264"}
+    - {id: 90, cat: Movies/HD, desc: "Filmi HD DivX / XviD"}
+    - {id: 91, cat: Movies/DVD, desc: "Filmi DVD 5 / DVD 9"}
+    - {id: 92, cat: Movies/SD, desc: "Filmi SD DivX / XviD"}
+    - {id: 93, cat: Movies/SD, desc: "Filmi SD x264"}
+    - {id: 96, cat: Movies, desc: "Filmi TVRip"}
+    - {id: 101, cat: Movies, desc: "Filmi Boxset"}
+    - {id: 98, cat: Movies, desc: "Filmi Seriale"}
+    - {id: 95, cat: Movies, desc: "Bajki"}
+    - {id: 97, cat: Audio/Video, desc: "Kabarety"}
+    - {id: 102, cat: Movies/HD, desc: "Filmi x265"}
+    - {id: 104, cat: Movies, desc: "Filmi FILMY GSM / PDA"}
+    - {id: 86, cat: Audio, desc: "Muzyka BBRG"}
+    - {id: 110, cat: Movies, desc: "Filmi Biblijny"}
+    - {id: 114, cat: Movies/UHD, desc: "Filmi 4K-UHD"}
+    - {id: 115, cat: Movies, desc: "Filmi Fan BBRG"}
+    - {id: 112, cat: Movies, desc: "Filmi ENG"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: info_profile
+    type: info
+    label: Layout
+    default: "<ul><li>Only the English Classic profile is supported.</li><li>Make sure to set the <b>Torrent Listing (Lista torrentów)</b> option in your profile to <b>Classic (Klasyczny)</b></li><li>And set the <b>Language (Dil)</b> to <b>English</b></li><li>Using the <i>Modern</i> theme will prevent results, and using <i>Polski</i> will prevent upload dates.</li></ul>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules: Inactive accounts over 30 days will be warned by email about their inactivity. If within 24h a person does not log in to their account, they will lose them without the possibility of returning."
+
+login:
+  path: ?p=home&pid=1
+  method: form
+  form: form#sls_form
+  submitpath: ajax/login.php
+  inputs:
+    action: login
+    loginbox_membername: "{{ .Config.username }}"
+    loginbox_password: "{{ .Config.password }}"
+    loginbox_remember: 1
+  selectorinputs:
+    securitytoken:
+      selector: "script:contains(\"stKey: \")"
+      filters:
+        - name: regexp
+          args: "stKey: \"(.+?)\","
+  error:
+    - selector: div.error
+    - selector: :contains("-ERROR-")
+  test:
+    path: ?p=home&pid=1
+    selector: div#member_info_bar
+
+search:
+  paths:
+    - path: /
+  keywordsfilters:
+    - name: re_replace
+      args: ["[^a-zA-Z0-9]+", "%25"]
+  inputs:
+    p: torrents
+    pid: 32
+    $raw: "{{ range .Categories }}cid[]={{.}}&{{end}}"
+    keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
+    # does not support imdbid search but has imdbid links in results.
+  error:
+    - selector: div.error:not(:contains("There are no results found."))
+
+  rows:
+    selector: "table#torrents_table_classic > tbody > tr:has(a[href*=\"?p=torrents&pid=10&action=download&tid=\"]){{ if .Config.freeleech }}:has(img[src$=\"/torrent_free.png\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href*="?p=torrents&pid=10&cid="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cid
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+    details:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+      attribute: href
+    download:
+      selector: a[href*="?p=torrents&pid=10&action=download&tid="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
+    poster:
+      selector: a[href*="data/torrents/torrent_images/"]
+      attribute: href
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    size:
+      selector: a[rel="torrent_size"]
+    grabs:
+      selector: a[rel="times_completed"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    date_day:
+      # Uploaded Today at 04:01:07 by
+      # Uploaded Yesterday at 06:37:21 by
+      selector: td.torrent_name:contains("day at ")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: fuzzytime
+    date_year:
+      # Uploaded 17-04-2017 06:07:06 by
+      selector: td.torrent_name:not(:contains("day at "))
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm:ss"
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      case:
+        img[src$="/torrent_free.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# TSUE 2.2

@@ -172,4 +172,4 @@ search:
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json DBy v0.96
+# json DBy v0.96 (based on UNIT3D 6.3.0?)

@@ -1,13 +1,21 @@
 ---
-id: zetorrents
-name: zetorrents
-description: "zetorrents is a FRENCH Public site for MOVIES / TV / GENERAL"
+id: world-torrent
+replaces:
+  - zetorrents
+name: World-torrent
+description: "World-torrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.world-torrent.com/
+  - https://www.world-torrent1.com/
+  - https://www.cine-torrent1.com/
+  - https://ww1-mania-torrent.com/
+  - https://www.magnet-torrent1.com/
+  - https://www.mega-torrent9.com/
+  - https://www.zone-torrent6.com/
+  - https://www.warez-torrent1.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -22,7 +30,6 @@ legacylinks:
   - https://www.site-torrent.com/
   - https://www.rantop.my/
   # actual legacylinks
-  - https://www.zetorrents.in/
   - https://www.zetorrents.vg/
   - https://www.zetorrents.vc/
   - https://www.zetorrents.sk/
@@ -37,20 +44,37 @@ legacylinks:
   - https://ww1-zetorrents.me/
   - https://www.zetorrents.rent/
   - https://ww1-zetorrents.town/
+  - https://www.world-torrent.com/
+  - https://www.mania-torrent.com/
 
 caps:
-  categories:
-    Other: Other
+  categorymappings:
+    - {id: Films, cat: Movies, desc: "Movies"}
+    - {id: Animes, cat: TV/Anime, desc: "Anime"}
+    - {id: Documentaires, cat: TV/Documentary, desc: "Documentaires"}
+    - {id: Séries, cat: TV, desc: "TV"}
+    - {id: Musiques, cat: Audio, desc: "Music"}
+    - {id: Ebooks, cat: Books, desc: "Books"}
+    - {id: Livres, cat: Books, desc: "Livres"}
+    - {id: Logiciels, cat: PC, desc: "Software"}
+    - {id: Applications, cat: PC, desc: "Applications"}
+    - {id: Jeux-PC, cat: PC/Games, desc: "PC Games"}
+    - {id: Jeux-Consoles, cat: Console/XBox 360, desc: "Console Games"}
+    - {id: Porno, cat: XXX, desc: "Porno"}
+    - {id: Spectacles, cat: TV/Other, desc: "Spectacles"}
+    - {id: Sports, cat: TV/Sport, desc: "Sports"}
+    - {id: Formations, cat: Other, desc: "Formations"}
+    - {id: Vidéos, cat: TV, desc: "Vidéos"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
   allowrawsearch: true
 
 settings:
-  - name: info_category_8000
-    type: info_category_8000
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -78,9 +102,9 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}home{{ end }}"
+    - path: "{{ if .Keywords }}recherche/{{ .Keywords }}{{ else }}derniers{{ end }}"
   keywordsfilters:
-    # if searching for season packs swith S01 to saison 1 #9712
+    # if searching for season packs switch S01 to saison 1 #9712
     - name: re_replace
       args: ["(?i)(S0)(\\d{1,2})$", "saison $2"]
     - name: re_replace
@@ -91,7 +115,8 @@ search:
 
   fields:
     category:
-      text: Other
+      selector: i
+      attribute: class
     title_phase1:
       selector: a[href^="/detail/"]
       filters:

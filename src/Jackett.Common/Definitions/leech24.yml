@@ -108,12 +108,12 @@ login:
 
 search:
   paths:
-    # https://leech24.net/torrents-search.php?c3=1&c1=1&c2=1&c42=1&c4=1&c7=1&search=&cat=0&incldead=1&freeleech=0&lang=0
+    # https://leech24.net/torrents-search.php?&search=&incldead=1&freeleech=0&lang=0
     - path: torrents-search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    cat: 0
+#    cat: 0 # causes 0 results
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 all, 1 notfree, 2 onlyfree

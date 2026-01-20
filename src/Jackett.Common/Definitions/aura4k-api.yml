@@ -1,28 +1,23 @@
 ---
-id: yoinked
-name: YOiNKED (API)
-description: "YOiNKED is a Private Torrent Tracker for MOVIES / TV / MUSIC"
+id: aura4k-api
+name: AURA4K (API)
+description: "AURA4K is a Private Torrent Tracker for MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://yoinked.org/
+  - https://aura4k.net/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: Books, desc: "Book"}
-    - {id: 5, cat: Audio/Audiobook, desc: "AudioBook"}
-    - {id: 6, cat: Console, desc: "Games"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]
-    book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey
@@ -31,7 +26,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://yoinked.org/\" target=\"_blank\">YOiNKED</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://aura4k.net/\" target=\"_blank\">AURA4K</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -59,7 +54,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in to the website or the tracker must register activity from your Announce URL once every 90 days or your account will be disabled."
+    default: "Accounts with no activity (login/traffic) for more than 90 days may be automatically pruned."
 
 login:
   path: /api/torrents
@@ -135,6 +130,8 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     _internal:
@@ -185,6 +182,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 0.4 but torrents must be seeded for 72 hours OR 1:1
     minimumratio:
-      text: 0.7
-# json UNIT3D 9.1.7
+      text: 1.0
+    minimumseedtime:
+      # 72 hours (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json UNIT3D 9.2.0

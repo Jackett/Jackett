@@ -131,6 +131,7 @@ namespace Jackett.Common.Indexers.Definitions
             TorznabCaps = new TorznabCapabilities();
             TorznabCaps.ParseCardigannSearchModes(Definition.Caps.Modes);
             TorznabCaps.SupportsRawSearch = Definition.Caps.Allowrawsearch;
+            TorznabCaps.TvSearchImdbAvailable = Definition.Caps.Allowtvsearchimdb;
 
             // init config Data
             configData = new ConfigurationData();

@@ -31,6 +31,7 @@ caps:
     - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
     - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
     - {id: Episodes HD, cat: TV/HD, desc: Episodes HD}
+    - {id: Episodes 4K UHD, cat: TV/UHD, desc: Episodes 4K UHD}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
@@ -60,6 +61,7 @@ caps:
     - {id: Pictures, cat: XXX/ImageSet, desc: Adult Pictures}
     - {id: Radio Shows, cat: Audio/Other, desc: Music Radio}
     - {id: Raw, cat: TV/Anime, desc: Anime Raw}
+    - {id: Season Packs, cat: TV, desc: Season Packs}
     - {id: Software, cat: PC/0day, desc: Software}
     - {id: Subs, cat: TV/Anime, desc: Anime Subs}
     - {id: Switch, cat: Console/Other, desc: Games Switch}

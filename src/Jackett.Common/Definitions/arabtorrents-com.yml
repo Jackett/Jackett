@@ -1,0 +1,136 @@
+---
+id: arabtorrents-com
+name: arab-torrents.com
+description: "arab-torrents.com is an ARABIC Public Torrent Tracker for MOVIES / TV / GENERAL"
+language: ar-AE
+type: public
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://arab-torrents.com/
+
+caps:
+  categorymappings:
+    # categories containing '»' have a double space in search results
+    - {id: 14, cat: Other, desc: "اسلامي"}
+    - {id: 17, cat: Books, desc: "كتب"}
+    - {id: 19, cat: TV/Documentary, desc: "المرئيات العربية »  وثائقي"}
+    - {id: 22, cat: PC, desc: "برامج عربية"}
+    - {id: 23, cat: PC, desc: "برامج عامه"}
+    - {id: 25, cat: Other, desc: "القران الكريم"}
+    - {id: 26, cat: Audio, desc: "اناشيد"}
+    - {id: 27, cat: Other, desc: "محاضرات"}
+    - {id: 41, cat: Movies, desc: "افلام عربيه"}
+    - {id: 44, cat: TV, desc: "مسلسلات عربية"}
+    - {id: 46, cat: Audio, desc: "منوع"}
+    - {id: 52, cat: Movies/Other, desc: "مسرحيات"}
+    - {id: 56, cat: TV/Sport, desc: "رياضي"}
+    - {id: 57, cat: TV/Foreign, desc: "مسلسلات آسيوية"}
+    - {id: 59, cat: Movies/Foreign, desc: "افلام آسيوية"}
+    - {id: 65, cat: Other, desc: "صور"}
+    - {id: 70, cat: Other, desc: "المرئيات العربية »  تعليمي"}
+    - {id: 71, cat: TV/Foreign, desc: "مسلسلات مدبلجه عربي"}
+    - {id: 86, cat: Movies/Foreign, desc: "افلام هنديه"}
+    - {id: 88, cat: Movies/Foreign, desc: "افلام مدبلجه عربي"}
+    - {id: 89, cat: TV, desc: "مسلسلات عربية كامله"}
+    - {id: 90, cat: TV, desc: "برامج ومسابقات"}
+    - {id: 92, cat: Other, desc: "المرئيات الاجنبية »  تعليمي"}
+    - {id: 93, cat: TV/Documentary, desc: "المرئيات الاجنبية »  وثائقي"}
+    - {id: 98, cat: Movies/Other, desc: "انمي مدبلج عربي »  افلام"}
+    - {id: 99, cat: Movies/Other, desc: "انمي مترجم عربي »  افلام"}
+    - {id: 100, cat: TV/Anime, desc: "انمي مدبلج عربي »  مسلسلات"}
+    - {id: 101, cat: TV/Anime, desc: "انمي مترجم عربي »  مسلسلات"}
+    - {id: 102, cat: TV/Anime, desc: "انمي مدبلج عربي »  حلقات"}
+    - {id: 103, cat: TV/Anime, desc: "انمي مترجم عربي »  حلقات"}
+    - {id: 113, cat: TV/Foreign, desc: "مسلسلات لاتينية مترجم.مدبلج"}
+    - {id: 114, cat: Movies/Foreign, desc: "افلام لاتينية مترجم.مدبلج"}
+    - {id: 115, cat: TV/Foreign, desc: "مسلسلات تركية مترجم.مدبلج"}
+    - {id: 116, cat: Movies/Foreign, desc: "افلام تركية مترجم.مدبلج"}
+    - {id: 117, cat: TV, desc: "رمضان 2025"}
+    # categories not listed
+    - {id: missing1, cat: TV/Other, desc: "الكارتون الصامت والكلاسيكي"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    - path: index.php
+    - path: index.php
+      inputs:
+        p: 2
+
+  inputs:
+    page: torrents
+    search: "{{ .Keywords }}"
+    # does not support multi-category search
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["^.{1,2}$", ""]
+
+  rows:
+    selector: table#torrents > tbody > tr
+
+  fields:
+    categorydesc:
+      selector: div.fcat
+    title:
+      selector: a[href^="/index.php?page=torrents&tid="] img
+      attribute: alt
+      filters:
+        - name: re_replace
+          args: ["(?<=\\d)\\s+(?=\\d)", " "]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[(\\d{4})\\]\\s*\\[م(\\d+)\\]", "S$3E$1 [$2]"]
+        - name: re_replace
+          args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
+        - name: re_replace
+          args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
+        - name: re_replace
+          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+        - name: re_replace
+          args: ["\\[\\s*\\]", ""]
+        - name: re_replace
+          args: ["(?<=\\S)(\\[)", " $1"]
+        - name: re_replace
+          args: ["S(\\d)(?=E)", "S0$1"]
+        - name: re_replace
+          args: ["E(\\d)(?=\\D)", "E0$1"]
+        - name: re_replace
+          args: ["\\s{2,}", " "]
+        - name: trim
+    details:
+      selector: a[href^="/index.php?page=torrents&tid="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    poster:
+      selector: a:has(img.posterIcon)
+      attribute: href
+    tmdbid:
+      selector: a[href*="themoviedb.org/movie/"], a[href*="themoviedb.org/tv/"]
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: div.fsize
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: td
+      remove: a[href^="magnet:?xt="], div
+# engine n/a

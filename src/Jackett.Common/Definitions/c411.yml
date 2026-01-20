@@ -1,0 +1,175 @@
+---
+id: c411
+name: C411
+description: "C411 (Community 411) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://c411.org/
+legacylinks:
+  - https://staging-68d548c5bd4.c411.org/
+
+caps:
+  categorymappings:
+    # from https://c411.org/api/torznab?apikey=YOUR-API-KEY&t=caps
+    - {id: 1000, cat: Console, desc: "Jeux Vidéo & Emulation"}
+    - {id: 1030, cat: Console/Wii, desc: "Nintendo"}
+    - {id: 1040, cat: Console/XBox, desc: "Xbox"}
+    - {id: 1080, cat: Console/PS4, desc: "Sony"}
+    - {id: 1090, cat: Console/Other, desc: "Jeux Autre & ROM/ISO"}
+    - {id: 2000, cat: Movies, desc: "Films & Vidéos"}
+    - {id: 2060, cat: Movies/Other, desc: "Animation Films & Vidéo-clips"}
+    - {id: 2070, cat: Movies, desc: "Films Documentaire"}
+    - {id: 2090, cat: Movies/Other, desc: "Films Concert & Spectacle"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio/MP3, desc: "Musique"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 3050, cat: Audio/Other, desc: "Karaoké & Podcast Radio & Samples"}
+    - {id: 4000, cat: PC/0day, desc: "Applications & Windows & Nulled"}
+    - {id: 4030, cat: PC/0day, desc: "Linux & MacOS"}
+    - {id: 4040, cat: PC, desc: "Formation"}
+    - {id: 4050, cat: PC, desc: "Games-Linux & Games-MacOS & Games-Divers & Autre & Émulateur & GPS & Scripts PHP & CMS & Wordpress"}
+    - {id: 4060, cat: PC/Mobile-Android, desc: "Android Mobile & Smartphone & Tablette & Applications & Cartes"}
+    - {id: 4070, cat: PC/Mobile-iOS, desc: "iOS Smartphone & Tablette"}
+    - {id: 5000, cat: TV, desc: "Série TV"}
+    - {id: 5060, cat: TV/Sport, desc: "Sport"}
+    - {id: 5070, cat: TV/Anime, desc: "Animation Série"}
+    - {id: 5080, cat: TV/Documentary, desc: "Emission TV"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6010, cat: XXX/DVD, desc: "3X Films"}
+    - {id: 6050, cat: XXX/Other, desc: "3X Ebooks"}
+    - {id: 6060, cat: XXX/ImageSet, desc: "3X Images"}
+    - {id: 6070, cat: XXX/Other, desc: "Hentai"}
+    - {id: 6080, cat: XXX/Other, desc: "3X Jeux"}
+    - {id: 7000, cat: Books, desc: "Ebook"}
+    - {id: 7010, cat: Books/Mags, desc: "Presse"}
+    - {id: 7020, cat: Books/EBook, desc: "Livres"}
+    - {id: 7030, cat: Books/Comics, desc: "BDs & Comics & Manga"}
+    - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets & Personnages"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "You can find or generate a new API Key by accessing the <a href=\"https://c411.org/user/integrations\" target=\"_blank\">C411 Intégrations API</a> page."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: info_3x
+    type: info
+    label: Including 3X
+    default: "IF you want to see 3x torrents access your <a href=\"https://c411.org/user/settings\" target=\"_blank\">C411 Paramètres</a> page and tick the <b>Afficher le contenu XXX</b> checkbox."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: "api/torznab?apikey={{ .Config.apikey }}&t=caps"
+  method: get
+
+search:
+  paths:
+    - path: api/torznab
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: link
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
+    date:
+      # Sun, 18 Jan 2026 04:05:41 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    grabs:
+      selector: '[name="grabs"]'
+      attribute: value
+    downloadvolumefactor:
+      selector: '[name="downloadvolumefactor"]'
+      attribute: value
+    uploadvolumefactor:
+      selector: '[name="uploadvolumefactor"]'
+      attribute: value
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# torznab xml
