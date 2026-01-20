@@ -106,7 +106,7 @@ namespace Jackett.Test.Common.Indexers
             Assert.AreEqual("magnet:?xt=urn:btih:d540fc48eb12f2833163eed6421d449dd8f1ce1f&dn=ubuntu-19.04-desktop-amd64.iso",
                              firstRelease.MagnetUri.ToString().Split(new[] { "&tr" }, StringSplitOptions.None).First());
             Assert.AreEqual("d540fc48eb12f2833163eed6421d449dd8f1ce1f", firstRelease.InfoHash);
-            Assert.AreEqual(2023, firstRelease.PublishDate.Year);
+            Assert.AreEqual(2024, firstRelease.PublishDate.Year);
             Assert.AreEqual(2097152000, firstRelease.Size);
             Assert.AreEqual(12, firstRelease.Seeders);
             Assert.AreEqual(13, firstRelease.Peers);
