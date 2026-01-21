@@ -602,6 +602,7 @@ namespace Jackett.Updater
                 "Definitions/oscarworld.yml",
                 "Definitions/ostwiki.yml",
                 "Definitions/oxtorrent.yml",
+                "Definitions/oxtorrent-co.yml",
                 "Definitions/oxtorrent-vip.yml",
                 "Definitions/p2pelite.yml",
                 "Definitions/pandahd.yml",

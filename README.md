@@ -97,7 +97,6 @@ Prior versions of Jackett are no longer supported.
  * NorTorrent
  * Nyaa.si
  * OneJAV
- * OxTorrent
  * OpenSharing
  * PC-torrent
  * Pirate's Paradise
