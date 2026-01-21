@@ -114,9 +114,6 @@ download:
     inputs:
       comment: "{{ .Config.thankyou }}"
       confirm: Confirm
-  selectors:
-    - selector: td a[href^="download.php"]
-      attribute: href
 
 search:
   paths:
