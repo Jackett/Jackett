@@ -115,7 +115,7 @@ download:
       comment: "{{ .Config.thankyou }}"
       confirm: Confirm
   selectors:
-    - selector: a[href^="download.php"]
+    - selector: a[href*="download.php?id="]
       attribute: href
 
 search:
