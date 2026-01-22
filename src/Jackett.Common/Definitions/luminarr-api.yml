@@ -53,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "To avoid your account being disabled, you must login at least once every 3 months (90 days). Accounts will be pruned three months after deactivation for inactivity."
+    default: "<ul><li>To avoid your account being disabled, you must login at least once every 3 months (90 days). Accounts will be pruned three months after deactivation for inactivity.</li><li> Luminarr is a sharing community, not a collection service. You must actively participate by uploading or downloading content within 30 days of account creation. Accounts that show no activity within this period may be pruned.</li></ul>"
 
 login:
   path: /api/torrents
@@ -71,7 +71,6 @@ search:
     - path: api/torrents/filter
       response:
         type: json
-        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
