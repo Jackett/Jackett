@@ -431,6 +431,7 @@ Prior versions of Jackett are no longer supported.
  * Libble
  * LibraNet (LN)
  * LinkoManija
+ * Luminarr
  * Locadora
  * LongPT
  * LosslessClub [![(invite needed)][inviteneeded]](#)
