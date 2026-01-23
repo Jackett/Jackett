@@ -1,8 +1,8 @@
 ---
 id: rotorrent-api
 name: RoTorrent (API)
-description: "RoTorrent is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+description: "RoTorrent (ROT) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ro-RO
 type: private
 encoding: UTF-8
 links:
@@ -56,10 +56,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "To avoid your account being disabled, you must login at least once every 3 months (90 days)."
 
 login:
   path: /api/torrents
@@ -73,10 +69,10 @@ login:
 search:
   paths:
     # https://hdinnovations.github.io/UNIT3D/torrent_api.html
+    # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
     - path: api/torrents/filter
       response:
         type: json
-        noResultsMessage: "No Torrents Found"
 
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
