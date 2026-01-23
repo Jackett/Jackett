@@ -87,9 +87,7 @@ search:
       args: ["[\\.\\s]", "%"]
 
   rows:
-    selector: torrents
-    count:
-      selector: total
+    selector: data.torrents
 
   fields:
     _id:
