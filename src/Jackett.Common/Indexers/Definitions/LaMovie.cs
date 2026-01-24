@@ -96,8 +96,8 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var images = row.SelectToken("images")?.ToObject<JObject>();
                 var poster = images.SelectToken("poster")?.ToString();
-                var backdrop = images.SelectToken("poster")?.ToString();
-                var logo = images.SelectToken("poster")?.ToString();
+                var backdrop = images.SelectToken("backdrop")?.ToString();
+                var logo = images.SelectToken("logo")?.ToString();
                 if (poster == null || backdrop == null || logo == null)
                 {
                     // skip results without image
