@@ -24,15 +24,19 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "lamovie";
         public override string Name => "LaMovie";
         public override string Description => "LaMovie is a semi-private site for movies and TV shows in latin spanish.";
-        public override string SiteLink { get; protected set; } = "https://la.movie/";
+        public sealed override string SiteLink { get; protected set; } = "https://la.movie/";
         public override string Language => "es-419";
         public override string Type => "semi-private";
         private string LoginUrl => SiteLink + "wp-json/wpf/v1/auth/login";
 
-        private Dictionary<string, string> headers = new()
+        private readonly Dictionary<string, string> _headers = new()
         {
             ["Content-Type"] = "application/json", ["Accept"] = "application/json"
         };
+
+        private string _searchUrl;
+        private string _detailsUrl;
+        private string _playerUrl;
 
         private ConfigurationDataLaMovie Configuration
         {
@@ -55,6 +59,10 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
             configData: new ConfigurationDataLaMovie())
         {
+            var apiLink = $"{SiteLink}wp-api/v1/";
+            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage=26";
+            _detailsUrl = $"{apiLink}single/movies?postType=movies";
+            _playerUrl = $"{apiLink}player?demo=0";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -64,7 +72,7 @@ namespace Jackett.Common.Indexers.Definitions
                 .ToString();
             var result = await RequestWithCookiesAndRetryAsync(
                 LoginUrl, cookieOverride: CookieHeader, method: RequestType.POST, referer: SiteLink, data: null,
-                headers: headers, rawbody: payload);
+                headers: _headers, rawbody: payload);
             var json = JObject.Parse(result.ContentString);
             var token = json.SelectToken("data.token")?.ToString();
             await ConfigureIfOK(
@@ -86,7 +94,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (isLoggedin)
             {
-                headers["Authorization"] = $"Bearer {token}";
+                _headers["Authorization"] = $"Bearer {token}";
                 IsConfigured = true;
                 SaveConfig();
             }
@@ -100,10 +108,14 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-            var searchUrl = $"{SiteLink}wp-api/v1/search?filter=%7B%7D&postType=any&q={searchTerm}&postsPerPage=26";
+            if (string.IsNullOrWhiteSpace(searchTerm))
+            {
+                searchTerm = "test";
+            }
+            _searchUrl += $"&q={searchTerm}";
             var response = await RequestWithCookiesAndRetryAsync(
-                searchUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
-                headers: headers);
+                _searchUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                headers: _headers);
             var pageReleases = ParseReleases(response, query);
             releases.AddRange(pageReleases);
             return releases;
@@ -142,7 +154,8 @@ namespace Jackett.Common.Indexers.Definitions
                 var slug = row["slug"]?.ToString();
                 var details = new Uri($"{SiteLink}peliculas/{slug}");
                 var lastUpdate = row.SelectToken("last_update")?.ToString();
-                var link = new Uri($"{SiteLink}wp-api/v1/single/movies?slug={slug}&postType=movies");
+                _detailsUrl += $"&slug={slug}";
+                var link = new Uri(_detailsUrl);
                 releases.Add(
                     new()
                     {
@@ -185,12 +198,13 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
-                headers: headers);
+                headers: _headers);
             var jsonDetails = JObject.Parse(details.ContentString);
             var movieId = jsonDetails.SelectToken("data._id")?.ToString();
+            _playerUrl += $"&postId={movieId}";
             var response = await RequestWithCookiesAndRetryAsync(
-                $"{SiteLink}wp-api/v1/player?postId={movieId}&demo=0", cookieOverride: CookieHeader, method: RequestType.GET,
-                referer: SiteLink, data: null, headers: headers);
+                _playerUrl, cookieOverride: CookieHeader, method: RequestType.GET,
+                referer: SiteLink, data: null, headers: _headers);
             var jsonDownloads = JObject.Parse(response.ContentString);
             var downloadUrls = jsonDownloads.SelectToken("data.downloads")?.ToList();
             var magnetUrl = downloadUrls?.FirstOrDefault(x => (bool)x.SelectToken("url")?.ToString().Contains("magnet"))
