@@ -2,9 +2,12 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -25,6 +28,12 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Language => "es-419";
         public override string Type => "semi-private";
         private string LoginUrl => SiteLink + "wp-json/wpf/v1/auth/login";
+
+        private Dictionary<string, string> headers = new()
+        {
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
+        };
 
         private ConfigurationDataLaMovie Configuration
         {
@@ -71,12 +80,6 @@ namespace Jackett.Common.Indexers.Definitions
                 ["password"] = Configuration.Password.Value
             }.ToString();
 
-            var headers = new Dictionary<string, string>
-            {
-                ["Content-Type"] = "application/json",
-                ["Accept"] = "application/json"
-            };
-
             var result = await RequestWithCookiesAndRetryAsync(
                 LoginUrl,
                 cookieOverride: CookieHeader,
@@ -122,8 +125,21 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
 
-            var searchTerm = "";
-            var searchUrl = $"/wp-api/v1/search?filter=%7B%7D&postType=any&q={searchTerm}&postsPerPage=26";
+            var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+            var searchUrl = $"{SiteLink}wp-api/v1/search?filter=%7B%7D&postType=any&q={searchTerm}&postsPerPage=26";
+
+            var response = await RequestWithCookiesAndRetryAsync(
+                searchUrl,
+                cookieOverride: CookieHeader,
+                method: RequestType.GET,
+                referer: SiteLink,
+                data: null,
+                headers: headers
+                );
+
+            var pageReleases = ParseReleases(response, query);
+
+            releases.AddRange(pageReleases);
 
             return releases;
         }
@@ -132,7 +148,71 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
 
+            var json = JObject.Parse(response.ContentString);
+            var posts = json.SelectToken("data.posts")?.ToObject<List<JObject>>();
+
+            foreach (var row in posts)
+            {
+                var images=row.SelectToken("images")?.ToObject<JObject>();
+                var poster = images.SelectToken("poster")?.ToString();
+                var backdrop = images.SelectToken("poster")?.ToString();
+                var logo = images.SelectToken("poster")?.ToString();
+
+                if (poster==null || backdrop==null || logo==null)
+                {
+                    // skip results without image
+                    continue;
+                }
+
+                var title = row["title"]?.ToString();
+                if (!CheckTitleMatchWords(query.GetQueryString(), title))
+                {
+                    // skip if it doesn't contain all words
+                    continue;
+                }
+
+                var year = row.SelectToken("release_date")?.ToString().Split('-')[0];
+                var slug = row["slug"]?.ToString();
+                var link = new Uri($"{SiteLink}peliculas/{slug}");
+                var lastUpdate = row.SelectToken("last_update")?.ToString();
+
+                releases.Add(new ()
+                {
+                    Guid = link,
+                    Details = link,
+                    Link = link,
+                    Title = $"{title}.1080p-Dual-Lat",
+                    Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                    Poster = new ($"{SiteLink}wp-content/uploads{poster}"),
+                    Year = long.Parse(year),
+                    Size = 2147483648, // 2 GB
+                    Files = 1,
+                    Seeders = 1,
+                    Peers = 2,
+                    DownloadVolumeFactor = 0,
+                    UploadVolumeFactor = 1,
+                    PublishDate = DateTime.Parse(lastUpdate)
+                });
+            }
+
             return releases;
+        }
+
+        private static bool CheckTitleMatchWords(string queryStr, string title)
+        {
+            // this code split the words, remove words with 2 letters or less, remove accents and lowercase
+            var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
+            var queryWords = from m in queryMatches.Cast<Match>()
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+
+            var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
+            var titleWords = from m in titleMatches.Cast<Match>()
+                             where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+            titleWords = titleWords.ToArray();
+
+            return queryWords.All(word => titleWords.Contains(word));
         }
 
         public override async Task<byte[]> Download(Uri link)
