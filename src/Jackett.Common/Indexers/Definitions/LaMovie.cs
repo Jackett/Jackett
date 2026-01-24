@@ -111,7 +111,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (isLoggedin)
             {
-                configData.AddDynamic("authToken", new ConfigurationData.StringConfigurationItem("Auth Token") { Value = token });
+                headers["Authorization"] = $"Bearer {token}";
                 IsConfigured = true;
                 SaveConfig();
             }
@@ -173,13 +173,14 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var year = row.SelectToken("release_date")?.ToString().Split('-')[0];
                 var slug = row["slug"]?.ToString();
-                var link = new Uri($"{SiteLink}peliculas/{slug}");
+                var details = new Uri($"{SiteLink}peliculas/{slug}");
                 var lastUpdate = row.SelectToken("last_update")?.ToString();
+                var link = new Uri($"{SiteLink}wp-api/v1/single/movies?slug={slug}&postType=movies");
 
                 releases.Add(new ()
                 {
                     Guid = link,
-                    Details = link,
+                    Details = details,
                     Link = link,
                     Title = $"{title}.1080p-Dual-Lat",
                     Category = new List<int> { TorznabCatType.MoviesHD.ID },
@@ -217,7 +218,32 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override async Task<byte[]> Download(Uri link)
         {
-            return null;
+            var details = await RequestWithCookiesAndRetryAsync(
+                link.AbsoluteUri,
+                cookieOverride: CookieHeader,
+                method: RequestType.GET,
+                referer: SiteLink,
+                data: null,
+                headers: headers
+                );
+            var jsonDetails = JObject.Parse(details.ContentString);
+            var movieId = jsonDetails.SelectToken("data._id")?.ToString();
+            var response = await RequestWithCookiesAndRetryAsync(
+                $"{SiteLink}wp-api/v1/player?postId={movieId}&demo=0",
+                cookieOverride: CookieHeader,
+                method: RequestType.GET,
+                referer: SiteLink,
+                data: null,
+                headers: headers
+                );
+            var jsonDownloads = JObject.Parse(response.ContentString);
+            var downloadUrls = jsonDownloads.SelectToken("data.downloads")?.ToList();
+            var magnetUrl = downloadUrls?.FirstOrDefault(x => (bool)x.SelectToken("url")?.ToString().Contains("magnet"))?.SelectToken("url");
+            if (magnetUrl == null)
+            {
+                throw new ("No magnet URL found");
+            }
+            return await base.Download(new (magnetUrl.ToString()));
         }
     }
 }
