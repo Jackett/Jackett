@@ -114,6 +114,11 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var json = JObject.Parse(response.ContentString);
             var posts = json.SelectToken("data.posts")?.ToObject<List<JObject>>();
+            if (posts == null)
+            {
+                return new();
+            }
+
             foreach (var row in posts)
             {
                 var images = row.SelectToken("images")?.ToObject<JObject>();
