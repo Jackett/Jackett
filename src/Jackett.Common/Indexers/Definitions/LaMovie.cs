@@ -31,7 +31,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly Dictionary<string, string> _headers = new()
         {
-            ["Content-Type"] = "application/json", ["Accept"] = "application/json"
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
         };
 
         private string _searchUrl;
