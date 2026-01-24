@@ -28,8 +28,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly Dictionary<string, string> _headers = new()
         {
-            ["Content-Type"] = "application/json",
-            ["Accept"] = "application/json"
+            ["Content-Type"] = "application/json", ["Accept"] = "application/json"
         };
 
         private string _searchUrl;
@@ -48,8 +47,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public LaMovie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                        ICacheService cs) : base(
-            configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
-            configData: new())
+            configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage={ReleasesPerPage}";
@@ -60,12 +58,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-
             var releases = await PerformQuery(new());
-
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                throw new("Could not find release from this URL."));
-
+            await ConfigureIfOK(string.Empty, releases.Any(), () => throw new("Could not find release from this URL."));
             return IndexerConfigurationStatus.Completed;
         }
 
@@ -77,16 +71,17 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 searchTerm = "test";
             }
+
             _searchUrl += $"&q={searchTerm}";
             var response = await RequestWithCookiesAndRetryAsync(
                 _searchUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
-            var pageReleases = ParseReleases(response, query);
+            var pageReleases = await ParseReleases(response, query);
             releases.AddRange(pageReleases);
             return releases;
         }
 
-        private List<ReleaseInfo> ParseReleases(WebResult response, TorznabQuery query)
+        private async Task<List<ReleaseInfo>> ParseReleases(WebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var json = JObject.Parse(response.ContentString);
@@ -121,17 +116,25 @@ namespace Jackett.Common.Indexers.Definitions
                 var lastUpdate = row.SelectToken("last_update")?.ToString();
                 _detailsUrl += $"&slug={slug}";
                 var link = new Uri(_detailsUrl);
-                releases.Add(
-                    new()
+                var downloadUrls = await GetDownloadUrlsAsync(link);
+
+                releases.AddRange(
+                    from downloadUrl in downloadUrls
+                    let magnetUrl = downloadUrl.SelectToken("url")?.ToString()
+                    let uriMagnet = new Uri(magnetUrl)
+                    let quality = downloadUrl.SelectToken("quality")?.ToString()
+                    let language = downloadUrl.SelectToken("lang")?.ToString()
+                    let size = downloadUrl.SelectToken("size")?.ToString()
+                    select new ReleaseInfo()
                     {
-                        Guid = link,
+                        Guid = uriMagnet,
                         Details = details,
-                        Link = link,
-                        Title = $"{title}.1080p-Dual-Lat",
+                        Link = uriMagnet,
+                        Title = $"{title}.{quality}.{language}",
                         Category = new List<int> { TorznabCatType.MoviesHD.ID },
                         Poster = new($"{SiteLink}wp-content/uploads{poster}"),
                         Year = long.Parse(year),
-                        Size = 2147483648, // 2 GB
+                        Size = ParseSize(size),
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
@@ -159,7 +162,29 @@ namespace Jackett.Common.Indexers.Definitions
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        public override async Task<byte[]> Download(Uri link)
+        private static long ParseSize(string sizeStr)
+        {
+            if (string.IsNullOrWhiteSpace(sizeStr))
+                return 2147483648; // 2 GB default
+
+            var match = Regex.Match(sizeStr.Trim(), @"^([\d.,]+)\s*(GB|MB|KB|B)?$", RegexOptions.IgnoreCase);
+            if (!match.Success)
+                return 2147483648;
+
+            var number = double.Parse(match.Groups[1].Value.Replace(',', '.'));
+            var unit = match.Groups[2].Value.ToUpperInvariant();
+
+            return unit switch
+            {
+                "GB" => (long)(number * 1024 * 1024 * 1024),
+                "MB" => (long)(number * 1024 * 1024),
+                "KB" => (long)(number * 1024),
+                "B" or "" => (long)number,
+                _ => 2147483648
+            };
+        }
+
+        private async Task<List<JToken>> GetDownloadUrlsAsync(Uri link)
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
@@ -168,18 +193,11 @@ namespace Jackett.Common.Indexers.Definitions
             var movieId = jsonDetails.SelectToken("data._id")?.ToString();
             _playerUrl += $"&postId={movieId}";
             var response = await RequestWithCookiesAndRetryAsync(
-                _playerUrl, cookieOverride: CookieHeader, method: RequestType.GET,
-                referer: SiteLink, data: null, headers: _headers);
+                _playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                headers: _headers);
             var jsonDownloads = JObject.Parse(response.ContentString);
-            var downloadUrls = jsonDownloads.SelectToken("data.downloads")?.ToList();
-            var magnetUrl = downloadUrls?.FirstOrDefault(x => (bool)x.SelectToken("url")?.ToString().Contains("magnet"))
-                                        ?.SelectToken("url");
-            if (magnetUrl == null)
-            {
-                throw new("No magnet URL found");
-            }
-
-            return await base.Download(new(magnetUrl.ToString()));
+            return jsonDownloads.SelectToken("data.downloads")
+                                ?.Where(x => (bool)x.SelectToken("url")?.ToString().Contains("magnet")).ToList();
         }
     }
 }
