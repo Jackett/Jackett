@@ -24,6 +24,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Language => "es-419";
         public override string Type => "public";
 
+        private const int ReleasesPerPage = 30;
+
         private readonly Dictionary<string, string> _headers = new()
         {
             ["Content-Type"] = "application/json",
@@ -50,7 +52,7 @@ namespace Jackett.Common.Indexers.Definitions
             configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
-            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage=26";
+            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage={ReleasesPerPage}";
             _detailsUrl = $"{apiLink}single/movies?postType=movies";
             _playerUrl = $"{apiLink}player?demo=0";
         }
