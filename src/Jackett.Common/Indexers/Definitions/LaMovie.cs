@@ -5,12 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using AngleSharp.Dom;
-using AngleSharp.Html.Parser;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
-using Jackett.Common.Models.IndexerConfig;
-using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
@@ -23,11 +19,10 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "lamovie";
         public override string Name => "LaMovie";
-        public override string Description => "LaMovie is a semi-private site for movies and TV shows in latin spanish.";
+        public override string Description => "LaMovie is a public site for movies and TV shows in latin spanish.";
         public sealed override string SiteLink { get; protected set; } = "https://la.movie/";
         public override string Language => "es-419";
-        public override string Type => "semi-private";
-        private string LoginUrl => SiteLink + "wp-json/wpf/v1/auth/login";
+        public override string Type => "public";
 
         private readonly Dictionary<string, string> _headers = new()
         {
@@ -38,12 +33,6 @@ namespace Jackett.Common.Indexers.Definitions
         private string _searchUrl;
         private string _detailsUrl;
         private string _playerUrl;
-
-        private ConfigurationDataLaMovie Configuration
-        {
-            get => (ConfigurationDataLaMovie)configData;
-            set => configData = value;
-        }
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
@@ -58,7 +47,7 @@ namespace Jackett.Common.Indexers.Definitions
         public LaMovie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                        ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
-            configData: new ConfigurationDataLaMovie())
+            configData: new ())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage=26";
@@ -69,40 +58,13 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var payload = new JObject { ["email"] = Configuration.Email.Value, ["password"] = Configuration.Password.Value }
-                .ToString();
-            var result = await RequestWithCookiesAndRetryAsync(
-                LoginUrl, cookieOverride: CookieHeader, method: RequestType.POST, referer: SiteLink, data: null,
-                headers: _headers, rawbody: payload);
-            var json = JObject.Parse(result.ContentString);
-            var token = json.SelectToken("data.token")?.ToString();
-            await ConfigureIfOK(
-                token, IsAuthorized(token), () =>
-                {
-                    var contentString = result.ContentString;
-                    var json = JObject.Parse(contentString);
-                    var errorMessage = json.Value<string>("msg");
-                    throw new ExceptionWithConfigData(errorMessage, Configuration);
-                });
+
+            var releases = await PerformQuery(new());
+
+            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                                    throw new ("Could not find release from this URL."));
+
             return IndexerConfigurationStatus.Completed;
-        }
-
-        private bool IsAuthorized(string token) => string.IsNullOrWhiteSpace(token)
-            ? throw new ExceptionWithConfigData("Login response did not contain a token", Configuration)
-            : true;
-
-        protected new async Task ConfigureIfOK(string token, bool isLoggedin, Func<Task> onError)
-        {
-            if (isLoggedin)
-            {
-                _headers["Authorization"] = $"Bearer {token}";
-                IsConfigured = true;
-                SaveConfig();
-            }
-            else
-            {
-                await onError();
-            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
