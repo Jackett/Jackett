@@ -30,11 +30,15 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://desitorrents.tv/\" target=\"_blank\">DesiTorrents</a> account <i>My Security</i> page and clicking on the <b>API Token</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://desitorrents.tv/\" target=\"_blank\">DesiTorrents</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -57,7 +61,7 @@ settings:
     default: "Inactive accounts will be disabled after 3 months of inactivity, 1 month for new accounts. Members must generate some download or upload activity at least once every 3 months."
 
 login:
-  path: /api/v1/torrents
+  path: /api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -69,7 +73,7 @@ search:
   paths:
     # https://hdinnovations.github.io/UNIT3D/torrent_api.html
     # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
-    - path: "/api/v1/torrents/filter"
+    - path: api/torrents/filter
       response:
         type: json
 
@@ -101,8 +105,15 @@ search:
   fields:
     category:
       selector: category_id
-    title:
+    title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -122,17 +133,18 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
-        - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: re_replace
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -149,7 +161,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -159,16 +176,20 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
-      # api returns 0=false, 1=true
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
       selector: double_upload
       case:
-        0: 1 # normal
-        1: 2 # double
+        False: 1 # normal
+        True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # global MR is 0.5 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
 #      text: 0.5
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 6.5.0 (custom)
+# json UNIT3D 9.2.0
