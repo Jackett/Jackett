@@ -126,13 +126,16 @@ namespace Jackett.Common.Indexers.Definitions
                     let quality = downloadUrl.SelectToken("quality")?.ToString()
                     let language = downloadUrl.SelectToken("lang")?.ToString()
                     let size = downloadUrl.SelectToken("size")?.ToString()
+                    let categories = quality.Contains("4K")
+                        ? new List<int> { TorznabCatType.MoviesUHD.ID }
+                        : new List<int> { TorznabCatType.MoviesHD.ID }
                     select new ReleaseInfo()
                     {
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
                         Title = $"{title}.{quality}.{language}",
-                        Category = new List<int> { TorznabCatType.MoviesHD.ID },
+                        Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{poster}"),
                         Year = long.Parse(year),
                         Size = ParseSize(size),
