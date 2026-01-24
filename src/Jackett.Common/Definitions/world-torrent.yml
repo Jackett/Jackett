@@ -10,12 +10,12 @@ encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
   - https://www.world-torrent1.com/
-  - https://www.cine-torrent1.com/
-  - https://ww1-mania-torrent.com/
-  - https://www.magnet-torrent1.com/
-  - https://www.mega-torrent9.com/
-  - https://www.zone-torrent6.com/
-  - https://www.warez-torrent1.com/
+  - https://www-cine-torrent.com/
+  - https://www-mania-torrent.com/
+  - https://ww1-magnet-torrent.com/
+  - https://ww1-mega-torrent.com/
+  - https://ww1-zone-torrent.com/
+  - https://ww1-warez-torrent.com/
 legacylinks:
   # latest domains list
   - https://www.rantop.org/
@@ -46,6 +46,12 @@ legacylinks:
   - https://ww1-zetorrents.town/
   - https://www.world-torrent.com/
   - https://www.mania-torrent.com/
+  - https://www.zone-torrent6.com/
+  - https://www.warez-torrent1.com/
+  - https://www.mega-torrent9.com/
+  - https://www.magnet-torrent1.com/
+  - https://www.cine-torrent1.com/
+  - https://ww1-mania-torrent.com/
 
 caps:
   categorymappings:
