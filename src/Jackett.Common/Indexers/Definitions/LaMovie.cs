@@ -47,7 +47,7 @@ namespace Jackett.Common.Indexers.Definitions
         public LaMovie(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                        ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
-            configData: new ())
+            configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage=26";
@@ -62,7 +62,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = await PerformQuery(new());
 
             await ConfigureIfOK(string.Empty, releases.Any(), () =>
-                                    throw new ("Could not find release from this URL."));
+                throw new("Could not find release from this URL."));
 
             return IndexerConfigurationStatus.Completed;
         }
