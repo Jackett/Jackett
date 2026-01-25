@@ -37,8 +37,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly string _searchUrl;
         private readonly string _latestUrl;
-        private string _detailsUrl;
-        private string _playerUrl;
+        private readonly string _detailsUrl;
+        private readonly string _playerUrl;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
@@ -47,6 +47,8 @@ namespace Jackett.Common.Indexers.Definitions
             var caps = new TorznabCapabilities { MovieSearchParams = new() { MovieSearchParam.Q } };
             caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
             caps.Categories.AddCategoryMapping(2, TorznabCatType.MoviesUHD);
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.TVHD);
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.TVAnime);
             return caps;
         }
 
@@ -55,10 +57,11 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
-            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage={ReleasesPerPage}";
+
+            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=any&postsPerPage={ReleasesPerPage}";
             _latestUrl =
-                $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=movies&postsPerPage=5";
-            _detailsUrl = $"{apiLink}single/movies?postType=movies";
+                $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=any&postsPerPage=5";
+            _detailsUrl = $"{apiLink}single/{{0}}?postType={{0}}";
             _playerUrl = $"{apiLink}player?demo=0";
         }
 
@@ -74,7 +77,9 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+
             var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? $"{_searchUrl}&q={searchTerm}" : _latestUrl;
+
             var response = await RequestWithCookiesAndRetryAsync(
                 releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
@@ -108,9 +113,17 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 var year = post.ReleaseDate?.Split('-')[0];
-                var details = new Uri($"{SiteLink}peliculas/{post.Slug}");
-                _detailsUrl += $"&slug={post.Slug}";
-                var link = new Uri(_detailsUrl);
+                var slugType = post.Type switch
+                {
+                    "movies" => "peliculas/",
+                    "tvshows" => "series/",
+                    "anime" => "animes/",
+                    _ => ""
+                };
+
+                var details = new Uri($"{SiteLink}{slugType}{post.Slug}");
+                var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
+                var link = new Uri(detailsUrl);
                 var downloadUrls = await GetDownloadUrlsAsync(link);
                 releases.AddRange(
                     from downloadUrl in downloadUrls
@@ -163,9 +176,9 @@ namespace Jackett.Common.Indexers.Definitions
                 headers: _headers);
             var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
             var movieId = detailsResponse?.Data?.Id;
-            _playerUrl += $"&postId={movieId}";
+            var playerUrl = $"{_playerUrl}&postId={movieId}";
             var response = await RequestWithCookiesAndRetryAsync(
-                _playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
             return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
@@ -189,6 +202,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                     [JsonPropertyName("slug")]
                     public string Slug { get; set; }
+
+                    [JsonPropertyName("type")]
+                    public string Type { get; set; }
 
                     [JsonPropertyName("release_date")]
                     public string ReleaseDate { get; set; }
