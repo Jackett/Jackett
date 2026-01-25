@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -28,8 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly Dictionary<string, string> _headers = new()
         {
-            ["Content-Type"] = "application/json",
-            ["Accept"] = "application/json"
+            ["Content-Type"] = "application/json", ["Accept"] = "application/json"
         };
 
         private string _searchUrl;
@@ -53,7 +54,8 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage={ReleasesPerPage}";
-            _latestUrl = $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=movies&postsPerPage=5";
+            _latestUrl =
+                $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=movies&postsPerPage=5";
             _detailsUrl = $"{apiLink}single/movies?postType=movies";
             _playerUrl = $"{apiLink}player?demo=0";
         }
@@ -70,85 +72,67 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-
-            var releasesUrl= !string.IsNullOrWhiteSpace(searchTerm)
-                ? $"{_searchUrl}&q={searchTerm}"
-                : _latestUrl;
-
+            var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? $"{_searchUrl}&q={searchTerm}" : _latestUrl;
             var response = await RequestWithCookiesAndRetryAsync(
                 releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
-
             var pageReleases = await ParseReleasesAsync(response, query);
-
             releases.AddRange(pageReleases);
-
             return releases;
         }
 
         private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var json = JObject.Parse(response.ContentString);
-            var posts = json.SelectToken("data.posts")?.ToObject<List<JObject>>();
+            var apiResponse = JsonSerializer.Deserialize<ApiResponse>(response.ContentString);
+            var posts = apiResponse?.Data?.Posts;
             if (posts == null)
             {
                 return new();
             }
 
-            foreach (var row in posts)
+            foreach (var post in posts)
             {
-                var images = row.SelectToken("images")?.ToObject<JObject>();
-                var poster = images.SelectToken("poster")?.ToString();
-                var backdrop = images.SelectToken("backdrop")?.ToString();
-                var logo = images.SelectToken("logo")?.ToString();
-                if (poster == null || backdrop == null || logo == null)
+                if (post.Images?.Poster == null || post.Images?.Backdrop == null || post.Images?.Logo == null)
                 {
                     // skip results without image
                     continue;
                 }
 
-                var title = row["title"]?.ToString();
-                if (!CheckTitleMatchWords(query.GetQueryString(), title))
+                if (!CheckTitleMatchWords(query.GetQueryString(), post.Title))
                 {
                     // skip if it doesn't contain all words
                     continue;
                 }
 
-                var year = row.SelectToken("release_date")?.ToString().Split('-')[0];
-                var slug = row["slug"]?.ToString();
-                var details = new Uri($"{SiteLink}peliculas/{slug}");
-                var lastUpdate = row.SelectToken("last_update")?.ToString();
-                _detailsUrl += $"&slug={slug}";
+                var year = post.ReleaseDate?.Split('-')[0];
+                var details = new Uri($"{SiteLink}peliculas/{post.Slug}");
+                _detailsUrl += $"&slug={post.Slug}";
                 var link = new Uri(_detailsUrl);
                 var downloadUrls = await GetDownloadUrlsAsync(link);
-
                 releases.AddRange(
                     from downloadUrl in downloadUrls
-                    let magnetUrl = downloadUrl.SelectToken("url")?.ToString()
-                    let uriMagnet = new Uri(magnetUrl)
-                    let quality = downloadUrl.SelectToken("quality")?.ToString()
-                    let language = downloadUrl.SelectToken("lang")?.ToString()
-                    let size = downloadUrl.SelectToken("size")?.ToString()
-                    let categories = quality.Contains("4K")
-                        ? new List<int> { TorznabCatType.MoviesUHD.ID }
-                        : new List<int> { TorznabCatType.MoviesHD.ID }
+                    let uriMagnet = new Uri(downloadUrl.Url)
+                    let categories =
+                        downloadUrl.Quality.Contains("4K")
+                            ? new List<int> { TorznabCatType.MoviesUHD.ID }
+                            : new List<int> { TorznabCatType.MoviesHD.ID }
                     select new ReleaseInfo()
                     {
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{title}.{quality}.{language}",
+                        Title = $"{post.Title}.{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
-                        Poster = new($"{SiteLink}wp-content/uploads{poster}"),
+                        Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = long.Parse(year),
-                        Size = ParseSize(size),
+                        Size = ParseSize(downloadUrl.Size),
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        PublishDate = DateTime.Parse(lastUpdate)
+                        PublishDate = DateTime.Parse(post.LastUpdate)
                     });
             }
 
@@ -174,14 +158,11 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (string.IsNullOrWhiteSpace(sizeStr))
                 return 2147483648; // 2 GB default
-
             var match = Regex.Match(sizeStr.Trim(), @"^([\d.,]+)\s*(GB|MB|KB|B)?$", RegexOptions.IgnoreCase);
             if (!match.Success)
                 return 2147483648;
-
             var number = double.Parse(match.Groups[1].Value.Replace(',', '.'));
             var unit = match.Groups[2].Value.ToUpperInvariant();
-
             return unit switch
             {
                 "GB" => (long)(number * 1024 * 1024 * 1024),
@@ -192,20 +173,101 @@ namespace Jackett.Common.Indexers.Definitions
             };
         }
 
-        private async Task<List<JToken>> GetDownloadUrlsAsync(Uri link)
+        private async Task<List<PlayerResponse.PlayerData.Download>> GetDownloadUrlsAsync(Uri link)
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
-            var jsonDetails = JObject.Parse(details.ContentString);
-            var movieId = jsonDetails.SelectToken("data._id")?.ToString();
+            var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
+            var movieId = detailsResponse?.Data?.Id;
             _playerUrl += $"&postId={movieId}";
             var response = await RequestWithCookiesAndRetryAsync(
                 _playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
-            var jsonDownloads = JObject.Parse(response.ContentString);
-            return jsonDownloads.SelectToken("data.downloads")
-                                ?.Where(x => (bool)x.SelectToken("url")?.ToString().Contains("magnet")).ToList();
+            var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
+            return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
+                   new List<PlayerResponse.PlayerData.Download>();
+        }
+
+        public class ApiResponse
+        {
+            [JsonPropertyName("data")]
+            public DataProp Data { get; set; }
+
+            public class DataProp
+            {
+                [JsonPropertyName("posts")]
+                public List<Post> Posts { get; set; }
+
+                public class Post
+                {
+                    [JsonPropertyName("title")]
+                    public string Title { get; set; }
+
+                    [JsonPropertyName("slug")]
+                    public string Slug { get; set; }
+
+                    [JsonPropertyName("release_date")]
+                    public string ReleaseDate { get; set; }
+
+                    [JsonPropertyName("last_update")]
+                    public string LastUpdate { get; set; }
+
+                    [JsonPropertyName("images")]
+                    public ImagesData Images { get; set; }
+
+                    public class ImagesData
+                    {
+                        [JsonPropertyName("poster")]
+                        public string Poster { get; set; }
+
+                        [JsonPropertyName("backdrop")]
+                        public string Backdrop { get; set; }
+
+                        [JsonPropertyName("logo")]
+                        public string Logo { get; set; }
+                    }
+                }
+            }
+        }
+
+        public class DetailsResponse
+        {
+            [JsonPropertyName("data")]
+            public DetailsData Data { get; set; }
+
+            public class DetailsData
+            {
+                [JsonPropertyName("_id")]
+                public int Id { get; set; }
+            }
+        }
+
+        public class PlayerResponse
+        {
+            [JsonPropertyName("data")]
+            public PlayerData Data { get; set; }
+
+            public class PlayerData
+            {
+                [JsonPropertyName("downloads")]
+                public List<Download> Downloads { get; set; }
+
+                public class Download
+                {
+                    [JsonPropertyName("url")]
+                    public string Url { get; set; }
+
+                    [JsonPropertyName("quality")]
+                    public string Quality { get; set; }
+
+                    [JsonPropertyName("lang")]
+                    public string Language { get; set; }
+
+                    [JsonPropertyName("size")]
+                    public string Size { get; set; }
+                }
+            }
         }
     }
 }
