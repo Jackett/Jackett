@@ -33,6 +33,7 @@ namespace Jackett.Common.Indexers.Definitions
         };
 
         private string _searchUrl;
+        private readonly string _latestUrl;
         private string _detailsUrl;
         private string _playerUrl;
 
@@ -52,6 +53,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=movies&postsPerPage={ReleasesPerPage}";
+            _latestUrl = $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=movies&postsPerPage=5";
             _detailsUrl = $"{apiLink}single/movies?postType=movies";
             _playerUrl = $"{apiLink}player?demo=0";
         }
@@ -68,21 +70,23 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-            if (string.IsNullOrWhiteSpace(searchTerm))
-            {
-                searchTerm = "test";
-            }
 
-            _searchUrl += $"&q={searchTerm}";
+            var releasesUrl= !string.IsNullOrWhiteSpace(searchTerm)
+                ? $"{_searchUrl}&q={searchTerm}"
+                : _latestUrl;
+
             var response = await RequestWithCookiesAndRetryAsync(
-                _searchUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
-            var pageReleases = await ParseReleases(response, query);
+
+            var pageReleases = await ParseReleasesAsync(response, query);
+
             releases.AddRange(pageReleases);
+
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> ParseReleases(WebResult response, TorznabQuery query)
+        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var json = JObject.Parse(response.ContentString);
