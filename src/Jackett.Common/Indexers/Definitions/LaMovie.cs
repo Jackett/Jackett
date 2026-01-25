@@ -19,7 +19,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "lamovie";
         public override string Name => "LaMovie";
-        public override string Description => "LaMovie is a public site for movies and TV shows in latin spanish.";
+        public override string Description => "LaMovie is a Public tracker for MOVIES / TV in Latin Spanish.";
         public sealed override string SiteLink { get; protected set; } = "https://la.movie/";
         public override string Language => "es-419";
         public override string Type => "public";
