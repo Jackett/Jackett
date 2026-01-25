@@ -116,7 +116,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     "movies" => "peliculas/",
                     "tvshows" => "series/",
-                    "anime" => "animes/",
+                    "animes" => "animes/",
                     _ => ""
                 };
                 var details = new Uri($"{SiteLink}{slugType}{post.Slug}");
@@ -132,7 +132,7 @@ namespace Jackett.Common.Indexers.Definitions
                             ? new List<int> { TorznabCatType.MoviesUHD.ID }
                             : new List<int> { TorznabCatType.MoviesHD.ID },
                         "tvshows" => new List<int> { TorznabCatType.TVHD.ID },
-                        "anime" => new List<int> { TorznabCatType.TVAnime.ID },
+                        "animes" => new List<int> { TorznabCatType.TVAnime.ID },
                         _ => new List<int> { TorznabCatType.Other.ID }
                     };
 
@@ -183,7 +183,7 @@ namespace Jackett.Common.Indexers.Definitions
                 headers: _headers);
             var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
             var postId = detailsResponse?.Data?.Id;
-            if (postType is "tvshows" or "anime")
+            if (postType is "tvshows" or "animes")
             {
                 return await GetMultiplePostDownloadUrls(postId);
             }
