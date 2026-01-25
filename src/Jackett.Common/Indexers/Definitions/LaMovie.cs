@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Text.Json;
 using System.Text.Json.Serialization;
+using System.Text.RegularExpressions;
+using System.Threading.Tasks;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
@@ -127,7 +127,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Title = $"{post.Title}.{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
-                        Year = year!=null ? long.Parse(year) : DateTime.Now.Year,
+                        Year = year != null ? long.Parse(year) : DateTime.Now.Year,
                         Size = downloadUrl.Size != null ? ParseUtil.GetBytes(downloadUrl.Size) : 2147483648, //2GB
                         Files = 1,
                         Seeders = 1,
