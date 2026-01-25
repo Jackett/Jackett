@@ -45,7 +45,19 @@ namespace Jackett.Common.Indexers.Definitions
 
         private TorznabCapabilities SetCapabilities()
         {
-            var caps = new TorznabCapabilities { MovieSearchParams = new() { MovieSearchParam.Q } };
+        private TorznabCapabilities SetCapabilities()
+        {
+            var caps = new TorznabCapabilities
+            {
+                TvSearchParams = new List<TvSearchParam>
+                {
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                },
+                MovieSearchParams = new List<MovieSearchParam>
+                {
+                    MovieSearchParam.Q
+                }
+            };
             caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
             caps.Categories.AddCategoryMapping(2, TorznabCatType.MoviesUHD);
             caps.Categories.AddCategoryMapping(3, TorznabCatType.TVHD);
