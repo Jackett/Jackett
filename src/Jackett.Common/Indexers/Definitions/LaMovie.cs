@@ -39,6 +39,7 @@ namespace Jackett.Common.Indexers.Definitions
         private readonly string _latestUrl;
         private readonly string _detailsUrl;
         private readonly string _playerUrl;
+        private readonly string _episodesUrl;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
@@ -63,6 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
                 $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=any&postsPerPage=5";
             _detailsUrl = $"{apiLink}single/{{0}}?postType={{0}}";
             _playerUrl = $"{apiLink}player?demo=0";
+            _episodesUrl = $"{apiLink}single/episodes/list?page=1&postPerPage=15";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -124,7 +126,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var details = new Uri($"{SiteLink}{slugType}{post.Slug}");
                 var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
                 var link = new Uri(detailsUrl);
-                var downloadUrls = await GetDownloadUrlsAsync(link);
+                var downloadUrls = await GetDownloadUrlsAsync(link,post.Type);
                 releases.AddRange(
                     from downloadUrl in downloadUrls
                     let uriMagnet = new Uri(downloadUrl.Url)
@@ -169,18 +171,58 @@ namespace Jackett.Common.Indexers.Definitions
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private async Task<List<PlayerResponse.PlayerData.Download>> GetDownloadUrlsAsync(Uri link)
+        private async Task<List<PlayerResponse.PlayerData.Download>> GetDownloadUrlsAsync(Uri link, string postType)
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
-            var movieId = detailsResponse?.Data?.Id;
-            var playerUrl = $"{_playerUrl}&postId={movieId}";
+            var postId = detailsResponse?.Data?.Id;
+
+            if (postType is "tvshows" or "anime")
+            {
+                return await GetMultiplePostDownloadUrls(postId);
+            }
+
+            return await GetSinglePostDownloadUrls(postId);
+        }
+
+        private async Task<List<PlayerResponse.PlayerData.Download>> GetMultiplePostDownloadUrls(int? postId, int seasonNumber=1)
+        {
+            var magnets = new List<PlayerResponse.PlayerData.Download>();
+
+            var episodesResponse = await GetEpisodesResponse(postId, seasonNumber);
+            foreach(var season in episodesResponse.Data.Seasons)
+            {
+                episodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
+                foreach (var episode in episodesResponse.Data.Posts)
+                {
+                    //adds all magnets from the season to magnet list
+                    magnets.AddRange(await GetSinglePostDownloadUrls(episode.Id));
+                }
+            }
+
+            return magnets;
+        }
+
+        private async Task<EpisodesResponse> GetEpisodesResponse(int? postId, int seasonNumber)
+        {
+            var episodesUrl = $"{_episodesUrl}&_id={postId}&season={seasonNumber}";
+            var response = await RequestWithCookiesAndRetryAsync(
+                episodesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                headers: _headers);
+            var episodesResponse = JsonSerializer.Deserialize<EpisodesResponse>(response.ContentString);
+            return episodesResponse;
+        }
+
+        private async Task<List<PlayerResponse.PlayerData.Download>> GetSinglePostDownloadUrls(int? postId)
+        {
+            var playerUrl = $"{_playerUrl}&postId={postId}";
             var response = await RequestWithCookiesAndRetryAsync(
                 playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
+
             return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
                    new List<PlayerResponse.PlayerData.Download>();
         }
@@ -265,6 +307,27 @@ namespace Jackett.Common.Indexers.Definitions
 
                     [JsonPropertyName("size")]
                     public string Size { get; set; }
+                }
+            }
+        }
+
+        public class EpisodesResponse
+        {
+            [JsonPropertyName("data")]
+            public EpisodesData Data { get; set; }
+
+            public class EpisodesData
+            {
+                [JsonPropertyName("posts")]
+                public List<PostData> Posts { get; set; }
+
+                [JsonPropertyName("seasons")]
+                public List<string> Seasons { get; set; }
+
+                public class PostData
+                {
+                    [JsonPropertyName("_id")]
+                    public int Id { get; set; }
                 }
             }
         }
