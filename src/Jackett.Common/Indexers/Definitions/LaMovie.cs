@@ -10,6 +10,7 @@ using System.Text.Json.Serialization;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -30,10 +31,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly Dictionary<string, string> _headers = new()
         {
-            ["Content-Type"] = "application/json", ["Accept"] = "application/json"
+            ["Content-Type"] = "application/json",
+            ["Accept"] = "application/json"
         };
 
-        private string _searchUrl;
+        private readonly string _searchUrl;
         private readonly string _latestUrl;
         private string _detailsUrl;
         private string _playerUrl;
@@ -125,8 +127,8 @@ namespace Jackett.Common.Indexers.Definitions
                         Title = $"{post.Title}.{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
-                        Year = long.Parse(year),
-                        Size = ParseSize(downloadUrl.Size),
+                        Year = year!=null ? long.Parse(year) : DateTime.Now.Year,
+                        Size = downloadUrl.Size != null ? ParseUtil.GetBytes(downloadUrl.Size) : 2147483648, //2GB
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
@@ -152,25 +154,6 @@ namespace Jackett.Common.Indexers.Definitions
                              select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
             return queryWords.All(word => titleWords.Contains(word));
-        }
-
-        private static long ParseSize(string sizeStr)
-        {
-            if (string.IsNullOrWhiteSpace(sizeStr))
-                return 2147483648; // 2 GB default
-            var match = Regex.Match(sizeStr.Trim(), @"^([\d.,]+)\s*(GB|MB|KB|B)?$", RegexOptions.IgnoreCase);
-            if (!match.Success)
-                return 2147483648;
-            var number = double.Parse(match.Groups[1].Value.Replace(',', '.'));
-            var unit = match.Groups[2].Value.ToUpperInvariant();
-            return unit switch
-            {
-                "GB" => (long)(number * 1024 * 1024 * 1024),
-                "MB" => (long)(number * 1024 * 1024),
-                "KB" => (long)(number * 1024),
-                "B" or "" => (long)number,
-                _ => 2147483648
-            };
         }
 
         private async Task<List<PlayerResponse.PlayerData.Download>> GetDownloadUrlsAsync(Uri link)
