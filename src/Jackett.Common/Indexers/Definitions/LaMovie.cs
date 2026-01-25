@@ -139,7 +139,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{post.Title}.{downloadUrl.Quality}.{downloadUrl.Language}",
+                        Title = $"{post.Title}.{(downloadUrl.Episode!=null?$"{downloadUrl.Episode}.":"")}{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
@@ -192,13 +192,25 @@ namespace Jackett.Common.Indexers.Definitions
             var magnets = new List<PlayerResponse.PlayerData.Download>();
 
             var episodesResponse = await GetEpisodesResponse(postId, seasonNumber);
-            foreach(var season in episodesResponse.Data.Seasons)
+            if (episodesResponse.Data?.Seasons == null)
+            {
+                return new();
+            }
+
+            foreach (var season in episodesResponse.Data.Seasons)
             {
                 episodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
                 foreach (var episode in episodesResponse.Data.Posts)
                 {
                     //adds all magnets from the season to magnet list
-                    magnets.AddRange(await GetSinglePostDownloadUrls(episode.Id));
+                    var episodeDownloadUrls = await GetSinglePostDownloadUrls(episode.Id);
+                    foreach (var episodeDownloadUrl in episodeDownloadUrls)
+                    {
+                        episodeDownloadUrl.Episode =
+                            $"S{episode.SeasonNumber.ToString().PadLeft(2, '0')}E{episode.EpisodeNumber.ToString().PadLeft(2, '0')}";
+                    }
+
+                    magnets.AddRange(episodeDownloadUrls);
                 }
             }
 
@@ -307,6 +319,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                     [JsonPropertyName("size")]
                     public string Size { get; set; }
+
+                    [JsonPropertyName("episode")]
+                    public string Episode { get; set; }
                 }
             }
         }
@@ -328,6 +343,10 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     [JsonPropertyName("_id")]
                     public int Id { get; set; }
+                    [JsonPropertyName("season_number")]
+                    public int SeasonNumber { get; set; }
+                    [JsonPropertyName("episode_number")]
+                    public int EpisodeNumber { get; set; }
                 }
             }
         }
