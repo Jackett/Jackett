@@ -98,7 +98,7 @@ search:
       selector: a[href^="/torrents.php?id="]
       attribute: href
     download:
-      selector: a[href^="torrents.php?action=download&id="]
+      selector: a[href^="/torrents.php?action=download&id="]
       attribute: href
     description_tags:
       selector: div.tags
