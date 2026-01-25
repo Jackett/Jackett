@@ -122,24 +122,27 @@ namespace Jackett.Common.Indexers.Definitions
                 var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
                 var link = new Uri(detailsUrl);
                 var downloadUrls = await GetDownloadUrlsAsync(link, post.Type);
-                releases.AddRange(
-                    from downloadUrl in downloadUrls
-                    let uriMagnet = new Uri(downloadUrl.Url)
-                    let categories =
-                        (post.Type == "movies"
-                            ? (downloadUrl.Quality.Contains("4K")
-                                ? new List<int> { TorznabCatType.MoviesUHD.ID }
-                                : new List<int> { TorznabCatType.MoviesHD.ID })
-                            : (post.Type == "tvshows"
-                                ? new List<int> { TorznabCatType.TVHD.ID }
-                                : new List<int> { TorznabCatType.TVAnime.ID }))
-                    select new ReleaseInfo()
+                releases.AddRange(downloadUrls.Select(downloadUrl =>
+                {
+                    var uriMagnet = new Uri(downloadUrl.Url);
+                    var categories = post.Type switch
+                    {
+                        "movies" => downloadUrl.Quality.Contains("4K")
+                            ? new List<int> { TorznabCatType.MoviesUHD.ID }
+                            : new List<int> { TorznabCatType.MoviesHD.ID },
+                        "tvshows" => new List<int> { TorznabCatType.TVHD.ID },
+                        "anime" => new List<int> { TorznabCatType.TVAnime.ID },
+                        _ => new List<int> { TorznabCatType.Other.ID }
+                    };
+
+                    var episodePart = downloadUrl.Episode != null ? $"{downloadUrl.Episode}." : "";
+
+                    return new ReleaseInfo
                     {
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title =
-                            $"{post.Title}.{(downloadUrl.Episode != null ? $"{downloadUrl.Episode}." : "")}{downloadUrl.Quality}.{downloadUrl.Language}",
+                        Title = $"{post.Title}.{episodePart}{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
@@ -150,7 +153,8 @@ namespace Jackett.Common.Indexers.Definitions
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
                         PublishDate = DateTime.Parse(post.LastUpdate)
-                    });
+                    };
+                }));
             }
 
             return releases;
