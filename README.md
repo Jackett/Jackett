@@ -350,6 +350,7 @@ Prior versions of Jackett are no longer supported.
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
  * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
+ * G3MINI TR4CK3R
  * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)
