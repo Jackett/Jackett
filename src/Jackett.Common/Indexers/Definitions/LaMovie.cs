@@ -42,9 +42,7 @@ namespace Jackett.Common.Indexers.Definitions
         private readonly string _episodesUrl;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
-
-        private TorznabCapabilities SetCapabilities()
-        {
+        
         private TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
