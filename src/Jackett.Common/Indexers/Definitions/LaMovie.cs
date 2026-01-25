@@ -31,8 +31,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private readonly Dictionary<string, string> _headers = new()
         {
-            ["Content-Type"] = "application/json",
-            ["Accept"] = "application/json"
+            ["Content-Type"] = "application/json", ["Accept"] = "application/json"
         };
 
         private readonly string _searchUrl;
@@ -58,7 +57,6 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
-
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=any&postsPerPage={ReleasesPerPage}";
             _latestUrl =
                 $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=any&postsPerPage=5";
@@ -79,9 +77,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-
             var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? $"{_searchUrl}&q={searchTerm}" : _latestUrl;
-
             var response = await RequestWithCookiesAndRetryAsync(
                 releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
@@ -122,24 +118,28 @@ namespace Jackett.Common.Indexers.Definitions
                     "anime" => "animes/",
                     _ => ""
                 };
-
                 var details = new Uri($"{SiteLink}{slugType}{post.Slug}");
                 var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
                 var link = new Uri(detailsUrl);
-                var downloadUrls = await GetDownloadUrlsAsync(link,post.Type);
+                var downloadUrls = await GetDownloadUrlsAsync(link, post.Type);
                 releases.AddRange(
                     from downloadUrl in downloadUrls
                     let uriMagnet = new Uri(downloadUrl.Url)
                     let categories =
-                        downloadUrl.Quality.Contains("4K")
-                            ? new List<int> { TorznabCatType.MoviesUHD.ID }
-                            : new List<int> { TorznabCatType.MoviesHD.ID }
+                        (post.Type == "movies"
+                            ? (downloadUrl.Quality.Contains("4K")
+                                ? new List<int> { TorznabCatType.MoviesUHD.ID }
+                                : new List<int> { TorznabCatType.MoviesHD.ID })
+                            : (post.Type == "tvshows"
+                                ? new List<int> { TorznabCatType.TVHD.ID }
+                                : new List<int> { TorznabCatType.TVAnime.ID }))
                     select new ReleaseInfo()
                     {
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{post.Title}.{(downloadUrl.Episode!=null?$"{downloadUrl.Episode}.":"")}{downloadUrl.Quality}.{downloadUrl.Language}",
+                        Title =
+                            $"{post.Title}.{(downloadUrl.Episode != null ? $"{downloadUrl.Episode}." : "")}{downloadUrl.Quality}.{downloadUrl.Language}",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
@@ -178,7 +178,6 @@ namespace Jackett.Common.Indexers.Definitions
                 headers: _headers);
             var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
             var postId = detailsResponse?.Data?.Id;
-
             if (postType is "tvshows" or "anime")
             {
                 return await GetMultiplePostDownloadUrls(postId);
@@ -187,10 +186,10 @@ namespace Jackett.Common.Indexers.Definitions
             return await GetSinglePostDownloadUrls(postId);
         }
 
-        private async Task<List<PlayerResponse.PlayerData.Download>> GetMultiplePostDownloadUrls(int? postId, int seasonNumber=1)
+        private async Task<List<PlayerResponse.PlayerData.Download>> GetMultiplePostDownloadUrls(
+            int? postId, int seasonNumber = 1)
         {
             var magnets = new List<PlayerResponse.PlayerData.Download>();
-
             var episodesResponse = await GetEpisodesResponse(postId, seasonNumber);
             if (episodesResponse.Data?.Seasons == null)
             {
@@ -234,7 +233,6 @@ namespace Jackett.Common.Indexers.Definitions
                 playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
-
             return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
                    new List<PlayerResponse.PlayerData.Download>();
         }
@@ -343,8 +341,10 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     [JsonPropertyName("_id")]
                     public int Id { get; set; }
+
                     [JsonPropertyName("season_number")]
                     public int SeasonNumber { get; set; }
+
                     [JsonPropertyName("episode_number")]
                     public int EpisodeNumber { get; set; }
                 }
