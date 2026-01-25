@@ -190,27 +190,33 @@ namespace Jackett.Common.Indexers.Definitions
             int? postId, int seasonNumber = 1)
         {
             var magnets = new List<PlayerResponse.PlayerData.Download>();
-            var episodesResponse = await GetEpisodesResponse(postId, seasonNumber);
-            if (episodesResponse.Data?.Seasons == null)
+            var initialEpisodesResponse = await GetEpisodesResponse(postId, seasonNumber);
+            if (initialEpisodesResponse.Data?.Seasons == null)
             {
                 return new();
             }
 
-            foreach (var season in episodesResponse.Data.Seasons)
+            var allEpisodes = new List<EpisodesResponse.EpisodesData.PostData>();
+            foreach (var season in initialEpisodesResponse.Data.Seasons)
             {
-                episodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
-                foreach (var episode in episodesResponse.Data.Posts)
+                var seasonEpisodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
+                if (seasonEpisodesResponse.Data?.Posts != null)
                 {
-                    //adds all magnets from the season to magnet list
-                    var episodeDownloadUrls = await GetSinglePostDownloadUrls(episode.Id);
-                    foreach (var episodeDownloadUrl in episodeDownloadUrls)
-                    {
-                        episodeDownloadUrl.Episode =
-                            $"S{episode.SeasonNumber.ToString().PadLeft(2, '0')}E{episode.EpisodeNumber.ToString().PadLeft(2, '0')}";
-                    }
-
-                    magnets.AddRange(episodeDownloadUrls);
+                    allEpisodes.AddRange(seasonEpisodesResponse.Data.Posts);
                 }
+            }
+
+            foreach (var episode in allEpisodes)
+            {
+                var episodeTag =
+                    $"S{episode.SeasonNumber.ToString().PadLeft(2, '0')}E{episode.EpisodeNumber.ToString().PadLeft(2, '0')}";
+
+                var episodeDownloadUrls = await GetSinglePostDownloadUrls(episode.Id);
+                magnets.AddRange(episodeDownloadUrls.Select(d =>
+                {
+                    d.Episode = episodeTag;
+                    return d;
+                }));
             }
 
             return magnets;
