@@ -63,6 +63,7 @@ caps:
     - {id: Raw, cat: TV/Anime, desc: Anime Raw}
     - {id: Season Packs, cat: TV, desc: Season Packs}
     - {id: Software, cat: PC/0day, desc: Software}
+    - {id: Sports, cat: TV/Sport, desc: Sports}
     - {id: Subs, cat: TV/Anime, desc: Anime Subs}
     - {id: Switch, cat: Console/Other, desc: Games Switch}
     - {id: TV, cat: TV, desc: TV}
