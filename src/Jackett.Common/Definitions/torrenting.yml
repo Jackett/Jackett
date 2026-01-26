@@ -56,7 +56,7 @@ settings:
     default: "All members are required to log into their account at least every 89 days or you will be deleted without warning."
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

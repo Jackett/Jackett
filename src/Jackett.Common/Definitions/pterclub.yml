@@ -75,7 +75,7 @@ settings:
     default: "Account retention rules:<ol><li>All accounts will be permanently protected and will not be deleted; however, due to site security, some users will be temporarily banned due to activity rules</li><li>New users with no traffic changes will be disabled after 7 days of registration (not the actual download volume)</li><li>Those who download free torrents without generating any upload volume, or simply auxiliary torrents that generate magic power without any uploads will still be banned</li><li>Users with a non-parked account will be disabled if they do not log in for 60 consecutive days</li><li>Users with a parked account will be disabled if they do not log in for 180 consecutive days</li><li>Angora/Veteran User and above will not be disabled after parking</li><li>Sichuan Jianzhou Cat/Nexus Master users and above will be retained forever.</li></ol>"
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

@@ -71,8 +71,8 @@ settings:
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
-login:
-  # using cookie method because login page has embedded Clouflare turnstile
+login:d
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

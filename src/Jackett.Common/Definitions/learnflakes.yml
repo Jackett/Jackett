@@ -76,7 +76,7 @@ settings:
     default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

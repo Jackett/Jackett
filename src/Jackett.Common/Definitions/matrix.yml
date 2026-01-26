@@ -94,7 +94,7 @@ settings:
     default: "If you do not log in to the site for 6 months, the system will automatically delete it!"
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
