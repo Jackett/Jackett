@@ -279,7 +279,9 @@ Prior versions of Jackett are no longer supported.
 
 <details>
 <summary>Click to expand list of supported private trackers (500+ trackers)</summary>
-* 0day.kiev
+
+   
+ * 0day.kiev
  * 13City
  * 1ptbar
  * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
