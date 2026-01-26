@@ -123,6 +123,22 @@ settings:
     options:
       POLISH: POLISH
       MULTi POLISH: MULTi POLISH
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seed: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
   method: cookie
@@ -137,24 +153,27 @@ search:
     # https://polskie-torrenty.eu/wyszukaj.php?q=Ronin&category=72&sort=seed_desc
     - path: wyszukaj.php
   inputs:
-    q: "{{ .Keywords }}"
-    category: '{{ if .Categories }}{{ join .Categories "," }}{{ else }}0{{ end }}'
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sort: "{{ .Config.sort }}_{{ .Config.type }}"
 
   rows:
     selector: table.results-table tbody tr
 
   fields:
+    category:
+      selector: td:nth-child(1) a
+      attribute: href
+      filters:
+        - name: querystring
+          args: sub_category
     title_phase1:
       selector: td:nth-child(2) a
     title_multilang:
       text: "{{ .Result.title_phase1 }}"
       filters:
         - name: re_replace
-          args:
-            [
-              "(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b",
-              "{{ .Config.multilanguage }}",
-            ]
+          args: ["(?i)\\b(MULTI(?!.*(?:POLISH|ENGLISH|\\bPL\\b)))\\b", "{{ .Config.multilanguage }}"]
         - name: re_replace
           args: ["(?i)\\b(pl)\\b", "POLISH"]
     title:
@@ -162,28 +181,12 @@ search:
     details:
       selector: td:nth-child(2) a
       attribute: href
-    _torrentid:
-      selector: td:nth-child(2) a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "id=([a-f0-9]+)"
     download:
       selector: td:nth-child(2) a
       attribute: href
       filters:
         - name: replace
           args: ["details.php?id=", "download.php?id="]
-    category:
-      selector: td:nth-child(1) a
-      attribute: href
-      filters:
-        - name: regexp
-          args: "sub_category=(\\d+)"
-    poster:
-      selector: td:nth-child(2) img
-      attribute: src
-      optional: true
     date:
       text: now
     size:
@@ -192,8 +195,6 @@ search:
       selector: td:nth-child(4)
     leechers:
       selector: td:nth-child(5)
-    grabs:
-      text: 0
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
