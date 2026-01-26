@@ -1593,3 +1593,6 @@ Jackett is an open-source project maintained by the community.
 - [GitHub Repository](https://github.com/Jackett/Jackett)
 - [Issue Tracker](https://github.com/Jackett/Jackett/issues)
 - [Release Notes](https://github.com/Jackett/Jackett/releases)
+
+[inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
+
