@@ -46,12 +46,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Filter freeleech only
@@ -77,24 +76,10 @@ settings:
     default: "If you are getting the error <b>Found no results while trying to browse this tracker</b> then first access the site with your browser and check that you are not being forced to change your password because it has expired after 180 days."
 
 login:
-  path: ?p=home&pid=1
-  method: form
-  form: form#loginbox_form
-  submitpath: ajax/login.php
+  # using cookie method because login page has embedded Clouflare turnstile
+  method: cookie
   inputs:
-    action: login
-    loginbox_membername: "{{ .Config.username }}"
-    loginbox_password: "{{ .Config.password }}"
-    loginbox_remember: 1
-  selectorinputs:
-    securitytoken:
-      selector: "script:contains(\"stKey: \")"
-      filters:
-        - name: regexp
-          args: "stKey: \"(.+?)\","
-  error:
-    - selector: div.error
-    - selector: :contains("-ERROR-")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: ?p=home&pid=1
     selector: div#member_info_bar
