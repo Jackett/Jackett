@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{post.Title}.{episodePart}{downloadUrl.Quality}.{downloadUrl.Language}",
+                        Title = $"{post.Title}.{episodePart}{downloadUrl.Quality}.{downloadUrl.Language}-la.movie",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
