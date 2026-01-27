@@ -119,14 +119,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (postTypes.Count == 0)
             {
-                postTypes.Add("any");
+                postTypes.Add("movies");
+                postTypes.Add("tvshows");
+                postTypes.Add("animes");
             }
 
             var seenGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
             foreach (var postType in postTypes)
             {
                 var searchUrl = string.Format(_searchUrl, postType) + $"&q={searchTerm}";
-                var latestUrl = string.Format(_latestUrl, postType == "any" ? "movies" : postType);
+                var latestUrl = string.Format(_latestUrl, postType);
                 var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? searchUrl : latestUrl;
                 var response = await RequestWithCookiesAndRetryAsync(
                     releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
