@@ -204,12 +204,17 @@ namespace Jackett.Common.Indexers.Definitions
 
                     var episodePart = downloadUrl.Episode != null ? $"{downloadUrl.Episode}." : "";
 
+                    //Radarr parsing
+                    var quality = downloadUrl.Quality.ToUpper()
+                                             .Replace("DUAL ", "")
+                                             .Replace("4K", "2160p");
+
                     return new ReleaseInfo
                     {
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{post.Title}.{episodePart}{downloadUrl.Quality}.{downloadUrl.Language}-la.movie",
+                        Title = $"{post.Title}.{episodePart}{quality}.{downloadUrl.Language}-la.movie",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
