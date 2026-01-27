@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers.Definitions
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private async Task<List<PlayerResponse.PlayerData.Download>> GetDownloadUrlsAsync(Uri link, string postType)
+        private async Task<List<Download>> GetDownloadUrlsAsync(Uri link, string postType)
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
@@ -255,17 +255,17 @@ namespace Jackett.Common.Indexers.Definitions
             return await GetSinglePostDownloadUrls(postId);
         }
 
-        private async Task<List<PlayerResponse.PlayerData.Download>> GetMultiplePostDownloadUrls(
+        private async Task<List<Download>> GetMultiplePostDownloadUrls(
             int? postId, int seasonNumber = 1)
         {
-            var magnets = new List<PlayerResponse.PlayerData.Download>();
+            var magnets = new List<Download>();
             var initialEpisodesResponse = await GetEpisodesResponse(postId, seasonNumber);
             if (initialEpisodesResponse.Data?.Seasons == null)
             {
                 return new();
             }
 
-            var allEpisodes = new List<EpisodesResponse.EpisodesData.PostData>();
+            var allEpisodes = new List<PostData>();
             foreach (var season in initialEpisodesResponse.Data.Seasons)
             {
                 var seasonEpisodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
@@ -301,7 +301,7 @@ namespace Jackett.Common.Indexers.Definitions
             return episodesResponse;
         }
 
-        private async Task<List<PlayerResponse.PlayerData.Download>> GetSinglePostDownloadUrls(int? postId)
+        private async Task<List<Download>> GetSinglePostDownloadUrls(int? postId)
         {
             var playerUrl = $"{_playerUrl}&postId={postId}";
             var response = await RequestWithCookiesAndRetryAsync(
@@ -309,121 +309,121 @@ namespace Jackett.Common.Indexers.Definitions
                 headers: _headers);
             var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
             return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
-                   new List<PlayerResponse.PlayerData.Download>();
+                   new List<Download>();
         }
 
         public class ApiResponse
         {
             [JsonPropertyName("data")]
             public DataProp Data { get; set; }
+        }
 
-            public class DataProp
-            {
-                [JsonPropertyName("posts")]
-                public List<Post> Posts { get; set; }
+        public class DataProp
+        {
+            [JsonPropertyName("posts")]
+            public List<Post> Posts { get; set; }
+        }
 
-                public class Post
-                {
-                    [JsonPropertyName("title")]
-                    public string Title { get; set; }
+        public class Post
+        {
+            [JsonPropertyName("title")]
+            public string Title { get; set; }
 
-                    [JsonPropertyName("slug")]
-                    public string Slug { get; set; }
+            [JsonPropertyName("slug")]
+            public string Slug { get; set; }
 
-                    [JsonPropertyName("type")]
-                    public string Type { get; set; }
+            [JsonPropertyName("type")]
+            public string Type { get; set; }
 
-                    [JsonPropertyName("release_date")]
-                    public string ReleaseDate { get; set; }
+            [JsonPropertyName("release_date")]
+            public string ReleaseDate { get; set; }
 
-                    [JsonPropertyName("last_update")]
-                    public string LastUpdate { get; set; }
+            [JsonPropertyName("last_update")]
+            public string LastUpdate { get; set; }
 
-                    [JsonPropertyName("images")]
-                    public ImagesData Images { get; set; }
+            [JsonPropertyName("images")]
+            public ImagesData Images { get; set; }
+        }
 
-                    public class ImagesData
-                    {
-                        [JsonPropertyName("poster")]
-                        public string Poster { get; set; }
+        public class ImagesData
+        {
+            [JsonPropertyName("poster")]
+            public string Poster { get; set; }
 
-                        [JsonPropertyName("backdrop")]
-                        public string Backdrop { get; set; }
+            [JsonPropertyName("backdrop")]
+            public string Backdrop { get; set; }
 
-                        [JsonPropertyName("logo")]
-                        public string Logo { get; set; }
-                    }
-                }
-            }
+            [JsonPropertyName("logo")]
+            public string Logo { get; set; }
         }
 
         public class DetailsResponse
         {
             [JsonPropertyName("data")]
             public DetailsData Data { get; set; }
+        }
 
-            public class DetailsData
-            {
-                [JsonPropertyName("_id")]
-                public int Id { get; set; }
-            }
+        public class DetailsData
+        {
+            [JsonPropertyName("_id")]
+            public int Id { get; set; }
         }
 
         public class PlayerResponse
         {
             [JsonPropertyName("data")]
             public PlayerData Data { get; set; }
+        }
 
-            public class PlayerData
-            {
-                [JsonPropertyName("downloads")]
-                public List<Download> Downloads { get; set; }
+        public class PlayerData
+        {
+            [JsonPropertyName("downloads")]
+            public List<Download> Downloads { get; set; }
+        }
 
-                public class Download
-                {
-                    [JsonPropertyName("url")]
-                    public string Url { get; set; }
+        public class Download
+        {
+            [JsonPropertyName("url")]
+            public string Url { get; set; }
 
-                    [JsonPropertyName("quality")]
-                    public string Quality { get; set; }
+            [JsonPropertyName("quality")]
+            public string Quality { get; set; }
 
-                    [JsonPropertyName("lang")]
-                    public string Language { get; set; }
+            [JsonPropertyName("lang")]
+            public string Language { get; set; }
 
-                    [JsonPropertyName("size")]
-                    public string Size { get; set; }
+            [JsonPropertyName("size")]
+            public string Size { get; set; }
 
-                    [JsonPropertyName("episode")]
-                    public string Episode { get; set; }
-                }
-            }
+            [JsonPropertyName("episode")]
+            public string Episode { get; set; }
         }
 
         public class EpisodesResponse
         {
             [JsonPropertyName("data")]
             public EpisodesData Data { get; set; }
+        }
 
-            public class EpisodesData
-            {
-                [JsonPropertyName("posts")]
-                public List<PostData> Posts { get; set; }
+        public class EpisodesData
+        {
+            [JsonPropertyName("posts")]
+            public List<PostData> Posts { get; set; }
 
-                [JsonPropertyName("seasons")]
-                public List<string> Seasons { get; set; }
+            [JsonPropertyName("seasons")]
+            public List<string> Seasons { get; set; }
+        }
 
-                public class PostData
-                {
-                    [JsonPropertyName("_id")]
-                    public int Id { get; set; }
+        public class PostData
+        {
+            [JsonPropertyName("_id")]
+            public int Id { get; set; }
 
-                    [JsonPropertyName("season_number")]
-                    public int SeasonNumber { get; set; }
+            [JsonPropertyName("season_number")]
+            public int SeasonNumber { get; set; }
 
-                    [JsonPropertyName("episode_number")]
-                    public int EpisodeNumber { get; set; }
-                }
-            }
+            [JsonPropertyName("episode_number")]
+            public int EpisodeNumber { get; set; }
         }
     }
 }
