@@ -765,13 +765,18 @@ namespace Jackett.Common.Indexers.Definitions
                 var (rootCat, usesSaison) = GetRootCategory(c);
                 if (rootCat != null)
                 {
-                    var key = $"{rootCat}|";
+                    string subCat = null;
+                    if (rootCat != c.ToString())
+                    {
+                        subCat = c.ToString();
+                    }
+                    var key = $"{rootCat}|{subCat}";
                     if (produced.Add(key))
                     {
                         yield return new SearchRequest
                         {
                             RootCategory = rootCat,
-                            SubCategory = null,
+                            SubCategory = subCat,
                             UseSaisonRewrite = usesSaison
                         };
                     }
