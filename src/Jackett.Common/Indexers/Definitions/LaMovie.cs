@@ -68,9 +68,9 @@ namespace Jackett.Common.Indexers.Definitions
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
             var apiLink = $"{SiteLink}wp-api/v1/";
-            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType=any&postsPerPage={ReleasesPerPage}";
+            _searchUrl = $"{apiLink}search?filter=%7B%7D&postType={{0}}&postsPerPage={ReleasesPerPage}";
             _latestUrl =
-                $"{apiLink}listing/movies?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType=any&postsPerPage=5";
+                $"{apiLink}listing/{{0}}?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType={{0}}&postsPerPage=5";
             _detailsUrl = $"{apiLink}single/{{0}}?postType={{0}}";
             _playerUrl = $"{apiLink}player?demo=0";
             _episodesUrl = $"{apiLink}single/episodes/list?page=1&postPerPage=15";
@@ -88,12 +88,66 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-            var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? $"{_searchUrl}&q={searchTerm}" : _latestUrl;
-            var response = await RequestWithCookiesAndRetryAsync(
-                releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
-                headers: _headers);
-            var pageReleases = await ParseReleasesAsync(response, query);
-            releases.AddRange(pageReleases);
+
+            // Determine postType(s) based on categories
+            var postTypes = new List<string>();
+            if (query.Categories.Length > 0)
+            {
+                var categories = query.Categories;
+
+                var wantsMovies = categories.Any(c => c == TorznabCatType.Movies.ID ||
+                                                     c == TorznabCatType.MoviesHD.ID ||
+                                                     c == TorznabCatType.MoviesUHD.ID);
+                var wantsTvShows = categories.Any(c => c == TorznabCatType.TV.ID || c == TorznabCatType.TVHD.ID);
+                var wantsAnimes = categories.Any(c => c == TorznabCatType.TV.ID || c == TorznabCatType.TVAnime.ID);
+
+                if (wantsMovies)
+                {
+                    postTypes.Add("movies");
+                }
+
+                if (wantsTvShows)
+                {
+                    postTypes.Add("tvshows");
+                }
+
+                if (wantsAnimes)
+                {
+                    postTypes.Add("animes");
+                }
+            }
+
+            if (postTypes.Count == 0)
+            {
+                postTypes.Add("any");
+            }
+
+            var seenGuids = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var postType in postTypes)
+            {
+                var searchUrl = string.Format(_searchUrl, postType) + $"&q={searchTerm}";
+                var latestUrl = string.Format(_latestUrl, postType == "any" ? "movies" : postType);
+                var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? searchUrl : latestUrl;
+                var response = await RequestWithCookiesAndRetryAsync(
+                    releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
+                    headers: _headers);
+                var pageReleases = await ParseReleasesAsync(response, query);
+
+                foreach (var release in pageReleases)
+                {
+                    if (release?.Guid == null)
+                    {
+                        continue;
+                    }
+
+                    var guidKey = release.Guid.AbsoluteUri;
+                    if (seenGuids.Add(guidKey))
+                    {
+                        releases.Add(release);
+                    }
+                }
+            }
+
             return releases;
         }
 
