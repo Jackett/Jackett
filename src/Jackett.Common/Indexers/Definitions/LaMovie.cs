@@ -221,9 +221,8 @@ namespace Jackett.Common.Indexers.Definitions
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
                         Size = downloadUrl.Size != null ? ParseUtil.GetBytes(downloadUrl.Size) : 2.Gigabytes(),
-                        Files = 1,
                         Seeders = 1,
-                        Peers = 2,
+                        Peers = 1,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
                         PublishDate = DateTime.Parse(post.LastUpdate)
