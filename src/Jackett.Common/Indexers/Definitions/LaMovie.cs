@@ -399,7 +399,8 @@ namespace Jackett.Common.Indexers.Definitions
         {
             private int _id;
             [JsonPropertyName("_id")]
-            public object Id {
+            public object Id
+            {
                 get => _id;
                 set => _id = int.Parse(value.ToString());
             }
