@@ -50,7 +50,7 @@ search:
           args: ["今天", "Today"]
         - name: fuzzytime
     date_year:
-      selector: td:nth-child(3):not(:has(a))
+      selector: td:not(:has(a)):matches("^\s*(\d{4}/\d{1,2}/\d{1,2})\s+(\d{1,2}:\d{2})\s*$") # match like "2026/1/28 14:30"
       optional: true
       filters:
         - name: append
