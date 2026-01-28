@@ -285,8 +285,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var episode in allEpisodes)
             {
-                var episodeTag =
-                    $"S{episode.SeasonNumber.ToString().PadLeft(2, '0')}E{episode.EpisodeNumber.ToString().PadLeft(2, '0')}";
+                var episodeTag = $"S{episode.SeasonNumber:00}E{episode.EpisodeNumber:00}";
 
                 var episodeDownloadUrls = await GetSinglePostDownloadUrls(episode.Id);
                 magnets.AddRange(episodeDownloadUrls.Select(d =>
