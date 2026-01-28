@@ -279,6 +279,8 @@ namespace Jackett.Common.Indexers.Definitions
             int? postId, int seasonNumber = 1)
         {
             var maxEpisodesSetting = ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("MaxEpisodesPerSeries")).Value;
+            var maxEpisodesPerSeries = string.IsNullOrWhiteSpace(maxEpisodesSetting) ? 5 : ParseUtil.CoerceInt(maxEpisodesSetting);
+            var targetCount = maxEpisodesPerSeries > 0 ? maxEpisodesPerSeries : int.MaxValue;
 
             var magnets = new List<Download>();
             var initialEpisodesResponse = await GetEpisodesResponse(postId, seasonNumber);
@@ -288,12 +290,21 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             var allEpisodes = new List<PostData>();
+
             foreach (var season in initialEpisodesResponse.Data.Seasons)
             {
+                if (allEpisodes.Count >= targetCount)
+                    break;
+
                 var seasonEpisodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
                 if (seasonEpisodesResponse.Data?.Posts != null)
                 {
-                    allEpisodes.AddRange(seasonEpisodesResponse.Data.Posts);
+                    var remainingSlots = targetCount - allEpisodes.Count;
+                    var episodesToAdd = seasonEpisodesResponse.Data.Posts
+                        .Take(remainingSlots)
+                        .ToList();
+
+                    allEpisodes.AddRange(episodesToAdd);
                 }
             }
 
