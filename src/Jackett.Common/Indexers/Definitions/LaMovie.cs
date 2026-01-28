@@ -97,7 +97,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
 
-            if (searchTerm.Length < 3)
+            if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm.Length < 3)
             {
                 throw new Exception("Search term must have at least 3 characters.");
             }
