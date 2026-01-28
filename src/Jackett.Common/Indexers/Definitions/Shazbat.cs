@@ -9,6 +9,7 @@ using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -41,12 +42,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataShazbat configData => (ConfigurationDataShazbat)base.configData;
 
         public Shazbat(IIndexerConfigurationService configService, WebClient c, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: c,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataShazbat())
         {
             webclient.requestDelay = 5.1;
