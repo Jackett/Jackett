@@ -315,7 +315,7 @@ namespace Jackett.Common.Indexers.Definitions
                 playerUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var playerResponse = JsonSerializer.Deserialize<PlayerResponse>(response.ContentString);
-            return playerResponse?.Data?.Downloads?.Where(x => x.Url.Contains("magnet")).ToList() ??
+            return playerResponse?.Data?.Downloads?.Where(x => x.Url.StartsWith("magnet:?xt=")).ToList() ??
                    new List<Download>();
         }
 
