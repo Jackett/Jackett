@@ -9,6 +9,7 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
+using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -75,6 +76,12 @@ namespace Jackett.Common.Indexers.Definitions
             _detailsUrl = $"{apiLink}single/{{0}}?postType={{0}}";
             _playerUrl = $"{apiLink}player?demo=0";
             _episodesUrl = $"{apiLink}single/episodes/list?page=1&postPerPage=15";
+
+            var maxEpisodes = new ConfigurationData.StringConfigurationItem("Max episodes per series (0=unlimited)")
+            {
+                Value = "5"
+            };
+            configData.AddDynamic("MaxEpisodesPerSeries", maxEpisodes);
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -271,6 +278,8 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<Download>> GetMultiplePostDownloadUrls(
             int? postId, int seasonNumber = 1)
         {
+            var maxEpisodesSetting = ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("MaxEpisodesPerSeries")).Value;
+
             var magnets = new List<Download>();
             var initialEpisodesResponse = await GetEpisodesResponse(postId, seasonNumber);
             if (initialEpisodesResponse.Data?.Seasons == null)
