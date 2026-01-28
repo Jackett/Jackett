@@ -49,12 +49,15 @@ search:
         - name: replace
           args: ["今天", "Today"]
         - name: fuzzytime
-    date_year:
-      selector: td:nth-child(3):not(:has(a))
+    date_year_raw:
+      selector: td:nth-of-type(4)
       optional: true
       filters:
-        - name: append
-          args: " +08:00" # CST
+        - name: regexp
+          args: "(\\d{4}/\\d{1,2}/\\d{1,2}[\\s\\u00A0]+\\d{1,2}:\\d{2})"
+    date_year:
+      text: "{{ if .Result.date_year_raw }}{{ .Result.date_year_raw }} +08:00{{ else }}{{ end }}"
+      filters:
         - name: dateparse
           args: "yyyy/MM/dd HH:mm zzz"
     date:
