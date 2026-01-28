@@ -54,7 +54,8 @@ namespace Jackett.Common.Indexers.Definitions
                 MovieSearchParams = new List<MovieSearchParam>
                 {
                     MovieSearchParam.Q
-                }
+                },
+                SupportsRawSearch = true,
             };
             caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesHD);
             caps.Categories.AddCategoryMapping(2, TorznabCatType.MoviesUHD);
