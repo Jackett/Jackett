@@ -209,6 +209,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var quality = downloadUrl.Quality.ToUpper()
                                              .Replace("DUAL ", "")
                                              .Replace("4K", "2160p");
+                    var language = downloadUrl.Language.Replace("/", ".");
 
                     return new ReleaseInfo
                     {
