@@ -90,6 +90,11 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
 
+            if (searchTerm.Length < 3)
+            {
+                throw new Exception("Search term must have at least 3 characters.");
+            }
+
             // Determine postType(s) based on categories
             var postTypes = new List<string>();
             if (query.Categories.Length > 0)
@@ -254,7 +259,7 @@ namespace Jackett.Common.Indexers.Definitions
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
             var detailsResponse = JsonSerializer.Deserialize<DetailsResponse>(details.ContentString);
-            var postId = detailsResponse?.Data?.Id;
+            var postId = (int)detailsResponse.Data.Id;
             if (postType is "tvshows" or "animes")
             {
                 return await GetMultiplePostDownloadUrls(postId);
@@ -372,8 +377,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         public class DetailsData
         {
+            private int _id;
             [JsonPropertyName("_id")]
-            public int Id { get; set; }
+            public object Id {
+                get => _id;
+                set => _id = int.Parse(value.ToString());
+            }
         }
 
         public class PlayerResponse
