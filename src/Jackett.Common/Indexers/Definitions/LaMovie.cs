@@ -219,7 +219,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
-                        Size = downloadUrl.Size != null ? ParseUtil.GetBytes(downloadUrl.Size) : 2147483648, //2GB
+                        Size = downloadUrl.Size != null ? ParseUtil.GetBytes(downloadUrl.Size) : 2.Gigabytes(),
                         Files = 1,
                         Seeders = 1,
                         Peers = 2,
