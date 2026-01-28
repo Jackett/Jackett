@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.Json;
@@ -69,19 +70,19 @@ namespace Jackett.Common.Indexers.Definitions
                        ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
+            var maxEpisodes = new ConfigurationData.StringConfigurationItem("Max episodes per series (0=unlimited)")
+            {
+                Value = "5"
+            };
+            configData.AddDynamic("MaxEpisodesPerSeries", maxEpisodes);
+
             var apiLink = $"{SiteLink}wp-api/v1/";
             _searchUrl = $"{apiLink}search?filter=%7B%7D&postType={{0}}&postsPerPage={ReleasesPerPage}";
             _latestUrl =
                 $"{apiLink}listing/{{0}}?filter=%7B%7D&page=1&orderBy=latest&order=DESC&postType={{0}}&postsPerPage=5";
             _detailsUrl = $"{apiLink}single/{{0}}?postType={{0}}";
             _playerUrl = $"{apiLink}player?demo=0";
-            _episodesUrl = $"{apiLink}single/episodes/list?page=1&postPerPage=15";
-
-            var maxEpisodes = new ConfigurationData.StringConfigurationItem("Max episodes per series (0=unlimited)")
-            {
-                Value = "5"
-            };
-            configData.AddDynamic("MaxEpisodesPerSeries", maxEpisodes);
+            _episodesUrl = $"{apiLink}single/episodes/list";
         }
 
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
@@ -276,35 +277,68 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         private async Task<List<Download>> GetMultiplePostDownloadUrls(
-            int? postId, int seasonNumber = 1)
+            int postId, int seasonNumber = 1)
         {
             var maxEpisodesSetting = ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("MaxEpisodesPerSeries")).Value;
             var maxEpisodesPerSeries = string.IsNullOrWhiteSpace(maxEpisodesSetting) ? 5 : ParseUtil.CoerceInt(maxEpisodesSetting);
             var targetCount = maxEpisodesPerSeries > 0 ? maxEpisodesPerSeries : int.MaxValue;
 
             var magnets = new List<Download>();
-            var initialEpisodesResponse = await GetEpisodesResponse(postId, seasonNumber);
-            if (initialEpisodesResponse.Data?.Seasons == null)
+            var allEpisodes = new List<PostData>();
+
+            var perPage = 15;
+            var seasonsResponse = await GetEpisodesResponse(postId, seasonNumber: seasonNumber, maxEpisodes: perPage, page: 1);
+            var seasons = seasonsResponse?.Data?.Seasons;
+            if (seasons == null || seasons.Count == 0)
             {
                 return new();
             }
 
-            var allEpisodes = new List<PostData>();
+            var seasonNumbers = seasons
+                .Select(s => ParseUtil.CoerceInt(s))
+                .Where(s => s > 0)
+                .Distinct()
+                .OrderByDescending(s => s)
+                .ToList();
 
-            foreach (var season in initialEpisodesResponse.Data.Seasons)
+            var seenEpisodeIds = new HashSet<int>();
+            foreach (var season in seasonNumbers)
             {
                 if (allEpisodes.Count >= targetCount)
-                    break;
-
-                var seasonEpisodesResponse = await GetEpisodesResponse(postId, int.Parse(season));
-                if (seasonEpisodesResponse.Data?.Posts != null)
                 {
-                    var remainingSlots = targetCount - allEpisodes.Count;
-                    var episodesToAdd = seasonEpisodesResponse.Data.Posts
-                        .Take(remainingSlots)
-                        .ToList();
+                    break;
+                }
 
-                    allEpisodes.AddRange(episodesToAdd);
+                var seasonMeta = await GetEpisodesResponse(postId, seasonNumber: season, maxEpisodes: perPage, page: 1);
+                var lastPage = seasonMeta?.Data?.Pagination?.LastPage ?? 1;
+                if (lastPage < 1)
+                {
+                    lastPage = 1;
+                }
+
+                for (var page = lastPage; page >= 1 && allEpisodes.Count < targetCount; page--)
+                {
+                    var pageResponse = await GetEpisodesResponse(postId, seasonNumber: season, maxEpisodes: perPage, page: page);
+                    var pagePosts = pageResponse?.Data?.Posts;
+                    if (pagePosts == null || pagePosts.Count == 0)
+                    {
+                        continue;
+                    }
+
+                    foreach (var episode in pagePosts
+                                 .OrderByDescending(p => p.Date)
+                                 .ThenByDescending(p => p.EpisodeNumber))
+                    {
+                        if (allEpisodes.Count >= targetCount)
+                        {
+                            break;
+                        }
+
+                        if (seenEpisodeIds.Add(episode.Id))
+                        {
+                            allEpisodes.Add(episode);
+                        }
+                    }
                 }
             }
 
@@ -323,9 +357,9 @@ namespace Jackett.Common.Indexers.Definitions
             return magnets;
         }
 
-        private async Task<EpisodesResponse> GetEpisodesResponse(int? postId, int seasonNumber)
+        private async Task<EpisodesResponse> GetEpisodesResponse(int postId, int seasonNumber, int maxEpisodes, int page = 1)
         {
-            var episodesUrl = $"{_episodesUrl}&_id={postId}&season={seasonNumber}";
+            var episodesUrl = $"{_episodesUrl}?page={page}&_id={postId}&postsPerPage={maxEpisodes}&season={seasonNumber}";
             var response = await RequestWithCookiesAndRetryAsync(
                 episodesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                 headers: _headers);
@@ -333,7 +367,7 @@ namespace Jackett.Common.Indexers.Definitions
             return episodesResponse;
         }
 
-        private async Task<List<Download>> GetSinglePostDownloadUrls(int? postId)
+        private async Task<List<Download>> GetSinglePostDownloadUrls(int postId)
         {
             var playerUrl = $"{_playerUrl}&postId={postId}";
             var response = await RequestWithCookiesAndRetryAsync(
@@ -449,6 +483,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             [JsonPropertyName("seasons")]
             public List<string> Seasons { get; set; }
+
+            [JsonPropertyName("pagination")]
+            public PaginationData Pagination { get; set; }
         }
 
         public class PostData
@@ -461,6 +498,47 @@ namespace Jackett.Common.Indexers.Definitions
 
             [JsonPropertyName("episode_number")]
             public int EpisodeNumber { get; set; }
+
+            [JsonPropertyName("date")]
+            [JsonConverter(typeof(DateTimeConverter))]
+            public DateTime Date { get; set; }
+        }
+
+        internal sealed class DateTimeConverter : JsonConverter<DateTime>
+        {
+            private const string Format = "yyyy-MM-dd HH:mm:ss";
+
+            public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+            {
+                if (reader.TokenType != JsonTokenType.String)
+                    throw new JsonException($"Expected string for date but got {reader.TokenType}");
+
+                var s = reader.GetString();
+                if (s == null)
+                    throw new JsonException("Date string was null");
+
+                return DateTime.ParseExact(s, Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
+            }
+
+            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
+            {
+                writer.WriteStringValue(value.ToString(Format, CultureInfo.InvariantCulture));
+            }
+        }
+
+        public class PaginationData
+        {
+            [JsonPropertyName("current_page")]
+            public int CurrentPage { get; set; }
+
+            [JsonPropertyName("last_page")]
+            public int LastPage { get; set; }
+
+            [JsonPropertyName("total")]
+            public int Total { get; set; }
+
+            [JsonPropertyName("per_page")]
+            public int PerPage { get; set; }
         }
     }
 }
