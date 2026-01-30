@@ -500,7 +500,7 @@ namespace Jackett.Common.Indexers.Definitions
                 return IndexerConfigurationStatus.Completed;
             }
 
-            throw new Exception("Login failed (unexpected response).");
+            throw new Exception($"Login failed (unexpected response). Status = {resp.Status}, Content = {resp.ContentString}");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
