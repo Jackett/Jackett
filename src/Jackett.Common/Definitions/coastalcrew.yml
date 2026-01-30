@@ -10,11 +10,12 @@ links:
 
 caps:
   categorymappings:
-    - {id: 122, cat: Movies, desc: "Movie Klassiker"}
-    - {id: 124, cat: Movies, desc: "Movie Kids"}
-    - {id: 127, cat: Movies, desc: "Movie Pack"}
-    - {id: 138, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 140, cat: Movies/3D, desc: "Movie 3D"}
+    - {id: 138, cat: Movies/BluRay, desc: "Movie BluRay"}
+    - {id: 127, cat: Movies, desc: "Movie Pack"}
+    - {id: 124, cat: Movies, desc: "Movie Kids"}
+    - {id: 122, cat: Movies, desc: "Movie Klassiker"}
+    - {id: 141, cat: Movies, desc: "Movie Klassiker 4K/UHD"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD-R"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
@@ -36,6 +37,12 @@ caps:
     - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
     - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
     - {id: 136, cat: TV/Documentary, desc: "Doku Pack"}
+
+    - {id: 134, cat: Other, desc: "Sonstiges Pack"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
+    - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
+    - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
+    - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
 
     - {id: 9, cat: PC, desc: "App Linux"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
@@ -69,14 +76,7 @@ caps:
 
     - {id: 61, cat: TV/Sport, desc: "Sport HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport SD"}
-    - {id: 116, cat: TV/Sport, desc: "Sport DVD-R"}
     - {id: 117, cat: TV/Sport, desc: "Sport DVD-R"}
-
-    - {id: 134, cat: Other, desc: "Sonstiges Pack"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
-    - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
-    - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
-    - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
 
     - {id: 131, cat: TV/UHD, desc: "Internt'l Serie UHD"}
     - {id: 103, cat: Movies/SD, desc: "Internt'l Movie SD"}
