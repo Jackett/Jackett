@@ -1,0 +1,122 @@
+---
+id: animenosekai
+name: Anime No Sekai
+description: "Anime No Sekai (ANSK) is a BRAZILIAN Private Torrent Tracker for ANIME"
+language: pt-BR
+type: private
+encoding: windows-1252
+links:
+  - https://www.ansktracker.com/
+
+caps:
+  categorymappings:
+    - {id: 3, cat: Movies, desc: "Anime Movie"}
+    - {id: 2, cat: TV/Anime, desc: "Anime OVA"}
+    - {id: 1, cat: TV/Anime, desc: "Anime TV"}
+    - {id: 4, cat: TV, desc: "Doramas"}
+    - {id: 5, cat: Audio, desc: "Músicas"}
+    - {id: 6, cat: Other, desc: "Outros"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 5
+    options:
+      5: created
+      1: seeders
+      3: size
+      6: title
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    logout: no
+  error:
+    - selector: table:contains("Aviso!")
+  test:
+    path: index.php
+    selector: a[href$="/logout.php"]
+
+download:
+  selectors:
+    - selector: a[href^="download.php/"]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    freeleech: "{{ if .Config.freeleech }}1{{else}}{{end}}"
+    order: "{{ .Config.sort }}"
+
+  rows:
+    selector: tr#trTorrentRow
+
+  fields:
+    categorydesc:
+      selector: td:nth-child(1) img
+      attribute: alt
+    title:
+      selector: a[href*="details.php?id="]
+    details:
+      selector: a[href*="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="details.php?id="]
+      attribute: href
+    date:
+      selector: td:nth-child(6)
+      filters:
+        - name: dateparse
+          args: "dd/MM/yyyy"
+    size:
+      selector: td:nth-child(7)
+    files:
+      selector: td:nth-child(4)
+    grabs:
+      selector: td:nth-child(8)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        font[color="green"]:contains("[FL]"): 0
+        "*": 1
+    uploadvolumefactor_custom:
+      selector: font[color="red"]:contains("[x")
+      optional: true
+      filters:
+        - name: replace
+          args: ["x[", ""]
+        - name: replace
+          args: ["]", ""]
+    uploadvolumefactor:
+      case:
+        font[color="red"]:contains("[x"): "{{ .Result.uploadvolumefactor_custom }}"
+        "*": 1
+    minimumratio:
+      text: 0.25
+# engine n/a
