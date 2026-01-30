@@ -132,8 +132,12 @@ search:
       selector: genre
     downloadvolumefactor:
       selector: promotion.down_multiplier
+      optional: true
+      default: 1
     uploadvolumefactor:
       selector: promotion.up_multiplier
+      optional: true
+      default: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
