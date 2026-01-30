@@ -59,7 +59,7 @@ login:
 
 download:
   selectors:
-    - selector: a[href*="/download.php/"]
+    - selector: a[href^="download.php/"]
       attribute: href
 
 search:
