@@ -501,7 +501,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             logger.Debug($"Login response content: {resp.ContentString}");
-            throw new Exception($"Login failed. Status = {resp.Status}, see debug logs for details");
+            throw new Exception($"Login failed. Status = {resp.Status}, see debug logs for details.");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
