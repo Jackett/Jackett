@@ -66,15 +66,15 @@ caps:
     - {id: 60, cat: TV, desc: " |- Мультфильмы 2000-2010 годов"}
     - {id: 59, cat: TV, desc: " |- Мультфильмы до 2000 года"}
     # Аниме # Anime
-    - {id: 345, cat: TV/anime, desc: "Сериалы"}
-    - {id: 346, cat: TV/anime, desc: " |- Новинки (Онгоинги)"}
-    - {id: 347, cat: TV/anime, desc: " |- Аниме Сериалы"}
-    - {id: 348, cat: TV/anime, desc: " |- Аниме Сериалы (HD)"}
-    - {id: 365, cat: TV/anime, desc: " |- OVA"}
-    - {id: 361, cat: TV/anime, desc: "Фильмы"}
-    - {id: 366, cat: TV/anime, desc: " |- Новинки"}
-    - {id: 365, cat: TV/anime, desc: " |- Аниме Фильмы (HD)"}
-    - {id: 362, cat: TV/anime, desc: " |- OVA"}
+    - {id: 345, cat: TV/Anime, desc: "Сериалы"}
+    - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
+    - {id: 347, cat: TV/Anime, desc: " |- Аниме Сериалы"}
+    - {id: 348, cat: TV/Anime, desc: " |- Аниме Сериалы (HD)"}
+    - {id: 365, cat: TV/Anime, desc: " |- OVA"}
+    - {id: 361, cat: TV/Anime, desc: "Фильмы"}
+    - {id: 366, cat: TV/Anime, desc: " |- Новинки"}
+    - {id: 365, cat: TV/Anime, desc: " |- Аниме Фильмы (HD)"}
+    - {id: 362, cat: TV/Anime, desc: " |- OVA"}
     # Музыка # Music
     - {id: 225, cat: Audio, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
     - {id: 228, cat: Audio, desc: " |- Поп музыка России и стран бывшего СССР"}
