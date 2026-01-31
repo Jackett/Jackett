@@ -97,6 +97,15 @@
                 <li>For the <b>API key</b> use <b class="api-key-text"></b>.</li>
                 <li>Configure the correct category IDs via the <b>(Anime) Categories</b> options. See the Jackett indexer configuration for a list of supported categories.</li>
             </ol>
+            <h4>Integrating with qBittorrent</h4>
+            <ol>
+                <li>Open qBittorrent → <b>Tools</b> → <b>Options</b> → <b>Search</b> tab.</li>
+                <li>Click the <b>Search Plugins</b> button.</li>
+                <li>Click <b>Check for updates</b> - you'll see 5-6 built-in plugins, including Jackett.</li>
+                <li>Now you need to find the config file of Jackett plugin. Find its location here (the location varies by OS): <a href="https://github.com/qbittorrent/search-plugins/wiki/How-to-configure-Jackett-plugin#configuration" target="_blank">https://github.com/qbittorrent/search-plugins/wiki/How-to-configure-Jackett-plugin#configuration</a>.</li>
+                <li>Navigate to that location and open <code>jackett.json</code> in a text editor.</li>
+                <li>Replace the API key field with your actual API key, found in the top-right corner of <a href="http://127.0.0.1:9117/" target="_blank">http://127.0.0.1:9117/</a>.</li>
+            </ol>
             <h4>Adding a Jackett indexer in CouchPotato</h4>
             <ol>
                 <li>Go to <b>Settings > Searchers</b>.</li>
