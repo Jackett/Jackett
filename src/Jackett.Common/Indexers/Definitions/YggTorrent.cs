@@ -500,7 +500,7 @@ namespace Jackett.Common.Indexers.Definitions
                 return IndexerConfigurationStatus.Completed;
             }
 
-            logger.Debug($"Login response content: {resp.ContentString}");
+            logger.Error("Login response content: {response}", resp.ContentString);
             throw new Exception($"Login failed. Status = {resp.Status}, see debug logs for details.");
         }
 
