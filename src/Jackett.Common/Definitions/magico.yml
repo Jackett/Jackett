@@ -8,8 +8,9 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://magico.to/
+  - https://mpellas.me/
 legacylinks:
+  - https://magico.to/
   - https://magico.info/
   - https://magico.one/
   - https://magico.club/
