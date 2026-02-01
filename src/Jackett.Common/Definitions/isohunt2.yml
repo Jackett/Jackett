@@ -6,13 +6,20 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://isohunt.sh/
+  - https://isohunt.lol/
+  - https://isohuntx.com/
+  - https://isohuntz.com/
+  - https://isohuntz.net/
+  - https://isohunt.how/
+  - https://isohunt.tube/
 legacylinks:
   - https://isohunt2.net/ # redirects to torrentproject.cc
   - https://isohunt.fun/ # redirects to torrentproject.cc
   - https://isohunt.tv/ # redirects to torrentproject.cc
   - https://isohunt.nz/
   - https://isohunt.ch/
+  - https://isohunt.sh/
+  - https://isohunt.app/
 
 caps:
   categorymappings:
