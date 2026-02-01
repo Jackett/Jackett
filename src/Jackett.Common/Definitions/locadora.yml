@@ -143,8 +143,8 @@ search:
     _internal:
       selector: internal
       case:
-        False: "{{ .False }}"
-        True: "{{ .True }}"
+        0: "{{ .False }}"
+        1: "{{ .True }}"
     description:
       text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
