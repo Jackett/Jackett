@@ -116,17 +116,18 @@ namespace Jackett.Common.Indexers.Definitions
             var showTorrentsBody = new Dictionary<string, string>
             {
                 { "portlet", "true" },
-                { "tab", "true" }
+                { "tab", "true" },
             };
 
             if (!string.IsNullOrWhiteSpace(term))
             {
-                var searchBody = new Dictionary<string, string>
+                var searchParameters = new Dictionary<string, string>
                 {
-                    { "search", term }
+                    { "search", term },
+                    { "portlet", "true" },
                 };
 
-                response = await RequestWithCookiesAndRetryAsync(SearchUrl, method: RequestType.POST, referer: TorrentsUrl, data: searchBody);
+                response = await RequestWithCookiesAndRetryAsync($"{SearchUrl}?{searchParameters.GetQueryString()}", referer: TorrentsUrl);
                 response = await ReloginIfNecessaryAsync(response);
 
                 var parser = new HtmlParser();
@@ -266,7 +267,7 @@ namespace Jackett.Common.Indexers.Definitions
             term = Regex.Replace(term, @"(.+)\b\d{4}(\.\d{2}\.\d{2})?\b", "$1");
             term = Regex.Replace(term, @"[\.\s\(\)\[\]]+", " ");
 
-            return term.ToLower().Trim();
+            return term.ToLowerInvariant().Trim();
         }
 
         protected virtual List<int> ParseCategories(string title) => title.Contains("1080p") || title.Contains("1080i") || title.Contains("720p") ? new List<int> { TorznabCatType.TVHD.ID } : new List<int> { TorznabCatType.TVSD.ID };
