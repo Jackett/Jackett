@@ -98,7 +98,6 @@ caps:
     - {id: 124, cat: Audio, desc: " |- Фольклор, Народная и Этническая музыка"}
     - {id: 338, cat: Audio, desc: " |- Country"}
     - {id: 231, cat: Audio, desc: " |- Сборники и альбомы выходившие неофициальными изданиями."}
-    - {id: 144, cat: Audio, desc: "♫ ROCK & METAL ♫"}
     - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal (mp3)"}
     - {id: 202, cat: Audio, desc: " |- Сборники Русского рока (mp3)"}
     - {id: 214, cat: Audio, desc: " |- Soft & Pop-Rock"}
@@ -179,7 +178,7 @@ caps:
     - {id: 355, cat: Books, desc: " |- Медико-биологические науки"}
     - {id: 356, cat: Books, desc: " |- Фармация и фармакология"}
     - {id: 358, cat: Books, desc: " |- Нетрадиционная, народная медицина и популярные книг..."}
-    - {id: 350, cat: Books, desc: " |- Видеоуроки и лекции по медицине"}
+    - {id: 360, cat: Books, desc: " |- Видеоуроки и лекции по медицине"}
     - {id: 359, cat: Books, desc: " |- Ветеринария, разное"}
     # Игры # Games
     - {id: 105, cat: PC/Games, desc: "Игры для ПК"}
@@ -269,6 +268,31 @@ caps:
     - {id: 179, cat: Other, desc: "Дизайнерские материалы"}
     - {id: 186, cat: Other, desc: " |- Всё для 2d графики"}
     - {id: 185, cat: Other, desc: " |- Всё для 3d графики"}
+    # Мобильные устройства # Mobile devices
+    - {id: 376, cat: PC/Mobile-Other, desc: "Помощь по разделу (Мобильные устройства)"}
+    - {id: 375, cat: PC/Mobile-Other, desc: "Игры"}
+    - {id: 393, cat: PC/Mobile-Other, desc: "Игры |- Java"}
+    - {id: 390, cat: PC/Mobile-Other, desc: "Игры |- Windows Mobile / Windows Phone"}
+    - {id: 387, cat: PC/Mobile-iOS, desc: "Игры |- iOS"}
+    - {id: 383, cat: PC/Mobile-Android, desc: "Игры |- Android"}
+    - {id: 380, cat: PC/Mobile-Other, desc: "Игры |- Symbian"}
+    - {id: 374, cat: PC/Mobile-Other, desc: "Приложения"}
+    - {id: 392, cat: PC/Mobile-Other, desc: "Приложения |- Java"}
+    - {id: 389, cat: PC/Mobile-Other, desc: "Приложения |- Windows Mobile / Windows Phone"}
+    - {id: 386, cat: PC/Mobile-iOS, desc: "Приложения |- iOS"}
+    - {id: 382, cat: PC/Mobile-Android, desc: "Приложения |- Android"}
+    - {id: 379, cat: PC/Mobile-Other, desc: "Приложения |- Symbian"}
+    - {id: 373, cat: PC/Mobile-Other, desc: "Прошивки"}
+    - {id: 391, cat: PC/Mobile-Other, desc: "Прошивки |- Java"}
+    - {id: 388, cat: PC/Mobile-Other, desc: "Прошивки |- Windows Mobile / Windows Phone"}
+    - {id: 385, cat: PC/Mobile-iOS, desc: "Прошивки |- iOS"}
+    - {id: 381, cat: PC/Mobile-Android, desc: "Прошивки |- Android"}
+    - {id: 378, cat: PC/Mobile-Other, desc: "Прошивки |- Symbian"}
+    - {id: 377, cat: PC/Mobile-Other, desc: "Прошивки |- Другие"}
+    - {id: 367, cat: PC/Mobile-Other, desc: "Дополнительно"}
+    - {id: 368, cat: PC/Mobile-Other, desc: "Дополнительно |- Софт для работы с телефоном"}
+    - {id: 370, cat: PC/Mobile-Other, desc: "Дополнительно |- Видео для КПК"}
+    - {id: 369, cat: PC/Mobile-Other, desc: "Дополнительно |- Темы и Обои"}
 
   modes:
     search: [q]
