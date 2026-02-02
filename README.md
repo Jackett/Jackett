@@ -101,6 +101,7 @@ Prior versions of Jackett are no longer supported.
  * PC-torrent
  * Pirate's Paradise
  * plugintorrent
+ * PornoTorrent
  * PornRips
  * Postman
  * RedeTorrent
