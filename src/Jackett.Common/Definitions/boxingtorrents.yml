@@ -98,7 +98,7 @@ search:
     d: "{{ .Config.type }}"
 
   rows:
-    selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="details.php?id="])
+    selector: table.torrenttable tr:has(a[href^="details.php?id="])
 
   fields:
     category:
@@ -143,4 +143,4 @@ search:
     minimumseedtime:
       # 3 day (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# engine n/a
+# BT 4.0
