@@ -560,6 +560,7 @@ Prior versions of Jackett are no longer supported.
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
+ * The Brothers
  * The Crazy Ones
  * The Empire (TE)
  * The Falling Angels (TFA)
