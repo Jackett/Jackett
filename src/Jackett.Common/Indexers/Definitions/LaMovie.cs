@@ -70,7 +70,7 @@ namespace Jackett.Common.Indexers.Definitions
                        ICacheService cs) : base(
             configService: configService, client: wc, logger: l, p: ps, cacheService: cs, configData: new())
         {
-            var maxEpisodes = new ConfigurationData.StringConfigurationItem("Max episodes per series (0=unlimited)")
+            var maxEpisodes = new ConfigurationData.StringConfigurationItem("Max latest episodes per series (only when query is empty; last 7 days, 0=unlimited)")
             {
                 Value = "5"
             };
@@ -97,6 +97,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
+            var isLatest = string.IsNullOrWhiteSpace(query.GetQueryString());
 
             if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm.Length < 3)
             {
@@ -143,11 +144,11 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var searchUrl = string.Format(_searchUrl, postType) + $"&q={searchTerm}";
                 var latestUrl = string.Format(_latestUrl, postType);
-                var releasesUrl = !string.IsNullOrWhiteSpace(searchTerm) ? searchUrl : latestUrl;
+                var releasesUrl = !isLatest ? searchUrl : latestUrl;
                 var response = await RequestWithCookiesAndRetryAsync(
                     releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                     headers: _headers);
-                var pageReleases = await ParseReleasesAsync(response, query);
+                var pageReleases = await ParseReleasesAsync(response, query, isLatest);
 
                 foreach (var release in pageReleases)
                 {
@@ -167,7 +168,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query)
+        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query, bool isLatest)
         {
             var releases = new List<ReleaseInfo>();
             var apiResponse = JsonSerializer.Deserialize<ApiResponse>(response.ContentString);
@@ -202,7 +203,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var details = new Uri($"{SiteLink}{slugType}{post.Slug}");
                 var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
                 var link = new Uri(detailsUrl);
-                var downloadUrls = await GetDownloadUrlsAsync(link, post.Type);
+                var downloadUrls = await GetDownloadUrlsAsync(link, post.Type, isLatest);
                 releases.AddRange(downloadUrls.Select(downloadUrl =>
                 {
                     var uriMagnet = new Uri(downloadUrl.Url);
@@ -261,7 +262,7 @@ namespace Jackett.Common.Indexers.Definitions
             return queryWords.All(word => titleWords.Contains(word));
         }
 
-        private async Task<List<Download>> GetDownloadUrlsAsync(Uri link, string postType)
+        private async Task<List<Download>> GetDownloadUrlsAsync(Uri link, string postType, bool isLatest)
         {
             var details = await RequestWithCookiesAndRetryAsync(
                 link.AbsoluteUri, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
@@ -270,18 +271,24 @@ namespace Jackett.Common.Indexers.Definitions
             var postId = (int)detailsResponse.Data.Id;
             if (postType is "tvshows" or "animes")
             {
-                return await GetMultiplePostDownloadUrls(postId);
+                return await GetMultiplePostDownloadUrls(postId, isLatest: isLatest);
             }
 
             return await GetSinglePostDownloadUrls(postId);
         }
 
         private async Task<List<Download>> GetMultiplePostDownloadUrls(
-            int postId, int seasonNumber = 1)
+            int postId, int seasonNumber = 1, bool isLatest = false)
         {
-            var maxEpisodesSetting = ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("MaxEpisodesPerSeries")).Value;
-            var maxEpisodesPerSeries = string.IsNullOrWhiteSpace(maxEpisodesSetting) ? 5 : ParseUtil.CoerceInt(maxEpisodesSetting);
-            var targetCount = maxEpisodesPerSeries > 0 ? maxEpisodesPerSeries : int.MaxValue;
+            var targetCount = int.MaxValue;
+            var cutoffDate = DateTime.MinValue;
+            if (isLatest)
+            {
+                var maxEpisodesSetting = ((ConfigurationData.StringConfigurationItem)configData.GetDynamic("MaxEpisodesPerSeries")).Value;
+                var maxEpisodesPerSeries = string.IsNullOrWhiteSpace(maxEpisodesSetting) ? 5 : ParseUtil.CoerceInt(maxEpisodesSetting);
+                targetCount = maxEpisodesPerSeries > 0 ? maxEpisodesPerSeries : int.MaxValue;
+                cutoffDate = DateTime.Now.AddDays(-7);
+            }
 
             var magnets = new List<Download>();
             var allEpisodes = new List<PostData>();
@@ -325,18 +332,50 @@ namespace Jackett.Common.Indexers.Definitions
                         continue;
                     }
 
-                    foreach (var episode in pagePosts
-                                 .OrderByDescending(p => p.Date)
-                                 .ThenByDescending(p => p.EpisodeNumber))
+                    if (isLatest)
                     {
-                        if (allEpisodes.Count >= targetCount)
+                        var sortedEpisodes = pagePosts
+                            .Select(p => new
+                            {
+                                Episode = p,
+                                ParsedDate = DateTime.Parse(p.Date, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal)
+                            })
+                            .OrderByDescending(p => p.ParsedDate)
+                            .ThenByDescending(p => p.Episode.EpisodeNumber)
+                            .ToList();
+
+                        if (sortedEpisodes.Count > 0 && sortedEpisodes[0].ParsedDate < cutoffDate)
                         {
                             break;
                         }
 
-                        if (seenEpisodeIds.Add(episode.Id))
+                        foreach (var item in sortedEpisodes)
                         {
-                            allEpisodes.Add(episode);
+                            if (allEpisodes.Count >= targetCount)
+                            {
+                                break;
+                            }
+
+                            if (item.ParsedDate < cutoffDate)
+                            {
+                                continue;
+                            }
+
+                            var episode = item.Episode;
+                            if (seenEpisodeIds.Add(episode.Id))
+                            {
+                                allEpisodes.Add(episode);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        foreach (var episode in pagePosts.OrderByDescending(p => p.EpisodeNumber))
+                        {
+                            if (seenEpisodeIds.Add(episode.Id))
+                            {
+                                allEpisodes.Add(episode);
+                            }
                         }
                     }
                 }
@@ -500,30 +539,7 @@ namespace Jackett.Common.Indexers.Definitions
             public int EpisodeNumber { get; set; }
 
             [JsonPropertyName("date")]
-            [JsonConverter(typeof(DateTimeConverter))]
-            public DateTime Date { get; set; }
-        }
-
-        internal sealed class DateTimeConverter : JsonConverter<DateTime>
-        {
-            private const string Format = "yyyy-MM-dd HH:mm:ss";
-
-            public override DateTime Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
-            {
-                if (reader.TokenType != JsonTokenType.String)
-                    throw new JsonException($"Expected string for date but got {reader.TokenType}");
-
-                var s = reader.GetString();
-                if (s == null)
-                    throw new JsonException("Date string was null");
-
-                return DateTime.ParseExact(s, Format, CultureInfo.InvariantCulture, DateTimeStyles.AssumeLocal);
-            }
-
-            public override void Write(Utf8JsonWriter writer, DateTime value, JsonSerializerOptions options)
-            {
-                writer.WriteStringValue(value.ToString(Format, CultureInfo.InvariantCulture));
-            }
+            public string Date { get; set; }
         }
 
         public class PaginationData
