@@ -131,9 +131,12 @@ search:
     selector: table.browse.table.striped > tbody > tr:has(a[href^="download.php?torrent="])
 
   fields: # some users (rank specific?) have an extra column (td:nth-child(4)) with bookmark features
-    categorydesc:
-      selector: img[src^="./pic/caticons"]
-      attribute: alt
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
     title:
       selector: a[href^="details.php?id="]
       remove: span.has-text-red
@@ -143,6 +146,9 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: img[src^="/img.php?"]
+      attribute: src
     files:
       selector: a[href^="filelist.php?id="]
     date_day:
@@ -163,15 +169,15 @@ search:
     date:
       text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-last-child(4) div:first-child
+      selector: td:nth-last-child(4) div[title^="Size"]
     grabs:
       selector: a[href^="snatches.php?id="]
     seeders:
-      selector: a[title="Seeders"]
+      selector: a[title$="Seeders"]
       optional: true
       default: 0
     leechers:
-      selector: a[title="Leechers"]
+      selector: a[title$="Leechers"]
       optional: true
       default: 0
     downloadvolumefactor:
