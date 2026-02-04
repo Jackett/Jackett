@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 testlinktorrent: false
 links:
-  - https://pornotorrent.net.br/
+  - https://pornotorrent.com.br/
 legacylinks:
   - https://www.pornotorrent.eu/
+  - https://pornotorrent.net.br/
 
 caps:
   categorymappings:
@@ -22,11 +23,11 @@ settings: []
 
 download:
   selectors:
-    - selector: a.download-btn
-      attribute: href
+    - selector: script:contains("CM_MAGNET_URL")
       filters:
-        - name: replace
-          args: ["https://pornotorrent.net.br/magnet/", ""]
+        - name: regexp
+          args: /magnet./(.+?)\"
+        - name: urldecode
 
 search:
   paths:
@@ -55,7 +56,7 @@ search:
     date:
       text: now
     size:
-      selector: span:has(span.cm-ico-size)
+      text: 5GB
     seeders:
       text: 1
     leechers:
