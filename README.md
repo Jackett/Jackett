@@ -132,7 +132,6 @@ Prior versions of Jackett are no longer supported.
  * Torrents.csv
  * Torrentsome (토렌트썸)
  * Torrenttip (토렌트팁)
- * TrahT
  * U3C3
  * Uindex
  * UzTracker
@@ -211,6 +210,7 @@ Prior versions of Jackett are no longer supported.
  * themixingbowl (TMB)
  * Toloka
  * TorrentMasters
+ * TrahT
  * TribalMixes
  * Union Fansub
  * UniOtaku
