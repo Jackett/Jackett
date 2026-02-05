@@ -18,7 +18,8 @@ caps:
     - {id: 4, cat: XXX/UHD, desc: "XXX 2160p/UHD/4K"}
     - {id: 3, cat: XXX/WEB-DL, desc: "XXX Movies/DVD/WEB"}
     - {id: 5, cat: XXX/ImageSet, desc: "XXX IMAGESET"}
-    - {id: 6, cat: XXX/Other, desc: "XXX VR"}
+    - {id: 6, cat: XXX/Other, desc: "XXX VR/VirtualReality"}
+    - {id: 7, cat: XXX/Pack, desc: "XXX Pack/MegaPack"}
 
   modes:
     search: [q]
