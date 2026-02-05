@@ -14,6 +14,9 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 46, cat: PC/Games, desc: "Games/PC"}
+    - {id: 47, cat: PC/Games, desc: "Games/PCRips"}
+    - {id: 48, cat: Console, desc: "Games/PS"}
     - {id: 37, cat: Movies/HD, desc: "Internal/HD-1080p"}
     - {id: 17, cat: Movies/HD, desc: "Internal/HD-720p"}
     - {id: 30, cat: TV/HD, desc: "Internal/HDTV"}
@@ -21,11 +24,13 @@ caps:
     - {id: 40, cat: Movies/HD, desc: "Internal/Mp4"}
     - {id: 26, cat: Movies, desc: "Internal/Remux"}
     - {id: 45, cat: Movies/WEB-DL, desc: "Internal/WEB-DL"}
+    - {id: 12, cat: TV/HD, desc: "HDTV-Packs"}
     - {id: 25, cat: Movies/3D, desc: "Movies/3D-Ou"}
     - {id: 16, cat: Movies/3D, desc: "Movies/3D-SbS"}
     - {id: 5, cat: Movies/BluRay, desc: "Movies/BluRay"}
     - {id: 38, cat: Movies/HD, desc: "Movies/HD-1080p"}
     - {id: 10, cat: Movies/HD, desc: "Movies/HD-720p"}
+    - {id: 21, cat: TV/HD, desc: "Movies/HDTV"}
     - {id: 29, cat: Movies/HD, desc: "Movies/mHD"}
     - {id: 41, cat: Movies/HD, desc: "Movies/Mp4"}
     - {id: 39, cat: Movies, desc: "Movies/Remux"}
@@ -35,8 +40,6 @@ caps:
     - {id: 22, cat: Audio/MP3, desc: "Music-MP3"}
     - {id: 43, cat: Audio/Video, desc: "Music/1080p"}
     - {id: 42, cat: Audio/Video, desc: "Music/720p"}
-    - {id: 12, cat: TV/HD, desc: "HDTV-Packs"}
-    - {id: 21, cat: TV/HD, desc: "Movies/HDTV"}
 
   modes:
     search: [q]
