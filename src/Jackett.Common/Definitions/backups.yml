@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 113, cat: PC, desc: "2Play! Official"}
     - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
