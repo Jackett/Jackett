@@ -6,9 +6,11 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
-  - http://nordichd.sytes.net/
+  - http://nordichd.org/
 legacylinks:
   - https://nordichd.sytes.net/ # https not supported
+  - http://nordichd.sytes.net/
+  - https://nordichd.org/ # https not supported
 
 caps:
   categorymappings:
