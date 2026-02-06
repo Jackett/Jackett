@@ -51,7 +51,7 @@ Jackett works as a proxy server that translates queries from applications ([Sona
 **Key Features:**
 - Single repository of maintained indexer scraping and translation logic
 - Removes the burden of tracker integration from other applications
-- Supports both public and private trackers
+- Supports public, semi-private and private trackers
 - Implements the [Torznab](https://torznab.github.io/spec-1.3-draft/index.html) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs
 
 ### Developer Information
