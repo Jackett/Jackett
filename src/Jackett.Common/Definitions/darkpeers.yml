@@ -17,6 +17,7 @@ caps:
     - {id: 5, cat: PC, desc: "Software"}
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: Other, desc: "Assorted"}
+    - {id: 8, cat: Books, desc: "Books"}
 
   modes:
     search: [q]
