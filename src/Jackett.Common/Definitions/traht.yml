@@ -1,9 +1,9 @@
 ---
 id: traht
 name: TrahT
-description: "TrahT is a RUSSIAN Public Torrent Tracker for 3X"
+description: "TrahT is a RUSSIAN Semi-Private Torrent Tracker for 3X"
 language: ru-RU
-type: public
+type: semi-private
 encoding: windows-1251
 links:
   - https://traht.org/
@@ -18,8 +18,27 @@ caps:
     search: [q]
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: info_flaresolverr
     type: info_flaresolverr
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:has(div.error)
+    - selector: title:contains("403")
+  test:
+    path: /
+    selector: a[href*="logout.php"]
 
 search:
   paths:

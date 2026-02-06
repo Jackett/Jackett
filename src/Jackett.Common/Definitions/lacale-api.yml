@@ -5,12 +5,12 @@ description: "La Cale is a FRENCH Private Torrent Tracker for MOVIES / TV / GENE
 language: fr-FR
 type: private
 encoding: UTF-8
-requestDelay: 2.1
+requestDelay: 5.0
 links:
   - https://la-cale.space/
 
 caps:
-  # use https://la-cale.space/api/external/meta?passkey=YOUR-PASSKEY for cat mappings, slug is id, name is desc
+  # use https://la-cale.space/api/external/meta?apikey=YOUR-APIKEY for cat mappings, slug is id, name is desc
   categorymappings:
     # Autres
     - {id: autres, cat: Other, desc: "Autres"}
@@ -64,12 +64,19 @@ caps:
     book-search: [q]
 
 settings:
+  - name: apikey
+    type: text
+    label: API key
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "Find/Generate your API key on your <a href=\"https://la-cale.space/settings/api-keys\" target=\"_blank\">La Cale API keys</a>."
   - name: passkey
     type: text
-    label: Passkey
-  - name: info_key
+    label: Passkey override (Optional - Forces Magnet Link)
+  - name: info_passkey
     type: info
-    label: About your Passkey
+    label: About your secret Passkey
     default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
   - name: multilang
     type: checkbox
@@ -95,14 +102,14 @@ login:
   path: api/external
   method: get
   inputs:
-    passkey: "{{ .Config.passkey }}"
+    apikey: "{{ .Config.apikey }}"
   error:
-    - selector: ":root:contains(\"Passkey invalide\")"
+    - selector: ":root:contains(\"API key invalide\")"
       message:
-        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
-    - selector: ":root:contains(\"Passkey manquant\")"
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: ":root:contains(\"API key manquant\")"
       message:
-        text: "The Passkey was not accepted by {{ .Config.sitelink }}."
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
@@ -112,14 +119,13 @@ search:
         type: json
 
   inputs:
-    passkey: "{{ .Config.passkey }}"
+    apikey: "{{ .Config.apikey }}"
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
-    q: "{{ .Keywords }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}FRENCH{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
 
   rows:
     selector: $
-    missingAttributeEqualsNoResults: true
 
   fields:
     categorydesc:
@@ -144,11 +150,13 @@ search:
       text: "{{ .Config.sitelink }}"
     infohash:
       selector: infoHash
-    download:
-      selector: link
       filters:
-        - name: append
-          args: "?passkey={{ .Config.passkey }}"
+        - name: tolower
+    _link:
+      selector: link
+    download:
+      # Fix: Hybrid download logic. If a passkey is provided, forge a magnet link to override it; otherwise, download the .torrent file provided by the API.
+      text: "{{ if .Config.passkey }}magnet:?xt=urn:btih:{{ .Result.infohash }}&dn={{ .Result.title }}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}{{ else }}{{ .Result._link }}&apikey={{ .Config.apikey }}{{ end }}"
     size:
       selector: size
     date:

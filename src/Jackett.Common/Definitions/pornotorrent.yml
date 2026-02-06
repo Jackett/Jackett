@@ -1,0 +1,70 @@
+---
+id: pornotorrent
+name: PornoTorrent
+description: "PornoTorrent is a BRAZILIAN Public Torrent Tracker for 3X"
+language: pt-BR
+type: public
+encoding: UTF-8
+testlinktorrent: false
+links:
+  - https://pornotorrent.com.br/
+legacylinks:
+  - https://www.pornotorrent.eu/
+  - https://pornotorrent.net.br/
+
+caps:
+  categorymappings:
+    - {id: XXX, cat: XXX, desc: XXX}
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: script:contains("CM_MAGNET_URL")
+      filters:
+        - name: regexp
+          args: /magnet./(.+?)\"
+        - name: urldecode
+
+search:
+  paths:
+    - path: /
+  inputs:
+    s: "{{ .Keywords }}"
+    cat: 0
+
+  rows:
+    selector: div.section_inner > div.row > div
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: a.cm-card-pretitle__badge
+    details:
+      selector: a.cm-card-pretitle__badge
+      attribute: href
+    download:
+      selector: a.cm-card-pretitle__badge
+      attribute: href
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      text: 5GB
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: span:has(span.cm-ico-clock)
+# engine n/a

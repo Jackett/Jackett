@@ -26,7 +26,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep, genre]
     movie-search: [q, genre]
-    music-search: [q, album, artist, genre]
+    music-search: [q, genre]
 
 settings:
   - name: username
@@ -71,29 +71,28 @@ login:
     selector: a[href^="logout.php?auth="], a[href^="torrents.php?action=download&id="]
 
 search:
-    # https://jpopsuki.eu/ajax.php?section=torrents&artistname=&action=advanced&torrentname=snow+man&remastertitle=&filelist=&bitrate=&format=&media=&year=&freeleech=&remastered=&searchtags=&tags_type=0&order_by=s3&order_way=desc&enablegrouping=1
+    # https://jpopsuki.eu/ajax.php?section=torrents&searchstr=snow man&action=basic&searchtags=&tags_type=0&order_by=s3&order_way=desc&filter_cat[5]=1
   paths:
     - path: ajax.php
   keywordsfilters:
     - name: re_replace # replace special characters with " " (space)
       args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
   inputs:
-    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}{{ if or .Query.Album .Query.Artist .Keywords }}action=advanced{{ else }}searchtags=japanese&tags_type=0{{ end }}"
-    artistname: "{{ .Query.Artist }}"
-    torrentname: "{{ if .Query.Album }}{{ .Query.Album }}{{ else }}{{ .Keywords }}{{ end }}"
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-    order_by: "{{ .Config.sort }}"
-    order_way: "{{ .Config.type }}"
-    disablegrouping: 1
     section: torrents
+    searchstr: "{{ .Keywords }}"
+    action: basic
     searchtags: "{{ .Query.Genre }}"
     # 0 Any, 1 All
     tags_type: 1
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    $raw: "{{ range .Categories }}&filter_cat[{{.}}]=1{{end}}"
   error:
     - selector: :root:contains("Database error.")
 
   rows:
-    selector: table#torrent_table > tbody > tr[class^="torrent"]
+    selector: table#torrent_table > tbody > tr[class^="torrent"]:has(a[href^="torrents.php?action=download&id="])
 
   fields:
     category:
@@ -112,6 +111,9 @@ search:
           args: [".", "_"]
     description:
       text: "{{ .Result.genre }}"
+    artist:
+      selector: td:nth-last-child(7) a[href*="artist.php"]
+      optional: true
     title:
       selector: td:nth-last-child(7)
       remove: span, div.tags, a[title="View Comments"]

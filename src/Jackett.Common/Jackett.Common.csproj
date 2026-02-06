@@ -17,18 +17,18 @@
     <PackageReference Include="FlareSolverrSharp" Version="3.0.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.0" />
-    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http" Version="2.3.9" />
+    <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.9" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="NLog" Version="5.4.0" />
+    <PackageReference Include="NLog" Version="5.5.1" />
     <PackageReference Include="Polly" Version="8.6.5" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
-    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.11" />
-    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.11" />
-    <PackageReference Include="System.Text.Json" Version="9.0.11" />
+    <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.12" />
+    <PackageReference Include="System.Text.Encoding.CodePages" Version="9.0.12" />
+    <PackageReference Include="System.Text.Json" Version="9.0.12" />
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 

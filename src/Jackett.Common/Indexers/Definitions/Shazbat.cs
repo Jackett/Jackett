@@ -107,66 +107,72 @@ namespace Jackett.Common.Indexers.Definitions
             var searchTerm = query.SanitizedSearchTerm;
             var term = FixSearchTerm(searchTerm);
 
-            var showTorrentsHeaders = new Dictionary<string, string>
-            {
-                { "Content-Type", "application/x-www-form-urlencoded" },
-                { "X-Requested-With", "XMLHttpRequest" },
-            };
-
-            var showTorrentsBody = new Dictionary<string, string>
-            {
-                { "portlet", "true" },
-                { "tab", "true" }
-            };
-
             if (!string.IsNullOrWhiteSpace(term))
             {
-                var searchBody = new Dictionary<string, string>
+                var searchParameters = new Dictionary<string, string>
                 {
-                    { "search", term }
+                    { "search", term },
+                    { "portlet", "true" },
                 };
 
-                response = await RequestWithCookiesAndRetryAsync(SearchUrl, method: RequestType.POST, referer: TorrentsUrl, data: searchBody);
+                response = await RequestWithCookiesAndRetryAsync(
+                    $"{SearchUrl}?{searchParameters.GetQueryString()}",
+                    referer: TorrentsUrl,
+                    headers: new Dictionary<string, string>
+                    {
+                        { "X-Requested-With", "XMLHttpRequest" },
+                    });
                 response = await ReloginIfNecessaryAsync(response);
 
                 var parser = new HtmlParser();
-                using var dom = parser.ParseDocument(response.ContentString);
+                using var dom = await parser.ParseDocumentAsync(response.ContentString);
 
                 hasGlobalFreeleech = dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
 
                 releases.AddRange(ParseResults(response, query, searchTerm, hasGlobalFreeleech));
 
                 var shows = dom.QuerySelectorAll("div.show[data-id]");
-                if (shows.Any())
+
+                if (shows.Length > 0)
                 {
                     var showPagesFetchLimit = ShowPagesFetchLimit;
 
                     if (showPagesFetchLimit < 1 || showPagesFetchLimit > 5)
+                    {
                         throw new Exception($"Value for Show Pages Fetch Limit should be between 1 and 5. Current value: {showPagesFetchLimit}.");
+                    }
 
                     if (shows.Length > showPagesFetchLimit)
+                    {
                         logger.Debug($"Your search returned {shows.Length} shows. Use a more specific search term for more relevant results.");
+                    }
 
                     foreach (var show in shows.Take(showPagesFetchLimit))
                     {
                         var showTorrentsQueryParams = new Dictionary<string, string>
                         {
                             { "id", show.GetAttribute("data-id") },
-                            { "show_mode", "torrents" }
+                            { "show_mode", "torrents" },
+                            { "portlet", "true" },
+                            { "tab", "true" },
                         };
 
                         searchUrls.Add(new WebRequest
                         {
                             Url = $"{ShowUrl}?{showTorrentsQueryParams.GetQueryString()}",
-                            Type = RequestType.POST,
-                            PostData = showTorrentsBody,
-                            Headers = showTorrentsHeaders
+                            Type = RequestType.GET,
+                            Headers = new Dictionary<string, string>
+                            {
+                                { "X-Requested-With", "XMLHttpRequest" },
+                            },
                         });
                     }
                 }
             }
             else
+            {
                 searchUrls.Add(new WebRequest { Url = TorrentsUrl, Type = RequestType.GET });
+            }
 
             foreach (var searchUrl in searchUrls)
             {
@@ -194,7 +200,9 @@ namespace Jackett.Common.Indexers.Definitions
             using var dom = parser.ParseDocument(response.ContentString);
 
             if (!hasGlobalFreeleech)
+            {
                 hasGlobalFreeleech = dom.QuerySelector("span:contains(\"Freeleech until:\"):has(span.datetime)") != null;
+            }
 
             var publishDate = DateTime.Now;
 
@@ -206,7 +214,9 @@ namespace Jackett.Common.Indexers.Definitions
                 var title = ParseTitle(row.QuerySelector("td:nth-of-type(3)"));
 
                 if ((query.ImdbID == null || !TorznabCaps.MovieSearchImdbAvailable) && !query.MatchQueryStringAND(title, queryStringOverride: searchTerm))
+                {
                     continue;
+                }
 
                 var link = new Uri(SiteLink + row.QuerySelector("td:nth-of-type(5) a[href^=\"load_torrent?\"]")?.GetAttribute("href"));
                 var details = new Uri(SiteLink + row.QuerySelector("td:nth-of-type(5) [href^=\"torrent_info?\"]")?.GetAttribute("href"));
@@ -266,23 +276,26 @@ namespace Jackett.Common.Indexers.Definitions
             term = Regex.Replace(term, @"(.+)\b\d{4}(\.\d{2}\.\d{2})?\b", "$1");
             term = Regex.Replace(term, @"[\.\s\(\)\[\]]+", " ");
 
-            return term.ToLower().Trim();
+            return term.ToLowerInvariant().Trim();
         }
 
         protected virtual List<int> ParseCategories(string title) => title.Contains("1080p") || title.Contains("1080i") || title.Contains("720p") ? new List<int> { TorznabCatType.TVHD.ID } : new List<int> { TorznabCatType.TVSD.ID };
 
         private async Task<WebResult> ReloginIfNecessaryAsync(WebResult response)
         {
-            if (!(response.IsRedirect && response.RedirectingTo.Contains("login")) && !response.ContentString.ContainsIgnoreCase("sign in now"))
+            if ((response.IsRedirect && response.RedirectingTo.ContainsIgnoreCase("login")) ||
+                response.ContentString.ContainsIgnoreCase("sign in now") ||
+                (response.ContentString.ContainsIgnoreCase("fullRedirect") && response.ContentString.ContainsIgnoreCase("login")))
             {
-                return response;
+                logger.Debug("Shazbat session expired, relogin.");
+
+                await ApplyConfiguration(null);
+                response.Request.Cookies = CookieHeader;
+
+                return await webclient.GetResultAsync(response.Request);
             }
 
-            logger.Debug("Shazbat session expired. Relogin.");
-
-            await ApplyConfiguration(null);
-            response.Request.Cookies = CookieHeader;
-            return await webclient.GetResultAsync(response.Request);
+            return response;
         }
     }
 }

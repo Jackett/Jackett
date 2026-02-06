@@ -20,13 +20,14 @@ caps:
     - {id: 215, cat: Movies, desc: " |- Классика мирового кинематографа"}
     - {id: 5, cat: Movies, desc: " |- Фильмы (HDvideo)"}
     - {id: 189, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
+    - {id: 349, cat: Movies, desc: " |- Кинофильмы (48-120 FPS)"}
     - {id: 8, cat: Movies, desc: " |- Фильмологии"}
     - {id: 242, cat: Movies, desc: " |- Индийское кино"}
     - {id: 7, cat: Movies, desc: " |- DVDScr, TS, CAMRip и т.п."}
     - {id: 6, cat: Movies, desc: " |- HD-AVC"}
     - {id: 33, cat: Movies, desc: " |- Перевод на узбекский"}
     - {id: 14, cat: Movies, desc: "Российские кинофильмы"}
-    - {id: 24, cat: Movies, desc: " |- Новинки 2025"}
+    - {id: 24, cat: Movies, desc: " |- Фильмы 2025"}
     - {id: 223, cat: Movies, desc: " |- Кино СССР"}
     - {id: 16, cat: Movies, desc: " |- Фильмы (HDvideo)"}
     - {id: 190, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
@@ -64,6 +65,16 @@ caps:
     - {id: 61, cat: TV, desc: " |- Мультфильмы 2011-2024 годов"}
     - {id: 60, cat: TV, desc: " |- Мультфильмы 2000-2010 годов"}
     - {id: 59, cat: TV, desc: " |- Мультфильмы до 2000 года"}
+    # Аниме # Anime
+    - {id: 345, cat: TV/Anime, desc: "Сериалы"}
+    - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
+    - {id: 347, cat: TV/Anime, desc: " |- Аниме Сериалы"}
+    - {id: 348, cat: TV/Anime, desc: " |- Аниме Сериалы (HD)"}
+    - {id: 365, cat: TV/Anime, desc: " |- OVA"}
+    - {id: 361, cat: TV/Anime, desc: "Фильмы"}
+    - {id: 366, cat: TV/Anime, desc: " |- Новинки"}
+    - {id: 365, cat: TV/Anime, desc: " |- Аниме Фильмы (HD)"}
+    - {id: 362, cat: TV/Anime, desc: " |- OVA"}
     # Музыка # Music
     - {id: 225, cat: Audio, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
     - {id: 228, cat: Audio, desc: " |- Поп музыка России и стран бывшего СССР"}
@@ -87,10 +98,8 @@ caps:
     - {id: 124, cat: Audio, desc: " |- Фольклор, Народная и Этническая музыка"}
     - {id: 338, cat: Audio, desc: " |- Country"}
     - {id: 231, cat: Audio, desc: " |- Сборники и альбомы выходившие неофициальными изданиями."}
-    - {id: 144, cat: Audio, desc: "♫ ROCK & METAL ♫"}
     - {id: 201, cat: Audio, desc: " |- Русский Rock, Metal (mp3)"}
     - {id: 202, cat: Audio, desc: " |- Сборники Русского рока (mp3)"}
-    - {id: 323, cat: Audio, desc: " |- Русский Rock, Metal (Lossless)"}
     - {id: 214, cat: Audio, desc: " |- Soft & Pop-Rock"}
     - {id: 334, cat: Audio, desc: " |- Progressive & Art-Rock"}
     - {id: 156, cat: Audio, desc: " |- Progressive, Art, Classic & Hard Rock"}
@@ -100,8 +109,6 @@ caps:
     - {id: 211, cat: Audio, desc: " |- Сборники зарубежного Рока"}
     - {id: 243, cat: Audio, desc: " |- Зарубежный Metal (альбомы)"}
     - {id: 154, cat: Audio, desc: " |- Зарубежный Metal (сборники)"}
-    - {id: 155, cat: Audio, desc: " |- Rock (lossless)"}
-    - {id: 146, cat: Audio, desc: " |- Metal (Lossless)"}
     - {id: 216, cat: Audio, desc: "♫ Alternative, Punk, Industrial, Gothic ♫ (Mp3)♫"}
     - {id: 219, cat: Audio, desc: " |- Alternative"}
     - {id: 220, cat: Audio, desc: " |- Punk"}
@@ -136,11 +143,11 @@ caps:
     - {id: 133, cat: Audio, desc: "♫ Музыка в формате ♫ (lossless)"}
     - {id: 203, cat: Audio, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
     - {id: 139, cat: Audio, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}
-    - {id: 339, cat: Audio, desc: " |- Rock (Lossless)"}
+    - {id: 339, cat: Audio, desc: " |- Rock, Metal (Lossless)"}
+    - {id: 340, cat: Audio, desc: " |- Русский Rock, Metal (Lossless)"}
     - {id: 141, cat: Audio, desc: " |- Электронная музыка (lossless)"}
     - {id: 142, cat: Audio, desc: " |- Джаз и блюз (lossless)"}
     - {id: 138, cat: Audio, desc: " |- Шансон и Военная песня (lossless)"}
-    - {id: 134, cat: Audio, desc: " |- Другие направления (lossless)"}
     - {id: 157, cat: Audio, desc: "Музыкальные видеоклипы и концерты"}
     - {id: 161, cat: Audio, desc: " |- Поп"}
     - {id: 160, cat: Audio, desc: " |- Электронная музыка"}
@@ -162,6 +169,17 @@ caps:
     - {id: 175, cat: Audio/Audiobook, desc: " |- ♫ Любовно-фантастический роман"}
     - {id: 174, cat: Audio, desc: " |- Аудиокниги на других языках (Audio)"}
     - {id: 319, cat: Books, desc: " |- Аудиокниги для детей"}
+    - {id: 350, cat: Books, desc: "Медицина и здоровье"}
+    - {id: 351, cat: Books, desc: " |- Клиническая медицина до 1980 года"}
+    - {id: 352, cat: Books, desc: " |- Клиническая медицина с 1980 по 2000 год"}
+    - {id: 353, cat: Books, desc: " |- Клиническая медицина после 2000 года"}
+    - {id: 354, cat: Books, desc: " |- Научная медицинская периодика (газеты и журналы)"}
+    - {id: 357, cat: Books, desc: " |- Популярная медицинская периодика (газеты и журналы)"}
+    - {id: 355, cat: Books, desc: " |- Медико-биологические науки"}
+    - {id: 356, cat: Books, desc: " |- Фармация и фармакология"}
+    - {id: 358, cat: Books, desc: " |- Нетрадиционная, народная медицина и популярные книг..."}
+    - {id: 360, cat: Books, desc: " |- Видеоуроки и лекции по медицине"}
+    - {id: 359, cat: Books, desc: " |- Ветеринария, разное"}
     # Игры # Games
     - {id: 105, cat: PC/Games, desc: "Игры для ПК"}
     - {id: 120, cat: PC/Games, desc: " |- Горячие новинки (License`s)"}
@@ -250,6 +268,31 @@ caps:
     - {id: 179, cat: Other, desc: "Дизайнерские материалы"}
     - {id: 186, cat: Other, desc: " |- Всё для 2d графики"}
     - {id: 185, cat: Other, desc: " |- Всё для 3d графики"}
+    # Мобильные устройства # Mobile devices
+    - {id: 376, cat: PC/Mobile-Other, desc: "Помощь по разделу (Мобильные устройства)"}
+    - {id: 375, cat: PC/Mobile-Other, desc: "Игры"}
+    - {id: 393, cat: PC/Mobile-Other, desc: "Игры |- Java"}
+    - {id: 390, cat: PC/Mobile-Other, desc: "Игры |- Windows Mobile / Windows Phone"}
+    - {id: 387, cat: PC/Mobile-iOS, desc: "Игры |- iOS"}
+    - {id: 383, cat: PC/Mobile-Android, desc: "Игры |- Android"}
+    - {id: 380, cat: PC/Mobile-Other, desc: "Игры |- Symbian"}
+    - {id: 374, cat: PC/Mobile-Other, desc: "Приложения"}
+    - {id: 392, cat: PC/Mobile-Other, desc: "Приложения |- Java"}
+    - {id: 389, cat: PC/Mobile-Other, desc: "Приложения |- Windows Mobile / Windows Phone"}
+    - {id: 386, cat: PC/Mobile-iOS, desc: "Приложения |- iOS"}
+    - {id: 382, cat: PC/Mobile-Android, desc: "Приложения |- Android"}
+    - {id: 379, cat: PC/Mobile-Other, desc: "Приложения |- Symbian"}
+    - {id: 373, cat: PC/Mobile-Other, desc: "Прошивки"}
+    - {id: 391, cat: PC/Mobile-Other, desc: "Прошивки |- Java"}
+    - {id: 388, cat: PC/Mobile-Other, desc: "Прошивки |- Windows Mobile / Windows Phone"}
+    - {id: 385, cat: PC/Mobile-iOS, desc: "Прошивки |- iOS"}
+    - {id: 381, cat: PC/Mobile-Android, desc: "Прошивки |- Android"}
+    - {id: 378, cat: PC/Mobile-Other, desc: "Прошивки |- Symbian"}
+    - {id: 377, cat: PC/Mobile-Other, desc: "Прошивки |- Другие"}
+    - {id: 367, cat: PC/Mobile-Other, desc: "Дополнительно"}
+    - {id: 368, cat: PC/Mobile-Other, desc: "Дополнительно |- Софт для работы с телефоном"}
+    - {id: 370, cat: PC/Mobile-Other, desc: "Дополнительно |- Видео для КПК"}
+    - {id: 369, cat: PC/Mobile-Other, desc: "Дополнительно |- Темы и Обои"}
 
   modes:
     search: [q]

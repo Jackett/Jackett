@@ -61,7 +61,7 @@ settings:
     default: "Inactive accounts will be disabled after 3 months of inactivity, 1 month for new accounts. Members must generate some download or upload activity at least once every 3 months."
 
 login:
-  path: /api/torrents
+  path: /api/v1/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -73,7 +73,7 @@ search:
   paths:
     # https://hdinnovations.github.io/UNIT3D/torrent_api.html
     # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
-    - path: api/torrents/filter
+    - path: api/v1/torrents/filter
       response:
         type: json
 
@@ -192,4 +192,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.2.0
+# json UNIT3D 9.2.0 (custom)

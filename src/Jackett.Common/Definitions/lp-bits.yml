@@ -1,30 +1,24 @@
 ---
-id: ptsbao
-name: PTSBAO (烧包)
-description: "PTSBAO (烧包) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
-language: zh-CN
+id: lp-bits
+name: LP-Bits 2.0
+description: LP-Bits 2.0 is a Private Torrent Tracker for Linkin Park Music Releases."
+language: en-US
 type: private
 encoding: UTF-8
-followredirect: true
 links:
-  - https://ptsbao.club/
+  - https://lp-bits.com/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies(电影)"}
-    - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
-    - {id: 403, cat: TV/Other, desc: "TV Shows(电视节目)"}
-    - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"}
-    - {id: 414, cat: Audio, desc: "Music(音乐)"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries(记录片)"}
-    - {id: 423, cat: Movies, desc: "Movies Original(原创)"}
-    - {id: 409, cat: Other, desc: "Misc(其他)"}
-    - {id: 424, cat: Other, desc: "Limit(限制)"}
+    - {id: 409, cat: Audio/Video, desc: "Video Audience Shot"}
+    - {id: 404, cat: Audio/Video, desc: "Documentaries \ Misc"}
+    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 407, cat: Audio, desc: "Audio Professional"}
+    - {id: 408, cat: Audio/Video, desc: "Pro Shot Video"}
+    - {id: 410, cat: Audio, desc: "Audio Audience Shot"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
     music-search: [q]
 
 settings:
@@ -57,9 +51,13 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
-  # switched from the form method to the cookie method due to #9554
+  # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -72,42 +70,37 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}0{{ end }}"
+    search_area: 0
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
-    # does not return imdb link in results
 
   rows:
     selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
-      selector: a[href*="torrents.php?cat="]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
-    title_default:
-      selector: table.torrentname td a[href*="details.php?id="]
     title:
-      selector: a[title][href*="details.php?id="]
+      selector: a[title][href^="details.php?id="]
       attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
       selector: img[data-src]
@@ -158,4 +151,4 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP v1.9.14 2026-01-23
+# NexusPHP v1.9.14 2026-01-23 (custom)

@@ -500,7 +500,8 @@ namespace Jackett.Common.Indexers.Definitions
                 return IndexerConfigurationStatus.Completed;
             }
 
-            throw new Exception("Login failed (unexpected response).");
+            logger.Error("Login response content: {response}", resp.ContentString);
+            throw new Exception($"Login failed. Status [{resp.Status}], see logs for details.");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
@@ -765,13 +766,18 @@ namespace Jackett.Common.Indexers.Definitions
                 var (rootCat, usesSaison) = GetRootCategory(c);
                 if (rootCat != null)
                 {
-                    var key = $"{rootCat}|";
+                    string subCat = null;
+                    if (rootCat != c.ToString())
+                    {
+                        subCat = c.ToString();
+                    }
+                    var key = $"{rootCat}|{subCat}";
                     if (produced.Add(key))
                     {
                         yield return new SearchRequest
                         {
                             RootCategory = rootCat,
-                            SubCategory = null,
+                            SubCategory = subCat,
                             UseSaisonRewrite = usesSaison
                         };
                     }

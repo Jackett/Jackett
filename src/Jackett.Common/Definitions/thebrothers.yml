@@ -1,99 +1,79 @@
 ---
-id: coastalcrew
-name: Coastal-Music-Crew
-description: "Coastal-Music-Crew (C-M-C) is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: thebrothers
+name: The Brothers
+description: "The Brothers is a Private GERMAN tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://coastal-crew.bounceme.net/
+  - https://the-brothers.bounceme.net/
 
 caps:
   categorymappings:
-    - {id: 32, cat: Movies/HD, desc: "Movie HD"}
+    # Klassiker
+    - {id: 157, cat: Movies, desc: "Klassiker All In"}
+    # Anime
+    - {id: 158, cat: Movies, desc: "Anime Filme"}
+    - {id: 159, cat: TV/Anime, desc: "Anime Serien"}
+    # Kids
+    - {id: 146, cat: Movies, desc: "Kids Alles"}
+    # Movie
+    - {id: 122, cat: Movies/UHD, desc: "Movie 4K"}
+    - {id: 124, cat: Movies, desc: "Movie Pack"}
+    - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
-    - {id: 140, cat: Movies/3D, desc: "Movie 3D"}
-    - {id: 138, cat: Movies/BluRay, desc: "Movie BluRay"}
-    - {id: 127, cat: Movies, desc: "Movie Pack"}
-    - {id: 124, cat: Movies, desc: "Movie Kids"}
-    - {id: 142, cat: Movies, desc: "Movie Anime"}
-    - {id: 122, cat: Movies, desc: "Movie Klassiker"}
-    - {id: 141, cat: Movies, desc: "Movie Klassiker 4K/UHD"}
-    - {id: 114, cat: Movies/DVD, desc: "Movie DVD-R"}
-    - {id: 26, cat: Movies/UHD, desc: "Movie 4K"}
-
-    - {id: 133, cat: TV/Anime, desc: "Serien Anime"}
-    - {id: 57, cat: TV/HD, desc: "Serien HD"}
+    - {id: 32, cat: Movies/HD, desc: "Movie HD"}
+    - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
+    # Serien
     - {id: 59, cat: TV, desc: "Serien Pack"}
+    - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
-    - {id: 56, cat: TV/SD, desc: "Serien DVD-R"}
-    - {id: 123, cat: TV, desc: "Serien Klassiker"}
-    - {id: 126, cat: TV, desc: "Serien Kids"}
-    - {id: 132, cat: TV/UHD, desc: "Serien UHD"}
-
-    - {id: 92, cat: TV/Documentary, desc: "Doku Avi"}
-    - {id: 94, cat: TV/Documentary, desc: "Doku Audio"}
-    - {id: 135, cat: TV/Documentary, desc: "Doku UHD"}
-    - {id: 13, cat: TV/Documentary, desc: "Doku DVD-R"}
-    - {id: 14, cat: TV/Documentary, desc: "Doku HD"}
-    - {id: 15, cat: TV/Documentary, desc: "Doku SD"}
-    - {id: 136, cat: TV/Documentary, desc: "Doku Pack"}
-
-    - {id: 134, cat: Other, desc: "Sonstiges Pack"}
-    - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
-    - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
-    - {id: 69, cat: Other, desc: "Sonstiges Tutorial"}
-    - {id: 71, cat: Other/Misc, desc: "Sonstiges Other"}
-
+    - {id: 56, cat: TV/SD, desc: "Serien DVD"}
+    # Software
     - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 9, cat: PC, desc: "App Linux"}
-    - {id: 139, cat: PC/Mobile-Android, desc: "App Android Apps"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
-
-    - {id: 16, cat: Console, desc: "Game Misc"}
+    # Game
+    - {id: 120, cat: Console/PS3, desc: "Game PlayStation"}
+    - {id: 16, cat: Console, desc: "Game Wimmelbild"}
     - {id: 17, cat: PC/Games, desc: "Game PC"}
-    - {id: 18, cat: Console/PS3, desc: "Game PS2"}
-    - {id: 19, cat: Console/PS3, desc: "Game PS3"}
     - {id: 20, cat: Console/PSP, desc: "Game PSP"}
-    - {id: 21, cat: Console/PS4, desc: "Game PSX"}
     - {id: 22, cat: Console/Wii, desc: "Game Wii"}
-    - {id: 23, cat: Console/XBox, desc: "Game XBOX"}
-    - {id: 24, cat: Console/XBox 360, desc: "Game XBOX360"}
-
-    - {id: 137, cat: Audio, desc: "Music OST"}
+    - {id: 24, cat: Console/XBox, desc: "Game XBOX"}
+    # Music
+    - {id: 52, cat: Audio, desc: "Music Pack"}
+    - {id: 126, cat: Audio, desc: "Music Audio"}
+    - {id: 55, cat: Audio/Video, desc: "Music Video"}
+    - {id: 49, cat: Audio, desc: "Music Charts"}
+    - {id: 125, cat: Audio, desc: "Music Mixe"}
     - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 48, cat: Audio, desc: "Music Album"}
-    - {id: 49, cat: Audio, desc: "Music Charts"}
-    - {id: 52, cat: Audio, desc: "Music Pack"}
-    - {id: 53, cat: Audio, desc: "Music Sampler"}
-    - {id: 120, cat: Audio, desc: "Music Xmas"}
-    - {id: 121, cat: Audio/Lossless, desc: "Music Flac"}
-    - {id: 55, cat: Audio/Video, desc: "Music Video SD"}
-    - {id: 109, cat: Audio/Video, desc: "Music Video HD"}
-    - {id: 110, cat: Audio/Video, desc: "Music DVD-R"}
-    - {id: 128, cat: Audio, desc: "Music EP"}
-    - {id: 125, cat: Audio, desc: "Music Kids"}
-
-    - {id: 61, cat: TV/Sport, desc: "Sport HD"}
-    - {id: 117, cat: TV/Sport, desc: "Sport DVD-R"}
-    - {id: 62, cat: TV/Sport, desc: "Sport SD"}
-
-    - {id: 131, cat: TV/UHD, desc: "Internt'l Serie UHD"}
+    - {id: 148, cat: Audio, desc: "Music Discography"}
+    # Sport
+    - {id: 61, cat: TV/Sport, desc: "Sport Other"}
+    - {id: 130, cat: TV/Sport, desc: "Sport WWE"}
+    # Sonstiges
+    - {id: 131, cat: Books/Mags, desc: "Sonstiges Zeitungen"}
+    - {id: 144, cat: TV/Documentary, desc: "Sonstiges Doku"}
+    - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
+    - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
+    - {id: 69, cat: Books, desc: "Sonstiges Tutorial"}
+    - {id: 71, cat: Books/Other, desc: "Sonstiges Other"}
+    # Internt'l
+    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
+    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
+    - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD"}
+    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
+    - {id: 104, cat: Other, desc: "Internt'l Misc"}
+    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
+    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
     - {id: 103, cat: Movies/SD, desc: "Internt'l Movie SD"}
     - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
-    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
-    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
-    - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD-R"}
-    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
-    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
-    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
-    - {id: 104, cat: Other, desc: "Internt'l Misc"}
-
-    - {id: 74, cat: XXX/Other, desc: "XXX Other"}
-    - {id: 76, cat: XXX/SD, desc: "XXX SD"}
+    # XXX
+    - {id: 113, cat: XXX/DVD, desc: "XXX DVD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 113, cat: XXX/DVD, desc: "XXX DVD-R"}
+    - {id: 76, cat: XXX/SD, desc: "XXX SD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
 
   modes:
@@ -110,6 +90,9 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: pin
+    type: text
+    label: Pin
   - name: sort
     type: select
     label: Sort requested from site
@@ -130,10 +113,6 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Anzahl der Torrents beim Durchsuchen</b> <i>Torrents per page:</i> setting to <b>60</b> on your account profile. The default is <i>15</i>.
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "If you do not log in, your account will be automatically deleted after 28 days."
 
 login:
   path: login.php
@@ -143,11 +122,17 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    pin: "{{ .Config.pin }}"
   error:
     - selector: div#login_error
   test:
     path: index.php
     selector: a[href="logout.php"]
+
+download:
+  selectors:
+    - selector: a[href^="download_ssl.php?torrent="]
+      attribute: href
 
 search:
   paths:
@@ -155,14 +140,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 name, 1 descr, 2 both (options 1 and 2 are disabled)
+    # 0 name, 1 descr, 2 both
     blah: 0
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   rows:
     selector: div.selection_wrap
-
   fields:
     category_p1:
       selector: div.kat_cat_pic_name
@@ -179,7 +163,7 @@ search:
       selector: a.selection_a
       attribute: href
     download:
-      selector: a[href^="download_ssl.php?torrent="]
+      selector: a.selection_a
       attribute: href
     poster:
       selector: div[id^="details"] img
@@ -218,13 +202,15 @@ search:
     leechers:
       selector: div.selection_unter_aaa
     downloadvolumefactor:
-      text: 1
+      case:
+        ":root:has(div.onlyup)": 0 # GLobal Freeleech event
+        "*": 1
     uploadvolumefactor:
       text: 1
-# global MR is 1.0 but torrents must be seeded for 3 days regardless of ratio
+# global MR is 0.7 but torrents must be seeded for 2 days regardless of ratio
 #    minimumratio:
-#      text: 1.0
+#      text: 0.7
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # 3xT

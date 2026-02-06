@@ -74,632 +74,614 @@ The currently supported version of Jackett is **0.24.+**, which is compatible wi
 
 Prior versions of Jackett are no longer supported.
 
----
+#### Supported Trackers
+<details> <summary> <b> Supported Public Trackers </b> </summary>
 
-## Supported Trackers
-
-### Public Trackers
-
-<details>
-<summary>Click to expand list of supported public trackers</summary>
-
-- ØMagnet
-- 1337x
-- 52BT
-- ACG.RIP
-- AniLibria
-- Anime Tosho
-- AniRena
-- AniSource
-- ApacheTorrent
-- arab-torrents.com
-- AudioBook Bay (ABB)
-- Bangumi Moe
-- BigFANGroup
-- BitRu
-- BitSearch (Solid Torrents)
-- BluDV
-- BlueRoms
-- BT.etree
-- BTdirectory (BT目录)
-- btstate
-- Byrutor
-- Catorrent
-- Cinecalidad
-- cpasbienClone
-- CrackingPatching
-- DaMagNet
-- DivxTotal
-- dmhy
-- DonTorrent
-- E-Hentai
-- EBook Bay (EBB)
-- Elitetorrent.wf
-- EpubLibre
-- ExtraTorrent.st
-- EZTV
-- FileMood
-- FilmesHdTorrent
-- Free JAV Torrent
-- Frozen Layer
-- GamesTorrents
-- GTorrent.pro
-- HDRTorrent
-- ilCorSaRoNeRo
-- Internet Archive (archive.org)
-- Isohunt2
-- kickasstorrents.to
-- kickasstorrents.ws
-- Knaben
-- LimeTorrents
-- LinuxTracker
-- Mac Torrents Download
-- Magnet Cat
-- MagnetDownload
-- Magnetz
-- MegaPeer
-- MejorTorrent
-- Mikan
-- MixTapeTorrent
-- MoviesDVDR
-- MyPornClub
-- nekoBT
-- NewStudio
-- Nipponsei
-- NoNaMe Club (NNM-Club)
-- NorTorrent
-- Nyaa.si
-- OneJAV
-- OpenSharing
-- PC-torrent
-- Pirate's Paradise
-- plugintorrent
-- PornoTorrent
-- PornRips
-- Postman
-- RedeTorrent
-- RinTorNeT
-- RuTor
-- RuTracker.RU
-- Sexy-Pics
-- Shana Project
-- ShowRSS
-- SkidrowRepack
-- sosulki
-- SubsPlease
-- sukebei.Nyaa.si
-- The Pirate Bay (TPB)
-- TheRARBG
-- Tokyo Tosho
-- Torrent Downloads
-- Torrent Oyun indir
-- Torrent[CORE]
-- torrent.by
-- torrent-pirat
-- Torrent9
-- TorrentDownload
-- TorrentGalaxyClone
-- TorrentKitty
-- TorrentProject2
-- TorrentQQ (토렌트큐큐)
-- Torrents.csv
-- Torrentsome (토렌트썸)
-- Torrenttip (토렌트팁)
-- U3C3
-- Uindex
-- UzTracker
-- VSTHouse
-- VST Torrentz
-- VSTorrent
-- Wolfmax4K
-- World-torrent
-- XXXClub
-- xxxtor
-- YTS.ag
-- ZkTorrent
-
+ * ØMagnet
+ * 1337x
+ * 52BT
+ * ACG.RIP
+ * AniLibria
+ * Anime Tosho
+ * AniRena
+ * AniSource
+ * ApacheTorrent
+ * arab-torrents.com
+ * AudioBook Bay (ABB)
+ * Bangumi Moe
+ * BigFANGroup
+ * BitRu
+ * BitSearch (Solid Torrents)
+ * BluDV
+ * BlueRoms
+ * BT.etree
+ * BTdirectory (BT目录)
+ * btstate
+ * Byrutor
+ * Catorrent
+ * Cinecalidad
+ * cpasbienClone
+ * CrackingPatching
+ * DaMagNet
+ * DivxTotal
+ * dmhy
+ * DonTorrent
+ * E-Hentai
+ * EBook Bay (EBB)
+ * Elitetorrent.wf
+ * EpubLibre
+ * ExtraTorrent.st
+ * EZTV
+ * FileMood
+ * FilmesHdTorrent
+ * Free JAV Torrent
+ * Frozen Layer
+ * GamesTorrents
+ * GTorrent.pro
+ * HDRTorrent
+ * ilCorSaRoNeRo
+ * Internet Archive (archive.org)
+ * Isohunt2
+ * kickasstorrents.to
+ * kickasstorrents.ws
+ * Knaben
+ * LimeTorrents
+ * LinuxTracker
+ * Mac Torrents Download
+ * Magnet Cat
+ * MagnetDownload
+ * Magnetz
+ * MegaPeer
+ * MejorTorrent
+ * Mikan
+ * MixTapeTorrent
+ * MoviesDVDR
+ * MyPornClub
+ * nekoBT
+ * NewStudio
+ * Nipponsei
+ * NoNaMe Club (NNM-Club)
+ * NorTorrent
+ * Nyaa.si
+ * OneJAV
+ * OpenSharing
+ * PC-torrent
+ * Pirate's Paradise
+ * plugintorrent
+ * PornoTorrent
+ * PornRips
+ * Postman
+ * RedeTorrent
+ * RinTorNeT
+ * RuTor
+ * RuTracker.RU
+ * Sexy-Pics
+ * Shana Project
+ * ShowRSS
+ * SkidrowRepack
+ * sosulki
+ * SubsPlease
+ * sukebei.Nyaa.si
+ * The Pirate Bay (TPB)
+ * TheRARBG
+ * Tokyo Tosho
+ * Torrent Downloads
+ * Torrent Oyun indir
+ * Torrent[CORE]
+ * torrent.by
+ * torrent-pirat
+ * Torrent9
+ * TorrentDownload
+ * TorrentGalaxyClone
+ * TorrentKitty
+ * TorrentProject2
+ * TorrentQQ (토렌트큐큐)
+ * Torrents.csv
+ * Torrentsome (토렌트썸)
+ * Torrenttip (토렌트팁)
+ * U3C3
+ * Uindex
+ * UzTracker
+ * VSTHouse
+ * VST Torrentz
+ * VSTorrent
+ * Wolfmax4K
+ * World-torrent
+ * XXXClub
+ * xxxtor
+ * YTS.ag
+ * ZkTorrent
 </details>
 
-### Semi-Private Trackers
+<details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
-<details>
-<summary>Click to expand list of supported semi-private trackers</summary>
-
-- AniDUB
-- AnimeLayer
-- ArenaBG
-- Best-Torrents (PAY2DL)
-- BitMagnet (Local DHT) - [Website](https://github.com/bitmagnet-io/bitmagnet)
-- BookTracker
-- BootyTape
-- comicat
-- Deildu
-- Devil-Torrents
-- DreamingTree
-- DXP (Deaf Experts)
-- Electro-Torrent
-- Erai-Raws
-- Ex-torrenty
-- ExKinoRay
-- EZTV (login)
-- Fenyarnyek-Tracker
-- File-Tracker
-- Gay-Torrents.net
-- HD-CzTorrent (PAY2DL)
-- HDGalaKtik
-- HellTorrents (PAY2DL)
-- HunTorrent
-- Il CorSaRo Blu
-- ilDraGoNeRo
-- Kinorun
-- Kinozal
-- LostFilm.tv
-- Magnetico (Local DHT) - [Website](https://github.com/boramalper/magnetico)
-- Marine Tracker
-- Masters-TB
-- Mazepa
-- Metal Tracker
-- MioBT
-- MIRcrew
-- MuseBootlegs (MB)
-- MVGroup Forum
-- MVGroup Main
-- NetHD (VietTorrent)
-- NewStudio (login)
-- NoNaMe Club (NNM-Club) (login)
-- Polskie-Torrenty
-- PornoLab
-- Postman (login)
-- ProPorno
-- PussyTorrents
-- Rainbow Tracker
-- RGFootball
-- RinTor
-- RiperAM
-- RockBox
-- RUDUB (ex-BaibaKoTV)
-- Rustorka
-- RuTracker.org
-- seleZen
-- Sharewood
-- Sk-CzTorrent
-- SkTorrent-org
-- themixingbowl (TMB)
-- Toloka
-- TorrentMasters
-- Traht
-- TribalMixes
-- Union Fansub
-- UniOtaku
-- ViDEOTEKA (VT)
-- Ztracker
-
+ * AniDUB
+ * AnimeLayer
+ * ArenaBG
+ * Best-Torrents [PAY2DL]
+ * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
+ * BookTracker
+ * BootyTape
+ * comicat
+ * Deildu
+ * Devil-Torrents
+ * DreamingTree
+ * DXP (Deaf Experts)
+ * Electro-Torrent
+ * Erai-Raws
+ * Ex-torrenty
+ * ExKinoRay
+ * EZTV (login)
+ * Fenyarnyek-Tracker
+ * File-Tracker
+ * Gay-Torrents.net
+ * HD-CzTorrent [PAY2DL]
+ * HDGalaKtik
+ * HellTorrents [PAY2DL]
+ * HunTorrent
+ * Il CorSaRo Blu
+ * ilDraGoNeRo
+ * Kinorun
+ * Kinozal
+ * LostFilm.tv
+ * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
+ * Marine Tracker
+ * Masters-TB
+ * Mazepa
+ * Metal Tracker
+ * MioBT
+ * MIRcrew
+ * MuseBootlegs (MB)
+ * MVGroup Forum
+ * MVGroup Main
+ * NetHD (VietTorrent)
+ * NewStudio (login)
+ * NoNaMe Club (NNM-Club) (login)
+ * Polskie-Torrenty
+ * PornoLab
+ * Postman (login)
+ * ProPorno
+ * PussyTorrents
+ * Rainbow Tracker
+ * RGFootball
+ * RinTor
+ * RiperAM
+ * RockBox
+ * RUDUB (ex-BaibaKoTV)
+ * Rustorka
+ * RuTracker.org
+ * seleZen
+ * Sharewood
+ * Sk-CzTorrent
+ * SkTorrent-org
+ * themixingbowl (TMB)
+ * Toloka
+ * TorrentMasters
+ * TrahT
+ * TribalMixes
+ * Union Fansub
+ * UniOtaku
+ * ViDEOTEKA (VT)
+ * Ztracker
 </details>
 
-### Private Trackers
+<details> <summary> <b> Supported Private Trackers </b> </summary>
 
-<details>
-<summary>Click to expand list of supported private trackers (500+ trackers)</summary>
-
-   
-- 0day.kiev
-- 13City
-- 1ptbar
-- 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
-- 3D Torrents (3DT)
-- 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
-- 52PT
-- 720pier
-- Abnormal (ABN)
-- ABtorrents (ABT + RNS)
-- AcrossTheTasman [![(invite needed)][inviteneeded]](#)
-- Aftershock
-- AFUN
-- AGSVPT (Arctic Global Seed Vault)
-- Aidoru!Online
-- Aither
-- alingPT
-- AlphaRatio (AR)
-- AmigosShareClub (ASC)
-- Anime No Sekai (ANSK)
-- AnimeBytes (AB)
-- AnimeTorrents (AnT)
-- AnimeTorrents.ro (Anime Torrents Romania)
-- AnimeWorld (AW)
-- Anthelion (ANT)
-- Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
-- ArabicSource
-- ArabP2P
-- ArabScene [![(invite needed)][inviteneeded]](#)
-- ArabTorrents [![(invite needed)][inviteneeded]](#)
-- AsianCinema
-- AsianDVDClub (ADC)
-- Audiences
-- AudioNews (AN)
-- AURA4K
-- Aussierul.es [![(invite needed)][inviteneeded]](#)
-- AvistaZ (AsiaTorrents)
-- Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
-- Back-ups
-- BakaBT
-- baoziPT
-- Beload
-- Best-Core
-- BeyondHD (BHD)
-- Bibliotik [![(invite needed)][inviteneeded]](#)
-- BigBBS
-- BigCore
-- Bit-Bázis
-- BIT-HDTV
-- Bitded
-- bitGAMER
-- BitHUmen
-- Bitpalace
-- BitPorn
-- BitTorrentFiles
-- BiTTuRK
-- BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
-- BlueBird
-- BlurayTracker
-- Blutopia (BLU)
-- Borgzelle [![(invite needed)][inviteneeded]](#)
-- Boxing Torrents
-- Brasil Tracker
-- BroadcasTheNet (BTN) [![(invite needed)][inviteneeded]](#)
-- BrokenStones [![(invite needed)][inviteneeded]](#)
-- BTArg
-- BTNext (BTNT) [![(invite needed)][inviteneeded]](#)
-- BTSCHOOL
-- BWTorrents
-- BYRBT
-- C411
-- cangbaoge (CBG)
-- CapybaraBR
-- Carp-Hunter
-- Carpathians
-- CarPT
-- Cathode-Ray.Tube (CRT)
-- CD File
-- CeskeForum
-- CGPeers [![(invite needed)][inviteneeded]](#)
-- CHDBits [![(invite needed)][inviteneeded]](#)
-- ChileBT
-- Cinemageddon [![(invite needed)][inviteneeded]](#)
-- CinemaMovieS_ZT
-- Cinematik
-- CinemaZ (EuTorrents)
-- ClearJAV
-- Coastal-Music-Crew (C-M-C)
-- ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
-- Concertos
-- CrabPT (蟹黄堡)
-- CrazySpirits
-- CrnaBerza
-- cspt (财神)
-- cyanbug (大青虫)
-- DANISH BYTES
-- Darkpeers
-- Das Unerwartete (D-U)
-- DataScene (DS)
-- DesiTorrents
-- Diablo Torrent
-- DICMusic [![(invite needed)][inviteneeded]](#)
-- DigitalCore (DC)
-- DimeADozen (EzTorrent)
-- DiscFan [![(invite needed)][inviteneeded]](#)
-- DocsPedia
-- Drugari
-- dubhe (天枢)
-- Ebooks-Shares [![(invite needed)][inviteneeded]](#)
-- Empornium (EMP) [![(invite needed)][inviteneeded]](#)
-- eMuwarez
-- eShareNet
-- eStone (BigTorrent)
-- Exitorrent.org [![(invite needed)][inviteneeded]](#)
-- ExoticaZ (YourExotic)
-- Explosiv-World (E-W)
-- ExtremeBits
-- F1Carreras
-- F1GP
-- FANO.IN [![(invite needed)][inviteneeded]](#)
-- Fappaizuri
-- FearNoPeer
-- Femdomcult
-- FileList (FL)
-- FinElite (FE) [![(invite needed)][inviteneeded]](#)
-- Flood (FLD)
-- Flux-Zone
-- Free Farm (自由农场)
-- FunFile (FF)
-- FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
-- FutureTorrent [PAY2DL]
-- Fuzer (FZ)
-- G3MINI TR4CK3R
-- Gay-Torrents.org
-- GAYtorrent.ru
-- GazelleGames (GGn)
-- Generation-Free
-- GGPT
-- GigaTorrents
-- GimmePeers (formerly ILT) [PAY2DL]
-- GiroTorrent
-- GreatPosterWall (GPW)
-- HaiDan
-- Hǎitáng (海棠PT)
-- HappyFappy (HF)
-- Hawke-uno (HUNO)
-- HD Dolby [![(invite needed)][inviteneeded]](#)
-- HD Zero
-- HD-Club [![(invite needed)][inviteneeded]](#)
-- HD-Forever (HDF)
-- HD-Olimpo [![(invite needed)][inviteneeded]](#)
-- HD-Only (HDO)
-- HD-Space (HDS)
-- HD-Torrents (HDT)
-- HD-UNiT3D
-- HDArea (HDA)
-- HDBao
-- HDBits [![(invite needed)][inviteneeded]](#)
-- HDCiTY (HDC) [![(invite needed)][inviteneeded]](#)
-- HDClone
-- HDFans
-- HDHome [![(invite needed)][inviteneeded]](#)
-- HDKylin (麒麟)
-- HDRoute [![(invite needed)][inviteneeded]](#)
-- HDSky [![(invite needed)][inviteneeded]](#)
-- HDtime
-- HDTorrents.it [PAY2DL]
-- HDTurk
-- HDU
-- Hebits (HB)
-- HellasHut
-- HELLENIC-HD
-- HHanClub
-- HHD
-- House of Devil
-- HQMusic
-- HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
-- HxPT (好学) [![(invite needed)][inviteneeded]](#)
-- ImmortalSeed (iS)
-- Immortuos
-- Indietorrents [![(invite needed)][inviteneeded]](#)
-- INFINITY [PAY2DL] [![(invite needed)][inviteneeded]](#)
-- InfinityHD
-- Infire
-- Insane Tracker
-- IPTorrents (IPT)
-- ItaTorrents
-- JME-REUNIT3D
-- JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
-- JPopsuki
-- JPTV4us
-- KamePT [![(invite needed)][inviteneeded]](#)
-- Karagarga [![(invite needed)][inviteneeded]](#)
-- Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
-- Kelu [![(invite needed)][inviteneeded]](#)
-- Korsar [![(invite needed)][inviteneeded]](#)
-- KrazyZone
-- Kufei (库非)
-- Kufirc
-- Kunlun (昆仑)
-- lajidui
-- Last Digital Underground (LDU)
-- LastFiles (LF)
-- Lat-Team
-- Le Saloon [![(invite needed)][inviteneeded]](#)
-- LearnFlakes
-- Leech24
-- LemonHD [![(invite needed)][inviteneeded]](#)
-- LemonHD.net
-- Lesbians4u
-- LetSeed
-- Libble
-- LibraNet (LN)
-- LinkoManija
-- Locadora
-- LongPT
-- LosslessClub [![(invite needed)][inviteneeded]](#)
-- LP-Bits 2.0
-- LST
-- LuckPT [![(invite needed)][inviteneeded]](#)
-- Luminarr
-- M-Team - TP (MTTP) [![(invite needed)][inviteneeded]](#)
-- MaDs Revolution
-- Majomparádé (TurkDepo)
-- Making Off
-- Malayabits
-- Mansão dos Animes (MDAN)
-- March
-- Matrix
-- MeseVilág (Fairytale World)
-- MetalGuru [![(invite needed)][inviteneeded]](#)
-- Milkie (ME)
-- MMA-Torrents [![(invite needed)][inviteneeded]](#)
-- MNV (Max-New-Vision)
-- MOJBLiNK
-- MonikaDesign (MDU)
-- MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
-- MouseBits
-- MyAnonamouse (MAM)
-- MySpleen [![(invite needed)][inviteneeded]](#)
-- NCore
-- Nebulance (NBL) (TransmiTheNet)
-- NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
-- NicePT
-- Nirvana
-- NorBits
-- NORDiCHD
-- NordicQuality
-- NovaHD
-- OKPT
-- Old Greek Tracker (OGT)
-- Old Toons World (OTW)
-- OpenCD [![(invite needed)][inviteneeded]](#)
-- Orpheus
-- OnlyEncodes+
-- OshenPT
-- OurBits (HDPter)
-- P2PBG
-- Panda
-- Party-Tracker
-- PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
-- Peeratiko
-- Peers.FM
-- Phoenix Project
-- PigNetwork (猪猪网)
-- PixelCove (Ultimate Gamer)
-- PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
-- Polish Torrent (PTT)
-- PolishTracker [![(invite needed)][inviteneeded]](#)
-- Pornbay [![(invite needed)][inviteneeded]](#)
-- Portugas
-- Pretome
-- PrivateHD (PHD)
-- ProAudioTorrents (PAT)
-- PT GTK
-- PT分享站 (itzmx)
-- PTCafe (咖啡)
-- PTCC (我的PT)
-- PTerClub (PT之友俱乐部)
-- PTFans
-- PTFiles (PTF)
-- PThome [![(invite needed)][inviteneeded]](#)
-- PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
-- PTSKIT
-- PTtime
-- Punk's Horror Tracker
-- PuntoTorrent [![(invite needed)][inviteneeded]](#)
-- PuTao (葡萄)
-- PWTorrents (PWT)
-- Qingwa (青蛙)
-- R3V WTF! [![(invite needed)][inviteneeded]](#)
-- Racing4Everyone (R4E)
-- RacingForMe (RFM)
-- RailgunPT
-- Rain (雨)
-- Rastastugan
-- Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
-- Redacted (PassTheHeadphones)
-- ReelFlix (HD4Free,LegacyHD)
-- RetroFlix
-- RevolutionTT [![(invite needed)][inviteneeded]](#)
-- RocketHD
-- Romanian Metal Torrents (RMT)
-- RoTorrent (ROT)
-- Rousi
-- Rousi.pro
-- SAMARITANO
-- SBPT
-- SceneHD [![(invite needed)][inviteneeded]](#)
-- SceneRush [![(invite needed)][inviteneeded]](#)
-- SceneTime
-- Secret Cinema
-- SeedFile (SF)
-- seedpool
-- SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
-- SexTorrent
-- SFP (Share Friends Projekt)
-- ShaKaw [![(invite needed)][inviteneeded]](#)
-- Shareisland
-- Shazbat
-- SiamBIT [PAY2DL]
-- SkipTheCommercials
-- SnowPT (SSPT)
-- SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
-- SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
-- SpeedCD
-- Speedmaster HD [![(invite needed)][inviteneeded]](#)
-- Spirit of Revolution [![(invite needed)][inviteneeded]](#)
-- SportsCult
-- SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
-- SugoiMusic
-- Superbits (SBS)
-- Swarmazon
-- Tangmen (唐门)
-- TangPT (躺平)
-- Tapochek
-- Tasmanit
-- Team CT Game (TCTG)
-- TeamHD
-- TeamOS
-- TEKNO3D [![(invite needed)][inviteneeded]](#)
-- The Brothers
-- The Crazy Ones
-- The Empire (TE)
-- The Falling Angels (TFA)
-- The Geeks
-- The Kitchen (TK)
-- The New Retro
-- The Occult (TO)
-- The Old School (TOS)
-- The Paradiese
-- The Place (TP)
-- The Show (TSBZ)
-- The Vault (TVBZ)
-- The-New-Fun
-- TheLeachZone (TLZ)
-- TJUPT (北洋园PT)
-- TLFBits [![(invite needed)][inviteneeded]](#)
-- TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
-- Toca Share
-- Tormac
-- Tornado
-- Torr9
-- Torrent Heaven (Dutch)
-- Torrent Network (TN)
-- Torrent Trader [![(invite needed)][inviteneeded]](#)
-- Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
-- TOrrent-tuRK (TORK)
-- Torrent.LT
-- TorrentBD
-- TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
-- TorrentCCF (TCCF)
-- TorrentDay (TD)
-- TorrentDD (TodayBit)
-- Torrenteros (TTR)
-- TorrentHR
-- Torrenting (TT)
-- TorrentLeech (TL)
-- TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
-- ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
-- TrackerMK
-- TranceTraffic
-- Trellas (Magico) [![(invite needed)][inviteneeded]](#)
-- TreZzoR
-- TurkSeed (Aturk)
-- TurkTorrent (TT) [PAY2DL]
-- TV Chaos UK (TVCUK)
-- TVstore
-- U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
-- UBits
-- UHDBits
-- UltraHD
-- UnlimitZ
-- upload.cx (ULCX)
-- Upscale Vault
-- UTOPIA
-- Vault network
-- White Angel
-- WinterSakura [![(invite needed)][inviteneeded]](#)
-- World-In-HD [![(invite needed)][inviteneeded]](#)
-- World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
-- x-ite.me (XM)
-- xloli (ilolicon PT)
-- XSpeeds (XS)
-- Xthor [![(invite needed)][inviteneeded]](#)
-- xTorrenty [![(invite needed)][inviteneeded]](#)
-- XtremeBytes (TorrentSurf)
-- XWT-Classics
-- XWTorrents (XWT)
-- YggTorrent (YGG)
-- YUSCENE
-- Zamunda.net
-- Zappateers
-- Zelka.org
-- ZmPT (织梦)
-
-Full details available in the source documentation.
-
+ * 0day.kiev
+ * 13City
+ * 1ptbar
+ * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
+ * 3D Torrents (3DT)
+ * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
+ * 52PT
+ * 720pier
+ * Abnormal (ABN)
+ * ABtorrents (ABT + RNS)
+ * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
+ * Aftershock
+ * AFUN
+ * AGSVPT (Arctic Global Seed Vault)
+ * Aidoru!Online
+ * Aither
+ * alingPT
+ * AlphaRatio (AR)
+ * AmigosShareClub (ASC)
+ * Anime No Sekai (ANSK)
+ * AnimeBytes (AB)
+ * AnimeTorrents (AnT)
+ * AnimeTorrents.ro (Anime Torrents Romania)
+ * AnimeWorld (AW)
+ * Anthelion (ANT)
+ * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
+ * ArabicSource
+ * ArabP2P
+ * ArabScene [![(invite needed)][inviteneeded]](#)
+ * ArabTorrents [![(invite needed)][inviteneeded]](#)
+ * AsianCinema
+ * AsianDVDClub (ADC)
+ * Audiences
+ * AudioNews (AN)
+ * AURA4K
+ * Aussierul.es [![(invite needed)][inviteneeded]](#)
+ * AvistaZ (AsiaTorrents)
+ * Azusa (梓喵) [![(invite needed)][inviteneeded]](#)
+ * Back-ups
+ * BakaBT
+ * baoziPT
+ * Beload
+ * Best-Core
+ * BeyondHD (BHD)
+ * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigBBS
+ * BigCore
+ * Bit-Bázis
+ * BIT-HDTV
+ * Bitded
+ * bitGAMER
+ * BitHUmen
+ * Bitpalace
+ * BitPorn
+ * BitTorrentFiles
+ * BiTTuRK
+ * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
+ * BlueBird
+ * BlurayTracker
+ * Blutopia (BLU)
+ * Borgzelle [![(invite needed)][inviteneeded]](#)
+ * Boxing Torrents
+ * Brasil Tracker
+ * BroadcasTheNet (BTN) [![(invite needed)][inviteneeded]](#)
+ * BrokenStones [![(invite needed)][inviteneeded]](#)
+ * BTArg
+ * BTNext (BTNT) [![(invite needed)][inviteneeded]](#)
+ * BTSCHOOL
+ * BWTorrents
+ * BYRBT
+ * C411
+ * cangbaoge (CBG)
+ * CapybaraBR
+ * Carp-Hunter
+ * Carpathians
+ * CarPT
+ * Cathode-Ray.Tube (CRT)
+ * CD File
+ * CeskeForum
+ * CGPeers [![(invite needed)][inviteneeded]](#)
+ * CHDBits [![(invite needed)][inviteneeded]](#)
+ * ChileBT
+ * Cinemageddon [![(invite needed)][inviteneeded]](#)
+ * CinemaMovieS_ZT
+ * Cinematik
+ * CinemaZ (EuTorrents)
+ * ClearJAV
+ * Coastal-Music-Crew (C-M-C)
+ * ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
+ * Concertos
+ * CrabPT (蟹黄堡)
+ * CrazySpirits
+ * CrnaBerza
+ * cspt (财神)
+ * cyanbug (大青虫)
+ * DANISH BYTES
+ * Darkpeers
+ * Das Unerwartete (D-U)
+ * DataScene (DS)
+ * DesiTorrents
+ * Diablo Torrent
+ * DICMusic [![(invite needed)][inviteneeded]](#)
+ * DigitalCore (DC)
+ * DimeADozen (EzTorrent)
+ * DiscFan [![(invite needed)][inviteneeded]](#)
+ * DocsPedia
+ * Drugari
+ * dubhe (天枢)
+ * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
+ * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
+ * eMuwarez
+ * eShareNet
+ * eStone (BigTorrent)
+ * Exitorrent.org [![(invite needed)][inviteneeded]](#)
+ * ExoticaZ (YourExotic)
+ * Explosiv-World (E-W)
+ * ExtremeBits
+ * F1Carreras
+ * F1GP
+ * FANO.IN [![(invite needed)][inviteneeded]](#)
+ * Fappaizuri
+ * FearNoPeer
+ * Femdomcult
+ * FileList (FL)
+ * FinElite (FE) [![(invite needed)][inviteneeded]](#)
+ * Flood (FLD)
+ * Flux-Zone
+ * Free Farm (自由农场)
+ * FunFile (FF)
+ * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
+ * FutureTorrent [PAY2DL]
+ * Fuzer (FZ)
+ * G3MINI TR4CK3R
+ * Gay-Torrents.org
+ * GAYtorrent.ru
+ * GazelleGames (GGn)
+ * Generation-Free
+ * GGPT
+ * GigaTorrents
+ * GimmePeers (formerly ILT) [PAY2DL]
+ * GiroTorrent
+ * GreatPosterWall (GPW)
+ * HaiDan
+ * Hǎitáng (海棠PT)
+ * HappyFappy (HF)
+ * Hawke-uno (HUNO)
+ * HD Dolby [![(invite needed)][inviteneeded]](#)
+ * HD Zero
+ * HD-Club [![(invite needed)][inviteneeded]](#)
+ * HD-Forever (HDF)
+ * HD-Olimpo [![(invite needed)][inviteneeded]](#)
+ * HD-Only (HDO)
+ * HD-Space (HDS)
+ * HD-Torrents (HDT)
+ * HD-UNiT3D
+ * HDArea (HDA)
+ * HDBao
+ * HDBits [![(invite needed)][inviteneeded]](#)
+ * HDCiTY (HDC) [![(invite needed)][inviteneeded]](#)
+ * HDClone
+ * HDFans
+ * HDHome [![(invite needed)][inviteneeded]](#)
+ * HDKylin (麒麟)
+ * HDRoute [![(invite needed)][inviteneeded]](#)
+ * HDSky [![(invite needed)][inviteneeded]](#)
+ * HDtime
+ * HDTorrents.it [PAY2DL]
+ * HDTurk
+ * HDU
+ * Hebits (HB)
+ * HellasHut
+ * HELLENIC-HD
+ * HHanClub
+ * HHD
+ * House of Devil
+ * HQMusic
+ * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
+ * HxPT (好学) [![(invite needed)][inviteneeded]](#)
+ * ImmortalSeed (iS)
+ * Immortuos
+ * Indietorrents [![(invite needed)][inviteneeded]](#)
+ * INFINITY [PAY2DL] [![(invite needed)][inviteneeded]](#)
+ * InfinityHD
+ * Infire
+ * Insane Tracker
+ * IPTorrents (IPT)
+ * ItaTorrents
+ * JME-REUNIT3D
+ * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
+ * JPopsuki
+ * JPTV4us
+ * KamePT [![(invite needed)][inviteneeded]](#)
+ * Karagarga [![(invite needed)][inviteneeded]](#)
+ * Keep Friends (FRDS-PT) [![(invite needed)][inviteneeded]](#)
+ * Kelu [![(invite needed)][inviteneeded]](#)
+ * Korsar [![(invite needed)][inviteneeded]](#)
+ * KrazyZone
+ * Kufei (库非)
+ * Kufirc
+ * Kunlun (昆仑)
+ * lajidui
+ * Last Digital Underground (LDU)
+ * LastFiles (LF)
+ * Lat-Team
+ * Le Saloon [![(invite needed)][inviteneeded]](#)
+ * LearnFlakes
+ * Leech24
+ * LemonHD [![(invite needed)][inviteneeded]](#)
+ * LemonHD.net
+ * Lesbians4u
+ * LetSeed
+ * Libble
+ * LibraNet (LN)
+ * LinkoManija
+ * Locadora
+ * LongPT
+ * LosslessClub [![(invite needed)][inviteneeded]](#)
+ * LP-Bits 2.0
+ * LST
+ * LuckPT [![(invite needed)][inviteneeded]](#)
+ * Luminarr
+ * M-Team - TP (MTTP) [![(invite needed)][inviteneeded]](#)
+ * MaDs Revolution
+ * Majomparádé (TurkDepo)
+ * Making Off
+ * Malayabits
+ * Mansão dos Animes (MDAN)
+ * March
+ * Matrix
+ * MeseVilág (Fairytale World)
+ * MetalGuru [![(invite needed)][inviteneeded]](#)
+ * Milkie (ME)
+ * MMA-Torrents [![(invite needed)][inviteneeded]](#)
+ * MNV (Max-New-Vision)
+ * MOJBLiNK
+ * MonikaDesign (MDU)
+ * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
+ * MouseBits
+ * MyAnonamouse (MAM)
+ * MySpleen [![(invite needed)][inviteneeded]](#)
+ * NCore
+ * Nebulance (NBL) (TransmiTheNet)
+ * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
+ * NicePT
+ * Nirvana
+ * NorBits
+ * NORDiCHD
+ * NordicQuality
+ * NovaHD
+ * OKPT
+ * Old Greek Tracker (OGT)
+ * Old Toons World (OTW)
+ * OpenCD [![(invite needed)][inviteneeded]](#)
+ * Orpheus
+ * OnlyEncodes+
+ * OshenPT
+ * OurBits (HDPter)
+ * P2PBG
+ * Panda
+ * Party-Tracker
+ * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
+ * Peeratiko
+ * Peers.FM
+ * Phoenix Project
+ * PigNetwork (猪猪网)
+ * PixelCove (Ultimate Gamer)
+ * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
+ * Polish Torrent (PTT)
+ * PolishTracker [![(invite needed)][inviteneeded]](#)
+ * Pornbay [![(invite needed)][inviteneeded]](#)
+ * Portugas
+ * Pretome
+ * PrivateHD (PHD)
+ * ProAudioTorrents (PAT)
+ * PT GTK
+ * PT分享站 (itzmx)
+ * PTCafe (咖啡)
+ * PTCC (我的PT)
+ * PTerClub (PT之友俱乐部)
+ * PTFans
+ * PTFiles (PTF)
+ * PThome [![(invite needed)][inviteneeded]](#)
+ * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
+ * PTSKIT
+ * PTtime
+ * Punk's Horror Tracker
+ * PuntoTorrent [![(invite needed)][inviteneeded]](#)
+ * PuTao (葡萄)
+ * PWTorrents (PWT)
+ * Qingwa (青蛙)
+ * R3V WTF! [![(invite needed)][inviteneeded]](#)
+ * Racing4Everyone (R4E)
+ * RacingForMe (RFM)
+ * RailgunPT
+ * Rain (雨)
+ * Rastastugan
+ * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
+ * Redacted (PassTheHeadphones)
+ * ReelFlix (HD4Free,LegacyHD)
+ * RetroFlix
+ * RevolutionTT [![(invite needed)][inviteneeded]](#)
+ * RocketHD
+ * Romanian Metal Torrents (RMT)
+ * RoTorrent (ROT)
+ * Rousi
+ * Rousi.pro
+ * SAMARITANO
+ * SBPT
+ * SceneHD [![(invite needed)][inviteneeded]](#)
+ * SceneRush [![(invite needed)][inviteneeded]](#)
+ * SceneTime
+ * Secret Cinema
+ * SeedFile (SF)
+ * seedpool
+ * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
+ * SexTorrent
+ * SFP (Share Friends Projekt)
+ * ShaKaw [![(invite needed)][inviteneeded]](#)
+ * Shareisland
+ * Shazbat
+ * SiamBIT [PAY2DL]
+ * SkipTheCommercials
+ * SnowPT (SSPT)
+ * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
+ * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
+ * SpeedCD
+ * Speedmaster HD [![(invite needed)][inviteneeded]](#)
+ * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
+ * SportsCult
+ * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
+ * SugoiMusic
+ * Superbits (SBS)
+ * Swarmazon
+ * Tangmen (唐门)
+ * TangPT (躺平)
+ * Tapochek
+ * Tasmanit
+ * Team CT Game (TCTG)
+ * TeamHD
+ * TeamOS
+ * TEKNO3D [![(invite needed)][inviteneeded]](#)
+ * The Brothers
+ * The Crazy Ones
+ * The Empire (TE)
+ * The Falling Angels (TFA)
+ * The Geeks
+ * The Kitchen (TK)
+ * The New Retro
+ * The Occult (TO)
+ * The Old School (TOS)
+ * The Paradiese
+ * The Place (TP)
+ * The Show (TSBZ)
+ * The Vault (TVBZ)
+ * The-New-Fun
+ * TheLeachZone (TLZ)
+ * TJUPT (北洋园PT)
+ * TLFBits [![(invite needed)][inviteneeded]](#)
+ * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
+ * Toca Share
+ * Tormac
+ * Tornado
+ * Torr9
+ * Torrent Heaven (Dutch)
+ * Torrent Network (TN)
+ * Torrent Trader [![(invite needed)][inviteneeded]](#)
+ * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
+ * TOrrent-tuRK (TORK)
+ * Torrent.LT
+ * TorrentBD
+ * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
+ * TorrentCCF (TCCF)
+ * TorrentDay (TD)
+ * TorrentDD (TodayBit)
+ * Torrenteros (TTR)
+ * TorrentHR
+ * Torrenting (TT)
+ * TorrentLeech (TL)
+ * TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
+ * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
+ * TrackerMK
+ * TranceTraffic
+ * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
+ * TreZzoR
+ * TurkSeed (Aturk)
+ * TurkTorrent (TT) [PAY2DL]
+ * TV Chaos UK (TVCUK)
+ * TVstore
+ * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
+ * UBits
+ * UHDBits
+ * UltraHD
+ * UnlimitZ
+ * upload.cx (ULCX)
+ * Upscale Vault
+ * UTOPIA
+ * Vault network
+ * White Angel
+ * WinterSakura [![(invite needed)][inviteneeded]](#)
+ * World-In-HD [![(invite needed)][inviteneeded]](#)
+ * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
+ * x-ite.me (XM)
+ * xloli (ilolicon PT)
+ * XSpeeds (XS)
+ * Xthor [![(invite needed)][inviteneeded]](#)
+ * xTorrenty [![(invite needed)][inviteneeded]](#)
+ * XtremeBytes (TorrentSurf)
+ * XWT-Classics
+ * XWTorrents (XWT)
+ * YggTorrent (YGG)
+ * YUSCENE
+ * Zamunda.net
+ * Zappateers
+ * Zelka.org
+ * ZmPT (织梦)
 </details>
 
 **Note:** Trackers marked with "invite needed" have no active maintainer and may be broken or missing features. If you have an invite, please send it to jacketttest@gmail.com or garfieldsixtynine@gmail.com to help improve these indexers.
