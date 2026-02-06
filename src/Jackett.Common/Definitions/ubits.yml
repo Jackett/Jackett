@@ -75,6 +75,10 @@ login:
   path: login.php
   method: form
   form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
     secret: ""
     username: "{{ .Config.username }}"
