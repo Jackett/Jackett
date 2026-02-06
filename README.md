@@ -494,7 +494,7 @@ Prior versions of Jackett are no longer supported.
  * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
- * March
+ * March [![(invite needed)][inviteneeded]](#)
  * Matrix
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
