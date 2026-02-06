@@ -60,6 +60,8 @@ This project is recruiting development help.  If you can help out please [contac
 
 For detailed troubleshooting and contributing guidelines, please see [CONTRIBUTING.md](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md)
 
+A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
+
 **Note:** The Discord server is no longer maintained. If you have a problem, request, or question, please open a new issue on [GitHub](https://github.com/Jackett/Jackett/issues/8180).
 
 ---
