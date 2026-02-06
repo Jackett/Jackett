@@ -56,7 +56,7 @@ Jackett works as a proxy server that translates queries from applications ([Sona
 
 ### Developer Information
 
-A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
+This project is recruiting development help.  If you can help out please [contact us](https://github.com/Jackett/Jackett/issues/8180).
 
 For detailed troubleshooting and contributing guidelines, please see [CONTRIBUTING.md](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md)
 
