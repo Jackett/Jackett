@@ -40,7 +40,7 @@
 
 ## Introduction
 
-Jackett works as a proxy server that translates queries from applications (Sonarr, Radarr, SickRage, CouchPotato, Mylar3, Lidarr, DuckieTV, qBittorrent, Nefarious, NZBHydra2, etc.) into tracker-site-specific HTTP queries, parses the HTML or JSON response, and sends results back to the requesting software.
+Jackett works as a proxy server that translates queries from applications ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious), [NZBHydra2](https://github.com/theotherp/nzbhydra2) etc.) into tracker-site-specific HTTP queries, parses the HTML or JSON response, and sends results back to the requesting software.
 
 **What Jackett does:**
 - Acts as a bridge between your apps and torrent trackers
