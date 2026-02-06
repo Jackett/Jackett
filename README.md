@@ -1522,6 +1522,10 @@ If an indexer shows "Cloudflare protected" errors:
 ./jackett --NoUpdates
 ```
 
+#### Other Common Issues
+
+See https://github.com/Jackett/Jackett/wiki/Troubleshooting
+
 ### Getting Help
 
 1. Check the [GitHub Issues](https://github.com/Jackett/Jackett/issues) for similar problems
