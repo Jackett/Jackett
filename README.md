@@ -686,7 +686,7 @@ Prior versions of Jackett are no longer supported.
  * ZmPT (织梦)
 </details>
 
-**Note:** Trackers marked with "invite needed" have no active maintainer and may be broken or missing features. If you have an invite, please send it to jacketttest@gmail.com or garfieldsixtynine@gmail.com to help improve these indexers.
+**Note:** Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be broken or missing features. If you have an invite, please send it to `jacketttest [at] gmail [dot] com` or `garfieldsixtynine [at] gmail [dot] com` to help improve these indexers.
 
 ---
 
