@@ -107,7 +107,7 @@ caps:
     - {id: 212, cat: Audio, desc: " |- Instrumental & Guitar Rock"}
     - {id: 241, cat: Audio, desc: " |- Rock'n'Roll, Rockabilly, Psychobilly"}
     - {id: 211, cat: Audio, desc: " |- Сборники зарубежного Рока"}
-    - {id: 243, cat: Audio, desc: " |- Зарубежный Metal (альбомы)"}
+    - {id: 394, cat: Audio, desc: " |- Зарубежный Metal (альбомы, дискографии)"}
     - {id: 154, cat: Audio, desc: " |- Зарубежный Metal (сборники)"}
     - {id: 216, cat: Audio, desc: "♫ Alternative, Punk, Industrial, Gothic ♫ (Mp3)♫"}
     - {id: 219, cat: Audio, desc: " |- Alternative"}
