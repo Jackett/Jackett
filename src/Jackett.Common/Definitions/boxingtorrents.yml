@@ -11,23 +11,22 @@ links:
 caps:
   categorymappings:
     - {id: 17, cat: TV/Sport, desc: "4K"}
-    - {id: 15, cat: TV/Sport, desc: "3D"}
-    - {id: 9, cat: TV/Sport, desc: "Amateur - Full"}
     - {id: 16, cat: TV/Sport, desc: "Blu-ray"}
-    - {id: 13, cat: TV/Sport, desc: "Career Set"}
+    - {id: 14, cat: TV/Sport, desc: "HD"}
     - {id: 8, cat: TV/Sport, desc: "DVD"}
-    - {id: 10, cat: TV/Sport, desc: "Foreign - Excellent"}
-    - {id: 11, cat: TV/Sport, desc: "Foreign - Fair"}
-    - {id: 6, cat: TV/Sport, desc: "Foreign - Good"}
-    - {id: 12, cat: TV/Sport, desc: "Foreign - Poor"}
     - {id: 1, cat: TV/Sport, desc: "Full - Excellent"}
     - {id: 3, cat: TV/Sport, desc: "Full - Fair"}
     - {id: 2, cat: TV/Sport, desc: "Full - Good"}
     - {id: 4, cat: TV/Sport, desc: "Full - Poor"}
-    - {id: 14, cat: TV/Sport, desc: "HD"}
-    - {id: 7, cat: TV/Sport, desc: "Misc"}
-    - {id: 18, cat: TV/Sport, desc: "Instructional"}
+    - {id: 10, cat: TV/Sport, desc: "Foreign - Excellent"}
+    - {id: 11, cat: TV/Sport, desc: "Foreign - Fair"}
+    - {id: 6, cat: TV/Sport, desc: "Foreign - Good"}
+    - {id: 12, cat: TV/Sport, desc: "Foreign - Poor"}
+    - {id: 13, cat: TV/Sport, desc: "Career Set"}
     - {id: 19, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 9, cat: TV/Sport, desc: "Amateur - Full"}
+    - {id: 18, cat: TV/Sport, desc: "Instructional"}
+    - {id: 7, cat: TV/Sport, desc: "Misc"}
 
   modes:
     search: [q]
@@ -44,22 +43,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: added
-    options:
-      added: created
-      seeders: seeders
-      size: size
-      name: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: DESC
-    options:
-      DESC: desc
-      ASC: asc
+#  - name: sort
+#    type: select
+#    label: Sort requested from site
+#    default: added
+#    options:
+#      added: created
+#      seeders: seeders
+#      size: size
+#      name: title
+#  - name: type
+#    type: select
+#    label: Order requested from site
+#    default: DESC
+#    options:
+#      DESC: desc
+#      ASC: asc
   - name: info_download
     type: info
     label: "Download Restrictions"
@@ -86,19 +85,32 @@ search:
   paths:
     # https://tc-boxing.com/browse.php?c16=1&c8=1&c14=1&incldead=1
     # https://tc-boxing.com/browse.php?search=tyson&cat=0&incldead=1
+    # https://tc-boxing.com/browse.php?search=medina&cat=0&incldead=1&screen=1&champ=1&free=1
     - path: browse.php
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}c{{.}}=1&{{end}}{{ else }}cat=0{{ end }}"
-    # 1 incldead, null active
+    # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 1 freeleech only, null all
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
-    sort: "{{ .Config.sort }}"
-    d: "{{ .Config.type }}"
+# dropped sorting as this prevents the dateheaders from results!
+#    sort: "{{ .Config.sort }}"
+#    d: "{{ .Config.type }}"
 
   rows:
-    selector: table.torrenttable tr:has(a[href^="details.php?id="])
+    selector: table.torrenttable > tbody > tr:has(a[href^="details.php?id="])
+    filters:
+      - name: andmatch
+    dateheaders:
+      selector: td[colspan] > b
+      filters:
+        - name: append
+          args: " -07:00" # PDT
+        - name: replace
+          args: ["Torrents added ", ""]
+        - name: dateparse
+          args: "dddd, d. MMM, yyyy zzz"
 
   fields:
     category:
@@ -116,14 +128,7 @@ search:
       selector: a[href^="details.php?id="]
       attribute: href
     files:
-      selector: td:nth-last-child(8)
-    date:
-      selector: td:nth-last-child(6)
-      filters:
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
+      selector: td:nth-last-child(7)
     size:
       selector: td:nth-last-child(5)
     grabs:
