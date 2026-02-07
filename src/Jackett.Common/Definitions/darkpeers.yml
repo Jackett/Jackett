@@ -18,6 +18,7 @@ caps:
     - {id: 6, cat: XXX, desc: "XXX"}
     - {id: 7, cat: Other, desc: "Assorted"}
     - {id: 8, cat: Books, desc: "Books"}
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
