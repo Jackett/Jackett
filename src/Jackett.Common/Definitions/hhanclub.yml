@@ -7,8 +7,10 @@ type: private
 encoding: UTF-8
 followredirect: true
 links:
-  - https://hhanclub.top/
+  - https://hhanclub.net/
   - https://hhan.club/
+legacylinks:
+  - https://hhanclub.top/
 
 caps:
   categorymappings:
