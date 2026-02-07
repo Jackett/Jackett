@@ -226,7 +226,8 @@ namespace Jackett.Common.Indexers.Definitions
                                              .Replace("4K", "2160p");
                     var language = downloadUrl.Language
                                               .Replace("/", ".")
-                                              .Replace("Inglés", "English");
+                                              .Replace("Inglés", "English")
+                                              .Replace("Castellano", "Spanish");
 
                     return new ReleaseInfo
                     {
