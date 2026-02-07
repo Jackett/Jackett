@@ -12,38 +12,15 @@ links:
 caps:
   # use https://la-cale.space/api/external/meta?apikey=YOUR-APIKEY for cat mappings, slug is id, name is desc
   categorymappings:
-    # Autres
-    - {id: autres, cat: Other, desc: "Autres"}
+    # XXX
+    - {id: xxx, cat: XXX, desc: "XXX"}
     # Vidéo
     - {id: video, cat: Movies, desc: "Vidéo"}
     - {id: video, cat: TV, desc: "Vidéo"}
     - {id: films, cat: Movies, desc: "Films"}
-    - {id: animation, cat: Movies/Other, desc: "Animation"}
     - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
     - {id: sports, cat: TV/Sport, desc: "Sports"}
     - {id: series, cat: TV, desc: "Séries TV"}
-    - {id: s-ries-hd, cat: TV/HD, desc: "Séries HD"}
-    # Applications
-    - {id: applications, cat: PC, desc: "Applications"}
-    - {id: software, cat: PC, desc: "Logiciels"}
-    - {id: linux, cat: PC, desc: "Linux"}
-    - {id: systemes, cat: PC, desc: "Systèmes"}
-    # Jeux
-    - {id: games, cat: PC/Games, desc: "Jeux"}
-    - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
-    - {id: pc, cat: PC/Games, desc: "PC"}
-    - {id: playstation, cat: Console/PS4, desc: "Playstation"}
-    - {id: sega, cat: Console/Other, desc: "Sega"}
-    - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
-    - {id: xbox, cat: Console/XBox, desc: "Xbox"}
-    # E-books
-    - {id: e-books, cat: Books/EBook, desc: "E-books"}
-    - {id: bd, cat: Books/Comics, desc: "BD"}
-    - {id: comics, cat: Books/Comics, desc: "Comics"}
-    - {id: divers, cat: Books/Other, desc: "Divers"}
-    - {id: livres, cat: Books/EBook, desc: "Livres"}
-    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
-    - {id: presse, cat: Books/Mags, desc: "Presse"}
     # Audio
     - {id: audio, cat: Audio, desc: "Audio"}
     - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
@@ -53,8 +30,30 @@ caps:
     - {id: m4a, cat: Audio, desc: "M4A"}
     - {id: mp3, cat: Audio/MP3, desc: "MP3"}
     - {id: podcast, cat: Audio/Other, desc: "Podcast"}
-    # XXX
-    - {id: xxx, cat: XXX, desc: "XXX"}
+    # E-books
+    - {id: e-books, cat: Books/EBook, desc: "E-books"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: comics, cat: Books/Comics, desc: "Comics"}
+    - {id: divers, cat: Books/Other, desc: "Divers"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    - {id: linux, cat: PC, desc: "Linux"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    # Autres
+    - {id: autres, cat: Other, desc: "Autres"}
+    # Jeux
+    - {id: games, cat: PC/Games, desc: "Jeux"}
+    - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
+    - {id: pc, cat: PC/Games, desc: "PC"}
+    - {id: playstation, cat: Console/PS4, desc: "Playstation"}
+    - {id: sega, cat: Console/Other, desc: "Sega"}
+    - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
+    - {id: vr, cat: PC/Games, desc: "VR"}
+    - {id: xbox, cat: Console/XBox, desc: "Xbox"}
 
   modes:
     search: [q]
