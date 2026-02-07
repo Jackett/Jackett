@@ -222,8 +222,11 @@ namespace Jackett.Common.Indexers.Definitions
                     //Radarr parsing
                     var quality = downloadUrl.Quality.ToUpper()
                                              .Replace("DUAL ", "")
+                                             .Replace("HD", "1080p")
                                              .Replace("4K", "2160p");
-                    var language = downloadUrl.Language.Replace("/", ".");
+                    var language = downloadUrl.Language
+                                              .Replace("/", ".")
+                                              .Replace("Inglés", "English");
 
                     return new ReleaseInfo
                     {
