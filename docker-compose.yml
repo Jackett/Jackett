@@ -1,0 +1,35 @@
+# Jackett built from source (this repo). Use for local dev/test e.g. indexer XFilmes.
+# Build: docker compose build
+# Run:   docker compose up -d
+# UI:    http://localhost:9117
+# FlareSolverr: http://localhost:8191 (usado pelo Jackett para resolver Cloudflare)
+
+services:
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    environment:
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+      - TZ=America/Sao_Paulo
+    ports:
+      - "8191:8191"
+    restart: unless-stopped
+
+  jackett:
+    build: .
+    image: jackett:local
+    container_name: jackett
+    ports:
+      - "9117:9117"
+    volumes:
+      - jackett_config:/config
+    environment:
+      - TZ=America/Sao_Paulo
+    restart: unless-stopped
+    depends_on:
+      - flaresolverr
+
+volumes:
+  jackett_config: {}

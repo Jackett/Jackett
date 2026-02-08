@@ -1,0 +1,31 @@
+# Git and IDE
+.git
+.gitignore
+.vs
+*.user
+*.suo
+
+# Build outputs (rebuilt inside image)
+**/bin
+**/obj
+**/out
+
+# Test and tooling
+**/TestResults
+**/node_modules
+**/.idea
+
+# Docs and assets not needed at runtime
+.github
+*.md
+!README.md
+*.png
+*.ico
+
+# Installers and scripts not needed in container
+*.iss
+*.sh
+*.bat
+*.config
+yamllint.yml
+azure-pipelines.yml
