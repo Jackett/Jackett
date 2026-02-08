@@ -12,15 +12,16 @@ links:
 caps:
   # use https://la-cale.space/api/external/meta?apikey=YOUR-APIKEY for cat mappings, slug is id, name is desc
   categorymappings:
-    # XXX
-    - {id: xxx, cat: XXX, desc: "XXX"}
-    # Vidéo
-    - {id: video, cat: Movies, desc: "Vidéo"}
-    - {id: video, cat: TV, desc: "Vidéo"}
-    - {id: films, cat: Movies, desc: "Films"}
-    - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
-    - {id: sports, cat: TV/Sport, desc: "Sports"}
-    - {id: series, cat: TV, desc: "Séries TV"}
+    # Autres
+    - {id: autres, cat: Other, desc: "Autres"}
+    # E-books
+    - {id: e-books, cat: Books/EBook, desc: "E-books"}
+    - {id: bd, cat: Books/Comics, desc: "BD"}
+    - {id: comics, cat: Books/Comics, desc: "Comics"}
+    - {id: divers, cat: Books/Other, desc: "Divers"}
+    - {id: livres, cat: Books/EBook, desc: "Livres"}
+    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
+    - {id: presse, cat: Books/Mags, desc: "Presse"}
     # Audio
     - {id: audio, cat: Audio, desc: "Audio"}
     - {id: audio-divers, cat: Audio/Other, desc: "Audio divers"}
@@ -30,21 +31,6 @@ caps:
     - {id: m4a, cat: Audio, desc: "M4A"}
     - {id: mp3, cat: Audio/MP3, desc: "MP3"}
     - {id: podcast, cat: Audio/Other, desc: "Podcast"}
-    # E-books
-    - {id: e-books, cat: Books/EBook, desc: "E-books"}
-    - {id: bd, cat: Books/Comics, desc: "BD"}
-    - {id: comics, cat: Books/Comics, desc: "Comics"}
-    - {id: divers, cat: Books/Other, desc: "Divers"}
-    - {id: livres, cat: Books/EBook, desc: "Livres"}
-    - {id: mangas, cat: Books/Comics, desc: "Mangas"}
-    - {id: presse, cat: Books/Mags, desc: "Presse"}
-    # Applications
-    - {id: applications, cat: PC, desc: "Applications"}
-    - {id: software, cat: PC, desc: "Logiciels"}
-    - {id: linux, cat: PC, desc: "Linux"}
-    - {id: systemes, cat: PC, desc: "Systèmes"}
-    # Autres
-    - {id: autres, cat: Other, desc: "Autres"}
     # Jeux
     - {id: games, cat: PC/Games, desc: "Jeux"}
     - {id: nintendo, cat: Console/NDS, desc: "Nintendo"}
@@ -54,6 +40,20 @@ caps:
     - {id: t-l-phones, cat: PC/Mobile-Other, desc: "Téléphones"}
     - {id: vr, cat: PC/Games, desc: "VR"}
     - {id: xbox, cat: Console/XBox, desc: "Xbox"}
+    # Applications
+    - {id: applications, cat: PC, desc: "Applications"}
+    - {id: software, cat: PC, desc: "Logiciels"}
+    - {id: linux, cat: PC, desc: "Linux"}
+    - {id: systemes, cat: PC, desc: "Systèmes"}
+    # Vidéo
+    - {id: video, cat: Movies, desc: "Vidéo"}
+    - {id: video, cat: TV, desc: "Vidéo"}
+    - {id: films, cat: Movies, desc: "Films"}
+    - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
+    - {id: sports, cat: TV/Sport, desc: "Sports"}
+    - {id: series, cat: TV, desc: "Séries TV"}
+    # XXX
+    - {id: xxx, cat: XXX, desc: "XXX"}
 
   modes:
     search: [q]
@@ -70,13 +70,6 @@ settings:
     type: info
     label: About your API key
     default: "Find/Generate your API key on your <a href=\"https://la-cale.space/settings/api-keys\" target=\"_blank\">La Cale API keys</a>."
-  - name: passkey
-    type: text
-    label: Passkey override (Optional - Forces Magnet Link)
-  - name: info_passkey
-    type: info
-    label: About your secret Passkey
-    default: "Find your Passkey on your <a href=\"https://la-cale.space/profile\" target=\"_blank\">La Cale profile page</a>."
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -146,16 +139,11 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}"
-    infohash:
-      selector: infoHash
-      filters:
-        - name: tolower
-    _link:
       selector: link
     download:
-      # Fix: Hybrid download logic. If a passkey is provided, forge a magnet link to override it; otherwise, download the .torrent file provided by the API.
-      text: "{{ if .Config.passkey }}magnet:?xt=urn:btih:{{ .Result.infohash }}&dn={{ .Result.title }}&tr=https%3A%2F%2Ftracker.la-cale.space%2Fannounce%3Fpasskey%3D{{ .Config.passkey }}{{ else }}{{ .Result._link }}&apikey={{ .Config.apikey }}{{ end }}"
+      selector: downloadLink
+    infohash:
+      selector: infoHash
     size:
       selector: size
     date:
