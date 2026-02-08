@@ -387,7 +387,8 @@ namespace Jackett.Common.Indexers.Definitions
                 },
                 MovieSearchParams = new List<MovieSearchParam> { MovieSearchParam.Q },
                 MusicSearchParams = new List<MusicSearchParam> { MusicSearchParam.Q },
-                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q }
+                BookSearchParams = new List<BookSearchParam> { BookSearchParam.Q },
+                SupportsRawSearch = true
             };
 
             // Movies/Tv Shows Categories
