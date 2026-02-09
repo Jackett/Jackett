@@ -17,10 +17,10 @@ caps:
     - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"}
     - {id: 406, cat: Audio, desc: "Music(音乐)"}
     - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
-    - {id: 408, cat: Other, desc: "Others(其它）"}
+    - {id: 408, cat: Other, desc: "Others(其它)"}
     - {id: 410, cat: PC/0day, desc: "Software(软件)"}
     - {id: 411, cat: PC/Games, desc: "Games(游戏)"}
-    - {id: 409, cat: TV, desc: "Others(其它）"}
+    - {id: 409, cat: TV, desc: "Others(其它)"}
 
   modes:
     search: [q]
