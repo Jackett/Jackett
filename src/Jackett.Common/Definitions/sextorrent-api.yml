@@ -95,7 +95,6 @@ settings:
     type: info
     label: Account Inactivity
     default: "Inactive Account mean No trafic Up/Down, these  will be wiped very fast."
-"
 
 login:
   path: /api/torrents
