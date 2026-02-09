@@ -632,7 +632,6 @@ Prior versions of Jackett are no longer supported.
  * YUSCENE
  * Zamunda.net
  * Zappateers
- * Zelka.org
  * ZmPT (织梦)
 </details>
 
