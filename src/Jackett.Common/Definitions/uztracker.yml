@@ -73,7 +73,7 @@ caps:
     - {id: 365, cat: TV/Anime, desc: " |- OVA"}
     - {id: 361, cat: TV/Anime, desc: "Фильмы"}
     - {id: 366, cat: TV/Anime, desc: " |- Новинки"}
-    - {id: 365, cat: TV/Anime, desc: " |- Аниме Фильмы (HD)"}
+    - {id: 364, cat: TV/Anime, desc: " |- Аниме Фильмы (HD)"}
     - {id: 362, cat: TV/Anime, desc: " |- OVA"}
     # Музыка # Music
     - {id: 225, cat: Audio, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
