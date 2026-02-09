@@ -849,6 +849,7 @@ namespace Jackett.Updater
                 "Definitions/xider-torrent.yml",
                 "Definitions/xktorrent.yml",
                 "Definitions/xperiencebytes-api.yml",
+                "Definitions/xthor-api.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
                 "Definitions/xxxadulttorrent.yml",

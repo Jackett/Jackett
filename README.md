@@ -624,7 +624,6 @@ Prior versions of Jackett are no longer supported.
  * x-ite.me (XM)
  * xloli (ilolicon PT)
  * XSpeeds (XS)
- * Xthor [![(invite needed)][inviteneeded]](#)
  * xTorrenty [![(invite needed)][inviteneeded]](#)
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
