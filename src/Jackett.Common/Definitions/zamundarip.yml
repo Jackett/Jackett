@@ -1,0 +1,100 @@
+---
+id: zamundarip
+name: Zamunda RIP
+description: "Zamunda RIP is a BULGARIAN Public Torrent Archive for MOVIES / TV / GENERAL"
+language: bg-BG
+type: public
+encoding: UTF-8
+links:
+  - https://zamunda.rip/
+
+caps:
+  categorymappings:
+    # from https://zamunda.rip/api/torznab/api?t=caps
+    - {id: 1000, cat: Console, desc: "Console"}
+    - {id: 1050, cat: Console/XBox, desc: "Игри/Xbox"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2040, cat: Movies/HD, desc: "Филми/HD"}
+    - {id: 2030, cat: Movies/SD, desc: "Филми/SD"}
+    - {id: 2010, cat: Movies, desc: "Филми/Русия"}
+    - {id: 2020, cat: Movies/Other, desc: "Филми/Документални"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Blu-ray"}
+    - {id: 2060, cat: Movies/3D, desc: "Филми/3D"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio, desc: "Музика"}
+    - {id: 3020, cat: Audio/Video, desc: "Музика/DVD-R"}
+    - {id: 3040, cat: Audio, desc: "Музика/DTS"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 4050, cat: PC/Games, desc: "Игри/PC ISO"}
+    - {id: 4030, cat: PC/Mac, desc: "Игри/Mac"}
+    - {id: 4020, cat: PC/ISO, desc: "Програми/PC ISO"}
+    - {id: 4010, cat: PC, desc: "Програми/други"}
+    - {id: 4040, cat: PC/Mobile-Other, desc: "Mobile/GSM"}
+    - {id: 4070, cat: PC/Mobile-Android, desc: "Андроид/Игри"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5070, cat: TV/Anime, desc: "Анимации/Аниме"}
+    - {id: 5030, cat: TV, desc: "Сериали"}
+    - {id: 5040, cat: TV/HD, desc: "Сериали/HD"}
+    - {id: 5020, cat: TV, desc: "Сериали/Русия"}
+    - {id: 5060, cat: TV/Sport, desc: "Спорт/TV"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6040, cat: XXX/x264, desc: "XXX"}
+    - {id: 7000, cat: Books, desc: "Other"}
+    - {id: 7030, cat: Books/Comics, desc: "Книги/Комикси"}
+    - {id: 8000, cat: Other, desc: "Misc"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://zamunda.rip/api/torznab/api?t=search&limit=100
+    - path: api/torznab/api
+      response:
+        type: xml
+
+  inputs:
+    t: search
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title:
+      selector: title
+    details:
+      text: "{{ .Config.sitelink }}"
+    download:
+      selector: link
+    date:
+      # Sun, 08 Feb 2026 19:31:03 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: '[name="size"]'
+      attribute: value
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml
