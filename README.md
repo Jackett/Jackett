@@ -192,6 +192,7 @@ Prior versions of Jackett are no longer supported.
  * XXXClub
  * xxxtor
  * YTS.ag
+ * Zamunda RIP
  * ZkTorrent
 </details>
 
@@ -199,7 +200,6 @@ Prior versions of Jackett are no longer supported.
 
  * AniDUB
  * AnimeLayer
- * ArenaBG
  * Best-Torrents [PAY2DL]
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
  * BookTracker
@@ -680,9 +680,7 @@ Prior versions of Jackett are no longer supported.
  * XWTorrents (XWT)
  * YggTorrent (YGG)
  * YUSCENE
- * Zamunda.net
  * Zappateers
- * Zelka.org
  * ZmPT (织梦)
 </details>
 
