@@ -96,12 +96,17 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchTerm = WebUtilityHelpers.UrlEncode(query.GetQueryString(), Encoding.UTF8);
-            var isLatest = string.IsNullOrWhiteSpace(query.GetQueryString());
+            var rawSearchTerm = query.GetQueryString()?.Trim();
+            var searchTerm = WebUtilityHelpers.UrlEncode(rawSearchTerm, Encoding.UTF8);
+            var isLatest = string.IsNullOrWhiteSpace(rawSearchTerm);
 
-            if (!string.IsNullOrWhiteSpace(searchTerm) && searchTerm.Length < 3)
+            if (!isLatest && rawSearchTerm.Length < 3)
             {
-                throw new Exception("Search term must have at least 3 characters.");
+                var msg = $"Search term must have at least 3 characters. Used search term: '{rawSearchTerm}' (length {rawSearchTerm.Length}).";
+
+                return query.InteractiveSearch
+                    ? throw new IndexerException(this, msg)
+                    : releases;
             }
 
             // Determine postType(s) based on categories
