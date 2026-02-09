@@ -220,14 +220,26 @@ namespace Jackett.Common.Indexers.Definitions
                     var episodePart = downloadUrl.Episode != null ? $"{downloadUrl.Episode}." : "";
 
                     //Radarr parsing
-                    var quality = downloadUrl.Quality.ToUpper()
-                                             .Replace("DUAL ", "")
-                                             .Replace("HD", "1080p")
-                                             .Replace("4K", "2160p");
-                    var language = downloadUrl.Language
-                                              .Replace("/", ".")
-                                              .Replace("Inglés", "English")
-                                              .Replace("Castellano", "Spanish");
+                    var quality = Regex.Replace(
+                        downloadUrl.Quality.ToUpper(),
+                        @"\bDUAL\b\s*|\bHD\b|\b4K\b",
+                        m => m.Value.Trim() switch
+                        {
+                            "DUAL" => string.Empty,
+                            "HD" => "1080p",
+                            "4K" => "2160p",
+                            _ => m.Value
+                        });
+
+                    var language = Regex.Replace(
+                        downloadUrl.Language.Replace("/", "."),
+                        @"\bInglés\b|\bCastellano\b",
+                        m => m.Value switch
+                        {
+                            "Inglés" => "English",
+                            "Castellano" => "Spanish",
+                            _ => m.Value
+                        });
 
                     return new ReleaseInfo
                     {
