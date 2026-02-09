@@ -14,12 +14,12 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 28, cat: Movies, desc: "Foreign Movie"}
     - {id: 2, cat: TV, desc: "Serie TV"}
     - {id: 15, cat: Books/EBook, desc: "Ebook"}
     - {id: 26, cat: Audio/Audiobook, desc: "Audio Book"}
     - {id: 17, cat: Books/Mags, desc: "Riviste e Giornali"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 27, cat: Audio/Other, desc: "Podcast"}
     - {id: 7, cat: PC/Games, desc: "Games"}
     - {id: 23, cat: PC, desc: "Software"}
     - {id: 24, cat: TV/Sport, desc: "Eventi Sportivi"}
