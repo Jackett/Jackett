@@ -52,7 +52,7 @@ $(document).ready(function () {
 
     const hashArgs = getHashArgs();
     if ("indexers" in hashArgs)
-      currentFilter = hashArgs.filter
+        currentFilter = hashArgs.filter
     bindUIButtons();
     loadJackettSettings();
 });
@@ -73,15 +73,15 @@ function getHashArgs() {
 }
 
 function type_filter(indexer) {
-  return indexer.type == this.value;
+    return indexer.type == this.value;
 }
 
 function tag_filter(indexer) {
-  return indexer.tags.map(t => t.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
+    return indexer.tags.map(t => t.toLowerCase()).indexOf(this.value.toLowerCase()) > -1;
 }
 
 function state_filter(indexer) {
-  return indexer.state == this.value;
+    return indexer.state == this.value;
 }
 
 function getJackettConfig(callback) {
@@ -125,13 +125,60 @@ function loadJackettSettings() {
         $("#jackett-allowupdate").attr('checked', data.updatedisabled);
         $("#jackett-prerelease").attr('checked', data.prerelease);
         $("#jackett-logging").attr('checked', data.logging);
-
-        $("#jackett-cache-enabled").attr('checked', data.cache_enabled);
+        
+        $("#jackett-cache-type").val(data.cache_type);
+        $("#jackett-cache-connection-string").val(data.cache_connection_string);
         $("#jackett-cache-ttl").val(data.cache_ttl);
         $("#jackett-cache-max-results-per-indexer").val(data.cache_max_results_per_indexer);
-        if (!data.cache_enabled) {
+        if (data.cache_type == 0) {
             $("#jackett-show-releases").attr("disabled", true);
         }
+
+        var queryField = document.getElementById("jackett-cache-type");
+        queryField.addEventListener("change", function (event) {
+            var selectedValue = this.value;
+            var elementinput = document.getElementById("input-header-jackett-cache-connection-string");
+            var element = document.getElementById("jackett-cache-connection-string");
+            if (selectedValue === "0" || selectedValue === "1") {
+                if (elementinput) {                    
+                    elementinput.style.display = "none";
+                }
+                if (element) {                    
+                    element.style.display = "none";
+                }
+            }
+            else {
+                if (selectedValue === "2") {
+                    if (elementinput) {
+                        elementinput.style.display = "inline-block";
+                    }
+                    if (element) {
+                        element.style.display = "inline-block";
+                        element.setAttribute("placeholder", "for example base.db");
+                        element.value = "cache.db";                        
+                    }
+                }
+                else {
+                    if (selectedValue === "3") {
+                        if (elementinput) {
+                            elementinput.style.display = "inline-block";
+                        }
+                        if (element) {
+                            element.style.display = "inline-block";
+                            element.setAttribute("placeholder", "for example localhost:27017");
+                            element.value = "";                            
+                        }
+                    }
+                    else {
+                        if (element) {
+                            element.removeAttribute("placeholder");
+                        }
+                    }
+                }
+            }
+
+        });
+
 
         $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
         $("#jackett-flaresolverr-maxtimeout").val(data.flaresolverr_maxtimeout);
@@ -218,22 +265,22 @@ function reloadIndexers() {
 
 function configureFilters(indexers) {
     function add(f) {
-      if (availableFilters.find(x => x.id == f.id))
-        return;
-      if (!indexers.every(f.apply, f) && indexers.some(f.apply, f))
-        availableFilters.push(f);
+        if (availableFilters.find(x => x.id == f.id))
+            return;
+        if (!indexers.every(f.apply, f) && indexers.some(f.apply, f))
+            availableFilters.push(f);
     }
 
-    availableFilters.push({id: "test:passed", apply: state_filter, value: "success" });
-    availableFilters.push({id: "test:failed", apply: state_filter, value: "error" });
+    availableFilters.push({ id: "test:passed", apply: state_filter, value: "success" });
+    availableFilters.push({ id: "test:failed", apply: state_filter, value: "error" });
 
     ["public", "private", "semi-private"]
-      .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
-      .forEach(add);
+        .map(t => { return { id: "type:" + t, apply: type_filter, value: t } })
+        .forEach(add);
 
     configuredTags.sort()
-      .map(t => { return { id: "tag:" + t.toLowerCase(), apply: tag_filter, value: t }})
-      .forEach(add);
+        .map(t => { return { id: "tag:" + t.toLowerCase(), apply: tag_filter, value: t } })
+        .forEach(add);
 }
 
 function displayFilteredIndexersList(indexers, filter) {
@@ -241,11 +288,11 @@ function displayFilteredIndexersList(indexers, filter) {
     if (availableFilters.length > 0) {
         var filtersTemplate = Handlebars.compile($("#jackett-filters").html());
         var filters = $(filtersTemplate({
-              filters: availableFilters,
-              active: active ? active.id : null
-            }));
+            filters: availableFilters,
+            active: active ? active.id : null
+        }));
 
-        $("li a", filters).on('click', function(){
+        $("li a", filters).on('click', function () {
             displayFilteredIndexersList(configuredIndexers, $(this).data("id"));
         });
 
@@ -286,23 +333,23 @@ function displayConfiguredIndexersList(indexers) {
             [0, "asc"]
         ],
         "columnDefs": [{
-                "targets": 0,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "targets": 1,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "targets": 2,
-                "visible": false,
-                "searchable": true,
-                "orderable": false
-            }
+            "targets": 0,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "targets": 1,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "targets": 2,
+            "visible": false,
+            "searchable": true,
+            "orderable": false
+        }
         ]
     });
 
@@ -397,61 +444,61 @@ function displayUnconfiguredIndexersList() {
             [1, "asc"]
         ],
         "columnDefs": [{
-                "name": "select",
-                "targets": 0,
-                "visible": true,
-                "searchable": false,
-                "orderable": false
-            },
-            {
-                "name": "name",
-                "targets": 1,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "name": "description",
-                "targets": 2,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "name": "type",
-                "targets": 3,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "name": "type_string",
-                "targets": 4,
-                "visible": false,
-                "searchable": false,
-                "orderable": false,
-            },
-            {
-                "name": "language",
-                "targets": 5,
-                "visible": true,
-                "searchable": true,
-                "orderable": true
-            },
-            {
-                "name": "buttons",
-                "targets": 6,
-                "visible": true,
-                "searchable": false,
-                "orderable": false
-            },
-            {
-                "name": "url",
-                "targets": 7,
-                "visible": false,
-                "searchable": true,
-                "orderable": false
-            }
+            "name": "select",
+            "targets": 0,
+            "visible": true,
+            "searchable": false,
+            "orderable": false
+        },
+        {
+            "name": "name",
+            "targets": 1,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "name": "description",
+            "targets": 2,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "name": "type",
+            "targets": 3,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "name": "type_string",
+            "targets": 4,
+            "visible": false,
+            "searchable": false,
+            "orderable": false,
+        },
+        {
+            "name": "language",
+            "targets": 5,
+            "visible": true,
+            "searchable": true,
+            "orderable": true
+        },
+        {
+            "name": "buttons",
+            "targets": 6,
+            "visible": true,
+            "searchable": false,
+            "orderable": false
+        },
+        {
+            "name": "url",
+            "targets": 7,
+            "visible": false,
+            "searchable": true,
+            "orderable": false
+        }
         ]
     });
 
@@ -659,9 +706,9 @@ function prepareSetupButtons(element) {
         var id = $btn.data("id");
         var indexer = configuredIndexers.find(i => i.id === id);
         if (indexer)
-          $btn.click(function () {
-              displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description);
-          });
+            $btn.click(function () {
+                displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description);
+            });
     });
 }
 
@@ -777,23 +824,23 @@ function populateConfigItems(configForm, config) {
 }
 
 function setupConfigItem(configItem, item) {
-  switch (item.type) {
-    case "inputtags": {
-        configItem.find("input").tagify({
-          dropdown: {
-            enabled: 0,
-            position: "text"
-          },
-          separator: item.separator || ",",
-          whitelist: item.whitelist || [],
-          blacklist: item.blacklist || [],
-          pattern: item.pattern || null,
-          delimiters: item.delimiters || item.separator || ",",
-          originalInputValueFormat: function (values) { return values.map(item => item.value.toLowerCase()).join(this.separator); }
-        });
-      }
-      break;
-  }
+    switch (item.type) {
+        case "inputtags": {
+            configItem.find("input").tagify({
+                dropdown: {
+                    enabled: 0,
+                    position: "text"
+                },
+                separator: item.separator || ",",
+                whitelist: item.whitelist || [],
+                blacklist: item.blacklist || [],
+                pattern: item.pattern || null,
+                delimiters: item.delimiters || item.separator || ",",
+                originalInputValueFormat: function (values) { return values.map(item => item.value.toLowerCase()).join(this.separator); }
+            });
+        }
+            break;
+    }
 }
 
 function newConfigModal(title, config, caps, link, alternativesitelinks, description) {
@@ -902,7 +949,7 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
 function resolveUrl(baseUrl, url) {
     if (baseUrl != '') {
         url = baseUrl + url;
-    }else{
+    } else {
         var a = document.createElement('a');
         a.href = url;
         url = a.href;
@@ -911,29 +958,29 @@ function resolveUrl(baseUrl, url) {
 }
 
 function doErrorNotify(indexerId, errorMessage, errorEvent) {
-  if (errorMessage !== undefined) {
-    var githubRepo = "Jackett/Jackett";
-    var githubText = "this indexer";
-    var githubTemplate = "?template=bug_report.yml&"
-    if (errorMessage.includes("FlareSolverr")) {
-      githubRepo = "FlareSolverr/FlareSolverr";
-      githubText = "FlareSolverr"
+    if (errorMessage !== undefined) {
+        var githubRepo = "Jackett/Jackett";
+        var githubText = "this indexer";
+        var githubTemplate = "?template=bug_report.yml&"
+        if (errorMessage.includes("FlareSolverr")) {
+            githubRepo = "FlareSolverr/FlareSolverr";
+            githubText = "FlareSolverr"
+        }
+        var githubUrl = "https://github.com/" + githubRepo + "/issues/new" + githubTemplate + "title=[" + indexerId + "] (" + errorEvent + ")";
+        var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
+        var htmlEscapedError = $("<div>").text(errorMessage.substring(0, indexEnd)).html();
+        var urlEscapedError = encodeURIComponent(errorMessage.substring(0, indexEnd));
+        var link = "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>";
+        if (errorMessage.includes("FlareSolverr is not configured")) {
+            link = "<i><a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">Instructions to install and configure FlareSolverr.</a><i><br />" +
+                "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frequent errors with FlareSolverr.</a><i>";
+        }
+        doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" + link,
+            "danger", "glyphicon glyphicon-alert", false);
+    } else {
+        doNotify("An error occurred while " + errorEvent + " indexers, please take a look at indexers with failed test for more information.",
+            "danger", "glyphicon glyphicon-alert");
     }
-    var githubUrl = "https://github.com/" + githubRepo + "/issues/new" + githubTemplate + "title=[" + indexerId + "] (" + errorEvent + ")";
-    var indexEnd = 2000 - githubUrl.length; // keep url <= 2k #5104
-    var htmlEscapedError = $("<div>").text(errorMessage.substring(0, indexEnd)).html();
-    var urlEscapedError = encodeURIComponent(errorMessage.substring(0, indexEnd));
-    var link = "<i><a href=\"" + githubUrl + " " + urlEscapedError + "\" target=\"_blank\">Click here to open an issue on GitHub for " + githubText + ".</a><i>";
-    if (errorMessage.includes("FlareSolverr is not configured")) {
-      link = "<i><a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">Instructions to install and configure FlareSolverr.</a><i><br />" +
-        "<i><a href=\"https://github.com/Jackett/Jackett/wiki/Troubleshooting#error-connecting-to-flaresolverr-server\" target=\"_blank\">Troubleshooting frequent errors with FlareSolverr.</a><i>";
-    }
-    doNotify("An error occurred while " + errorEvent + " this indexer<br /><b>" + htmlEscapedError + "</b><br />" + link,
-      "danger", "glyphicon glyphicon-alert", false);
-  } else {
-    doNotify("An error occurred while " + errorEvent + " indexers, please take a look at indexers with failed test for more information.",
-      "danger", "glyphicon glyphicon-alert");
-  }
 }
 
 function doNotify(message, type, icon, autoHide) {
@@ -1004,25 +1051,25 @@ function updateReleasesRow(row) {
     }
 
     if (TMDBId && TMDBId > 0) {
-      var TMdbType = (Cat.includes("Movies")) ? "movie" :  "tv";
-      labels.append('\n<a href="https://www.themoviedb.org/' + TMdbType + '/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
+        var TMdbType = (Cat.includes("Movies")) ? "movie" : "tv";
+        labels.append('\n<a href="https://www.themoviedb.org/' + TMdbType + '/' + TMDBId + '" target="_blank" class="label label-tmdb" alt="TMDB" title="TMDB">TMDB</a>');
     }
 
     if (TVDBId && TVDBId > 0) {
-      labels.append('\n<a href="https://thetvdb.com/?tab=series&id=' + TVDBId + '" target="_blank" class="label label-tvdb" alt="TVDB" title="TVDB">TVDB</a>');
+        labels.append('\n<a href="https://thetvdb.com/?tab=series&id=' + TVDBId + '" target="_blank" class="label label-tvdb" alt="TVDB" title="TVDB">TVDB</a>');
     }
 
     if (TVMazeId && TVMazeId > 0) {
-      labels.append('\n<a href="https://tvmaze.com/shows/' + TVMazeId + '" target="_blank" class="label label-tvmaze" alt="TVMaze" title="TVMaze">TVMaze</a>');
+        labels.append('\n<a href="https://tvmaze.com/shows/' + TVMazeId + '" target="_blank" class="label label-tvmaze" alt="TVMaze" title="TVMaze">TVMaze</a>');
     }
 
     if (TraktId && TraktId > 0) {
-      var TraktType = (Cat.includes("Movies")) ? "movies" :  "shows";
-      labels.append('\n<a href="https://www.trakt.tv/' + TraktType + '/' + TraktId + '" target="_blank" class="label label-trakt" alt="Trakt" title="Trakt">Trakt</a>');
+        var TraktType = (Cat.includes("Movies")) ? "movies" : "shows";
+        labels.append('\n<a href="https://www.trakt.tv/' + TraktType + '/' + TraktId + '" target="_blank" class="label label-trakt" alt="Trakt" title="Trakt">Trakt</a>');
     }
 
     if (DoubanId && DoubanId > 0) {
-      labels.append('\n<a href="https://movie.douban.com/subject/' + DoubanId + '" target="_blank" class="label label-douban" alt="Douban" title="Douban">Douban</a>');
+        labels.append('\n<a href="https://movie.douban.com/subject/' + DoubanId + '" target="_blank" class="label label-douban" alt="Douban" title="Douban">Douban</a>');
     }
 
     if (!isNaN(DownloadVolumeFactor)) {
@@ -1047,7 +1094,7 @@ function updateReleasesRow(row) {
 function showSearch(selectedFilter, selectedIndexer, query, category) {
     var selectedIndexers = [];
     if (selectedIndexer)
-      selectedIndexers = selectedIndexer.split(",");
+        selectedIndexers = selectedIndexer.split(",");
     var releaseTemplate = Handlebars.compile($("#jackett-search").html());
     var releaseDialog = $(releaseTemplate({
         filters: availableFilters,
@@ -1071,12 +1118,12 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
         var selected = select.val();
         var filter = availableFilters.find(f => f.id == filterId);
         if (filter)
-          trackers = trackers.filter(filter.apply,filter);
+            trackers = trackers.filter(filter.apply, filter);
         var options = trackers.map(t => {
-          return {
-            label: t.name,
-            value: t.id
-          }
+            return {
+                label: t.name,
+                value: t.id
+            }
         });
         select.multiselect('dataprovider', options);
         select.val(selected).multiselect("refresh");
@@ -1162,7 +1209,7 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
             searchResults.empty();
             updateSearchResultTable(searchResults, data).search('').columns().search('').draw();
             searchResults.find('div.dataTables_filter input').focusWithoutScrolling();
-            document.title = "(" + data.Results.length +") " + searchString;
+            document.title = "(" + data.Results.length + ") " + searchString;
         }).fail(function () {
             $('#jackett-search-perform').html($('#search-button-ready').html());
             doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
@@ -1193,26 +1240,26 @@ function showSearch(selectedFilter, selectedIndexer, query, category) {
     });
 
     searchCategory.multiselect({
-      maxHeight: 400,
-      enableFiltering: true,
-      includeSelectAllOption: true,
-      enableCaseInsensitiveFiltering: true,
-      nonSelectedText: 'Any'
+        maxHeight: 400,
+        enableFiltering: true,
+        includeSelectAllOption: true,
+        enableCaseInsensitiveFiltering: true,
+        nonSelectedText: 'Any'
     });
 
     if (availableFilters.length > 0) {
-      if (selectedFilter) {
-        searchFilter.val(selectedFilter);
-        searchFilter.multiselect("refresh");
-      }
-      searchFilter.trigger("change");
+        if (selectedFilter) {
+            searchFilter.val(selectedFilter);
+            searchFilter.multiselect("refresh");
+        }
+        searchFilter.trigger("change");
     }
     else
-      setTrackers(selectedFilter, configuredIndexers);
+        setTrackers(selectedFilter, configuredIndexers);
 
     if (selectedIndexers) {
-      searchTracker.val(selectedIndexers);
-      searchTracker.multiselect("refresh");
+        searchTracker.val(selectedIndexers);
+        searchTracker.multiselect("refresh");
     }
     searchTracker.trigger("change");
 
@@ -1337,29 +1384,29 @@ function updateSearchResultTable(element, results) {
             [0, "desc"]
         ],
         "columnDefs": [{
-                "targets": 0,
-                "visible": false,
-                "searchable": false,
-                "type": 'date'
-            },
-            {
-                "targets": 1,
-                "visible": true,
-                "searchable": false,
-                "iDataSort": 0
-            },
-            {
-                "targets": 4,
-                "visible": false,
-                "searchable": false,
-                "type": 'num'
-            },
-            {
-                "targets": 5,
-                "visible": true,
-                "searchable": false,
-                "iDataSort": 4
-            }
+            "targets": 0,
+            "visible": false,
+            "searchable": false,
+            "type": 'date'
+        },
+        {
+            "targets": 1,
+            "visible": true,
+            "searchable": false,
+            "iDataSort": 0
+        },
+        {
+            "targets": 4,
+            "visible": false,
+            "searchable": false,
+            "type": 'num'
+        },
+        {
+            "targets": 5,
+            "visible": true,
+            "searchable": false,
+            "iDataSort": 4
+        }
         ],
         fnPreDrawCallback: function () {
             var table = this;
@@ -1478,12 +1525,12 @@ function bindUIButtons() {
     });
 
     $('#remind-external-access-button').click(function () {
-      $("#warning-external-access").hide();
+        $("#warning-external-access").hide();
     });
 
     $('#dismiss-external-access-button').click(function () {
-      localStorage.setItem('external-access-warning-hidden', true);
-      $("#warning-external-access").hide();
+        localStorage.setItem('external-access-warning-hidden', true);
+        $("#warning-external-access").hide();
     });
 
     $('#api-key-copy-button').click(function () {
@@ -1538,41 +1585,41 @@ function bindUIButtons() {
                     [0, "desc"]
                 ],
                 "columnDefs": [{
-                        "targets": 0,
-                        "visible": false,
-                        "searchable": false,
-                        "type": 'date'
-                    },
-                    {
-                        "targets": 1,
-                        "visible": false,
-                        "searchable": false,
-                        "type": 'date'
-                    },
-                    {
-                        "targets": 2,
-                        "visible": true,
-                        "searchable": false,
-                        "iDataSort": 0
-                    },
-                    {
-                        "targets": 3,
-                        "visible": true,
-                        "searchable": false,
-                        "iDataSort": 1
-                    },
-                    {
-                        "targets": 6,
-                        "visible": false,
-                        "searchable": false,
-                        "type": 'num'
-                    },
-                    {
-                        "targets": 7,
-                        "visible": true,
-                        "searchable": false,
-                        "iDataSort": 6
-                    }
+                    "targets": 0,
+                    "visible": false,
+                    "searchable": false,
+                    "type": 'date'
+                },
+                {
+                    "targets": 1,
+                    "visible": false,
+                    "searchable": false,
+                    "type": 'date'
+                },
+                {
+                    "targets": 2,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 0
+                },
+                {
+                    "targets": 3,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 1
+                },
+                {
+                    "targets": 6,
+                    "visible": false,
+                    "searchable": false,
+                    "type": 'num'
+                },
+                {
+                    "targets": 7,
+                    "visible": true,
+                    "searchable": false,
+                    "iDataSort": 6
+                }
                 ],
                 initComplete: function () {
                     var count = 0;
@@ -1635,7 +1682,8 @@ function bindUIButtons() {
         var jackett_update = $("#jackett-allowupdate").is(':checked');
         var jackett_prerelease = $("#jackett-prerelease").is(':checked');
         var jackett_logging = $("#jackett-logging").is(':checked');
-        var jackett_cache_enabled = $("#jackett-cache-enabled").is(':checked');
+        var jackett_cache_type = $("#jackett-cache-type").val();
+        var jackett_cache_connection_string = $("#jackett-cache-connection-string").val();
         var jackett_cache_ttl = $("#jackett-cache-ttl").val();
         var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
         var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
@@ -1661,7 +1709,8 @@ function bindUIButtons() {
             basepathoverride: jackett_basepathoverride,
             baseurloverride: jackett_baseurloverride,
             logging: jackett_logging,
-            cache_enabled: jackett_cache_enabled,
+            cache_type: jackett_cache_type,
+            cache_connection_string: jackett_cache_connection_string,
             cache_ttl: jackett_cache_ttl,
             cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
             flaresolverrurl: jackett_flaresolverr_url,

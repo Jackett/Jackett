@@ -82,7 +82,7 @@ namespace Jackett.Server.Services
                 logger.Info($"Environment version: {Environment.Version} ({runtimedir})");
                 logger.Info($"OS version: {Environment.OSVersion}" +
                     (Environment.Is64BitOperatingSystem ? " (64bit OS)" : "") +
-                    (Environment.Is64BitProcess ? " (64bit process)" : ""));
+                    (Environment.Is64BitProcess ? " (64bit process)" : " (32bit process)"));
                 var variants = new Variants();
                 var variant = variants.GetVariant();
                 logger.Info($"Jackett variant: {variant}");
@@ -139,6 +139,8 @@ namespace Jackett.Server.Services
                 logger.Info("App config/log directory: " + configService.GetAppDataFolder());
 
                 logger.Info($"Using proxy: {config.ProxyType}");
+
+                logger.Info($"Cache Type: {config.CacheType}");
 
                 logger.Info("Using FlareSolverr: " + (string.IsNullOrEmpty(config.FlareSolverrUrl) ? "No" : config.FlareSolverrUrl));
 

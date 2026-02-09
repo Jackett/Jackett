@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Xml;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -33,12 +34,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         const string RSS_FEED = "feed/?";
         public EraiRaws(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
-            IProtectionService ps, ICacheService cs)
+            IProtectionService ps, CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationData())
         {
             var rssKey = new StringConfigurationItem("RSSKey") { Value = "" };

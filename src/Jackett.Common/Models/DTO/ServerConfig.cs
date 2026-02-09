@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.Serialization;
 using Jackett.Common.Models.Config;
+using MongoDB.Driver.Core.Configuration;
 
 namespace Jackett.Common.Models.DTO
 {
@@ -35,7 +36,9 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public string baseurloverride { get; set; }
         [DataMember]
-        public bool cache_enabled { get; set; }
+        public CacheType cache_type { get; set; }
+        [DataMember]
+        public string cache_connection_string { get; set; }
         [DataMember]
         public long cache_ttl { get; set; }
         [DataMember]
@@ -84,7 +87,8 @@ namespace Jackett.Common.Models.DTO
             logging = config.RuntimeSettings.TracingEnabled;
             basepathoverride = config.BasePathOverride;
             baseurloverride = config.BaseUrlOverride;
-            cache_enabled = config.CacheEnabled;
+            cache_type = config.CacheType;
+            cache_connection_string = config.CacheConnectionString;
             cache_ttl = config.CacheTtl;
             cache_max_results_per_indexer = config.CacheMaxResultsPerIndexer;
             flaresolverrurl = config.FlareSolverrUrl;

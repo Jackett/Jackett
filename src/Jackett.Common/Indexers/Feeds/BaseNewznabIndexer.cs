@@ -5,6 +5,7 @@ using System.Linq;
 using System.Xml.Linq;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -16,13 +17,13 @@ namespace Jackett.Common.Indexers.Feeds
     public abstract class BaseNewznabIndexer : BaseFeedIndexer
     {
         protected BaseNewznabIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                     ConfigurationData configData, IProtectionService p, ICacheService cs,
+                                     ConfigurationData configData, IProtectionService p, CacheManager cm,
                                      string downloadBase = null)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
-                   cs: cs,
+                   cm: cm,
                    configData: configData,
                    downloadBase: downloadBase)
         {

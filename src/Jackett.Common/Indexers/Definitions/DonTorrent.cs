@@ -12,6 +12,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -89,12 +90,12 @@ namespace Jackett.Common.Indexers.Definitions
             };
 
         public DonTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
-            ICacheService cs)
+            CacheManager cm)
             : base(configService: configService,
                    client: w,
                    logger: l,
                    p: ps,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationData())
         {
             // avoid CLoudflare too many requests limiter

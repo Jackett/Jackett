@@ -8,6 +8,7 @@ using System.Web;
 using AngleSharp.Dom;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Newtonsoft.Json.Linq;
@@ -20,8 +21,8 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
     public abstract class PublicBrazilianIndexerBase : IndexerBase
     {
         public PublicBrazilianIndexerBase(IIndexerConfigurationService configService, WebClient wc, Logger l,
-                                          IProtectionService ps, ICacheService cs) : base(
-            configService: configService, client: wc, logger: l, p: ps, cacheService: cs,
+                                          IProtectionService ps, CacheManager cm) : base(
+            configService: configService, client: wc, logger: l, p: ps, cacheManager: cm,
             configData: new ConfigurationData())
         {
             webclient.requestDelay = .5;

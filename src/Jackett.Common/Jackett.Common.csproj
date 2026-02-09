@@ -9,11 +9,46 @@
     <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
   </PropertyGroup>
 
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Release|net9.0|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(TargetFramework)|$(Platform)'=='Debug|net9.0|AnyCPU'">
+    <TreatWarningsAsErrors>false</TreatWarningsAsErrors>
+    <WarningsAsErrors />
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <SQLitePCLRawLibESQLite3x64Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x64\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x64Path>
+    <SQLitePCLRawLibESQLite3x86Path>$(NuGetPackageRoot)sqlitepclraw.lib.e_sqlite3\2.1.9\runtimes\linux-x86\native\libe_sqlite3.so</SQLitePCLRawLibESQLite3x86Path>
+  </PropertyGroup>
+
+  <Target Name="CopySQLiteLib" AfterTargets="Build;Test" Condition="'$(TargetFramework)' == 'netstandard2.0'">
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x64Path)" DestinationFolder="$(OutDir)runtimes/linux-x64/native/" />
+    <Copy SourceFiles="$(SQLitePCLRawLibESQLite3x86Path)" DestinationFolder="$(OutDir)runtimes/linux-x86/native/" />
+  </Target>
+
+  <!-- Conditionally obtain references for the .NET 8.0 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'net9.0' ">
+    <PackageReference Include="SQLitePCLRaw.bundle_e_sqlite3" Version="2.1.9" />
+  </ItemGroup>
+
+  <!-- Conditionally obtain references for the .NET462 target -->
+  <ItemGroup Condition=" '$(TargetFramework)' == 'netstandard2.0' ">
+    <PackageReference Include="Microsoft.NETFramework.ReferenceAssemblies" Version="1.0.3" />
+    <PackageReference Include="SQLitePCLRaw.provider.e_sqlite3" Version="2.1.9" />
+    <PackageReference Include="SQLitePCLRaw.lib.e_sqlite3" Version="2.1.9" />
+  </ItemGroup>
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.Data.Sqlite.Core" Version="8.0.8" />
+    <PackageReference Include="SQLitePCLRaw.Core" Version="2.1.9" />
     <PackageReference Include="AngleSharp" Version="1.4.0" />
     <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
+    <PackageReference Include="Dapper" Version="2.1.35" />
     <PackageReference Include="FlareSolverrSharp" Version="3.0.7" />
     <PackageReference Include="CommandLineParser" Version="2.9.1" />
     <PackageReference Include="DotNet4.SocksProxy" Version="1.4.0.1" />
@@ -21,6 +56,7 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="2.3.9" />
     <PackageReference Include="Microsoft.CSharp" Version="4.7.0" />
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
+    <PackageReference Include="MongoDB.Driver" Version="2.25.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.5.1" />
     <PackageReference Include="Polly" Version="8.6.5" />

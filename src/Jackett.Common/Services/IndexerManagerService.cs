@@ -10,6 +10,7 @@ using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Indexers.Meta;
 using Jackett.Common.Models;
 using Jackett.Common.Models.Config;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using NLog;
@@ -22,7 +23,7 @@ namespace Jackett.Common.Services
 
     public class IndexerManagerService : IIndexerManagerService
     {
-        private readonly ICacheService _cacheService;
+        private readonly CacheManager _cacheManager;
         private readonly IIndexerConfigurationService _configService;
         private readonly IProtectionService _protectionService;
         private readonly WebClient _webClient;
@@ -39,7 +40,7 @@ namespace Jackett.Common.Services
         // (the id is used in the torznab/download/search urls and in the indexer configuration file)
         private Dictionary<string, string> _renamedIndexers = new Dictionary<string, string>();
 
-        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, ICacheService cache, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
+        public IndexerManagerService(IIndexerConfigurationService config, IProtectionService protectionService, WebClient webClient, Logger l, CacheManager cacheManager, IProcessService processService, IConfigurationService globalConfigService, ServerConfig serverConfig)
         {
             _configService = config;
             _protectionService = protectionService;
@@ -48,7 +49,7 @@ namespace Jackett.Common.Services
             _globalConfigService = globalConfigService;
             _serverConfig = serverConfig;
             _logger = l;
-            _cacheService = cache;
+            _cacheManager = cacheManager;
         }
 
         public void InitIndexers(List<string> path)
@@ -120,14 +121,14 @@ namespace Jackett.Common.Services
             var indexerTypes = allNonMetaInstantiatableIndexerTypes.Where(p => p.Name != "CardigannIndexer");
             var nativeIndexers = indexerTypes.Select(type =>
             {
-                var constructorArgumentTypes = new[] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(ICacheService) };
+                var constructorArgumentTypes = new[] { typeof(IIndexerConfigurationService), typeof(WebClient), typeof(Logger), typeof(IProtectionService), typeof(CacheManager) };
                 var constructor = type.GetConstructor(constructorArgumentTypes);
                 if (constructor != null)
                 {
                     // create own webClient instance for each indexer (separate cookies stores, etc.)
                     var indexerWebClientInstance = (WebClient)Activator.CreateInstance(_webClient.GetType(), _processService, _logger, _globalConfigService, _serverConfig);
 
-                    var arguments = new object[] { _configService, indexerWebClientInstance, _logger, _protectionService, _cacheService };
+                    var arguments = new object[] { _configService, indexerWebClientInstance, _logger, _protectionService, _cacheManager };
                     var indexer = (IIndexer)constructor.Invoke(arguments);
                     return indexer;
                 }
@@ -190,7 +191,7 @@ namespace Jackett.Common.Services
                         // create own webClient instance for each indexer (separate cookies stores, etc.)
                         var indexerWebClientInstance = (WebClient)Activator.CreateInstance(_webClient.GetType(), _processService, _logger, _globalConfigService, _serverConfig);
 
-                        IIndexer indexer = new CardigannIndexer(_configService, indexerWebClientInstance, _logger, _protectionService, _cacheService, definition);
+                        IIndexer indexer = new CardigannIndexer(_configService, indexerWebClientInstance, _logger, _protectionService, _cacheManager, definition);
                         _configService.Load(indexer);
                         return indexer;
                     }
@@ -230,7 +231,7 @@ namespace Jackett.Common.Services
             var (fallbackStrategyProvider, resultFilterProvider) = GetStrategyProviders();
 
             _logger.Info("Adding aggregate indexer ('all' indexer) ...");
-            _aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, _configService, _webClient, _logger, _protectionService, _cacheService)
+            _aggregateIndexer = new AggregateIndexer(fallbackStrategyProvider, resultFilterProvider, _configService, _webClient, _logger, _protectionService, _cacheManager)
             {
                 Indexers = _indexers.Values
             };
@@ -352,7 +353,7 @@ namespace Jackett.Common.Services
                     _webClient,
                     _logger,
                     _protectionService,
-                    _cacheService,
+                    _cacheManager,
                     filterFunc
                 )
             {

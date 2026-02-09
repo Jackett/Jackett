@@ -8,6 +8,7 @@ using Jackett.Common.Exceptions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -144,23 +145,23 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return cats;
         }
 
-        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
+        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, CacheManager cm)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: new ConfigurationDataAvistaZTracker())
         {
             webclient.requestDelay = 6;
         }
 
-        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs, ConfigurationData configData)
+        protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, CacheManager cm, ConfigurationData configData)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: configData)
         {
             webclient.requestDelay = 6;

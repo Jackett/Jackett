@@ -8,7 +8,10 @@ using Autofac.Extensions.DependencyInjection;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Plumbing;
 using Jackett.Common.Services;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
+using Jackett.Common.Utils;
+using Jackett.Server.Controllers;
 using Jackett.Server.Middleware;
 using Jackett.Server.Services;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -23,6 +26,9 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
+using NLog;
+using Dapper;
+using Jackett.Common.Models;
 using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 #if !NET471
 using Microsoft.Extensions.Hosting;
@@ -108,10 +114,51 @@ namespace Jackett.Server
             builder.RegisterType<SecurityService>().As<ISecurityService>().SingleInstance();
             builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
             builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
-            builder.RegisterType<CacheService>().As<ICacheService>().SingleInstance();
             builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
             builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
 
+            builder.RegisterType<MemoryCacheService>().AsSelf().SingleInstance();
+            builder.RegisterType<SQLiteCacheService>().AsSelf().SingleInstance();
+            builder.RegisterType<MongoDBCacheService>().AsSelf().SingleInstance();
+            builder.RegisterType<NoCacheService>().AsSelf().SingleInstance();
+            builder.RegisterType<CacheServiceFactory>().AsSelf().SingleInstance();
+            builder.RegisterType<CacheManager>().AsSelf().SingleInstance();
+            builder.RegisterType<ServerConfigurationController>().AsSelf().InstancePerDependency();
+
+            builder.Register(ctx =>
+            {
+                var logger = ctx.Resolve<Logger>();
+                var serverConfig = ctx.Resolve<ServerConfig>();
+                return new SQLiteCacheService(logger, serverConfig.CacheConnectionString, serverConfig);
+            }).AsSelf().SingleInstance();
+
+            builder.Register(ctx =>
+            {
+                var logger = ctx.Resolve<Logger>();
+                var serverConfig = ctx.Resolve<ServerConfig>();
+                return new MongoDBCacheService(logger, serverConfig.CacheConnectionString, serverConfig);
+            }).AsSelf().SingleInstance();
+
+            builder.Register(ctx =>
+            {
+                var logger = ctx.Resolve<Logger>();
+                return new NoCacheService(logger);
+            }).AsSelf().SingleInstance();
+            /**/
+            builder.Register(ctx =>
+            {
+                var logger = ctx.Resolve<Logger>();
+                var serverConfig = ctx.Resolve<ServerConfig>();
+                return new MemoryCacheService(logger, serverConfig);
+            }).AsSelf().SingleInstance();
+            /**/
+            builder.Register<ICacheService>(ctx =>
+            {
+                var factory = ctx.Resolve<CacheServiceFactory>();
+                var config = ctx.Resolve<ServerConfig>();
+                return factory.CreateCacheService(config.CacheType, config.CacheConnectionString);
+            }).SingleInstance();
+            RegisterDapperTypeHandlers();
             var container = builder.Build();
             Helper.ApplicationContainer = container;
 
@@ -208,5 +255,21 @@ namespace Jackett.Server
         }
 
         private static void OnStopped() => Helper.Logger.Info($"Jackett stopped");
+        private void RegisterDapperTypeHandlers()
+        {
+            var logger = LogManager.GetCurrentClassLogger();
+            SqlMapper.RemoveTypeMap(typeof(DateTime));
+            SqlMapper.RemoveTypeMap(typeof(DateTime?));
+            SqlMapper.RemoveTypeMap(typeof(string));
+            SqlMapper.AddTypeHandler(new NullableDateTimeHandler(logger));
+            SqlMapper.AddTypeHandler(new StringHandler(logger));
+            SqlMapper.AddTypeHandler(new UriHandler(logger));
+            SqlMapper.AddTypeHandler(new ICollectionIntHandler(logger));
+            SqlMapper.AddTypeHandler(new FloatHandler(logger));
+            SqlMapper.AddTypeHandler(new LongHandler(logger));
+            SqlMapper.AddTypeHandler(new DoubleHandler(logger));
+            SqlMapper.AddTypeHandler(new ICollectionStringHandler(logger));
+            SqlMapper.AddTypeHandler(new DateTimeHandler(logger));
+        }
     }
 }

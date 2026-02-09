@@ -8,6 +8,7 @@ using Jackett.Common.Exceptions;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -45,7 +46,9 @@ namespace Jackett.Common.Indexers
         public virtual string[] Tags { get; protected set; }
 
         // https://github.com/Jackett/Jackett/issues/3292#issuecomment-838586679
-        private TimeSpan HealthyStatusValidity => cacheService.CacheTTL + cacheService.CacheTTL;
+
+        private TimeSpan HealthyStatusValidity => cacheManager.CurrentCacheService.CacheTTL + cacheManager.CurrentCacheService.CacheTTL;
+
         private static readonly TimeSpan ErrorStatusValidity = TimeSpan.FromMinutes(10);
         private static readonly TimeSpan MaxStatusValidity = TimeSpan.FromDays(1);
 
@@ -55,7 +58,9 @@ namespace Jackett.Common.Indexers
         protected Logger logger;
         protected IIndexerConfigurationService configurationService;
         protected IProtectionService protectionService;
-        protected ICacheService cacheService;
+        protected CacheManager cacheManager;
+
+        //protected CacheManager CacheManager => CacheManagerProvider.CacheManager;
 
         protected ConfigurationData configData;
 
@@ -84,12 +89,12 @@ namespace Jackett.Common.Indexers
         public abstract TorznabCapabilities TorznabCaps { get; protected set; }
 
         // standard constructor used by most indexers
-        public BaseIndexer(IIndexerConfigurationService configService, Logger logger, ConfigurationData configData, IProtectionService p, ICacheService cs)
+        public BaseIndexer(IIndexerConfigurationService configService, Logger logger, ConfigurationData configData, IProtectionService p, CacheManager cm)
         {
             this.logger = logger;
             configurationService = configService;
             protectionService = p;
-            cacheService = cs;
+            cacheManager = cm;
 
             if (SiteLink.IsNotNullOrWhiteSpace() && !SiteLink.EndsWith("/", StringComparison.Ordinal))
                 throw new Exception("Site link must end with a slash.");
@@ -364,7 +369,7 @@ namespace Jackett.Common.Indexers
 
             if (queryCopy.Cache)
             {
-                var cachedReleases = cacheService.Search(this, queryCopy);
+                var cachedReleases = cacheManager.Search(this, queryCopy);
                 if (cachedReleases != null)
                     return new IndexerResult(this, cachedReleases, 0, true);
             }
@@ -385,7 +390,7 @@ namespace Jackett.Common.Indexers
                 // De-dupe releases by Guid so duplicate results aren't returned.
                 results = results.GroupBy(r => r.Guid).Select(g => g.First()).ToList();
 
-                cacheService.CacheResults(this, queryCopy, results.ToList());
+                cacheManager.CacheResults(this, queryCopy, results.ToList());
                 errorCount = 0;
                 expireAt = DateTime.Now.Add(HealthyStatusValidity);
                 return new IndexerResult(this, results, sw.ElapsedMilliseconds, false);
@@ -413,9 +418,9 @@ namespace Jackett.Common.Indexers
     public abstract class BaseWebIndexer : BaseIndexer, IWebIndexer
     {
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                 ConfigurationData configData, IProtectionService p, ICacheService cacheService,
+                                 ConfigurationData configData, IProtectionService p, CacheManager cacheManager,
                                  string downloadBase = null)
-            : base(configService: configService, logger: logger, configData: configData, p: p, cs: cacheService)
+            : base(configService: configService, logger: logger, configData: configData, p: p, cm: cacheManager)
         {
             webclient = client;
             downloadUrlBase = downloadBase;
@@ -423,8 +428,8 @@ namespace Jackett.Common.Indexers
 
         // minimal constructor used by e.g. cardigann generic indexer
         protected BaseWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
-            IProtectionService p, ICacheService cacheService)
-            : base(configService: configService, logger: logger, configData: null, p: p, cs: cacheService)
+            IProtectionService p, CacheManager cacheManager)
+            : base(configService: configService, logger: logger, configData: null, p: p, cm: cacheManager)
         {
             webclient = client;
         }
@@ -944,9 +949,9 @@ namespace Jackett.Common.Indexers
     public abstract class BaseCachingWebIndexer : BaseWebIndexer
     {
         protected BaseCachingWebIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                        ConfigurationData configData, IProtectionService p, ICacheService cacheService,
+                                        ConfigurationData configData, IProtectionService p, CacheManager cacheManager,
                                         string downloadBase = null)
-            : base(configService: configService, client: client, logger: logger, configData: configData, p: p, cacheService: cacheService, downloadBase: downloadBase)
+            : base(configService: configService, client: client, logger: logger, configData: configData, p: p, cacheManager: cacheManager, downloadBase: downloadBase)
         {
         }
 

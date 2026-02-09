@@ -5,6 +5,7 @@ using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -24,12 +25,12 @@ namespace Jackett.Common.Indexers.Definitions
         private new ConfigurationDataAvistaZ configData => (ConfigurationDataAvistaZ)base.configData;
 
         public AvistaZ(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                       ICacheService cs)
+                       CacheManager cm)
             : base(configService: configService,
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs,
+                   cm: cm,
                    configData: new ConfigurationDataAvistaZ())
         {
         }

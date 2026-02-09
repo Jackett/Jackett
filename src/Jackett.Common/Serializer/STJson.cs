@@ -43,7 +43,7 @@ namespace Jackett.Common.Serializer
             }
             catch (JsonException)
             {
-                result = default(T);
+                result = default;
                 return false;
             }
         }

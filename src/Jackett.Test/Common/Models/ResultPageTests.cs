@@ -22,7 +22,7 @@ namespace Jackett.Test.Common.Models
                    logger: null,
                    configData: null,
                    p: null,
-                   cs: null)
+                   cm: null)
         {
         }
 

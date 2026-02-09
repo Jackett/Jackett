@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using NLog;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
@@ -38,13 +39,13 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         public SpeedApp(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
-                        ICacheService cs)
+                        CacheManager cm)
             : base(configService: configService,
 
                    client: wc,
                    logger: l,
                    p: ps,
-                   cs: cs)
+                   cm: cm)
         {
             // requestDelay for API Limit (1 request per 2 seconds)
             webclient.requestDelay = 2.1;

@@ -177,7 +177,7 @@ hr {
     text-align: center;
 }
 
-#jackett-allowext, #jackett-allowcors, #jackett-allowupdate, #jackett-logging, #jackett-prerelease, #jackett-cache-enabled {
+#jackett-allowext, #jackett-allowcors, #jackett-allowupdate, #jackett-logging, #jackett-prerelease {
     width: 25px;
 }
 

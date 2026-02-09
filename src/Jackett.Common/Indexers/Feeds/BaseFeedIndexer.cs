@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
+using Jackett.Common.Services.Cache;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
@@ -17,13 +18,13 @@ namespace Jackett.Common.Indexers.Feeds
         protected abstract Uri FeedUri { get; }
 
         protected BaseFeedIndexer(IIndexerConfigurationService configService, WebClient client, Logger logger,
-                                  ConfigurationData configData, IProtectionService p, ICacheService cs,
+                                  ConfigurationData configData, IProtectionService p, CacheManager cm,
                                   string downloadBase = null)
             : base(configService: configService,
                    client: client,
                    logger: logger,
                    p: p,
-                   cacheService: cs,
+                   cacheManager: cm,
                    configData: configData,
                    downloadBase: downloadBase)
         {
