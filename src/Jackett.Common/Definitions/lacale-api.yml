@@ -113,7 +113,7 @@ search:
   inputs:
     apikey: "{{ .Config.apikey }}"
     $raw: "{{ range .Categories }}cat={{.}}&{{end}}"
-    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}FRENCH{{ end }}"
+    q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
 
   rows:
