@@ -630,7 +630,6 @@ Prior versions of Jackett are no longer supported.
  * XWTorrents (XWT)
  * YggTorrent (YGG)
  * YUSCENE
- * Zamunda.net
  * Zappateers
  * ZmPT (织梦)
 </details>
