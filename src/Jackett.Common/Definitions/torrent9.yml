@@ -8,9 +8,8 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://ww2.torrent9.to/
+  - https://www5.torrent9.to/
 legacylinks:
-  - https://www.torrent09.uno/
   - https://www.torrent9.pl/ # this is a proxy for torrent9clone
   - https://torrent9.black-mirror.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.unblocked.casa/ # this is a proxy for torrent9clone
@@ -34,6 +33,7 @@ legacylinks:
   - https://www.torrent9.zone/ # clone? details links are broken
   - https://torrent9.to/
   - https://www5.torrent9.to/
+  - https://ww2.torrent9.to/
 
 caps:
   # dont forget to update the search fields category case block
