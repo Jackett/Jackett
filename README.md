@@ -552,6 +552,7 @@ Prior versions of Jackett are no longer supported.
  * PTFans
  * PTFiles (PTF)
  * PThome [![(invite needed)][inviteneeded]](#)
+ * PTLGS [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
  * PTtime
