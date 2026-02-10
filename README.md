@@ -455,6 +455,7 @@ Prior versions of Jackett are no longer supported.
  * MMA-Torrents [![(invite needed)][inviteneeded]](#)
  * MNV (Max-New-Vision)
  * MOJBLiNK
+ * MomentPT [![(invite needed)][inviteneeded]](#)
  * MonikaDesign (MDU)
  * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
  * MouseBits
