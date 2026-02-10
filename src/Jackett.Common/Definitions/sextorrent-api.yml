@@ -26,25 +26,25 @@ caps:
     - {id: 17, cat: XXX, desc: "Orgy GangBang"}
     - {id: 18, cat: XXX, desc: "Lesbian"}
     - {id: 19, cat: XXX, desc: "Teen"}
-    - {id: 20, cat: XXX, desc: "HD High.Definition"}
-    - {id: 21, cat: XXX, desc: "Cartoon Hentai"}
+    - {id: 20, cat: XXX/x264, desc: "HD High.Definition"}
+    - {id: 21, cat: XXX/Other, desc: "Cartoon Hentai"}
     - {id: 22, cat: XXX, desc: "Interracial"}
     - {id: 23, cat: XXX, desc: "Masturbate"}
-    - {id: 24, cat: XXX, desc: "Music.Video"}
+    - {id: 24, cat: XXX/Other, desc: "Music.Video"}
     - {id: 25, cat: XXX, desc: "POV"}
     - {id: 26, cat: XXX, desc: "Shemale TS Trans.Sex"}
     - {id: 27, cat: XXX, desc: "Straight"}
-    - {id: 28, cat: XXX, desc: "Mega.PACK"}
+    - {id: 28, cat: XXX/Pack, desc: "Mega.PACK"}
     - {id: 29, cat: XXX, desc: "VR - Porn"}
-    - {id: 30, cat: XXX, desc: "Pictures XXX"}
+    - {id: 30, cat: XXX/ImageSet, desc: "Pictures XXX"}
     - {id: 31, cat: XXX, desc: "SiteRip"}
     - {id: 32, cat: XXX, desc: "Foreign"}
     - {id: 33, cat: XXX, desc: "Latina"}
-    - {id: 34, cat: XXX, desc: "Games All type"}
-    - {id: 35, cat: XXX, desc: "Magazines (Press.)"}
+    - {id: 34, cat: XXX/Other, desc: "Games All type"}
+    - {id: 35, cat: XXX/Other, desc: "Magazines (Press.)"}
     - {id: 36, cat: XXX, desc: "Feature"}
     - {id: 37, cat: XXX, desc: "Big-Ass"}
-    - {id: 38, cat: XXX, desc: "Other (all.mixt.)"}
+    - {id: 38, cat: XXX/Other, desc: "Other (all.mixt.)"}
     - {id: 39, cat: XXX, desc: "CumShot"}
     - {id: 40, cat: XXX, desc: "Black"}
     - {id: 41, cat: XXX, desc: "Piss"}
@@ -52,6 +52,7 @@ caps:
     - {id: 43, cat: XXX, desc: "Pregnant"}
     - {id: 44, cat: XXX, desc: "GAY"}
     - {id: 45, cat: XXX, desc: "Classic"}
+    - {id: 46, cat: XXX, desc: "Threesome"}
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
