@@ -555,6 +555,7 @@ Prior versions of Jackett are no longer supported.
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
  * PTtime
+ * PTzone
  * Punk's Horror Tracker
  * PuntoTorrent [![(invite needed)][inviteneeded]](#)
  * PuTao (葡萄)
@@ -672,6 +673,7 @@ Prior versions of Jackett are no longer supported.
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
  * x-ite.me (XM)
+ * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)
  * xloli (ilolicon PT)
  * XSpeeds (XS)
  * Xthor [![(invite needed)][inviteneeded]](#)
