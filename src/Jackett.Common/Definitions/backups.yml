@@ -14,30 +14,30 @@ caps:
     - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
-    - {id: 51, cat: PC/Mac, desc: "Apple"}
     - {id: 3, cat: PC, desc: "Apps"}
-    - {id: 109, cat: PC, desc: "Attract-Mode"}
+    - {id: 109, cat: PC, desc: "Attract"}
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 71, cat: Console, desc: "Batocera"}
+    - {id: 108, cat: Console, desc: "Bazpacks"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
     - {id: 112, cat: Console, desc: "Brojack & Laws"}
     - {id: 42, cat: Console, desc: "CoinOPS Official"}
     - {id: 65, cat: Console, desc: "CoinOps Unofficial"}
-    - {id: 22, cat: Console, desc: "CoinOps"}
+    - {id: 22, cat: Console, desc: "CoinOps Xbox"}
     - {id: 63, cat: Books/Comics, desc: "Comics"}
-    - {id: 60, cat: Console, desc: "Core"}
+    - {id: 60, cat: Console, desc: "CORE"}
     - {id: 72, cat: Console, desc: "CORE Community"}
     - {id: 44, cat: Console, desc: "CP78"}
     - {id: 16, cat: TV/Documentary, desc: "Docu"}
     - {id: 41, cat: Console, desc: "Dragon"}
-    - {id: 5, cat: Books, desc: "EBooks"}
+    - {id: 5, cat: Books, desc: "eBooks"}
     - {id: 89, cat: PC, desc: "Ghostware"}
-    - {id: 84, cat: TV, desc: "GOG DRM FREE"}
+    - {id: 84, cat: TV, desc: "GOG"}
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
     - {id: 107, cat: Console, desc: "KinHanK"}
     - {id: 43, cat: Console, desc: "LaunchBox"}
-    - {id: 85, cat: PC, desc: "MAME Rom Sets"}
+    - {id: 85, cat: PC, desc: "MAME"}
     - {id: 32, cat: Movies, desc: "Movie Pack"}
     - {id: 106, cat: Movies/UHD, desc: "Movie Pack 4K"}
     - {id: 6, cat: Movies, desc: "Movies"}
@@ -51,15 +51,15 @@ caps:
     - {id: 30, cat: Console, desc: "Playstation"}
     - {id: 83, cat: PC, desc: "Retro eXo"}
     - {id: 56, cat: PC, desc: "Retro Minis"}
-    - {id: 67, cat: PC, desc: "Retrobat"}
+    - {id: 67, cat: PC, desc: "RetroBat"}
     - {id: 88, cat: PC, desc: "RetroFE"}
     - {id: 76, cat: Console, desc: "RGS"}
-    - {id: 27, cat: PC, desc: "Roms and Emulators"}
+    - {id: 27, cat: PC, desc: "ROM Packs"}
     - {id: 62, cat: PC, desc: "RPi"}
     - {id: 81, cat: PC, desc: "Scene"}
-    - {id: 68, cat: PC, desc: "Schmoomer's"}
+    - {id: 68, cat: PC, desc: "Schmoomer"}
     - {id: 110, cat: Console, desc: "ScummVM"}
-    - {id: 57, cat: Console, desc: "Sega"}
+    - {id: 57, cat: Console, desc: "SEGA"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 75, cat: Audio, desc: "Soundtracks"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
@@ -68,9 +68,9 @@ caps:
     - {id: 9, cat: TV, desc: "TV Packs"}
     - {id: 11, cat: TV, desc: "TV Shows"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
-    - {id: 26, cat: Console, desc: "Xbox"}
+    - {id: 26, cat: Console, desc: "XBOX"}
     - {id: 12, cat: Console, desc: "XBOX360"}
-    - {id: 23, cat: XXX, desc: "xxx18+"}
+    - {id: 23, cat: XXX, desc: "XXX18+"}
 
   modes:
     search: [q]
@@ -129,31 +129,31 @@ search:
     # sort is done via do=quick_sort, and freeleech sorting is part of that set
 
   rows:
-    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
         args: 66
 
   fields:
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrent-category-"]
       attribute: href
       filters:
-        - name: querystring
-          args: category
+        - name: regexp
+          args: "torrent-category-(\\d+)"
     title_default:
       # is often abbreviated
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
     title:
       # can be abbreviated but usually longer than title_default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="details.php?id="]
+      selector: a[href*="torrent-details-"]
       attribute: href
     download:
-      selector: a[href*="download.php?id="]
+      selector: a[href*="download-torrent-"]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
