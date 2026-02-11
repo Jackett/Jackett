@@ -114,6 +114,8 @@ login:
   path: "api/{{ .Config.passkey }}/last-torrents"
   method: get
   error:
+    - selector: ":root:contains(\"Invalid passkey\")"
+    - selector: ":root:contains(\"La page demandée est introuvable\")" # 404 page on empty passkey
     - selector: ":root:contains(\"Passkey invalide\")"
     - selector: ":root:contains(\"503 Service Temporarily Unavailable\")"
 
