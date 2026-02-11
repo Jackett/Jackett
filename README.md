@@ -213,7 +213,6 @@ Prior versions of Jackett are no longer supported.
  * TribalMixes
  * Union Fansub
  * UniOtaku
- * ViDEOTEKA (VT)
  * Ztracker
 </details>
 
