@@ -36,6 +36,9 @@ caps:
     - {id: 32, cat: Movies, desc: " |- Пр-во Узбекфильм (на русском)"}
     - {id: 30, cat: Movies, desc: " |- Пр-во Узбекфильм (на узбекском языке)"}
     # Сериалы, Видео и ТВ # Series, Videos and TV
+    - {id: 413, cat: TV, desc: "Зарубежные сериалы (DVD)"}
+    - {id: 412, cat: TV, desc: "Зарубежные сериалы (HD)"}
+    - {id: 411, cat: TV, desc: "Зарубежные сериалы (UHD)"}
     - {id: 97, cat: TV, desc: "Сериалы"}
     - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
     - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
