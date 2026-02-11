@@ -5,8 +5,6 @@ description: "Bittorrentfiles is a Private GERMAN Torrent Tracker for MOVIES / T
 language: de-DE
 type: private
 encoding: UTF-8
-certificates:
-  - f9d7cb73beb0254372638cfd7afca468ed568964 # Expired 10th Feb 2026
 links:
   - https://bittorrentfiles.me/
 legacylinks:
