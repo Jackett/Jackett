@@ -10,19 +10,21 @@ links:
 
 caps:
   categorymappings:
-    # Kids
-    - {id: 146, cat: Movies, desc: "Kids Alles"}
-    # Anime
-    - {id: 160, cat: TV/Anime, desc: "Anime Pack"}
-    - {id: 165, cat: Movies, desc: "Anime Film"}
-    - {id: 163, cat: TV/Anime, desc: "Anime Serie"}
-    - {id: 166, cat: TV/Anime, desc: "Anime Serie"}
     # Klassiker
     - {id: 157, cat: Movies, desc: "Klassiker All In"}
+    # Anime
+    - {id: 189, cat: TV/Anime, desc: "Anime Serie"}
+    - {id: 193, cat: TV/Anime, desc: "Anime Pack"}
+    - {id: 183, cat: TV/Anime, desc: "Anime HD"}
+    - {id: 184, cat: TV/Anime, desc: "Anime SD"}
+    - {id: 186, cat: TV/Anime, desc: "Anime 4K"}
+    # Kids
+    - {id: 146, cat: Movies, desc: "Kids Alles"}
     # Movie
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 122, cat: Movies/UHD, desc: "Movie 4K"}
     - {id: 124, cat: Movies, desc: "Movie Pack"}
+    - {id: 196, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
