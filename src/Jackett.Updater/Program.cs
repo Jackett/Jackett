@@ -480,7 +480,6 @@ namespace Jackett.Updater
                 "Definitions/hdpt.yml",
                 "Definitions/hdt-lafenice.yml",
                 "Definitions/hdvbits.yml",
-                "Definitions/hdvideo.yml",
                 "Definitions/hdzone.yml", // renamed to hdfun
                 "Definitions/heavens-hell.yml",
                 "Definitions/hellastz.yml",

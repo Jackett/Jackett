@@ -387,6 +387,7 @@ Prior versions of Jackett are no longer supported.
  * HDTorrents.it [PAY2DL]
  * HDTurk
  * HDU
+ * HDVideo
  * Hebits (HB)
  * HellasHut
  * HELLENIC-HD
