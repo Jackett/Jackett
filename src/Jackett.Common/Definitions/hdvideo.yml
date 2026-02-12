@@ -193,6 +193,7 @@ search:
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "
-    minimumratio:
-      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
 # NexusPHP v1.8.15 2024-12-23
