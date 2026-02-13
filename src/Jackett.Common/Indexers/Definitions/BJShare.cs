@@ -302,20 +302,7 @@ namespace Jackett.Common.Indexers.Definitions
                         if (row.QuerySelector(".edition_info") != null)
                             continue;
 
-                        // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
-                        // so let's try to pick up first without the .tooltip class,
-                        // if nothing is found, then we try again without that filter
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
-                        if (qDetailsLink == null)
-                        {
-                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                            // if still can't find the right link, skip it
-                            if (qDetailsLink == null)
-                            {
-                                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
-                                continue;
-                            }
-                        }
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
                         var title = StripSearchString(qDetailsLink.TextContent, false);
 
                         var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
