@@ -538,6 +538,7 @@ Prior versions of Jackett are no longer supported.
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
+ * PlayletPT [![(invite needed)][inviteneeded]](#)
  * Polish Torrent (PTT)
  * PolishTracker [![(invite needed)][inviteneeded]](#)
  * Pornbay [![(invite needed)][inviteneeded]](#)
@@ -635,6 +636,7 @@ Prior versions of Jackett are no longer supported.
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
  * Toca Share
+ * TokyoPT [![(invite needed)][inviteneeded]](#)
  * Tormac
  * Tornado
  * Torr9
