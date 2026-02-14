@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 113, cat: PC, desc: "2Play! Official"}
+    - {id: 115, cat: PC, desc: "2Play! Official"}
     - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
@@ -129,31 +129,29 @@ search:
     # sort is done via do=quick_sort, and freeleech sorting is part of that set
 
   rows:
-    selector: "table#sortabletable > tbody > tr:has(a[href*=\"download-torrent-\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
+    selector: "table#sortabletable > tbody > tr:has(a[href*=\"/details.php?id=\"]){{ if .Config.freeleech }}:has(img[src$=\"freedownload.gif\"]){{ else }}{{ end }}"
     filters:
       - name: andmatch
         args: 66
 
   fields:
     category:
-      selector: a[href*="torrent-category-"]
+      selector: a[href*="/browse.php?category="]
       attribute: href
       filters:
-        - name: regexp
-          args: "torrent-category-(\\d+)"
+        - name: querystring
+          args: category
     title_default:
-      # is often abbreviated
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="/details.php?id="]
     title:
-      # can be abbreviated but usually longer than title_default
       selector: div.tooltip-content > div
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href*="torrent-details-"]
+      selector: a[href*="/details.php?id="]
       attribute: href
     download:
-      selector: a[href*="download-torrent-"]
+      selector: a[href*="/download.php?id="]
       attribute: href
     magnet:
       selector: a[href^="magnet:?xt="]
