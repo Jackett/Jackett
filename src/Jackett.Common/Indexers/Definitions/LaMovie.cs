@@ -97,6 +97,13 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var rawSearchTerm = query.GetQueryString()?.Trim();
+
+            // Remove year from search term (e.g., "Movie Name 2024" -> "Movie Name")
+            if (!string.IsNullOrWhiteSpace(rawSearchTerm))
+            {
+                rawSearchTerm = Regex.Replace(rawSearchTerm, @"\s+\d{4}$", "").Trim();
+            }
+
             var searchTerm = WebUtilityHelpers.UrlEncode(rawSearchTerm, Encoding.UTF8);
             var isLatest = string.IsNullOrWhiteSpace(rawSearchTerm);
 
@@ -251,7 +258,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = uriMagnet,
                         Details = details,
                         Link = uriMagnet,
-                        Title = $"{post.Title}.{episodePart}{quality}.{language}-la.movie",
+                        Title = $"{post.Title}.{episodePart}{quality}.{language}-LaMovie",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
                         Year = year != null ? long.Parse(year) : DateTime.Now.Year,
