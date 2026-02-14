@@ -108,7 +108,7 @@ search:
 
   fields:
     category:
-      selector: a[href*="cat="]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -122,6 +122,33 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
+    date_elapsed:
+      selector: td.rowfollow:nth-child(4) > span[title]
+      attribute: title
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00"
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    date_added:
+      selector: td.rowfollow:nth-child(4):not(:has(span))
+      optional: true
+      filters:
+        - name: append
+          args: " +08:00"
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
@@ -130,23 +157,6 @@ search:
       selector: td.rowfollow:nth-child(7)
     grabs:
       selector: td.rowfollow:nth-child(8)
-    date_elapsed:
-      selector: td.rowfollow:nth-child(4) > span[title]
-      attribute: title
-      filters:
-        - name: append
-          args: " +08:00"
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    date_added:
-      selector: td.rowfollow:nth-child(4):not(:has(span))
-      filters:
-        - name: append
-          args: " +08:00"
-        - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
-    date:
-      text: "{{ or .Result.date_elapsed .Result.date_added }}"
     downloadvolumefactor:
       case:
         img.pro_free: 0
