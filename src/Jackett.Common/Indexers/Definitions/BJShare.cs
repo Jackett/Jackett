@@ -305,16 +305,18 @@ namespace Jackett.Common.Indexers.Definitions
                         // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
                         // so let's try to pick up first without the .tooltip class,
                         // if nothing is found, then we try again without that filter
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]:not(.tooltip)");
+                        if (qDetailsLink == null)
+                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        // fallback to old id= format for backward compatibility
+                        if (qDetailsLink == null)
+                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
+                        if (qDetailsLink == null)
+                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
                         if (qDetailsLink == null)
                         {
-                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                            // if still can't find the right link, skip it
-                            if (qDetailsLink == null)
-                            {
-                                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
-                                continue;
-                            }
+                            logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
+                            continue;
                         }
                         var title = StripSearchString(qDetailsLink.TextContent, false);
 
@@ -409,8 +411,18 @@ namespace Jackett.Common.Indexers.Definitions
                         if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
                             release.Title += " Brazilian";
 
-                        // This tracker does not provide an publish date to search terms (only on last 24h page)
-                        release.PublishDate = DateTime.Today;
+                        // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46")
+                        var dateStr = row.QuerySelector("span.time.bjtooltip")?.GetAttribute("title");
+
+                        if (!string.IsNullOrWhiteSpace(dateStr) &&
+                            DateTime.TryParseExact(dateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var publishDate))
+                        {
+                            release.PublishDate = publishDate;
+                        }
+                        else
+                        {
+                            release.PublishDate = DateTime.Today;
+                        }
 
                         // check for previously stripped search terms
                         if (!query.MatchQueryStringAND(release.Title, null, searchTerm))
@@ -467,89 +479,104 @@ namespace Jackett.Common.Indexers.Definitions
                             MinimumRatio = 1,
                             MinimumSeedTime = 0
                         };
-                        var qDetailsLink = row.QuerySelector("a.BJinfoBox");
-                        var qBJinfoBox = qDetailsLink.QuerySelector("span");
+
+                        // Details link - site changed from a.BJinfoBox to standard torrentid links
+                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        if (qDetailsLink == null)
+                        {
+                            logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the details link");
+                            continue;
+                        }
+
                         var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
                         var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                        var qSeeders = row.QuerySelector("td:nth-child(4)");
-                        var qLeechers = row.QuerySelector("td:nth-child(5)");
-                        var qQuality = row.QuerySelector("font[color=\"red\"]");
-                        var qFreeLeech = row.QuerySelector("font[color=\"green\"]:contains(Free)");
-                        var qTitle = qDetailsLink.QuerySelector("font");
-                        // Get international title if available, or use the full title if not
-                        release.Title = qTitle.TextContent;
+                        var qSeeders = row.QuerySelector("td:nth-last-child(2)");
+                        var qLeechers = row.QuerySelector("td:nth-last-child(1)");
+                        var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
+                        var qSize = row.QuerySelector("td.number_column.nobr");
+
+                        // Title from the details link
+                        release.Title = qDetailsLink.TextContent.Trim();
                         var seasonEp = _EpisodeRegex.Match(release.Title).Value;
+
+                        // Year from text after title link (e.g., " [2026]" inside the <strong> wrapper)
                         var year = "";
+                        var yearNode = qDetailsLink.NextSibling;
+                        if (yearNode != null)
+                        {
+                            var yearMatch = Regex.Match(yearNode.TextContent, @"\[(\d{4})\]");
+                            if (yearMatch.Success)
+                                year = yearMatch.Groups[1].Value;
+                        }
+
+                        // Category from data-categoryid attribute on the row, or from cat link
+                        var catStr = row.GetAttribute("data-categoryid");
+                        if (string.IsNullOrEmpty(catStr) && qCatLink != null)
+                            catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+
+                        // Description from bracket info (e.g., "[MKV / H.264 / WEB-DL / ...]")
                         release.Description = "";
-                        var extraInfo = "";
-                        var releaseQuality = "";
-                        foreach (var child in qBJinfoBox.ChildNodes)
+                        var groupInfo = row.QuerySelector("div.group_info");
+                        if (groupInfo != null)
                         {
-                            var type = child.NodeType;
-                            if (type != NodeType.Text)
-                                continue;
-                            var line = child.TextContent;
-                            if (line.StartsWith("Tamanho:"))
-                            {
-                                var size = line.Substring("Tamanho: ".Length);
-                                release.Size = ParseUtil.GetBytes(size);
-                            }
-                            else if (line.StartsWith("Lançado em: "))
-                            {
-                                var publishDateStr = line.Substring("Lançado em: ".Length).Replace("às ", "");
-                                publishDateStr += " +0";
-                                var publishDate = DateTime.SpecifyKind(
-                                    DateTime.ParseExact(publishDateStr, "dd/MM/yyyy HH:mm z", CultureInfo.InvariantCulture),
-                                    DateTimeKind.Unspecified);
-                                release.PublishDate = publishDate.ToLocalTime();
-                            }
-                            else if (line.StartsWith("Ano:"))
-                            {
-                                year = line.Substring("Ano: ".Length);
-                            }
-                            else if (line.StartsWith("Qualidade:"))
-                            {
-                                releaseQuality = line.Substring("Qualidade: ".Length);
-                                if (releaseQuality == "WEB")
-                                    releaseQuality = "WEB-DL";
-                                extraInfo += releaseQuality + " ";
-                            }
+                            var groupInfoText = groupInfo.TextContent;
+                            // Match bracket content containing " / " (space-slash-space) — this is the format/quality info
+                            // This avoids matching title brackets like [Subtitle] or year brackets like [2026]
+                            var descMatch = Regex.Match(groupInfoText, @"\[([^\]]* / [^\]]*)\]");
+                            if (descMatch.Success)
+                                release.Description = descMatch.Groups[1].Value.Trim();
+                        }
+
+                        // Process description similar to search method
+                        release.Description = release.Description.Replace(" / Free", "");
+                        release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL ");
+                        if (release.Description.EndsWith("/ WEB"))
+                            release.Description = release.Description.Substring(0, release.Description.Length - 3) + "WEB-DL";
+                        release.Description = release.Description.Replace("Full HD", "1080p");
+                        release.Description = release.Description.Replace("/ HD /", "/ 720p /");
+                        release.Description = Regex.Replace(release.Description, @"/ HD$", "/ 720p");
+                        release.Description = release.Description.Replace("4K", "2160p");
+                        release.Description = release.Description.Replace("SD", "480p");
+                        release.Description = release.Description.Replace("Dual Áudio", "Dual");
+
+                        // Build title
+                        release.Title = ParseTitle(release.Title, seasonEp, year, catStr ?? "");
+
+                        // Append description elements to title
+                        var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
+                        if (!string.IsNullOrEmpty(cleanDescription))
+                        {
+                            var stringSeparators = new[] { " / " };
+                            var titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
+                            release.Title = release.Title.Trim();
+                            if (titleElements.Length < 6)
+                                release.Title += " " + string.Join(" ", titleElements);
                             else
-                            {
-                                release.Description += line + "\n";
-                                if (line.Contains(":"))
-                                    if (!(line.StartsWith("Lançado") || line.StartsWith("Resolução") ||
-                                          line.StartsWith("Idioma") || line.StartsWith("Autor")))
-                                    {
-                                        var info = line.Substring(line.IndexOf(": ", StringComparison.Ordinal) + 2);
-                                        if (info == "Dual Áudio")
-                                            info = "Dual";
-                                        extraInfo += info + " ";
-                                    }
-                            }
+                                release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " +
+                                                 titleElements[2] + " " + titleElements[4] + " " + string.Join(
+                                                     " ", titleElements.Skip(6));
                         }
 
-                        if (Regex.IsMatch(extraInfo, "(Dual|[Nn]acional|[Dd]ublado)"))
-                            extraInfo += " Brazilian";
+                        if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
+                            release.Title += " Brazilian";
 
-                        var catStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                        // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46")
+                        var dateStr = row.QuerySelector("span.time.bjtooltip")?.GetAttribute("title");
 
-                        release.Title = ParseTitle(release.Title, seasonEp, year, catStr);
-
-                        if (qQuality != null)
+                        if (!string.IsNullOrWhiteSpace(dateStr) &&
+                            DateTime.TryParseExact(dateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var publishDate))
                         {
-                            var quality = qQuality.TextContent;
-                            release.Title += quality switch
-                            {
-                                "4K" => " 2160p",
-                                "Full HD" => " 1080p",
-                                "HD" => " 720p",
-                                _ => " 480p"
-                            };
+                            release.PublishDate = publishDate;
+                        }
+                        else
+                        {
+                            release.PublishDate = DateTime.Today;
                         }
 
-                        release.Title += " " + extraInfo.TrimEnd();
-                        release.Category = MapTrackerCatToNewznab(catStr);
+                        if (qSize != null)
+                            release.Size = ParseUtil.GetBytes(qSize.TextContent);
+
+                        release.Category = MapTrackerCatToNewznab(catStr ?? "");
                         release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
                         release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
                         release.Guid = release.Link;
