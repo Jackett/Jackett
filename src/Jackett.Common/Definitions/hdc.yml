@@ -93,75 +93,74 @@ search:
     notnewword: 1
 
   rows:
-    selector: div.trblock
+    selector: div.mitem
 
   fields:
-    title:
-      selector: div.trtop a[href^="t-"]
     category:
-      selector: div.trm
+      selector: div.mcontent
       attribute: style
       filters:
         - name: regexp
           args: (\d+)
+    title:
+      selector: div.mtop a[href^="t-"]
     details:
-      selector: div.trtop a[href^="t-"]
+      selector: div.mtop a[href^="t-"]
       attribute: href
     download:
       selector: a[href^="download?id="]
       attribute: href
     poster:
-      selector: div.trp:not(:has(img[src$="poster.jpg"])) img
+      selector: div.mposter:not(:has(img[src$="poster.jpg"])) img
       attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: div.trbo div:nth-last-child(8)
+      selector: div.mbottom div:nth-last-child(7)
       remove: i
     seeders:
-      selector: div.trbo div:nth-last-child(7)
+      selector: div.mbottom div:nth-last-child(6)
       optional: true
       default: 0
       filters:
         - name: re_replace
           args: ["\\s", "0"]
     leechers:
-      selector: div.trbo div:nth-last-child(6)
+      selector: div.mbottom div:nth-last-child(5)
       optional: true
       default: 0
       filters:
         - name: re_replace
           args: ["\\s", "0"]
     grabs:
-      selector: div.trbo div:nth-last-child(5)
+      selector: div.mbottom div:nth-last-child(4)
       optional: true
       default: 0
       filters:
         - name: re_replace
           args: ["\\s", "0"]
     date:
+      selector: div.minfo
       remove: a, span
-      selector: div[style="float:right;"]
       filters:
-        - name: replace
-          args: ["@", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     downloadvolumefactor:
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
+        div.bfree: 0
+        div.bfreetwoup: 0
+        div.bhalfdown: 0.5
+        div.bhalfdowntwoup: 0.5
+        div.bthirdown: 0.3
+        div.bnone: 1
         "*": 1
     uploadvolumefactor:
       case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
+        div.bhalfdowntwoup: 2
+        div.bfreetwoup: 2
+        div.btwoup: 2
         "*": 1
-# engine n/a (likely based on NexusPHP)
+# engine n/a (based on NexusPHP)
