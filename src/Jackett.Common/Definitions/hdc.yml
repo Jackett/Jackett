@@ -151,16 +151,16 @@ search:
     downloadvolumefactor:
       case:
         div.bfree: 0
-        div.bfreetwoup: 0
+        div.btwoupfree: 0
         div.bhalfdown: 0.5
-        div.bhalfdowntwoup: 0.5
+        div.btwouphalfdown: 0.5
         div.bthirdown: 0.3
         div.bnone: 1
         "*": 1
     uploadvolumefactor:
       case:
-        div.bhalfdowntwoup: 2
-        div.bfreetwoup: 2
+        div.btwouphalfdown: 2
+        div.btwoupfree: 2
         div.btwoup: 2
         "*": 1
 # engine n/a (based on NexusPHP)
