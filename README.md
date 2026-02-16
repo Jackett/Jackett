@@ -763,16 +763,6 @@ Copy and paste this command into your terminal:
 cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github.com/Jackett/Jackett/releases/latest/download/"$f" && sudo tar -xzf "$f" && sudo rm -f "$f" && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
 ```
 
-This command will:
-- Download Jackett to `/opt`
-- Extract the archive
-- Set proper permissions
-- Install Jackett as a systemd service
-- Start the service automatically
-- Display the service status
-
-After installation, visit `http://127.0.0.1:9117` in your web browser.
-
 #### Method 2: Step-by-Step Installation
 
 1. Download and extract the latest release:
