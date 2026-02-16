@@ -14,8 +14,8 @@
 4. [Installation](#installation)
    - [Windows Installation](#windows-installation)
    - [Linux Installation (AMD x64)](#linux-installation-amd-x64)
-   - [Linux Installation (ARM)](#linux-installation-arm)
-   - [Linux Installation (Legacy ARM)](#linux-installation-legacy-arm)
+   - [Linux Installation (ARMv7 or above)](#linux-installation-armv7-or-above)
+   - [Linux Installation (ARMv6 or below)](#linux-installation-armv6 or below)
    - [macOS Installation](#macos-installation)
    - [Docker Installation](#docker-installation)
    - [Other Installation Methods](#other-installation-methods)
@@ -724,7 +724,7 @@ Prior versions of Jackett are no longer supported.
 
 5. Click "Install" and wait for the installation to finish
 
-6. Navigate your web browser to `http://127.0.0.1:9117`
+6. Double-click the Jackett tray icon, or navigate your web browser to `http://127.0.0.1:9117`
 
 7. You are now ready to begin adding trackers
 
@@ -736,14 +736,14 @@ Prior versions of Jackett are no longer supported.
 
 1. Download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.Windows.zip)
 
-2. Extract to your preferred location (e.g., `C:\Jackett`)
+2. Extract to your preferred location (e.g., `C:\ProgramData\Jackett`)
 
 3. Run `JackettConsole.exe` to start Jackett
 
-4. Access Jackett at `http://127.0.0.1:9117`
+4. Navigate your web browser to `http://127.0.0.1:9117`
 
 **Running from Command Line:**
-You can run Jackett from the command line to see log messages. Use `JackettConsole.exe` (for Command Prompt), found in the Jackett data folder: `%ProgramData%\Jackett`. Ensure the server is not already running from the tray or service.
+You can run Jackett from the command line to see log messages. Use `JackettConsole.exe` (for Command Prompt), found in the Jackett data folder: e.g. `%ProgramData%\Jackett`. Ensure the server is not already running from the tray or service.
 
 ---
 
@@ -799,21 +799,15 @@ After installation, visit `http://127.0.0.1:9117` in your web browser.
    systemctl status jackett.service
    ```
 
-5. Access Jackett at `http://127.0.0.1:9117`
+5. Navigate your web browser to `http://127.0.0.1:9117`
 
 #### Running Without Installing as a Service
 
-1. Download and extract the latest release as shown above
+1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
 
-2. Navigate to the Jackett folder:
-   ```bash
-   cd /opt/Jackett
-   ```
+2. Open a Terminal and `cd` to the `Jackett` folder
 
-3. Run Jackett:
-   ```bash
-   ./jackett
-   ```
+3. Run Jackett with the command `./jackett`
 
 #### Service Management Commands
 
@@ -834,21 +828,24 @@ systemctl status jackett.service
 journalctl -u jackett.service
 ```
 
-**Logs Location:** `~/.config/Jackett/log.txt` and `journalctl -u jackett.service`
+**Logs Location:** `~/.config/Jackett/log.txt`
+**View Logs:** `journalctl -u jackett.service`
 
 #### Home Directory Configuration
 
 If you want to run Jackett with a user without a `/home` directory, add this line to your systemd file:
-```
+
+```text
 Environment=XDG_CONFIG_HOME=/path/to/folder
 ```
+
 This folder will be used to store configuration files.
 
 ---
 
-### Linux Installation (ARM)
+### Linux Installation (ARMv7 or above)
 
-For ARM-based systems (Raspberry Pi, etc.)
+For modern ARM-based systems (Raspberry Pi, etc.)
 
 **Prerequisites:**
 - Most operating systems include all required dependencies
@@ -868,6 +865,7 @@ For ARM-based systems (Raspberry Pi, etc.)
    ```
 
 2. Install as a service:
+
    ```bash
    cd /opt/Jackett
    sudo ./install_service_systemd.sh
