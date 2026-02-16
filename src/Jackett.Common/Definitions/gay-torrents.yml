@@ -140,7 +140,7 @@ search:
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
   headers:
-    Referer: ["https://www.gay-torrents.net/"]
+    Referer: ["{{ .Config.sitelink }}"] 
 
   rows:
     selector: ul.TorrentList, ul.Torrent-List
