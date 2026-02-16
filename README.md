@@ -1138,7 +1138,7 @@ FlareSolverr is a proxy server that solves Cloudflare and other anti-bot challen
 2. Configure FlareSolverr in Jackett:
    - Open Jackett settings
    - Set **FlareSolverr API URL** (e.g., `http://172.17.0.2:8191`)
-   - Keep the default value in **FlareSolverr Max Timeout (ms)**
+   - It is recommended to keep the default value in **FlareSolverr Max Timeout (ms)**
 
 **Note:** Setting up this service is optional. Most indexers do not require it.
 
