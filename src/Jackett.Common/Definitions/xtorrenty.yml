@@ -44,12 +44,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: email
+  - name: cookie
     type: text
-    label: Email
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -77,18 +76,10 @@ settings:
       asc: asc
 
 login:
-  path: ?do=login
-  method: form
-  form: form
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    login_name: "{{ .Config.email }}"
-    login_password: "{{ .Config.password }}"
-    login_not_save: ""
-    login: submit
-  error:
-    - selector: div.berrors b:contains("Wystąpił błąd podczas autoryzacji")
-      message:
-        text: "Uwaga! Logowanie na stronie nie powiodło się. Nieprawidłowy adres e-mail lub hasło."
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href$="/index.php?action=logout"]
