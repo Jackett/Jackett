@@ -813,9 +813,6 @@ systemctl restart jackett.service
 
 # Check status
 systemctl status jackett.service
-
-# View logs
-journalctl -u jackett.service
 ```
 
 **Logs Location:** `~/.config/Jackett/log.txt`
