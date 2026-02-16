@@ -148,8 +148,9 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static string InternationalTitle(string title)
         {
-            var match = Regex.Match(title, @".* \[(.*\/?)\]");
-            return match.Success ? match.Groups[1].Value.Split('/')[0] : title;
+            // Keep the full title including both Portuguese and English versions
+            // This allows searches in both languages to work correctly
+            return title;
         }
 
         private static string StripSearchString(string term, bool isAnime)
