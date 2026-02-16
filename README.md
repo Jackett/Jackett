@@ -1380,6 +1380,7 @@ See the [contributing guide](https://github.com/Jackett/Jackett/blob/master/CONT
 Install .NET SDK manually from [dotnet.microsoft.com](https://dotnet.microsoft.com/download?initial-os=macos)
 
 **Build Steps:**
+
 ```bash
 # Clone the repository
 git clone https://github.com/Jackett/Jackett.git
