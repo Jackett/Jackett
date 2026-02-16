@@ -872,27 +872,32 @@ For modern ARM-based systems (Raspberry Pi, etc.)
    ```
 
 3. The service will start on each login. Manage it using:
+
    ```bash
-   systemctl stop jackett.service    # Stop
-   systemctl start jackett.service   # Start
-   systemctl status jackett.service  # Check status
+   # Start Jackett
+   systemctl start jackett.service
+
+   # Stop Jackett
+   systemctl stop jackett.service
+
+   # Restart Jackett
+   systemctl restart jackett.service
+
+   # Check status
+   systemctl status jackett.service
    ```
 
-#### Running Without Installing as a Service
+1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
 
-1. Download and extract as shown above
+2. Open a Terminal and `cd` to the `Jackett` folder
 
-2. Run Jackett:
-   ```bash
-   cd /opt/Jackett
-   ./jackett
-   ```
+3. Run Jackett with the command `./jackett`
 
 ---
 
-### Linux Installation (Legacy ARM)
+### Linux Installation (ARMv6 or below)
 
-For ARMv6 or older systems.
+For legacy ARM systems.
 
 **Prerequisites:**
 
@@ -902,30 +907,27 @@ For ARMv6 or older systems.
    - On Red Hat/CentOS/openSUSE/Fedora, also install `mono-locale-extras`
 
 2. Install libcurl:
-   ```bash
-   # Debian/Ubuntu
-   sudo apt-get install libcurl4-openssl-dev
-   
-   # Red Hat/Fedora
-   sudo yum install libcurl-devel
-   ```
-   For other distributions, see the [Curl documentation](http://curl.haxx.se/dlwiz/?type=devel)
+   - Debian/Ubuntu: `apt-get install libcurl4-openssl-dev`
+   - Redhat/Fedora: `yum install libcurl-devel`
+   - For other distributions, see the [Curl documentation](http://curl.haxx.se/dlwiz/?type=devel)
 
 3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` from the [releases page](https://github.com/Jackett/Jackett/releases/latest)
 
 4. Run Jackett using Mono:
+
    ```bash
    mono --debug JackettConsole.exe
    ```
 
 5. (Optional) To install as a service:
+
    ```bash
    sudo ./install_service_systemd_mono.sh
    ```
 
 **Important Notes:**
 - Mono must be compiled with the Roslyn compiler (default)
-- Using MCS will cause "An error has occurred" errors (See [issue #2704](https://github.com/Jackett/Jackett/issues/2704))
+- Using MCS will cause "An error has occurred" errors (see [issue #2704](https://github.com/Jackett/Jackett/issues/2704))
 - For users without a `/home` directory, add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file
 
 ---
@@ -938,8 +940,8 @@ For ARMv6 or older systems.
 #### Installing as a Service
 
 1. Download the appropriate release:
-   - Intel Macs: `Jackett.Binaries.macOS.tar.gz`
-   - Apple Silicon (M1/M2/M3): `Jackett.Binaries.macOSARM64.tar.gz`
+   - Intel (x86): `Jackett.Binaries.macOS.tar.gz`
+   - Apple silicon (ARM): `Jackett.Binaries.macOSARM64.tar.gz`
 
    Get the latest release from the [releases page](https://github.com/Jackett/Jackett/releases/latest)
 
@@ -949,7 +951,7 @@ For ARMv6 or older systems.
 
 4. If installation is successful, close the Terminal window
 
-5. Access Jackett at `http://127.0.0.1:9117`
+5. Navigate your web browser to `http://127.0.0.1:9117`
 
 **Service Management:**
 
@@ -969,14 +971,11 @@ launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
 
 #### Running Without Installing as a Service
 
-1. Download and extract the appropriate release as shown above
+1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
 
 2. Open Terminal and navigate to the Jackett folder
 
-3. Run Jackett:
-   ```bash
-   ./jackett
-   ```
+3. Run Jackett with the command `./jackett`
 
 ---
 
