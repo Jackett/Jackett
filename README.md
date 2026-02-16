@@ -15,7 +15,7 @@
    - [Windows Installation](#windows-installation)
    - [Linux Installation (AMD x64)](#linux-installation-amd-x64)
    - [Linux Installation (ARMv7 or above)](#linux-installation-armv7-or-above)
-   - [Linux Installation (ARMv6 or below)](#linux-installation-armv6 or below)
+   - [Linux Installation (ARMv6 or below)](#linux-installation-armv6-or-below)
    - [macOS Installation](#macos-installation)
    - [Docker Installation](#docker-installation)
    - [Other Installation Methods](#other-installation-methods)
