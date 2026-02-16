@@ -511,6 +511,7 @@ Prior versions of Jackett are no longer supported.
  * Muxuege) [![(invite needed)][inviteneeded]](#)
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
+ * NanyangPT (南洋) [![(invite needed)][inviteneeded]](#)
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
