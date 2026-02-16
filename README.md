@@ -6,24 +6,73 @@
 [![GitHub Releases](https://img.shields.io/github/downloads/Jackett/Jackett/total.svg?maxAge=60&style=flat-square)](https://github.com/Jackett/Jackett/releases/latest)
 [![Docker Pulls](https://img.shields.io/docker/pulls/linuxserver/jackett.svg?maxAge=60&style=flat-square)](https://hub.docker.com/r/linuxserver/jackett/)
 
-_Our [![Discord](https://img.shields.io/badge/discord-chat-7289DA.svg?maxAge=60&style=flat-square)](https://discord.gg/J865QuA) server is no longer maintained. If you have a problem, request, or question then please open a new issue here._
+## Table of Contents
 
-This project is a new fork and is recruiting development help.  If you can help out please [contact us](https://github.com/Jackett/Jackett/issues/8180).
+1. [Introduction](#introduction)
+2. [Supported Systems](#supported-systems)
+3. [Supported Trackers](#supported-trackers)
+4. [Installation](#installation)
+   - [Windows Installation](#windows-installation)
+   - [Linux Installation (AMD x64)](#linux-installation-amd-x64)
+   - [Linux Installation (ARMv7 or above)](#linux-installation-armv7-or-above)
+   - [Linux Installation (ARMv6 or below)](#linux-installation-armv6-or-below)
+   - [macOS Installation](#macos-installation)
+   - [Docker Installation](#docker-installation)
+   - [Other Installation Methods](#other-installation-methods)
+5. [Uninstallation](#uninstallation)
+6. [Configuration](#configuration)
+   - [Running Behind Reverse Proxy](#running-behind-reverse-proxy)
+   - [Search Cache](#search-cache)
+   - [Torznab Cache](#torznab-cache)
+   - [FlareSolverr Configuration](#configuring-flaresolverr)
+   - [OMDb Configuration](#configuring-omdb)
+7. [API Usage](#api-usage)
+   - [Torznab Query Syntax](#jackett-torznab-query-syntax)
+   - [Search Modes and Parameters](#search-modes-and-parameters)
+   - [Filter Indexers](#filter-indexers)
+   - [Aggregate Indexers](#aggregate-indexers)
+8. [Command Line Options](#command-line-switches)
+9. [Building from Source](#building-from-source)
+10. [Troubleshooting](#troubleshooting)
+11. [Contributing](#contributing)
 
-Please see our [troubleshooting and contributing guidelines](CONTRIBUTING.md) before submitting any issues or pull requests
+---
 
-Jackett works as a proxy server: it translates queries from apps ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious), [NZBHydra2](https://github.com/theotherp/nzbhydra2) etc.) into tracker-site-specific http queries, parses the html or json response, and then sends results back to the requesting software. This allows for getting recent uploads (like RSS) and performing searches. Jackett is a single repository of maintained indexer scraping & translation logic - removing the burden from other apps.
+## Introduction
 
-#### Developer note:
-The software implements the [Torznab](https://torznab.github.io/spec-1.3-draft/index.html) (with hybrid [nZEDb](https://github.com/nZEDb/nZEDb/blob/b485fa326a0ff1f47ce144164eb1f070e406b555/resources/db/schema/data/10-categories.tsv)/[Newznab](https://newznab.readthedocs.io/en/latest/misc/api/#predefined-categories) [category numbering](https://github.com/Jackett/Jackett/wiki/Jackett-Categories)) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs.
+Jackett works as a proxy server that translates queries from applications ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious), [NZBHydra2](https://github.com/theotherp/nzbhydra2), etc.) into tracker-site-specific HTTP queries, parses the HTML or JSON response, and sends results back to the requesting software.
+
+**What Jackett does:**
+- Acts as a bridge between your apps and torrent trackers
+- Provides recent uploads (similar to RSS feeds)
+- Performs searches across multiple trackers
+- Returns results in a standardized format (Torznab/TorrentPotato)
+
+**Key Features:**
+- Single repository of maintained indexer scraping and translation logic
+- Removes the burden of tracker integration from other applications
+- Supports public, semi-private and private trackers
+- Implements the [Torznab](https://torznab.github.io/spec-1.3-draft/index.html) and [TorrentPotato](https://github.com/RuudBurger/CouchPotatoServer/wiki/Couchpotato-torrent-provider) APIs
+
+### Developer Information
+
+This project is recruiting development help.  If you can help out please [contact us](https://github.com/Jackett/Jackett/issues/8180).
+
+For detailed troubleshooting and contributing guidelines, please see [CONTRIBUTING.md](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md)
 
 A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](https://github.com/webtor-io/go-jackett)
 
-#### Supported Systems
-The currently supported version of Jackett is 0.24.+, which is compatible with the following OS:
-* Windows 10 Version 1607+ or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#windows)
-* Linux [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux)
-* macOS 13.0+ (Ventura) or greater [supported operating systems here](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#apple)
+**Note:** The Discord server is no longer maintained. If you have a problem, request, or question, please open a new issue on [GitHub](https://github.com/Jackett/Jackett/issues).
+
+---
+
+## Supported Systems
+
+The currently supported version of Jackett is **0.24.+**, which is compatible with:
+
+- **Windows:** Windows 10 Version 1607 or greater ([full list](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#windows))
+- **Linux:** Various distributions ([full list](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#linux))
+- **macOS:** macOS 13.0+ (Ventura) or greater ([full list](https://github.com/dotnet/core/blob/main/release-notes/9.0/supported-os.md#apple))
 
 Prior versions of Jackett are no longer supported.
 
@@ -142,6 +191,7 @@ Prior versions of Jackett are no longer supported.
  * XXXClub
  * xxxtor
  * YTS.ag
+ * Zamunda RIP
  * ZkTorrent
 </details>
 
@@ -645,217 +695,352 @@ Prior versions of Jackett are no longer supported.
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
 </details>
 
-Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be broken or missing features. If you have an invite please send it to jacketttest [at] gmail [dot] com or garfieldsixtynine [at] gmail [dot] com get them fixed/improved.
+**Note:** Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be broken or missing features. If you have an invite, please send it to `jacketttest [at] gmail [dot] com` or `garfieldsixtynine [at] gmail [dot] com` to help improve these indexers.
 
-### Jackett Torznab query syntax
+---
 
-Jackett accepts Torznab queries following the specifications described in the [Torznab document](https://torznab.github.io/spec-1.3-draft/index.html).
-For example, `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=caps` would return the capabilities of the indexer, and `.../api/v2.0/indexers/<aJackettIndexerName>/results/torznab/api?apikey=<yourJackettApiKey>&t=search&q=keywords` would perform a free text search on that indexer.
+## Installation
 
-### Search modes and parameters
+### Windows Installation
 
-A list of supported API search modes and parameters:
+#### Method 1: Using the Installer (Recommended)
 
+**Prerequisites:**
+- Windows 10 Version 1607 or newer
+- Administrator privileges
+- .NET prerequisites ([check here](https://learn.microsoft.com/en-us/dotnet/core/install/windows#net-installer))
+
+**Installation Steps:**
+
+1. Download the latest version of the [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe)
+
+2. Run the `Jackett.Installer.Windows.exe` program
+
+3. When prompted for permission to make changes to your computer, click "Yes"
+
+4. During installation:
+   - Check "Install as Windows Service" if you want Jackett to start automatically with Windows
+   - Check "Launch Jackett" to open Jackett after installation completes
+
+5. Click "Install" and wait for the installation to finish
+
+6. Double-click the Jackett tray icon, or navigate your web browser to `http://127.0.0.1:9117`
+
+7. You are now ready to begin adding trackers
+
+**Service Management:**
+- When installed as a service, the tray icon acts as a way to open, start, or stop Jackett
+- If not installed as a service, Jackett will run its web server from the tray tool
+
+#### Method 2: Manual Installation
+
+1. Download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.Windows.zip)
+
+2. Extract to your preferred location (e.g., `C:\ProgramData\Jackett`)
+
+3. Run `JackettConsole.exe` to start Jackett
+
+4. Navigate your web browser to `http://127.0.0.1:9117`
+
+**Running from Command Line:**
+You can run Jackett from the command line to see log messages. Use `JackettConsole.exe` (for Command Prompt), found in the Jackett data folder: e.g. `%ProgramData%\Jackett`. Ensure the server is not already running from the tray or service.
+
+---
+
+### Linux Installation (AMD x64)
+
+This section covers installation on most common Linux distributions including Ubuntu, Linux Mint, Debian, Fedora, and others.
+
+**Prerequisites:**
+- Most operating systems include all required dependencies
+- If dependencies are missing, refer to [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md)
+
+#### Method 1: One-Command Installation (Easiest)
+
+Copy and paste this command into your terminal:
+
+```bash
+cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github.com/Jackett/Jackett/releases/latest/download/"$f" && sudo tar -xzf "$f" && sudo rm -f "$f" && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
 ```
-t=search:
-   params  : q
-t=tvsearch:
-   params  : q, season, ep, imdbid, tvdbid, rid, tmdbid, tvmazeid, traktid, doubanid, year, genre
-t=movie:
-   params  : q, imdbid, tmdbid, traktid, doubanid, year, genre
-t=music:
-   params  : q, album, artist, label, track, year, genre
-t=book:
-   params  : q, title, author, publisher, year, genre
-```
 
-Note that most indexers will only support a subset of these search modes and parameters, use the t=caps to get a list of the actual modes and parms supported by an indexer.
+#### Method 2: Step-by-Step Installation
 
-Examples:
+1. Download and extract the latest release:
 
-```
-.../api?apikey=APIKEY&t=search&cat=100002,100003&q=Show+Title+S01E02
+   ```bash
+   cd /opt
+   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz
+   sudo tar -xzf Jackett.Binaries.LinuxAMDx64.tar.gz
+   sudo rm Jackett.Binaries.LinuxAMDx64.tar.gz
+   ```
 
-.../api?apikey=APIKEY&t=tvsearch&cat=5000&q=Show+Title&season=1&ep=2
-.../api?apikey=APIKEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
+2. Set proper ownership:
 
-.../api?apikey=APIKEY&t=movie&cat=100001&q=Movie+Title&year=2023
-.../api?apikey=APIKEY&t=movie&cat=2000&imdbid=tt1234567
+   ```bash
+   sudo chown -R $(whoami):$(id -g) /opt/Jackett
+   ```
 
-.../api?apikey=APIKEY&t=music&cat=100004&album=Title&artist=Name
+3. Install as a service:
 
-.../api?apikey=APIKEY&t=book&cat=100005,100006&genre=horror&publisher=Stuff
-```
+   ```bash
+   cd /opt/Jackett
+   sudo ./install_service_systemd.sh
+   ```
 
-### Filter indexers
+4. Check service status:
 
-A special "filter" indexer is available at `.../api/v2.0/indexers/<filter>/results/torznab`
-It will query the configured indexers that match the `<filter>` expression criteria and return the combined results as "all".
+   ```bash
+   systemctl status jackett.service
+   ```
 
-Supported filters
-Filter | Condition
--|-
-`type:<type>` | where the indexer type is equal to `<type>`
-`tag:<tag>` | where the indexer tags contain `<tag>`
-`lang:<tag>` | where the indexer language start with `<lang>`
-`test:{passed\|failed}` | where the last indexer test performed `passed` or `failed`
-`status:{healthy\|failing\|unknown}` | where the indexer state is `healthy` (successfully operates in the last minutes), `failing` (generates errors in the recent call) or `unknown` (unused for a while)
+5. Navigate your web browser to `http://127.0.0.1:9117`
 
-Supported operators
-Operator | Condition
--|-
-`!<expr>` | where not `<expr>`
-`<expr1>+<expr2>[+<expr3>...]` | where `<expr1>` and `<expr2>` [and `<expr3>`...]
-`<expr1>,<expr2>[,<expr3>...]` | where `<expr1>` or `<expr2>` [or `<expr3>`...]
-
-Example 1:
-The "filter" indexer at `.../api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab` will query all the configured indexers tagged with `group1` or all the indexers not private and with `en` language (`en-en`,`en-us`,...)
-
-Example 2:
-The "filter" indexer at `/api/v2.0/indexers/!status:failing,test:passed` will query all the configured indexers not `failing` or which `passed` its last test.
-
-### Aggregate indexers
-
-A special "all" indexer is available at `/api/v2.0/indexers/all/results/torznab`.
-It will query all configured indexers and return the combined results.
-
-If your client supports multiple feeds it's recommended to add each indexer directly instead of using the "all" indexer.
-Using the "all" indexer has no advantages (besides reduced management overhead), and there are many disadvantages:
-* you lose control over indexer specific settings (categories, search modes, etc.)
-* mixing search modes (IMDB, query, etc.) might cause low-quality results
-* indexer specific categories (>= 100000) can't be used.
-* slow indexers will slow down the overall result
-* total results are limited to 1000
-
-To get all Jackett indexers including their capabilities you can use `t=indexers` on the "all" indexer. To get only configured/unconfigured indexers you can also add `configured=true/false` as a query parameter.
-
-## Installation on Windows
-We recommend you install Jackett as a Windows service using the supplied [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe). You may also download the [zipped version](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.Windows.zip) if you would like to configure everything manually.
-
-To get started with using the installer for Jackett, follow the steps below:
-
-1. Check if you need any .NET prerequisites installed, see https://learn.microsoft.com/en-us/dotnet/core/install/windows#net-installer
-2. Download the latest version of the [Windows installer](https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Installer.Windows.exe)
-3. Run the Jackett.Installer.Windows.exe program.
-4. When prompted if you would like this app to make changes to your computer, select "yes".
-5. If you would like to install Jackett as a Windows Service, make sure the "Install as Windows Service" checkbox is filled.
-6. Once the installation has finished, check the "Launch Jackett" box to get started.
-7. Navigate your web browser to http://127.0.0.1:9117
-8. You're now ready to begin adding your trackers and using Jackett.
-
-When installed as a service the tray icon acts as a way to open/start/stop Jackett. If you opted to not install it as a service then Jackett will run its web server from the tray tool.
-
-Jackett can also be run from the command line if you would like to see log messages (Ensure the server isn't already running from the tray/service). This can be done by using "JackettConsole.exe" (for Command Prompt), found in the Jackett data folder: "%ProgramData%\Jackett".
-
-
-## Installation on Linux (AMDx64)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to the [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md) page.
-
-### Install as service
-A) Command to download and install the latest package and run the Jackett service:
-
-`cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github.com/Jackett/Jackett/releases/latest/download/"$f" && sudo tar -xzf "$f" && sudo rm -f "$f" && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"`
-
-B) Or manually:
+#### Running Without Installing as a Service
 
 1. Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
-2. To install Jackett as a service, open a Terminal, cd to the jackett folder, and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
 
-### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxAMDx64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page, open a Terminal, cd to the jackett folder, and run Jackett with the command `./jackett`
+2. Open a Terminal and `cd` to the `Jackett` folder
 
-### home directory
-If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
+3. Run Jackett with the command `./jackett`
 
+#### Service Management Commands
 
-## Installation on Linux (ARMv7 or above)
-On most operating systems all the required dependencies will already be present. In case they are not, you can refer to the [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md) page.
+```bash
+# Start Jackett
+systemctl start jackett.service
 
-### Install as service
-1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
-2. To install Jackett as a service, open a Terminal, cd to the jackett folder, and run `sudo ./install_service_systemd.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
+# Stop Jackett
+systemctl stop jackett.service
 
-### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` (32 bit is the most common on ARM) release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page, open a Terminal, cd to the jackett folder and run Jackett with the command `./jackett`
+# Restart Jackett
+systemctl restart jackett.service
 
-### home directory
-If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
-
-
-## Installation on Linux (ARMv6 or below)
- 1. Install [Mono 5.10](http://www.mono-project.com/download/#download-lin) or better (using the latest stable release is recommended)
-       * Follow the instructions on the mono website and install the `mono-devel` and the `ca-certificates-mono` packages.
-       * On Red Hat/CentOS/openSUSE/Fedora the `mono-locale-extras` package is also required.
- 2. Install  libcurl:
-       * Debian/Ubuntu: `apt-get install libcurl4-openssl-dev`
-       * Redhat/Fedora: `yum install libcurl-devel`
-       * For other distros see the  [Curl docs](http://curl.haxx.se/dlwiz/?type=devel).
- 3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page and run Jackett using mono with the command `mono --debug JackettConsole.exe`.
- 4. (Optional) To install Jackett as a service, open the Terminal and run `sudo ./install_service_systemd_mono.sh` You need root permissions to install the service. The service will start on each logon. You can always stop it by running `systemctl stop jackett.service` from Terminal. You can start it again it using `systemctl start jackett.service`. Logs are stored as usual under `~/.config/Jackett/log.txt` and also in `journalctl -u jackett.service`.
-
-If you want to run it with a user without a /home directory you need to add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file, this folder will be used to store your config files.
-
-Mono must be compiled with the Roslyn compiler (default), using MCS will cause "An error has occurred." errors (See https://github.com/Jackett/Jackett/issues/2704).
-
-
-### Installation on Linux via Ansible
-
-On a CentOS/RedHat 7 system: [jewflix.jackett](https://galaxy.ansible.com/jewflix/jackett)
-
-On an Ubuntu 16 system: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
-
-
-## Uninstallation on Linux
-`wget https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_service_systemd.sh --quiet -O -|sudo bash`
-
-
-## Installation on macOS
-
-### Prerequisites
-macOS 13.0+ (Ventura) or greater
-
-### Install as service
-1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page.
-2. Open the extracted folder and double-click on `install_service_macos`.
-3. If the installation was a success, you can close the Terminal window.
-
-The service will start on each logon. You can always stop it by running `launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist` from Terminal. You can start it again it using `launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist`.
-Logs are stored as usual under `~/.config/Jackett/log.txt` or `/Users/your-user-name/Library/Application Support/Jackett/log.txt`.
-
-### Run without installing as a service
-Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page and run Jackett with the command `./jackett`.
-
-
-## Uninstallation on macOS
-`curl -sSL https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_jackett_macos| bash`
-
-
-## Installation on Linux or macOS via Homebrew
-
-[Homebrew Formulae - Jackett](https://formulae.brew.sh/formula/jackett)
-
-
-## Installation using Docker
-Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/). The Jackett Docker is highly recommended, especially if you are having Mono stability issues or having issues running Mono on your system e.g. QNAP, Synology. Thanks to [LinuxServer.io](https://linuxserver.io)
-
-
-## Installation on Alpine Linux
-Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-Alpine-Linux).
-
-
-## Installation on Synology
-Jackett is available as a [beta package](https://synocommunity.com/package/jackett) from [SynoCommunity](https://synocommunity.com/)
-
-
-## Installation on OpenWrt
-Detailed instructions are available at [Jackett's Wiki](https://github.com/Jackett/Jackett/wiki/Installation-on-OpenWrt).
-
-
-## Running Jackett behind a reverse proxy
-When running Jackett behind a reverse proxy make sure that the original hostname of the request is passed to Jackett. If HTTPS is used also set the X-Forwarded-Proto header to "https". Don't forget to adjust the "Base path override" Jackett option accordingly.
-
-Example config for apache:
+# Check status
+systemctl status jackett.service
 ```
+
+**Logs Location:** `~/.config/Jackett/log.txt`
+**View Logs:** `journalctl -u jackett.service`
+
+#### Home Directory Configuration
+
+If you want to run Jackett with a user without a `/home` directory, add this line to your systemd file:
+
+```text
+Environment=XDG_CONFIG_HOME=/path/to/folder
+```
+
+This folder will be used to store configuration files.
+
+---
+
+### Linux Installation (ARMv7 or above)
+
+For modern ARM-based systems (Raspberry Pi, etc.)
+
+**Prerequisites:**
+- Most operating systems include all required dependencies
+- If dependencies are missing, refer to [.NET Required Packages](https://github.com/dotnet/core/blob/main/release-notes/9.0/os-packages.md)
+
+#### Installing as a Service
+
+1. Download the appropriate release:
+   - For 32-bit ARM (most common): `Jackett.Binaries.LinuxARM32.tar.gz`
+   - For 64-bit ARM: `Jackett.Binaries.LinuxARM64.tar.gz`
+
+   ```bash
+   cd /opt
+   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz
+   sudo tar -xzf Jackett.Binaries.LinuxARM32.tar.gz
+   sudo rm Jackett.Binaries.LinuxARM32.tar.gz
+   ```
+
+2. Install as a service:
+
+   ```bash
+   cd /opt/Jackett
+   sudo ./install_service_systemd.sh
+   ```
+
+3. The service will start on each login. Manage it using:
+
+   ```bash
+   # Start Jackett
+   systemctl start jackett.service
+
+   # Stop Jackett
+   systemctl stop jackett.service
+
+   # Restart Jackett
+   systemctl restart jackett.service
+
+   # Check status
+   systemctl status jackett.service
+   ```
+
+1. Download and extract the latest `Jackett.Binaries.LinuxARM32.tar.gz` or `Jackett.Binaries.LinuxARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
+
+2. Open a Terminal and `cd` to the `Jackett` folder
+
+3. Run Jackett with the command `./jackett`
+
+---
+
+### Linux Installation (ARMv6 or below)
+
+For legacy ARM systems.
+
+**Prerequisites:**
+
+1. Install Mono 5.10 or newer (latest stable release recommended):
+   - Follow instructions on the [Mono website](http://www.mono-project.com/download/#download-lin)
+   - Install `mono-devel` and `ca-certificates-mono` packages
+   - On Red Hat/CentOS/openSUSE/Fedora, also install `mono-locale-extras`
+
+2. Install libcurl:
+   - Debian/Ubuntu: `apt-get install libcurl4-openssl-dev`
+   - Redhat/Fedora: `yum install libcurl-devel`
+   - For other distributions, see the [Curl documentation](http://curl.haxx.se/dlwiz/?type=devel)
+
+3. Download and extract the latest `Jackett.Binaries.Mono.tar.gz` from the [releases page](https://github.com/Jackett/Jackett/releases/latest)
+
+4. Run Jackett using Mono:
+
+   ```bash
+   mono --debug JackettConsole.exe
+   ```
+
+5. (Optional) To install as a service:
+
+   ```bash
+   sudo ./install_service_systemd_mono.sh
+   ```
+
+**Important Notes:**
+- Mono must be compiled with the Roslyn compiler (default)
+- Using MCS will cause "An error has occurred" errors (see [issue #2704](https://github.com/Jackett/Jackett/issues/2704))
+- For users without a `/home` directory, add `Environment=XDG_CONFIG_HOME=/path/to/folder` to your systemd file
+
+---
+
+### macOS Installation
+
+**Prerequisites:**
+- macOS 13.0+ (Ventura) or greater
+
+#### Installing as a Service
+
+1. Download the appropriate release:
+   - Intel (x86): `Jackett.Binaries.macOS.tar.gz`
+   - Apple silicon (ARM): `Jackett.Binaries.macOSARM64.tar.gz`
+
+   Get the latest release from the [releases page](https://github.com/Jackett/Jackett/releases/latest)
+
+2. Extract the downloaded file
+
+3. Open the extracted folder and double-click on `install_service_macos`
+
+4. If installation is successful, close the Terminal window
+
+5. Navigate your web browser to `http://127.0.0.1:9117`
+
+**Service Management:**
+
+The service will start on each login. You can control it using:
+
+```bash
+# Stop Jackett
+launchctl unload ~/Library/LaunchAgents/org.user.Jackett.plist
+
+# Start Jackett
+launchctl load ~/Library/LaunchAgents/org.user.Jackett.plist
+```
+
+**Logs Location:**
+- `~/.config/Jackett/log.txt`
+- `/Users/your-user-name/Library/Application Support/Jackett/log.txt`
+
+#### Running Without Installing as a Service
+
+1. Download and extract the latest `Jackett.Binaries.macOS.tar.gz` or `Jackett.Binaries.macOSARM64.tar.gz` release from the [releases](https://github.com/Jackett/Jackett/releases/latest) page
+
+2. Open Terminal and navigate to the Jackett folder
+
+3. Run Jackett with the command `./jackett`
+
+---
+
+### Docker Installation
+
+Docker installation is highly recommended, especially if you are experiencing Mono stability issues or having trouble running Mono on your system (e.g., QNAP, Synology).
+
+Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/)
+
+Thanks to [LinuxServer.io](https://linuxserver.io) for maintaining the Docker image.
+
+---
+
+### Other Installation Methods
+
+#### Linux via Ansible
+
+- CentOS/RedHat 7: [jewflix.jackett](https://galaxy.ansible.com/jewflix/jackett)
+- Ubuntu 16: [chrisjohnson00.jackett](https://galaxy.ansible.com/chrisjohnson00/jackett)
+
+#### Homebrew (macOS/Linux)
+
+Install via Homebrew: [Homebrew Formulae - Jackett](https://formulae.brew.sh/formula/jackett)
+
+#### Synology
+
+Jackett is available as a beta package from [SynoCommunity](https://synocommunity.com/package/jackett)
+
+#### Alpine Linux
+
+Detailed instructions available at [Jackett's Wiki - Alpine Linux](https://github.com/Jackett/Jackett/wiki/Installation-on-Alpine-Linux)
+
+#### OpenWrt
+
+Detailed instructions available at [Jackett's Wiki - OpenWrt](https://github.com/Jackett/Jackett/wiki/Installation-on-OpenWrt)
+
+---
+
+## Uninstallation
+
+### Windows
+
+- Use "Add or Remove Programs" in Windows Settings
+- Or run the installer again and choose "Uninstall"
+
+### Linux
+
+Run this command:
+
+```bash
+wget https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_service_systemd.sh --quiet -O - | sudo bash
+```
+
+### macOS
+
+Run this command:
+
+```bash
+curl -sSL https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_jackett_macos | bash
+```
+
+---
+
+## Configuration
+
+### Running Behind Reverse Proxy
+
+When running Jackett behind a reverse proxy, ensure that the original hostname of the request is passed to Jackett. If HTTPS is used, also set the `X-Forwarded-Proto` header to "https". 
+
+**Important:** Adjust the "Base path override" in Jackett settings accordingly.
+
+#### Apache Configuration Example
+
+```apache
 <Location /jackett>
     ProxyPreserveHost On
     RequestHeader set X-Forwarded-Proto expr=%{REQUEST_SCHEME}
@@ -864,123 +1049,503 @@ Example config for apache:
 </Location>
 ```
 
-Example config for Nginx:
-```
+#### Nginx Configuration Example
+
+```nginx
 location /jackett {
-	proxy_pass http://127.0.0.1:9117;
-	proxy_set_header X-Real-IP $remote_addr;
-	proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-	proxy_set_header X-Forwarded-Proto $scheme;
-	proxy_set_header X-Forwarded-Host $http_host;
-	proxy_redirect off;
+    proxy_pass http://127.0.0.1:9117;
+    proxy_set_header X-Real-IP $remote_addr;
+    proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+    proxy_set_header X-Forwarded-Proto $scheme;
+    proxy_set_header X-Forwarded-Host $http_host;
+    proxy_redirect off;
 }
 ```
 
-## Search Cache
-Jackett has an internal cache to increase search speed and reduce the number of requests to torrent sites.
-The default values should be good for most users. If you have problems, you can reduce the TTL value in the
-configuration or even disable the cache. Keep in mind that you can be banned by the sites if you make a lot of requests.
-* **Cache TTL (seconds)**: (default 2100 / 35 minutes) It indicates how long the results can remain in the cache.
-* **Cache max results per indexer**: (default 1000) How many results are kept in the cache for each indexer? This limit is used to limit the use of RAM. If you make many requests and you have enough memory, increase this number.
+### Search Cache
 
-## Torznab cache
-If you have enabled the Jackett internal cache, but have an indexer for which you would prefer to fetch fresh results (thus ignoring the internal cache) then add the **&cache=false** parameter to your torznab query.
+Jackett has an internal cache to increase search speed and reduce the number of requests to torrent sites. The default values should be suitable for most users.
 
-## Configuring FlareSolverr
-Some indexers are protected by Cloudflare or similar services and Jackett is not able to solve the challenges.
-For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) has been integrated into Jackett. This service is in charge of solving the challenges and configuring Jackett with the necessary cookies.
-Setting up this service is optional; most indexers don't need it.
-* Install FlareSolverr service (following their instructions)
-* Configure **FlareSolverr API URL** in Jackett. For example: http://172.17.0.2:8191
-* It is recommended to keep the default value in **FlareSolverr Max Timeout (ms)**
+**Configuration Options:**
 
-## Configuring OMDb
-This feature is used as a fallback (when using the aggregate Indexer) to get the movie/series title if only the IMDB ID is provided in the request.
-To use it, please just request a free API key on [OMDb](https://omdbapi.com/apikey.aspx) (1,000 daily requests limit) and paste the key in Jackett
+- **Cache TTL (seconds):** Default is 2100 (35 minutes). This indicates how long results can remain in the cache.
+- **Cache max results per indexer:** Default is 1000. This limits how many results are kept in cache for each indexer to control RAM usage.
 
-## Command line switches
+**Note:** If you make many requests and have sufficient memory, you can increase the maximum results. If you experience problems, you can reduce the TTL value or disable the cache. Be aware that making too many requests can result in being banned by tracker sites.
 
-  You can pass various options when running via the command line:
+### Torznab Cache
 
-<details> <summary> Command Line Switches </summary>
+If you have enabled the Jackett internal cache but want to fetch fresh results for a specific query (ignoring the cache), add the `&cache=false` parameter to your Torznab query.
 
--   `-i, --Install`            Install Jackett windows service (Must be admin)
--   `-s, --Start`              Start the Jacket Windows service (Must be admin)
--   `-k, --Stop`               Stop the Jacket Windows service (Must be admin)
--   `-u, --Uninstall`          Uninstall Jackett windows service (Must be admin).
+Example:
 
--   `-r, --ReserveUrls`        (Re)Register windows port reservations (Required for
-                            listening on all interfaces).
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=search&q=query&cache=false
+```
 
--   `-l, --Logging`            Log all requests/responses to Jackett
+### Configuring FlareSolverr
 
--   `-t, --Tracing`            Enable tracing
+Some indexers are protected by Cloudflare or similar services, and Jackett cannot solve the challenges on its own. For these cases, [FlareSolverr](https://github.com/FlareSolverr/FlareSolverr) has been integrated into Jackett.
 
--   `-c, --UseClient`          Override web client selection.
-                            [automatic(Default)/httpclient/httpclient2]
+**What is FlareSolverr:**
+FlareSolverr is a proxy server that solves Cloudflare and other anti-bot challenges, then provides Jackett with the necessary cookies.
 
--   `-x, --ListenPublic`       Listen publicly
+**Setup Instructions:**
 
--   `-z, --ListenPrivate`      Only allow local access
+1. Install FlareSolverr service following their [installation instructions](https://github.com/FlareSolverr/FlareSolverr)
 
--   `-p, --Port`               Web server port
+2. Configure FlareSolverr in Jackett:
+   - Open Jackett settings
+   - Set **FlareSolverr API URL** (e.g., `http://172.17.0.2:8191`)
+   - It is recommended to keep the default value in **FlareSolverr Max Timeout (ms)**
 
--   `-n, --IgnoreSslErrors`    [true/false] Ignores invalid SSL certificates
+**Note:** Setting up this service is optional. Most indexers do not require it.
 
--   `-d, --DataFolder`         Specify the location of the data folder (Must be an admin on Windows)
-    - e.g. --DataFolder="D:\Your Data\Jackett\".
-    - Don't use this on Unix (mono) systems. On Unix just adjust the HOME directory of the user to the data folder or set the XDG_CONFIG_HOME environment variable.
+### Configuring OMDb
 
--   `--NoRestart`              Don't restart after the update
+This feature is used as a fallback when using the aggregate indexer to get the movie or series title if only the IMDB ID is provided in the request.
 
--   `--PIDFile`                Specify the location of the PID file
+**Setup Instructions:**
 
--   `--NoUpdates`              Disable automatic updates
+1. Request a free API key from [OMDb](https://omdbapi.com/apikey.aspx)
+   - Free tier allows 1,000 daily requests
 
--   `--help`                   Display this help screen.
+2. Paste the API key in Jackett settings
 
--   `--version`                Display version information.
-</details>
+---
 
-## Building from source
+## API Usage
 
-### Windows
-[See our contributing guide.](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md#contributing-code)
+### Jackett Torznab Query Syntax
 
-### OSX
+Jackett accepts Torznab queries following the specifications described in the [Torznab specification document](https://torznab.github.io/spec-1.3-draft/index.html).
 
+**Basic Query Structure:**
+
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/<indexer-name>/results/torznab/api?apikey=<your-api-key>&t=<search-type>&<parameters>
+```
+
+**Examples:**
+
+Get indexer capabilities:
+
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/1337x/results/torznab/api?apikey=YOUR_API_KEY&t=caps
+```
+
+Perform a free text search:
+
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/1337x/results/torznab/api?apikey=YOUR_API_KEY&t=search&q=ubuntu
+```
+
+### Search Modes and Parameters
+
+Jackett supports the following search modes:
+
+#### t=search (General Search)
+**Parameters:** `q` (query string)
+
+**Example:**
+
+```text
+.../api?apikey=YOUR_API_KEY&t=search&cat=100002,100003&q=Show+Title+S01E02
+```
+
+#### t=tvsearch (TV Search)
+**Parameters:** `q`, `season`, `ep`, `imdbid`, `tvdbid`, `rid`, `tmdbid`, `tvmazeid`, `traktid`, `doubanid`, `year`, `genre`
+
+**Examples:**
+
+```text
+.../api?apikey=YOUR_API_KEY&t=tvsearch&cat=5000&q=Show+Title&season=1&ep=2
+
+.../api?apikey=YOUR_API_KEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
+```
+
+#### t=movie (Movie Search)
+**Parameters:** `q`, `imdbid`, `tmdbid`, `traktid`, `doubanid`, `year`, `genre`
+
+**Examples:**
+
+```text
+.../api?apikey=YOUR_API_KEY&t=movie&cat=100001&q=Movie+Title&year=2023
+
+.../api?apikey=YOUR_API_KEY&t=movie&cat=2000&imdbid=tt1234567
+```
+
+#### t=music (Music Search)
+**Parameters:** `q`, `album`, `artist`, `label`, `track`, `year`, `genre`
+
+**Example:**
+
+```text
+.../api?apikey=YOUR_API_KEY&t=music&cat=100004&album=Title&artist=Name
+```
+
+#### t=book (Book Search)
+**Parameters:** `q`, `title`, `author`, `publisher`, `year`, `genre`
+
+**Example:**
+
+```text
+.../api?apikey=YOUR_API_KEY&t=book&cat=100005,100006&genre=horror&publisher=Stuff
+```
+
+**Note:** Most indexers will only support a subset of these search modes and parameters. Use `t=caps` to get a list of the actual modes and parameters supported by a specific indexer.
+
+### Filter Indexers
+
+A special "filter" indexer is available at:
+
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/<filter>/results/torznab
+```
+
+It will query the configured indexers that match the filter expression criteria and return combined results as "all".
+
+#### Supported Filters
+
+| Filter | Condition |
+|--------|-----------|
+| `type:<type>` | Indexer type equals `<type>` |
+| `tag:<tag>` | Indexer tags contain `<tag>` |
+| `lang:<lang>` | Indexer language starts with `<lang>` |
+| `test:passed` | Last indexer test passed |
+| `test:failed` | Last indexer test failed |
+| `status:healthy` | Indexer successfully operated in recent minutes |
+| `status:failing` | Indexer generated errors in recent calls |
+| `status:unknown` | Indexer unused for a while |
+
+#### Supported Operators
+
+| Operator | Condition |
+|----------|-----------|
+| `!<expr>` | NOT `<expr>` |
+| `<expr1>+<expr2>` | `<expr1>` AND `<expr2>` |
+| `<expr1>,<expr2>` | `<expr1>` OR `<expr2>` |
+
+#### Filter Examples
+
+**Example 1:**
+Query indexers tagged with "group1" OR all non-private indexers with English language:
+
+```text
+.../api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab
+```
+
+**Example 2:**
+Query indexers that are not failing OR that passed their last test:
+
+```text
+.../api/v2.0/indexers/!status:failing,test:passed/results/torznab
+```
+
+### Aggregate Indexers
+
+A special "all" indexer is available at:
+
+```text
+http://127.0.0.1:9117/api/v2.0/indexers/all/results/torznab
+```
+
+It will query all configured indexers and return combined results.
+
+#### Important Considerations
+
+**When to use the "all" indexer:**
+- Quick setup with fewer configuration steps
+- Testing multiple indexers at once
+
+**Limitations of the "all" indexer:**
+- You lose control over indexer-specific settings (categories, search modes, etc.)
+- Mixing search modes (IMDB, query, etc.) might cause low-quality results
+- Indexer-specific categories (>= 100000) cannot be used
+- Slow indexers will slow down overall results
+- Total results are limited to 1000
+
+**Recommendation:** If your client supports multiple feeds, add each indexer directly instead of using the "all" indexer for better control and performance.
+
+#### Getting Indexer Information
+
+To get all Jackett indexers including their capabilities:
+
+```text
+.../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers
+```
+
+To filter by configuration status:
+
+```text
+.../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers&configured=true
+.../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers&configured=false
+```
+
+---
+
+## Command Line Switches
+
+You can pass various options when running Jackett via the command line:
+
+### Windows Service Management
+- `-i, --Install` - Install Jackett Windows service (requires administrator)
+- `-s, --Start` - Start the Jackett Windows service (requires administrator)
+- `-k, --Stop` - Stop the Jackett Windows service (requires administrator)
+- `-u, --Uninstall` - Uninstall Jackett Windows service (requires administrator)
+- `-r, --ReserveUrls` - Register Windows port reservations (required for listening on all interfaces)
+
+### Configuration Options
+- `-l, --Logging` - Log all requests/responses to Jackett
+- `-t, --Tracing` - Enable tracing
+- `-c, --UseClient` - Override web client selection: `automatic` (default), `httpclient`, `httpclient2`
+- `-x, --ListenPublic` - Listen publicly (accessible from other devices)
+- `-z, --ListenPrivate` - Only allow local access (default)
+- `-p, --Port` - Specify web server port (default: 9117)
+- `-n, --IgnoreSslErrors` - Ignore invalid SSL certificates: `true` or `false`
+- `-d, --DataFolder` - Specify the location of the data folder (requires administrator on Windows)
+  - Example: `--DataFolder="D:\Your Data\Jackett\"`
+  - Note: Do not use this on Unix (Mono) systems. Adjust the HOME directory or set XDG_CONFIG_HOME environment variable instead
+- `--NoRestart` - Don't restart after update
+- `--PIDFile` - Specify the location of the PID file
+- `--NoUpdates` - Disable automatic updates
+- `--help` - Display help screen
+- `--version` - Display version information
+
+### Example Usage
 
 ```bash
-# manually install osx dotnet via:
-https://dotnet.microsoft.com/download?initial-os=macos
-# then:
+# Start Jackett on a custom port
+./jackett --Port 9118
+
+# Start with public access enabled
+./jackett --ListenPublic
+
+# Start with custom data folder (Windows)
+JackettConsole.exe --DataFolder="D:\Jackett Data"
+
+# Enable detailed logging
+./jackett --Logging --Tracing
+```
+
+---
+
+## Building from Source
+
+### Windows
+
+See the [contributing guide](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md#contributing-code) for detailed instructions.
+
+### macOS
+
+**Prerequisites:**
+Install .NET SDK manually from [dotnet.microsoft.com](https://dotnet.microsoft.com/download?initial-os=macos)
+
+**Build Steps:**
+
+```bash
+# Clone the repository
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
-# dotnet core version
-dotnet publish Jackett.Server -f net9.0 --self-contained -r osx-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net9.0/osx-x64/jackett # run jackett
+# Build for .NET Core
+dotnet publish Jackett.Server -f net9.0 --self-contained -r osx-x64 -c Debug
+
+# Run Jackett
+./Jackett.Server/bin/Debug/net9.0/osx-x64/jackett
 ```
 
 ### Linux
 
+**Prerequisites:**
 
 ```bash
-sudo apt install nuget msbuild dotnet-sdk-9.0 # install build tools (Debian/ubuntu)
+# Install build tools (Debian/Ubuntu)
+sudo apt install nuget msbuild dotnet-sdk-9.0
+
+# For other distributions, install equivalent packages
+```
+
+**Build Steps:**
+
+```bash
+# Clone the repository
 git clone https://github.com/Jackett/Jackett.git
 cd Jackett/src
 
-# dotnet core version
-dotnet publish Jackett.Server -f net9.0 --self-contained -r linux-x64 -c Debug # takes care of everything
-./Jackett.Server/bin/Debug/net9.0/linux-x64/jackett # run jackett
+# Build for .NET Core
+dotnet publish Jackett.Server -f net9.0 --self-contained -r linux-x64 -c Debug
+
+# Run Jackett
+./Jackett.Server/bin/Debug/net9.0/linux-x64/jackett
 ```
+
+---
+
+## Troubleshooting
+
+### Common Issues
+
+#### Cannot Connect to Jackett
+
+**Check if Jackett is running:**
+
+```bash
+# Linux
+systemctl status jackett.service
+
+# Windows
+- Check the system tray for Jackett icon
+- Check Services (services.msc) for "Jackett" service
+```
+
+**Try alternative URL:**
+- Instead of `http://127.0.0.1:9117`, try `http://localhost:9117`
+
+**Check firewall:**
+- Ensure port 9117 is not blocked by your firewall
+- On Linux: `sudo ufw allow 9117`
+- On Windows: Check Windows Defender Firewall settings
+
+#### No Search Results
+
+**Test the indexer directly:**
+1. Go to Jackett dashboard
+2. Click "Manual Search" on the indexer
+3. Enter a test query
+4. Check if results appear
+
+**Verify tracker status:**
+- Check if the tracker website is accessible in your browser
+- Some trackers may be down or blocking your IP
+
+**Check indexer configuration:**
+- For private trackers, ensure your credentials are correct
+- Try re-adding the indexer
+
+#### Permission Denied Errors (Linux)
+
+```bash
+# Fix ownership of Jackett files
+sudo chown -R $USER:$USER /opt/Jackett
+sudo chown -R $USER:$USER ~/.config/Jackett
+```
+
+#### Service Won't Start (Linux)
+
+```bash
+# View recent error logs
+journalctl -u jackett.service -n 50
+
+# Reload systemd and restart
+sudo systemctl daemon-reload
+sudo systemctl restart jackett.service
+
+# Check for errors
+systemctl status jackett.service
+```
+
+#### Cloudflare Protection
+
+If an indexer shows "Cloudflare protected" errors:
+1. Install and configure FlareSolverr (see [Configuring FlareSolverr](#configuring-flaresolverr))
+2. Make sure FlareSolverr is running and accessible
+3. Test the indexer again
+
+#### Updates Failing
+
+**Manual update:**
+1. Download the latest release for your platform
+2. Stop Jackett service
+3. Extract new files over existing installation
+4. Start Jackett service
+
+**Disable automatic updates:**
+
+```bash
+./jackett --NoUpdates
+```
+
+#### Other Common Issues
+
+See https://github.com/Jackett/Jackett/wiki/Troubleshooting
+
+### Getting Help
+
+1. Check the [GitHub Issues](https://github.com/Jackett/Jackett/issues) for similar problems
+2. Read the [Troubleshooting Guide](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md)
+3. Open a new issue with:
+   - Your operating system and version
+   - Jackett version
+   - Error messages from logs
+   - Steps to reproduce the problem
+
+### Log Locations
+
+**Linux:**
+- `~/.config/Jackett/log.txt`
+- `journalctl -u jackett.service`
+
+**Windows:**
+- `%ProgramData%\Jackett\log.txt`
+
+**macOS:**
+- `~/.config/Jackett/log.txt`
+- `/Users/your-user-name/Library/Application Support/Jackett/log.txt`
+
+---
+
+## Contributing
+
+This project is actively recruiting development help. If you can contribute code, please see:
+- [Contributing Guidelines](https://github.com/Jackett/Jackett/blob/master/CONTRIBUTING.md)
+- [Open Issues](https://github.com/Jackett/Jackett/issues)
+- [Contact the Team](https://github.com/Jackett/Jackett/issues/8180)
+
+**Ways to Contribute:**
+- Report bugs and issues
+- Suggest new features
+- Add or fix indexer definitions
+- Improve documentation
+- Submit code contributions
+
+---
 
 ## Screenshots
 
-![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot1.png)
+![Jackett Dashboard](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot1.png)
 
-![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot2.png)
+![Indexer Management](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot2.png)
 
-![screenshot](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot3.png)
+![Search Results](https://raw.githubusercontent.com/Jackett/Jackett/master/.github/jackett-screenshot3.png)
+
+---
+
+## Quick Reference
+
+| Item | Value/Location |
+|------|----------------|
+| Default URL | `http://127.0.0.1:9117` |
+| Default Port | 9117 |
+| Config (Linux) | `~/.config/Jackett/` |
+| Config (Windows) | `%ProgramData%\Jackett\` |
+| Config (macOS) | `~/.config/Jackett/` or `~/Library/Application Support/Jackett/` |
+| Logs (Linux) | `~/.config/Jackett/log.txt` |
+| Logs (Windows) | `%ProgramData%\Jackett\log.txt` |
+| Latest Release | [GitHub Releases](https://github.com/Jackett/Jackett/releases/latest) |
+| Documentation | [GitHub Wiki](https://github.com/Jackett/Jackett/wiki) |
+| Issues | [GitHub Issues](https://github.com/Jackett/Jackett/issues) |
+
+---
+
+## License and Credits
+
+Jackett is an open-source project maintained by the community.
+
+**Links:**
+- [GitHub Repository](https://github.com/Jackett/Jackett)
+- [Issue Tracker](https://github.com/Jackett/Jackett/issues)
+- [Release Notes](https://github.com/Jackett/Jackett/releases)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
+
