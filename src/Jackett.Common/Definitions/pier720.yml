@@ -59,6 +59,7 @@ caps:
     - {id: 65, cat: TV/Sport, desc: "Hockey - Stanley Cup Finals"}
     - {id: 92, cat: TV/Sport, desc: "Hockey - NCAA"}
     - {id: 49, cat: TV/Sport, desc: "Hockey - World Championship"}
+    - {id: 123, cat: TV/Sport, desc: "Hockey - Olympic Games"}
     - {id: 68, cat: TV/Sport, desc: "Hockey - Documentaries"}
     - {id: 64, cat: TV/Sport, desc: "Hockey - Reviews and highlights"}
     - {id: 50, cat: TV/Sport, desc: "Hockey - Other"}

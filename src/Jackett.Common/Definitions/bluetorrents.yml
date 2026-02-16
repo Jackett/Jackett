@@ -1,0 +1,121 @@
+---
+id: bluetorrents
+name: BlueTorrents
+description: "BlueTorrents is a Private Torrent Tracker for MOVIES / TV / MUSIC / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://bluetorrents.com/
+
+caps:
+  categorymappings:
+    # from https://bluetorrents.com/api/external?apikey=YOUR-API-KEY&t=caps
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 5000, cat: TV, desc: "TV Shows"}
+    - {id: 1000, cat: Console, desc: "Games"}
+    - {id: 3000, cat: Audio, desc: "Music"}
+    - {id: 4000, cat: PC/0day, desc: "Apps"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 8000, cat: Other, desc: "Other"}
+    - {id: 7000, cat: Books, desc: "Books"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, tmdbid]
+    music-search: [q]
+    book-search: [q]
+  allowtvsearchimdb: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "You can find your API Key by accessing the <a href=\"https://bluetorrents.com/settings\" target=\"_blank\">BlueTorrents Settings</a>  page, and scrolling down to the <b>API keys</b> section."
+  - name: info_3x
+    type: info
+    label: Including 3X
+    default: "IF you want to see 3x torrents access your <a href=\"https://bluetorrents.com/settings\" target=\"_blank\">BlueTorrents Settings</a> page and tick the <b>Show NSFW content</b> checkbox."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts with no activity for 90+ days may be disabled."
+
+search:
+  paths:
+    - path: api/external
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID  .Query.TMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: link
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
+    imdbid:
+      selector: '[name="imdbid"]'
+      attribute: value
+    tmdbid:
+      selector: '[name="tmdbid"]'
+      attribute: value
+    date:
+      # Sun, 08 Feb 2026 03:32:24 -0800
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    grabs:
+      selector: '[name="grabs"]'
+      attribute: value
+    downloadvolumefactor:
+      selector: '[name="downloadvolumefactor"]'
+      attribute: value
+    uploadvolumefactor:
+      selector: '[name="uploadvolumefactor"]'
+      attribute: value
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# torznab xml

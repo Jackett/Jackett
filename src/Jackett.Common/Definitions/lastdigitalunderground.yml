@@ -13,8 +13,8 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Films: General"}
-    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
     - {id: 21, cat: Movies/3D, desc: "Films: 3D"}
+    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
     - {id: 25, cat: Movies/Other, desc: "Films: Musical"}
     - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
     - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
@@ -46,12 +46,18 @@ caps:
     - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
     - {id: 45, cat: XXX, desc: "Mature: NSFW No ENG Subs"}
     - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
+    - {id: 52, cat: XXX, desc: "Mature: NSFW LGBTQ [UnListed]"}
     - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW MegaPacks"}
     - {id: 10, cat: XXX, desc: "Mature: Hentai"}
     - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
     - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
     - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
     - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
+    - {id: 47, cat: PC/0day, desc: "Software: PC"}
+    - {id: 48, cat: PC/Mac, desc: "Software: Mac"}
+    - {id: 49, cat: PC, desc: "Software: Linux/Unix"}
+    - {id: 50, cat: Console, desc: "Software: Console/ROMS"}
+    - {id: 51, cat: XXX/Other, desc: "Software: Adult Games Mature"}
     - {id: 43, cat: Other, desc: "Internal Testing"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
 

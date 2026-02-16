@@ -139,6 +139,9 @@ search:
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: ul.TorrentList, ul.Torrent-List
 

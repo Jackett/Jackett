@@ -1,24 +1,31 @@
 ---
-id: lp-bits
-name: LP-Bits 2.0
-description: LP-Bits 2.0 is a Private Torrent Tracker for Linkin Park Music Releases."
-language: en-US
+id: ptzone
+name: PTzone
+description: "PTzone is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://lp-bits.com/
+  - https://ptzone.xyz/
 
 caps:
   categorymappings:
-    - {id: 409, cat: Audio/Video, desc: "Video Audience Shot"}
-    - {id: 404, cat: Audio/Video, desc: "Documentaries \ Misc"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: Audio, desc: "Audio Professional"}
-    - {id: 408, cat: Audio/Video, desc: "Pro Shot Video"}
-    - {id: 410, cat: Audio, desc: "Audio Audience Shot"}
+    - {id: 401, cat: Movies, desc: "Movies(电影)"}
+    - {id: 402, cat: TV, desc: "TV Series(电视剧)"}
+    - {id: 403, cat: TV, desc: "TV Shows(综艺)"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries(纪录片)"}
+    - {id: 405, cat: TV/Anime, desc: "Animations(动漫)"}
+    - {id: 406, cat: Audio, desc: "Music(音乐)"}
+    - {id: 407, cat: TV/Sport, desc: "Sports(体育)"}
+    - {id: 408, cat: Other, desc: "Others(其它)"}
+    - {id: 410, cat: PC/0day, desc: "Software(软件)"}
+    - {id: 411, cat: PC/Games, desc: "Games(游戏)"}
+    - {id: 409, cat: TV, desc: "Others(其它)"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid, doubanid]
+    movie-search: [q, imdbid, doubanid]
     music-search: [q]
 
 settings:
@@ -57,7 +64,7 @@ settings:
     default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
-  # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
+  # using cookie method because site regularly disables login page for certain events during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -70,13 +77,13 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
-    # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: 0
+    # 0 title, 1 descr, 3 uploader, 4 imdburl (not working)
+    search_area: "{{ if or .Query.IMDBID .Query.DoubanID }}1{{ else }}0{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -84,7 +91,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.torrents > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
@@ -93,9 +100,13 @@ search:
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
     title:
       selector: a[title][href^="details.php?id="]
       attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -105,9 +116,14 @@ search:
     poster:
       selector: img[data-src]
       attribute: data-src
-      filters:
-        - name: replace
-          args: ["pic/imdb_pic/nophoto.gif", ""]
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -159,4 +175,15 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP v1.9.14 2026-01-23 (custom)
+    description_verified:
+      case:
+        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
+        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
+        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
+# NexusPHP v1.9.9 2025-10-02

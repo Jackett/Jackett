@@ -148,7 +148,7 @@ search:
     size:
       selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td.rowfollow.rowfollow:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
     leechers:
       selector: td.rowfollow:nth-child(7)
     grabs:

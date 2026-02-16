@@ -1,25 +1,32 @@
 ---
-id: lp-bits
-name: LP-Bits 2.0
-description: LP-Bits 2.0 is a Private Torrent Tracker for Linkin Park Music Releases."
-language: en-US
+id: xingyung
+name: Xingyung (星陨阁)
+description: "Xingyung (星陨阁) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://lp-bits.com/
+  - https://pt.xingyungept.org/
 
 caps:
   categorymappings:
-    - {id: 409, cat: Audio/Video, desc: "Video Audience Shot"}
-    - {id: 404, cat: Audio/Video, desc: "Documentaries \ Misc"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: Audio, desc: "Audio Professional"}
-    - {id: 408, cat: Audio/Video, desc: "Pro Shot Video"}
-    - {id: 410, cat: Audio, desc: "Audio Audience Shot"}
+    - {id: 409, cat: Other, desc: "其他/Misc"}
+    - {id: 408, cat: Audio, desc: "音频/HQ Audio"}
+    - {id: 406, cat: Audio/Video, desc: "MV/Music Videos"}
+    - {id: 407, cat: TV/Sport, desc: "体育/Sports"}
+    - {id: 410, cat: TV, desc: "短剧/Playlet"}
+    - {id: 404, cat: TV/Documentary, desc: "纪录片/Documentary"}
+    - {id: 405, cat: TV/Anime, desc: "动漫/Animations"}
+    - {id: 403, cat: TV, desc: "综艺/TV Shows"}
+    - {id: 402, cat: TV, desc: "电视剧/TVSeries"}
+    - {id: 401, cat: Movies, desc: "电影/Movies"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -70,44 +77,53 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
-    search_area: 0
-    # 0 AND, 1 OR, 2 exact
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.torrents > tbody > tr:has(a[href*="download.php?id="])
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     poster:
       selector: img[data-src]
       attribute: data-src
-      filters:
-        - name: replace
-          args: ["pic/imdb_pic/nophoto.gif", ""]
+    imdbid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
+    doubanid:
+      # site currently only has a badge and rating, the id is not present. just in case a future update.
+      selector: a[href*="movie.douban.com/subject/"]
+      attribute: href
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -159,4 +175,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP v1.9.14 2026-01-23 (custom)
+    minimumratio:
+      text: 2.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.9.6 2025-06-25

@@ -508,7 +508,7 @@ Prior versions of Jackett are no longer supported.
  * MonikaDesign (MDU)
  * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
  * MouseBits
- * Muxuege) [![(invite needed)][inviteneeded]](#)
+ * Muxuege [![(invite needed)][inviteneeded]](#)
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
  * NanyangPT (南洋) [![(invite needed)][inviteneeded]](#)

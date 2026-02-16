@@ -1,25 +1,29 @@
 ---
-id: lp-bits
-name: LP-Bits 2.0
-description: LP-Bits 2.0 is a Private Torrent Tracker for Linkin Park Music Releases."
-language: en-US
+id: momentpt
+name: MomentPT
+description: "MomentPT is a CHINESE Private Torrent Tracker for Photography"
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://lp-bits.com/
+  - https://www.momentpt.top/
 
 caps:
   categorymappings:
-    - {id: 409, cat: Audio/Video, desc: "Video Audience Shot"}
-    - {id: 404, cat: Audio/Video, desc: "Documentaries \ Misc"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: Audio, desc: "Audio Professional"}
-    - {id: 408, cat: Audio/Video, desc: "Pro Shot Video"}
-    - {id: 410, cat: Audio, desc: "Audio Audience Shot"}
+    - {id: 401, cat: Other, desc: "写真(Portraiture)"}
+    - {id: 402, cat: Other, desc: "人像(Portrait)"}
+    - {id: 403, cat: Other, desc: "风光(Landscape)"}
+    - {id: 404, cat: Other, desc: "纪实(Documentary)"}
+    - {id: 416, cat: Other, desc: "杂志(Magazine)"}
+    - {id: 415, cat: Other, desc: "静物(Still Life)"}
+    - {id: 414, cat: Other, desc: "儿童(Children)"}
+    - {id: 413, cat: Other, desc: "超现实(Surreal)"}
+    - {id: 412, cat: Other, desc: "美食(Cuisine)"}
+    - {id: 411, cat: Other, desc: "动物(Animals)"}
+    - {id: 405, cat: Other, desc: "人文(Humanity)"}
 
   modes:
     search: [q]
-    music-search: [q]
 
 settings:
   - name: cookie
@@ -77,37 +81,38 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: 0
-    # 0 AND, 1 OR, 2 exact
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.torrents > tbody > tr:has(a[href*="download.php?id="])
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
     poster:
       selector: img[data-src]
       attribute: data-src
-      filters:
-        - name: replace
-          args: ["pic/imdb_pic/nophoto.gif", ""]
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -159,4 +164,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP v1.9.14 2026-01-23 (custom)
+    minimumratio:
+      text: 2.0
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.9.7 2025-09-24 (custom)

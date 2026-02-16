@@ -1,25 +1,29 @@
 ---
-id: lp-bits
-name: LP-Bits 2.0
-description: LP-Bits 2.0 is a Private Torrent Tracker for Linkin Park Music Releases."
-language: en-US
+id: siqi
+name: Siqi
+description: "Siqi is a CHINESE Private Tracker for HD image BOOKS and E-BOOKS"
+language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://lp-bits.com/
+  - https://si-qi.xyz/
 
 caps:
   categorymappings:
-    - {id: 409, cat: Audio/Video, desc: "Video Audience Shot"}
-    - {id: 404, cat: Audio/Video, desc: "Documentaries \ Misc"}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos"}
-    - {id: 407, cat: Audio, desc: "Audio Professional"}
-    - {id: 408, cat: Audio/Video, desc: "Pro Shot Video"}
-    - {id: 410, cat: Audio, desc: "Audio Audience Shot"}
+    - {id: 411, cat: Books/Comics, desc: "漫画 (Comics)"}
+    - {id: 417, cat: Books/Technical, desc: "软件 (Software)"}
+    - {id: 416, cat: Books/EBook, desc: "摄影 (Photography)"}
+    - {id: 415, cat: Books/Technical, desc: "工具书 (Reference Books)"}
+    - {id: 414, cat: Books/Mags, desc: "杂志 (Magazines)"}
+    - {id: 413, cat: Other, desc: "图片集 (Photo Albums)"}
+    - {id: 412, cat: Books/Comics, desc: "连环画 (Comic Strips)"}
+    - {id: 418, cat: Books/EBook, desc: "插图书 (Illustrated Books)"}
+    - {id: 401, cat: Books/Technical, desc: "教学 (Instructional)"}
+    - {id: 409, cat: Books/Other, desc: "其他 (Others)"}
 
   modes:
     search: [q]
-    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: cookie
@@ -51,10 +55,6 @@ settings:
     type: info
     label: Results Per Page
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
 
 login:
   # using cookie method because site does a JS call to API/Challenge via JQuery to load response parm required for takelogin.php
@@ -77,7 +77,7 @@ search:
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
     search_area: 0
-    # 0 AND, 1 OR, 2 exact
+    # 0 AND, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -93,9 +93,13 @@ search:
       filters:
         - name: querystring
           args: cat
+    title_default:
+      selector: a[href^="details.php?id="]
     title:
       selector: a[title][href^="details.php?id="]
       attribute: title
+      optional: true
+      default: "{{ .Result.title_default }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -105,9 +109,6 @@ search:
     poster:
       selector: img[data-src]
       attribute: data-src
-      filters:
-        - name: replace
-          args: ["pic/imdb_pic/nophoto.gif", ""]
     date_elapsed:
       # time type: time elapsed (default)
       selector: td.rowfollow:nth-child(4) > span[title]
@@ -159,4 +160,12 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP v1.9.14 2026-01-23 (custom)
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 days (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+    description:
+      selector: td.rowfollow:nth-child(2)
+      remove: a, b, font, img, span
+# NexusPHP v1.9.6 2025-06-25 (Custom)

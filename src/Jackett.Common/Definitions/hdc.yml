@@ -33,13 +33,12 @@ caps:
     music-search: [q]
 
 settings:
-  # not entirely sure why cookie method is being used. while the login page uses non-standard field names, the form seems regular enough.
-  # but since none of the team have an account we cannot switch to using form method without having any testing validation.
-  - name: cookie
+  - name: username
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
+    label: Username
+  - name: password
+    type: password
+    label: Password
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -63,13 +62,29 @@ settings:
     type: info
     label: Settings for Results
     default: "To use this indexer please set the following on your HDC account <b>profile</b>:<ul><li><i>Site Language:</i><b> English</b></li><li><i>Torrent List Profile:</i> <b>Default Modern [preview]</b></li><li><i>Time Type: </i><b>Time Added</b></li><li><i>Torrents per page:</i><b> 100</b></li></ul>"
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 180 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 60 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 30 days in a row.</li></ol>"
 
 login:
-  method: cookie
+  path: login
+  method: form
+  form: form[action="signinhandler"]
   inputs:
-    cookie: "{{ .Config.cookie }}"
+    nftsidl1c03b: "{{ .Config.username }}"
+    insf0urO0abl1i: "{{ .Config.password }}"
+  selectorinputs:
+    s0hot:
+      selector: input[name="s0hot"]
+      attribute: value
+    asDf0z:
+      selector: input[name="asDf0z"]
+      attribute: value
+  error:
+    - selector: div.errormsg
   test:
-    path: pt
+    path: /
     selector: a[href^="logout?key="]
 
 search:
@@ -93,75 +108,67 @@ search:
     notnewword: 1
 
   rows:
-    selector: div.trblock
+    selector: div.mitem
 
   fields:
-    title:
-      selector: div.trtop a[href^="t-"]
     category:
-      selector: div.trm
+      selector: div.mcontent
       attribute: style
       filters:
         - name: regexp
-          args: (\d+)
+          args: "\\/(\\d+).png"
+    title:
+      selector: div.mtop a[href^="t-"]
     details:
-      selector: div.trtop a[href^="t-"]
+      selector: div.mtop a[href^="t-"]
       attribute: href
     download:
       selector: a[href^="download?id="]
       attribute: href
     poster:
-      selector: div.trp:not(:has(img[src$="poster.jpg"])) img
+      selector: div.mcontent:not(:has(img[src$="poster.jpg"])) img
       attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     size:
-      selector: div.trbo div:nth-last-child(8)
+      selector: div.mbottom div:nth-last-child(7)
       remove: i
     seeders:
-      selector: div.trbo div:nth-last-child(7)
+      selector: a[href$="#seeders"]
       optional: true
       default: 0
-      filters:
-        - name: re_replace
-          args: ["\\s", "0"]
     leechers:
-      selector: div.trbo div:nth-last-child(6)
+      selector: a[href$="#leechers"]
       optional: true
       default: 0
-      filters:
-        - name: re_replace
-          args: ["\\s", "0"]
     grabs:
-      selector: div.trbo div:nth-last-child(5)
+      selector: a[href^="viewsnatches?id="]
       optional: true
       default: 0
-      filters:
-        - name: re_replace
-          args: ["\\s", "0"]
     date:
-      remove: a, span
-      selector: div[style="float:right;"]
+      selector: div[style="minfo"]
+      remove: span
       filters:
-        - name: replace
-          args: ["@", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     downloadvolumefactor:
       case:
-        img.pro_free: 0
-        img.pro_free2up: 0
-        img.pro_50pctdown: 0.5
-        img.pro_50pctdown2up: 0.5
-        img.pro_30pctdown: 0.3
+        div.bfree: 0
+        div.btwoupfree: 0
+        div.bhalfdown: 0.5
+        div.btwouphalfdown: 0.5
+        div.bthirdown: 0.3
+        div.bnone: 1
         "*": 1
     uploadvolumefactor:
       case:
-        img.pro_50pctdown2up: 2
-        img.pro_free2up: 2
-        img.pro_2up: 2
+        div.btwouphalfdown: 2
+        div.btwoupfree: 2
+        div.btwoup: 2
         "*": 1
-# engine n/a (likely based on NexusPHP)
+    minimumratio:
+      text: 1
+# engine n/a (based on NexusPHP)

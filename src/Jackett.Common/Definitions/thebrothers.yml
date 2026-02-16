@@ -13,27 +13,31 @@ caps:
     # Klassiker
     - {id: 157, cat: Movies, desc: "Klassiker All In"}
     # Anime
-    - {id: 158, cat: Movies, desc: "Anime Filme"}
-    - {id: 159, cat: TV/Anime, desc: "Anime Serien"}
+    - {id: 189, cat: TV/Anime, desc: "Anime Serie"}
+    - {id: 193, cat: TV/Anime, desc: "Anime Pack"}
+    - {id: 183, cat: TV/Anime, desc: "Anime HD"}
+    - {id: 184, cat: TV/Anime, desc: "Anime SD"}
+    - {id: 186, cat: TV/Anime, desc: "Anime 4K"}
     # Kids
     - {id: 146, cat: Movies, desc: "Kids Alles"}
     # Movie
+    - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 122, cat: Movies/UHD, desc: "Movie 4K"}
     - {id: 124, cat: Movies, desc: "Movie Pack"}
-    - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
+    - {id: 196, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
     # Serien
-    - {id: 59, cat: TV, desc: "Serien Pack"}
-    - {id: 57, cat: TV/HD, desc: "Serien HD"}
-    - {id: 60, cat: TV/SD, desc: "Serien SD"}
     - {id: 56, cat: TV/SD, desc: "Serien DVD"}
+    - {id: 57, cat: TV/HD, desc: "Serien HD"}
+    - {id: 59, cat: TV, desc: "Serien Pack"}
+    - {id: 60, cat: TV/SD, desc: "Serien SD"}
     # Software
-    - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 9, cat: PC, desc: "App Linux"}
-    - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
+    - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
+    - {id: 12, cat: PC/0day, desc: "App Win"}
     # Game
     - {id: 120, cat: Console/PS3, desc: "Game PlayStation"}
     - {id: 16, cat: Console, desc: "Game Wimmelbild"}
@@ -42,39 +46,39 @@ caps:
     - {id: 22, cat: Console/Wii, desc: "Game Wii"}
     - {id: 24, cat: Console/XBox, desc: "Game XBOX"}
     # Music
-    - {id: 52, cat: Audio, desc: "Music Pack"}
-    - {id: 126, cat: Audio, desc: "Music Audio"}
-    - {id: 55, cat: Audio/Video, desc: "Music Video"}
-    - {id: 49, cat: Audio, desc: "Music Charts"}
-    - {id: 125, cat: Audio, desc: "Music Mixe"}
-    - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 48, cat: Audio, desc: "Music Album"}
+    - {id: 49, cat: Audio, desc: "Music Charts"}
+    - {id: 52, cat: Audio, desc: "Music Pack"}
+    - {id: 54, cat: Audio, desc: "Music Single"}
+    - {id: 55, cat: Audio/Video, desc: "Music Video"}
+    - {id: 125, cat: Audio, desc: "Music Mixe"}
+    - {id: 126, cat: Audio, desc: "Music Audio"}
     - {id: 148, cat: Audio, desc: "Music Discography"}
     # Sport
     - {id: 61, cat: TV/Sport, desc: "Sport Other"}
     - {id: 130, cat: TV/Sport, desc: "Sport WWE"}
     # Sonstiges
-    - {id: 131, cat: Books/Mags, desc: "Sonstiges Zeitungen"}
     - {id: 144, cat: TV/Documentary, desc: "Sonstiges Doku"}
+    - {id: 131, cat: Books/Mags, desc: "Sonstiges Zeitungen"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     - {id: 69, cat: Books, desc: "Sonstiges Tutorial"}
     - {id: 71, cat: Books/Other, desc: "Sonstiges Other"}
     # Internt'l
-    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
-    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
-    - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD"}
-    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
-    - {id: 104, cat: Other, desc: "Internt'l Misc"}
-    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
-    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
-    - {id: 103, cat: Movies/SD, desc: "Internt'l Movie SD"}
     - {id: 98, cat: Movies/HD, desc: "Internt'l Movie HD"}
+    - {id: 99, cat: TV/HD, desc: "Internt'l Serie HD"}
+    - {id: 102, cat: TV/SD, desc: "Internt'l Serie SD"}
+    - {id: 103, cat: Movies/SD, desc: "Internt'l Movie SD"}
+    - {id: 104, cat: Other, desc: "Internt'l Misc"}
+    - {id: 105, cat: TV/Documentary, desc: "Internt'l Doku"}
+    - {id: 106, cat: Books/EBook, desc: "Internt'l E-Book"}
+    - {id: 107, cat: Audio/Audiobook, desc: "Internt'l A-Book"}
+    - {id: 115, cat: Movies/DVD, desc: "Internt'l DVD"}
     # XXX
-    - {id: 113, cat: XXX/DVD, desc: "XXX DVD"}
     - {id: 73, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 76, cat: XXX/SD, desc: "XXX SD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
+    - {id: 76, cat: XXX/SD, desc: "XXX SD"}
+    - {id: 113, cat: XXX/DVD, desc: "XXX DVD"}
 
   modes:
     search: [q]

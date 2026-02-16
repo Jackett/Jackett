@@ -5,65 +5,60 @@ description: "SexTorrent is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
 encoding: UTF-8
-certificates:
-  - 473e65bfd1884f2904b09ac811d0d88355f618b1 # expired 19 Jan 2025
 links:
   - https://sextorrent.myds.me/
 
 caps:
   categorymappings:
-    - {id: 3, cat: XXX, desc: "Amateur"}
-    - {id: 4, cat: XXX, desc: "Anal"}
-    - {id: 5, cat: XXX, desc: "Asian"}
-    - {id: 6, cat: XXX, desc: "BDSM"}
-    - {id: 7, cat: XXX, desc: "Big-Tits"}
-    - {id: 8, cat: XXX, desc: "Busty"}
-    - {id: 9, cat: XXX, desc: "Creampie"}
-    - {id: 10, cat: XXX, desc: "Fetish"}
-    - {id: 11, cat: XXX, desc: "Mature"}
-    - {id: 12, cat: XXX, desc: "Hardcore"}
-    - {id: 13, cat: XXX, desc: "Old and Young"}
-    - {id: 14, cat: XXX, desc: "Milf"}
-    - {id: 15, cat: XXX, desc: "Oral"}
-    - {id: 16, cat: XXX, desc: "Orgy Gang Bang"}
-    - {id: 17, cat: XXX, desc: "Lesbian"}
-    - {id: 18, cat: XXX, desc: "Teen"}
-    - {id: 19, cat: XXX, desc: "HD - High.Definition"}
-    - {id: 20, cat: XXX, desc: "Hentai"}
-    - {id: 21, cat: XXX, desc: "Interracial"}
-    - {id: 22, cat: XXX, desc: "Masturbate"}
-    - {id: 23, cat: XXX, desc: "Music Video"}
-    - {id: 24, cat: XXX, desc: "POV"}
-    - {id: 25, cat: XXX, desc: "Shemale -TS- TransSex"}
-    - {id: 26, cat: XXX, desc: "Straight"}
-    - {id: 27, cat: XXX, desc: "Mega.Pack"}
-    - {id: 28, cat: XXX, desc: "V.R. -Porn-"}
-    - {id: 30, cat: XXX/ImageSet, desc: "Pictures"}
-    - {id: 29, cat: XXX, desc: "SiteRip"}
-    - {id: 31, cat: XXX, desc: "Foreign"}
-    - {id: 32, cat: XXX, desc: "Latina"}
-    - {id: 33, cat: XXX/Other, desc: "Games"}
-    - {id: 34, cat: XXX, desc: "Magazines"}
-    - {id: 35, cat: XXX, desc: "Feature"}
-    - {id: 36, cat: XXX, desc: "Big-Ass"}
-    - {id: 37, cat: XXX/Other, desc: "Other"}
-    - {id: 38, cat: XXX, desc: "Cumshot"}
-    - {id: 39, cat: XXX, desc: "Black"}
-    - {id: 40, cat: XXX, desc: "Piss"}
-    - {id: 41, cat: XXX, desc: "Homemade"}
-    - {id: 42, cat: XXX, desc: "Pregnant"}
-    - {id: 43, cat: XXX, desc: "Gay"}
+    - {id: 4, cat: XXX, desc: "Hardcore"}
+    - {id: 5, cat: XXX, desc: "Anal"}
+    - {id: 6, cat: XXX, desc: "Asian"}
+    - {id: 7, cat: XXX, desc: "BDSM"}
+    - {id: 8, cat: XXX, desc: "Big.Tits"}
+    - {id: 9, cat: XXX, desc: "Busty"}
+    - {id: 10, cat: XXX, desc: "Creampie"}
+    - {id: 11, cat: XXX, desc: "Fetish"}
+    - {id: 12, cat: XXX, desc: "Mature"}
+    - {id: 13, cat: XXX, desc: "Amateur"}
+    - {id: 14, cat: XXX, desc: "Old and Young"}
+    - {id: 15, cat: XXX, desc: "Milf"}
+    - {id: 16, cat: XXX, desc: "Oral"}
+    - {id: 17, cat: XXX, desc: "Orgy GangBang"}
+    - {id: 18, cat: XXX, desc: "Lesbian"}
+    - {id: 19, cat: XXX, desc: "Teen"}
+    - {id: 20, cat: XXX/x264, desc: "HD High.Definition"}
+    - {id: 21, cat: XXX/Other, desc: "Cartoon Hentai"}
+    - {id: 22, cat: XXX, desc: "Interracial"}
+    - {id: 23, cat: XXX, desc: "Masturbate"}
+    - {id: 24, cat: XXX/Other, desc: "Music.Video"}
+    - {id: 25, cat: XXX, desc: "POV"}
+    - {id: 26, cat: XXX, desc: "Shemale TS Trans.Sex"}
+    - {id: 27, cat: XXX, desc: "Straight"}
+    - {id: 28, cat: XXX/Pack, desc: "Mega.PACK"}
+    - {id: 29, cat: XXX, desc: "VR - Porn"}
+    - {id: 30, cat: XXX/ImageSet, desc: "Pictures XXX"}
+    - {id: 31, cat: XXX, desc: "SiteRip"}
+    - {id: 32, cat: XXX, desc: "Foreign"}
+    - {id: 33, cat: XXX, desc: "Latina"}
+    - {id: 34, cat: XXX/Other, desc: "Games All type"}
+    - {id: 35, cat: XXX/Other, desc: "Magazines (Press.)"}
+    - {id: 36, cat: XXX, desc: "Feature"}
+    - {id: 37, cat: XXX, desc: "Big-Ass"}
+    - {id: 38, cat: XXX/Other, desc: "Other (all.mixt.)"}
+    - {id: 39, cat: XXX, desc: "CumShot"}
+    - {id: 40, cat: XXX, desc: "Black"}
+    - {id: 41, cat: XXX, desc: "Piss"}
+    - {id: 42, cat: XXX, desc: "Homemade"}
+    - {id: 43, cat: XXX, desc: "Pregnant"}
+    - {id: 44, cat: XXX, desc: "GAY"}
     - {id: 45, cat: XXX, desc: "Classic"}
-    - {id: 44, cat: XXX, desc: "SiteFan"}
+    - {id: 46, cat: XXX, desc: "Threesome"}
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 47, cat: XXX, desc: "Threesome"}
-    - {id: 46, cat: XXX, desc: "Ai Generated"}
+    - {id: 3, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
 
 settings:
   - name: apikey
@@ -97,6 +92,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive Account mean No trafic Up/Down, these  will be wiped very fast."
 
 login:
   path: /api/torrents
@@ -204,10 +203,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+# global MR is 0.7 but torrents must be seeded for 7 days regardless of ratio
 #    minimumratio:
-#      text: 0.4
+#      text: 0.7
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.1.7 (custom)
+# json UNIT3D 9.2.0 (custom)

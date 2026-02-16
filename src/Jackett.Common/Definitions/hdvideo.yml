@@ -1,52 +1,29 @@
 ---
-id: 1ptbar
-name: 1ptbar
-description: "1ptbar is a CHINESE Private Torrent Tracker for MOVIES / TV / E-LEARNING"
+id: hdvideo
+name: HDVideo
+description: "HDVideo is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: zh-CN
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
-  - https://1ptba.com/
+  - https://hdvideo.top/
 
 caps:
-  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movie(電影)", default: true}
-    - {id: 402, cat: TV, desc: "TV Series(電視影劇)", default: true}
-    - {id: 403, cat: TV, desc: "TV Shows(電視綜藝)", default: true}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries(紀錄教育)", default: true}
-    - {id: 405, cat: TV/Anime, desc: "Animations(卡通動漫)", default: true}
-    - {id: 406, cat: Audio/Video, desc: "Music Videos(音樂短片/演唱會)", default: true}
-    - {id: 407, cat: TV/Sport, desc: "Sports(體育賽事)", default: true}
-    - {id: 408, cat: Audio, desc: "HQ Audio(高品质音频)", default: true}
-    - {id: 410, cat: PC/0day, desc: "Software(軟體)", default: true}
-    - {id: 411, cat: PC/Games, desc: "Games(電子遊戲)", default: true}
-    - {id: 412, cat: Books/EBook, desc: "eBook(電子書)", default: true}
-    - {id: 409, cat: Other, desc: "Misc(其他)", default: true}
-    - {id: 610, cat: XXX/x264, desc: "AV(有碼)/HD Censored", default: false}
-    - {id: 611, cat: XXX/x264, desc: "AV(無碼)/HD Uncensored", default: false}
-    - {id: 612, cat: XXX/SD, desc: "AV(有碼)/SD Censored", default: false}
-    - {id: 613, cat: XXX/SD, desc: "AV(無碼)/SD Uncensored", default: false}
-    - {id: 614, cat: XXX/DVD, desc: "AV(無碼)/DVDiSo Uncensored", default: false}
-    - {id: 615, cat: XXX/DVD, desc: "AV(有碼)/DVDiSo Censored", default: false}
-    - {id: 616, cat: XXX/UHD, desc: "AV(有碼)/Blu-Ray Censored", default: false}
-    - {id: 617, cat: XXX/UHD, desc: "AV(無碼)/Blu-Ray Uncensored", default: false}
-    - {id: 618, cat: XXX/Pack, desc: "AV(網站)/0Day", default: false}
-    - {id: 619, cat: XXX/Pack, desc: "IV(寫真影集)/Video Collection", default: false}
-    - {id: 620, cat: XXX/ImageSet, desc: "IV(寫真圖集)/Picture Collection", default: false}
-    - {id: 621, cat: XXX/Other, desc: "H-Game(遊戲)", default: false}
-    - {id: 622, cat: XXX/Other, desc: "H-Anime(動畫)", default: false}
-    - {id: 623, cat: XXX/Other, desc: "H-Comic(漫畫)", default: false}
-    - {id: 624, cat: XXX/Other, desc: "Adult film(成人電影)", default: false}
-    - {id: 625, cat: XXX/Other, desc: "AV(Gay)/HD", default: false}
+    - {id: 406, cat: Audio, desc: "HQ Audio/音轨"}
+    - {id: 408, cat: Audio/Video, desc: "MV/音乐"}
+    - {id: 407, cat: TV/Sport, desc: "Sports/体育"}
+    - {id: 404, cat: TV/Documentary, desc: "Documentaries/纪录片"}
+    - {id: 403, cat: TV, desc: "TV Shows/综艺"}
+    - {id: 405, cat: TV/Anime, desc: "Anime/动漫"}
+    - {id: 402, cat: TV, desc: "TV Series/电视剧"}
+    - {id: 401, cat: Movies, desc: "Movies/电影"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
@@ -61,7 +38,7 @@ settings:
   - name: info_2fa
     type: info
     label: "About 2FA code"
-    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the 1ptbar Web Site. Otherwise just leave it empty."
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the RailgunPT Web Site. Otherwise just leave it empty."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -82,8 +59,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_flaresolverr
-    type: info_flaresolverr
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -91,11 +66,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Cherish your user account. Inactive accounts would be deleted based on the following rules:<ol><li>Veteran User or above would never be deleted.</li><li>Elite User or above would never be deleted if parked (at User CP).</li><li>Parked accounts would be deleted if users have not logged in for more than 400 days in a row.</li><li>Unparked accounts would be deleted if users have not logged in for more than 150 days in a row.</li><li>Accounts with both uploaded and downloaded amount being 0 would be deleted if users have not logged in for more than 100 days in a row.</li></ol>"
-  - name: info_special
-    type: info
-    label: Special Categories
-    default: "Only <b>Power User</b> or above can view Special section. Searching for XXX categories by users below this class will result in search errors."
+    default: "Accounts inactive (i.e. not logged in for a long time) are automatically deleted."
 
 login:
   path: login.php
@@ -119,13 +90,9 @@ login:
   test:
     path: index.php
     selector: a[href="logout.php"]
-
 search:
   paths:
     - path: torrents.php
-      categories: [401, 402, 403, 404, 405, 406, 407, 408, 410, 411, 412, 409]
-    - path: special.php
-      categories: [610, 611, 612, 613, 614, 615, 616, 617, 618, 619, 620, 621, 622, 623, 624, 625]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
@@ -142,7 +109,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -164,9 +131,6 @@ search:
     download:
       selector: a[href^="download.php?id="]
       attribute: href
-    poster:
-      selector: img[data-src]
-      attribute: data-src
     imdbid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="imdb.com/title/tt"]
@@ -177,17 +141,17 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-last-of-type(6) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
         - name: append
-          args: " +08:00"
+          args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-last-of-type(6):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -197,21 +161,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-last-of-type(5)
-      optional: true
-      default: 512MB
+      selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td.rowfollow:nth-last-of-type(4)
-      optional: true
-      default: 0
+      selector: td.rowfollow:nth-child(6)
     leechers:
-      selector: td.rowfollow:nth-last-of-type(3)
-      optional: true
-      default: 0
+      selector: td.rowfollow:nth-child(7)
     grabs:
-      selector: td.rowfollow:nth-last-of-type(2)
-      optional: true
-      default: 0
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -226,7 +182,18 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    description_verified:
+      case:
+        span[title="通过"], span[title="通過"], span[title="Allowed"]: "Verified:"
+        span[title="未审"], span[title="未審"], span[title="Not reviewed"]: "Unverified:"
+        span[title="拒绝"], span[title="拒絕"], span[title="Denied"]: "Banned:"
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.9.13 2025-12-28
+      filters:
+        - name: prepend
+          args: "{{ .Result.description_verified }} "
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# NexusPHP v1.8.15 2024-12-23
