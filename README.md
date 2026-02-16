@@ -1142,17 +1142,6 @@ FlareSolverr is a proxy server that solves Cloudflare and other anti-bot challen
 
 **Note:** Setting up this service is optional. Most indexers do not require it.
 
-#### Docker Installation for FlareSolverr
-
-```bash
-docker run -d \
-  --name=flaresolverr \
-  -p 8191:8191 \
-  -e LOG_LEVEL=info \
-  --restart unless-stopped \
-  ghcr.io/flaresolverr/flaresolverr:latest
-```
-
 ### Configuring OMDb
 
 This feature is used as a fallback when using the aggregate indexer to get the movie or series title if only the IMDB ID is provided in the request.
