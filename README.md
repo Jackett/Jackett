@@ -376,7 +376,7 @@ Prior versions of Jackett are no longer supported.
  * HDArea (HDA)
  * HDBao
  * HDBits [![(invite needed)][inviteneeded]](#)
- * HDCiTY (HDC) [![(invite needed)][inviteneeded]](#)
+ * HDCiTY (HDC)
  * HDClone
  * HDFans
  * HDHome [![(invite needed)][inviteneeded]](#)
