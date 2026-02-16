@@ -40,7 +40,7 @@
 
 ## Introduction
 
-Jackett works as a proxy server that translates queries from applications ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious), [NZBHydra2](https://github.com/theotherp/nzbhydra2) etc.) into tracker-site-specific HTTP queries, parses the HTML or JSON response, and sends results back to the requesting software.
+Jackett works as a proxy server that translates queries from applications ([Sonarr](https://github.com/Sonarr/Sonarr), [Radarr](https://github.com/Radarr/Radarr), [SickRage](https://sickrage.github.io/), [CouchPotato](https://couchpota.to/), [Mylar3](https://github.com/mylar3/mylar3), [Lidarr](https://github.com/lidarr/lidarr), [DuckieTV](https://github.com/SchizoDuckie/DuckieTV), [qBittorrent](https://www.qbittorrent.org/), [Nefarious](https://github.com/lardbit/nefarious), [NZBHydra2](https://github.com/theotherp/nzbhydra2), etc.) into tracker-site-specific HTTP queries, parses the HTML or JSON response, and sends results back to the requesting software.
 
 **What Jackett does:**
 - Acts as a bridge between your apps and torrent trackers
@@ -766,6 +766,7 @@ cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github
 #### Method 2: Step-by-Step Installation
 
 1. Download and extract the latest release:
+
    ```bash
    cd /opt
    sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz
@@ -774,17 +775,20 @@ cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github
    ```
 
 2. Set proper ownership:
+
    ```bash
    sudo chown -R $(whoami):$(id -g) /opt/Jackett
    ```
 
 3. Install as a service:
+
    ```bash
    cd /opt/Jackett
    sudo ./install_service_systemd.sh
    ```
 
 4. Check service status:
+
    ```bash
    systemctl status jackett.service
    ```
@@ -972,50 +976,6 @@ Docker installation is highly recommended, especially if you are experiencing Mo
 
 Detailed instructions are available at [LinuxServer.io Jackett Docker](https://hub.docker.com/r/linuxserver/jackett/)
 
-#### Quick Start with Docker Compose
-
-Create a `docker-compose.yml` file:
-
-```yaml
-version: "3"
-services:
-  jackett:
-    image: lscr.io/linuxserver/jackett:latest
-    container_name: jackett
-    environment:
-      - PUID=1000
-      - PGID=1000
-      - TZ=Etc/UTC
-    volumes:
-      - /path/to/jackett/config:/config
-      - /path/to/downloads:/downloads
-    ports:
-      - 9117:9117
-    restart: unless-stopped
-```
-
-Run with:
-```bash
-docker-compose up -d
-```
-
-#### Using Docker Run Command
-
-```bash
-docker run -d \
-  --name=jackett \
-  -e PUID=1000 \
-  -e PGID=1000 \
-  -e TZ=Etc/UTC \
-  -p 9117:9117 \
-  -v /path/to/jackett/config:/config \
-  -v /path/to/downloads:/downloads \
-  --restart unless-stopped \
-  lscr.io/linuxserver/jackett:latest
-```
-
-Access Jackett at `http://127.0.0.1:9117`
-
 Thanks to [LinuxServer.io](https://linuxserver.io) for maintaining the Docker image.
 
 ---
@@ -1030,10 +990,6 @@ Thanks to [LinuxServer.io](https://linuxserver.io) for maintaining the Docker im
 #### Homebrew (macOS/Linux)
 
 Install via Homebrew: [Homebrew Formulae - Jackett](https://formulae.brew.sh/formula/jackett)
-
-```bash
-brew install jackett
-```
 
 #### Synology
 
@@ -1059,6 +1015,7 @@ Detailed instructions available at [Jackett's Wiki - OpenWrt](https://github.com
 ### Linux
 
 Run this command:
+
 ```bash
 wget https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_service_systemd.sh --quiet -O - | sudo bash
 ```
@@ -1066,6 +1023,7 @@ wget https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_service_
 ### macOS
 
 Run this command:
+
 ```bash
 curl -sSL https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_jackett_macos | bash
 ```
@@ -1120,7 +1078,8 @@ Jackett has an internal cache to increase search speed and reduce the number of 
 If you have enabled the Jackett internal cache but want to fetch fresh results for a specific query (ignoring the cache), add the `&cache=false` parameter to your Torznab query.
 
 Example:
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=search&q=query&cache=false
 ```
 
@@ -1162,19 +1121,22 @@ This feature is used as a fallback when using the aggregate indexer to get the m
 Jackett accepts Torznab queries following the specifications described in the [Torznab specification document](https://torznab.github.io/spec-1.3-draft/index.html).
 
 **Basic Query Structure:**
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/<indexer-name>/results/torznab/api?apikey=<your-api-key>&t=<search-type>&<parameters>
 ```
 
 **Examples:**
 
 Get indexer capabilities:
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/1337x/results/torznab/api?apikey=YOUR_API_KEY&t=caps
 ```
 
 Perform a free text search:
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/1337x/results/torznab/api?apikey=YOUR_API_KEY&t=search&q=ubuntu
 ```
 
@@ -1186,7 +1148,8 @@ Jackett supports the following search modes:
 **Parameters:** `q` (query string)
 
 **Example:**
-```
+
+```text
 .../api?apikey=YOUR_API_KEY&t=search&cat=100002,100003&q=Show+Title+S01E02
 ```
 
@@ -1194,7 +1157,8 @@ Jackett supports the following search modes:
 **Parameters:** `q`, `season`, `ep`, `imdbid`, `tvdbid`, `rid`, `tmdbid`, `tvmazeid`, `traktid`, `doubanid`, `year`, `genre`
 
 **Examples:**
-```
+
+```text
 .../api?apikey=YOUR_API_KEY&t=tvsearch&cat=5000&q=Show+Title&season=1&ep=2
 
 .../api?apikey=YOUR_API_KEY&t=tvsearch&cat=5040,5045&genre=comedy&season=2023&ep=02/13
@@ -1204,7 +1168,8 @@ Jackett supports the following search modes:
 **Parameters:** `q`, `imdbid`, `tmdbid`, `traktid`, `doubanid`, `year`, `genre`
 
 **Examples:**
-```
+
+```text
 .../api?apikey=YOUR_API_KEY&t=movie&cat=100001&q=Movie+Title&year=2023
 
 .../api?apikey=YOUR_API_KEY&t=movie&cat=2000&imdbid=tt1234567
@@ -1214,7 +1179,8 @@ Jackett supports the following search modes:
 **Parameters:** `q`, `album`, `artist`, `label`, `track`, `year`, `genre`
 
 **Example:**
-```
+
+```text
 .../api?apikey=YOUR_API_KEY&t=music&cat=100004&album=Title&artist=Name
 ```
 
@@ -1222,7 +1188,8 @@ Jackett supports the following search modes:
 **Parameters:** `q`, `title`, `author`, `publisher`, `year`, `genre`
 
 **Example:**
-```
+
+```text
 .../api?apikey=YOUR_API_KEY&t=book&cat=100005,100006&genre=horror&publisher=Stuff
 ```
 
@@ -1231,7 +1198,8 @@ Jackett supports the following search modes:
 ### Filter Indexers
 
 A special "filter" indexer is available at:
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/<filter>/results/torznab
 ```
 
@@ -1262,20 +1230,23 @@ It will query the configured indexers that match the filter expression criteria 
 
 **Example 1:**
 Query indexers tagged with "group1" OR all non-private indexers with English language:
-```
+
+```text
 .../api/v2.0/indexers/tag:group1,!type:private+lang:en/results/torznab
 ```
 
 **Example 2:**
 Query indexers that are not failing OR that passed their last test:
-```
+
+```text
 .../api/v2.0/indexers/!status:failing,test:passed/results/torznab
 ```
 
 ### Aggregate Indexers
 
 A special "all" indexer is available at:
-```
+
+```text
 http://127.0.0.1:9117/api/v2.0/indexers/all/results/torznab
 ```
 
@@ -1299,12 +1270,14 @@ It will query all configured indexers and return combined results.
 #### Getting Indexer Information
 
 To get all Jackett indexers including their capabilities:
-```
+
+```text
 .../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers
 ```
 
 To filter by configuration status:
-```
+
+```text
 .../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers&configured=true
 .../api/v2.0/indexers/all/results/torznab/api?apikey=YOUR_API_KEY&t=indexers&configured=false
 ```
@@ -1416,13 +1389,14 @@ dotnet publish Jackett.Server -f net9.0 --self-contained -r linux-x64 -c Debug
 #### Cannot Connect to Jackett
 
 **Check if Jackett is running:**
+
 ```bash
 # Linux
 systemctl status jackett.service
 
 # Windows
-# Check the system tray for Jackett icon
-# Or check Services (services.msc) for "Jackett" service
+- Check the system tray for Jackett icon
+- Check Services (services.msc) for "Jackett" service
 ```
 
 **Try alternative URL:**
@@ -1487,6 +1461,7 @@ If an indexer shows "Cloudflare protected" errors:
 4. Start Jackett service
 
 **Disable automatic updates:**
+
 ```bash
 ./jackett --NoUpdates
 ```
