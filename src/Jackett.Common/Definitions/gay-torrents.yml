@@ -139,6 +139,9 @@ search:
     - name: re_replace
       args: ["(\\w+)", "+$1"] # prepend + to each word
 
+  headers:
+    Referer: ["https://www.gay-torrents.net/"]
+
   rows:
     selector: ul.TorrentList, ul.Torrent-List
 
