@@ -128,6 +128,8 @@ search:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
       selector: a[href$="dllist=1#seeders"]
       optional: true
