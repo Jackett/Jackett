@@ -6,7 +6,7 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://52pt.site/
+  - https://nanyangpt.com/
 
 caps:
   categorymappings:
@@ -150,13 +150,21 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
+      optional: true
+      default: 0
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(7)
+      optional: true
+      default: 0
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0
