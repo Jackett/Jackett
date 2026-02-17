@@ -79,6 +79,10 @@ login:
     securelogin: ""
     ssl: yes
     trackerssl: yes
+  selectorinputs:
+    xss:
+      selector: input[name="xss"]
+      attribute: value
   error:
     - selector: td.embedded:has(h2:contains("失败"))
   test:
