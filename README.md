@@ -560,6 +560,7 @@ Prior versions of Jackett are no longer supported.
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
  * PTtime
+ * PTYING (樱花)
  * PTzone
  * Punk's Horror Tracker
  * PuntoTorrent [![(invite needed)][inviteneeded]](#)
@@ -1034,7 +1035,7 @@ curl -sSL https://raw.githubusercontent.com/Jackett/Jackett/master/uninstall_jac
 
 ### Running Behind Reverse Proxy
 
-When running Jackett behind a reverse proxy, ensure that the original hostname of the request is passed to Jackett. If HTTPS is used, also set the `X-Forwarded-Proto` header to "https". 
+When running Jackett behind a reverse proxy, ensure that the original hostname of the request is passed to Jackett. If HTTPS is used, also set the `X-Forwarded-Proto` header to "https".
 
 **Important:** Adjust the "Base path override" in Jackett settings accordingly.
 
