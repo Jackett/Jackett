@@ -97,6 +97,19 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var rawSearchTerm = query.GetQueryString()?.Trim();
+            int? searchYear = null;
+
+            // Extract year from search term if present
+            if (!string.IsNullOrWhiteSpace(rawSearchTerm))
+            {
+                var yearMatch = Regex.Match(rawSearchTerm, @"\b(19\d{2}|20\d{2})\b");
+                if (yearMatch.Success)
+                {
+                    searchYear = int.Parse(yearMatch.Value);
+                    // Remove year from search term
+                    rawSearchTerm = rawSearchTerm.Replace(yearMatch.Value, "").Trim();
+                }
+            }
 
             // Remove episode patterns from search term (e.g., "Show Name S01E01" -> "Show Name")
             // but keep the episode info in query object for filtering
@@ -189,7 +202,7 @@ namespace Jackett.Common.Indexers.Definitions
                             continue; // Try next fallback term
                         }
 
-                        pageReleases = await ParseReleasesAsync(response, query, isLatest, term, rawSearchTerm);
+                        pageReleases = await ParseReleasesAsync(response, query, isLatest, term, rawSearchTerm, searchYear);
 
                         if (pageReleases.Any())
                         {
@@ -204,7 +217,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var response = await RequestWithCookiesAndRetryAsync(
                         latestUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                         headers: _headers);
-                    pageReleases = await ParseReleasesAsync(response, query, isLatest, rawSearchTerm, rawSearchTerm);
+                    pageReleases = await ParseReleasesAsync(response, query, isLatest, rawSearchTerm, rawSearchTerm, searchYear);
                 }
 
                 foreach (var release in pageReleases)
@@ -225,7 +238,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query, bool isLatest, string searchTerm, string originalSearchTerm)
+        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query, bool isLatest, string searchTerm, string originalSearchTerm, int? searchYear)
         {
             var releases = new List<ReleaseInfo>();
             var apiResponse = JsonSerializer.Deserialize<ApiResponse>(response.ContentString);
@@ -241,6 +254,16 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     // skip results without image
                     continue;
+                }
+
+                // Filter by year if specified in search query
+                if (searchYear.HasValue && !string.IsNullOrWhiteSpace(post.ReleaseDate))
+                {
+                    var postYear = post.ReleaseDate.Split('-')[0];
+                    if (int.TryParse(postYear, out var postYearInt) && postYearInt != searchYear.Value)
+                    {
+                        continue; // Skip if year doesn't match
+                    }
                 }
 
                 if (!string.IsNullOrWhiteSpace(searchTerm))
