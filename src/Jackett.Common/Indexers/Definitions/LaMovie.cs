@@ -98,6 +98,16 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var rawSearchTerm = query.GetQueryString()?.Trim();
 
+            // Remove episode patterns from search term (e.g., "Show Name S01E01" -> "Show Name")
+            // but keep the episode info in query object for filtering
+            if (!string.IsNullOrWhiteSpace(rawSearchTerm))
+            {
+                // Remove patterns like S01E01, s01e01
+                rawSearchTerm = Regex.Replace(rawSearchTerm, @"\s+[Ss]\d{1,2}[Ee]\d{1,2}$", "").Trim();
+                // Remove patterns like 1x01, 1X01
+                rawSearchTerm = Regex.Replace(rawSearchTerm, @"\s+\d{1,2}[xX]\d{1,2}$", "").Trim();
+            }
+
             // Limit search term to 16 characters to match the website's search API behavior for better title matching
             // The website uses: const Fe = xe.substring(0, 16);
             if (!string.IsNullOrWhiteSpace(rawSearchTerm) && rawSearchTerm.Length > 16)
@@ -217,7 +227,37 @@ namespace Jackett.Common.Indexers.Definitions
                 var detailsUrl = string.Format(_detailsUrl, post.Type) + $"&slug={post.Slug}";
                 var link = new Uri(detailsUrl);
                 var downloadUrls = await GetDownloadUrlsAsync(link, post.Type, isLatest);
-                releases.AddRange(downloadUrls.Select(downloadUrl =>
+                
+                // Filter by episode if specified
+                var filteredDownloadUrls = downloadUrls;
+                if (query.Season > 0 || !string.IsNullOrWhiteSpace(query.Episode))
+                {
+                    filteredDownloadUrls = downloadUrls.Where(downloadUrl =>
+                    {
+                        if (string.IsNullOrWhiteSpace(downloadUrl.Episode))
+                        {
+                            return false;
+                        }
+                        
+                        // Parse episode tag (e.g., "S01E01")
+                        var episodeMatch = Regex.Match(downloadUrl.Episode, @"S(\d{1,2})E(\d{1,2})", RegexOptions.IgnoreCase);
+                        if (!episodeMatch.Success)
+                        {
+                            return false;
+                        }
+                        
+                        var season = int.Parse(episodeMatch.Groups[1].Value);
+                        var episode = int.Parse(episodeMatch.Groups[2].Value);
+                        
+                        // Match season and episode
+                        var seasonMatch = query.Season == 0 || query.Season == season;
+                        var episodeMatch2 = string.IsNullOrWhiteSpace(query.Episode) || query.Episode == episode.ToString();
+                        
+                        return seasonMatch && episodeMatch2;
+                    }).ToList();
+                }
+                
+                releases.AddRange(filteredDownloadUrls.Select(downloadUrl =>
                 {
                     var uriMagnet = new Uri(downloadUrl.Url);
                     var categories = post.Type switch
