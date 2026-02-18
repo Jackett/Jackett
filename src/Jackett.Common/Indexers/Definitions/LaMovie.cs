@@ -98,13 +98,14 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var rawSearchTerm = query.GetQueryString()?.Trim();
 
-            // Remove year from search term (e.g., "Movie Name 2024" -> "Movie Name")
-            if (!string.IsNullOrWhiteSpace(rawSearchTerm))
+            // Limit search term to 16 characters to match the website's search API behavior for better title matching
+            // The website uses: const Fe = xe.substring(0, 16);
+            if (!string.IsNullOrWhiteSpace(rawSearchTerm) && rawSearchTerm.Length > 16)
             {
-                rawSearchTerm = Regex.Replace(rawSearchTerm, @"\s+\d{4}$", "").Trim();
+                rawSearchTerm = rawSearchTerm.Substring(0, 16);
             }
 
-            var searchTerm = WebUtilityHelpers.UrlEncode(rawSearchTerm, Encoding.UTF8);
+            var searchTerm = !string.IsNullOrWhiteSpace(rawSearchTerm) ? Uri.EscapeDataString(rawSearchTerm) : string.Empty;
             var isLatest = string.IsNullOrWhiteSpace(rawSearchTerm);
 
             if (!isLatest && rawSearchTerm.Length < 3)
@@ -160,7 +161,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var response = await RequestWithCookiesAndRetryAsync(
                     releasesUrl, cookieOverride: CookieHeader, method: RequestType.GET, referer: SiteLink, data: null,
                     headers: _headers);
-                var pageReleases = await ParseReleasesAsync(response, query, isLatest);
+                var pageReleases = await ParseReleasesAsync(response, query, isLatest, rawSearchTerm);
 
                 foreach (var release in pageReleases)
                 {
@@ -180,7 +181,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query, bool isLatest)
+        private async Task<List<ReleaseInfo>> ParseReleasesAsync(WebResult response, TorznabQuery query, bool isLatest, string searchTerm)
         {
             var releases = new List<ReleaseInfo>();
             var apiResponse = JsonSerializer.Deserialize<ApiResponse>(response.ContentString);
@@ -198,7 +199,7 @@ namespace Jackett.Common.Indexers.Definitions
                     continue;
                 }
 
-                if (!CheckTitleMatchWords(query.GetQueryString(), post.Title))
+                if (!string.IsNullOrWhiteSpace(searchTerm) && !CheckTitleMatchWords(searchTerm, post.Title))
                 {
                     // skip if it doesn't contain all words
                     continue;
