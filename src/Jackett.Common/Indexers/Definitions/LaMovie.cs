@@ -411,17 +411,28 @@ namespace Jackett.Common.Indexers.Definitions
             
             // If using fallback (queryStr is shorter than originalQuery), be more strict
             // Require at least 2 matching words to avoid false positives
-            var originalWordCount = originalQuery.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries).Length;
-            if (originalWordCount > 2 && queryWordsList.Count == 1)
+            var originalWords = Regex.Matches(originalQuery, @"\b[\w']+\b").Cast<Match>()
+                .Select(m => Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower())))
+                .Where(w => w.Length > 2)
+                .ToList();
+            
+            var originalWordCount = originalWords.Count;
+            
+            if (queryWordsList.Count < originalWordCount)
             {
-                // Single word fallback: require the word to match AND at least one more word from original query
-                var originalWords = Regex.Matches(originalQuery, @"\b[\w']+\b").Cast<Match>()
-                    .Select(m => Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower())))
-                    .Where(w => w.Length > 2)
-                    .ToList();
-                
+                // Using fallback: require matching based on original query size
                 var matchCount = originalWords.Count(word => titleWords.Contains(word));
-                return matchCount >= 2; // Require at least 2 words from original query to match
+                
+                if (originalWordCount == 2)
+                {
+                    // For 2-word queries, require both words to match
+                    return matchCount == 2;
+                }
+                else if (originalWordCount > 2)
+                {
+                    // For longer queries, require at least 2 words to match
+                    return matchCount >= 2;
+                }
             }
             
             return queryWordsList.All(word => titleWords.Contains(word));
