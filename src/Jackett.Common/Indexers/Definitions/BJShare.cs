@@ -152,6 +152,12 @@ namespace Jackett.Common.Indexers.Definitions
             return match.Success ? match.Groups[1].Value.Split('/')[0] : title;
         }
 
+        private static string NationalTitle(string title)
+        {
+            var match = Regex.Match(title, @"(.*) \[.*\/?\]");
+            return match.Success ? match.Groups[1].Value : title;
+        }
+
         private static string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
@@ -161,7 +167,7 @@ namespace Jackett.Common.Indexers.Definitions
             return term.TrimEnd();
         }
 
-        private string ParseTitle(string title, string seasonEp, string year, string categoryStr)
+        private string ParseTitle(string title, string seasonEp, string year, string categoryStr, bool international)
         {
             // Removes the SxxExx if it comes on the title
             var cleanTitle = _EpisodeRegex.Replace(title, string.Empty);
@@ -172,7 +178,7 @@ namespace Jackett.Common.Indexers.Definitions
             cleanTitle = Regex.Replace(cleanTitle, @"^\s*|[\s-]*$", string.Empty);
 
             // Get international title if available, or use the full title if not
-            cleanTitle = InternationalTitle(cleanTitle);
+            cleanTitle = international ? InternationalTitle(cleanTitle) : NationalTitle(cleanTitle);
             foreach (var resultTerm in _commonResultTerms)
             {
                 var newTitle = cleanTitle.ToLower().Replace(resultTerm.Key.ToLower(), resultTerm.Value);
@@ -365,16 +371,19 @@ namespace Jackett.Common.Indexers.Definitions
                         var qSeeders = row.QuerySelector("td:nth-last-child(2)");
                         var qLeechers = row.QuerySelector("td:nth-last-child(1)");
                         var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
+                        var nationalTitle = "";
                         if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
                         {
                             release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
-                            release.Title = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr);
+                            release.Title = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, true);
+                            nationalTitle = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, false);
                             release.Category = groupCategory;
                         }
                         else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
                         {
                             release.Description = row.QuerySelector("div.torrent_info").TextContent;
-                            release.Title = ParseTitle(title, seasonEp, yearStr, categoryStr);
+                            release.Title = ParseTitle(title, seasonEp, yearStr, categoryStr, true);
+                            nationalTitle = ParseTitle(title, seasonEp, yearStr, categoryStr, false);
                             release.Category = category;
                         }
 
@@ -390,26 +399,33 @@ namespace Jackett.Common.Indexers.Definitions
 
                         // Adjust the description in order to can be read by Radarr and Sonarr
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
-                        string[] titleElements;
 
-                        //Formats the title so it can be parsed later
+                        // Formats the title so it can be parsed later
                         var stringSeparators = new[]
                         {
                             " / "
                         };
-                        titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
-                        // release.Title += string.Join(" ", titleElements);
-                        release.Title = release.Title.Trim();
-                        if (titleElements.Length < 6)
-                            // Usually non movies / series could have less than 6 elements, eg: Books.
-                            release.Title += " " + string.Join(" ", titleElements);
-                        else
-                            release.Title += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] + " " +
-                                             titleElements[2] + " " + titleElements[4] + " " + string.Join(
-                                                 " ", titleElements.Skip(6));
+                        var titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
 
-                        if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
-                            release.Title += " Brazilian";
+                        string AppendDescriptionToTitle(string baseTitle)
+                        {
+                            var formattedTitle = baseTitle.Trim();
+                            if (titleElements.Length < 6)
+                                // Usually non movies / series could have less than 6 elements, eg: Books.
+                                formattedTitle += " " + string.Join(" ", titleElements);
+                            else
+                                formattedTitle += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
+                                                  " " + titleElements[2] + " " + titleElements[4] + " " +
+                                                  string.Join(" ", titleElements.Skip(6));
+
+                            if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
+                                formattedTitle += " Brazilian";
+
+                            return formattedTitle;
+                        }
+
+                        release.Title = AppendDescriptionToTitle(release.Title);
+                        nationalTitle = AppendDescriptionToTitle(nationalTitle);
 
                         // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46")
                         var dateStr = row.QuerySelector("span.time.bjtooltip")?.GetAttribute("title");
@@ -425,9 +441,18 @@ namespace Jackett.Common.Indexers.Definitions
                         }
 
                         // check for previously stripped search terms
-                        if (!query.MatchQueryStringAND(release.Title, null, searchTerm))
+                        var matchesReleaseTitle = query.MatchQueryStringAND(release.Title, null, searchTerm);
+                        var matchesNationalTitle = !matchesReleaseTitle &&
+                                                   query.MatchQueryStringAND(nationalTitle, null, searchTerm);
+
+                        if (!matchesReleaseTitle && !matchesNationalTitle)
                         {
                             continue;
+                        }
+
+                        if (matchesNationalTitle)
+                        {
+                            release.Title = nationalTitle;
                         }
 
                         var size = qSize.TextContent;
@@ -539,7 +564,7 @@ namespace Jackett.Common.Indexers.Definitions
                         release.Description = release.Description.Replace("Dual Áudio", "Dual");
 
                         // Build title
-                        release.Title = ParseTitle(release.Title, seasonEp, year, catStr ?? "");
+                        release.Title = ParseTitle(release.Title, seasonEp, year, catStr ?? "", true);
 
                         // Append description elements to title
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
