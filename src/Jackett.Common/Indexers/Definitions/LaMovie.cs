@@ -391,29 +391,40 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var terms = new List<string>();
             var words = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-
+            
             if (words.Length == 0)
             {
                 return terms;
             }
-
+            
             // Strategy 1: Try with full term (already truncated to 16 chars)
             terms.Add(searchTerm);
-
-            // Strategy 2: Try with first 2 words
-            // Helps when full term doesn't match but partial does
-            if (words.Length >= 2)
+            
+            // Filter out short/common words for fallback strategies
+            var significantWords = words.Where(w => w.Length > 3).ToList();
+            
+            // Strategy 2: Try with first 2 significant words
+            if (significantWords.Count >= 2)
             {
+                terms.Add(string.Join(" ", significantWords.Take(2)));
+            }
+            else if (words.Length >= 2)
+            {
+                // Fallback to first 2 words even if not significant
                 terms.Add(string.Join(" ", words.Take(2)));
             }
-
-            // Strategy 3: Try with just first word
-            // Last resort for very specific titles
-            if (words.Length >= 1 && words[0].Length >= 3)
+            
+            // Strategy 3: Try with just first significant word
+            if (significantWords.Count >= 1)
             {
+                terms.Add(significantWords[0]);
+            }
+            else if (words.Length >= 1 && words[0].Length >= 3)
+            {
+                // Fallback to first word if at least 3 chars
                 terms.Add(words[0]);
             }
-
+            
             return terms;
         }
 
