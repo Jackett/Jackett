@@ -7,6 +7,8 @@ type: private
 encoding: UTF-8
 links:
   - https://nanyangpt.com/
+legacylinks:
+  - https://52pt.site/ # loaded in error when firs set up from template
 
 caps:
   categorymappings:
