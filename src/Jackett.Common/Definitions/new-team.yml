@@ -1,0 +1,474 @@
+---
+id: new-team
+name: New-Team
+description: "New-Team is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://new-team.org/
+
+caps:
+  categorymappings:
+    # Кинематограф, театр, видео
+    - {id: 241, cat: Movies, desc: "|- Релизы от Scarabey"}
+    - {id: 1170, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2019 - 2023"}
+    - {id: 1137, cat: Movies, desc: "|-- ТРЕБУЕТСЯ СИД."}
+    - {id: 1116, cat: Movies, desc: "|-- Группа 'Сиды' - хранение раздач"}
+    - {id: 1040, cat: Movies, desc: "|-- Зарубежные и российские фильмы до 1990 года"}
+    - {id: 1041, cat: Movies, desc: "|-- Зарубежные и российские фильмы 1991-2000"}
+    - {id: 1042, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2001-2009"}
+    - {id: 1039, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2010-2013"}
+    - {id: 1088, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2014-2015"}
+    - {id: 1112, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2016-2018"}
+    - {id: 1110, cat: Movies, desc: "|-- Зарубежные и российские фильмы в MKV (AVC / BDRip 720p /..."}
+    - {id: 1111, cat: Movies/Other, desc: "|-- Аниме"}
+    - {id: 1051, cat: Movies/Foreign, desc: "|-- Азиатские фильмы"}
+    - {id: 1035, cat: TV, desc: "|-- Сериалы"}
+    - {id: 1096, cat: TV, desc: "|--- Сериал '24 часа'"}
+    - {id: 1092, cat: TV, desc: "|--- Сериал 'Во все тяжкие'"}
+    - {id: 1094, cat: TV, desc: "|--- Сериал 'Игра престолов'"}
+    - {id: 1098, cat: TV, desc: "|--- Сериал 'Остаться в живых'"}
+    - {id: 1097, cat: TV, desc: "|--- Сериал 'Подпольная империя'"}
+    - {id: 1090, cat: TV, desc: "|--- Сериал 'Спартак'"}
+    - {id: 1093, cat: TV, desc: "|--- Сериал 'Ходячие мертвецы'"}
+    - {id: 1095, cat: TV, desc: "|--- Сериал 'Шерлок'"}
+    - {id: 124, cat: Movies, desc: "|- Кинофильмы"}
+    - {id: 191, cat: Movies/Foreign, desc: "|-- Зарубежное кино до 1990 года"}
+    - {id: 192, cat: Movies/Foreign, desc: "|-- Зарубежное кино 1990 - 1999"}
+    - {id: 160, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2000 - 2009"}
+    - {id: 125, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2010 - 2019"}
+    - {id: 1142, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2020 - 2024"}
+    - {id: 1182, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2025 (Новинки)"}
+    - {id: 126, cat: Movies/Foreign, desc: "|-- Зарубежное кино (HD и DVD Video)"}
+    - {id: 162, cat: Movies, desc: "|-- Российское кино"}
+    - {id: 164, cat: Movies, desc: "|--- Российское кино (HD и DVD Video)"}
+    - {id: 1144, cat: Movies, desc: "|--- Детское российское кино"}
+    - {id: 900, cat: Movies, desc: "|-- Советское кино"}
+    - {id: 1181, cat: Movies, desc: "|--- Советское кино (HD и DVD Video)"}
+    - {id: 1143, cat: Movies, desc: "|--- Детское советское кино"}
+    - {id: 1104, cat: Movies, desc: "|--- Фильмы довоенные и созданные во время войны"}
+    - {id: 1177, cat: Movies, desc: "|--- Телеспектакль"}
+    - {id: 891, cat: Movies/3D, desc: "|-- Кинофильмы 3D"}
+    - {id: 338, cat: Movies/Foreign, desc: "|-- Классика зарубежного кино"}
+    - {id: 337, cat: Movies/Foreign, desc: "|-- Азиатские фильмы"}
+    - {id: 917, cat: Movies, desc: "|-- Арт-хаус и авторское кино"}
+    - {id: 207, cat: Movies, desc: "|-- Сборники"}
+    - {id: 203, cat: Movies/Other, desc: "|-- Трейлеры и дополнительные материалы"}
+    - {id: 826, cat: Audio/Other, desc: "|-- Звуковые дорожки и переводы"}
+    - {id: 827, cat: Audio/Other, desc: "|--- Авторский перевод"}
+    - {id: 828, cat: Audio/Other, desc: "|--- Закадровый перевод"}
+    - {id: 134, cat: TV/Documentary, desc: "|- Документальные фильмы и телепередачи"}
+    - {id: 999, cat: TV/Documentary, desc: "|-- Флора и фауна"}
+    - {id: 254, cat: TV/Documentary, desc: "|-- Великая Отечественная война"}
+    - {id: 478, cat: TV/Documentary, desc: "|-- Научно-популярные фильмы"}
+    - {id: 1058, cat: TV/Documentary, desc: "|-- История:  Города и Страны / Архитектура / Музеи мира"}
+    - {id: 136, cat: TV/Documentary, desc: "|-- История: Биографии / Кумиры / Личности / События"}
+    - {id: 253, cat: TV/Documentary, desc: "|-- Планета Земля / Космос / Вселенная"}
+    - {id: 256, cat: TV/Documentary, desc: "|-- Вера и религия / Диагностика кармы"}
+    - {id: 252, cat: TV/Documentary, desc: "|-- Тайны века / Спецслужбы / Теории Заговоров"}
+    - {id: 255, cat: TV/Documentary, desc: "|-- Развлекательные телепередачи и шоу, приколы и юмор"}
+    - {id: 135, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (DVD, HD Video)"}
+    - {id: 889, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (3D)"}
+    # Сериалы
+    - {id: 845, cat: TV, desc: "|- Отечественные cериалы"}
+    - {id: 850, cat: TV, desc: "|-- Обсуждение сериалов"}
+    - {id: 854, cat: TV, desc: "|-- Исторические, военные"}
+    - {id: 846, cat: TV/Foreign, desc: "|- Зарубежные сериалы"}
+    - {id: 856, cat: TV/Foreign, desc: "|-- Исторические, военные"}
+    - {id: 847, cat: TV, desc: "|- Отечественные сериалы (HD, DVD Video)"}
+    - {id: 857, cat: TV, desc: "|-- Исторические, военные"}
+    - {id: 848, cat: TV/Foreign, desc: "|- Зарубежные сериалы (HD, DVD Video)"}
+    - {id: 858, cat: TV/Foreign, desc: "|-- Исторические, военные"}
+    # Мультипликация
+    - {id: 869, cat: Movies/Other, desc: "|- Мультфильмы"}
+    - {id: 1068, cat: Movies/Other, desc: "|- Короткометражные отечественные мультфильмы"}
+    - {id: 1067, cat: Movies/Other, desc: "|- Короткометражные иностранные мультфильмы"}
+    - {id: 1066, cat: Movies/Other, desc: "|- Короткометражные мультфильмы (DVD, HD Video)"}
+    - {id: 871, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы"}
+    - {id: 870, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы"}
+    - {id: 875, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы (DVD, HD Video)"}
+    - {id: 874, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы (DVD, HD Video)"}
+    - {id: 877, cat: Movies/Other, desc: "|-- Сборники отечественных мультфильмов"}
+    - {id: 876, cat: Movies/Other, desc: "|-- Сборники зарубежных мультфильмов"}
+    - {id: 890, cat: Movies/Other, desc: "|-- Мультфильмы 3D"}
+    - {id: 872, cat: TV/Anime, desc: "|- Мультсериалы"}
+    - {id: 878, cat: TV/Anime, desc: "|-- Отечественные Мультсериалы"}
+    - {id: 879, cat: TV/Anime, desc: "|-- Зарубежные Мультсериалы"}
+    - {id: 873, cat: TV/Anime, desc: "|- Аниме"}
+    - {id: 886, cat: TV/Anime, desc: "|-- Рипы Аниме"}
+    - {id: 884, cat: TV/Anime, desc: "|-- Аниме (DVD)"}
+    - {id: 885, cat: TV/Anime, desc: "|-- Аниме (HD Video)"}
+    - {id: 883, cat: TV/Anime, desc: "|-- Манга"}
+    # Музыка
+    - {id: 571, cat: Audio/Lossless, desc: "|- Камерная и сольная инструментальная музыка (lossless)"}
+    - {id: 567, cat: Audio/Lossless, desc: "|- Вокальная и хоровая музыка (lossless)"}
+    - {id: 577, cat: Audio, desc: "|- Classical Crossover (lossy и lossless)"}
+    - {id: 565, cat: Audio, desc: "|- Полные собрания сочинений и многодисковые издания..."}
+    - {id: 569, cat: Audio/Lossless, desc: "|- Оркестровая музыка (lossless)"}
+    - {id: 574, cat: Audio/MP3, desc: "|- Вокальная и хоровая музыка (lossy)"}
+    - {id: 576, cat: Audio/MP3, desc: "|- Камерная и сольная инструментальная музыка (lossy)"}
+    - {id: 579, cat: Audio/MP3, desc: "|- Восточноевропейский фолк (lossy)"}
+    - {id: 580, cat: Audio/Lossless, desc: "|- Восточноевропейский фолк (lossless)"}
+    - {id: 581, cat: Audio/MP3, desc: "|- Западноевропейский фолк (lossy)"}
+    - {id: 582, cat: Audio/Lossless, desc: "|- Западноевропейский фолк (lossless)"}
+    - {id: 583, cat: Audio, desc: "|- Klezmer и Еврейский фольклор (lossy и lossless)"}
+    - {id: 584, cat: Audio/MP3, desc: "|- Этническая музыка Сибири, Средней и Восточной Азии (lossy)"}
+    - {id: 585, cat: Audio/Lossless, desc: "|- Этническая музыка Сибири, Средней и Восточной Азии..."}
+    - {id: 587, cat: Audio/Lossless, desc: "|- Этническая музыка Индии (lossless)"}
+    - {id: 589, cat: Audio/Lossless, desc: "|- Этническая музыка Африки и Ближнего Востока (lossless)"}
+    - {id: 590, cat: Audio, desc: "|- Этническая музыка Кавказа и Закавказья (lossy и lossless)"}
+    - {id: 591, cat: Audio/MP3, desc: "|- Этническая музыка Северной и Южной Америки (lossy)"}
+    - {id: 592, cat: Audio/Lossless, desc: "|- Этническая музыка Северной и Южной Америки (lossless)"}
+    - {id: 593, cat: Audio, desc: "|- Этническая музыка Австралии, островов Тихого и Индийского..."}
+    - {id: 595, cat: Audio/Lossless, desc: "|- Country, Bluegrass (lossless)"}
+    - {id: 608, cat: Audio/Lossless, desc: "|- Nouveau Flamenco, Mediterranean Guitar, Acoustic guitar..."}
+    - {id: 607, cat: Audio, desc: "|- Nouveau Flamenco, Mediterranean Guitar, Acoustic guitar..."}
+    - {id: 487, cat: Audio, desc: "|- Fields Recordings, Nature Sounds (Звуки природы)"}
+    - {id: 481, cat: Audio/Lossless, desc: "|- New Age, Celtic New Age (lossless)"}
+    - {id: 483, cat: Audio/MP3, desc: "|- New Age, Celtic New Age (lossy)"}
+    - {id: 1048, cat: Audio/Lossless, desc: "|- Enigmatic, Gregorianic, Ambientpop, Mysticpop (lossless)"}
+    - {id: 1049, cat: Audio/MP3, desc: "|- Enigmatic, Gregorianic, Ambientpop, Mysticpop (lossy)"}
+    - {id: 484, cat: Audio/Lossless, desc: "|- Meditative, Healing, Relax & Nature (lossless)"}
+    - {id: 485, cat: Audio/MP3, desc: "|- Meditative, Healing, Relax & Nature (lossy)"}
+    - {id: 490, cat: Audio/Lossless, desc: "|- World Music, Ethnicbeat, Worldbeat, World Fusion..."}
+    - {id: 491, cat: Audio/MP3, desc: "|- World Music, Ethnicbeat, Worldbeat, World Fusion (lossy)"}
+    - {id: 492, cat: Audio/Lossless, desc: "|- Mantras, Ragas, Kirtans (lossless)"}
+    - {id: 493, cat: Audio/MP3, desc: "|- Mantras, Ragas, Kirtans (lossy)"}
+    - {id: 652, cat: Audio/MP3, desc: "|- Отечественный Рэп, Хип-Хоп (lossy)"}
+    - {id: 653, cat: Audio/MP3, desc: "|- Отечественный R'n'B (lossy)"}
+    - {id: 654, cat: Audio/Lossless, desc: "|- Отечественный Рэп, Хип-Хоп, R'n'B (lossless)"}
+    - {id: 657, cat: Audio/MP3, desc: "|- Зарубежный Рэп, Хип-Хоп (lossy)"}
+    - {id: 659, cat: Audio/Lossless, desc: "|- Зарубежный Рэп, Хип-Хоп (lossless)"}
+    - {id: 660, cat: Audio/Lossless, desc: "|- Зарубежный R'n'B (lossless)"}
+    - {id: 756, cat: Audio/Lossless, desc: "|- Ska, Ska-Punk, Ska-Jazz (lossless)"}
+    - {id: 752, cat: Audio/MP3, desc: "|- Reggae (lossy)"}
+    - {id: 755, cat: Audio/Lossless, desc: "|- Reggae, Dancehall, Dub (lossless)"}
+    - {id: 549, cat: Audio, desc: "|- Саундтреки и Караоке"}
+    - {id: 765, cat: Audio, desc: "|-- Минусовки (lossy и lossless)"}
+    - {id: 767, cat: Audio/Lossless, desc: "|-- Саундтреки к отечественным фильмам (lossless)"}
+    - {id: 768, cat: Audio/MP3, desc: "|-- Саундтреки к отечественным фильмам (lossy)"}
+    - {id: 769, cat: Audio/Lossless, desc: "|-- Саундтреки к зарубежным фильмам (lossless)"}
+    - {id: 770, cat: Audio/MP3, desc: "|-- Саундтреки к зарубежным фильмам (lossy)"}
+    - {id: 772, cat: Audio/Lossless, desc: "|-- Саундтреки к играм (lossless)"}
+    - {id: 776, cat: Audio/Lossless, desc: "|- Отечественный шансон (lossless)"}
+    - {id: 777, cat: Audio/MP3, desc: "|- Отечественный шансон (lossy)"}
+    - {id: 778, cat: Audio/MP3, desc: "|- Сборники отечественного шансона (lossy)"}
+    - {id: 779, cat: Audio/Lossless, desc: "|- Военная песня (lossless)"}
+    - {id: 780, cat: Audio/MP3, desc: "|- Военная песня (lossy)"}
+    - {id: 781, cat: Audio/Lossless, desc: "|- Авторская песня (lossless)"}
+    - {id: 782, cat: Audio/MP3, desc: "|- Авторская песня (lossy)"}
+    - {id: 952, cat: Audio/Lossless, desc: "|- Зарубежный шансон, Chanson (lossless)"}
+    - {id: 1175, cat: Audio/Lossless, desc: "|- Итальянская поп-музыка (lossless)"}
+    - {id: 1174, cat: Audio/Lossless, desc: "|- Латиноамериканская поп-музыка (lossless)"}
+    - {id: 1173, cat: Audio/Lossless, desc: "|- Easy Listening, Instrumental Pop (lossless)"}
+    - {id: 836, cat: Audio/MP3, desc: "|- Отечественная поп-музыка (lossy)"}
+    - {id: 837, cat: Audio/Lossless, desc: "|- Отечественная поп-музыка (lossless)"}
+    - {id: 838, cat: Audio/MP3, desc: "|- Зарубежная поп-музыка (lossy)"}
+    - {id: 839, cat: Audio/Lossless, desc: "|- Зарубежная поп-музыка (lossless)"}
+    - {id: 843, cat: Audio/Lossless, desc: "|- Восточноазиатская поп-музыка (lossless)"}
+    - {id: 1082, cat: Audio/Lossless, desc: "|- Disco, Italo-Disco, Euro-Disco, Hi-NRG (lossless)"}
+    - {id: 1081, cat: Audio/Lossless, desc: "|- Eurodance, Euro-House, Technopop (lossless)"}
+    - {id: 1084, cat: Audio/MP3, desc: "|- Disco, Italo-Disco, Euro-Disco, Hi-NRG (сборники) (lossy)"}
+    - {id: 1083, cat: Audio/MP3, desc: "|- Eurodance, Euro-House, Technopop (сборники) (lossy)"}
+    - {id: 1187, cat: Audio, desc: "|- Аудио, как приложение к журналам"}
+    - {id: 794, cat: Audio, desc: "|- Orthodox spiritual music. Православные песнопения..."}
+    - {id: 1140, cat: Audio, desc: "|- Аудиоматериал для тестирования и настройки"}
+    - {id: 1099, cat: Audio/MP3, desc: "|- Профессиональная музыка для йоги и фитнеса (lossy)"}
+    - {id: 789, cat: Audio/Lossless, desc: "|- Отечественная музыка других жанров (lossless)"}
+    - {id: 788, cat: Audio/MP3, desc: "|- Отечественная музыка других жанров (lossy)"}
+    - {id: 791, cat: Audio/Lossless, desc: "|- Зарубежная музыка других жанров (lossless)"}
+    - {id: 790, cat: Audio/MP3, desc: "|- Зарубежная музыка других жанров (lossy)"}
+    - {id: 795, cat: Audio, desc: "|- Сборники песен для детей (lossy и lossless)"}
+    - {id: 798, cat: Audio, desc: "|- Мюзикл (lossy и lossless)"}
+    - {id: 800, cat: Audio/MP3, desc: "|- Неофициальные и внежанровые сборники (lossy)"}
+    - {id: 186, cat: Audio/Video, desc: "|- Музыкальное видео (DVD и HD Video)"}
+    - {id: 185, cat: Audio/Video, desc: "|- Музыкальное видео"}
+    - {id: 1160, cat: Audio/Foreign, desc: "|- Зарубежная поп-музыка"}
+    - {id: 1159, cat: Audio, desc: "|- Советская эстрада, ретро, романсы"}
+    - {id: 1158, cat: Audio, desc: "|- Отечественная поп-музыка"}
+    - {id: 1157, cat: Audio, desc: "|- Инструментальная поп-музыка, эстрада"}
+    - {id: 1156, cat: Audio, desc: "|- Джаз и блюз"}
+    - {id: 1155, cat: Audio/Foreign, desc: "|- Зарубежная рок-музыка"}
+    - {id: 1154, cat: Audio, desc: "|- Отечественная рок-музыка"}
+    - {id: 1153, cat: Audio, desc: "|- Электронная музыка"}
+    - {id: 1152, cat: Audio, desc: "|- Классика и классика в современной обработке"}
+    # Электронная музыка
+    - {id: 611, cat: Audio/Lossless, desc: "|- Goa Trance, Psy-Trance (lossless)"}
+    - {id: 612, cat: Audio/MP3, desc: "|- Goa Trance, Psy-Trance (lossy)"}
+    - {id: 613, cat: Audio/Lossless, desc: "|- PsyChill, Ambient Dub (lossless)"}
+    - {id: 614, cat: Audio/MP3, desc: "|- PsyChill, Ambient Dub (lossy)"}
+    - {id: 616, cat: Audio/Lossless, desc: "|- Trance (lossless)"}
+    - {id: 617, cat: Audio/MP3, desc: "|- Trance (lossy)"}
+    - {id: 618, cat: Audio/MP3, desc: "|- Trance (Singles, EPs) (lossy)"}
+    - {id: 619, cat: Audio/MP3, desc: "|- Trance (Radioshows, Podcasts, Live Sets, Mixes) (lossy)"}
+    - {id: 1061, cat: Audio/MP3, desc: "|- Trance discography (lossy)"}
+    - {id: 621, cat: Audio/Lossless, desc: "|- Hardcore, Hardstyle, Jumpstyle (lossless)"}
+    - {id: 622, cat: Audio/MP3, desc: "|- Hardcore, Hardstyle, Jumpstyle (lossy)"}
+    - {id: 623, cat: Audio, desc: "|- Hardcore, Hardstyle, Jumpstyle (vinyl, web)"}
+    - {id: 624, cat: Audio/Lossless, desc: "|- House (lossless)"}
+    - {id: 625, cat: Audio, desc: "|- House (Radioshow, Podcast, Liveset, Mixes)"}
+    - {id: 626, cat: Audio/MP3, desc: "|- House (lossy)"}
+    - {id: 627, cat: Audio, desc: "|- House (Проморелизы, сборники)"}
+    - {id: 628, cat: Audio/MP3, desc: "|- House (Singles, EPs) (lossy)"}
+    - {id: 629, cat: Audio/Lossless, desc: "|- Techno (lossless)"}
+    - {id: 630, cat: Audio/MP3, desc: "|- Techno (lossy)"}
+    - {id: 631, cat: Audio, desc: "|- Techno (Radioshows, Podcasts, Livesets, Mixes)"}
+    - {id: 632, cat: Audio/MP3, desc: "|- Techno (Singles, EPs) (lossy)"}
+    - {id: 643, cat: Audio/Lossless, desc: "|- Dubstep, Future Garage, Bass Music, UK Garage (lossless)"}
+    - {id: 644, cat: Audio/MP3, desc: "|- Dubstep, Future Garage, Bass Music, UK Garage (lossy)"}
+    - {id: 634, cat: Audio/Lossless, desc: "|- Electro, Electro-Freestyle, Nu Electro (lossless)"}
+    - {id: 635, cat: Audio/MP3, desc: "|- Electro, Electro-Freestyle, Nu Electro (lossy)"}
+    - {id: 636, cat: Audio/Lossless, desc: "|- Drum & Bass, Jungle (lossless)"}
+    - {id: 637, cat: Audio/MP3, desc: "|- Drum & Bass, Jungle (lossy)"}
+    - {id: 641, cat: Audio/Lossless, desc: "|- Breakbeat (lossless)"}
+    - {id: 642, cat: Audio/MP3, desc: "|- Breakbeat (lossy)"}
+    - {id: 645, cat: Audio/Lossless, desc: "|- IDM (lossless)"}
+    - {id: 646, cat: Audio/MP3, desc: "|- IDM (lossy)"}
+    - {id: 802, cat: Audio/Lossless, desc: "|- Chillout, Lounge, Downtempo (lossless)"}
+    - {id: 803, cat: Audio/MP3, desc: "|- Chillout, Lounge, Downtempo (lossy)"}
+    - {id: 804, cat: Audio/Lossless, desc: "|- Nu Jazz, Acid Jazz, Future Jazz (lossless)"}
+    - {id: 805, cat: Audio/MP3, desc: "|- Nu Jazz, Acid Jazz, Future Jazz (lossy)"}
+    - {id: 806, cat: Audio/Lossless, desc: "|- Trip Hop, Abstract Hip-Hop (lossless)"}
+    - {id: 807, cat: Audio/MP3, desc: "|- Trip Hop, Abstract Hip-Hop (lossy)"}
+    - {id: 1070, cat: Audio, desc: "|- 8-bit, Chiptune (lossy & lossless)"}
+    - {id: 808, cat: Audio/Lossless, desc: "|- Experimental (lossless)"}
+    - {id: 809, cat: Audio/MP3, desc: "|- Experimental (lossy)"}
+    - {id: 810, cat: Audio/Lossless, desc: "|- Modern Classical, Electroacoustic (lossless)"}
+    - {id: 811, cat: Audio/MP3, desc: "|- Modern Classical, Electroacoustic (lossy)"}
+    - {id: 812, cat: Audio/Lossless, desc: "|- Traditional Electronic, Ambient (lossless)"}
+    - {id: 813, cat: Audio/MP3, desc: "|- Traditional Electronic, Ambient (lossy)"}
+    - {id: 815, cat: Audio/Lossless, desc: "|- EBM, Dark Electro, Aggrotech (lossless)"}
+    - {id: 816, cat: Audio/MP3, desc: "|- EBM, Dark Electro, Aggrotech (lossy)"}
+    - {id: 817, cat: Audio/Lossless, desc: "|- Industrial, Noise (lossless)"}
+    - {id: 818, cat: Audio/MP3, desc: "|- Industrial, Noise (lossy)"}
+    - {id: 1071, cat: Audio/Lossless, desc: "|- Darkwave, Neoclassical, Ethereal, Dungeon Synth (lossless)"}
+    - {id: 1072, cat: Audio/MP3, desc: "|- Darkwave, Neoclassical, Ethereal, Dungeon Synth (lossy)"}
+    - {id: 819, cat: Audio/Lossless, desc: "|- Synthpop, Futurepop, New Wave (lossless)"}
+    - {id: 820, cat: Audio/MP3, desc: "|- Synthpop, Futurepop, New Wave (lossy)"}
+    - {id: 512, cat: Audio/Lossless, desc: "|- Label Packs (lossless)"}
+    - {id: 513, cat: Audio/MP3, desc: "|- Label packs, Scene packs, Radioshows packs (lossy)"}
+    # Рок-музыка
+    - {id: 524, cat: Audio, desc: "|- Зарубежный Rock"}
+    - {id: 699, cat: Audio/Lossless, desc: "|-- Pop Rock & Soft Rock (lossless)"}
+    - {id: 700, cat: Audio/MP3, desc: "|-- Pop Rock & Soft Rock (lossy)"}
+    - {id: 696, cat: Audio/Lossless, desc: "|-- Folk Rock (lossless)"}
+    - {id: 1167, cat: Audio/MP3, desc: "|-- Folk Rock (lossy)"}
+    - {id: 692, cat: Audio/Lossless, desc: "|-- Classic Rock & Hard Rock (lossless)"}
+    - {id: 693, cat: Audio/MP3, desc: "|-- Classic Rock & Hard Rock (lossy)"}
+    - {id: 694, cat: Audio/Lossless, desc: "|-- Progressive & Art-Rock (lossless)"}
+    - {id: 695, cat: Audio/MP3, desc: "|-- Progressive & Art-Rock (lossy)"}
+    - {id: 697, cat: Audio/Lossless, desc: "|-- AOR (Melodic Hard Rock, Arena rock) (lossless)"}
+    - {id: 698, cat: Audio/MP3, desc: "|-- AOR (Melodic Hard Rock, Arena rock) (lossy)"}
+    - {id: 701, cat: Audio/Lossless, desc: "|-- Instrumental Guitar Rock (lossless)"}
+    - {id: 702, cat: Audio/MP3, desc: "|-- Instrumental Guitar Rock (lossy)"}
+    - {id: 703, cat: Audio/Lossless, desc: "|-- Rockabilly, Psychobilly, Rock'n'Roll (lossless)"}
+    - {id: 704, cat: Audio/MP3, desc: "|-- Rockabilly, Psychobilly, Rock'n'Roll (lossy)"}
+    - {id: 705, cat: Audio/Lossless, desc: "|-- Восточноазиатский рок (lossless)"}
+    - {id: 706, cat: Audio/MP3, desc: "|-- Восточноазиатский рок (lossy)"}
+    - {id: 918, cat: Audio/Lossless, desc: "|- Sludge, Stoner, Post-Metal (lossless)"}
+    - {id: 919, cat: Audio/MP3, desc: "|- Sludge, Stoner, Post-Metal (lossly)"}
+    - {id: 711, cat: Audio/Lossless, desc: "|- Death, Doom (lossless)"}
+    - {id: 712, cat: Audio/MP3, desc: "|- Death, Doom (lossy)"}
+    - {id: 707, cat: Audio/Lossless, desc: "|- Avant-garde, Experimental Metal (lossless)"}
+    - {id: 708, cat: Audio/MP3, desc: "|- Avant-garde, Experimental Metal (lossy)"}
+    - {id: 709, cat: Audio/Lossless, desc: "|- Black (lossless)"}
+    - {id: 710, cat: Audio/MP3, desc: "|- Black (lossy)"}
+    - {id: 713, cat: Audio/Lossless, desc: "|- Folk, Pagan, Viking (lossless)"}
+    - {id: 714, cat: Audio/MP3, desc: "|- Folk, Pagan, Viking (lossy)"}
+    - {id: 715, cat: Audio/Lossless, desc: "|- Gothic Metal (lossless)"}
+    - {id: 716, cat: Audio/MP3, desc: "|- Gothic Metal (lossy)"}
+    - {id: 717, cat: Audio/Lossless, desc: "|- Grind, Brutal Death (lossless)"}
+    - {id: 718, cat: Audio/MP3, desc: "|- Grind, Brutal Death (lossy)"}
+    - {id: 719, cat: Audio/Lossless, desc: "|- Heavy, Power, Progressive (lossless)"}
+    - {id: 720, cat: Audio/MP3, desc: "|- Heavy, Power, Progressive (lossy)"}
+    - {id: 721, cat: Audio/Lossless, desc: "|- Metalcore, Deathcore, Mathcore (lossless)"}
+    - {id: 722, cat: Audio/MP3, desc: "|- Metalcore, Deathcore, Mathcore (lossy)"}
+    - {id: 723, cat: Audio/Lossless, desc: "|- Thrash, Speed (lossless)"}
+    - {id: 724, cat: Audio/MP3, desc: "|- Thrash, Speed (lossy)"}
+    - {id: 725, cat: Audio/Lossless, desc: "|- Сборники (lossless)"}
+    - {id: 726, cat: Audio/MP3, desc: "|- Сборники (lossy)"}
+    - {id: 1122, cat: Audio/Lossless, desc: "|- Gothic Rock, Deathrock, Electrogoth, Dark Cabaret..."}
+    - {id: 1125, cat: Audio/MP3, desc: "|- Gothic Rock, Deathrock, Electrogoth, Dark Cabaret (lossy)"}
+    - {id: 1123, cat: Audio/Lossless, desc: "|- Dark Folk, Neofolk, Martial Industrial, Ritual Ambient..."}
+    - {id: 1124, cat: Audio/MP3, desc: "|- Dark Folk, Neofolk, Martial Industrial, Ritual Ambient..."}
+    - {id: 727, cat: Audio/Lossless, desc: "|- Alternative & Nu-metal (lossless)"}
+    - {id: 728, cat: Audio/MP3, desc: "|- Alternative & Nu-metal (lossy)"}
+    - {id: 729, cat: Audio/Lossless, desc: "|- Punk (lossless)"}
+    - {id: 730, cat: Audio/MP3, desc: "|- Punk (lossy)"}
+    - {id: 731, cat: Audio/Lossless, desc: "|- Hardcore (lossless)"}
+    - {id: 732, cat: Audio/MP3, desc: "|- Hardcore (lossy)"}
+    - {id: 733, cat: Audio/Lossless, desc: "|- Indie, Post-Rock & Post-Punk (lossless)"}
+    - {id: 734, cat: Audio/MP3, desc: "|- Indie, Post-Rock & Post-Punk (lossy)"}
+    - {id: 735, cat: Audio/Lossless, desc: "|- Industrial & Post-industrial (lossless)"}
+    - {id: 736, cat: Audio/MP3, desc: "|- Industrial & Post-industrial (lossy)"}
+    - {id: 737, cat: Audio/Lossless, desc: "|- Emocore, Post-hardcore (lossless)"}
+    - {id: 738, cat: Audio/MP3, desc: "|- Emocore, Post-hardcore (lossy)"}
+    - {id: 1074, cat: Audio/MP3, desc: "|- Сборники (lossy)"}
+    - {id: 742, cat: Audio/Lossless, desc: "|- Рок, Панк, Альтернатива (lossless)"}
+    - {id: 743, cat: Audio/MP3, desc: "|- Рок, Панк, Альтернатива (lossy)"}
+    - {id: 744, cat: Audio/Lossless, desc: "|- Металл (lossless)"}
+    - {id: 745, cat: Audio/MP3, desc: "|- Металл (lossy)"}
+    - {id: 746, cat: Audio/Lossless, desc: "|- Рок на языках народов xUSSR (lossless)"}
+    - {id: 747, cat: Audio/MP3, desc: "|- Рок на языках народов xUSSR (lossy)"}
+    # Джазовая и блюзовая музыка
+    - {id: 670, cat: Audio/Lossless, desc: "|- World Jazz, Ethnic Jazz (lossless)"}
+    - {id: 666, cat: Audio/Lossless, desc: "|- Early Jazz, Swing, Gypsy (lossless)"}
+    - {id: 667, cat: Audio/Lossless, desc: "|- Bop (lossless)"}
+    - {id: 668, cat: Audio/Lossless, desc: "|- Mainstream Jazz, Cool (lossless)"}
+    - {id: 669, cat: Audio/Lossless, desc: "|- Jazz Fusion (lossless)"}
+    - {id: 671, cat: Audio/Lossless, desc: "|- Avant-Garde Jazz, Free Improvisation (lossless)"}
+    - {id: 672, cat: Audio/Lossless, desc: "|- Modern Creative, Third Stream (lossless)"}
+    - {id: 673, cat: Audio/Lossless, desc: "|- Smooth, Jazz-Pop (lossless)"}
+    - {id: 674, cat: Audio/Lossless, desc: "|- Vocal Jazz (lossless)"}
+    - {id: 675, cat: Audio/Lossless, desc: "|- Funk, Soul, R&B (lossless)"}
+    - {id: 677, cat: Audio/MP3, desc: "|- Зарубежный джаз (lossy)"}
+    - {id: 680, cat: Audio/Lossless, desc: "|- Blues Rock (lossless)"}
+    - {id: 679, cat: Audio/Lossless, desc: "|- Blues (Texas, Chicago, Modern and Others) (lossless)"}
+    - {id: 681, cat: Audio/Lossless, desc: "|- Roots, Pre-War Blues, Early R&B, Gospel (lossless)"}
+    - {id: 683, cat: Audio/MP3, desc: "|- Зарубежный блюз (lossy)"}
+    - {id: 686, cat: Audio/Lossless, desc: "|- Отечественный джаз (lossless)"}
+    - {id: 687, cat: Audio/MP3, desc: "|- Отечественный джаз (lossy)"}
+    - {id: 688, cat: Audio/Lossless, desc: "|- Отечественный блюз (lossless)"}
+    - {id: 689, cat: Audio/MP3, desc: "|- Отечественный блюз (lossy)"}
+    # Программное обеспечение
+    - {id: 68, cat: PC, desc: "|- Программы под Windows"}
+    - {id: 91, cat: PC, desc: "|-- Системы для бизнеса"}
+    - {id: 95, cat: PC, desc: "|-- Программы для работы со звуком"}
+    - {id: 94, cat: PC, desc: "|-- Редакторы видео"}
+    - {id: 87, cat: PC, desc: "|-- 3D моделирование, рендеринг и плагины для них"}
+    - {id: 98, cat: PC, desc: "|-- Системы навигации и карты"}
+    # Книги и журналы
+    - {id: 340, cat: Books, desc: "|- Предложения по улучшению раздела 'Книги и журналы..."}
+    - {id: 341, cat: Books, desc: "|- Художественная литература"}
+    - {id: 351, cat: Books, desc: "|-- Русская литература (Классика)"}
+    - {id: 405, cat: Books, desc: "|-- Русская литература (Современная проза)"}
+    - {id: 352, cat: Books/Foreign, desc: "|-- Зарубежная литература (до 1900 г.)"}
+    - {id: 353, cat: Books/Foreign, desc: "|-- Зарубежная литература (XX и XXI век)"}
+    - {id: 354, cat: Books, desc: "|-- Детектив / боевик / триллер"}
+    - {id: 355, cat: Books, desc: "|-- Женский роман"}
+    - {id: 315, cat: Books/Foreign, desc: "|-- Зарубежная фантастика / фэнтези / мистика"}
+    - {id: 316, cat: Books, desc: "|-- Отечественная фантастика / фэнтези / мистика"}
+    - {id: 356, cat: Books, desc: "|-- Приключения"}
+    - {id: 358, cat: Books/Foreign, desc: "|-- Художественная литература на иностранных языках"}
+    - {id: 365, cat: Books, desc: "|- Учебная литература для детского сада и начальной шко..."}
+    - {id: 359, cat: Books, desc: "|- Художественная литературара для средних и старших классов"}
+    - {id: 343, cat: Books, desc: "|- Гуманитарные науки, история, философия"}
+    - {id: 378, cat: Books, desc: "|-- Исторические науки. Издания 1992-по н.в."}
+    - {id: 377, cat: Books, desc: "|-- История России"}
+    - {id: 376, cat: Books, desc: "|-- Эпоха СССР"}
+    - {id: 375, cat: Books, desc: "|-- История отдельных стран и регионов"}
+    - {id: 371, cat: Books, desc: "|-- Философия"}
+    - {id: 368, cat: Books, desc: "|-- Психотерапия, психодиагностика, консультирование и психокоррекция"}
+    - {id: 367, cat: Books, desc: "|-- Эзотерика, саморазвитие и самосовершенствование"}
+    - {id: 382, cat: Books, desc: "|- Электроника / радио"}
+    - {id: 345, cat: Books, desc: "|- Компьютерная литература"}
+    - {id: 394, cat: Books, desc: "|-- Веб-дизайн и программирование"}
+    - {id: 393, cat: Books, desc: "|-- Программирование"}
+    - {id: 898, cat: Books, desc: "|-- СУБД"}
+    - {id: 392, cat: Books, desc: "|-- Графика, обработка видео"}
+    - {id: 391, cat: Books, desc: "|-- Сети / VoIP"}
+    - {id: 389, cat: Books, desc: "|-- Компьютерные журналы и приложения к ним"}
+    - {id: 396, cat: Books/Other, desc: "|- Прочее"}
+    - {id: 349, cat: Books/Mags, desc: "|- Журналы и газеты (общий раздел)"}
+    - {id: 350, cat: Books/Other, desc: "|- Разное"}
+    - {id: 342, cat: Books, desc: "|-- Учебная литература - для детей, родителей и учителей"}
+    - {id: 370, cat: Books, desc: "|-- Экономика, бизнес, менеджмент, маркетинг"}
+    - {id: 398, cat: Books, desc: "|-- Прочие хобби"}
+    - {id: 399, cat: Books, desc: "|-- Кулинария (книги)"}
+    - {id: 400, cat: Books, desc: "|-- Охота и рыбалка"}
+    - {id: 336, cat: Books, desc: "|-- Физкультура, фитнес, бодибилдинг, йога"}
+    # Разное
+    - {id: 242, cat: Other, desc: "|- Другое"}
+    # Скрытые разделы
+    - {id: 1184, cat: Other, desc: "|- Для оформления релизов AVP Studio"}
+
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: login.php
+  method: form
+  form: form[action="./login.php"]
+  inputs:
+    login_username: "{{ .Config.username }}"
+    login_password: "{{ .Config.password }}"
+    redirect: "index.php"
+    login: Вход
+  error:
+    - selector: table.error
+  test:
+    path: index.php
+    selector: a[href^="login.php?logout=1"]
+
+search:
+  paths:
+    - path: tracker.php
+  inputs:
+    f: "{{ join .Categories \",\" }}"
+    nm: "{{ .Keywords }}"
+    o: "{{ .Config.sort }}"
+    s: "{{ .Config.type }}"
+    tm: -1
+
+  rows:
+    selector: tr[id^="tor_"]:has(a[href^="/download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="tracker.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
+    title:
+      selector: a.tLink
+    details:
+      selector: a.tLink
+      attribute: href
+    download:
+      selector: a[href^="/download.php?id="]
+      attribute: href
+    size:
+      selector: td:nth-child(6) > u
+    seeders:
+      selector: td.seedmed > b
+    leechers:
+      selector: td.leechmed > b
+    grabs:
+      selector: td:nth-child(9)
+    date:
+      selector: td:last-child > u
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+# engine n/a
