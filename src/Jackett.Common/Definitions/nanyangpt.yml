@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - https://nanyangpt.com/
 legacylinks:
-  - https://52pt.site/ # loaded in error when firs set up from template
+  - https://52pt.site/ # loaded in error when first set up from template
 
 caps:
   categorymappings:
@@ -31,12 +31,11 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -67,26 +66,10 @@ settings:
     default: "Account retention rules:<ol><li>University lecturer and above users will be retained forever</li><li>Excellent master's degree and above users will not be deleted after the account is parked (in the control panel)</li><li>Users with a parked account who do not log in for 400 consecutive days will be deleted</li><li>Users with non-parked account will be deleted if they do not log in for 150 consecutive days</li></ol>"
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[alt="CAPTCHA"]
-    input: imagestring
+  # using cookie method as login.php is different depending on IP address
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    logout: ""
-    securelogin: ""
-    ssl: yes
-    trackerssl: yes
-  selectorinputs:
-    xss:
-      selector: input[name="xss"]
-      attribute: value
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href$="usercp.php"]
@@ -185,10 +168,7 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
-# NYPT Project v1.0 2014-10-01
+# NYPT Project v1.0 2014-10-01 (based on NexusPHP)
