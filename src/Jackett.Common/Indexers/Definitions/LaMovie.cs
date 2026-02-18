@@ -413,7 +413,7 @@ namespace Jackett.Common.Indexers.Definitions
             // Require at least 2 matching words to avoid false positives
             var originalWords = Regex.Matches(originalQuery, @"\b[\w']+\b").Cast<Match>()
                 .Select(m => Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower())))
-                .Where(w => w.Length > 2)
+                .Where(w => w.Length > 2 && !Regex.IsMatch(w, @"^\d{4}$")) // Exclude years (4-digit numbers)
                 .ToList();
             
             var originalWordCount = originalWords.Count;
