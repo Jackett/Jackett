@@ -236,6 +236,7 @@ Prior versions of Jackett are no longer supported.
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
+ * New-Team
  * NewStudio (login)
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
