@@ -18,6 +18,7 @@ caps:
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 4000, cat: PC, desc: "PC/Applications"}
     - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5000, cat: TV/Animes, desc: "Animes"}
     - {id: 6000, cat: XXX, desc: "XXX"}
     - {id: 7000, cat: Books, desc: "Books/eBook"}
     - {id: 8000, cat: Other, desc: "Other"}
