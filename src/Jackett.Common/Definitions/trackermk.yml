@@ -5,8 +5,12 @@ description: "TrackerMK is a MACEDONIAN Private Torrent Tracker for MOVIES / TV 
 language: mk-MK
 type: private
 encoding: UTF-8
+certificates:
+  - d37b3811042d0868c032a097857b1a98ad583c31 # Expired 30 Dec 2025
 links:
-  - http://trackermk.com/ # does not support https, CA expired December 2017
+  - https://trackermk.com/
+legacylinks:
+  - http://trackermk.com/ # forces https despite invalid CA
 
 caps:
   categorymappings:
