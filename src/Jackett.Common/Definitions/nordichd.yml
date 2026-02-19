@@ -17,6 +17,7 @@ caps:
     - {id: 46, cat: PC/Games, desc: "Games/PC"}
     - {id: 47, cat: PC/Games, desc: "Games/PCRips"}
     - {id: 48, cat: Console, desc: "Games/PS"}
+    - {id: 49, cat: Movies/UHD, desc: "Internal/4k-2160p"}
     - {id: 37, cat: Movies/HD, desc: "Internal/HD-1080p"}
     - {id: 17, cat: Movies/HD, desc: "Internal/HD-720p"}
     - {id: 30, cat: TV/HD, desc: "Internal/HDTV"}
@@ -27,6 +28,7 @@ caps:
     - {id: 12, cat: TV/HD, desc: "HDTV-Packs"}
     - {id: 25, cat: Movies/3D, desc: "Movies/3D-Ou"}
     - {id: 16, cat: Movies/3D, desc: "Movies/3D-SbS"}
+    - {id: 50, cat: Movies/UHD, desc: "Movies/4k-2016p"}
     - {id: 5, cat: Movies/BluRay, desc: "Movies/BluRay"}
     - {id: 38, cat: Movies/HD, desc: "Movies/HD-1080p"}
     - {id: 10, cat: Movies/HD, desc: "Movies/HD-720p"}
