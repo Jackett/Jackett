@@ -391,18 +391,18 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var terms = new List<string>();
             var words = searchTerm.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
-            
+
             if (words.Length == 0)
             {
                 return terms;
             }
-            
+
             // Strategy 1: Try with full term (already truncated to 16 chars)
             terms.Add(searchTerm);
-            
+
             // Filter out short/common words for fallback strategies
             var significantWords = words.Where(w => w.Length > 3).ToList();
-            
+
             // Strategy 2: Try with first 2 significant words
             if (significantWords.Count >= 2)
             {
@@ -413,7 +413,7 @@ namespace Jackett.Common.Indexers.Definitions
                 // Fallback to first 2 words even if not significant
                 terms.Add(string.Join(" ", words.Take(2)));
             }
-            
+
             // Strategy 3: Try with just first significant word
             if (significantWords.Count >= 1)
             {
@@ -424,7 +424,7 @@ namespace Jackett.Common.Indexers.Definitions
                 // Fallback to first word if at least 3 chars
                 terms.Add(words[0]);
             }
-            
+
             return terms;
         }
 
@@ -440,23 +440,23 @@ namespace Jackett.Common.Indexers.Definitions
                              where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
                              select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
             titleWords = titleWords.ToArray();
-            
+
             var queryWordsList = queryWords.ToList();
-            
+
             // If using fallback (queryStr is shorter than originalQuery), be more strict
             // Require at least 2 matching words to avoid false positives
             var originalWords = Regex.Matches(originalQuery, @"\b[\w']+\b").Cast<Match>()
                 .Select(m => Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower())))
                 .Where(w => w.Length > 2 && !Regex.IsMatch(w, @"^\d{4}$")) // Exclude years (4-digit numbers)
                 .ToList();
-            
+
             var originalWordCount = originalWords.Count;
-            
+
             if (queryWordsList.Count < originalWordCount)
             {
                 // Using fallback: require matching based on original query size
                 var matchCount = originalWords.Count(word => titleWords.Contains(word));
-                
+
                 if (originalWordCount == 2)
                 {
                     // For 2-word queries, require both words to match
@@ -468,7 +468,7 @@ namespace Jackett.Common.Indexers.Definitions
                     return matchCount >= 2;
                 }
             }
-            
+
             return queryWordsList.All(word => titleWords.Contains(word));
         }
 
