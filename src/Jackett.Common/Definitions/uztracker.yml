@@ -13,8 +13,7 @@ caps:
     # Кинофильмы # Movies
     - {id: 3, cat: Movies, desc: "Зарубежные кинофильмы"}
     - {id: 13, cat: Movies, desc: " |- Новинки 2026"}
-    - {id: 342, cat: Movies, desc: " |- Фильмы 2025"}
-    - {id: 12, cat: Movies, desc: " |- Фильмы 2021-2024"}
+    - {id: 12, cat: Movies, desc: " |- Фильмы 2021-2025 годов"}
     - {id: 11, cat: Movies, desc: " |- Фильмы 2011-2020 годов"}
     - {id: 10, cat: Movies, desc: " |- Зарубежные фильмы до 2011 года"}
     - {id: 215, cat: Movies, desc: " |- Классика мирового кинематографа"}
@@ -27,6 +26,7 @@ caps:
     - {id: 6, cat: Movies, desc: " |- HD-AVC"}
     - {id: 33, cat: Movies, desc: " |- Перевод на узбекский"}
     - {id: 14, cat: Movies, desc: "Российские кинофильмы"}
+    - {id: 344, cat: Movies, desc: " |- Новинки 2026"}
     - {id: 24, cat: Movies, desc: " |- Фильмы 2025"}
     - {id: 223, cat: Movies, desc: " |- Кино СССР"}
     - {id: 16, cat: Movies, desc: " |- Фильмы (HDvideo)"}
@@ -213,7 +213,11 @@ caps:
     - {id: 108, cat: PC/Games, desc: " |- Старые игры"}
     - {id: 107, cat: PC/Games, desc: " |- Игровое видео"}
     - {id: 106, cat: PC/Games, desc: " |- Патчи, моды, дополнения, DLC и т.п."}
-    - {id: 248, cat: PC/Games, desc: "Игры для Android"}
+    - {id: 414, cat: Console, desc: " |- PS4 / PS5"}
+    - {id: 402, cat: Console, desc: " |- PS/PS2/PS3"}
+    - {id: 415, cat: Console, desc: " |- PSP / Игры PS1 для PSP"}
+    - {id: 416, cat: Console, desc: " |- Xbox 360"}
+    - {id: 417, cat: PC/Games, desc: " |- SteamMachine"}
     # Софт # Software
     - {id: 76, cat: PC, desc: "Операционные системы"}
     - {id: 80, cat: PC, desc: " |- Windows 11"}
