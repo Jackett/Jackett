@@ -560,6 +560,7 @@ Prior versions of Jackett are no longer supported.
  * PTLGS [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
+ * PTTey [![(invite needed)][inviteneeded]](#)
  * PTtime
  * PTYING (樱花)
  * PTzone
