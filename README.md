@@ -518,6 +518,7 @@ Prior versions of Jackett are no longer supported.
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
  * Nirvana
+ * njtupt (浦园)) [![(invite needed)][inviteneeded]](#)
  * NorBits
  * NORDiCHD
  * NordicQuality
