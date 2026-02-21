@@ -305,9 +305,9 @@ namespace Jackett.Common.Indexers.Definitions
                         // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
                         // so let's try to pick up first without the .tooltip class,
                         // if nothing is found, then we try again without that filter
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]:not(.tooltip)");
+                        var qDetailsLink = row.QuerySelector("a[href*=\"torrentid=\"]:not(.tooltip)");
                         if (qDetailsLink == null)
-                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                            qDetailsLink = row.QuerySelector("a[href*=\"torrentid=\"]");
                         // fallback to old id= format for backward compatibility
                         if (qDetailsLink == null)
                             qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
@@ -320,7 +320,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
                         var title = StripSearchString(qDetailsLink.TextContent, false);
 
-                        var seasonEl = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        var seasonEl = row.QuerySelector("a[href*=\"torrentid=\"]");
                         string seasonEp = null;
                         if (seasonEl != null)
                         {
@@ -480,8 +480,7 @@ namespace Jackett.Common.Indexers.Definitions
                             MinimumSeedTime = 0
                         };
 
-                        // Details link - site changed from a.BJinfoBox to standard torrentid links
-                        var qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?torrentid=\"]");
+                        var qDetailsLink = row.QuerySelector("a[href*=\"torrentid=\"]");
                         if (qDetailsLink == null)
                         {
                             logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the details link");
