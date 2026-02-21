@@ -61,6 +61,7 @@ caps:
     - {id: 93, cat: Movies/Other, desc: "Xmas Movies : Packs"}
     - {id: 94, cat: Audio/Other, desc: "Xmas Music Pack: Packs"}
     - {id: 95, cat: Other, desc: "Misc: Misc"}
+    - {id: 106, cat: Audio, desc: "Sals Top Torren: Never Forgotten"}
 
   modes:
     search: [q]
