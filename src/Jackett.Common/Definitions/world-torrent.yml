@@ -10,7 +10,7 @@ encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
   - https://ww2-mania-torrent.com/
-  - https://ww1-cine-torrent.com/
+  - https://ww2-cine-torrent.com/
   - https://www-magnet-torrent.com/
   - https://www-mega-torrent.com/
   - https://ww2-zone-torrent.com/
@@ -56,6 +56,7 @@ legacylinks:
   - https://www-mania-torrent.com/
   - https://www-world-torrent.com/
   - https://ww1-world-torrent.com/
+  - https://ww1-cine-torrent.com/
 
 caps:
   categorymappings:
