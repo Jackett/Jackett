@@ -5,6 +5,8 @@ description: "TheShow (TSBZ) is a Private Torrent Tracker for ENTERTAINMENT-INDU
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 3bf77e8aa3cea0c26ae0bceb5c1f20fe75a3d64c # Expired 21st Feb 2026
 links:
   - https://theshow.click/
 legacylinks:
