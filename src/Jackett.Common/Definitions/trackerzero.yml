@@ -1,0 +1,147 @@
+---
+id: trackerzero
+name: TrackerZero
+description: "TrackerZero is an ITALIAN Private Torrent Tracker for MOVIES / TV / MUSIC / SOFTWARE"
+language: it-IT
+type: private
+encoding: UTF-8
+links:
+  - https://trackerzero.it/
+caps:
+  # https://trackerzero.it/docs#/torrents/list_categories_api_torrents_categories_get
+  categorymappings:
+    - {id: 4, cat: Movies/UHD, desc: "4k"}
+    - {id: 5, cat: Movies/SD, desc: "DvdRiP"}
+    - {id: 6, cat: Movies/SD, desc: "News_Cinema"}
+    - {id: 7, cat: Movies/HD, desc: "BluRay"}
+    - {id: 8, cat: Movies/DVD, desc: "DVD-R"}
+    - {id: 9, cat: TV/HD, desc: "SerieTV_Straniere"}
+    - {id: 10, cat: TV/HD, desc: "SerieTV_Italiane"}
+    - {id: 11, cat: TV/HD, desc: "DocuSerie"}
+    - {id: 12, cat: TV/Documentary, desc: "Documentari"}
+    - {id: 13, cat: Audio/MP3, desc: "MP3"}
+    - {id: 14, cat: Audio/Lossless, desc: "Flac"}
+    - {id: 15, cat: Audio/Video, desc: "VideoMusicai"}
+    - {id: 16, cat: Movies/Other, desc: "Spettacoli_E_Teatro"}
+    - {id: 17, cat: Movies/HD, desc: "Saghe"}
+    - {id: 18, cat: PC/Games, desc: "Giochi_PC"}
+    - {id: 19, cat: PC/Games, desc: "Giochi_Linux"}
+    - {id: 20, cat: Console/Other, desc: "Giochi_Mac"}
+    - {id: 21, cat: PC/0day, desc: "App_Windows"}
+    - {id: 22, cat: PC/0day, desc: "App_Linux"}
+    - {id: 23, cat: PC/Mac, desc: "App_Mac"}
+    - {id: 24, cat: TV/Anime, desc: "Cartoon"}
+    - {id: 25, cat: TV/Anime, desc: "Anime"}
+    - {id: 26, cat: Books/Mags, desc: "Quotidiani_Periodici"}
+    - {id: 27, cat: Books/EBook, desc: "Libri"}
+    - {id: 28, cat: Audio/Audiobook, desc: "Audiolibri"}
+    - {id: 29, cat: Other, desc: "VideoCorsi_E_Guide"}
+    - {id: 30, cat: TV/Other, desc: "Programmi tv"}
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API key
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Fetch/XHR</b> button (Chrome Browser) or <b>XHR</b> button (FireFox)</li><li>Perform any search on the web site</li><li>Click on the first <i>torrents?limit=30&page=1&sort_by=created_at&sort_dir=desc</i> entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the API key from the <b>Authorization</b> string <i>(everything after 'Authorization: Bearer ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_passkey
+    type: info
+    label: About your Passkey
+    default: "Find your Passkey by accessing your <a href=\"https://trackerzero.it/\" target=\"_blank\">TrackerZero</a> <i>Profile</i> page and scrolling down to the <b>Passkey</b> section."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: api/torrents/latest
+  method: get
+
+search:
+  # docs: https://trackerzero.it/docs
+  paths:
+    # https://trackerzero.it/api/torrents?limit=100&page=1&q=pacific&sort_by=created_at&sort_dir=desc
+    - path: api/torrents
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    limit: 100
+    page: 1
+    q: "{{ .Keywords }}"
+    sort_by: "{{ .Config.sort }}"
+    sort_dir: "{{ .Config.type }}"
+    # category searching not supported, using it causes 500 internal server error
+
+  keywordsfilters:
+    - name: diacritics
+      args: replace
+
+  rows:
+    selector: items
+
+  fields:
+    category:
+      selector: category.id
+    title:
+      selector: name
+    _id:
+      selector: id
+    details:
+      text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}"
+    download:
+      text: "{{ .Config.sitelink }}api/torrents/{{ .Result._id }}/download-rss?passkey={{ .Config.passkey }}"
+    poster:
+      selector: poster
+    date:
+      # "created_at": "2026-02-20T18:17:51.514900+00:00" is returned by Newtonsoft.Json.Linq as 02/20/2026 18:17:51
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# json api
