@@ -139,6 +139,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_limit
+    type: info
+    label: "Download Daily Limit"
+    default: "Polskie-Torrenty has a daily limit on downloads. If downloads <b>fail</b> then you have exceeded your daily limit. Try again tomorrow."
 
 login:
   method: cookie
