@@ -215,6 +215,7 @@ caps:
     - {id: 414, cat: Console/PS4, desc: " |- PS4 / PS5"}
     - {id: 402, cat: Console/PS3, desc: " |- PS/PS2/PS3"}
     - {id: 415, cat: Console/PSP, desc: " |- PSP / Игры PS1 для PSP"}
+    - {id: 431, cat: Console/Other, desc: " |- Switch"}
     - {id: 416, cat: Console/XBox 360, desc: " |- Xbox 360"}
     - {id: 417, cat: PC/Games, desc: " |- SteamMachine"}
     # Софт # Software
