@@ -1,0 +1,122 @@
+---
+id: axelbg
+name: AxelBg
+description: "AxelBg is a BULGARIAN Public Torrent Tracker for 0DAY / GENERAL"
+language: bg-BG
+type: public
+encoding: windows-1251
+links:
+  - https://axelbg.net/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: TV/Anime, desc: "Anime"}
+    - {id: 44, cat: Books/EBook, desc: "Books"}
+    - {id: 42, cat: Books/Comics, desc: "Cartoons"}
+    - {id: 43, cat: Books/Comics, desc: "Comics"}
+    - {id: 45, cat: Other, desc: "Education"}
+    - {id: 2, cat: Console, desc: "Games"}
+    - {id: 9, cat: Other, desc: "MISC"}
+    - {id: 8, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 49, cat: Movies/HD, desc: "Movies/Hi-Res"}
+    - {id: 3, cat: Movies/SD, desc: "Movies/VHS"}
+    - {id: 7, cat: Movies/SD, desc: "Movies/XviD"}
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 47, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 46, cat: Audio/Lossless, desc: "Music/Lossless"}
+    - {id: 48, cat: Movies, desc: "Pictures"}
+    - {id: 1, cat: PC, desc: "Software"}
+    - {id: 5, cat: TV, desc: "TV Episodes"}
+    - {id: 50, cat: TV/HD, desc: "TV/Hi-Res"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "AxelBg blocks Non-Bulgarian IP addresses. No results likely means your IP was not accepted. Test by accessing <a href=\"https://axelbg.net/\" target=\"_blank\">AxelBg</a> WEB site with your browser."
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 active, 1 incldead, 2 onlydead, 3 onlyfree, 4 only BGAudio, 5 only BGSubs
+    incldead: 1
+    # intitle, everywhere
+    place: intitle
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table > tbody > tr:has(div.rPreview)
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="download.php"]
+      attribute: href
+    poster:
+      # <div class="rPreview" onmouseover="showBimage(this, '25', 'https://img.imghosting.biz/524/cd08136cf63c733255cda9d51e566429.jpg')">
+      selector: div.rPreview
+      attribute: onmouseover
+      filters:
+        - name: regexp
+          args: (?=http)(.+?)\'
+    files:
+      selector: td:nth-last-child(7)
+    date:
+      # 2026-02-22<br />11:23:43
+      selector: td:nth-last-child(5)
+      filters:
+        - name: append
+          args: " +02:00" # EET
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    size:
+      selector: td:nth-last-child(4)
+    grabs:
+      selector: td:nth-last-child(3)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

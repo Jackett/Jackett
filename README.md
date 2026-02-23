@@ -90,6 +90,7 @@ Prior versions of Jackett are no longer supported.
  * ApacheTorrent
  * arab-torrents.com
  * AudioBook Bay (ABB)
+ * AxelBg
  * Bangumi Moe
  * BigFANGroup
  * BitRu
