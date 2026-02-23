@@ -18,6 +18,8 @@ caps:
     - {id: 10, cat: TV/Anime, desc: "Series Anime"}
     - {id: 6, cat: Other, desc: "Varios"}
     - {id: 11, cat: Movies/UHD, desc: "Películas 4K"}
+    # undocumented
+    - {id: 4, cat: Console, desc: "Juegos"}
 
   modes:
     search: [q]
