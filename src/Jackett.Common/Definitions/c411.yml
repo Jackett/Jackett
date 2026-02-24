@@ -50,8 +50,7 @@ caps:
     - {id: 7010, cat: Books/Mags, desc: "Presse"}
     - {id: 7020, cat: Books/EBook, desc: "Livres"}
     - {id: 7030, cat: Books/Comics, desc: "BDs & Comics & Manga"}
-    - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets &
-    Pack & Personnages"}
+    - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets & Pack & Personnages"}
 
   modes:
     search: [q]
