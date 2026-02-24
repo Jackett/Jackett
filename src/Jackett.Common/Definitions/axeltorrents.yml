@@ -1,9 +1,9 @@
 ---
-id: axelbg
-name: AxelBg
-description: "AxelBg is a BULGARIAN Public Torrent Tracker for 0DAY / GENERAL"
+id: axeltorrents
+name: AXEL Torrents
+description: "AXEL Torrents is a BULGARIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: bg-BG
-type: public
+type: semi-private
 encoding: windows-1251
 links:
   - https://axelbg.net/
@@ -32,12 +32,22 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
 settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -54,21 +64,37 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
   - name: ip_filtering
     type: info
     label: "IP Filtering"
-    default: "AxelBg blocks Non-Bulgarian IP addresses. No results likely means your IP was not accepted. Test by accessing <a href=\"https://axelbg.net/\" target=\"_blank\">AxelBg</a> WEB site with your browser."
+    default: "AXEL Torrents blocks Non-Bulgarian IP addresses. No results likely means your IP was not accepted. Test by accessing <a href=\"https://axelbg.net/\" target=\"_blank\">AXEL Torrents</a> WEB site with your browser."
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.login-note
+  test:
+    path: /
+    selector: a[href="/logout.php"]
 
 search:
   paths:
     - path: browse.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # 0 active, 1 incldead, 2 onlydead, 3 onlyfree, 4 only BGAudio, 5 only BGSubs
-    incldead: 1
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     # intitle, everywhere
-    place: intitle
+    place: "{{ if .Query.IMDBID }}everywhere{{ else }}intitle{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -116,7 +142,14 @@ search:
     leechers:
       selector: td:nth-last-child(1)
     downloadvolumefactor:
-      text: 0
+      case:
+        img[src="/images/free.gif"]: 0
+        "*": 1
     uploadvolumefactor:
       text: 1
-# engine n/a
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+    description:
+      selector: em
+# engine n/a (based on NexusPHP)
