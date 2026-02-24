@@ -13,15 +13,19 @@ legacylinks:
 caps:
   categorymappings:
     # from https://c411.org/api/torznab?apikey=YOUR-API-KEY&t=caps
-    - {id: 1000, cat: Console, desc: "Jeux Vidéo & Emulation"}
+    - {id: 1000, cat: Console, desc: "Jeux Vidéo & Emulation & VR"}
     - {id: 1030, cat: Console/Wii, desc: "Nintendo"}
-    - {id: 1040, cat: Console/XBox, desc: "Xbox"}
+    - {id: 1040, cat: Console/XBox, desc: "Microsoft"}
     - {id: 1080, cat: Console/PS4, desc: "Sony"}
     - {id: 1090, cat: Console/Other, desc: "Jeux Autre & ROM/ISO"}
     - {id: 2000, cat: Movies, desc: "Films & Vidéos"}
-    - {id: 2060, cat: Movies/Other, desc: "Animation Films & Vidéo-clips"}
+    - {id: 2010, cat: Movies/Other, desc: "Films Collection"}
+    - {id: 2030, cat: Movies/Foreign, desc: "Films Foreign"}
+    - {id: 2050, cat: Movies/Other, desc: "Vidéo-clips"}
+    - {id: 2060, cat: Movies/Other, desc: "Films Animation"}
     - {id: 2070, cat: Movies, desc: "Films Documentaire"}
-    - {id: 2090, cat: Movies/Other, desc: "Films Concert & Spectacle"}
+    - {id: 2080, cat: Movies/Other, desc: "Films Spectacle"}
+    - {id: 2090, cat: Movies/Other, desc: "Films Concert"}
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3010, cat: Audio/MP3, desc: "Musique"}
     - {id: 3030, cat: Audio/Audiobook, desc: "Audiobooks"}
@@ -36,7 +40,7 @@ caps:
     - {id: 5060, cat: TV/Sport, desc: "Sport"}
     - {id: 5070, cat: TV/Anime, desc: "Animation Série"}
     - {id: 5080, cat: TV/Documentary, desc: "Emission TV"}
-    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6000, cat: XXX, desc: "3X & 3X VR"}
     - {id: 6010, cat: XXX/DVD, desc: "3X Films"}
     - {id: 6050, cat: XXX/Other, desc: "3X Ebooks"}
     - {id: 6060, cat: XXX/ImageSet, desc: "3X Images"}
@@ -46,7 +50,8 @@ caps:
     - {id: 7010, cat: Books/Mags, desc: "Presse"}
     - {id: 7020, cat: Books/EBook, desc: "Livres"}
     - {id: 7030, cat: Books/Comics, desc: "BDs & Comics & Manga"}
-    - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets & Personnages"}
+    - {id: 8010, cat: Other/Misc, desc: "Imprimante 3D & Objets &
+    Pack & Personnages"}
 
   modes:
     search: [q]
