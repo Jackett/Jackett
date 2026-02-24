@@ -99,7 +99,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table > tbody > tr:has(div.rPreview)
+    selector: table > tbody > tr.rollout
 
   fields:
     category:
