@@ -157,6 +157,31 @@ namespace Jackett.Common.Indexers.Definitions
             return match.Success ? match.Groups[1].Value : title;
         }
 
+        private static string AppendDescriptionToTitle(string baseTitle, string cleanDescription, string description)
+        {
+            var formattedTitle = baseTitle.Trim();
+            if (!string.IsNullOrEmpty(cleanDescription))
+            {
+                var stringSeparators = new[]
+                {
+                    " / "
+                };
+                var titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
+                if (titleElements.Length < 6)
+                    // Usually non movies / series could have less than 6 elements, eg: Books.
+                    formattedTitle += " " + string.Join(" ", titleElements);
+                else
+                    formattedTitle += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
+                                      " " + titleElements[2] + " " + titleElements[4] + " " +
+                                      string.Join(" ", titleElements.Skip(6));
+            }
+
+            if (Regex.IsMatch(description, "(Dual|[Nn]acional|[Dd]ublado)"))
+                formattedTitle += " Brazilian";
+
+            return formattedTitle;
+        }
+
         private static string StripSearchString(string term, bool isAnime)
         {
             // Search does not support searching with episode numbers so strip it if we have one
@@ -399,32 +424,8 @@ namespace Jackett.Common.Indexers.Definitions
                         // Adjust the description in order to can be read by Radarr and Sonarr
                         var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
 
-                        // Formats the title so it can be parsed later
-                        var stringSeparators = new[]
-                        {
-                            " / "
-                        };
-                        var titleElements = cleanDescription.Split(stringSeparators, StringSplitOptions.None);
-
-                        string AppendDescriptionToTitle(string baseTitle)
-                        {
-                            var formattedTitle = baseTitle.Trim();
-                            if (titleElements.Length < 6)
-                                // Usually non movies / series could have less than 6 elements, eg: Books.
-                                formattedTitle += " " + string.Join(" ", titleElements);
-                            else
-                                formattedTitle += " " + titleElements[5] + " " + titleElements[3] + " " + titleElements[1] +
-                                                  " " + titleElements[2] + " " + titleElements[4] + " " +
-                                                  string.Join(" ", titleElements.Skip(6));
-
-                            if (Regex.IsMatch(release.Description, "(Dual|[Nn]acional|[Dd]ublado)"))
-                                formattedTitle += " Brazilian";
-
-                            return formattedTitle;
-                        }
-
-                        release.Title = AppendDescriptionToTitle(release.Title);
-                        nationalTitle = AppendDescriptionToTitle(nationalTitle);
+                        release.Title = AppendDescriptionToTitle(release.Title, cleanDescription, release.Description);
+                        nationalTitle = AppendDescriptionToTitle(nationalTitle, cleanDescription, release.Description);
 
                         // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46")
                         var dateStr = row.QuerySelector("span.time.bjtooltip")?.GetAttribute("title");
