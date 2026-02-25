@@ -441,11 +441,7 @@ namespace Jackett.Common.Indexers.Definitions
                         }
 
                         // check for previously stripped search terms
-                        var matchesReleaseTitle = query.MatchQueryStringAND(release.Title, null, searchTerm);
-                        var matchesNationalTitle = !matchesReleaseTitle &&
-                                                   query.MatchQueryStringAND(nationalTitle, null, searchTerm);
-
-                        if (!matchesReleaseTitle && !matchesNationalTitle)
+                        if (!query.MatchQueryStringAND(release.Title, null, searchTerm) && !query.MatchQueryStringAND(nationalTitle, null, searchTerm))
                         {
                             continue;
                         }
