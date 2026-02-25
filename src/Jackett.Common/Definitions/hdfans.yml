@@ -109,7 +109,7 @@ search:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
-    incldead: 0
+    incldead: 1
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl
