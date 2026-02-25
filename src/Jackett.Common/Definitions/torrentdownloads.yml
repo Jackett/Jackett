@@ -68,7 +68,7 @@ download:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}/search/{{ else }}/today/{{ end }}"
+    - path: "{{ if .Keywords }}/search/{{ else }}/yesterday/{{ end }}"
       followredirect: true
   inputs:
     $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
