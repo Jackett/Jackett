@@ -9,9 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrentsome235.com/
+  - https://torrentsome236.com/
 legacylinks:
-  - https://torrentsome220.com/
   - https://torrentsome221.com/
   - https://torrentsome222.com/
   - https://torrentsome223.com/
@@ -26,6 +25,7 @@ legacylinks:
   - https://torrentsome232.com/
   - https://torrentsome233.com/
   - https://torrentsome234.com/
+  - https://torrentsome235.com/
 
 caps:
   categorymappings:
