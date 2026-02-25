@@ -99,6 +99,7 @@ caps:
     - {id: 102, cat: Other, desc: "Post And Share"}
     - {id: 100, cat: Other, desc: "Tutorials"} # undocumented
     - {id: 103, cat: Other, desc: "Other Topic"} # undocumented
+    - {id: 166, cat: PC, desc: "Windows 64 Bit"} # undocumented
 
   modes:
     search: [q]
