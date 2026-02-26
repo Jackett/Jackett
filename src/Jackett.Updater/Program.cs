@@ -285,6 +285,7 @@ namespace Jackett.Updater
                 "Definitions/audiobooktorrents.yml", // renamed to abtorrents
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
+                "Definitions/axeltorrents.yml",
                 "Definitions/b2s-share.yml",
                 "Definitions/badasstorrents.yml",
                 "Definitions/baibako.yml", // renamed rudub #5673
