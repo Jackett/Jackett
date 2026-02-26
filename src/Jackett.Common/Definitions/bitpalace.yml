@@ -5,6 +5,8 @@ description: "Bitpalace is a HUNGARIAN Private Torrent Tracker for MOVIES / TV /
 language: hu-HU
 type: private
 encoding: UTF-8
+certificates:
+  - 87c00996262837ea785a43f1f1fc0a7b31956182 # using cert for .hu domain
 links:
   - https://bitpalace.cc/
 legacylinks:
