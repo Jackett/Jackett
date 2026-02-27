@@ -39,12 +39,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -71,21 +70,10 @@ settings:
       a: asc
 
 login:
-  path: ucp.php?mode=login
-  method: form
-  form: form[action^="./ucp.php?mode=login"]
+  # using cookie method because site returns SQL error on first access
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    autologin: on
-    redirect: index.php
-    login: Войти
-  selectorinputs:
-    sid:
-      selector: input[name="sid"]
-      attribute: value
-  error:
-    - selector: span.error
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href^="./ucp.php?mode=logout&sid="]
