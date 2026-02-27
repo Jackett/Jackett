@@ -27,7 +27,8 @@ caps:
     - {id: 33, cat: Movies/Foreign, desc: " |- Перевод на узбекский"}
     - {id: 14, cat: Movies, desc: "Российские кинофильмы"}
     - {id: 344, cat: Movies, desc: " |- Новинки 2026"}
-    - {id: 24, cat: Movies, desc: " |- Фильмы 2025"}
+    - {id: 24, cat: Movies, desc: " |- Российские фильмы 2021-2025 годов"}
+    - {id: 430, cat: Movies, desc: " |- Российские фильмы 2011-2020 годов"}
     - {id: 223, cat: Movies, desc: " |- Кино СССР"}
     - {id: 16, cat: Movies, desc: " |- Фильмы (HDvideo)"}
     - {id: 190, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
@@ -40,6 +41,8 @@ caps:
     - {id: 412, cat: TV/Foreign, desc: " |- Зарубежные сериалы (HD)"}
     - {id: 427, cat: TV/Foreign, desc: " |- Зарубежные сериалы (FullHD)"}
     - {id: 411, cat: TV/Foreign, desc: " |- Зарубежные сериалы (UHD)"}
+    - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
+    - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
     - {id: 418, cat: TV, desc: "Российские сериалы"}
     - {id: 419, cat: TV, desc: " |- Российские сериалы (HD)"}
     - {id: 428, cat: TV, desc: " |- Российские сериалы (FullHD)"}
@@ -49,12 +52,9 @@ caps:
     - {id: 429, cat: TV/Foreign, desc: " |- Азиатские сериалы (FullHD)"}
     - {id: 422, cat: TV/Foreign, desc: " |- Азиатские сериалы (UHD)"}
     - {id: 97, cat: TV, desc: "Сериалы"}
-    - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
-    - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
     - {id: 102, cat: TV, desc: " |- Российские сериалы"}
     - {id: 100, cat: TV, desc: " |- Турецкие сериалы"}
     - {id: 99, cat: TV, desc: " |- Узбекские сериалы"}
-    - {id: 98, cat: TV, desc: " |- Мультсериалы"}
     # Мультфильмы # Cartoons
     - {id: 36, cat: TV/Foreign, desc: "Зарубежные мультфильмы"}
     - {id: 48, cat: TV/Foreign, desc: " |- Новинки 2026"}
@@ -74,6 +74,7 @@ caps:
     - {id: 187, cat: TV, desc: " |- Мультфильмы 4K, 3D"}
     - {id: 49, cat: TV, desc: " |- Перевод на узбекский"}
     - {id: 403, cat: TV, desc: " |- Узбекские мультфильмы"}
+    - {id: 98, cat: TV, desc: " |- Мультсериалы"}
     # Аниме # Anime
     - {id: 345, cat: TV/Anime, desc: "Сериалы"}
     - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
@@ -168,6 +169,15 @@ caps:
     - {id: 166, cat: Books, desc: "Книги FB2"}
     - {id: 173, cat: Books, desc: " |- Художественная литература"}
     - {id: 314, cat: Books, desc: " |- Учебно-техническая литература"}
+    - {id: 434, cat: Books/Mags, desc: "Журналы"}
+    - {id: 435, cat: Books/Mags, desc: " |- Авто-мото"}
+    - {id: 437, cat: Books/Mags, desc: " |- Строительство и ремонт"}
+    - {id: 441, cat: Books/Mags, desc: " |- Сад и огород"}
+    - {id: 436, cat: Books/Mags, desc: " |- Кулинория"}
+    - {id: 442, cat: Books/Mags, desc: " |- Наука"}
+    - {id: 440, cat: Books/Mags, desc: " |- Космос"}
+    - {id: 439, cat: Books/Mags, desc: " |- История"}
+    - {id: 438, cat: Books/Mags, desc: " |- Хобби"}
     - {id: 167, cat: Audio/Audiobook, desc: "Аудиокниги"}
     - {id: 335, cat: Audio/Audiobook, desc: " |- ♫ Русская литература ХХ-ХХI века"}
     - {id: 232, cat: Audio/Audiobook, desc: " |- ♫ Детективы, приключения, триллеры"}
@@ -296,14 +306,8 @@ caps:
     - {id: 386, cat: PC/Mobile-iOS, desc: " |- iOS"}
     - {id: 382, cat: PC/Mobile-Android, desc: " |- Android"}
     - {id: 379, cat: PC/Mobile-Other, desc: " |- Symbian"}
-    - {id: 373, cat: PC/Mobile-Other, desc: "Прошивки"}
-    - {id: 391, cat: PC/Mobile-Other, desc: " |- Java"}
-    - {id: 388, cat: PC/Mobile-Other, desc: " |- Windows Mobile / Windows Phone"}
-    - {id: 385, cat: PC/Mobile-iOS, desc: " |- iOS"}
-    - {id: 381, cat: PC/Mobile-Android, desc: " |- Android"}
-    - {id: 378, cat: PC/Mobile-Other, desc: " |- Symbian"}
-    - {id: 377, cat: PC/Mobile-Other, desc: " |- Другие"}
     - {id: 367, cat: PC/Mobile-Other, desc: "Дополнительно"}
+    - {id: 373, cat: PC/Mobile-Other, desc: " |- Прошивки"}
     - {id: 368, cat: PC/Mobile-Other, desc: " |- Софт для работы с телефоном"}
     - {id: 370, cat: PC/Mobile-Other, desc: " |- Видео для КПК"}
     - {id: 369, cat: PC/Mobile-Other, desc: " |- Темы и Обои"}
