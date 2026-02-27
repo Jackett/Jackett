@@ -77,6 +77,7 @@ caps:
     - {id: 846, cat: TV/Foreign, desc: "|- Зарубежные сериалы"}
     - {id: 856, cat: TV/Foreign, desc: "|-- Исторические, военные"}
     - {id: 847, cat: TV, desc: "|- Отечественные сериалы (HD, DVD Video)"}
+    - {id: 1188, cat: TV, desc: "|-- Детектив, боевик, криминал"}
     - {id: 857, cat: TV, desc: "|-- Исторические, военные"}
     - {id: 848, cat: TV/Foreign, desc: "|- Зарубежные сериалы (HD, DVD Video)"}
     - {id: 858, cat: TV/Foreign, desc: "|-- Исторические, военные"}
