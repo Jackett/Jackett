@@ -9,7 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://ww2-mania-torrent.com/
+  - https://ww3-mania-torrent.com/
   - https://ww2-cine-torrent.com/
   - https://ww2-magnet-torrent.com/
   - https://ww2-mega-torrent.com/
@@ -19,7 +19,6 @@ legacylinks:
   # latest domains list
   - https://www.rantop.org/
   - https://www.site-torrent.cc/
-  - https://www.torrent-site.com/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
@@ -28,6 +27,7 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.site-torrent.com/
   - https://www.rantop.my/
+  - https://www.torrent-site.com/
   # actual legacylinks
   - https://ww1-zetorrents.me/
   - https://www.zetorrents.rent/
@@ -38,16 +38,15 @@ legacylinks:
   - https://www.magnet-torrent1.com/
   - https://ww1-magnet-torrent.com/
   - https://www-magnet-torrent.com/
-  - https://www.mania-torrent.com/
   - https://ww1-mania-torrent.com/
   - https://www-mania-torrent.com/
+  - https://ww2-mania-torrent.com/
   - https://www.mega-torrent9.com/
   - https://ww1-mega-torrent.com/
   - https://www-mega-torrent.com/
   - https://www.warez-torrent1.com/
   - https://ww1-warez-torrent.com/
   - https://www-warez-torrent.com/
-  - https://www.world-torrent.com/
   - https://www.world-torrent1.com/
   - https://www-world-torrent.com/
   - https://ww1-world-torrent.com/
