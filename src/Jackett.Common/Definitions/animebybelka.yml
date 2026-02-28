@@ -44,6 +44,11 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: stripcyrillic
     type: checkbox
     label: Strip Cyrillic Letters
@@ -95,6 +100,9 @@ search:
     st: 0
     ch: 300
     t: 0
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   keywordsfilters:
     # strip season and/or ep
