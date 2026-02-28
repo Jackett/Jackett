@@ -6,63 +6,64 @@ language: bg-BG
 type: private
 encoding: UTF-8
 links:
-  - http://www.p2pbg.com/ # site does not support https ERR_CONNECTION_REFUSED
+  - https://www.p2pbg.com/
 legacylinks:
+  - http://www.p2pbg.com/
   - http://p2pbg.com/ # site does not support https ERR_CONNECTION_REFUSED
 
 caps:
   categorymappings:
     # movies
     - {id: 1, cat: Movies/SD, desc: "Movies XviD"}
-    - {id: 55, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 16, cat: Movies/HD, desc: "Movies x264"}
-    - {id: 11, cat: Movies/DVD, desc: "Movies DVD"}
-    - {id: 17, cat: Movies/HD, desc: "Movies MPEG2"}
-    - {id: 18, cat: Movies/BluRay, desc: "Movies BR/HD DVD"}
     - {id: 7, cat: TV/Documentary, desc: "Movies Documentaries"}
-    - {id: 35, cat: Movies, desc: "Movies GSM"}
-    - {id: 34, cat: Movies, desc: "Movies BG"}
-    - {id: 24, cat: TV/SD, desc: "TV BG"}
+    - {id: 11, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 14, cat: TV, desc: "TV Shows"}
     - {id: 15, cat: TV, desc: "TV Boxset"}
-    - {id: 38, cat: TV/Anime, desc: "TV Cartoons"}
+    - {id: 16, cat: Movies/HD, desc: "Movies x264"}
+    - {id: 17, cat: Movies/HD, desc: "Movies MPEG2"}
+    - {id: 18, cat: Movies/BluRay, desc: "Movies BR/HD DVD"}
+    - {id: 24, cat: TV/SD, desc: "TV BG"}
+    - {id: 34, cat: Movies, desc: "Movies BG"}
+    - {id: 35, cat: Movies, desc: "Movies GSM"}
+    - {id: 38, cat: TV/Anime, desc: "Cartoons"}
+    - {id: 55, cat: Movies/3D, desc: "Movies 3D"}
     # music
     - {id: 2, cat: Audio/MP3, desc: "Music Song"}
-    - {id: 28, cat: Audio, desc: "Music Album"}
-    - {id: 29, cat: Audio, desc: "Music Discography"}
     - {id: 3, cat: Audio/Video, desc: "Music DVD"}
     - {id: 19, cat: Audio/Video, desc: "Music Video"}
+    - {id: 28, cat: Audio, desc: "Music Album"}
+    - {id: 29, cat: Audio, desc: "Music Discography"}
     # games
     - {id: 8, cat: PC/Games, desc: "Games PC ISO"}
     - {id: 9, cat: PC/Games, desc: "Games PC Rips"}
-    - {id: 33, cat: Console/Wii, desc: "Games Wii"}
     - {id: 12, cat: Console/PS3, desc: "Games PS2"}
-    - {id: 23, cat: Console/PS3, desc: "Games PS3"}
     - {id: 20, cat: Console/PSP, desc: "Games PSP"}
     - {id: 21, cat: Console/XBox, desc: "Games XboX"}
     - {id: 22, cat: Console/XBox 360, desc: "Games X360"}
+    - {id: 23, cat: Console/PS3, desc: "Games PS3"}
+    - {id: 33, cat: Console/Wii, desc: "Games Wii"}
     # appz
     - {id: 26, cat: PC/ISO, desc: "Appz PC ISO"}
-    - {id: 31, cat: PC/0day, desc: "Appz Ripped"}
-    - {id: 30, cat: PC, desc: "Appz Linux"}
-    - {id: 49, cat: PC/Mac, desc: "Appz MacOS"}
     - {id: 27, cat: PC, desc: "Appz GSM"}
+    - {id: 30, cat: PC, desc: "Appz Linux"}
+    - {id: 31, cat: PC/0day, desc: "Appz Ripped"}
+    - {id: 49, cat: PC/Mac, desc: "Appz MacOS"}
     # sports
     - {id: 5, cat: TV/Sport, desc: "Sport F1"}
     - {id: 51, cat: TV/Sport, desc: "Sport"}
     # other
-    - {id: 6, cat: Books, desc: "Books"}
     - {id: 4, cat: Other, desc: "Other"}
+    - {id: 6, cat: Books, desc: "Books"}
     - {id: 37, cat: Other/Misc, desc: "Pictures"}
     - {id: 39, cat: Other, desc: "e-Learning"}
-    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile GSM"}
     - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile iPhone"}
+    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile GSM"}
     # 3x
     - {id: 13, cat: XXX, desc: "XXX"}
-    - {id: 54, cat: XXX/x264, desc: "XXX HD"}
     - {id: 32, cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}
     - {id: 53, cat: XXX, desc: "XXX Hentai"}
+    - {id: 54, cat: XXX/x264, desc: "XXX HD"}
     - {id: 56, cat: XXX, desc: "XXX 3D"}
 
   modes:
@@ -99,9 +100,9 @@ settings:
       ASC: asc
 
 login:
-  path: index.php?page=login
+  path: login
   method: form
-  form: form[action="index.php?page=login"]
+  form: form[name="login"]
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
@@ -109,14 +110,13 @@ login:
     - selector: td.lista span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href$="logout"]
 
 search:
   paths:
-    # http://p2pbg.com/index.php?page=torrents&search=%D0%9A%D0%B0%D1%82%D0%BE&category=0&active=0
-    - path: index.php
+    # https://www.p2pbg.com/torrents?search=&category=0&active=0&hidexxx=on
+    - path: torrents
   inputs:
-    page: torrents
     category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0;{{ end }}"
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 all 1, active, 2 dead
@@ -125,44 +125,25 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: td table[width="100%"] tr td table.lista tr:has(a[href^="index.php?page=torrent-details"])
+    selector: td table[width="100%"] tr td table.lista tr:has(a[href*="/torrents/"])
 
   fields:
     category:
-      selector: td a[href*="category="]
+      selector: a[href*="category="]
       attribute: href
       filters:
         - name: querystring
           args: category
-    title_default:
-      # often abbreviated
-      selector: td:nth-child(2) a
     title:
-      # usually full length
-      selector: td a[title]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
-      filters:
-        - name: replace
-          args: ["View details: ", ""]
-        - name: replace
-          args: ["Преглед на детайли: ", ""]
+      selector: td:nth-child(2) a
     details:
-      selector: td a[href*="id="]
+      selector: a[href*="/torrents/"]
       attribute: href
-    download:
-      selector: td a[href*="id="]
+    magnet:
+      selector: a[href^="magnet:?xt="]
       attribute: href
-      filters:
-        - name: querystring
-          args: id
-        - name: prepend
-          args: "download.php?id="
-        - name: append
-          args: "&f={{ .Result.title }}.torrent"
     poster:
-      selector: td a:has(img[src^="/torrentimg/pic"])
+      selector: a:has(img[src*="/torrentimg/pic"])
       attribute: onmouseover
       filters:
         - name: regexp
