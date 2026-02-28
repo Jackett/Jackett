@@ -142,6 +142,7 @@ Prior versions of Jackett are no longer supported.
  * Nipponsei
  * NoNaMe Club (NNM-Club)
  * NorTorrent
+ * Nostr (NIP-35)
  * Nyaa.si
  * OneJAV
  * OpenSharing
