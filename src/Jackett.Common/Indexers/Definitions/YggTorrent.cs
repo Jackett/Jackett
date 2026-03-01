@@ -141,6 +141,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         #endregion
 
+        #region Is Movie search
+
+        private bool isMovieSearch = false;
+
+        #endregion
+
         #region Configuration Keys
 
         private const string CfgUsername = "username";
@@ -521,9 +527,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             rawQuery = NormalizeFrenchSeasonInRawQuery(rawQuery);
 
-            var isMovieQuery = IsMovieQuery(query, trackerCats);
+            isMovieSearch = IsMovieQuery(query, trackerCats);
 
-            var keywords = BuildKeywordsFromRaw(rawQuery, isMovieQuery);
+            var keywords = BuildKeywordsFromRaw(rawQuery);
 
             var order = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgOrder)).Value;
             var sortKey = ((SingleSelectConfigurationItem)configData.GetDynamic(CfgSort)).Value;
@@ -635,7 +641,7 @@ namespace Jackett.Common.Indexers.Definitions
         /// Constructs search keywords from the raw query.
         /// Applies configuration options (strip season, enhanced anime)
         /// </summary>
-        private string BuildKeywordsFromRaw(string rawQuery, bool isMovieQuery)
+        private string BuildKeywordsFromRaw(string rawQuery)
         {
             var keywords = rawQuery.Trim();
 
@@ -645,12 +651,12 @@ namespace Jackett.Common.Indexers.Definitions
             var enhancedAnime = GetEnhancedAnimeEnabled();
             var enhancedAnime4 = GetEnhancedAnime4Enabled();
 
-            if (enhancedAnime4 && !isMovieQuery)
+            if (enhancedAnime4 && !isMovieSearch)
             {
                 keywords = _StandaloneEpisode4Digits.Replace(keywords, "E$1");
             }
 
-            if (enhancedAnime && !isMovieQuery)
+            if (enhancedAnime && !isMovieSearch)
             {
                 keywords = _StandaloneEpisode3Digits.Replace(keywords, "E$1");
                 keywords = _StandaloneEpisode2Digits.Replace(keywords, "E$1");
@@ -978,11 +984,11 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            if (enhancedAnime4)
+            if (enhancedAnime4 && !isMovieSearch)
             {
                 t = ConvertStandaloneNumbersToEpisodes(t, includeYears: true);
             }
-            else if (enhancedAnime)
+            else if (enhancedAnime && !isMovieSearch)
             {
                 t = ConvertStandaloneNumbersToEpisodes(t, includeYears: false);
             }
