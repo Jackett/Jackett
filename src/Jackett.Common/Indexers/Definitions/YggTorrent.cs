@@ -521,7 +521,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             rawQuery = NormalizeFrenchSeasonInRawQuery(rawQuery);
 
-            var isMovieQuery = IsMovieQuery(rawQuery);
+            var isMovieQuery = IsMovieQuery(query);
 
             var keywords = BuildKeywordsFromRaw(rawQuery, isMovieQuery);
 
