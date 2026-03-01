@@ -628,6 +628,8 @@ namespace Jackett.Common.Indexers.Definitions
         /// </summary>
         private bool IsMovieQuery(TorznabQuery query)
         {
+            if (query.Categories == null)
+                return false;
             return query.Categories?.Any(cat => IsMovieOnlyCategory(cat)) == true;
         }
 
