@@ -628,7 +628,7 @@ namespace Jackett.Common.Indexers.Definitions
         /// </summary>
         private bool IsMovieQuery(TorznabQuery query)
         {
-            return query.Categories?.Any(cat => IsFilmVideoCategory(cat)) == true;
+            return query.Categories?.Any(cat => IsMovieOnlyCategory(cat)) == true;
         }
 
         /// <summary>
@@ -835,6 +835,7 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         private static bool IsFilmVideoCategory(int c) => c == 2145 || (c >= 2178 && c <= 2187);
+        private static bool IsMovieOnlyCategory(int c) => c == 2183 || c == 2178;
         private static bool IsAudioCategory(int c) => c == 2139 || (c >= 2147 && c <= 2150);
         private static bool IsApplicationCategory(int c) => c == 2144 || (c >= 2171 && c <= 2177);
         private static bool IsGameCategory(int c) => c == 2142 || (c >= 2159 && c <= 2167);
