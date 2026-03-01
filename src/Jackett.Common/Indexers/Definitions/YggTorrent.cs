@@ -634,16 +634,7 @@ namespace Jackett.Common.Indexers.Definitions
         /// </summary>
         private bool IsMovieQuery(TorznabQuery query, List<int> trackerCats)
         {
-<<<<<<< HEAD
-<<<<<<< HEAD
             return query.IsMovieSearch || (trackerCats?.Any(IsMovieOnlyCategory) ?? false);
-=======
-=======
-            if (query.Categories == null)
-                return false;
->>>>>>> 6665c95ca (Add fallback if rawsearch)
-            return query.Categories?.Any(cat => IsMovieOnlyCategory(cat)) == true;
->>>>>>> 9adc33f67 (Update YggTorrent.cs)
         }
 
         /// <summary>
