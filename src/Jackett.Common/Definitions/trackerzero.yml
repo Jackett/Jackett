@@ -26,9 +26,12 @@ caps:
     - {id: 19, cat: PC/Games, desc: "Giochi_Linux"}
     - {id: 20, cat: Console/Other, desc: "Giochi_Mac"}
     - {id: 18, cat: PC/Games, desc: "Giochi_PC"}
+    - {id: 34, cat: Console/PS4, desc: "Giochi PS4"}
+    - {id: 33, cat: Console/PS4, desc: "Giochi PS5"}
     - {id: 27, cat: Books/EBook, desc: "Libri"}
     - {id: 13, cat: Audio/MP3, desc: "MP3"}
     - {id: 6, cat: Movies/SD, desc: "News_Cinema"}
+    - {id: 35, cat: Console/NDS, desc: "Nintendo Switch"}
     - {id: 30, cat: TV/Other, desc: "Programmi tv"}
     - {id: 26, cat: Books/Mags, desc: "Quotidiani_Periodici"}
     - {id: 17, cat: Movies/HD, desc: "Saghe"}
