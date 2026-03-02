@@ -40,6 +40,11 @@ search:
     limit: 100
     search: "{{ .Keywords }}"
 
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
   rows:
     selector: torrents
     count:
@@ -55,21 +60,21 @@ search:
       selector: file_path
     download:
       text: "{{ if .Result.download_link }}/{{ .Result.download_link }}{{ else }}{{ end }}"
-    details_link:
+    details:
       selector: id
       filters:
         - name: prepend
-          args: "#/torrent/"
-    details:
-      text: "/{{ .Result.details_link }}"
+          args: "{{ .Config.sitelink }}}#/torrent/"
     magnet:
       optional: true
       selector: magnet_link
     date:
       selector: created_at
       filters:
+        - name: append
+          args: " -12:00" # NUT
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss"
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
       selector: file_size
     grabs:
