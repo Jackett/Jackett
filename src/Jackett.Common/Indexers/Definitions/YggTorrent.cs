@@ -521,7 +521,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             rawQuery = NormalizeFrenchSeasonInRawQuery(rawQuery);
 
-            var isMovieQuery = IsMovieQuery(query);
+            var isMovieQuery = IsMovieQuery(query, trackerCats);
 
             var keywords = BuildKeywordsFromRaw(rawQuery, isMovieQuery);
 
@@ -626,9 +626,9 @@ namespace Jackett.Common.Indexers.Definitions
         /// <summary>
         /// Check if the query is a movie query
         /// </summary>
-        private bool IsMovieQuery(TorznabQuery query)
+        private bool IsMovieQuery(TorznabQuery query, List<int> trackerCats)
         {
-            return query.IsMovieSearch || (query.Categories?.Any(IsMovieOnlyCategory) ?? false);
+            return query.IsMovieSearch || (trackerCats?.Any(IsMovieOnlyCategory) ?? false);
         }
 
         /// <summary>
