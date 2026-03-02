@@ -673,7 +673,6 @@ Prior versions of Jackett are no longer supported.
  * TVstore
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
- * UHDBits
  * UltraHD
  * UnlimitZ
  * upload.cx (ULCX)
@@ -1554,4 +1553,3 @@ Jackett is an open-source project maintained by the community.
 - [Release Notes](https://github.com/Jackett/Jackett/releases)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
-
