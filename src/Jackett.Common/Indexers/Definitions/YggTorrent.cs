@@ -147,12 +147,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         #endregion
 
-        #region Is Movie search
-
-        private bool isMovieSearch = false;
-
-        #endregion
-
         #region Configuration Keys
 
         private const string CfgUsername = "username";
