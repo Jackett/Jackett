@@ -141,7 +141,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         #endregion
         
-        private const bool isMovieSearch = false;
+        private bool isMovieSearch = false;
         
         #region Is Movie search
         
