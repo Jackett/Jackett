@@ -572,7 +572,7 @@ namespace Jackett.Common.Indexers.Definitions
                         html = resp.ContentString ?? "";
                     }
 
-                    releases.AddRange(ParseSearchResults(html));
+                    releases.AddRange(await ParseSearchResultsAsync(html, isMovieQuery));
                 }
             }
 
@@ -850,14 +850,14 @@ namespace Jackett.Common.Indexers.Definitions
 
         #region Parsing
 
-        private IEnumerable<ReleaseInfo> ParseSearchResults(string html)
+        private async Task<IEnumerable<ReleaseInfo>> ParseSearchResultsAsync(string html, bool isMovieQuery)
         {
             var releases = new List<ReleaseInfo>();
 
             try
             {
                 var parser = new HtmlParser();
-                using var doc = parser.ParseDocument(html);
+                using var doc = await parser.ParseDocumentAsync(html);
 
                 var rows = doc.QuerySelectorAll("table.table > tbody > tr:not(tr.ygg-promo-row-lc)");
                 foreach (var row in rows)
@@ -873,7 +873,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                     var id = idMatch.Groups[1].Value;
                     var titleRaw = a.TextContent?.Trim() ?? "";
-                    var title = NormalizeTitle(titleRaw);
+                    var title = NormalizeTitle(titleRaw, isMovieQuery);
 
                     var catHidden = row.QuerySelector("td:nth-child(1) > div.hidden")?.TextContent?.Trim() ?? "";
                     var catId = ParseUtil.CoerceInt(catHidden);
@@ -943,7 +943,7 @@ namespace Jackett.Common.Indexers.Definitions
         /// <summary>
         /// Normalize the title of a torrent according to the configuration options.
         /// </summary>
-        private string NormalizeTitle(string title)
+        private string NormalizeTitle(string title, bool isMovieQuery)
         {
             if (title.IsNullOrWhiteSpace())
                 return title ?? "";
@@ -978,11 +978,11 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            if (enhancedAnime4)
+            if (enhancedAnime4 && !isMovieQuery)
             {
                 t = ConvertStandaloneNumbersToEpisodes(t, includeYears: true);
             }
-            else if (enhancedAnime)
+            else if (enhancedAnime && !isMovieQuery)
             {
                 t = ConvertStandaloneNumbersToEpisodes(t, includeYears: false);
             }
