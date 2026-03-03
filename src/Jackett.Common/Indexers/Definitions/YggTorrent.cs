@@ -138,12 +138,12 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex _StandaloneEpisode4Digits = new Regex(
             @"(?<![SE\d])(?<=[\s\.\-\[\(]|^)(\d{4})(?=[\s\.\-\]\)]|$)",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
-
+            
         #endregion
         
-        private bool isMovieSearch = false;
-        
         #region Is Movie search
+        
+        private bool isMovieSearch = false;
         
         #endregion
 
