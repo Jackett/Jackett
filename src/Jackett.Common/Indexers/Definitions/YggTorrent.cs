@@ -140,6 +140,12 @@ namespace Jackett.Common.Indexers.Definitions
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         #endregion
+        
+        private const bool isMovieSearch = false;
+        
+        #region Is Movie search
+        
+        #endregion
 
         #region Is Movie search
 
