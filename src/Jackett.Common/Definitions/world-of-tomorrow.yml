@@ -13,51 +13,58 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 1107, cat: PC/Mac, desc: "Apps: MAC"}
-    - {id: 1018, cat: PC, desc: "Apps: Sonstige"}
-    - {id: 1028, cat: PC/0day, desc: "Apps: Windows"}
-    - {id: 1036, cat: Audio/Audiobook, desc: "Audio: Hörbücher"}
-    - {id: 1072, cat: Audio, desc: "Audio: Musik-Packs"}
-    - {id: 1093, cat: Audio/Video, desc: "Audio: Musik-Videos"}
-    - {id: 1070, cat: Audio/Lossless, desc: "Audio: Musik/Flac"}
-    - {id: 1014, cat: Audio/MP3, desc: "Audio: Musik/MP3"}
-    - {id: 1071, cat: Audio, desc: "Audio: Soundtracks"}
-    - {id: 1110, cat: Audio, desc: "Audio: WOTT"}
-    - {id: 1049, cat: Movies/HD, desc: "Filme: 1080p"}
-    - {id: 1090, cat: Movies/3D, desc: "Filme: 3D"}
-    - {id: 1048, cat: Movies/HD, desc: "Filme: 720p"}
-    - {id: 1087, cat: TV/Anime, desc: "Filme: Anime"}
-    - {id: 1047, cat: Movies/BluRay, desc: "Filme: Bluray"}
-    - {id: 1011, cat: Movies/DVD, desc: "Filme: DVD / HD2DVD"}
-    - {id: 1060, cat: Movies/HD, desc: "Filme: HDTV"}
-    - {id: 1091, cat: Movies, desc: "Filme: Packs"}
-    - {id: 1062, cat: Movies/SD, desc: "Filme: SD"}
-    - {id: 1089, cat: Movies/UHD, desc: "Filme: UHD"}
-    - {id: 1108, cat: TV, desc: "Filme: WOTT"}
-    - {id: 1108, cat: Movies, desc: "Filme: WOTT"}
-    - {id: 1079, cat: TV/HD, desc: "Serien: 1080P"}
-    - {id: 1095, cat: TV/UHD, desc: "Serien: 2160P"}
-    - {id: 1078, cat: TV/HD, desc: "Serien: 720P"}
-    - {id: 1105, cat: TV/Anime, desc: "Serien: Anime"}
-    - {id: 1100, cat: TV/HD, desc: "Serien: Packs HD"}
-    - {id: 1016, cat: TV/SD, desc: "Serien: Packs-SD"}
-    - {id: 1077, cat: TV/SD, desc: "Serien: SD"}
-    - {id: 1109, cat: TV, desc: "Serien: WOTT"}
-    - {id: 1064, cat: TV/Documentary, desc: "Sonstiges: Dokumentation"}
-    - {id: 1019, cat: Books/EBook, desc: "Sonstiges: Ebooks"}
-    - {id: 1111, cat: Books/EBook, desc: "Sonstiges: English Section"}
-    - {id: 1101, cat: TV, desc: "Sonstiges: Kids"}
-    - {id: 1096, cat: Other, desc: "Sonstiges: Sonstiges"}
-    - {id: 1092, cat: Console, desc: "Sonstiges: Wimmelbild"}
-    - {id: 1088, cat: XXX, desc: "Sonstiges: XXX"}
-    - {id: 1106, cat: XXX/ImageSet, desc: "Sonstiges: XXX Bilder"}
-    - {id: 1102, cat: XXX/Other, desc: "Sonstiges: XXX HENTAI"}
-    - {id: 1005, cat: Console, desc: "Spiele: Konsolen"}
-    - {id: 1004, cat: PC/Games, desc: "Spiele: Windows"}
-    - {id: 1075, cat: TV/Sport, desc: "Sport: Formel 1"}
-    - {id: 1074, cat: TV/Sport, desc: "Sport: Fussball"}
-    - {id: 1073, cat: TV/Sport, desc: "Sport: Sport"}
-    - {id: 1023, cat: TV/Sport, desc: "Sport: Wrestling"}
+    # Apps
+    - {id: 1107, cat: PC/Mac, desc: "MAC"}
+    - {id: 1018, cat: PC, desc: "Sonstige"}
+    - {id: 1028, cat: PC/0day, desc: "Windows"}
+    # Audio
+    - {id: 1036, cat: Audio/Audiobook, desc: "Hörbücher"}
+    - {id: 1072, cat: Audio, desc: "Musik-Packs"}
+    - {id: 1093, cat: Audio/Video, desc: "Musik-Videos"}
+    - {id: 1070, cat: Audio/Lossless, desc: "Musik/Flac"}
+    - {id: 1014, cat: Audio/MP3, desc: "Musik/MP3"}
+    - {id: 1071, cat: Audio, desc: "Soundtracks"}
+    - {id: 1110, cat: Audio, desc: "WOTT"}
+    # Filme
+    - {id: 1049, cat: Movies/HD, desc: "1080p"}
+    - {id: 1090, cat: Movies/3D, desc: "3D"}
+    - {id: 1048, cat: Movies/HD, desc: "720p"}
+    - {id: 1087, cat: TV/Anime, desc: "Anime"}
+    - {id: 1047, cat: Movies/BluRay, desc: "BluRay"}
+    - {id: 1011, cat: Movies/DVD, desc: "DVD"}
+    - {id: 1060, cat: Movies/HD, desc: "HDTV"}
+    - {id: 1091, cat: Movies, desc: "Packs"}
+    - {id: 1062, cat: Movies/SD, desc: "SD"}
+    - {id: 1089, cat: Movies/UHD, desc: "UHD"}
+    - {id: 1089, cat: Movies/UHD, desc: "2160p"}
+    - {id: 1108, cat: Movies, desc: "WOTT"}
+    # Serien
+    - {id: 1079, cat: TV/HD, desc: "1080p"}
+    - {id: 1095, cat: TV/UHD, desc: "2160p"}
+    - {id: 1078, cat: TV/HD, desc: "720p"}
+    - {id: 1105, cat: TV/Anime, desc: "Anime"}
+    - {id: 1100, cat: TV/HD, desc: "Packs HD"}
+    - {id: 1016, cat: TV/SD, desc: "Packs-SD"}
+    - {id: 1077, cat: TV/SD, desc: "SD"}
+    - {id: 1109, cat: TV, desc: "WOTT"}
+    # Sonstiges
+    - {id: 1064, cat: TV/Documentary, desc: "Dokus"}
+    - {id: 1019, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 1111, cat: Books/EBook, desc: "English Section"}
+    - {id: 1101, cat: TV, desc: "Kids"}
+    - {id: 1096, cat: Other, desc: "Sonstiges"}
+    - {id: 1092, cat: Console, desc: "Wimmelbild"}
+    - {id: 1088, cat: XXX, desc: "XXX"}
+    - {id: 1106, cat: XXX/ImageSet, desc: "XXX Bilder"}
+    - {id: 1102, cat: XXX/Other, desc: "XXX HENTAI"}
+    # Spiele
+    - {id: 1005, cat: Console, desc: "Konsolen"}
+    - {id: 1004, cat: PC/Games, desc: "Windows"}
+    # Sport
+    - {id: 1075, cat: TV/Sport, desc: "Formel 1"}
+    - {id: 1074, cat: TV/Sport, desc: "Fussball"}
+    - {id: 1073, cat: TV/Sport, desc: "Sport"}
+    - {id: 1023, cat: TV/Sport, desc: "Wrestling"}
 
   modes:
     search: [q]
@@ -118,7 +125,6 @@ login:
     pin: "{{ .Config.pin }}"
     remember: 1
   error:
-    - selector: table.tableinborder:contains("Login fehlgeschlagen!")
     - selector: div#loginStatus
   test:
     path: index.php
@@ -134,6 +140,7 @@ search:
   inputs:
     name: "{{ .Keywords }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    searchMethod: wildcard
     maxAge: added
     sortBy: "{{ .Config.sortby }}"
     sortByType: "{{ .Config.typeby }}"
@@ -141,71 +148,57 @@ search:
     highlight: no
     onlyupload: "{{ if .Config.onlyupload }}yes{{ else }}no{{ end }}"
     freeleech: "{{ if .Config.freeleech }}yes{{ else }}no{{ end }}"
+    offset: 0
     limit: 100
 
   rows:
-    selector: div.container
+    selector: div.sr-card
 
   fields:
     categorydesc:
-      selector: div.category
-      attribute: data-content
-      filters:
-        - name: re_replace
-          args: [" \\[.+?\\]", ""]
+      selector: div.sr-badge-cat
+      remove: span.sr-badge-lang
     title:
-      selector: div.title a
+      selector: div.sr-title-row a[href^="torrent.php"]
     details:
-      selector: div.title a
+      selector: div.sr-title-row a[href^="torrent.php"]
       attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
     poster:
-      selector: img
+      selector: div.sr-cover img
       attribute: src
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a.sr-link-badge[href*="imdb.com"]
       attribute: href
     size:
-      selector: span:has(i.fa-hdd)
+      selector: span.sr-detail-size
     grabs:
-      selector: span:has(i.fa-download)
+      selector: span.sr-detail-dl
     seeders:
-      selector: span:has(i.fa-circle-chevron-up)
+      selector: span.sr-detail-seed
     leechers:
-      selector: span:has(i.fa-circle-chevron-down)
+      selector: span.sr-detail-leech
     date:
-      selector: span:has(i.fa-clock)
+      selector: span.sr-detail-time i
+      attribute: title
       filters:
-        - name: re_replace
-          args: ["(?i)(vor)", " ago"]
-        - name: re_replace
-          args: ["(?i)(sekunden|sekunde)", "seconds"]
-        - name: re_replace
-          args: ["(?i)(minuten|minute)", "minutes"]
-        - name: re_replace
-          args: ["(?i)(stunden|stunde)", "hours"]
-        - name: re_replace
-          args: ["(?i)(tagen|tag)", "days"]
-        - name: re_replace
-          args: ["(?i)(wochen|woche)", "weeks"]
-        - name: re_replace
-          args: ["(?i)(monaten|monat)", "months"]
-        - name: re_replace
-          args: ["(?i)(jahren|jahr)", " years"]
-        - name: timeago
+        - name: append
+          args: " +01:00"
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     downloadvolumefactor:
       case:
-        div.status-button-onlyupload: 0 # only upload is counted
+        span.sr-status-onlyupload: 0 # only upload is counted
         "*": 1
     uploadvolumefactor:
       case:
-        div.status-button-freeleech: 0 # nothing is counted
+        span.sr-status-freeleech: 0 # nothing is counted
         "*": 1
     minimumratio:
       text: 0.7
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# WoT Reworked v8.3.7
+# WoT Reworked v9.0.0
