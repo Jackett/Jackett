@@ -862,6 +862,7 @@ namespace Jackett.Updater
                 "Definitions/ydypt.yml",
                 "Definitions/yingk.yml",
                 "Definitions/yggcookie.yml",
+                "Definitions/yggcookie-turbo.yml",
                 "Definitions/yggtorrent.yml",
                 "Definitions/yggtorrent-turbo.yml",
                 "Definitions/yoinked.yml",
