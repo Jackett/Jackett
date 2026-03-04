@@ -390,6 +390,11 @@ namespace Jackett.Common.Indexers.Definitions
                     Description = string.Join("<br />\n", descriptions)
                 };
 
+                if (row.ImdbId.IsNotNullOrWhiteSpace())
+                {
+                    release.Imdb = ParseUtil.GetImdbId(row.ImdbId);
+                }
+
                 if (row.TvMazeId.HasValue)
                 {
                     release.TVMazeId = row.TvMazeId.Value;
@@ -444,6 +449,9 @@ namespace Jackett.Common.Indexers.Definitions
 
         [JsonPropertyName("group_id")]
         public int TorrentId { get; set; }
+
+        [JsonPropertyName("imdb_id")]
+        public string ImdbId { get; set; }
 
         [JsonPropertyName("tvmaze_id")]
         public int? TvMazeId { get; set; }
