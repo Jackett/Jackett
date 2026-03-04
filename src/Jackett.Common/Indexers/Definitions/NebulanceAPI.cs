@@ -400,11 +400,6 @@ namespace Jackett.Common.Indexers.Definitions
                     release.TVMazeId = row.TvMazeId.Value;
                 }
 
-                if (row.Banner.IsNotNullOrWhiteSpace() && !row.Banner.Contains("noimage.png"))
-                {
-                    release.Poster = new Uri(row.Banner);
-                }
-
                 releases.Add(release);
             }
 
@@ -443,9 +438,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         [JsonPropertyName("group_name")]
         public string GroupName { get; set; }
-
-        [JsonPropertyName("series_banner")]
-        public string Banner { get; set; }
 
         [JsonPropertyName("group_id")]
         public int TorrentId { get; set; }
