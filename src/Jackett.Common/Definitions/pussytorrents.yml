@@ -100,8 +100,16 @@ search:
       selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
+    description:
+      selector: td.name
+      remove: span.title, span.subnote
     downloadvolumefactor:
-      text: 0
+      text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.4
+    minimumseedtime:
+      # 60 hours (as seconds = 2.5 x 24 x 60 x 60)
+      text: 216000
 # engine n/a
