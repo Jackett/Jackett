@@ -214,7 +214,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             if ((queryParams.Get("season").IsNotNullOrWhiteSpace() || queryParams.Get("episode").IsNotNullOrWhiteSpace()) &&
                 queryParams.Get("name").IsNullOrWhiteSpace() &&
-                queryParams.Get("season").IsNullOrWhiteSpace() &&
+                queryParams.Get("release").IsNullOrWhiteSpace() &&
                 queryParams.Get("tvmaze").IsNullOrWhiteSpace())
             {
                 _logger.Warn("NBL API does not support season calls without name, series, id, imdb, tvmaze, or time keys.");
