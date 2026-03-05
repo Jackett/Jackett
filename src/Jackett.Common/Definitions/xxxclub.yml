@@ -26,21 +26,6 @@ caps:
     search: [q]
 
 settings:
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: uploaded
-    options:
-      uploaded: created
-      size: size
-      seeders: seeders
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
   - name: info_flaresolverr
     type: info_flaresolverr
 
@@ -51,9 +36,9 @@ download:
 
 search:
   paths:
-    # https://xxxclub.to/torrents/browse/all/?sort=size&order=asc
-    # https://xxxclub.to/torrents/search?q=metartx&sort=uploaded&order=desc
-    - path: "torrents/{{ if .Keywords }}search?q={{ .Keywords }}&{{ else }}browse/all/?{{ end }}sort={{ .Config.sort }}&order={{ .Config.type }}"
+    # https://xxxclub.to/torrents/browse/all/
+    # https://xxxclub.to/torrents/search/all/metartx
+    - path: "torrents/{{ if .Keywords }}search/all/{{ .Keywords }}{{ else }}browse/all/{{ end }}"
 
   rows:
     selector: div.browsetableinside > ul > li:not(:first-child)
