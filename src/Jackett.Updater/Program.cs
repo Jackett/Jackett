@@ -553,6 +553,7 @@ namespace Jackett.Updater
                 "Definitions/magnetdl.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
+                "Definitions/masters-tb.yml",
                 "Definitions/mediamaatjes.yml",
                 "Definitions/megabliz.yml",
                 "Definitions/megamixtracker.yml",
