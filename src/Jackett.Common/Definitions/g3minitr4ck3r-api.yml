@@ -172,7 +172,7 @@ search:
       selector: download_link
       filters:
         - name: append
-          args: "{{ if .Config.use_fl_tokens }}use_token=1{{ else }}{{ end }}"
+          args: "{{ if .Config.use_fl_tokens }}?use_token=1{{ else }}{{ end }}"
     poster:
       selector: meta.poster
       filters:
