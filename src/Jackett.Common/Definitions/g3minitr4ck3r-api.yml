@@ -43,6 +43,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: use_fl_tokens
+    type: checkbox
+    label: Use Freeleech Tokens automatically
+    default: true
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
@@ -166,6 +170,9 @@ search:
       selector: details_link
     download:
       selector: download_link
+      filters:
+        - name: append
+          args: "{{ if .Config.use_fl_tokens }}use_token=1{{ else }}{{ end }}"
     poster:
       selector: meta.poster
       filters:
