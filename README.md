@@ -517,6 +517,7 @@ Prior versions of Jackett are no longer supported.
  * NicePT
  * Nirvana
  * njtupt (浦园)) [![(invite needed)][inviteneeded]](#)
+ * NOBS (NUCLEAR ORDER BIT SYNDICATE)
  * NorBits
  * NORDiCHD
  * NordicQuality
