@@ -410,9 +410,9 @@ search:
       # unix
       selector: td:last-child > u
     seeders:
-      selector: td.seedmed > b
+      selector: td.seedmed > span > b
     leechers:
-      selector: td.leechmed > b
+      selector: td.leechmed > span > b
     downloadvolumefactor:
       case:
         img[src="images/tor_gold.gif"]: 0
