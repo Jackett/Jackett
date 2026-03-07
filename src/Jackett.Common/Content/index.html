@@ -9,10 +9,8 @@
     <meta charset="utf-8" />
     <meta name="referrer" content="no-referrer" /> <!-- Don't send referrer when loading third party resources (E.g. Empornium poster images won't load) -->
     <meta name="robots" content="noindex, nofollow"/>
-    <link rel="apple-touch-icon" href="../apple-touch-icon.png" />
-    <link rel="mask-icon" href="../jackett_medium.png" color="#35c5f4">
-    <link rel="icon" type="image/ico" href="../favicon.ico" />
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
+    <link rel="icon" href="/jacket_medium.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="/jacket_medium_dark.png" media="(prefers-color-scheme: dark)">
     <script type="text/javascript" src="../libs/filesize.min.js?changed=2017083001"></script>
     <script type="text/javascript" src="../libs/jquery.min.js?changed=13019"></script>
     <script type="text/javascript" src="../libs/jquery.dataTables.min.js?changed=2017083001" charset="utf8"></script>
@@ -29,17 +27,20 @@
     <link rel="stylesheet" type="text/css" href="../bootstrap/bootstrap.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../animate.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/tagify.css?changed=11662">
-    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20240225001" media="only screen and (min-device-width: 480px)">
-    <link rel="stylesheet" type="text/css" href="../custom_mobile.css?changed=20240225001" media="only screen and (max-device-width: 480px)">
     <link rel="stylesheet" type="text/css" href="../css/jquery.dataTables.min.css?changed=2017083001">
     <link rel="stylesheet" type="text/css" href="../css/bootstrap-multiselect.css?changed=20230107001" />
     <link rel="stylesheet" type="text/css" href="../css/font-awesome.min.css?changed=2017083001">
+    <link rel="stylesheet" type="text/css" href="../custom.css?changed=20240225001" >
     <title>Jackett</title>
 </head>
 <body>
     <div id="page">
 
-        <img id="logo" src="../jacket_medium.png" alt="Logo" /><span id="header-title">Jackett</span>
+        <picture>
+            <source srcset="/jacket_medium_dark.png" media="(prefers-color-scheme: dark)">
+            <img id="logo" src="/jacket_medium.png" alt="Logo">
+        </picture>
+        <span id="header-title">Jackett</span>
 
         <div class="pull-right jackett-apikey">
             <span class="input-header">API Key: </span>
@@ -371,13 +372,6 @@
                     </tr>
                     {{/each}}
                 </tbody>
-                <tfoot>
-                    <tr>
-                      <th></th>
-                      <th></th>
-                      <th data-type="hiddendata"></th>
-                    </tr>
-                </tfoot>
             </table>
         </div>
     </script>
@@ -708,7 +702,7 @@
                         <h4 class="modal-title">Server Logs</h4>
                     </div>
                     <div class="modal-body">
-                        <table class="dataTable compact cell-border hover stripe">
+                        <table id="jackett-logs-datatable" class="dataTable compact cell-border hover stripe">
                             <thead>
                                 <tr>
                                     <th>Date</th>
