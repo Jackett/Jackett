@@ -12,42 +12,42 @@ links:
 caps:
   # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 4, cat: Movies/3D, desc: "3D/Magyar", default: true}
-    - {id: 5, cat: Movies/3D, desc: "3D/Külföldi", default: true}
-    - {id: 48, cat: Movies/HD, desc: "Film/BR-BDRIP/Külföldi", default: true}
-    - {id: 50, cat: Movies/HD, desc: "Film/BR-BDRIP/Magyar", default: true}
-    - {id: 75, cat: Movies/SD, desc: "Film/Cam/Külföldi", default: true}
-    - {id: 76, cat: Movies/SD, desc: "Film/Cam/Magyar", default: true}
-    - {id: 26, cat: Movies/DVD, desc: "Film/DVD/Külföldi", default: true}
-    - {id: 25, cat: Movies/DVD, desc: "Film/DVD/Magyar", default: true}
-    - {id: 58, cat: Movies/DVD, desc: "Film/DVD9/Külföld", default: true}
-    - {id: 59, cat: Movies/DVD, desc: "Film/DVD9/Magyar", default: true}
-    - {id: 42, cat: Movies/HD, desc: "Film/HD/Külföldi", default: true}
-    - {id: 51, cat: Movies/HD, desc: "Film/HD/Magyar", default: true}
-    - {id: 38, cat: Movies/SD, desc: "Film/XviD/Külföldi", default: true}
-    - {id: 24, cat: Movies/SD, desc: "Film/XviD/Magyar", default: true}
-    - {id: 85, cat: TV/Sport, desc: "Sport/Külföldi", default: true}
-    - {id: 87, cat: TV/Sport, desc: "Sport/Magyar", default: true}
-    - {id: 47, cat: TV/SD, desc: "Sorozat/Külföldi", default: true}
-    - {id: 36, cat: TV/SD, desc: "Sorozat/Magyar", default: true}
-    - {id: 6, cat: TV/HD, desc: "Sorozat/HD/Magyar", default: true}
-    - {id: 7, cat: TV/HD, desc: "Sorozat/HD/Külföldi", default: true}
-    - {id: 56, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
-    - {id: 33, cat: Books, desc: "Könyv/Külföldi", default: true}
-    - {id: 44, cat: Books, desc: "Könyv/Magyar", default: true}
-    - {id: 28, cat: PC/Games, desc: "Játék/ISO", default: true}
-    - {id: 32, cat: Console, desc: "Játék/Konzol", default: true}
-    - {id: 30, cat: PC/Games, desc: "Játék/RIP", default: true}
-    - {id: 53, cat: Audio/Lossless, desc: "Lossless/Külföldi", default: true}
-    - {id: 74, cat: Audio/Lossless, desc: "Lossless/Magyar", default: true}
-    - {id: 40, cat: Audio/Other, desc: "Zene/Külföldi", default: true}
-    - {id: 41, cat: Audio/Other, desc: "Zene/Magyar", default: true}
-    - {id: 34, cat: PC/Mobile-Other, desc: "Mobil", default: true}
-    - {id: 35, cat: PC/ISO, desc: "Programok/ISO", default: true}
-    - {id: 46, cat: PC/0day, desc: "Programok/RIP", default: true}
-    - {id: 70, cat: XXX/DVD, desc: "XXX/DVD", default: false}
-    - {id: 39, cat: XXX/XviD, desc: "XXX/XviD", default: false}
-    - {id: 57, cat: XXX, desc: "XXX/HD", default: false}
+    - {id: 2, cat: Movies/3D, desc: "3D/Külföldi", default: true}
+    - {id: 1, cat: Movies/3D, desc: "3D/Magyar", default: true}
+    - {id: 3, cat: Movies/HD, desc: "Film/BR-BDRIP/Külföldi", default: true}
+    - {id: 4, cat: Movies/HD, desc: "Film/BR-BDRIP/Magyar", default: true}
+    - {id: 5, cat: Movies/SD, desc: "Film/Cam/Külföldi", default: true}
+    - {id: 6, cat: Movies/SD, desc: "Film/Cam/Magyar", default: true}
+    - {id: 7, cat: Movies/DVD, desc: "Film/DVD/Külföldi", default: true}
+    - {id: 8, cat: Movies/DVD, desc: "Film/DVD/Magyar", default: true}
+    - {id: 9, cat: Movies/DVD, desc: "Film/DVD9/Külföld", default: true}
+    - {id: 10, cat: Movies/DVD, desc: "Film/DVD9/Magyar", default: true}
+    - {id: 11, cat: Movies/HD, desc: "Film/HD/Külföldi", default: true}
+    - {id: 12, cat: Movies/HD, desc: "Film/HD/Magyar", default: true}
+    - {id: 13, cat: Movies/SD, desc: "Film/XviD/Külföldi", default: true}
+    - {id: 14, cat: Movies/SD, desc: "Film/XviD/Magyar", default: true}
+    - {id: 21, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
+    - {id: 24, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 25, cat: Console, desc: "Játék/Konzol", default: true}
+    - {id: 26, cat: PC/Games, desc: "Játék/RIP", default: true}
+    - {id: 22, cat: Books, desc: "Könyv/Külföldi", default: true}
+    - {id: 23, cat: Books, desc: "Könyv/Magyar", default: true}
+    - {id: 27, cat: Audio/Lossless, desc: "Lossless/Külföldi", default: true}
+    - {id: 28, cat: Audio/Lossless, desc: "Lossless/Magyar", default: true}
+    - {id: 31, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 32, cat: PC/ISO, desc: "Programok/ISO", default: true}
+    - {id: 33, cat: PC/0day, desc: "Programok/RIP", default: true}
+    - {id: 20, cat: TV/HD, desc: "Sorozat/HD/Magyar", default: true}
+    - {id: 19, cat: TV/HD, desc: "Sorozat/HD/Külföldi", default: true}
+    - {id: 17, cat: TV/SD, desc: "Sorozat/Külföldi", default: true}
+    - {id: 18, cat: TV/SD, desc: "Sorozat/Magyar", default: true}
+    - {id: 15, cat: TV/Sport, desc: "Sport/Külföldi", default: true}
+    - {id: 16, cat: TV/Sport, desc: "Sport/Magyar", default: true}
+    - {id: 29, cat: Audio/Other, desc: "Zene/Külföldi", default: true}
+    - {id: 30, cat: Audio/Other, desc: "Zene/Magyar", default: true}
+    - {id: 34, cat: XXX/DVD, desc: "XXX/DVD", default: false}
+    - {id: 36, cat: XXX/x264, desc: "XXX/HD", default: false}
+    - {id: 35, cat: XXX/XviD, desc: "XXX/XviD", default: false}
 
   modes:
     search: [q]
@@ -67,6 +67,22 @@ settings:
     label: User-Agent
   - name: info_useragent
     type: info_useragent
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 0
+    options:
+      0: created
+      5: seeders
+      3: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 0
+    options:
+      0: desc
+      1: asc
   - name: info_tpp
     type: info
     label: Results Per Page
@@ -82,107 +98,109 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: letoltes.php
-    selector: a[href^="logout.php?getUnique="]
+    path: index
+    selector: a[href^="/logout/"]
 
 search:
   paths:
-    - path: letoltes.php
-      categories: [4, 5, 48, 50, 75, 76, 26, 25, 58, 59, 42, 51, 38, 24, 85, 87, 47, 36, 6, 7, 56, 33, 44, 28, 32, 30, 53, 74, 40, 41, 34, 35, 46]
-      inputs:
-        tipus: 1
-    - path: xxx.php
-      categories: [70, 39, 57]
+    # https://majomparade.eu/torrents/?action=search&search_text=&incldead=0&categories[]=19&categories[]=18
+    - path: torrents/
+      categories: [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 21, 24, 25, 26, 27, 28, 31, 32, 33, 20, 19, 17, 18, 15, 16, 29, 30]
+    # https://majomparade.net/torrents/turkalo/?action=search&search_text=&incldead=0&categories[]=19&categories[]=18
+    - path: torrents/turkalo/
+      categories: [2, 1, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 21, 24, 25, 26, 27, 28, 31, 32, 33, 20, 19, 17, 18, 15, 16, 29, 30]
+    # https://majomparade.net/torrents/xxx/?action=search&search_text=&incldead=0&categories[]=34&categories[]=36&categories[]=35
+    - path: torrents/xxx/
+      categories: [34, 36, 35]
   inputs:
-    $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
-    name: "{{ if .Query.IMDBID }}http://www.imdb.com/title/{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    imdb_search: "{{ if .Query.IMDBID }}yes{{ else }}{{ end }}"
-    k: yes
-    tipuska: 1
+    action: search
+    search_text: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # 0 active, 1 all, 2 dead, 3 0.5x, 62 2x, 63 3x, 64 4x
+    incldead: 1
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    sort: "{{ .Config.sort }}"
+    order_by: "{{ .Config.type }}"
 
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
-    selector: table#table > tbody > tr:has(a[href^="download.php?torrent="])
+    selector: article.torrent-card
 
   fields:
-    download:
-      selector: a[href^="download.php?torrent="]
-      attribute: href
-    title_default:
-      selector: a[href^="details.php?id="] > b
-      attribute: title
-    title:
-      selector: a[href^="details.php?id="] > b[title*="Torrent neve:"]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
-      filters:
-        - name: regexp
-          args: "Torrent neve: (.*?)<"
-    title_hungarian:
-      selector: a[href^="details.php?id="] > b
-      attribute: title
-      filters:
-        - name: regexp
-          args: "<br />(.*)"
     category:
-      selector: a[href*="&category[]="]
+      selector: a[href*="&categories[]="]
       attribute: href
       filters:
         - name: querystring
-          args: category[]
+          args: categories[]
+    title:
+      selector: a[href*="&categories[]="]
+      attribute: data-name
     details:
-      selector: a[href^="details.php?id="]
+      selector: a.torrent-title
       attribute: href
+    download:
+      selector: a[href*="&categories[]="]
+      attribute: data-dl
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: img[src="pic/borito.png"], a[href^="details.php?id="] > b[title*="Torrent neve:"]
-      attribute: title
-      filters:
-        - name: regexp
-          args: src='(.*?)'
-    files:
-      selector: td:nth-child(5)
+      selector: a[href*="&categories[]="]
+      attribute: data-cover
     size:
-      selector: td:nth-child(7)
+      selector: div.torrent-card__meta-short span:nth-child(3)
     grabs:
-      selector: td:nth-child(8)
+      selector: a[href^="/torrent/snatches/"]
     seeders:
-      selector: td:nth-child(9)
+      selector: a[href^="/torrent/peers/"]
     leechers:
-      selector: td:nth-child(10)
+      selector: a[href$="leechers"]
     date:
-      selector: td:nth-child(6)
+      # 46 perce 34 másodperce
+      # 1 órája 4 perce
+      # 3 napja 22 órája
+      # 5 hónapja 10 napja
+      # 1 éve 13 napja
+      selector: div.torrent-card__meta-short span:nth-child(1)
       filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
+        - name: replace
+          args: ["másodperce", "second"]
+        - name: replace
+          args: ["perce", "minute"]
+        - name: replace
+          args: ["órája", "hour"]
+        - name: replace
+          args: ["napja", "day"]
+        - name: replace
+          args: ["hete", "week"]
+        - name: replace
+          args: ["hónapja", "month"]
+        - name: replace
+          args: ["éve", "year"]
+        - name: timeago
     downloadvolumefactor:
-      text: 0
+      text: 1
     uploadvolumefactor:
       case:
-        img[title="Ennél a torrentnél 2x szorzó van."]: 2
-        img[title="Ennél a torrentnél 3x szorzó van."]: 3
-        img[title="Ennél a torrentnél 4x szorzó van."]: 4
+        span.torrent-chip--boost:contains("0.5x"): 0.5
+        span.torrent-chip--boost:contains("2x"): 2
+        span.torrent-chip--boost:contains("3x"): 3
+        span.torrent-chip--boost:contains("4x"): 4
         "*": 1
-    genre:
-      selector: td:nth-child(2)
-      remove: a, img
-      filters:
-        - name: re_replace
-          args: ["(?i)(0.5x|2x|3x|4x)", ""]
-    description:
+    _verification:
       case:
-        img[src$="/pic/yes.png"]: "Verified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_hungarian }}"
-        img[src$="/pic/nincs.png"]: "Unverified: {{ if .Result.genre }}{{ .Result.genre }}<br>{{ else }}{{ end }}{{ .Result.title_hungarian }}"
+        span.torrent-chip--mod-ok: Verified
+        span.torrent-chip--mod-unknown: Unverified
+    genre:
+      selector: div.torrent-card__actions-row
+      remove: a, span.torrent-chip--boost, span.torrent-chip--mod-ok, span.torrent-chip--mod-unknown
+    description:
+      text: "{{ .Result._verification }}: {{ if .Result.genre }}{{ .Result.genre }}{{ else }}{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# engine n/a
+# Majomparádé v3
