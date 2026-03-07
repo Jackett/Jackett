@@ -6,7 +6,7 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
-using FlareSolverrSharp.Types;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -106,7 +106,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var results = await PerformQuery(new TorznabQuery());
                 if (!results.Any())
+                {
                     throw new Exception("Found 0 results in the tracker");
+                }
 
                 IsConfigured = true;
                 SaveConfig();
@@ -136,17 +138,25 @@ namespace Jackett.Common.Indexers.Definitions
 
             var catList = MapTorznabCapsToTrackers(query);
             foreach (var cat in catList)
+            {
                 qParams.Set($"c{cat}", "1");
+            }
 
             if (query.IsImdbQuery)
+            {
                 qParams.Set("imdb", query.ImdbID);
+            }
 
             if (!string.IsNullOrEmpty(query.SanitizedSearchTerm))
+            {
                 qParams.Set("search", query.GetQueryString());
+            }
 
             // If Only Freeleech Enabled
             if (configData.Freeleech.Value)
+            {
                 qParams.Set("freeleech", "on");
+            }
 
             var searchUrl = SearchUrl + "?" + qParams.GetQueryString();
             var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
@@ -162,8 +172,10 @@ namespace Jackett.Common.Indexers.Definitions
 
             // not logged in
             if (results.ContentString == null || !results.ContentString.Contains("/logout.php"))
+            {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
                                     "made a mistake when copying it. Please check the settings.");
+            }
 
             return ParseResponse(query, results.ContentString);
         }
@@ -179,14 +191,18 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var table = dom.QuerySelector("table.movehere");
                 if (table == null)
+                {
                     return releases; // no results
+                }
 
-                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head").Select(x => x.TextContent).ToList();
-                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type"));
-                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name"));
-                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size"));
-                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders"));
-                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers"));
+                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
+                                         .Select(x => x.GetAttribute("title").IsNotNullOrWhiteSpace() ? x.GetAttribute("title") : x.TextContent)
+                                         .ToList();
+                var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type", StringComparison.OrdinalIgnoreCase));
+                var nameIndex = headerColumns.FindIndex(x => x.Equals("Name", StringComparison.OrdinalIgnoreCase));
+                var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size", StringComparison.OrdinalIgnoreCase));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeder(s)", StringComparison.OrdinalIgnoreCase));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leecher(s)", StringComparison.OrdinalIgnoreCase));
 
                 var rows = dom.QuerySelectorAll("tr.browse");
                 foreach (var row in rows)
@@ -196,7 +212,9 @@ namespace Jackett.Common.Indexers.Definitions
                     var title = qLink.TextContent;
 
                     if (!query.MatchQueryStringAND(title))
+                    {
                         continue;
+                    }
 
                     var details = new Uri(SiteLink + qLink.GetAttribute("href").TrimStart('/'));
                     var torrentId = ParseUtil.GetArgumentFromQueryString(qLink.GetAttribute("href"), "id");
@@ -230,7 +248,9 @@ namespace Jackett.Common.Indexers.Definitions
                     };
 
                     if (query.IsImdbQuery)
+                    {
                         release.Imdb = ParseUtil.CoerceLong(query.ImdbIDShort);
+                    }
 
                     releases.Add(release);
                 }
