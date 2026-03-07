@@ -90,11 +90,11 @@ settings:
     label: Page for TEST
     default: 1
     options:
-      1: 1
-      2: 2
-      3: 3
-      4: 4
-      5: 5
+      1: "1"
+      2: "2"
+      3: "3"
+      4: "4"
+      5: "5"
   - name: info_page
     type: info
     label: About TEST page
