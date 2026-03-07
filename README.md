@@ -125,6 +125,7 @@ Prior versions of Jackett are no longer supported.
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
+ * LaMovie
  * LimeTorrents
  * LinuxTracker
  * Mac Torrents Download
