@@ -140,7 +140,7 @@ search:
 
   fields:
     category:
-      selector: img[src*="images/categories/"]
+      selector: img[src*="images/categories"]
       attribute: src
       case:
         # not all categories are available at the moment, so some are deduced and unconfirmed
