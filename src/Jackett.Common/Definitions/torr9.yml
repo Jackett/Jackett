@@ -6,8 +6,9 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://torr9.xyz/
+  - https://torr9.net/
 legacylinks:
+  - https://torr9.xyz/
   - https://torr9.com/
 
 caps:
@@ -37,7 +38,7 @@ settings:
   - name: info_key
     type: info
     label: About your PassKey
-    default: "You can find the API PassKey by accessing your <a href=\"https://torr9.xyz/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
+    default: "You can find the API PassKey by accessing your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -60,16 +61,16 @@ settings:
   - name: info_3x
     type: info
     label: Including 3X
-    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.xyz/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
+    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
 
 login:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
-  path: "https://api.torr9.xyz/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
+  path: "https://api.torr9.net/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
   method: get
 
 search:
   paths:
-    - path: https://api.torr9.xyz/api/v1/torznab
+    - path: https://api.torr9.net/api/v1/torznab
       response:
         type: xml
 
