@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # from https://nekobt.to/api/torznab/api?t=caps
     - {id: 5070, cat: TV/Anime, desc: "Anime"}
     - {id: 2000, cat: Movies/Other, desc: "Movies"}
 
