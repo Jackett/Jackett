@@ -55,10 +55,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_results
-    type: info
-    label: "Search results"
-    default: "This indexer does not support <b>Torrent Groups</b>.<br />On your account <i>Settings</i> change <b>Torrent grouping</b> to <b>DO NOT Group torrents by default</b>."
 
 login:
   path: login.php
@@ -83,6 +79,7 @@ search:
       args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
   inputs:
     section: torrents
+    disablegrouping: 1
     searchstr: "{{ .Keywords }}"
     action: basic
     searchtags: "{{ .Query.Genre }}"
