@@ -54,10 +54,12 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowtvsearchimdb: true
+  allowrawsearch: true
 
 settings:
   - name: apikey
@@ -104,12 +106,13 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-    t: "{{ if .Query.IMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    t: "{{ .Query.Type }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
     limit: 100
 
   keywordsfilters:
@@ -147,6 +150,12 @@ search:
       attribute: url
     infohash:
       selector: '[name="infohash"]'
+      attribute: value
+    imdbid:
+      selector: '[name="imdbid"]'
+      attribute: value
+    tmdbid:
+      selector: '[name="tmdbid"]'
       attribute: value
     date:
       # Sun, 18 Jan 2026 04:05:41 +0000
