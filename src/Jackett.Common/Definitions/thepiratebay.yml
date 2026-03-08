@@ -164,13 +164,6 @@ search:
     # replace simplified Chinese as this confuses TPB search engine #7291
     - name: re_replace
       args: ["([\\p{IsCJKUnifiedIdeographs}\\W]+)", "."]
-    # search for both S01 and Season 01
-    - name: re_replace
-      args: ["(?i)\\b(S(\\d{2,3}))\\b", "$1|\"Season.$2\""]
-    # currently, the only uploader for General Hospital puts a space between season and episode
-    # this filter searches both formats, so 'General Hospital S01E02' becomes 'General Hospital S01E02|"S01 E02"'
-    - name: re_replace
-      args: ["(?i)\\b(General\\.Hospital)\\.((S\\d{2,3})(E\\d{2,3}))\\b", "$1.$2|\"$3.$4\""]
     - name: tolower
 
   rows:
