@@ -15,15 +15,15 @@ caps:
     - {id: 10, cat: TV/Sport, desc: "Sports"}
     - {id: 13, cat: Movies/Other, desc: "Documentaires - Film"}
     - {id: 14, cat: TV/Documentary, desc: "Documentaires - Series"}
+    - {id: 15, cat: TV, desc: "Documentaires - Émission TV"}
     - {id: 3, cat: PC/Games, desc: "Jeux PC"}
-    - {id: 4, cat: Console, desc: "Jeux Consoles"}
     - {id: 7, cat: Movies, desc: "Films Animation Japonaise"}
     - {id: 6, cat: TV/Anime, desc: "Animes"}
-    - {id: 5, cat: Audio, desc: "Audios"}
     - {id: 8, cat: Books/Comics, desc: "Bandes dessinées"}
     - {id: 11, cat: Books/Comics, desc: "Mangas"}
     - {id: 9, cat: Books/Mags, desc: "Magazines"}
     - {id: 12, cat: Books/EBook, desc: "Livres"}
+    - {id: 16, cat: Audio/Audiobook, desc: "Livres - Audios"}
 
   modes:
     search: [q]
