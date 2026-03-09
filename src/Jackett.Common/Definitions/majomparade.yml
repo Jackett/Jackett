@@ -158,28 +158,12 @@ search:
     leechers:
       selector: a[href$="leechers"]
     date:
-      # 46 perce 34 másodperce
-      # 1 órája 4 perce
-      # 3 napja 22 órája
-      # 5 hónapja 10 napja
-      # 1 éve 13 napja
       selector: div.torrent-card__meta-short span:nth-child(1)
       filters:
-        - name: replace
-          args: ["másodperce", "second"]
-        - name: replace
-          args: ["perce", "minute"]
-        - name: replace
-          args: ["órája", "hour"]
-        - name: replace
-          args: ["napja", "day"]
-        - name: replace
-          args: ["hete", "week"]
-        - name: replace
-          args: ["hónapja", "month"]
-        - name: replace
-          args: ["éve", "year"]
-        - name: timeago
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
     downloadvolumefactor:
       text: 1
     uploadvolumefactor:
