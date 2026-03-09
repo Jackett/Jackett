@@ -100,7 +100,7 @@ search:
 
   inputs:
     name: "{{ .Keywords }}"
-    categoryId: "{{ join .Categories \",\" }}"
+#    categoryId: "{{ join .Categories \",\" }}" # API only supports single category at this stage
     resultByPage: 100
     sort: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
