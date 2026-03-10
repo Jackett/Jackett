@@ -36,11 +36,10 @@ settings:
     type: info
     label: About your API key
     default: "Find your API key on your <a href=\"https://abn.lol/User/Parameters\" target=\"_blank\">Parameters</a> page. The API key is read-only and never expires."
-# not supported by API yet
-#  - name: freeleech
-#    type: checkbox
-#    label: Search freeleech only
-#    default: false
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -99,12 +98,12 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
+    $raw: "{{ range .Categories }}categoryId={{.}}&{{end}}"
     name: "{{ .Keywords }}"
-#    categoryId: "{{ join .Categories \",\" }}" # API only supports single category at this stage
     resultByPage: 100
     sort: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    # freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}" # API does not support this parameter yet
+    freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
 
   keywordsfilters:
     - name: re_replace
@@ -139,9 +138,8 @@ search:
       text: "{{ .Config.sitelink }}Torrent/Details?ReleaseId={{ .Result._id }}"
     download:
       selector: downloadUrl
-#   always null ATM
-#    infohash:
-#      selector: infoHash
+    infohash:
+      selector: infoHash
     date:
       # created": "2026-03-07T06:59:22.137408" is returned by Newtonsoft.Json.Linq as 03/07/2026 06:59:22
       selector: created
