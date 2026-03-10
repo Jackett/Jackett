@@ -98,7 +98,7 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
-    $raw: "{{ range .Categories }}&categoryId={{.}}{{end}}"
+    $raw: "{{ range .Categories }}categoryId={{.}}&{{end}}"
     name: "{{ .Keywords }}"
     resultByPage: 100
     sort: "{{ .Config.sort }}"
