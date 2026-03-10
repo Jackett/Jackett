@@ -691,6 +691,7 @@ namespace Jackett.Updater
                 "Definitions/seedpeer.yml",
                 "Definitions/sextorrent.yml",
                 "Definitions/sexxi.yml",
+                "Definitions/sfp.yml",
                 "Definitions/shadowflow.yml",
                 "Definitions/sharefiles.yml",
                 "Definitions/shareisland.yml", // switch to *-API #8682
