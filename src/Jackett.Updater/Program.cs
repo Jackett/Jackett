@@ -351,6 +351,7 @@ namespace Jackett.Updater
                 "Definitions/cloudtorrents.yml",
                 "Definitions/cooltorrent.yml",
                 "Definitions/cpabien.yml",
+                "Definitions/cpasbienclone.yml",
                 "Definitions/cpasbiensi.yml",
                 "Definitions/crazyhd.yml",
                 "Definitions/crazyscorner.yml",

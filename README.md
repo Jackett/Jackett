@@ -100,7 +100,6 @@ Prior versions of Jackett are no longer supported.
  * btstate
  * Byrutor
  * Catorrent
- * cpasbienClone
  * CrackingPatching
  * DaMagNet
  * Demonoid Clone
