@@ -145,7 +145,6 @@ Prior versions of Jackett are no longer supported.
  * OneJAV
  * OpenSharing
  * PC-torrent
- * Pirate's Paradise
  * plugintorrent
  * PornoTorrent
  * PornRips
