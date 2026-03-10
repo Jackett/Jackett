@@ -177,6 +177,7 @@ search:
       case:
         span.torrent-chip--mod-ok: Verified
         span.torrent-chip--mod-unknown: Unverified
+        span.torrent-chip--mod-bad: Blocked
     genre:
       selector: div.torrent-card__actions-row
       remove: a, span.torrent-chip--boost, span.torrent-chip--mod-ok, span.torrent-chip--mod-unknown
