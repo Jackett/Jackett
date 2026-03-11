@@ -36,6 +36,10 @@ settings:
     type: info
     label: About your API key
     default: "Find your API key on your <a href=\"https://abn.lol/User/Parameters\" target=\"_blank\">Parameters</a> page. The API key is read-only and never expires."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.abn.lol
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -81,7 +85,7 @@ settings:
     default: "Accounts are automatically deactivated after 4 months of inactivity (no connection to the site)."
 
 login:
-  path: https://api.abn.lol/api/Release/Search?name=test&resultByPage=1
+  path: "https://{{ .Config.apiurl }}/api/Release/Search?name=test&resultByPage=1"
   method: get
   error:
     - selector: :root:contains("Unauthorized")
@@ -90,7 +94,7 @@ login:
 
 search:
   paths:
-    - path: https://api.abn.lol/api/Release/Search
+    - path: "https://{{ .Config.apiurl }}/api/Release/Search"
       response:
         type: json
 
