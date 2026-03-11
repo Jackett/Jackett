@@ -120,7 +120,6 @@ Prior versions of Jackett are no longer supported.
  * HDRTorrent
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
- * Isohunt2
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
