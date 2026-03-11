@@ -188,7 +188,7 @@ search:
       filters:
         - name: append
           args: " +03:00" # MSK
-        - name: dataparse
+        - name: dateparse
           args: "dd.MM.yyyy HH:mm zzz"
     size:
       selector: div.info-row:has(i.fa-database)
