@@ -72,6 +72,10 @@ caps:
   allowrawsearch: true
 
 settings:
+  - name: apiurl
+    label: API URL
+    type: text
+    default: relay.ygg.gratis
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -94,7 +98,7 @@ settings:
 
 search:
   paths:
-    - path: https://relay.ygg.gratis/torznab
+    - path: "https://{{ .Config.apiurl }}/torznab"
       response:
         type: xml
 
