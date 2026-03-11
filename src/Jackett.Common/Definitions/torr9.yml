@@ -39,6 +39,10 @@ settings:
     type: info
     label: About your PassKey
     default: "You can find the API PassKey by accessing your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.torr9.net
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -65,12 +69,12 @@ settings:
 
 login:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
-  path: "https://api.torr9.net/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
+  path: "https://{{ .Config.apiurl }}/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
   method: get
 
 search:
   paths:
-    - path: https://api.torr9.net/api/v1/torznab
+    - path: "https://{{ .Config.apiurl }}/api/v1/torznab"
       response:
         type: xml
 
