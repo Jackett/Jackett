@@ -287,6 +287,7 @@ Prior versions of Jackett are no longer supported.
  * Anime No Sekai (ANSK)
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
+ * AnimeTorrents.ro (Anime Torrents Romania)
  * AnimeWorld (AW)
  * Anthelion (ANT)
  * Araba Fenice (Phoenix) [![(invite needed)][inviteneeded]](#)
