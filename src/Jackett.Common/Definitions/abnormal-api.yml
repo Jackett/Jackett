@@ -163,8 +163,8 @@ search:
     downloadvolumefactor:
       selector: freeleech
       case:
-        False: "{{ .False }}"
-        True: "{{ .True }}"
+        False: 1 # not free
+        True: 0 # freeleech
     uploadvolumefactor:
       text: 1
     minimumratio:
