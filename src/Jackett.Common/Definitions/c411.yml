@@ -95,8 +95,12 @@ settings:
 
 login:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
-  path: "api/torznab?apikey={{ .Config.apikey }}&t=caps"
+  path: api/torznab
   method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: search
+    limit: 1
 
 search:
   paths:

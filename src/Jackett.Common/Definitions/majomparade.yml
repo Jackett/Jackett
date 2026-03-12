@@ -135,19 +135,19 @@ search:
         - name: querystring
           args: categories[]
     title:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-name
     details:
       selector: a.torrent-title
       attribute: href
     download:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-dl
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-cover
     size:
       selector: div.torrent-card__meta-short span:nth-child(3)
@@ -177,6 +177,7 @@ search:
       case:
         span.torrent-chip--mod-ok: Verified
         span.torrent-chip--mod-unknown: Unverified
+        span.torrent-chip--mod-bad: Blocked
     genre:
       selector: div.torrent-card__actions-row
       remove: a, span.torrent-chip--boost, span.torrent-chip--mod-ok, span.torrent-chip--mod-unknown

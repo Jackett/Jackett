@@ -36,11 +36,14 @@ settings:
     type: info
     label: About your API key
     default: "Find your API key on your <a href=\"https://abn.lol/User/Parameters\" target=\"_blank\">Parameters</a> page. The API key is read-only and never expires."
-# not supported by API yet
-#  - name: freeleech
-#    type: checkbox
-#    label: Search freeleech only
-#    default: false
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.abn.lol
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -82,7 +85,7 @@ settings:
     default: "Accounts are automatically deactivated after 4 months of inactivity (no connection to the site)."
 
 login:
-  path: https://api.abn.lol/api/Release/Search?name=test&resultByPage=1
+  path: "https://{{ .Config.apiurl }}/api/Release/Search?name=test&resultByPage=1"
   method: get
   error:
     - selector: :root:contains("Unauthorized")
@@ -91,7 +94,7 @@ login:
 
 search:
   paths:
-    - path: https://api.abn.lol/api/Release/Search
+    - path: "https://{{ .Config.apiurl }}/api/Release/Search"
       response:
         type: json
 
@@ -99,12 +102,12 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
+    $raw: "{{ range .Categories }}categoryId={{.}}&{{end}}"
     name: "{{ .Keywords }}"
-#    categoryId: "{{ join .Categories \",\" }}" # API only supports single category at this stage
     resultByPage: 100
     sort: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
-    # freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}" # API does not support this parameter yet
+    freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
 
   keywordsfilters:
     - name: re_replace
@@ -139,9 +142,8 @@ search:
       text: "{{ .Config.sitelink }}Torrent/Details?ReleaseId={{ .Result._id }}"
     download:
       selector: downloadUrl
-#   always null ATM
-#    infohash:
-#      selector: infoHash
+    infohash:
+      selector: infoHash
     date:
       # created": "2026-03-07T06:59:22.137408" is returned by Newtonsoft.Json.Linq as 03/07/2026 06:59:22
       selector: created

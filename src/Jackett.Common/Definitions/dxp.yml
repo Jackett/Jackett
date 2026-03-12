@@ -92,6 +92,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   # https://dxp.ru/torrents.php?search=&sort=4&type=desc&wh=name&incldead=1
   paths:
@@ -110,13 +115,13 @@ search:
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
   rows:
-    selector: div.torrent-card
+    selector: div.torrent-item
 
   fields:
     categorydesc:
-      selector: div.poster-badge
+      selector: div.category-badge
     title:
-      selector: div.torrent-card-title
+      selector: h3.full-title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -170,32 +175,37 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="torrent-"]
+      selector: a[href^="content.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="content.php?id="]
       attribute: href
     poster:
-      selector: div.torrent-poster img
+      selector: a[href^="content.php?id="] img
       attribute: src
     date:
-      text: now
+      selector: span:has(i.fa-clock)
+      filters:
+        - name: append
+          args: " +03:00" # MSK
+        - name: dateparse
+          args: "dd.MM.yyyy HH:mm zzz"
     size:
-      text: 2GB
+      selector: div.info-row:has(i.fa-database)
     grabs:
-      selector: div.stat-item:nth-child(3) span
+      selector: span.completed-bottom
     seeders:
-      selector: div.stat-item:nth-child(1) span
+      selector: span.seeders-bottom
     leechers:
-      selector: div.stat-item:nth-child(2) span
+      selector: span.leechers-bottom
     downloadvolumefactor:
       case:
-        div.poster-badge:contains("VIP"): 1 # vip
+        div.category-badge:contains("VIP"): 1 # vip
         "*": 0
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 0.3
     description:
-      selector: div.torrent-card-title
+      selector: div.info-row:has(i.fa-globe)
 # engine n/a

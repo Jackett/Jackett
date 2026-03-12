@@ -138,6 +138,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: apiurl
+    label: API URL
+    type: text
+    default: apibay.org
   - name: uploader
     type: text
     label: Filter by Uploader
@@ -145,15 +149,10 @@ settings:
     type: info
     label: About filtering by Uploader
     default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of TPB titles, eg -MeGusta."
-  - name: info_api
-    type: info
-    label: About this Indexer
-    default: This indexer uses the API at https://apibay.org/ to get its official TPB data. Choose any site link that you can access/prefer so that you can view the torrent details page when browsing the Jackett dashboard results for this indexer.
 
 search:
   paths:
-    # https://apibay.org/q.php?q=bad+batch&cat=100,101,102,103,104
-    - path: "https://apibay.org/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
+    - path: "https://{{ .Config.apiurl }}/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
       response:
         type: json
 

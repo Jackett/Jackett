@@ -511,6 +511,7 @@ namespace Jackett.Updater
                 "Definitions/inperil.yml",
                 "Definitions/irishtv.yml",
                 "Definitions/isohunt.yml",
+                "Definitions/isohunt2.yml",
                 "Definitions/itorrent.yml",
                 "Definitions/iv-torrents.yml",
                 "Definitions/jme-reunit3d.yml", // switch to -API #13043
@@ -854,6 +855,7 @@ namespace Jackett.Updater
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/woot.yml",
                 "Definitions/wukong.yml",
+                "Definitions/x-ite.me.yml",
                 "Definitions/xbit.yml",
                 "Definitions/xbytes2.yml",
                 "Definitions/xfsub.yml",

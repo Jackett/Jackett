@@ -120,7 +120,6 @@ Prior versions of Jackett are no longer supported.
  * HDRTorrent
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
- * Isohunt2
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
@@ -680,7 +679,6 @@ Prior versions of Jackett are no longer supported.
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
- * x-ite.me (XM)
  * Xingwan (星湾) [![(invite needed)][inviteneeded]](#)
  * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)
  * xloli (ilolicon PT)
