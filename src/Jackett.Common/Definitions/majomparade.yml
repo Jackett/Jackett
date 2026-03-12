@@ -135,19 +135,19 @@ search:
         - name: querystring
           args: categories[]
     title:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-name
     details:
       selector: a.torrent-title
       attribute: href
     download:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-dl
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: a[href*="&categories[]="]
+      selector: a.torrent-title
       attribute: data-cover
     size:
       selector: div.torrent-card__meta-short span:nth-child(3)
