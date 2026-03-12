@@ -111,10 +111,10 @@ caps:
     - {id: 231, cat: Audio/MP3, desc: " |- 🎵 Сборники и альбомы выходившие неофициальными изданиями."}
     - {id: 201, cat: Audio/MP3, desc: " |- Русский Rock, Metal (mp3)"}
     - {id: 202, cat: Audio/MP3, desc: " |- Сборники Русского рока (mp3)"}
-    - {id: 214, cat: Audio/MP3, desc: " |- Soft & Pop-Rock"}
-    - {id: 334, cat: Audio/MP3, desc: " |- Progressive & Art-Rock"}
     - {id: 156, cat: Audio/MP3, desc: " |- Classic & Hard Rock"}
+    - {id: 334, cat: Audio/MP3, desc: " |- Progressive & Art-Rock"}
     - {id: 213, cat: Audio/MP3, desc: " |- Melodic & Folk Rock"}
+    - {id: 214, cat: Audio/MP3, desc: " |- Soft & Pop-Rock"}
     - {id: 212, cat: Audio/MP3, desc: " |- Instrumental & Guitar Rock"}
     - {id: 241, cat: Audio/MP3, desc: " |- Rock'n'Roll, Rockabilly, Psychobilly"}
     - {id: 211, cat: Audio/MP3, desc: " |- Сборники зарубежного Рока"}
@@ -148,6 +148,8 @@ caps:
     - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
     - {id: 330, cat: Audio, desc: " |- ♫ Зарубежная поп музыка (оцифровки)"}
     - {id: 328, cat: Audio, desc: " |- ♫ Советская и Российская эстрада (оцифровки)"}
+    - {id: 453, cat: Audio, desc: " |- ♫ Шансон и авторская песня (оцифровки"}
+    - {id: 455, cat: Audio, desc: " |- ♫ Зарубежный и Отечественный Metal (оцифровки)"}
     - {id: 331, cat: Audio, desc: " |- ♫ Русский рок (оцифровки)"}
     - {id: 326, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
     - {id: 325, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
@@ -321,6 +323,7 @@ caps:
     - {id: 209, cat: Other, desc: " |- Модификации для TorrentPier"}
     - {id: 207, cat: Other, desc: " |- Графика и стили для TorrentPier"}
     - {id: 206, cat: Other, desc: " |- Шаблоны для TorrentPier"}
+    - {id: 449, cat: Other, desc: " |- Ресурсы для скачивания"}
     # Технический форум # Technical Forum
     - {id: 163, cat: Other, desc: "Временные раздачи"}
 
