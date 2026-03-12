@@ -855,6 +855,7 @@ namespace Jackett.Updater
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/woot.yml",
                 "Definitions/wukong.yml",
+                "Definitions/x-ite.me.yml",
                 "Definitions/xbit.yml",
                 "Definitions/xbytes2.yml",
                 "Definitions/xfsub.yml",
