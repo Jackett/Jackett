@@ -119,7 +119,7 @@ search:
 
   fields:
     categorydesc:
-      selector: div.category-badge
+      selector: div.torrent-badge
     title:
       selector: h3.full-title
       filters:
@@ -184,8 +184,13 @@ search:
       selector: a[href^="content.php?id="] img
       attribute: src
     date:
-      selector: span:has(i.fa-clock)
+      selector: span.date-bottom
+      attribute: title
       filters:
+        - name: replace
+          args: ["Обновлен: ", ""]
+        - name: replace
+          args: ["Добавлен: ", ""]
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
@@ -198,6 +203,13 @@ search:
       selector: span.seeders-bottom
     leechers:
       selector: span.leechers-bottom
+    genre:
+      selector: div.info-row:has(i.fa-tags)
+    description:
+      selector: div.info-row:has(i.fa-globe)
+      filters:
+        - name: append
+          args: ": {{ .Result.genre }}"
     downloadvolumefactor:
       case:
         div.category-badge:contains("VIP"): 1 # vip
@@ -206,6 +218,4 @@ search:
       text: 1
     minimumratio:
       text: 0.3
-    description:
-      selector: div.info-row:has(i.fa-globe)
 # engine n/a
