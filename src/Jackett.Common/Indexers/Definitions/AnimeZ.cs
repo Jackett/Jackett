@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
@@ -99,6 +100,11 @@ namespace Jackett.Common.Indexers.Definitions
         protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, AvistazRelease row)
         {
             return MapTrackerCatToNewznab(row.Format).ToList();
+        }
+
+        protected override string ParseTitle(AvistazRelease row)
+        {
+            return row.ReleaseTitle.IsNotNullOrWhiteSpace() ? row.ReleaseTitle : row.FileName;
         }
     }
 }

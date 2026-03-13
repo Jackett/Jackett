@@ -155,6 +155,11 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return categories;
         }
 
+        protected virtual string ParseTitle(AvistazRelease row)
+        {
+            return row.FileName;
+        }
+
         protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
             : base(configService: configService,
                    client: client,
@@ -277,7 +282,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
                     var release = new ReleaseInfo
                     {
-                        Title = row.FileName,
+                        Title = ParseTitle(row),
                         Link = link,
                         InfoHash = row.InfoHash,
                         Details = details,
@@ -346,6 +351,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         [JsonPropertyName("file_name")]
         public string FileName { get; set; }
+
+        [JsonPropertyName("release_title")]
+        public string ReleaseTitle { get; set; }
 
         [JsonPropertyName("info_hash")]
         public string InfoHash { get; set; }
