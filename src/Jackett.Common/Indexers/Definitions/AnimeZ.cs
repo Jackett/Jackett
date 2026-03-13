@@ -20,7 +20,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "AnimeZ";
         public override string Description => "AnimeZ (ex-AnimeTorrents) is a Private Torrent Tracker for ANIME / MANGA";
         public override string SiteLink { get; protected set; } = "https://animez.to/";
-
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://animetorrents.me/",
+        };
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private new ConfigurationDataAvistaZTracker configData => (ConfigurationDataAvistaZTracker)base.configData;
