@@ -6,6 +6,8 @@ language: ru-RU
 type: public
 encoding: UTF-8
 requestDelay: 5
+certificates:
+  - 86d0328f79c36c9f716c8fe6df8a06351ab6e20c # Expired 14th March 2026
 links:
   - https://torrent.by/
 legacylinks:
