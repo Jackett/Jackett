@@ -7,7 +7,6 @@ using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
-using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Jackett.Common.Indexers.Definitions
@@ -77,15 +76,16 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             if (configData.Freeleech.Value)
+            {
                 qc.Add("discount[]", "1");
+            }
 
             return qc;
         }
 
-        protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, JToken row)
+        protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, AvistazRelease row)
         {
-            var cat = row.Value<JObject>("category").Properties().First().Name;
-            return MapTrackerCatToNewznab(cat).ToList();
+            return row.Category.SelectMany(c => MapTrackerCatToNewznab(c.Key)).ToList();
         }
     }
 }

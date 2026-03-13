@@ -1,13 +1,17 @@
 using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Jackett.Common.Exceptions;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
+using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
@@ -118,12 +122,12 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         }
 
         // hook to adjust category parsing
-        protected virtual IReadOnlyList<int> ParseCategories(TorznabQuery query, JToken row)
+        protected virtual IReadOnlyList<int> ParseCategories(TorznabQuery query, AvistazRelease row)
         {
             var categories = new List<int>();
-            var videoQuality = row.Value<string>("video_quality");
+            var videoQuality = row.VideoQuality;
 
-            switch (row.Value<string>("type").ToUpperInvariant())
+            switch (row.Type.ToUpperInvariant())
             {
                 case "MOVIE":
                     categories.Add(videoQuality switch
@@ -201,12 +205,16 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 throw new TooManyRequestsException("Rate limited", result);
             }
 
-            var json = JObject.Parse(result.ContentString);
-            _token = json.Value<string>("token");
+            if (!STJson.TryDeserialize<AvistazAuthResponse>(result.ContentString, out var authResponse))
+            {
+                throw new Exception("Invalid response from AvistaZ, the response is not valid JSON");
+            }
+
+            _token = authResponse.Token;
 
             if (_token == null)
             {
-                throw new Exception(json.Value<string>("message"));
+                throw new Exception(authResponse.Message ?? "Unauthorized request to indexer");
             }
         }
 
@@ -247,73 +255,63 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
             try
             {
-                var jsonContent = JToken.Parse(response.ContentString);
+                var jsonResponse = STJson.Deserialize<AvistazResponse>(response.ContentString);
 
-                foreach (var row in jsonContent.Value<JArray>("data"))
+                foreach (var row in jsonResponse.Data)
                 {
-                    var details = new Uri(row.Value<string>("url"));
-                    var link = new Uri(row.Value<string>("download"));
+                    var details = new Uri(row.Url);
+                    var link = new Uri(row.Download);
 
-                    var description = "";
-                    var jAudio = row.Value<JArray>("audio");
-                    if (jAudio is { HasValues: true })
+                    var description = string.Empty;
+
+                    if (row.Audio is { Count: > 0 })
                     {
-                        var audioList = jAudio.Select(tag => tag.Value<string>("language")).ToList();
+                        var audioList = row.Audio.Select(tag => tag.Language).ToList();
                         description += $"Audio: {string.Join(", ", audioList)}";
                     }
-                    var jSubtitle = row.Value<JArray>("subtitle");
-                    if (jSubtitle is { HasValues: true })
+                    if (row.Subtitle is { Count: > 0 })
                     {
-                        var subtitleList = jSubtitle.Select(tag => tag.Value<string>("language")).ToList();
+                        var subtitleList = row.Subtitle.Select(tag => tag.Language).ToList();
                         description += $"<br/>Subtitles: {string.Join(", ", subtitleList)}";
                     }
 
                     var release = new ReleaseInfo
                     {
-                        Title = row.Value<string>("file_name"),
+                        Title = row.FileName,
                         Link = link,
-                        InfoHash = row.Value<string>("info_hash"),
+                        InfoHash = row.InfoHash,
                         Details = details,
                         Guid = details,
                         Category = ParseCategories(query, row).ToList(),
-                        PublishDate = row.Value<DateTime>("created_at_iso").ToUniversalTime(),
+                        PublishDate = DateTime.Parse(row.CreatedAtIso, CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal),
                         Description = description,
-                        Size = row.Value<long>("file_size"),
-                        Files = row.Value<long>("file_count"),
-                        Grabs = row.Value<long>("completed"),
-                        Seeders = row.Value<int>("seed"),
-                        Peers = row.Value<int>("leech") + row.Value<int>("seed"),
-                        DownloadVolumeFactor = row.Value<double>("download_multiply"),
-                        UploadVolumeFactor = row.Value<double>("upload_multiply"),
+                        Size = row.FileSize,
+                        Files = row.FileCount,
+                        Grabs = row.Completed,
+                        Seeders = row.Seed,
+                        Peers = row.Leech + row.Seed,
+                        DownloadVolumeFactor = row.DownloadMultiply,
+                        UploadVolumeFactor = row.UploadMultiply,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200, // 72 hours
-                        Languages = row.Value<JArray>("audio")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
-                        Subs = row.Value<JArray>("subtitle")?.Select(x => x.Value<string>("language")).ToList() ?? new List<string>(),
+                        Languages = row.Audio?.Select(x => x.Language).ToList() ?? new List<string>(),
+                        Subs = row.Subtitle?.Select(x => x.Language).ToList() ?? new List<string>(),
                     };
 
-                    if (release.Size is > 0)
+                    if (row.FileSize is > 0)
                     {
-                        var sizeGigabytes = release.Size.Value / Math.Pow(1024, 3);
+                        var sizeGigabytes = row.FileSize.Value / Math.Pow(1024, 3);
 
                         release.MinimumSeedTime = sizeGigabytes > 50.0
                             ? (long)((100 * Math.Log(sizeGigabytes)) - 219.2023) * 3600
                             : 259200 + (long)(sizeGigabytes * 7200);
                     }
 
-                    var jMovieTv = row.Value<JToken>("movie_tv");
-                    if (jMovieTv is { HasValues: true })
+                    if (row.MovieTvinfo != null)
                     {
-                        release.Imdb = ParseUtil.GetImdbId(jMovieTv.Value<string>("imdb"));
-
-                        if (long.TryParse(jMovieTv.Value<string>("tvdb"), out var tvdbId))
-                        {
-                            release.TVDBId = tvdbId;
-                        }
-
-                        if (long.TryParse(jMovieTv.Value<string>("tmdb"), out var tmdbId))
-                        {
-                            release.TMDb = tmdbId;
-                        }
+                        release.Imdb = ParseUtil.GetImdbId(row.MovieTvinfo.Imdb);
+                        release.TMDb = row.MovieTvinfo.Tmdb.IsNotNullOrWhiteSpace() && long.TryParse(row.MovieTvinfo.Tmdb, out var tmdbId) ? tmdbId : 0;
+                        release.TVDBId = row.MovieTvinfo.Tvdb.IsNotNullOrWhiteSpace() && long.TryParse(row.MovieTvinfo.Tvdb, out var tvdbId) ? tvdbId : 0;
                     }
 
                     releases.Add(release);
@@ -329,7 +327,77 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
 
         private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>
         {
+            {"Accept", "application/json"},
             {"Authorization", $"Bearer {_token}"}
         };
+    }
+
+    public class AvistazRelease
+    {
+        public string Url { get; set; }
+        public string Download { get; set; }
+        public Dictionary<string, string> Category { get; set; }
+
+        [JsonPropertyName("movie_tv")]
+        public AvistazIdInfo MovieTvinfo { get; set; }
+
+        [JsonPropertyName("created_at_iso")]
+        public string CreatedAtIso { get; set; }
+
+        [JsonPropertyName("file_name")]
+        public string FileName { get; set; }
+
+        [JsonPropertyName("info_hash")]
+        public string InfoHash { get; set; }
+
+        public int? Leech { get; set; }
+        public int? Completed { get; set; }
+        public int? Seed { get; set; }
+
+        [JsonPropertyName("file_size")]
+        public long? FileSize { get; set; }
+
+        [JsonPropertyName("file_count")]
+        public int? FileCount { get; set; }
+
+        [JsonPropertyName("download_multiply")]
+        public double? DownloadMultiply { get; set; }
+
+        [JsonPropertyName("upload_multiply")]
+        public double? UploadMultiply { get; set; }
+
+        [JsonPropertyName("video_quality")]
+        public string VideoQuality { get; set; }
+
+        public string Type { get; set; }
+
+        public string Format { get; set; }
+
+        public IReadOnlyCollection<AvistazLanguage> Audio { get; set; }
+        public IReadOnlyCollection<AvistazLanguage> Subtitle { get; set; }
+    }
+
+    public class AvistazLanguage
+    {
+        public int Id { get; set; }
+        public string Language { get; set; }
+    }
+
+    public class AvistazResponse
+    {
+        public IReadOnlyCollection<AvistazRelease> Data { get; set; }
+    }
+
+    public class AvistazIdInfo
+    {
+        public string Tmdb { get; set; }
+        public string Tvdb { get; set; }
+        public string Imdb { get; set; }
+    }
+
+    public class AvistazAuthResponse
+    {
+        public string Token { get; set; }
+        public string Message { get; set; }
     }
 }

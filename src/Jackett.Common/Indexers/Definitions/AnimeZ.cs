@@ -7,7 +7,6 @@ using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
-using Newtonsoft.Json.Linq;
 using NLog;
 
 namespace Jackett.Common.Indexers.Definitions
@@ -97,9 +96,9 @@ namespace Jackett.Common.Indexers.Definitions
             return parameters;
         }
 
-        protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, JToken row)
+        protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, AvistazRelease row)
         {
-            return MapTrackerCatToNewznab(row.Value<string>("format")).ToList();
+            return MapTrackerCatToNewznab(row.Format).ToList();
         }
     }
 }
