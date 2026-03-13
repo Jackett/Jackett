@@ -82,7 +82,7 @@ namespace Jackett.Common.Indexers.Definitions
             return qc;
         }
 
-        protected override List<int> ParseCategories(TorznabQuery query, JToken row)
+        protected override IReadOnlyList<int> ParseCategories(TorznabQuery query, JToken row)
         {
             var cat = row.Value<JObject>("category").Properties().First().Name;
             return MapTrackerCatToNewznab(cat).ToList();

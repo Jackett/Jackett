@@ -65,7 +65,10 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 !query.Categories.Contains(TorznabCatType.Audio.ID))
             {
                 if (query.Categories.Contains(TorznabCatType.MoviesUHD.ID) || query.Categories.Contains(TorznabCatType.TVUHD.ID))
+                {
                     qc.Add("video_quality[]", "6"); // 2160p
+                }
+
                 if (query.Categories.Contains(TorznabCatType.MoviesHD.ID) || query.Categories.Contains(TorznabCatType.TVHD.ID))
                 {
                     qc.Add("video_quality[]", "2"); // 720p
@@ -73,7 +76,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                     qc.Add("video_quality[]", "3"); // 1080p
                 }
                 if (query.Categories.Contains(TorznabCatType.MoviesSD.ID) || query.Categories.Contains(TorznabCatType.TVSD.ID))
+                {
                     qc.Add("video_quality[]", "1"); // SD
+                }
             }
 
             // note, search by tmdb and tvdb are supported too
@@ -113,35 +118,37 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         }
 
         // hook to adjust category parsing
-        protected virtual List<int> ParseCategories(TorznabQuery query, JToken row)
+        protected virtual IReadOnlyList<int> ParseCategories(TorznabQuery query, JToken row)
         {
-            var cats = new List<int>();
-            var resolution = row.Value<string>("video_quality");
-            switch (row.Value<string>("type"))
+            var categories = new List<int>();
+            var videoQuality = row.Value<string>("video_quality");
+
+            switch (row.Value<string>("type").ToUpperInvariant())
             {
-                case "Movie":
-                    cats.Add(resolution switch
+                case "MOVIE":
+                    categories.Add(videoQuality switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.MoviesHD.ID,
                         "2160p" => TorznabCatType.MoviesUHD.ID,
                         _ => TorznabCatType.MoviesSD.ID
                     });
                     break;
-                case "TV-Show":
-                    cats.Add(resolution switch
+                case "TV-SHOW":
+                    categories.Add(videoQuality switch
                     {
                         var res when _hdResolutions.Contains(res) => TorznabCatType.TVHD.ID,
                         "2160p" => TorznabCatType.TVUHD.ID,
                         _ => TorznabCatType.TVSD.ID
                     });
                     break;
-                case "Music":
-                    cats.Add(TorznabCatType.Audio.ID);
+                case "MUSIC":
+                    categories.Add(TorznabCatType.Audio.ID);
                     break;
                 default:
                     throw new Exception("Error parsing category!");
             }
-            return cats;
+
+            return categories;
         }
 
         protected AvistazTracker(IIndexerConfigurationService configService, WebClient client, Logger logger, IProtectionService p, ICacheService cs)
@@ -268,7 +275,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                         InfoHash = row.Value<string>("info_hash"),
                         Details = details,
                         Guid = details,
-                        Category = ParseCategories(query, row),
+                        Category = ParseCategories(query, row).ToList(),
                         PublishDate = row.Value<DateTime>("created_at_iso").ToUniversalTime(),
                         Description = description,
                         Size = row.Value<long>("file_size"),
