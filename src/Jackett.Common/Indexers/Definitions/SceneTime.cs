@@ -195,7 +195,7 @@ namespace Jackett.Common.Indexers.Definitions
                     return releases; // no results
                 }
 
-                var headerColumns = table.QuerySelectorAll("tbody > tr > td.cat_Head")
+                var headerColumns = table.QuerySelectorAll("thead > tr > th.cat_Head")
                                          .Select(x => x.GetAttribute("title").IsNotNullOrWhiteSpace() ? x.GetAttribute("title") : x.TextContent)
                                          .ToList();
                 var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type", StringComparison.OrdinalIgnoreCase));
@@ -204,7 +204,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeder(s)", StringComparison.OrdinalIgnoreCase));
                 var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leecher(s)", StringComparison.OrdinalIgnoreCase));
 
-                var rows = dom.QuerySelectorAll("tr.browse");
+                var rows = table.QuerySelectorAll("tbody > tr");
                 foreach (var row in rows)
                 {
                     var qDescCol = row.Children[nameIndex];
