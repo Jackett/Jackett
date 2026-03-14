@@ -1,14 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Net;
+using System.Threading.Tasks;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -24,6 +27,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://animetorrents.me/",
         };
+
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private new ConfigurationDataAvistaZTracker configData => (ConfigurationDataAvistaZTracker)base.configData;
@@ -67,6 +71,30 @@ namespace Jackett.Common.Indexers.Definitions
             return caps;
         }
 
+        public override async Task<byte[]> Download(Uri link)
+        {
+            if (AuthorizationToken.IsNullOrWhiteSpace())
+            {
+                await RenewalTokenAsync();
+            }
+
+            var response = await RequestWithCookiesAsync(link.ToString(), headers: GetDownloadHeaders());
+
+            if (response.Status == HttpStatusCode.Unauthorized)
+            {
+                await RenewalTokenAsync();
+
+                response = await RequestWithCookiesAsync(link.ToString(), headers: GetDownloadHeaders());
+            }
+
+            if (response.Status != HttpStatusCode.OK)
+            {
+                throw new Exception($"Unknown error in download: {response.ContentBytes}");
+            }
+
+            return response.ContentBytes;
+        }
+
         protected override List<KeyValuePair<string, string>> GetSearchQueryParameters(TorznabQuery query)
         {
             var parameters = new List<KeyValuePair<string, string>>
@@ -108,6 +136,15 @@ namespace Jackett.Common.Indexers.Definitions
         protected override string ParseTitle(AvistazRelease row)
         {
             return row.ReleaseTitle.IsNotNullOrWhiteSpace() ? row.ReleaseTitle : row.FileName;
+        }
+
+        private Dictionary<string, string> GetDownloadHeaders()
+        {
+            return new Dictionary<string, string>
+            {
+                { "Accept", "application/json" },
+                { "Authorization", $"Bearer {AuthorizationToken}" }
+            };
         }
     }
 }

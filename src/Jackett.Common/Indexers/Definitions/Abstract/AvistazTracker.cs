@@ -37,7 +37,8 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         private string AuthUrl => SiteLink + "api/v1/jackett/auth";
         private string SearchUrl => SiteLink + "api/v1/jackett/torrents";
         private readonly HashSet<string> _hdResolutions = new HashSet<string> { "1080p", "1080i", "720p" };
-        private string _token;
+
+        protected string AuthorizationToken;
 
         private new ConfigurationDataAvistaZTracker configData => (ConfigurationDataAvistaZTracker)base.configData;
 
@@ -195,7 +196,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             return IndexerConfigurationStatus.Completed;
         }
 
-        private async Task RenewalTokenAsync()
+        protected async Task RenewalTokenAsync()
         {
             var body = new Dictionary<string, string>
             {
@@ -215,9 +216,9 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 throw new Exception("Invalid response from AvistaZ, the response is not valid JSON");
             }
 
-            _token = authResponse.Token;
+            AuthorizationToken = authResponse.Token;
 
-            if (_token == null)
+            if (AuthorizationToken == null)
             {
                 throw new Exception(authResponse.Message ?? "Unauthorized request to indexer");
             }
@@ -333,7 +334,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
         private Dictionary<string, string> GetSearchHeaders() => new Dictionary<string, string>
         {
             {"Accept", "application/json"},
-            {"Authorization", $"Bearer {_token}"}
+            {"Authorization", $"Bearer {AuthorizationToken}"}
         };
     }
 
