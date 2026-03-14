@@ -209,7 +209,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     var qDescCol = row.Children[nameIndex];
                     var qLink = qDescCol.QuerySelector("a");
-                    var title = qLink.TextContent;
+                    var title = qLink.QuerySelector("span.torrent-text").TextContent.Trim();
 
                     if (!query.MatchQueryStringAND(title))
                     {
