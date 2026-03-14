@@ -119,11 +119,6 @@ search:
     tmdbid: "{{ .Query.TMDBID }}"
     limit: 100
 
-  keywordsfilters:
-    # replace spaces between words with percent wildcard
-    - name: re_replace
-      args: ["\\W+", "%"]
-
   rows:
     selector: rss > channel > item
 
