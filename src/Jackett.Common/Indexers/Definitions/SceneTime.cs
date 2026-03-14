@@ -241,7 +241,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Size = ParseUtil.GetBytes(row.Children[sizeIndex].TextContent),
                         Seeders = seeders,
                         Peers = ParseUtil.CoerceInt(row.Children[leechersIndex].TextContent.Trim()) + seeders,
-                        DownloadVolumeFactor = row.QuerySelector("font > b:contains(Freeleech)") != null ? 0 : 1,
+                        DownloadVolumeFactor = row.QuerySelector("span.tag.free") != null ? 0 : 1,
                         UploadVolumeFactor = 1,
                         MinimumRatio = 1,
                         MinimumSeedTime = 259200 // 72 hours
