@@ -18,6 +18,7 @@ caps:
     - {id: 4, cat: Console, desc: "Jeux"}
     - {id: 5, cat: PC, desc: "Logiciel"}
     - {id: 6, cat: Audio, desc: "Musique"}
+    - {id: 8, cat: TV/Sport, desc: "Sport"}
 
   modes:
     search: [q]
