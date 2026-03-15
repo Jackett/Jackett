@@ -142,7 +142,12 @@ search:
     details:
       selector: link
     download:
-      selector: downloadLink
+      selector: infoHash
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}api/torrents/download/"
+        - name: append
+          args: "?apikey={{ .Config.apikey }}"
     infohash:
       selector: infoHash
     size:
