@@ -92,9 +92,6 @@ search:
       args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
-    # prepend % to each word - allow 1 character keywords
-    - name: re_replace
-      args: ["(\\w+)", "%$1"]
 
   rows:
     selector: tr.table_fon
