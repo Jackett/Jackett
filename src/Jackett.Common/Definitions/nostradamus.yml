@@ -92,7 +92,6 @@ login:
     t: search
     limit: 1
 
-
 search:
   paths:
     - path: api
