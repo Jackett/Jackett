@@ -518,6 +518,7 @@ Prior versions of Jackett are no longer supported.
  * NorBits
  * NORDiCHD
  * NordicQuality
+ * Nostradamus
  * NovaHD
  * OKPT
  * Old Greek Tracker (OGT)
