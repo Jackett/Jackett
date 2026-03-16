@@ -305,7 +305,6 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/bitnova.yml",
                 "Definitions/bitofvalor.yml",
-                "Definitions/bitsearch.yml",
                 "Definitions/bitsexy.yml",
                 "Definitions/bitsexy-api.yml",
                 "Definitions/bitspyder.yml",

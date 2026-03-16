@@ -1,0 +1,146 @@
+---
+id: bitsearch
+replaces:
+  - solidtorrents
+name: BitSearch
+description: "BitSearch (Solid Torrents) is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://bitsearch.to/
+  - https://solidtorrents.eu/
+legacylinks:
+  - https://bitsearch.nocensor.cloud/
+  - https://bitsearch.mrunblock.bond/
+  - https://solidtorrents.net/
+  - https://solidtorrents.nocensor.cloud/
+  - https://solidtorrents.to/
+
+caps:
+  categories:
+    Anime: TV/Anime
+    Anime/Dub/Dual Audio: TV/Anime
+    Anime/Raw: TV/Anime
+    Anime/Subbed: TV/Anime
+    AudioBook: Audio/Audiobook
+    Books: Books
+    Books/Academic: Books/EBook
+    Books/Comics: Books/Comics
+    Books/Fiction: Books/EBook
+    Books/Magazines: Books/Mags
+    Books/Non-fiction: Books/EBook
+    Ebook/Course: Books/EBook
+    Games: Console
+    Games/Console: Console
+    Games/Mobile: PC/Mobile-Other
+    Games/PC: PC/Games
+    Games/RIP: PC/Games
+    Movies: Movies
+    Movies/Dub/Dual Audio: Movies
+    Music: Audio
+    Music/Album: Audio
+    Music/Discography: Audio
+    Music/FLAC: Audio/Lossless
+    Music/Lossless: Audio/Lossless
+    Music/MP3: Audio/MP3
+    Music/Single: Audio
+    Other: Other
+    Other/Android: PC/Mobile-Android
+    Other/Archive: Other
+    Other/Audio: Audio
+    Other/Database: PC
+    Other/DiskImage: PC/ISO
+    Other/Document: Books/Comics
+    Other/Image: Other/Misc
+    Other/Program: PC
+    Other/Source Code: PC
+    Other/Video: TV
+    Softwares: PC/0day
+    Softwares/Android: PC/Mobile-Android
+    Softwares/Linux: PC
+    Softwares/MacOS: PC/Mac
+    Softwares/Windows: PC/0day
+    Softwares/iOS: PC/Mobile-iOS
+    TV: TV
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site.
+    default: created
+    options:
+      created: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site.
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt"]
+      attribute: href
+
+search:
+  paths:
+     # https://bitsearch.to/search?q=spongebob&sortBy=created&order=desc&page=1
+    - path: "{{ if .Keywords }}search?q={{ .Keywords }}&sortBy={{ .Config.sort }}&order={{ .Config.type }}&page=1{{ else }}latest{{ end }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: div.space-y-4 > div.bg-white > div.items-start
+
+  fields:
+    category:
+      # latest, search
+      selector: div.space-y-2 > span:nth-child(1), span.space-x-1:nth-child(1)
+    title:
+      selector: h3 > a
+    details:
+      selector: h3 > a
+      attribute: href
+    download:
+      selector: h3 > a
+      attribute: href
+    size:
+      selector: div.space-y-2 > span:nth-child(2), span.space-x-1:nth-child(2)
+    date_year:
+      selector: div.space-y-2 > span:nth-child(3):contains("/"), span.space-x-1:nth-child(3):contains("/")
+      optional: true
+      filters:
+        - name: dateparse
+          args: "M/d/yyyy"
+    date_ago:
+      selector: div.space-y-2 > span:nth-child(3):contains("ago"), span.space-x-1:nth-child(3):contains("ago")
+      optional: true
+      filters:
+        - name: timeago
+    date:
+      text: "{{ if or .Result.date_year .Result.date_ago }}{{ or .Result.date_year .Result.date_ago }}{{ else }}now{{ end }}"
+    seeders:
+      selector: div.space-x-3 > span:nth-child(1), span:contains("seeders")
+    leechers:
+      selector: div.space-x-3 > span:nth-child(2), span:contains("leechers")
+    grabs:
+      selector: span:contains("downloads")
+      optional: true
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a
