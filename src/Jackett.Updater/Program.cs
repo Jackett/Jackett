@@ -428,6 +428,7 @@ namespace Jackett.Updater
                 "Definitions/ftuapps.yml",
                 "Definitions/gfxpeers.yml",
                 "Definitions/falkonvisionteam.yml",
+                "Definitions/fluxzone.yml",
                 "Definitions/focusx.yml",
                 "Definitions/fouducinema.yml",
                 "Definitions/freakstrackingsystem.yml",

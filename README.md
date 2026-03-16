@@ -390,7 +390,6 @@ Prior versions of Jackett are no longer supported.
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * Flood (FLD)
- * Flux-Zone
  * Free Farm (自由农场)
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
