@@ -598,6 +598,7 @@ Prior versions of Jackett are no longer supported.
  * SiamBIT [PAY2DL]
  * Siqi
  * SkipTheCommercials
+ * Slobit Media
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
