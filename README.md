@@ -615,6 +615,7 @@ Prior versions of Jackett are no longer supported.
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
+ * TeamFlix
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
