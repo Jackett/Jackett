@@ -78,11 +78,12 @@ namespace Jackett.Server.Controllers
                     var torrentDictionary = parser.Parse(downloadBytes);
                     sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
-                    var content = indexer.Encoding.GetString(downloadBytes);
-                    _logger.Error(content);
-                    throw new Exception("BencodeParser failed", e);
+                    _logger.Warn("Invalid bencode, sending raw torrent");
+
+                    // Fallback: Send the original torrent, even if it doesn't comply
+                    sortedDownloadBytes = downloadBytes;
                 }
 
                 var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
