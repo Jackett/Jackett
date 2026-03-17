@@ -6,9 +6,9 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://vsthouse.ru/
-legacylinks:
   - http://vsthouse.ru/
+legacylinks:
+  - https://vsthouse.ru/
 
 caps:
   categories:
