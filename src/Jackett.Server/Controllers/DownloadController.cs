@@ -66,12 +66,12 @@ namespace Jackett.Server.Controllers
                     && downloadBytes[4] == 0x65 // e
                     && downloadBytes[5] == 0x74 // t
                     && downloadBytes[6] == 0x3a // :
-                    )
+                )
                 {
                     var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
                     return Redirect(magnetUrl);
                 }
-                
+
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
                 // Fix torrents with unsorted top-level keys
                 byte[] sortedDownloadBytes;
@@ -127,7 +127,8 @@ namespace Jackett.Server.Controllers
                 }
                 catch (Exception e)
                 {
-                    _logger.Error(indexer.Encoding.GetString(downloadBytes));
+                    var content = indexer.Encoding.GetString(downloadBytes);
+                    _logger.Error(content);
                     throw new Exception("BencodeParser failed", e);
                 }
 
@@ -158,12 +159,14 @@ namespace Jackett.Server.Controllers
                     return index + 1;
                 }
 
-                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent";
+                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
             {
-                _logger.Error($"Error downloading. indexer: {indexerId.Replace(Environment.NewLine, "")} path: {path.Replace(Environment.NewLine, "")}\n{e}");
+                _logger.Error($"Error downloading. " +
+                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
+                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return NotFound();
             }
         }
