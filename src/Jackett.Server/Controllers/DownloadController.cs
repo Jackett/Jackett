@@ -41,7 +41,9 @@ namespace Jackett.Server.Controllers
             try
             {
                 if (_serverConfig.APIKey != jackett_apikey)
+                {
                     return Unauthorized();
+                }
 
                 var indexer = _indexerService.GetWebIndexer(indexerId);
                 if (!indexer.IsConfigured)
@@ -84,14 +86,23 @@ namespace Jackett.Server.Controllers
                         {
                             // Read key
                             int colon = Array.IndexOf(downloadBytes, (byte)':', i);
-                            if (colon == -1) break;
+                            if (colon == -1)
+                            {
+                                break;
+                            }
+
                             int keyLen = int.Parse(Encoding.ASCII.GetString(downloadBytes, i, colon - i));
                             int keyStart = colon + 1;
                             int keyEnd = keyStart + keyLen;
-                            if (keyEnd > downloadBytes.Length) break;
+                            if (keyEnd > downloadBytes.Length)
+                            {
+                                break;
+                            }
+
                             var key = new byte[keyEnd - keyStart];
                             Array.Copy(downloadBytes, keyStart, key, 0, keyEnd - keyStart);
                             i = keyEnd;
+
                             // Read value
                             int valStart = i;
                             i = SkipBencodeElement(downloadBytes, i);
@@ -99,6 +110,7 @@ namespace Jackett.Server.Controllers
                             Array.Copy(downloadBytes, valStart, val, 0, i - valStart);
                             items.Add((key, val));
                         }
+
                         // Rebuild sorted top-level dictionary
                         var list = new List<byte> { (byte)'d' };
                         foreach (var kv in items.OrderBy(it => Encoding.ASCII.GetString(it.key)))
@@ -108,6 +120,7 @@ namespace Jackett.Server.Controllers
                             list.AddRange(kv.key);
                             list.AddRange(kv.value);
                         }
+
                         list.Add((byte)'e');
                         sortedDownloadBytes = list.ToArray();
                     }
@@ -125,28 +138,6 @@ namespace Jackett.Server.Controllers
                     throw new Exception("BencodeParser failed", e);
                 }
 
-                int SkipBencodeElement(byte[] data, int index)
-                {
-                    if (index >= data.Length) return index;
-                    var c = data[index];
-                    if (c == (byte)'i')
-                        return Array.IndexOf(data, (byte)'e', index) + 1;
-                    if (c == (byte)'l' || c == (byte)'d')
-                    {
-                        index++;
-                        while (index < data.Length && data[index] != (byte)'e')
-                            index = SkipBencodeElement(data, index);
-                        return index + 1;
-                    }
-                    if (c >= (byte)'0' && c <= (byte)'9')
-                    {
-                        int colon = Array.IndexOf(data, (byte)':', index);
-                        int len = int.Parse(Encoding.ASCII.GetString(data, index, colon - index));
-                        return colon + 1 + len;
-                    }
-                    return index + 1;
-                }
-
                 var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
 
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
@@ -158,6 +149,45 @@ namespace Jackett.Server.Controllers
                               $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return NotFound();
             }
+        }
+
+        private int SkipBencodeElement(byte[] data, int index)
+        {
+            if (index >= data.Length)
+            {
+                return index;
+            }
+
+            var c = data[index];
+            if (c == (byte)'i')
+            {
+                return Array.IndexOf(data, (byte)'e', index) + 1;
+            }
+
+            if (c == (byte)'l' || c == (byte)'d')
+            {
+                index++;
+                while (index < data.Length && data[index] != (byte)'e')
+                {
+                    index = SkipBencodeElement(data, index);
+                }
+
+                return index + 1;
+            }
+
+            if (c >= (byte)'0' && c <= (byte)'9')
+            {
+                int colon = Array.IndexOf(data, (byte)':', index);
+                if (colon == -1)
+                {
+                    return data.Length;
+                }
+
+                int len = int.Parse(Encoding.ASCII.GetString(data, index, colon - index));
+                return colon + 1 + len;
+            }
+
+            return index + 1;
         }
     }
 }
