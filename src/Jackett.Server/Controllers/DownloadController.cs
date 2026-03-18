@@ -27,7 +27,11 @@ namespace Jackett.Server.Controllers
         private readonly IIndexerManagerService _indexerService;
         private readonly IProtectionService _protectionService;
 
-        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
+        public DownloadController(
+            IIndexerManagerService i,
+            Logger l,
+            IProtectionService ps,
+            ServerConfig sConfig)
         {
             _serverConfig = sConfig;
             _logger = l;
@@ -36,7 +40,11 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadAsync(string indexerId, string path, string jackett_apikey, string file)
+        public async Task<IActionResult> DownloadAsync(
+            string indexerId,
+            string path,
+            string jackett_apikey,
+            string file)
         {
             try
             {
@@ -47,7 +55,8 @@ namespace Jackett.Server.Controllers
 
                 if (!indexer.IsConfigured)
                 {
-                    _logger.Warn($"Rejected a request to {indexer.Name} which is unconfigured.");
+                    _logger.Warn(
+                        $"Rejected a request to {indexer.Name} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
@@ -59,14 +68,14 @@ namespace Jackett.Server.Controllers
 
                 // handle magnet URLs
                 if (downloadBytes.Length >= 7
-                    && downloadBytes[0] == 0x6d // m
-                    && downloadBytes[1] == 0x61 // a
-                    && downloadBytes[2] == 0x67 // g
-                    && downloadBytes[3] == 0x6e // n
-                    && downloadBytes[4] == 0x65 // e
-                    && downloadBytes[5] == 0x74 // t
-                    && downloadBytes[6] == 0x3a // :
-                )
+                        && downloadBytes[0] == 0x6d // m
+                        && downloadBytes[1] == 0x61 // a
+                        && downloadBytes[2] == 0x67 // g
+                        && downloadBytes[3] == 0x6e // n
+                        && downloadBytes[4] == 0x65 // e
+                        && downloadBytes[5] == 0x74 // t
+                        && downloadBytes[6] == 0x3a // :
+                    )
                 {
                     var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
                     return Redirect(magnetUrl);
@@ -88,7 +97,8 @@ namespace Jackett.Server.Controllers
                             int colon = Array.IndexOf(downloadBytes, (byte)':', i);
                             if (colon == -1) break;
 
-                            int keyLen = int.Parse(Encoding.ASCII.GetString(downloadBytes, i, colon - i));
+                            int keyLen = int.Parse(
+                                Encoding.ASCII.GetString(downloadBytes, i, colon - i));
                             int keyStart = colon + 1;
                             int keyEnd = keyStart + keyLen;
                             if (keyEnd > downloadBytes.Length) break;
@@ -159,14 +169,16 @@ namespace Jackett.Server.Controllers
                     return index + 1;
                 }
 
-                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                var fileName = StringUtil.MakeValidFileName(file, '_', false)
+                                + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
             {
-                _logger.Error($"Error downloading. " +
-                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
-                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
+                _logger.Error(
+                    $"Error downloading. " +
+                    $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
+                    $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return NotFound();
             }
         }
