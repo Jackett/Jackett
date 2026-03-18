@@ -1,18 +1,18 @@
 using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using BencodeNET.Objects;
 using BencodeNET.Parsing;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Server.ActionFilters;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using NLog;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace Jackett.Server.Controllers
 {
@@ -45,11 +45,8 @@ namespace Jackett.Server.Controllers
 
                 var indexer = _indexerService.GetWebIndexer(indexerId);
 
-                if (!indexer.IsConfigured)
-                {
-                    _logger.Warn($"Rejected a request to {indexer.Name} which is unconfigured.");
-                    return Forbid("This indexer is not configured.");
-                }
+                if (indexer == null || !indexer.IsConfigured)
+                    return Forbid();
 
                 path = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(path));
                 path = _protectionService.UnProtect(path);
@@ -57,24 +54,21 @@ namespace Jackett.Server.Controllers
                 var target = new Uri(path, UriKind.RelativeOrAbsolute);
                 var downloadBytes = await indexer.Download(target);
 
-                // handle magnet URLs
-                if (downloadBytes.Length >= 7
-                    && downloadBytes[0] == 0x6d // m
-                    && downloadBytes[1] == 0x61 // a
-                    && downloadBytes[2] == 0x67 // g
-                    && downloadBytes[3] == 0x6e // n
-                    && downloadBytes[4] == 0x65 // e
-                    && downloadBytes[5] == 0x74 // t
-                    && downloadBytes[6] == 0x3a // :
-                    )
+                if (downloadBytes.Length >= 7 &&
+                    downloadBytes[0] == 0x6d &&
+                    downloadBytes[1] == 0x61 &&
+                    downloadBytes[2] == 0x67 &&
+                    downloadBytes[3] == 0x6e &&
+                    downloadBytes[4] == 0x65 &&
+                    downloadBytes[5] == 0x74 &&
+                    downloadBytes[6] == 0x3a)
                 {
                     var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
                     return Redirect(magnetUrl);
                 }
 
-                // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
-                // Fix torrents with unsorted top-level keys
                 byte[] sortedDownloadBytes;
+
                 try
                 {
                     if (downloadBytes.Length > 0 && downloadBytes[0] == (byte)'d')
@@ -84,11 +78,12 @@ namespace Jackett.Server.Controllers
 
                         while (i < downloadBytes.Length && downloadBytes[i] != (byte)'e')
                         {
-                            // Read key
                             int colon = Array.IndexOf(downloadBytes, (byte)':', i);
                             if (colon == -1) break;
 
-                            int keyLen = int.Parse(Encoding.ASCII.GetString(downloadBytes, i, colon - i));
+                            if (!int.TryParse(Encoding.ASCII.GetString(downloadBytes, i, colon - i), out int keyLen))
+                                break;
+
                             int keyStart = colon + 1;
                             int keyEnd = keyStart + keyLen;
                             if (keyEnd > downloadBytes.Length) break;
@@ -96,21 +91,23 @@ namespace Jackett.Server.Controllers
                             var key = downloadBytes[keyStart..keyEnd];
                             i = keyEnd;
 
-                            // Read value
                             int valStart = i;
                             i = SkipBencodeElement(downloadBytes, i);
-                            var val = downloadBytes[valStart..i];
+                            if (i <= valStart || i > downloadBytes.Length) break;
 
+                            var val = downloadBytes[valStart..i];
                             items.Add((key, val));
                         }
 
-                        // Rebuild sorted top-level dictionary
                         sortedDownloadBytes = new List<byte> { (byte)'d' }
                             .Concat(items
                                 .OrderBy(it => Encoding.ASCII.GetString(it.key))
-                                .SelectMany(kv => Encoding.ASCII.GetBytes(kv.key.Length + ":")
-                                                    .Concat(kv.key)
-                                                    .Concat(kv.value)))
+                                .SelectMany(kv =>
+                                    Encoding.ASCII.GetBytes(kv.key.Length + ":")
+                                        .Concat(kv.key)
+                                        .Concat(kv.value)
+                                )
+                            )
                             .Concat(new byte[] { (byte)'e' })
                             .ToArray();
                     }
@@ -121,10 +118,9 @@ namespace Jackett.Server.Controllers
                         sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
                     }
                 }
-                catch (Exception e)
+                catch
                 {
-                    _logger.Error(indexer.Encoding.GetString(downloadBytes));
-                    throw new Exception("BencodeParser failed", e);
+                    sortedDownloadBytes = downloadBytes;
                 }
 
                 int SkipBencodeElement(byte[] data, int index)
@@ -134,34 +130,40 @@ namespace Jackett.Server.Controllers
                     var c = data[index];
 
                     if (c == (byte)'i')
-                        return Array.IndexOf(data, (byte)'e', index) + 1;
+                    {
+                        int end = Array.IndexOf(data, (byte)'e', index);
+                        return end == -1
+                            ? data.Length
+                            : end + 1;
+                    }
 
                     if (c == (byte)'l' || c == (byte)'d')
                     {
                         index++;
                         while (index < data.Length && data[index] != (byte)'e')
                             index = SkipBencodeElement(data, index);
-                        return index + 1;
+                        return index < data.Length ? index + 1 : data.Length;
                     }
 
                     if (c >= (byte)'0' && c <= (byte)'9')
                     {
                         int colon = Array.IndexOf(data, (byte)':', index);
-                        int len = int.Parse(Encoding.ASCII.GetString(data, index, colon - index));
-                        return colon + 1 + len;
+                        if (colon == -1) return data.Length;
+
+                        if (!int.TryParse(Encoding.ASCII.GetString(data, index, colon - index), out int len))
+                            return data.Length;
+
+                        return Math.Min(colon + 1 + len, data.Length);
                     }
 
                     return index + 1;
                 }
 
-                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                var fileName = StringUtil.MakeValidFileName(file ?? "download", '_', false) + ".torrent";
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
-            catch (Exception e)
+            catch
             {
-                _logger.Error($"Error downloading. " +
-                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
-                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return NotFound();
             }
         }
