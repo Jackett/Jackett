@@ -105,6 +105,7 @@ caps:
     - {id: 682, cat: TV/Anime, desc: "UnCensored"}
     - {id: 681, cat: TV/Anime, desc: "Censored"}
     - {id: 697, cat: TV/Anime, desc: "Манга, обои, артбуки и др."}
+    - {id: 988, cat: TV/Anime, desc: "Китайская и корейская анимация"}
     # Music and Music Video      # Музыка и Музыкальное видео
     - {id: 450, cat: Audio, desc: "Общий раздел музыки"}
     - {id: 470, cat: Audio, desc: "Классическая музыка"}
