@@ -11,6 +11,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
 using NLog;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Jackett.Server.Controllers
 {
@@ -71,22 +73,88 @@ namespace Jackett.Server.Controllers
                 }
 
                 // This will fix torrents where the keys are not sorted, and thereby not supported by Sonarr.
+                // Fix torrents with unsorted top-level keys
                 byte[] sortedDownloadBytes;
                 try
                 {
-                    var parser = new BencodeParser();
-                    var torrentDictionary = parser.Parse(downloadBytes);
-                    sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
+                    if (downloadBytes.Length > 0 && downloadBytes[0] == (byte)'d')
+                    {
+                        int i = 1;
+                        var items = new List<(byte[] key, byte[] value)>();
+
+                        while (i < downloadBytes.Length && downloadBytes[i] != (byte)'e')
+                        {
+                            // Read key
+                            int colon = Array.IndexOf(downloadBytes, (byte)':', i);
+                            if (colon == -1) break;
+
+                            int keyLen = int.Parse(Encoding.ASCII.GetString(downloadBytes, i, colon - i));
+                            int keyStart = colon + 1;
+                            int keyEnd = keyStart + keyLen;
+                            if (keyEnd > downloadBytes.Length) break;
+
+                            var key = downloadBytes[keyStart..keyEnd];
+                            i = keyEnd;
+
+                            // Read value
+                            int valStart = i;
+                            i = SkipBencodeElement(downloadBytes, i);
+                            var val = downloadBytes[valStart..i];
+
+                            items.Add((key, val));
+                        }
+
+                        // Rebuild sorted top-level dictionary
+                        sortedDownloadBytes = new List<byte> { (byte)'d' }
+                            .Concat(items
+                                .OrderBy(it => Encoding.ASCII.GetString(it.key))
+                                .SelectMany(kv => Encoding.ASCII.GetBytes(kv.key.Length + ":")
+                                                    .Concat(kv.key)
+                                                    .Concat(kv.value)))
+                            .Concat(new byte[] { (byte)'e' })
+                            .ToArray();
+                    }
+                    else
+                    {
+                        var parser = new BencodeParser();
+                        var torrentDictionary = parser.Parse(downloadBytes);
+                        sortedDownloadBytes = torrentDictionary.EncodeAsBytes();
+                    }
                 }
                 catch (Exception e)
                 {
-                    var content = indexer.Encoding.GetString(downloadBytes);
-                    _logger.Error(content);
+                    _logger.Error(indexer.Encoding.GetString(downloadBytes));
                     throw new Exception("BencodeParser failed", e);
                 }
 
-                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                int SkipBencodeElement(byte[] data, int index)
+                {
+                    if (index >= data.Length) return index;
 
+                    var c = data[index];
+
+                    if (c == (byte)'i')
+                        return Array.IndexOf(data, (byte)'e', index) + 1;
+
+                    if (c == (byte)'l' || c == (byte)'d')
+                    {
+                        index++;
+                        while (index < data.Length && data[index] != (byte)'e')
+                            index = SkipBencodeElement(data, index);
+                        return index + 1;
+                    }
+
+                    if (c >= (byte)'0' && c <= (byte)'9')
+                    {
+                        int colon = Array.IndexOf(data, (byte)':', index);
+                        int len = int.Parse(Encoding.ASCII.GetString(data, index, colon - index));
+                        return colon + 1 + len;
+                    }
+
+                    return index + 1;
+                }
+
+                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
