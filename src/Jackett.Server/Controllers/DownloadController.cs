@@ -68,13 +68,13 @@ namespace Jackett.Server.Controllers
 
                 // handle magnet URLs
                 if (downloadBytes.Length >= 7
-                        && downloadBytes[0] == 0x6d // m
-                        && downloadBytes[1] == 0x61 // a
-                        && downloadBytes[2] == 0x67 // g
-                        && downloadBytes[3] == 0x6e // n
-                        && downloadBytes[4] == 0x65 // e
-                        && downloadBytes[5] == 0x74 // t
-                        && downloadBytes[6] == 0x3a // :
+                    && downloadBytes[0] == 0x6d // m
+                    && downloadBytes[1] == 0x61 // a
+                    && downloadBytes[2] == 0x67 // g
+                    && downloadBytes[3] == 0x6e // n
+                    && downloadBytes[4] == 0x65 // e
+                    && downloadBytes[5] == 0x74 // t
+                    && downloadBytes[6] == 0x3a // :
                     )
                 {
                     var magnetUrl = Encoding.UTF8.GetString(downloadBytes);
