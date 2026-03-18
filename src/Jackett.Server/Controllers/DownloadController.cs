@@ -27,11 +27,7 @@ namespace Jackett.Server.Controllers
         private readonly IIndexerManagerService _indexerService;
         private readonly IProtectionService _protectionService;
 
-        public DownloadController(
-            IIndexerManagerService i,
-            Logger l,
-            IProtectionService ps,
-            ServerConfig sConfig)
+        public DownloadController(IIndexerManagerService i, Logger l, IProtectionService ps, ServerConfig sConfig)
         {
             _serverConfig = sConfig;
             _logger = l;
@@ -40,11 +36,7 @@ namespace Jackett.Server.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> DownloadAsync(
-            string indexerId,
-            string path,
-            string jackett_apikey,
-            string file)
+        public async Task<IActionResult> DownloadAsync(string indexerId, string path, string jackett_apikey, string file)
         {
             try
             {
@@ -52,11 +44,9 @@ namespace Jackett.Server.Controllers
                     return Unauthorized();
 
                 var indexer = _indexerService.GetWebIndexer(indexerId);
-
                 if (!indexer.IsConfigured)
                 {
-                    _logger.Warn(
-                        $"Rejected a request to {indexer.Name} which is unconfigured.");
+                    _logger.Warn($"Rejected a request to {indexer.Name} which is unconfigured.");
                     return Forbid("This indexer is not configured.");
                 }
 
@@ -90,32 +80,25 @@ namespace Jackett.Server.Controllers
                     {
                         int i = 1;
                         var items = new List<(byte[] key, byte[] value)>();
-
                         while (i < downloadBytes.Length && downloadBytes[i] != (byte)'e')
                         {
                             // Read key
                             int colon = Array.IndexOf(downloadBytes, (byte)':', i);
                             if (colon == -1) break;
-
-                            int keyLen = int.Parse(
-                                Encoding.ASCII.GetString(downloadBytes, i, colon - i));
+                            int keyLen = int.Parse(Encoding.ASCII.GetString(downloadBytes, i, colon - i));
                             int keyStart = colon + 1;
                             int keyEnd = keyStart + keyLen;
                             if (keyEnd > downloadBytes.Length) break;
-
                             var key = new byte[keyEnd - keyStart];
                             Array.Copy(downloadBytes, keyStart, key, 0, keyEnd - keyStart);
                             i = keyEnd;
-
                             // Read value
                             int valStart = i;
                             i = SkipBencodeElement(downloadBytes, i);
                             var val = new byte[i - valStart];
                             Array.Copy(downloadBytes, valStart, val, 0, i - valStart);
-
                             items.Add((key, val));
                         }
-
                         // Rebuild sorted top-level dictionary
                         var list = new List<byte> { (byte)'d' };
                         foreach (var kv in items.OrderBy(it => Encoding.ASCII.GetString(it.key)))
@@ -145,12 +128,9 @@ namespace Jackett.Server.Controllers
                 int SkipBencodeElement(byte[] data, int index)
                 {
                     if (index >= data.Length) return index;
-
                     var c = data[index];
-
                     if (c == (byte)'i')
                         return Array.IndexOf(data, (byte)'e', index) + 1;
-
                     if (c == (byte)'l' || c == (byte)'d')
                     {
                         index++;
@@ -158,27 +138,24 @@ namespace Jackett.Server.Controllers
                             index = SkipBencodeElement(data, index);
                         return index + 1;
                     }
-
                     if (c >= (byte)'0' && c <= (byte)'9')
                     {
                         int colon = Array.IndexOf(data, (byte)':', index);
                         int len = int.Parse(Encoding.ASCII.GetString(data, index, colon - index));
                         return colon + 1 + len;
                     }
-
                     return index + 1;
                 }
 
-                var fileName = StringUtil.MakeValidFileName(file, '_', false)
-                                + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                var fileName = StringUtil.MakeValidFileName(file, '_', false) + ".torrent"; // call MakeValidFileName again to avoid any kind of injection attack
+                
                 return File(sortedDownloadBytes, "application/x-bittorrent", fileName);
             }
             catch (Exception e)
             {
-                _logger.Error(
-                    $"Error downloading. " +
-                    $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
-                    $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
+                _logger.Error($"Error downloading. " +
+                              $"indexer: {indexerId.Replace(Environment.NewLine, "")} " +
+                              $"path: {path.Replace(Environment.NewLine, "")}\n{e}");
                 return NotFound();
             }
         }
