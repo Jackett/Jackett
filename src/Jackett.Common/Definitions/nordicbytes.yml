@@ -42,7 +42,7 @@ settings:
   - name: info_apikey
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://nordicbytes.org/\" target=\"_blank\">NordicBytes</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Key by accessing the <a href=\"https://nordicbytes.org/account/apikey/\" target=\"_blank\">NordicBytes Account API Key</a> page and double clicking on the key to select it so you can copy/paste it to your indexer config."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
