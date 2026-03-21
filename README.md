@@ -361,7 +361,6 @@ Prior versions of Jackett are no longer supported.
  * CrnaBerza
  * cspt (财神)
  * cyanbug (大青虫)
- * DANISH BYTES
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
@@ -515,6 +514,7 @@ Prior versions of Jackett are no longer supported.
  * njtupt (浦园)) [![(invite needed)][inviteneeded]](#)
  * NOBS (NUCLEAR ORDER BIT SYNDICATE)
  * NorBits
+ * NordicBytes
  * NORDiCHD
  * NordicQuality
  * Nostradamus
