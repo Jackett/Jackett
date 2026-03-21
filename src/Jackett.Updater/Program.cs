@@ -360,6 +360,7 @@ namespace Jackett.Updater
                 "Definitions/cztorrent.yml",
                 "Definitions/dajiao.yml",
                 "Definitions/danishbytes.yml", // migrated to C#
+                "Definitions/danishbytes-api.yml ", // renamed to nordicbytes #10758
                 "Definitions/dariustracker.yml",
                 "Definitions/dark-shadow.yml",
                 "Definitions/darktracker.yml",
