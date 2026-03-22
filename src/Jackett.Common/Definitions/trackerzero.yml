@@ -55,7 +55,7 @@ settings:
   - name: info_apikey
     type: info
     label: About your API key
-    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Fetch/XHR</b> button (Chrome Browser) or <b>XHR</b> button (FireFox)</li><li>Perform any search on the web site</li><li>Click on the first <i>torrents?limit=30&page=1&sort_by=created_at&sort_dir=desc</i> entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the API key from the <b>Authorization</b> string <i>(everything after 'Authorization: Bearer ')</i> and <b>Paste</b> here.</li></ol>"
+    default: "Find your API key by accessing your <a href=\"https://trackerzero.it/\" target=\"_blank\">TrackerZero</a> <i>Profile</i> page and scrolling down to the <b>img.trackerzero.it</b> section."
   - name: passkey
     type: text
     label: Passkey
