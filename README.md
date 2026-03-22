@@ -538,6 +538,7 @@ Prior versions of Jackett are no longer supported.
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
  * PlayletPT [![(invite needed)][inviteneeded]](#)
+ * Podzemlje
  * Polish Torrent (PTT)
  * PolishTracker [![(invite needed)][inviteneeded]](#)
  * Pornbay [![(invite needed)][inviteneeded]](#)
