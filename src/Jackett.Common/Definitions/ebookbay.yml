@@ -69,7 +69,6 @@ caps:
   modes:
     search: [q]
     book-search: [q]
-    music-search: [q]
 
 settings: []
 
