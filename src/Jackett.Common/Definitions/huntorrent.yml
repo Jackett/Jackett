@@ -94,7 +94,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: browse.php
-    selector: a[href^="logout.php?k="]
+    selector: a[href*="logout.php?k="]
 
 search:
   headers:
