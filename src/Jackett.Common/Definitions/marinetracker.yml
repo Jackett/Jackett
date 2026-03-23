@@ -160,8 +160,8 @@ caps:
     - {id: 340, cat: Books, desc: "Examinations-Text books"}
     - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
-    - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
-    - {id: 373, cat: Audio, desc: "Audio-Fiction"}
+    - {id: 287, cat: Audio/Audiobook, desc: "Audio-Non-Fiction"}
+    - {id: 373, cat: Audio/Audiobook, desc: "Audio-Fiction"}
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
     - {id: 389, cat: Books, desc: "Yachting, sailing, boating-Sailboat terminology"}
@@ -262,6 +262,7 @@ caps:
   modes:
     search: [q]
     movie-search: [q]
+    music-search: [q]
     book-search: [q]
 
 settings:
