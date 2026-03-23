@@ -7,6 +7,7 @@ description: "BitSearch (Solid Torrents) is a Public torrent meta-search engine"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 3
 links:
   - https://bitsearch.to/
   - https://solidtorrents.eu/
