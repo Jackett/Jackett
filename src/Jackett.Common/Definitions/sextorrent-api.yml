@@ -53,7 +53,7 @@ caps:
     - {id: 44, cat: XXX, desc: "GAY"}
     - {id: 45, cat: XXX, desc: "Classic"}
     - {id: 46, cat: XXX, desc: "Threesome"}
-    - {id: 1, cat: Movies, desc: "Movies XXX"}
+    - {id: 1, cat: XXX, desc: "Movies XXX"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 47, cat: XXX, desc: "Unsorted"}
