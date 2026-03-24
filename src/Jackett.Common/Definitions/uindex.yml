@@ -39,7 +39,7 @@ search:
     c: 0
 
   rows:
-    selector: table.maintable > tbody > tr:has(a[href^="magnet:?xt="])
+    selector: table.sr-table > tbody > tr:has(a[href^="magnet:?xt="])
 
   fields:
     category:
@@ -57,13 +57,13 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     date:
-      selector: div.sub
+      selector: td.sr-col-uploaded
     size:
-      selector: td:nth-child(3)
+      selector: td.sr-col-size
     seeders:
-      selector: td:nth-child(4)
+      selector: td.sr-col-seeders
     leechers:
-      selector: td:nth-child(5)
+      selector: td.sr-col-leechers
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
