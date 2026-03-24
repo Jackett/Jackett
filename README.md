@@ -769,9 +769,7 @@ cd /opt && wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/
 
    ```bash
    cd /opt
-   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo tar -xzf Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo rm Jackett.Binaries.LinuxAMDx64.tar.gz
+   sudo wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz
    ```
 
 2. Set proper ownership:
