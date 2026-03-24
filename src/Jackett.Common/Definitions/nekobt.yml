@@ -37,7 +37,6 @@ settings:
       "1": "Level 1"
       "2": "Level 2"
       "3": "Level 3"
-      "4": "Level 4"
   - name: audio_lang
     type: text
     label: Audio Language (comma-separated codes, e.g. en,ja)
@@ -105,14 +104,8 @@ search:
   fields:
     title:
       selector: title
-      filters:
-        - name: re_replace
-          args: ["(.+?) {Tags:.+", "$1"]
     description:
       selector: title
-      filters:
-        - name: re_replace
-          args: [".+ {(Tags:.+?)}", "$1"]
     details:
       selector: comments
     magnet:
