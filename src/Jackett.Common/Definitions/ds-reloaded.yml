@@ -20,7 +20,7 @@ caps:
     - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
     - {id: 138, cat: Movies, desc: "Filme > Pack's"}
     - {id: 147, cat: Movies/HD, desc: "Filme > h266/x266"}
-    - {id: 150, cat: Movies/Foreign, desc: "Filme > International"}
+    - {id: 150, cat: Movies/Foreign, desc: "Filme >  International"}
     - {id: 57, cat: TV/HD, desc: "Serien > HD"}
     - {id: 60, cat: TV/SD, desc: "Serien > SD"}
     - {id: 139, cat: TV/UHD, desc: "Serien > UHD"}
