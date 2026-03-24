@@ -497,6 +497,7 @@ namespace Jackett.Updater
                 "Definitions/horriblesubs.yml",
                 "Definitions/horrorsite.yml",
                 "Definitions/hqsource.yml",
+                "Definitions/huntorrent-bithorlo.yml", // merged with huntorrent
                 "Definitions/hush.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/ibit.yml",
