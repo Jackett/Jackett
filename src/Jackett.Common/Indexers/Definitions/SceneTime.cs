@@ -6,7 +6,6 @@ using System.Globalization;
 using System.Linq;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
-using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -177,39 +176,41 @@ namespace Jackett.Common.Indexers.Definitions
                                     "made a mistake when copying it. Please check the settings.");
             }
 
-            return ParseResponse(query, results.ContentString);
+            return await ParseResponseAsync(query, results.ContentString);
         }
 
-        private List<ReleaseInfo> ParseResponse(TorznabQuery query, string htmlResponse)
+        private async Task<List<ReleaseInfo>> ParseResponseAsync(TorznabQuery query, string htmlResponse)
         {
             var releases = new List<ReleaseInfo>();
 
             try
             {
                 var parser = new HtmlParser();
-                using var dom = parser.ParseDocument(htmlResponse);
+                using var dom = await parser.ParseDocumentAsync(htmlResponse);
 
-                var table = dom.QuerySelector("table.movehere");
+                var table = dom.QuerySelector("table#torrenttable");
                 if (table == null)
                 {
-                    return releases; // no results
+                    logger.Error("No results, table element is not present in page.");
+                    return releases;
                 }
 
-                var headerColumns = table.QuerySelectorAll("thead > tr > th.cat_Head")
-                                         .Select(x => x.GetAttribute("title").IsNotNullOrWhiteSpace() ? x.GetAttribute("title") : x.TextContent)
+                var headerColumns = table.QuerySelectorAll("thead > tr > th")
+                                         .Select(x => x.GetAttribute("title") ?? x.QuerySelector("a[title]")?.GetAttribute("title") ?? x.TextContent)
                                          .ToList();
+
                 var categoryIndex = headerColumns.FindIndex(x => x.Equals("Type", StringComparison.OrdinalIgnoreCase));
                 var nameIndex = headerColumns.FindIndex(x => x.Equals("Name", StringComparison.OrdinalIgnoreCase));
                 var sizeIndex = headerColumns.FindIndex(x => x.Equals("Size", StringComparison.OrdinalIgnoreCase));
-                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeder(s)", StringComparison.OrdinalIgnoreCase));
-                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leecher(s)", StringComparison.OrdinalIgnoreCase));
+                var seedersIndex = headerColumns.FindIndex(x => x.Equals("Seeders", StringComparison.OrdinalIgnoreCase));
+                var leechersIndex = headerColumns.FindIndex(x => x.Equals("Leechers", StringComparison.OrdinalIgnoreCase));
 
                 var rows = table.QuerySelectorAll("tbody > tr");
                 foreach (var row in rows)
                 {
                     var qDescCol = row.Children[nameIndex];
                     var qLink = qDescCol.QuerySelector("a");
-                    var title = qLink.QuerySelector("span.torrent-text").TextContent.Trim();
+                    var title = qLink.QuerySelector("span.bw-torrent-name").TextContent.Trim();
 
                     if (!query.MatchQueryStringAND(title))
                     {
