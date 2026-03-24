@@ -761,7 +761,7 @@ This section covers installation on most common Linux distributions including Ub
 Copy and paste this command into your terminal:
 
 ```bash
-cd /opt && sudo wget -Nc -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
+cd /opt && wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
 ```
 
 #### Method 2: Step-by-Step Installation
