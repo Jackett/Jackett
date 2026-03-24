@@ -1,5 +1,7 @@
 ---
 id: huntorrent
+replaces:
+  - huntorrent-bithorlo
 name: HunTorrent
 description: "HunTorrent is a HUNGARIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: hu-HU
@@ -10,6 +12,7 @@ links:
   - https://huntorrent.org/
 legacylinks:
   - https://huntorrent.net/
+  - https://huntorrent.eu/
 
 caps:
   categorymappings:
@@ -52,10 +55,6 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_about
-    type: info
-    label: About this HunTorrent indexer
-    default: This indexer does not include the <b>bithorlo</b> torrent pages. Use the HunTorrent-bithorlo indexer to access those.
   - name: cookie
     type: text
     label: Cookie
@@ -93,22 +92,21 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
+    path: browse/
     selector: a[href*="logout.php?k="]
 
 search:
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
   paths:
-    # https://huntorrent.net/browse.php?&korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
-    - path: browse.php
+    # https://huntorrent.net/browse/?korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
+    - path: browse/
       categories: [28, 27, 4, 3, 6, 5, 2, 1, 17, 18, 19, 25, 24, 23, 38, 26, 20, 21, 31, 9, 8, 7, 13, 12, 11, 10]
       inputs:
         search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    - path: browse.php
+    - path: browse/xxx
       categories: [16, 32, 14, 15]
       inputs:
-        viewMode: xxx
         search: "{{ .Keywords }}"
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -121,25 +119,23 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.torrent-table > tbody > tr[id^="torrent-main-"]
+    selector: table.torrent-table > tbody > tr.torrent-row
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*="/?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
       selector: a.torrent-title-link
+      attribute: data-name
     details:
       selector: a.torrent-title-link
-      attribute: href
-      filters:
-        - name: replace
-          args: ["&hit=1", ""]
+      attribute: data-detail-url
     download:
-      selector: a[href^="download.php?"]
+      selector: a[href^="/download/"]
       attribute: href
     genre:
       selector: a[data-mufaj]
@@ -155,6 +151,9 @@ search:
     poster:
       selector: a[data-poster]
       attribute: data-poster
+      filters:
+        - name: prepend
+          args: "/"
     date:
       selector: a[data-added]
       attribute: data-added
