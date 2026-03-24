@@ -848,7 +848,7 @@ For modern ARM-based systems (Raspberry Pi, etc.)
 
    ```bash
    cd /opt
-   sudo wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz | sudo tar -xz
+   wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz | sudo tar -xz
    ```
 
 2. Install as a service:
