@@ -60,7 +60,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: a[href^="/user.php?id="]
+    selector: a.quick-action-logout
 
 search:
   paths:
