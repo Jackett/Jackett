@@ -1,6 +1,3 @@
-# CGPeers uses the Luminance code, which is based on gazelle
-# ajax.php API additionally needs the auth=$authkey argument
-# Because the API is e.g. missing poster images we use screen scraping instead of the generic gazelle based approach
 ---
 id: cgpeers
 name: CGPeers
@@ -15,6 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 17, cat: Other, desc: "Web Development"}
     - {id: 1, cat: PC/ISO, desc: "Applications"}
     - {id: 8, cat: PC/ISO, desc: "Audio"}
     - {id: 7, cat: Other, desc: "Game Development"}
@@ -64,7 +62,7 @@ login:
 
 search:
   paths:
-    - path: torrents.php
+    - path: torrent/browse
   inputs:
     $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
     title: "{{ .Keywords }}"
@@ -74,32 +72,29 @@ search:
     filter_freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: table#torrent_table > tbody > tr:has(a[href*="action=download"])
+    selector: table#torrent_table > tbody > tr:has(a[href*="torrent/download/"])
 
   fields:
-    download:
-      selector: a[href^="/torrents.php?action=download&id="]
-      attribute: href
-    title:
-      selector: a[href^="/torrents.php?id="]
     category:
       selector: a[href*="filter_cat"]
       attribute: href
       filters:
         - name: regexp
           args: "(\\d+)]=1"
+    title:
+      selector: td:nth-child(2) div a[href*="torrent/"]
     details:
-      selector: a[href^="/torrents.php?id="]
+      selector: td:nth-child(2) div a[href*="torrent/"]
+      attribute: href
+    download:
+      selector: a[href*="torrent/download/"]
       attribute: href
     poster:
-      selector: td:nth-child(2) > script
+      selector: td:nth-child(2) div a[href*="torrent/"]
+      attribute: data-bs-content
       filters:
         - name: regexp
-          args: "src=(.*?)>"
-        - name: re_replace
-          args: ["[\\\\\"]", ""]
-        - name: re_replace
-          args: ["/static/common/noartwork/.+", ""]
+          args: src=\"(.*?)\"
     files:
       selector: td:nth-child(3)
     date:
@@ -128,4 +123,4 @@ search:
         span.icon[title*="DoubleSeed"]: 2
         img[alt="DoubleSeed"]: 2
         "*": 1
-# luminance
+# CGPeers cc1d0762
