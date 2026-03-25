@@ -725,6 +725,7 @@ namespace Jackett.Updater
                 "Definitions/spidertk.yml",
                 "Definitions/sporthd.yml",
                 "Definitions/sportscraze.yml",
+                "Definitions/sugoimusic.yml",
                 "Definitions/sukebei-pantsu.yml",
                 "Definitions/swarmazon.yml", //  switched to *-API #13725
                 "Definitions/t411.yml",

@@ -608,7 +608,6 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
- * SugoiMusic
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
