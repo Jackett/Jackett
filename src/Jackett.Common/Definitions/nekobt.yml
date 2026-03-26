@@ -27,6 +27,10 @@ settings:
     type: info
     label: About your API key
     default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
+  - name: incltags
+    type: checkbox
+    label: Include tags in titles. To be used with Sonarr and Radarr custom formats, and any other downstream automations/filtering. See <a href=\"https://wiki.nekobt.to/info/metadata/#auto-titles\" target=\"_blank\">wiki</a> for more information.
+    default: false
   - name: levels
     type: select
     label: Subtitle Level
@@ -37,7 +41,6 @@ settings:
       "1": "Level 1"
       "2": "Level 2"
       "3": "Level 3"
-      "4": "Level 4"
   - name: audio_lang
     type: text
     label: Audio Language (comma-separated codes, e.g. en,ja)
@@ -107,12 +110,12 @@ search:
       selector: title
       filters:
         - name: re_replace
-          args: ["(.+?) {Tags:.+", "$1"]
+          args: ["(.+?)( {Tags:.+)", "{{ if .Config.incltags }}$1$2{{ else }}$1{{ end }}"]
     description:
       selector: title
       filters:
         - name: re_replace
-          args: [".+ {(Tags:.+?)}", "$1"]
+          args: [".+ {(Tags:.+?)}", "{{ if .Config.incltags }}{{ else }}$1{{ end }}"]
     details:
       selector: comments
     magnet:
