@@ -1,7 +1,7 @@
 ---
 id: p2pbg
 name: P2PBG
-description: "P2PBG is a BULGARIAN Private Torrent Tracker for 0DAY / GENERAL"
+description: "P2PBG is a BULGARIAN Private PAY2DL Torrent Tracker for 0DAY / GENERAL"
 language: bg-BG
 type: private
 encoding: UTF-8
@@ -84,6 +84,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_magnets
+    type: info
+    label: "About Magnets"
+    default: "IF you do not see Magnets in the results then this means that you are not a <b>Super User</b> or <b>VIP</b>.<br />You will need to visit the <a href=\"https://www.p2pbg.com/marketplace\" target=\"_blank\">MarketPlace</a>."
   - name: info_results
     type: info
     label: "Search results"
@@ -106,22 +110,26 @@ settings:
 login:
   path: login
   method: form
-  form: form[name="login"]
+  form: form.auth-form
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
+    remember: 1
   error:
-    - selector: td.lista span[style="color:#FF0000;"]
+    - selector: div.auth-notice:contains("Incorrect")
   test:
     path: index.php
     selector: a[href$="logout"]
 
 search:
   paths:
-    # https://www.p2pbg.com/torrents?search=&category=0&active=0&hidexxx=on
+    # https://www.p2pbg.com/torrents?fakeusernameremembered=&fakepasswordremembered=&search=&category=0&active=0&hidexxx=1
     - path: torrents
+  allowEmptyInputs: true
   inputs:
-    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0;{{ end }}"
+    category: "{{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}"
+    fakeusernameremembered: ""
+    fakepasswordremembered: ""
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 all 1, active, 2 dead
     active: 0
@@ -129,7 +137,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: td table[width="100%"] tr td table.lista tr:has(a[href*="/torrents/"])
+    selector: table.lista[width="100%"] tr > td > table.lista[width="100%"] tr:has(a[href*="category="])
 
   fields:
     category:
@@ -140,18 +148,24 @@ search:
           args: category
     title:
       selector: td:nth-child(2) a
+    _hash:
+      selector: td:nth-child(2) a
+      attribute: onclick
+      filters:
+        - name: regexp
+          args: ([A-F|a-f|0-9]{40})
     details:
-      selector: a[href*="/torrents/"]
-      attribute: href
+      text: "torrents/{{ .Result._hash }}"
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     poster:
       selector: a:has(img[src*="/torrentimg/pic"])
-      attribute: onmouseover
+      attribute: data-overlib
       filters:
         - name: regexp
-          args: src=([^\s]+)
+          args: src=\"(.*?)\"
     # two flavours
     date_day:
       # Yesterday

@@ -528,7 +528,7 @@ Prior versions of Jackett are no longer supported.
  * OnlyEncodes+
  * OshenPT
  * OurBits (HDPter)
- * P2PBG
+ * P2PBG [PAY2DL]
  * Panda
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
@@ -608,7 +608,6 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
- * SugoiMusic
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
