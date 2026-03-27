@@ -7,24 +7,24 @@ language: en-US
 encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
-  # official domain list are at https://yifystatus.com/ and official proxies list are at https://ytsproxies.com/
   # if the primary domain changes then don't forget to update the details, download and poster replace args
   - https://yts.bz/
+  # official domain list are at https://yifystatus.com/ and official proxies list are at https://ytsproxies.com/
+  - https://yts.ninjaproxy1.com/
+  - https://yts.proxyninja.org/
+  - https://yts.proxyninja.net/
+  - https://yts.torrentbay.st/
+  - https://yts.torrentsbay.org/
 legacylinks:
   - https://yts.am/ # redirects to .bz
   - https://yts.ag/ # redirects to .bz
   - https://yts.gg/ # redirects to .bz
-  - https://yts.mx/ # DNS Lookup error
+  - https://yts.mx/
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.download/
   - https://yts.lt/ # redirects to .bz
-  - https://yts.unblockninja.com/ # DNS Lookup error
-  - https://yts.ninjaproxy1.com/ # returns API doc
-  - https://yts.proxyninja.org/ # returns API doc
-  - https://yts.proxyninja.net/ # returns API doc
-  - https://yts.torrentbay.st/ # returns API doc
-  - https://yts.torrentsbay.org/ # returns API doc
+  - https://yts.unblockninja.com/
 
 caps:
   categorymappings:
@@ -39,12 +39,15 @@ caps:
     search: [q]
     movie-search: [q, imdbid]
 
-settings: []
+settings:
+  - name: apiurl
+    label: API URL
+    type: text
+    default: movies-api.accel.li
 
 search:
   paths:
-    # API documentation at https://yts.bz/api
-    - path: api/v2/list_movies.json
+    - path: "https://{{ .Config.apiurl }}/api/v2/list_movies.json"
       response:
         type: json
 
