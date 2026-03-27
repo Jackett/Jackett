@@ -58,6 +58,7 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 47, cat: XXX, desc: "Unsorted"}
     - {id: 48, cat: XXX, desc: "OnlyFans .com"}
+    - {id: 49, cat: XXX, desc: "MOVIE"}
 
   modes:
     search: [q]
