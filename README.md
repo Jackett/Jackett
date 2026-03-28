@@ -412,7 +412,7 @@ Prior versions of Jackett are no longer supported.
  * Hawke-uno (HUNO)
  * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD Zero
- * HD-Club [![(invite needed)][inviteneeded]](#)
+ * HD-Club
  * HD-Forever (HDF)
  * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
