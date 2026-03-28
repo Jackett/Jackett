@@ -8,6 +8,7 @@ encoding: UTF-8
 requestDelay: 2
 links:
   - https://majomparade.eu/
+  - https://majomparade.net/
 
 caps:
   # dont forget to update the path categories in the search block
