@@ -760,7 +760,7 @@ This section covers installation on most common Linux distributions including Ub
 Copy and paste this command into your terminal:
 
 ```bash
-cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github.com/Jackett/Jackett/releases/latest/download/"$f" && sudo tar -xzf "$f" && sudo rm -f "$f" && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
+cd /opt && wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
 ```
 
 #### Method 2: Step-by-Step Installation
@@ -769,9 +769,7 @@ cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github
 
    ```bash
    cd /opt
-   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo tar -xzf Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo rm Jackett.Binaries.LinuxAMDx64.tar.gz
+   wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz
    ```
 
 2. Set proper ownership:
@@ -850,9 +848,7 @@ For modern ARM-based systems (Raspberry Pi, etc.)
 
    ```bash
    cd /opt
-   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz
-   sudo tar -xzf Jackett.Binaries.LinuxARM32.tar.gz
-   sudo rm Jackett.Binaries.LinuxARM32.tar.gz
+   wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz | sudo tar -xz
    ```
 
 2. Install as a service:
