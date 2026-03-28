@@ -29,11 +29,15 @@ settings:
     default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
   - name: incltags
     type: checkbox
-    label: Include tags in titles. To be used with Sonarr and Radarr custom formats, and any other downstream automations/filtering. See <a href=\"https://wiki.nekobt.to/info/metadata/#auto-titles\" target=\"_blank\">wiki</a> for more information.
+    label: Include tags in titles.
     default: false
+  - name: info_tags
+    type: info
+    label: About including tags in titles.
+    default: "To be used with Sonarr and Radarr custom formats, and any other downstream automations/filtering. See <a href=\"https://wiki.nekobt.to/info/metadata/#auto-titles\" target=\"_blank\">wiki</a> for more information."
   - name: levels
     type: select
-    label: Subtitle Level
+    label: Subtitle-Level
     default: _
     options:
       _: "All"
