@@ -192,10 +192,11 @@ search:
     leechers:
       selector: td:nth-child(8)
     _verified:
-      selector: span.torrent-ok, span.torrent-unchecked
+      selector: span.torrent-ok, span.torrent-unchecked, span.torrent-error
       case:
         span.torrent-ok: Verified
         span.torrent-unchecked: Unchecked
+        span.torrent-error: Faulty Upload
     genre:
       selector: td:nth-child(2) > div > i.small
       filters:
