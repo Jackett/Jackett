@@ -79,6 +79,8 @@ caps:
     - {id: 75, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 76, cat: XXX/SD, desc: "XXX SD"}
     - {id: 113, cat: XXX/DVD, desc: "XXX DVD"}
+    # undocumented
+    - {id: 159, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
