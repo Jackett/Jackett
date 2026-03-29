@@ -228,7 +228,6 @@ Prior versions of Jackett are no longer supported.
  * Mazepa
  * Metal Tracker
  * MioBT
- * MIRcrew
  * MuseBootlegs (MB)
  * MVGroup Forum
  * MVGroup Main
