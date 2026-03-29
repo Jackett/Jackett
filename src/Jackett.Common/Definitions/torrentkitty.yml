@@ -6,18 +6,18 @@ language: en-US
 type: public
 encoding: UTF-8
 links:
-  - https://www.torrentkitty.vip/
-  - https://www.torrentkitty.red/
-  - https://torkitty.com/
   - https://www.torrentkitty.cam/
   - https://www.torrentkitty.ink/
   - https://www.torrentkitty.io/
+  - https://www.torrentkitty.vip/
+  - https://www.torrentkitty.app/
+  - https://www.torrentkitty.red/
+  - https://www.torrentkitty.lol/
+  - https://www.torrentkitty.best/
+  - https://www.torrentkitty.tv/
+  - https://torkitty.com/
 legacylinks:
   - https://www.torrentkitty.se/
-  - https://www.torrentkitty.app/ # no results for 2026
-  - https://www.torrentkitty.lol/ # no results for 2026
-  - https://www.torrentkitty.best/ # no results for 2026
-  - https://www.torrentkitty.tv/ # no results for 2026
 
 caps:
   categories:
