@@ -1,0 +1,156 @@
+---
+id: nexum-api
+name: Nexum (API)
+description: "Nexum is a FRENCH Private Torrent Tracker for MOVIES / TV"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 5.0
+links:
+  - https://nexum-core.com/
+
+caps:
+  # use https://nexum-core.com/api/v1/categories?apikey=YOUR-APIKEY for cat mappings, name is desc
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Films"}
+    - {id: 2, cat: TV, desc: "Séries TV"}
+    - {id: 3, cat: TV/Documentary, desc: "Documentaires"}
+    - {id: 4, cat: TV/Anime, desc: "Animés"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API key
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "Find/Generate your API key on your <a href=\"https://nexum-core.com/settings\" target=\"_blank\">Nexum Paramètres</a> at the <b>Clé API </b> section."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: api/v1/me
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+
+search:
+  paths:
+    # docs at https://nexum-core.com/api/docs
+    - path: api/v1/torrents
+      response:
+        type: json
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+#    $raw: "{{ range .Categories }}cat={{.}}&{{end}}" # not supported ATM
+    q: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    dir: "{{ .Config.type }}"
+    per_page: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: torrents
+
+  fields:
+    categorydesc:
+      selector: category
+    title_phase1:
+      selector: name
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    _id:
+      selector: id
+    details:
+      text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
+    download:
+      text: "{{ .Config.sitelink }}api/v1/torrents/{{ .Result._id }}/download?apikey={{ .Config.apikey }}"
+    infohash:
+      selector: info_hash
+    size:
+      selector: size
+    date:
+      # "created_at": "2026-03-29T22:07:56+02:00" is returned by Newtonsoft.Json.Linq as 03/30/2026 09:07:56
+      selector: created_at
+      filters:
+#        - name: append
+#          args: " +00:00" # GMT
+        - name: dateparse
+#          args: "MM/dd/yyyy HH:mm:ss zzz"
+          args: "MM/dd/yyyy HH:mm:ss"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    downloadvolumefactor:
+      selector: is_freeleech
+      case:
+        False: 1
+        True: 0
+    uploadvolumefactor:
+      text: 1
+# global MR ranges between 0 and 0.5 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.4
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json API
