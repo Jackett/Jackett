@@ -205,4 +205,4 @@ search:
     minimumseedtime:
       # 2 day (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json NBy v0.0.43 (based on UNIT3D 8.2.0)
+# json NBy v0.0.88 (based on UNIT3D 8.2.0)
