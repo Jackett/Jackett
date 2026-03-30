@@ -249,7 +249,6 @@ Prior versions of Jackett are no longer supported.
  * Rustorka
  * RuTracker.org
  * seleZen
- * Sharewood
  * Sk-CzTorrent
  * SkTorrent-org
  * themixingbowl (TMB)
