@@ -176,6 +176,7 @@ caps:
     - {id: 173, cat: Books, desc: " |- Художественная литература"}
     - {id: 314, cat: Books, desc: " |- Учебно-техническая литература"}
     - {id: 434, cat: Books/Mags, desc: "Журналы"}
+    - {id: 456, cat: Books/Mags, desc: " |- Музыка"}
     - {id: 435, cat: Books/Mags, desc: " |- Авто-мото"}
     - {id: 437, cat: Books/Mags, desc: " |- Строительство и ремонт"}
     - {id: 441, cat: Books/Mags, desc: " |- Сад и огород"}
