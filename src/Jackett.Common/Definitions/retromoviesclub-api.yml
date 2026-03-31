@@ -53,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Accounts with no activity (login/traffic) for more than 90 days may be automatically pruned."
+    default: "Accounts that are inactive for extended periods may be shelved or pruned."
 
 login:
   path: /api/torrents
@@ -182,8 +182,8 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # global MR is 0.4 but torrents must be seeded for 48 hours
-    minimumratio:
-      text: 1.0
+#    minimumratio:
+#      text: 0.4
     minimumseedtime:
       # 48 hours (as seconds = 2 x 24 x 60 x 60)
       text: 172800
