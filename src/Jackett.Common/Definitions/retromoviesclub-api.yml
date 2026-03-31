@@ -15,7 +15,6 @@ caps:
   modes:
     search: [q]
     movie-search: [q, imdbid, tmdbid]
-  allowtvsearchimdb: true
 
 settings:
   - name: apikey
