@@ -246,14 +246,18 @@ namespace Jackett.Common.Indexers.Definitions
 
             var jsonResponse = JsonConvert.DeserializeObject<BroadcastheNetResponse>(indexerResponse.Content);
 
-            if (jsonResponse?.Result?.Torrents == null)
+            if (jsonResponse.Error != null)
+            {
+                throw new Exception($"Indexer API call returned an error [{jsonResponse.Error}]");
+            }
+
+            if (jsonResponse.Result?.Torrents?.Values == null)
             {
                 return releases;
             }
 
-            foreach (var itemKey in jsonResponse.Result.Torrents)
+            foreach (var btnResult in jsonResponse.Result.Torrents.Values)
             {
-                var btnResult = itemKey.Value;
                 var descriptions = new List<string>();
 
                 if (btnResult.Series.IsNotNullOrWhiteSpace())
@@ -390,11 +394,12 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public string Id { get; set; }
         public BroadcastheNetResult Result { get; set; }
+        public JToken Error { get; set; }
     }
 
     public class BroadcastheNetResult
     {
-        public Dictionary<int, BroadcastheNetTorrent> Torrents { get; set; }
+        public IReadOnlyDictionary<int, BroadcastheNetTorrent> Torrents { get; set; }
     }
 
     public class BroadcastheNetTorrent
