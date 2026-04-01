@@ -281,7 +281,7 @@ search:
     submit: "Search"
 
   rows:
-    selector: table.tracker-table > tbody > tr.tracker-row:has(a[href*="/dl.php?id="])
+    selector: table.forumline > tbody > tr.hl-tr:has(a[href*="/dl.php?id="])
 
   fields:
     category:
@@ -299,7 +299,7 @@ search:
       selector: td a[href*="/dl.php?id="]
       attribute: href
     date:
-      selector: tr.tracker-row
+      selector: tr.hl-tr
       attribute: data-tor-date
       filters:
         - name: append
