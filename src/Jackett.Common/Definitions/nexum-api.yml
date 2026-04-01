@@ -82,7 +82,7 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-#    $raw: "{{ range .Categories }}cat={{.}}&{{end}}" # not supported ATM
+    cat: "{{ join .Categories \",\" }}"
     q: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     dir: "{{ .Config.type }}"
