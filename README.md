@@ -471,7 +471,6 @@ Prior versions of Jackett are no longer supported.
  * LearnFlakes
  * Leech24
  * LemonHD.net
- * Lesbians4u
  * LetSeed
  * Libble
  * LibraNet (LN)
