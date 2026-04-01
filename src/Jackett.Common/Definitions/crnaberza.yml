@@ -1,15 +1,14 @@
 ---
 id: crnaberza
 name: CrnaBerza
-description: "Crna Berza is a BALKAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "CrnaBerza is a BALKAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: sr-SP
 type: private
 encoding: UTF-8
 links:
-  - https://uat.crnaberza.net/
+  - https://www.crnaberza.com/
 legacylinks:
   - http://www.crnaberza.com/
-  - https://www.crnaberza.com/
 
 caps:
   categorymappings:
@@ -68,7 +67,7 @@ settings:
   - name: info
     type: info
     label: Results Per Page
-    default: For best results, change the 'Torrenata po stranici' setting to 50 on your 'Torrenti' from the 'Podešavanja naloga' menu on the Crna Berza webpage.
+    default: For best results, change the 'Torrenata po stranici' setting to 50 on your 'Torrenti' from the 'Podešavanja naloga' menu on the CrnaBerza webpage.
   - name: freeleech
     type: checkbox
     label: Filter freeleech only
