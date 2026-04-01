@@ -115,7 +115,6 @@ Prior versions of Jackett are no longer supported.
  * FileMood
  * FilmesHdTorrent
  * Free JAV Torrent
- * Frozen Layer
  * GamesTorrents
  * HDRTorrent
  * ilCorSaRoNeRo
