@@ -314,6 +314,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 12h (as seconds = 12 x 60 x 60)
+      text: 43200
 # Last Files V2
