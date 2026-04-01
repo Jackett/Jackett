@@ -333,6 +333,9 @@ search:
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
+  headers:
+    Cookie: ["tapochek_april_2026=1"]
+
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
