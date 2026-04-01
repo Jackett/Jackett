@@ -1,0 +1,157 @@
+---
+id: crazyspirits-api
+name: CrazySpirits (API)
+description: "Crazy Spirits is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 5
+links:
+  - https://crazyspirits.com/
+legacylinks:
+  - https://www.crazyspirits.ca/
+  - https://www.crazyspirits.com/
+
+caps:
+  categorymappings:
+    # from https://crazyspirits.com/feed.php?t=caps&apikey=YOUR-PASSKEY
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio/MP3, desc: "Audio/MP3"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 4010, cat: PC/0day, desc: "PC/0day"}
+    - {id: 4030, cat: PC/Games, desc: "PC/Games"}
+    - {id: 8000, cat: Other, desc: "Other"}
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, imdbid]
+    music-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: PassKey
+  - name: info_key
+    type: info
+    label: About your PassKey
+    default: "You can find the API PassKey by accessing <a href=\"https://crazyspirits.com/apps.php\" target=\"_blank\">CrazySpirits apps</a> page and scrolling down to <b>Votre API Key (Passkey)</b>."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+# can't test apikey with login as API returns OK with xml "error code": 100 "description": "INVALID API KEY" or "MISSING API KEY"
+
+search:
+  paths:
+    # docs at https://crazyspirits.com/apps.php
+    - path: feed.php
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.passkey }}"
+    t: "{{ .Query.Type }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: comments
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
+    imdbid:
+      selector: '[name="imdbid"]'
+      attribute: value
+    tmdbid:
+      selector: '[name="tmdbid"]'
+      attribute: value
+    tvdbid:
+      selector: '[name="tvdbid"]'
+      attribute: value
+    date:
+      # Tue, 31 Mar 2026 20:06:13 +0100
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: '[name="size"]'
+      attribute: value
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    grabs:
+      selector: '[name="grabs"]'
+      attribute: value
+    downloadvolumefactor:
+      selector: '[name="downloadvolumefactor"]'
+      attribute: value
+    uploadvolumefactor:
+      selector: '[name="uploadvolumefactor"]'
+      attribute: value
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# torznab xml
