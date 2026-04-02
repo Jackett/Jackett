@@ -16,6 +16,7 @@ caps:
     - {id: 2, cat: TV, desc: "Séries TV"}
     - {id: 3, cat: TV/Documentary, desc: "Documentaires"}
     - {id: 4, cat: TV/Anime, desc: "Animés"}
+    - {id: 5, cat: TV/Other, desc: "Concerts / Spectacles"}
 
   modes:
     search: [q]
