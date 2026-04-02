@@ -1,0 +1,156 @@
+---
+id: crnaberza2fa
+name: CrnaBerza2FA
+description: "CrnaBerza is a BALKAN Private Torrent Tracker for MOVIES / TV / GENERAL. This indexer uses cookie login for 2FA."
+language: sr-SP
+type: private
+encoding: UTF-8
+links:
+  - https://www.crnaberza.com/
+legacylinks:
+  - http://www.crnaberza.com/
+
+caps:
+  categorymappings:
+    - {id: 65, cat: Movies/3D, desc: "3D Film"}
+    - {id: 82, cat: Movies/UHD, desc: "4K video"}
+    - {id: 79, cat: PC/Mobile-Android, desc: "Android"}
+    - {id: 37, cat: Movies, desc: "Deca"}
+    - {id: 43, cat: TV/Documentary, desc: "Dokumentarci"}
+    - {id: 83, cat: Movies/BluRay, desc: "Film/BluRay Domaće"}
+    - {id: 84, cat: Movies/BluRay, desc: "Film/Digitalno Restaurisani"}
+    - {id: 52, cat: Movies/DVD, desc: "Film/DVD Domaće"}
+    - {id: 20, cat: Movies/DVD, desc: "Film/DVD Strano"}
+    - {id: 73, cat: Movies/HD, desc: "Film/HD Domaće"}
+    - {id: 48, cat: Movies/HD, desc: "Film/HD Strano"}
+    - {id: 29, cat: Movies/SD, desc: "Film/SD Domaće"}
+    - {id: 54, cat: Movies/SD, desc: "Film/SD Strano"}
+    - {id: 64, cat: Movies/HD, desc: "HD Boxset"}
+    - {id: 61, cat: Movies/HD, desc: "HD Mešano"}
+    - {id: 50, cat: PC/Games, desc: "Igre"}
+    - {id: 44, cat: Books, desc: "Knjige"}
+    - {id: 46, cat: Audio, desc: "Koncerti"}
+    - {id: 58, cat: Audio/Lossless, desc: "Lossless/Domaće"}
+    - {id: 59, cat: Audio/Lossless, desc: "Lossless/Strano"}
+    - {id: 5, cat: Audio/MP3, desc: "MP3/Domaća"}
+    - {id: 57, cat: Audio/MP3, desc: "MP3/Strano"}
+    - {id: 80, cat: TV, desc: "Paketi"}
+    - {id: 49, cat: PC, desc: "Programi"}
+#    - {id: 28, cat: Other, desc: "Razno"}
+    - {id: 85, cat: Movies, desc: "Remux"}
+    - {id: 62, cat: TV/SD, desc: "SD Boxset"}
+    - {id: 38, cat: TV/Sport, desc: "Sport"}
+    - {id: 39, cat: Audio/Video, desc: "Spotovi DVD"}
+    - {id: 45, cat: Books/Comics, desc: "Stripovi"}
+    - {id: 75, cat: TV/HD, desc: "TV/HD Domaće"}
+    - {id: 77, cat: TV/HD, desc: "TV/HD Strano"}
+    - {id: 78, cat: TV/Other, desc: "TV/ostalo"}
+    - {id: 30, cat: TV/SD, desc: "TV/SD Domaće"}
+    - {id: 34, cat: TV/SD, desc: "TV/SD Strano"}
+    - {id: 60, cat: XXX, desc: "XXX/Domace"}
+    - {id: 63, cat: XXX, desc: "XXX/Strano"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: info
+    type: info
+    label: Results Per Page
+    default: For best results, change the 'Torrenata po stranici' setting to 50 on your 'Torrenti' from the 'Podešavanja naloga' menu on the CrnaBerza webpage.
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort2
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: /
+    selector: a[href*="wp-login.php?action=logout"]
+
+search:
+  paths:
+    # https://uat.crnaberza.net/t/?category[]=83&category[]=84&category[]=52&category[]=73&category[]=29&search=
+    - path: t/
+  inputs:
+    $raw: "{{ range .Categories }}category[]={{.}}&{{end}}"
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort2 }}"
+    dir: "{{ .Config.type }}"
+    # does not support searching imdbid and does not return imdb links
+
+  rows:
+    selector: "table.min-w-full > tbody > tr:has(a[href*=\"/download/\"]){{ if .Config.freeleech }}:has(span.text-green-300:contains(\"Free Leech\")){{ else }}{{ end }}"
+
+  fields:
+    categorydesc:
+      selector: td:nth-of-type(1) img
+      attribute: alt
+    title:
+      selector: a[href*="/td/"]
+    details:
+      selector: a[href*="/td/"]
+      attribute: href
+    download:
+      selector: a[href*="/download/"]
+      attribute: href
+    date:
+      # Jan 25 2026<br>05:59 PM
+      selector: td:nth-of-type(4)
+      # auto adjusted by site account profile
+      filters:
+        - name: dateparse
+          args: "MMM d yyyy hh:mm tt"
+    size:
+      selector: td:nth-of-type(6)
+    seeders:
+      selector: td:nth-of-type(7)
+    leechers:
+      selector: td:nth-of-type(8)
+    downloadvolumefactor:
+      case:
+        "span.text-green-300:contains(\"Free Leech\")": 0
+        "span.text-blue-300:contains(\"½ Download\")": 0.5
+        "*": 1
+    uploadvolumefactor:
+      case:
+        "span.text-purple-300:contains(\"x5 Upload\")": 5
+        "span.text-purple-300:contains(\"x4 Upload\")": 4
+        "span.text-purple-300:contains(\"x3 Upload\")": 3
+        "span.text-purple-300:contains(\"x2 Upload\")": 2
+        "*": 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      text: 604800
+# WordPress 6.9.4
