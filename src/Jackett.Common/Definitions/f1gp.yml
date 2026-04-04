@@ -155,6 +155,6 @@ search:
     minimumratio:
       text: 1.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 43200
 #  xbtitFM v4.1.32
