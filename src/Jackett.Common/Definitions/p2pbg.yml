@@ -137,7 +137,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table.lista[width="100%"] tr > td > table.lista[width="100%"] tr:has(a[href*="category="])
+    selector: table.torrent-index__table:not(table.torrent-index__table--recommended) > tbody > tr.torrent-index__row
 
   fields:
     category:
