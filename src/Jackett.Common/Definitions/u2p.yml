@@ -73,9 +73,13 @@ caps:
 
 settings:
   - name: apiurl
-    label: API URL
-    type: text
-    default: relay.ygg.gratis
+    type: select
+    label: select an API URL
+    default: u2prelais.eliottb.dev
+    options:
+      u2prelais.eliottb.dev: u2prelais.eliottb.dev
+      relay.ygg.gratis: relay.ygg.gratis
+      u2p.anhkagi.net: u2p.anhkagi.net      
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
