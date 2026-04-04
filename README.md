@@ -360,6 +360,7 @@ Prior versions of Jackett are no longer supported.
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
+ * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
  * Diablo Torrent
  * DICMusic [![(invite needed)][inviteneeded]](#)
