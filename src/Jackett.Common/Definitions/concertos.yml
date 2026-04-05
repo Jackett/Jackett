@@ -13,6 +13,7 @@ caps:
     - {id: 1, cat: TV, desc: "Live Concert"}
     - {id: 2, cat: Audio/Video, desc: "Music Video"}
     - {id: 4, cat: TV, desc: "Music Documentary"}
+    - {id: 11, cat: TV, desc: "Music TV Series"}
     - {id: 5, cat: Audio/Lossless, desc: "Pure Audio"}
     - {id: 7, cat: TV, desc: "Opera"}
     - {id: 8, cat: TV, desc: "Musical"}
