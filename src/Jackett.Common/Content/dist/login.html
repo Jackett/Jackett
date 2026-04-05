@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+  <script type="module" crossorigin src="/assets/polyfills.js"></script>
+
+    <meta charset="utf-8" />
+    <meta name="robots" content="noindex, nofollow" />
+
+    <link rel='shortcut icon' type='image/x-icon' href='/favicon.ico' />
+
+    <title>Jackett</title>
+  <script async type="module" crossorigin src="/assets/login.js"></script>
+  <link rel="stylesheet" crossorigin href="/assets/main.css">
+  <script type="module">import.meta.url;import("_").catch(()=>1);(async function*(){})().next();window.__vite_is_modern_browser=true</script>
+  <script type="module">!function(){if(window.__vite_is_modern_browser)return;console.warn("vite: loading legacy chunks, syntax error above and the same error below should be ignored");var e=document.getElementById("vite-legacy-polyfill"),n=document.createElement("script");n.src=e.src,n.onload=function(){System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))},document.body.appendChild(n)}();</script>
+</head>
+
+<body>
+    <div id="page" style="width: fit-content;">
+
+        <img id="logo" src="/jacket_medium.png" alt="Logo">
+        <span id="jackett-title">Jackett</span>
+
+        <hr />
+        <form action="Dashboard" method="post">
+            <div class="row g-3 align-items-center">
+                <div class="col-auto">
+                    <label class="col-form-label">Admin password</label>
+                </div>
+                <div class="col-auto">
+                    <input id="password" name="password" class="form-control" type="password">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" value="Login" class="btn btn-primary">Login</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="toast-container position-fixed bottom-0 start-50 translate-middle-x mb-4"></div>
+  <script nomodule>!function(){var e=document,t=e.createElement("script");if(!("noModule"in t)&&"onbeforeload"in t){var n=!1;e.addEventListener("beforeload",(function(e){if(e.target===t)n=!0;else if(!e.target.hasAttribute("nomodule")||!n)return;e.preventDefault()}),!0),t.type="module",t.src=".",e.head.appendChild(t),t.remove()}}();</script>
+  <script nomodule crossorigin id="vite-legacy-polyfill" src="/assets/polyfills-legacy.js"></script>
+  <script nomodule crossorigin id="vite-legacy-entry" data-src="/assets/login-legacy.js">System.import(document.getElementById('vite-legacy-entry').getAttribute('data-src'))</script>
+</body>
+
+</html>
