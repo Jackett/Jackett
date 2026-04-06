@@ -74,9 +74,6 @@ login:
     quick_remember: yes
   error:
     - selector: div.error
-  test:
-    path: /
-    selector: div#statusbar
 
 search:
   paths:
