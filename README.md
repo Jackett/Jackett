@@ -339,7 +339,6 @@ Prior versions of Jackett are no longer supported.
  * Carpathians
  * CarPT
  * Cathode-Ray.Tube (CRT)
- * CD File
  * CeskeForum
  * CGPeers [![(invite needed)][inviteneeded]](#)
  * CHDBits [![(invite needed)][inviteneeded]](#)
