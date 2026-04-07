@@ -142,7 +142,10 @@ search:
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
-      text: "{{ .Config.sitelink }}"
+      selector: guid
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}#/e/"
     download:
       selector: enclosure
       attribute: url
