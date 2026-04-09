@@ -50,6 +50,7 @@ caps:
     MiniVideo: Other # MiniVideo
     补充音轨: Audio # Supplemental audio tracks
     iPhone/iPad视频: PC/Mobile-Other # IPhone / iPad video
+    动漫原盘: Movies/BluRay # Anime BluRay Original disc
     # 单机游戏
     PC: PC/Games # Games - PC
     MAC: PC/Mac # Games - MAC
