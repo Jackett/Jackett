@@ -12,7 +12,7 @@ links:
 
 caps:
   categorymappings:
-    # https://relay.ygg.gratis/torznab?t=caps
+    # https://u2prelais.eliottb.dev/torznab?t=caps
     - {id: 1000, cat: Console, desc: "Console"}
     - {id: 1010, cat: Console/NDS, desc: "Console/NDS"}
     - {id: 1020, cat: Console/PSP, desc: "Console/PS"}
@@ -107,13 +107,13 @@ search:
         type: xml
 
   inputs:
-    t: "{{ .Query.Type }}"
+    t: search
     q: "{{ .Keywords }}"
-    cat: "{{ join .Categories \",\" }}"
+#    cat: "{{ join .Categories \",\" }}"
 #    imdbid: "{{ .Query.IMDBID }}"
 #    tmdbid: "{{ .Query.TMDBID }}"
-    season: "{{ .Query.Season }}"
-    ep: "{{ .Query.Ep }}"
+#    season: "{{ .Query.Season }}"
+#    ep: "{{ .Query.Ep }}"
     limit: 100
 
   rows:
