@@ -77,11 +77,6 @@ login:
     path: home
     selector: a[href^="/logout.php?id="]
 
-download:
-  selectors:
-    - selector: a[href^="download.php/"]
-      attribute: href
-
 search:
   paths:
     - path: download-torrents
@@ -92,7 +87,7 @@ search:
     incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
 
   rows:
-    selector: tr.browse
+    selector: div.tt-row
 
   fields:
     category:
@@ -103,47 +98,42 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+      attribute: title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="download.php/"]
       attribute: href
     poster:
-      selector: td.numele_tor span[data-original-title]
-      attribute: data-original-title
-      filters:
-        - name: regexp
-          args: "src='(.+?)'"
-    genre:
-      selector: td.numele_tor small
-      filters:
-        - name: replace
-          args: ["Genre:\xA0", ""]
-    description:
-      case:
-        b[title="Verified"]: "Verified: {{ .Result.genre }}"
-        "*": "Unverified: {{ .Result.genre }}"
+      selector: a[href^="details.php?id="]
+      attribute: data-poster
     files:
-      selector: td:nth-last-child(8)
+      selector: div.tt-files
     date:
-      selector: td:nth-last-child(6)
+      selector: div.tt-date
       filters:
         - name: append
           args: " +02:00" # EET
         - name: dateparse
           args: "HH:mm:ssyyyy-MM-dd zzz"
     size:
-      selector: td:nth-last-child(5)
+      selector: div.tt-size
     grabs:
-      selector: td:nth-last-child(4)
+      selector: div.tt-compl
     seeders:
-      selector: td:nth-last-child(3)
+      selector: div.tt-seed
     leechers:
-      selector: td:nth-last-child(2)
+      selector: div.tt-leech
+    genre:
+      selector: span.tb-genre
+    description:
+      case:
+        span.tt-mod-ok: "Verified: {{ .Result.genre }}"
+        "*": "Unverified: {{ .Result.genre }}"
     downloadvolumefactor:
       case:
-        "img[src=\"./pic/freeleech.png\"]": 0
+        span.tb-fl: 0
         "*": 1
     uploadvolumefactor:
       text: 1
