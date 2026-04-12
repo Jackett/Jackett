@@ -605,6 +605,7 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
+ * SunnyPT [![(invite needed)][inviteneeded]](#)
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
