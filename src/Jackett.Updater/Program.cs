@@ -357,6 +357,7 @@ namespace Jackett.Updater
                 "Definitions/cpasbiensi.yml",
                 "Definitions/crazyhd.yml",
                 "Definitions/crazyscorner.yml",
+                "Definitions/crazyspirits.yml", // replaced by crazyspirits-api #5479
                 "Definitions/cryptichaven.yml",
                 "Definitions/czteam.yml",
                 "Definitions/cztorrent.yml",
