@@ -13,7 +13,6 @@ caps:
     - {id: 501, cat: Movies, desc: "Movies(电影)"}
     - {id: 502, cat: TV, desc: "TV Series(剧集)"}
     - {id: 503, cat: TV/Documentary, desc: "Docs(纪录)"}
-    - {id: 504, cat: TV/Anime, desc: "Animations(动画)"}
     - {id: 505, cat: TV, desc: "TV Shows(综艺)"}
     - {id: 506, cat: TV/Sport, desc: "Sports(体育)"}
     - {id: 507, cat: Audio/Video, desc: "MV(音乐视频)"}
