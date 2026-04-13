@@ -19,6 +19,7 @@ caps:
     - {id: 507, cat: Audio/Video, desc: "MV(音乐视频)"}
     - {id: 508, cat: Audio, desc: "Music(音乐)"}
     - {id: 509, cat: Other, desc: "Others(其他)"}
+    - {id: 510, cat: Audio/Audiobook, desc: "Audiobook(有声)"}
 
   modes:
     search: [q]
