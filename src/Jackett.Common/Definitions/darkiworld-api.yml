@@ -77,7 +77,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title:
       selector: title
@@ -86,22 +86,22 @@ search:
     download:
       selector: link
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
       optional: true
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="peers"]'
+      selector: "[name=peers]"
       attribute: value
     imdbid:
-      selector: '[name="imdbid"]'
+      selector: "[name=imdbid]"
       attribute: value
     tmdbid:
-      selector: '[name="tmdbid"]'
+      selector: "[name=tmdbid]"
       attribute: value
     date:
       # Mon, 02 Jan 2006 15:04:05 -0700
