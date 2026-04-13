@@ -101,7 +101,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title_phase1:
       selector: title
@@ -125,16 +125,16 @@ search:
       selector: enclosure
       attribute: url
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
     imdbid:
-      selector: '[name="imdbid"]'
+      selector: "[name=imdbid]"
       attribute: value
     tmdbid:
-      selector: '[name="tmdbid"]'
+      selector: "[name=tmdbid]"
       attribute: value
     tvdbid:
-      selector: '[name="tvdbid"]'
+      selector: "[name=tvdbid]"
       attribute: value
     date:
       # Tue, 31 Mar 2026 20:06:13 +0100
@@ -143,22 +143,22 @@ search:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
-      selector: '[name="size"]'
+      selector: "[name=size]"
       attribute: value
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="peers"]'
+      selector: "[name=peers]"
       attribute: value
     grabs:
-      selector: '[name="grabs"]'
+      selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
-      selector: '[name="downloadvolumefactor"]'
+      selector: "[name=downloadvolumefactor]"
       attribute: value
     uploadvolumefactor:
-      selector: '[name="uploadvolumefactor"]'
+      selector: "[name=uploadvolumefactor]"
       attribute: value
     minimumratio:
       text: 1.0

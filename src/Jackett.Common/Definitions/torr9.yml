@@ -99,7 +99,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title_phase1:
       selector: title
@@ -125,7 +125,7 @@ search:
     download:
       selector: link
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
     date:
       # Thu, 15 Jan 2026 16:24:34 +0000
@@ -136,10 +136,10 @@ search:
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="peers"]'
+      selector: "[name=peers]"
       attribute: value
     downloadvolumefactor:
       text: 1

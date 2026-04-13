@@ -96,7 +96,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title:
       selector: title
@@ -106,7 +106,7 @@ search:
       selector: enclosure
       attribute: url
     imdbid:
-      selector: '[name="imdbid"]'
+      selector: "[name=imdbid]"
       attribute: value
     date:
       # Tue, 07 Apr 2026 20:41:08 +0000
@@ -117,19 +117,19 @@ search:
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="leechers"]'
+      selector: "[name=leechers]"
       attribute: value
     grabs:
-      selector: '[name="grabs"]'
+      selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
-      selector: '[name="downloadvolumefactor"]'
+      selector: "[name=downloadvolumefactor]"
       attribute: value
     uploadvolumefactor:
-      selector: '[name="uploadvolumefactor"]'
+      selector: "[name=uploadvolumefactor]"
       attribute: value
     minimumratio:
       text: 1.0

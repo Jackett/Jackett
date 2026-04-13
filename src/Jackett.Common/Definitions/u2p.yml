@@ -123,7 +123,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title_phase1:
       selector: title
@@ -150,7 +150,7 @@ search:
       selector: enclosure
       attribute: url
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
     imdbid:
       selector: description
@@ -171,17 +171,17 @@ search:
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="leechers"]'
+      selector: "[name=leechers]"
       attribute: value
     downloadvolumefactor:
       text: 0
       # returns 1 ATM
-#      selector: '[name="downloadvolumefactor"]'
+#      selector: "[name=downloadvolumefactor]"
 #      attribute: value
     uploadvolumefactor:
-      selector: '[name="uploadvolumefactor"]'
+      selector: "[name=uploadvolumefactor]"
       attribute: value
 # torznab xml
