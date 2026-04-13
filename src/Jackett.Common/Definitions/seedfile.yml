@@ -79,7 +79,7 @@ login:
 
 search:
   paths:
-    - path: download-torrents
+    - path: browse
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -91,22 +91,22 @@ search:
 
   fields:
     category:
-      selector: a[href^="torrents.php?cat="]
+      selector: a[href^="/torrents.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="/torrent/"]
       attribute: title
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="/torrent/"]
       attribute: href
     download:
-      selector: a[href^="download.php/"]
+      selector: a[href^="/download/"]
       attribute: href
     poster:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="/torrent/"]
       attribute: data-poster
     files:
       selector: div.tt-files
