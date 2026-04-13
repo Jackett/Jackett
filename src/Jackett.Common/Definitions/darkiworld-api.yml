@@ -1,0 +1,119 @@
+---
+id: darkiworld-api
+name: DarkiWorld (API)
+description: "DarkiWorld is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://darkiworld.com/
+
+caps:
+  categorymappings:
+    - {id: 1000, cat: Console, desc: "Games"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 3000, cat: Audio, desc: "Music"}
+    - {id: 4000, cat: PC, desc: "Applications"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5020, cat: TV/Foreign, desc: "TV Foreign"}
+    - {id: 5030, cat: TV/SD, desc: "TV SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 5070, cat: TV/Anime, desc: "Anime"}
+    - {id: 5080, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 7000, cat: Books, desc: "E-Books"}
+    - {id: 8000, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or generate your API Key by logging in to <a href=\"https://darkiworld.com/account-settings\" target=\"_blank\">DarkiWorld Account Settings</a>, scrolling down to <b>Torznab / *arr integration</b>, and clicking <b>Generate my Torznab API key</b>."
+
+login:
+  path: api/v1/torznab/api
+  method: get
+  inputs:
+    t: caps
+    apikey: "{{ .Config.apikey }}"
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
+
+search:
+  paths:
+    - path: api/v1/torznab/api
+      response:
+        type: xml
+
+  inputs:
+    t: "{{ .Query.Type }"
+    apikey: "{{ .Config.apikey }}"
+    q: "{{ .Keywords }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Episode }}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: '[name="category"]'
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: comments
+    download:
+      selector: link
+    infohash:
+      selector: '[name="infohash"]'
+      attribute: value
+      optional: true
+    size:
+      selector: size
+    seeders:
+      selector: '[name="seeders"]'
+      attribute: value
+    leechers:
+      selector: '[name="peers"]'
+      attribute: value
+    imdbid:
+      selector: '[name="imdbid"]'
+      attribute: value
+    tmdbid:
+      selector: '[name="tmdbid"]'
+      attribute: value
+    date:
+      # Mon, 02 Jan 2006 15:04:05 -0700
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 24 hours (as seconds = 24 x 60 x 60)
+      text: 86400
+# Torznab xml
