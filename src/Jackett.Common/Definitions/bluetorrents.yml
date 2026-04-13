@@ -45,6 +45,19 @@ settings:
     label: Account Inactivity
     default: "Accounts with no activity for 90+ days may be disabled."
 
+login:
+  path: api/external
+  method: get
+  inputs:
+    t: search
+    apikey: "{{ .Config.apikey }}"
+    limit: 1
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
+
 search:
   paths:
     - path: api/external
