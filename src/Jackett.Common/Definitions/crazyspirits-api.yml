@@ -66,7 +66,18 @@ settings:
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
 
-# can't test apikey with login as API returns OK with xml "error code": 100 "description": "INVALID API KEY" or "MISSING API KEY"
+login:
+  path: feed.php
+  method: get
+  inputs:
+    t: search
+    apikey: "{{ .Config.passkey }}"
+    limit: 1
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
 
 search:
   paths:
