@@ -6,13 +6,16 @@ language: fr-FR
 type: semi-private
 encoding: UTF-8
 links:
+  - https://darkiworld16.com/
   - https://darkiworld.com/
 
 caps:
   categorymappings:
+    # from https://darkiworld16.com/api/v1/torznab/api?apikey=YOUR-API-KEY&t=caps
     - {id: 1000, cat: Console, desc: "Games"}
     - {id: 2000, cat: Movies, desc: "Movies"}
     - {id: 2010, cat: Movies/Foreign, desc: "Movies Foreign"}
+    - {id: 2020, cat: Movies/Other, desc: "Movies Other"}
     - {id: 2030, cat: Movies/SD, desc: "Movies SD"}
     - {id: 2040, cat: Movies/HD, desc: "Movies HD"}
     - {id: 2045, cat: Movies/UHD, desc: "Movies UHD"}
@@ -43,18 +46,33 @@ settings:
     type: info
     label: About your API key
     default: "Find or generate your API Key by logging in to <a href=\"https://darkiworld.com/account-settings\" target=\"_blank\">DarkiWorld Account Settings</a>, scrolling down to <b>Torznab / *arr integration</b>, and clicking <b>Generate my Torznab API key</b>."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
 
 login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: api/v1/torznab/api
   method: get
   inputs:
     t: caps
     apikey: "{{ .Config.apikey }}"
-  error:
-    - selector: error
-      message:
-        selector: error[description]
-        attribute: description
 
 search:
   paths:
@@ -63,9 +81,10 @@ search:
         type: xml
 
   inputs:
-    t: "{{ .Query.Type }"
+    t: "{{ .Query.Type }}"
     apikey: "{{ .Config.apikey }}"
     q: "{{ .Keywords }}"
+#    cat: "{{ join .Categories \",\" }}" # cat is not supported
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Episode }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
@@ -79,16 +98,27 @@ search:
     category:
       selector: "[name=category]"
       attribute: value
-    title:
+    title_phase1:
       selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: comments
     download:
-      selector: link
-    infohash:
-      selector: "[name=infohash]"
-      attribute: value
-      optional: true
+      selector: enclosure
+      attribute: url
     size:
       selector: size
     seeders:
@@ -104,15 +134,17 @@ search:
       selector: "[name=tmdbid]"
       attribute: value
     date:
-      # Mon, 02 Jan 2006 15:04:05 -0700
+      # Fri, 10 Apr 2026 06:33:59 +0200
       selector: pubDate
       filters:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     downloadvolumefactor:
-      text: 0
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
     uploadvolumefactor:
-      text: 1
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
     minimumseedtime:
       # 24 hours (as seconds = 24 x 60 x 60)
       text: 86400
