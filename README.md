@@ -200,6 +200,7 @@ Prior versions of Jackett are no longer supported.
  * BookTracker
  * BootyTape
  * comicat
+ * DarkiWorld
  * Deildu
  * Devil-Torrents
  * DreamingTree
