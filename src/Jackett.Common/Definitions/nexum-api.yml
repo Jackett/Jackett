@@ -90,11 +90,6 @@ search:
     dir: "{{ .Config.type }}"
     per_page: 100
 
-  keywordsfilters:
-    # replace spaces between words with percent wildcard
-    - name: re_replace
-      args: ["\\W+", "%"]
-
   rows:
     selector: torrents
 
