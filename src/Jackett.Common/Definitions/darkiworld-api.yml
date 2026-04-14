@@ -19,13 +19,18 @@ caps:
     - {id: 2030, cat: Movies/SD, desc: "Movies SD"}
     - {id: 2040, cat: Movies/HD, desc: "Movies HD"}
     - {id: 2045, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 2060, cat: Movies/3D, desc: "Movies 3D"}
     - {id: 3000, cat: Audio, desc: "Music"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Music Lossless"}
     - {id: 4000, cat: PC, desc: "Applications"}
     - {id: 5000, cat: TV, desc: "TV"}
     - {id: 5020, cat: TV/Foreign, desc: "TV Foreign"}
     - {id: 5030, cat: TV/SD, desc: "TV SD"}
     - {id: 5040, cat: TV/HD, desc: "TV HD"}
     - {id: 5045, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 5050, cat: TV/WEB-DL, desc: "TV WEB-DL"}
     - {id: 5070, cat: TV/Anime, desc: "Anime"}
     - {id: 5080, cat: TV/Documentary, desc: "Documentary"}
     - {id: 7000, cat: Books, desc: "E-Books"}
