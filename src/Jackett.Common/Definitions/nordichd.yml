@@ -32,6 +32,11 @@ caps:
     - {id: 37, cat: Movies, desc: "iNTERNAL Pack"}
     - {id: 39, cat: Movies/UHD, desc: "iNTERNAL 4k/2160p"}
     - {id: 2, cat: TV, desc: "TV Episodes"}
+    - {id: 40, cat: Audio, desc: "Music"}
+    - {id: 41, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 42, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 43, cat: Audio, desc: "Music Pack"}
+    - {id: 44, cat: Audio/Video, desc: "Music Video"}
     - {id: 3, cat: TV/SD, desc: "TV Episodes SD"}
     - {id: 4, cat: TV, desc: "TV Episodes Series"}
     - {id: 26, cat: TV/HD, desc: "TV Episodes HDTV Episodes"}
@@ -41,6 +46,7 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
 
 settings:
   - name: username
