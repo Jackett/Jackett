@@ -37,6 +37,8 @@ caps:
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowtvsearchimdb: true
+  allowrawsearch: true
 
 settings:
   - name: apikey
@@ -85,11 +87,16 @@ search:
     apikey: "{{ .Config.apikey }}"
     q: "{{ .Keywords }}"
 #    cat: "{{ join .Categories \",\" }}" # cat is not supported
-    season: "{{ .Query.Season }}"
-    ep: "{{ .Query.Episode }}"
+#    season: "{{ .Query.Season }}"
+#    ep: "{{ .Query.Episode }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tmdbid: "{{ .Query.TMDBID }}"
     limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
 
   rows:
     selector: rss > channel > item
