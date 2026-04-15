@@ -69,7 +69,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q]
+    movie-search: [q, imdbid]
     music-search: [q]
     book-search: [q]
 
@@ -138,7 +138,7 @@ search:
       method: post
 
   inputs:
-    name: "{{ .Keywords }}"
+    name: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     searchMethod: wildcard
     maxAge: added
