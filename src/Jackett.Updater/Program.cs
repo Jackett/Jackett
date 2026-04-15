@@ -270,6 +270,7 @@ namespace Jackett.Updater
                 "Definitions/animeclipse.yml",
                 "Definitions/animeitalia.yml",
                 "Definitions/animelovers-api.yml",
+                "Definitions/animenosekai.yml",
                 "Definitions/animetime.yml",
                 "Definitions/animetracker.yml",
                 "Definitions/animeworld.yml", // switch to *-API #8682
