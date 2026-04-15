@@ -29,6 +29,7 @@ caps:
     - {id: 21, cat: TV/Sport, desc: "UFC"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
+    - {id: 24, cat: Other, desc: "PDF"}
 
   modes:
     search: [q]
@@ -157,4 +158,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-#  xbtitFM v4.1.32
+#  xbtitFM v4.2.12
