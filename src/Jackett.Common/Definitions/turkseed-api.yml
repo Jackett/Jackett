@@ -68,7 +68,7 @@ settings:
     default: "Accounts that do not download a 15GB torrent from our site within a month will receive a warning (will be closed)! Accounts that do not upload (seed, share) 20gb on our site within a month will receive a warning (will be closed)! The account that receives three warnings will be automatically closed! No objections are accepted to the deletion of accounts that have not been on our site for six months and have not been active in any way!"
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

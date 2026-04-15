@@ -101,7 +101,7 @@ settings:
     default: "Inactive Account mean No trafic Up/Down, these  will be wiped very fast."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

@@ -94,7 +94,7 @@ settings:
     default: "Inactivity of an account for a period of 60 consecutive days will automatically deactivate your account."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

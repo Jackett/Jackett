@@ -58,7 +58,7 @@ settings:
     default: "Inactive accounts will be deleted as scheduled by Staff."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

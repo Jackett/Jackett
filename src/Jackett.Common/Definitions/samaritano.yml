@@ -68,7 +68,7 @@ settings:
     default: "Your account will be considered inactive if you have not logged in to the site for more than 90 days. After 30 days of inactivity (i.e. 30 days without logging in), your account will be removed from the tracker. Please note: The groups that suffer from inactivity are: User and Leech."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

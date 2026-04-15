@@ -49,7 +49,7 @@ settings:
     default: "You must download or upload data within 30 days of joining, or your account may be pruned for lurking."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

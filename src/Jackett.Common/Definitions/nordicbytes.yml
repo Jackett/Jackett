@@ -73,7 +73,7 @@ settings:
     default: "Your account is automatically disabled after 90 days of no activity."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

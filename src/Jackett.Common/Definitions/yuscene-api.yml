@@ -67,7 +67,7 @@ settings:
     type: info_flaresolverr
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

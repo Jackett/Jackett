@@ -70,7 +70,7 @@ settings:
     default: "After 60 days of no activity, your account will be automatically deleted."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

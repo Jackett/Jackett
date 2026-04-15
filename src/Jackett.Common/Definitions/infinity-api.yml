@@ -56,7 +56,7 @@ settings:
     default: "The system bot will prune inactive users after 90 days of no activity. If you wish to keep your account be sure to login."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
