@@ -186,6 +186,7 @@ caps:
     - {id: 439, cat: Books/Mags, desc: " |- История"}
     - {id: 438, cat: Books/Mags, desc: " |- Хобби"}
     - {id: 167, cat: Audio/Audiobook, desc: "Аудиокниги"}
+    - {id: 464, cat: Audio/Audiobook, desc: " |- ♫ История"}
     - {id: 335, cat: Audio/Audiobook, desc: " |- ♫ Русская литература ХХ-ХХI века"}
     - {id: 232, cat: Audio/Audiobook, desc: " |- ♫ Детективы, приключения, триллеры"}
     - {id: 337, cat: Audio/Audiobook, desc: " |- ♫ Детективы  Дарьи Донцовой"}
