@@ -11,6 +11,7 @@ links:
 
 caps:
   categorymappings:
+    # https://pandacd.io/api/torznab?t=caps
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3010, cat: Audio/MP3, desc: "MP3"}
     - {id: 3040, cat: Audio/Lossless, desc: "Lossless"}
@@ -19,11 +20,7 @@ caps:
     search: [q]
     music-search: [q, artist, album, genre]
 
-settings:
-  - name: apikey
-    type: text
-    label: API Key (optional)
-    default: ""
+settings: []
 
 search:
   paths:
@@ -38,7 +35,6 @@ search:
     artist: "{{ .Query.Artist }}"
     album: "{{ .Query.Album }}"
     genre: "{{ .Query.Genre }}"
-    apikey: "{{ .Config.apikey }}"
     limit: 100
 
   rows:
@@ -56,6 +52,7 @@ search:
       selector: enclosure
       attribute: url
     date:
+      # Wed, 15 Apr 2026 02:01:34 +0000
       selector: pubDate
       filters:
         - name: dateparse
@@ -72,7 +69,21 @@ search:
     grabs:
       selector: "[name=grabs]"
       attribute: value
+    files:
+      selector: "[name=files]"
+      attribute: value
     infohash:
       selector: "[name=infohash]"
+      attribute: value
+    genre:
+      selector: "[name=genre]"
+      attribute: value
+    description:
+      text: "{{ .Result.genre }}"
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
       attribute: value
 # torznab xml
