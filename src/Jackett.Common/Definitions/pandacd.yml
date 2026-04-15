@@ -1,7 +1,7 @@
 ---
 id: pandacd
 name: PandaCD
-description: "PandaCD is a music tracker for Creative Commons and artist-permitted content"
+description: "PandaCD is a Public Tracker for MUSIC (Creative Commons and artist-permitted content)"
 language: en-US
 type: public
 encoding: UTF-8
@@ -24,7 +24,7 @@ settings: []
 
 search:
   paths:
-    - path: /api/torznab
+    - path: api/torznab
       response:
         type: xml
 
