@@ -26,6 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string SiteLink { get; protected set; } = "https://torrent-syndikat.org/";
         public override string Language => "de-DE";
         public override string Type => "private";
+        public override int PageSize => 50;
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
