@@ -495,14 +495,12 @@ stages:
               targetType: inline
               script: reportgenerator -reports:$(Build.SourcesDirectory)/coverlet/reports/**/coverage.cobertura.*.xml -targetdir:$(Build.SourcesDirectory)/coverlet/reports/final/ -sourcedirs:$(Build.SourcesDirectory)/src/ -reporttypes:"Cobertura"
 
-          - task: PublishCodeCoverageResults@1
+          - task: PublishCodeCoverageResults@2
             displayName: Publish Code Coverage
             condition: and(succeeded(), startsWith(variables['runtime'], 'win'))
             inputs:
-              codeCoverageTool: Cobertura
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/final/Cobertura.xml
               pathToSources: $(Build.SourcesDirectory)/src/
-              additionalCodeCoverageFiles: $(Agent.TempDirectory)/*.trx
               failIfCoverageEmpty: true
 
           - task: PublishPipelineArtifact@1
