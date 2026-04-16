@@ -501,7 +501,6 @@ stages:
             inputs:
               summaryFileLocation: $(Build.SourcesDirectory)/coverlet/reports/final/Cobertura.xml
               pathToSources: $(Build.SourcesDirectory)/src/
-              additionalCodeCoverageFiles: $(Agent.TempDirectory)/*.trx
               failIfCoverageEmpty: true
 
           - task: PublishPipelineArtifact@1
