@@ -201,7 +201,6 @@ Prior versions of Jackett are no longer supported.
  * BookTracker
  * BootyTape
  * comicat
- * DarkiWorld
  * Deildu
  * Devil-Torrents
  * DreamingTree
@@ -218,6 +217,7 @@ Prior versions of Jackett are no longer supported.
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
+ * Hydracker
  * Il CorSaRo Blu
  * ilDraGoNeRo
  * Kinorun

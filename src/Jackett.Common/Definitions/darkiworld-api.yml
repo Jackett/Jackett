@@ -1,17 +1,21 @@
 ---
-id: darkiworld-api
-name: DarkiWorld (API)
-description: "DarkiWorld is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: hydracker-api
+replaces:
+  - darkiworld-api
+name: Hydracker (API)
+description: "Hydracker is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: semi-private
 encoding: UTF-8
 links:
+  - https://hydracker.com/
+legacylinks:
   - https://darkiworld16.com/
   - https://darkiworld.com/
 
 caps:
   categorymappings:
-    # from https://darkiworld16.com/api/v1/torznab/api?apikey=YOUR-API-KEY&t=caps
+    # from https://hydracker.com/api/v1/torznab/api?apikey=YOUR-API-KEY&t=caps
     - {id: 1000, cat: Console, desc: "Games"}
     - {id: 2000, cat: Movies, desc: "Movies"}
     - {id: 2010, cat: Movies/Foreign, desc: "Movies Foreign"}
@@ -52,7 +56,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or generate your API Key by logging in to <a href=\"https://darkiworld.com/account-settings\" target=\"_blank\">DarkiWorld Account Settings</a>, scrolling down to <b>Torznab / *arr integration</b>, and clicking <b>Generate my Torznab API key</b>."
+    default: "Find or generate your API Key by logging in to <a href=\"https://hydracker.com/account-settings\" target=\"_blank\">Hydracker Account Settings</a>, scrolling down to <b>Torznab / *arr integration</b>, and clicking <b>Generate my Torznab API key</b>."
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
