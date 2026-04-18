@@ -18,11 +18,14 @@ caps:
     - {id: 4, cat: TV/Anime, desc: "Animés"}
     - {id: 5, cat: TV/Other, desc: "Concerts / Spectacles"}
     - {id: 7, cat: TV/Sport, desc: "Sports"}
+    - {id: 8, cat: Books, desc: "eBooks"}
+    - {id: 9, cat: Audio/Audiobook, desc: "Audiobooks"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
