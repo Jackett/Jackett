@@ -367,6 +367,7 @@ namespace Jackett.Updater
                 "Definitions/danishbytes-api.yml ", // renamed to nordicbytes #10758
                 "Definitions/dariustracker.yml",
                 "Definitions/dark-shadow.yml",
+                "Definitions/darkiworld-api.yml", // renamed to hydracker-api #16737
                 "Definitions/darktracker.yml",
                 "Definitions/darmowetorenty.yml", // migrated to C#
                 "Definitions/datascene.yml", // switch to *-API #8682
