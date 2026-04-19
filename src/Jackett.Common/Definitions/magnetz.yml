@@ -11,6 +11,20 @@ links:
 caps:
   categorymappings:
     - {id: Other, cat: Other, desc: Other}
+    - {id: Movie, cat: Movies, desc: Movie}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: XXX, cat: XXX, desc: XXX}
+    - {id: eBook, cat: Books, desc: eBook}
+    - {id: App, cat: PC, desc: App}
+    - {id: Game, cat: Console, desc: Game}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: ABook, cat: Audio/Audiobook, desc: ABook}
+    - {id: Banned, cat: Other, desc: Banned}
+    - {id: Bookware, cat: Other, desc: Bookware}
+    - {id: MusicVideo, cat: Audio/Video, desc: MusicVideo}
+    - {id: Sports, cat: TV/Sport, desc: Sports}
+    - {id: Font, cat: Other, desc: Font}
 
   modes:
     search: [q]
@@ -20,8 +34,14 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_category_8000
-    type: info_category_8000
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
 
 download:
   selectors:
@@ -33,13 +53,14 @@ search:
     - path: search
   inputs:
     query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
+    sort: "{{ .Config.sort }}"
 
   rows:
-    selector: div.list-group-item
+    selector: article.result-card
 
   fields:
     category:
-      text: Other
+      selector: span.meta-chip--type
     title:
       selector: a
     details:
@@ -51,9 +72,16 @@ search:
     date:
       text: now
     size:
-      selector: small
+      selector: span.meta-chip--size
     seeders:
-      text: 1
+      selector: span.meta-chip--seeders
+    leechers:
+      selector: span.meta-chip--leechers
+    description:
+      selector: span.meta-chip--unverified, span.meta-chip--verified
+      case:
+        span.meta-chip--unverified: Unverified
+        span.meta-chip--verified: Verified
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
