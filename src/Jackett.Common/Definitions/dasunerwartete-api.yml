@@ -36,7 +36,7 @@ caps:
     - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
     - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
     - {id: 123, cat: TV/Documentary, desc: "Doku > Reihe"}
-    - {id: 153, cat: TV/Documentary, desc: "Doku > Dokus/UHD"}
+    - {id: 153, cat: TV/Documentary, desc: "Doku > UHD"}
     - {id: 126, cat: PC/Mobile-Other, desc: "Spiel > Mobil"}
     - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
     - {id: 24, cat: Console, desc: "Spiel > Konsole"}
