@@ -24,6 +24,7 @@ caps:
     - {id: 12, cat: Movies/Other, desc: "Desene Animate"}
     - {id: 17, cat: Other, desc: "Other"}
     - {id: 18, cat: Other, desc: "Other"}
+    - {id: 19, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
