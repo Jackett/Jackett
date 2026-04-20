@@ -29,7 +29,7 @@ caps:
     - {id: 21, cat: TV/Sport, desc: "UFC"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
-    - {id: 24, cat: Other, desc: "PDF"}
+    - {id: 24, cat: Other, desc: "Magazines - Books"}
 
   modes:
     search: [q]
@@ -124,25 +124,29 @@ search:
           args: src=(.+?) width
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
+    _is_pdf:
+      selector: a[href^="index.php?page=torrents&category=24"]
+      attribute: href
+      optional: true
     size:
-      selector: td:nth-child(11)
+      text: "{{ if .Result._is_pdf }}5MB{{ else }}5GB{{ end }}"
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
       default: 0
     downloadvolumefactor:
       case:
