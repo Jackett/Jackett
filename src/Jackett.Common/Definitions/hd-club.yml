@@ -117,25 +117,44 @@ search:
       selector: a[href^="download.php"]
       attribute: href
     poster:
-      selector: img.beny_img
+      selector: img.small-img
       attribute: src
     date:
-      # 07.09.2023 06:20:35
-      selector: td:nth-child(8)
+      # 21.03.2026 21:50:07<br>Smaže se za<br>2 Mesicu, 3 Tydny, 5 Hodin
+      selector: td:nth-last-child(7)
       # auto adjusted by site account profile
       filters:
+        - name: regexp
+          args: (\d{2}\.\d{2}\.\d{4} \d{2}:\d{2}:\d{2})
         - name: dateparse
           args: "dd.MM.yyyy HH:mm:ss"
     size:
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(6)
     seeders:
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(5)
     leechers:
-      selector: td:nth-child(11)
+      selector: td:nth-last-child(4)
     grabs:
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(3)
+    _exclusive:
+      optional: true
+      case:
+        img[src="beny/exclusive.png"]: Exclusive
+    _vip:
+      optional: true
+      case:
+        img[src="gold/free.gif"]: VIP
+    description:
+      text: "{{ if .Result._exclusive }}{{ .Result._exclusive }} {{ else }}{{ end }}{{ if .Result._vip }}{{ .Result._vip }}{{ else }}{{ end }}"
     downloadvolumefactor:
-      text: 1
+      case:
+        img[src="gold/gold.gif"]: 0
+        img[src="gold/gold75.gif"]: 0.25
+        img[src="gold/gold50.gif"]: 0.5
+        img[src="gold/gold25.gif"]: 0.75
+        "*": 1
     uploadvolumefactor:
       text: 1
-# xbtit v2.3.1
+    minimumratio:
+      text: 0.6
+# xbtit v2.0.1

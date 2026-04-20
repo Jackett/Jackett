@@ -406,7 +406,6 @@ caps:
     - {id: 680, cat: Audio, desc: " |- DVD-Audio"}
     - {id: 1149, cat: Audio, desc: " |- SACD-R"}
     - {id: 429, cat: Audio, desc: " |- DTS-Audio"}
-    - {id: 1234, cat: Audio, desc: " |- WEB-DL-Audio"}
     - {id: 681, cat: Audio, desc: " |- Vinyl-Rip и Hand-Made"}
     - {id: 330, cat: Audio, desc: "Классика"}
     - {id: 1256, cat: Audio, desc: " |- Классика (HD Audio)"}
@@ -434,6 +433,7 @@ caps:
     - {id: 1188, cat: Audio/Lossless, desc: " |- Blues, Soul (Lossless)"}
     - {id: 1189, cat: Audio, desc: " |- Blues, Soul"}
     - {id: 328, cat: Audio, desc: "Шансон, Авторская и Военная песня"}
+    - {id: 1370, cat: Audio, desc: " |- Шансон, Авторская и Военная песня (Hi-Res)"}
     - {id: 1180, cat: Audio/Lossless, desc: " |- Зарубежный Шансон (Lossless)"}
     - {id: 1181, cat: Audio, desc: " |- Зарубежный Шансон"}
     - {id: 364, cat: Audio/Lossless, desc: " |- Русский Шансон (Lossless)"}
@@ -670,6 +670,7 @@ caps:
     - {id: 1102, cat: Other, desc: "Материалы для мультимедиа и дизайна"}
     - {id: 1070, cat: Other, desc: " |- Digital Juice"}
     - {id: 534, cat: Other, desc: " |- Звуковые библиотеки"}
+    - {id: 676, cat: Other, desc: " |- Пресеты"}
     - {id: 1077, cat: Other, desc: " |- Дополнения"}
     - {id: 267, cat: Other, desc: " |- Футажи"}
     - {id: 1071, cat: Other, desc: " |- 3D модели и материалы"}
@@ -694,6 +695,7 @@ caps:
     - {id: 1273, cat: Other, desc: " |- Слайдшоу (проекты)"}
     - {id: 1274, cat: Other, desc: " |- Титры (проекты)"}
     - {id: 1275, cat: Other, desc: " |- Элементы (проекты)"}
+    - {id: 1372, cat: Other, desc: " |- Переходы, фоны и оверлеи (проекты)"}
     - {id: 1276, cat: Other, desc: " |- Разное (проекты)"}
     - {id: 1103, cat: Other, desc: "Графика, Арт, Разное"}
     - {id: 1114, cat: Other, desc: " |- Классическое искусство"}

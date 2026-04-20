@@ -5,6 +5,8 @@ description: "ThePlace (TP) is a Private Torrent Tracker for SEDUCTION / SELF-IM
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 3e8e14f055ed071a11e7ea64e96e3c4bf058f2f9 # Expired 27 Feb 2026
 links:
   - https://theplace.click/
 legacylinks:

@@ -60,6 +60,7 @@ caps:
     - {id: 68, cat: PC, desc: "Schmoomer"}
     - {id: 110, cat: Console, desc: "ScummVM"}
     - {id: 57, cat: Console, desc: "SEGA"}
+    - {id: 116, cat: PC, desc: "SiteRIP"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 75, cat: Audio, desc: "Soundtracks"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
@@ -184,8 +185,6 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "dd-MM-yyyy HH:mm zzz"
-    minimumratio:
-      text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800

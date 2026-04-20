@@ -93,17 +93,15 @@ Prior versions of Jackett are no longer supported.
  * Bangumi Moe
  * BigFANGroup
  * BitRu
- * BitSearch (Solid Torrents)
- * BluDV
  * BlueRoms
  * BT.etree
  * BTdirectory (BT目录)
  * btstate
  * Byrutor
  * Catorrent
- * cpasbienClone
  * CrackingPatching
  * DaMagNet
+ * Demonoid Clone
  * DivxTotal
  * dmhy
  * DonTorrent
@@ -116,13 +114,10 @@ Prior versions of Jackett are no longer supported.
  * FileMood
  * FilmesHdTorrent
  * Free JAV Torrent
- * Frozen Layer
  * GamesTorrents
- * GTorrent.pro
  * HDRTorrent
  * ilCorSaRoNeRo
  * Internet Archive (archive.org)
- * Isohunt2
  * kickasstorrents.to
  * kickasstorrents.ws
  * Knaben
@@ -148,7 +143,7 @@ Prior versions of Jackett are no longer supported.
  * OneJAV
  * OpenSharing
  * PC-torrent
- * Pirate's Paradise
+ * PandaCD
  * plugintorrent
  * PornoTorrent
  * PornRips
@@ -181,6 +176,7 @@ Prior versions of Jackett are no longer supported.
  * Torrents.csv
  * Torrentsome (토렌트썸)
  * Torrenttip (토렌트팁)
+ * U2P
  * U3C3
  * Uindex
  * UzTracker
@@ -199,6 +195,7 @@ Prior versions of Jackett are no longer supported.
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
 
  * AniDUB
+ * Anime by Belka (Аниме от Белки)
  * AnimeLayer
  * Best-Torrents [PAY2DL]
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
@@ -221,6 +218,7 @@ Prior versions of Jackett are no longer supported.
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
+ * Hydracker
  * Il CorSaRo Blu
  * ilDraGoNeRo
  * Kinorun
@@ -228,15 +226,14 @@ Prior versions of Jackett are no longer supported.
  * LostFilm.tv
  * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
  * Marine Tracker
- * Masters-TB
  * Mazepa
  * Metal Tracker
  * MioBT
- * MIRcrew
  * MuseBootlegs (MB)
  * MVGroup Forum
  * MVGroup Main
  * NetHD (VietTorrent)
+ * New-Team
  * NewStudio (login)
  * NoNaMe Club (NNM-Club) (login)
  * Polskie-Torrenty
@@ -253,7 +250,6 @@ Prior versions of Jackett are no longer supported.
  * Rustorka
  * RuTracker.org
  * seleZen
- * Sharewood
  * Sk-CzTorrent
  * SkTorrent-org
  * themixingbowl (TMB)
@@ -287,7 +283,6 @@ Prior versions of Jackett are no longer supported.
  * alingPT
  * AlphaRatio (AR)
  * AmigosShareClub (ASC)
- * Anime No Sekai (ANSK)
  * AnimeBytes (AB)
  * AnimeTorrents (AnT)
  * AnimeTorrents.ro (Anime Torrents Romania)
@@ -346,7 +341,6 @@ Prior versions of Jackett are no longer supported.
  * Carpathians
  * CarPT
  * Cathode-Ray.Tube (CRT)
- * CD File
  * CeskeForum
  * CGPeers [![(invite needed)][inviteneeded]](#)
  * CHDBits [![(invite needed)][inviteneeded]](#)
@@ -364,10 +358,10 @@ Prior versions of Jackett are no longer supported.
  * CrnaBerza
  * cspt (财神)
  * cyanbug (大青虫)
- * DANISH BYTES
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
+ * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
  * Diablo Torrent
  * DICMusic [![(invite needed)][inviteneeded]](#)
@@ -376,11 +370,11 @@ Prior versions of Jackett are no longer supported.
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
  * Drugari
- * dubhe (天枢)
+ * DS-Reloaded
+ * dubhe (天枢) [![(invite needed)][inviteneeded]](#)
  * Ebooks-Shares [![(invite needed)][inviteneeded]](#)
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
- * eShareNet
  * eStone (BigTorrent)
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
@@ -395,10 +389,10 @@ Prior versions of Jackett are no longer supported.
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * Flood (FLD)
- * Flux-Zone
  * Free Farm (自由农场)
  * FunFile (FF)
  * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
+ * funZone
  * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
  * G3MINI TR4CK3R
@@ -417,7 +411,7 @@ Prior versions of Jackett are no longer supported.
  * Hawke-uno (HUNO)
  * HD Dolby [![(invite needed)][inviteneeded]](#)
  * HD Zero
- * HD-Club [![(invite needed)][inviteneeded]](#)
+ * HD-Club
  * HD-Forever (HDF)
  * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
@@ -477,9 +471,7 @@ Prior versions of Jackett are no longer supported.
  * Le Saloon [![(invite needed)][inviteneeded]](#)
  * LearnFlakes
  * Leech24
- * LemonHD [![(invite needed)][inviteneeded]](#)
  * LemonHD.net
- * Lesbians4u
  * LetSeed
  * Libble
  * LibraNet (LN)
@@ -501,6 +493,7 @@ Prior versions of Jackett are no longer supported.
  * Matrix
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
+ * MidnightScene
  * Milkie (ME)
  * MMA-Torrents [![(invite needed)][inviteneeded]](#)
  * MNV (Max-New-Vision)
@@ -516,11 +509,16 @@ Prior versions of Jackett are no longer supported.
  * NCore
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
+ * Nexum
  * NicePT
  * Nirvana
+ * njtupt (浦园)) [![(invite needed)][inviteneeded]](#)
+ * NOBS (NUCLEAR ORDER BIT SYNDICATE)
  * NorBits
+ * NordicBytes
  * NORDiCHD
  * NordicQuality
+ * Nostradamus
  * NovaHD
  * OKPT
  * Old Greek Tracker (OGT)
@@ -530,7 +528,7 @@ Prior versions of Jackett are no longer supported.
  * OnlyEncodes+
  * OshenPT
  * OurBits (HDPter)
- * P2PBG
+ * P2PBG [PAY2DL]
  * Panda
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
@@ -541,6 +539,7 @@ Prior versions of Jackett are no longer supported.
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
  * PlayletPT [![(invite needed)][inviteneeded]](#)
+ * Podzemlje
  * Polish Torrent (PTT)
  * PolishTracker [![(invite needed)][inviteneeded]](#)
  * Pornbay [![(invite needed)][inviteneeded]](#)
@@ -560,6 +559,7 @@ Prior versions of Jackett are no longer supported.
  * PTLGS [![(invite needed)][inviteneeded]](#)
  * PTSBAO (烧包) [![(invite needed)][inviteneeded]](#)
  * PTSKIT
+ * PTTey [![(invite needed)][inviteneeded]](#)
  * PTtime
  * PTYING (樱花)
  * PTzone
@@ -578,11 +578,11 @@ Prior versions of Jackett are no longer supported.
  * Redacted (PassTheHeadphones)
  * ReelFlix (HD4Free,LegacyHD)
  * RetroFlix
+ * RetroMoviesClub (RMC)
  * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * RoTorrent (ROT)
- * Rousi
  * Rousi.pro
  * SAMARITANO
  * SBPT
@@ -594,13 +594,13 @@ Prior versions of Jackett are no longer supported.
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
  * SexTorrent
- * SFP (Share Friends Projekt)
  * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland
  * Shazbat
  * SiamBIT [PAY2DL]
  * Siqi
  * SkipTheCommercials
+ * Slobit Media
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)
@@ -609,7 +609,7 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
- * SugoiMusic
+ * SunnyPT [![(invite needed)][inviteneeded]](#)
  * Superbits (SBS)
  * Swarmazon
  * Tangmen (唐门)
@@ -617,6 +617,7 @@ Prior versions of Jackett are no longer supported.
  * Tapochek
  * Tasmanit
  * Team CT Game (TCTG)
+ * TeamFlix
  * TeamHD
  * TeamOS
  * TEKNO3D [![(invite needed)][inviteneeded]](#)
@@ -661,6 +662,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentLeech.pl [![(invite needed)][inviteneeded]](#)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
+ * TrackerZero [PAY2DL]
  * TranceTraffic
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
@@ -670,18 +672,17 @@ Prior versions of Jackett are no longer supported.
  * TVstore
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
- * UHDBits
  * UltraHD
  * UnlimitZ
  * upload.cx (ULCX)
  * Upscale Vault
  * UTOPIA
  * Vault network
+ * VietMediaF
  * White Angel
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
- * x-ite.me (XM)
  * Xingwan (星湾) [![(invite needed)][inviteneeded]](#)
  * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)
  * xloli (ilolicon PT)
@@ -690,7 +691,6 @@ Prior versions of Jackett are no longer supported.
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
- * YggTorrent (YGG)
  * YUSCENE
  * Zappateers
  * ZmPT (织梦)
@@ -762,7 +762,7 @@ This section covers installation on most common Linux distributions including Ub
 Copy and paste this command into your terminal:
 
 ```bash
-cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github.com/Jackett/Jackett/releases/latest/download/"$f" && sudo tar -xzf "$f" && sudo rm -f "$f" && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
+cd /opt && wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz && cd Jackett* && sudo chown $(whoami):$(id -g) -R "/opt/Jackett" && sudo ./install_service_systemd.sh && systemctl status jackett.service && cd - && echo -e "\nVisit http://127.0.0.1:9117"
 ```
 
 #### Method 2: Step-by-Step Installation
@@ -771,9 +771,7 @@ cd /opt && f=Jackett.Binaries.LinuxAMDx64.tar.gz && sudo wget -Nc https://github
 
    ```bash
    cd /opt
-   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo tar -xzf Jackett.Binaries.LinuxAMDx64.tar.gz
-   sudo rm Jackett.Binaries.LinuxAMDx64.tar.gz
+   wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxAMDx64.tar.gz | sudo tar -xz
    ```
 
 2. Set proper ownership:
@@ -852,9 +850,7 @@ For modern ARM-based systems (Raspberry Pi, etc.)
 
    ```bash
    cd /opt
-   sudo wget https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz
-   sudo tar -xzf Jackett.Binaries.LinuxARM32.tar.gz
-   sudo rm Jackett.Binaries.LinuxARM32.tar.gz
+   wget -O - -o /dev/stderr https://github.com/Jackett/Jackett/releases/latest/download/Jackett.Binaries.LinuxARM32.tar.gz | sudo tar -xz
    ```
 
 2. Install as a service:
@@ -1550,4 +1546,3 @@ Jackett is an open-source project maintained by the community.
 - [Release Notes](https://github.com/Jackett/Jackett/releases)
 
 [inviteneeded]: https://raw.githubusercontent.com/Jackett/Jackett/master/.github/label-inviteneeded.png
-

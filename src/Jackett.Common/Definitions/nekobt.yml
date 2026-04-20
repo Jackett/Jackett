@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # from https://nekobt.to/api/torznab/api?t=caps
     - {id: 5070, cat: TV/Anime, desc: "Anime"}
     - {id: 2000, cat: Movies/Other, desc: "Movies"}
 
@@ -19,16 +20,17 @@ caps:
     movie-search: [q]
 
 settings:
-  - name: apikey
-    type: text
-    label: API Key (Optional)
-  - name: info_key
+  - name: incltags
+    type: checkbox
+    label: Include tags in titles.
+    default: false
+  - name: info_tags
     type: info
-    label: About your API key
-    default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
+    label: About including tags in titles.
+    default: "To be used with Sonarr and Radarr custom formats, and any other downstream automations/filtering. See <a href=\"https://wiki.nekobt.to/info/metadata/#auto-titles\" target=\"_blank\">wiki</a> for more information."
   - name: levels
     type: select
-    label: Subtitle Level
+    label: Subtitle-Level
     default: _
     options:
       _: "All"
@@ -36,7 +38,6 @@ settings:
       "1": "Level 1"
       "2": "Level 2"
       "3": "Level 3"
-      "4": "Level 4"
   - name: audio_lang
     type: text
     label: Audio Language (comma-separated codes, e.g. en,ja)
@@ -82,9 +83,8 @@ search:
         type: xml
 
   inputs:
-    t: "search"
+    t: search
     q: "{{ .Keywords }}"
-    apikey: "{{ .Config.apikey }}"
     tvdbid: "{{ .Query.TVDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
@@ -106,12 +106,12 @@ search:
       selector: title
       filters:
         - name: re_replace
-          args: ["(.+?) {Tags:.+", "$1"]
+          args: ["(.+?)( {Tags:.+)", "{{ if .Config.incltags }}$1$2{{ else }}$1{{ end }}"]
     description:
       selector: title
       filters:
         - name: re_replace
-          args: [".+ {(Tags:.+?)}", "$1"]
+          args: [".+ {(Tags:.+?)}", "{{ if .Config.incltags }}{{ else }}$1{{ end }}"]
     details:
       selector: comments
     magnet:
@@ -126,18 +126,18 @@ search:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="leechers"]'
+      selector: "[name=leechers]"
       attribute: value
     grabs:
-      selector: '[name="grabs"]'
+      selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
       text: 0

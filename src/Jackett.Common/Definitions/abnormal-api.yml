@@ -1,6 +1,6 @@
 ---
-id: abnormal
-name: Abnormal
+id: abnormal-api
+name: Abnormal (API)
 description: "ABNormal (ABN) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
@@ -29,12 +29,21 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find your API key on your <a href=\"https://abn.lol/User/Parameters\" target=\"_blank\">Parameters</a> page. The API key is read-only and never expires."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.abn.lol
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -54,10 +63,6 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
-  - name: freeleech
-    type: checkbox
-    label: Search freeleech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -70,65 +75,52 @@ settings:
   - name: type
     type: select
     label: Order requested from site
-    default: desc
+    default: DESC
     options:
-      desc: desc
-      asc: asc
+      DESC: desc
+      ASC: asc
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "Accounts are automatically deactivated after 4 months of inactivity (no connection to the site)."
 
 login:
-  method: form
-  path: Home/Login
-  form: "#account"
-  inputs:
-    Username: "{{ .Config.username }}"
-    Password: "{{ .Config.password }}"
-    RememberMe: true
-  selectorinputs:
-    __RequestVerificationToken:
-      selector: input[name="__RequestVerificationToken"]
-      attribute: value
+  path: "https://{{ .Config.apiurl }}/api/Release/Search?name=test&resultByPage=1"
+  method: get
   error:
-    - selector: div.validation-summary-errors[data-valmsg-summary="true"]
+    - selector: :root:contains("Unauthorized")
       message:
-        text: " - Bad username/password."
-  test:
-    path: /
-    selector: form#logoutForm
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
 
 search:
   paths:
-    - path: Torrent
+    - path: "https://{{ .Config.apiurl }}/api/Release/Search"
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    $raw: "{{ range .Categories }}SelectedCats={{.}}&{{end}}"
-    Search: "{{ .Keywords }}"
-    UserId: ""
-    YearOperator: ≥
-    Year: ""
-    RatingOperator: ≥
-    Rating: ""
-    Pending: ""
-    Pack: ""
-    Scene: ""
-    Freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
-    SortOn: "{{ .Config.sort }}"
-    SortOrder: "{{ .Config.type }}"
+    $raw: "{{ range .Categories }}categoryId={{.}}&{{end}}"
+    name: "{{ .Keywords }}"
+    resultByPage: 100
+    sort: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
-    selector: table.table-rows > tbody > tr:has(a[href^="/Torrent/Download?ReleaseId="])
+    selector: $
 
   fields:
     category:
-      selector: a[href^="/Torrent?SelectedCats="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: SelectedCats
+      selector: categoryId
     title_phase1:
-      selector: td.grid-release-column > a
+      selector: name
     title_vostfr:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -143,35 +135,41 @@ search:
           args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    _id:
+      selector: id
     details:
-      selector: a[href^="/Torrent/Details?ReleaseId="]
-      attribute: href
+      # api returns https://api.abn.lol/api/Release/671444 which is not valid for browsing
+      text: "{{ .Config.sitelink }}Torrent/Details?ReleaseId={{ .Result._id }}"
     download:
-      selector: a[href^="/Torrent/Download?ReleaseId="]
-      attribute: href
+      selector: downloadUrl
+    infohash:
+      selector: infoHash
     date:
-      text: now
-    size:
-      selector: td:nth-child(6)
+      # created": "2026-03-07T06:59:22.137408" is returned by Newtonsoft.Json.Linq as 03/07/2026 06:59:22
+      selector: created
       filters:
-        - name: re_replace
-          args: [",", "."]
-        - name: replace
-          args: ["o", "B"]
+        - name: append
+          args: " +00:01" # CET
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
     seeders:
-      selector: td:nth-child(7)
+      selector: seeders
     leechers:
-      selector: td:nth-child(8)
+      selector: leechers
+    grabs:
+      selector: completed
     downloadvolumefactor:
+      selector: freeleech
       case:
-        img[title="Freeleech"]: 0
-        "*": 1
+        False: 1 # not free
+        True: 0 # freeleech
     uploadvolumefactor:
-      case:
-        "*": 1
+      text: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# Gazelle
+# JSON

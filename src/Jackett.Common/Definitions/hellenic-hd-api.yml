@@ -1,7 +1,7 @@
 ---
 id: hellenic-hd-api
 name: HELLENIC-HD (API)
-description: "HELLENIC-HD is a GREEK Private Torrent Tracker for MOVIES / TV"
+description: "HELLENIC-HD is a GREEK Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: el-GR
 type: private
 encoding: UTF-8
@@ -11,12 +11,22 @@ links:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 2, cat: TV, desc: "Series"}
+    - {id: 10, cat: Audio, desc: "Music"}
+    - {id: 11, cat: PC/Games, desc: "Games"}
+    - {id: 12, cat: PC/0day, desc: "Apps"}
+    - {id: 13, cat: Books, desc: "Books"}
+    - {id: 14, cat: TV/Sport, desc: "Sports"}
+    - {id: 15, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 16, cat: TV, desc: "Shows"}
+    - {id: 17, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -56,7 +66,7 @@ settings:
     default: "Accounts that have not logged in for 60 days will be disabled, and may be deleted shortly afterwards."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -187,4 +197,4 @@ search:
     minimumseedtime:
       # 14 days (as seconds = 14 x 24 x 60 x 60)
       text: 1209600
-# json UNIT3D 9.1.6
+# json UNIT3D 9.2.0

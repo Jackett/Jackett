@@ -9,16 +9,8 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrentsome234.com/
+  - https://torrentsome242.com/
 legacylinks:
-  - https://torrentsome219.com/
-  - https://torrentsome220.com/
-  - https://torrentsome221.com/
-  - https://torrentsome222.com/
-  - https://torrentsome223.com/
-  - https://torrentsome224.com/
-  - https://torrentsome225.com/
-  - https://torrentsome226.com/
   - https://torrentsome227.com/
   - https://torrentsome228.com/
   - https://torrentsome229.com/
@@ -26,6 +18,14 @@ legacylinks:
   - https://torrentsome231.com/
   - https://torrentsome232.com/
   - https://torrentsome233.com/
+  - https://torrentsome234.com/
+  - https://torrentsome235.com/
+  - https://torrentsome236.com/
+  - https://torrentsome237.com/
+  - https://torrentsome238.com/
+  - https://torrentsome239.com/
+  - https://torrentsome240.com/
+  - https://torrentsome241.com/
 
 caps:
   categorymappings:
@@ -47,6 +47,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     music-search: [q]
+    book-search: [q]
 
 settings:
   - name: info_flaresolverr

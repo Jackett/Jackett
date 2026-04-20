@@ -10,9 +10,9 @@ links:
 
 caps:
   categorymappings:
-    - {id: 145, cat: Movies, desc: "Filme > DRG"}
     - {id: 28, cat: Movies/SD, desc: "Filme > SD"}
     - {id: 32, cat: Movies/HD, desc: "Filme > HD"}
+    - {id: 145, cat: Movies, desc: "Filme > DRG"}
     - {id: 114, cat: Movies/UHD, desc: "Filme > UHD"}
     - {id: 140, cat: Movies/BluRay, desc: "Filme > BluRay"}
     - {id: 143, cat: TV/Anime, desc: "Filme > Anime"}
@@ -36,6 +36,7 @@ caps:
     - {id: 15, cat: TV/Documentary, desc: "Doku > SD"}
     - {id: 14, cat: TV/Documentary, desc: "Doku > HD"}
     - {id: 123, cat: TV/Documentary, desc: "Doku > Reihe"}
+    - {id: 153, cat: TV/Documentary, desc: "Doku > UHD"}
     - {id: 126, cat: PC/Mobile-Other, desc: "Spiel > Mobil"}
     - {id: 17, cat: PC/Games, desc: "Spiel > PC"}
     - {id: 24, cat: Console, desc: "Spiel > Konsole"}
@@ -51,9 +52,13 @@ caps:
     - {id: 142, cat: XXX/ImageSet, desc: "XXX > Pic´s"}
     - {id: 129, cat: Movies/SD, desc: "Internal > Film SD"}
     - {id: 128, cat: Movies/HD, desc: "Internal > Film HD"}
+    - {id: 152, cat: Movies/UHD, desc: "Internal > Film UHD"}
     - {id: 131, cat: TV/SD, desc: "Internal > Serien SD"}
     - {id: 130, cat: TV/HD, desc: "Internal > Serien HD"}
     - {id: 132, cat: Other, desc: "Internal > Sonstiges"}
+    - {id: 149, cat: Movies/UHD, desc: "Internal > Packs UHD"}
+    - {id: 150, cat: Movies/HD, desc: "Internal > Packs HD"}
+    - {id: 151, cat: Movies/SD, desc: "Internal > Packs SD"}
 
   modes:
     search: [q]

@@ -10,6 +10,7 @@ links:
   - https://nyaa.si/
   - https://nyaa.iss.ink/
   - https://nyaa.land/
+  - https://nyaa.mom/
   - https://nyaa.unblockninja.com/ # for magnets only
 legacylinks:
   - https://nyaa.black-mirror.xyz/
@@ -254,8 +255,19 @@ search:
       filters:
         - name: re_replace
           args: ["^(\\[.+?].+?)\\s*(?<![\\]\\)])((?:\\[|\\(| - ).+)", "{{ if and (and (eq .Result.category_group_id \"1\") (ne .Result.title_has_movie_ova \"YES\")) (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }}$1 S01 $2{{ else }}$1 $2{{ end }}"]
+    title_live_action:
+      text: "{{ .Result.title_optional }}"
+      filters:
+        # Insert S01 after year for Live Action titles without season/episode info
+        # e.g. Hotel.del.Luna.2019.1080p... -> Hotel.del.Luna.2019.S01.1080p...
+        - name: re_replace
+          args: ["^(.+?)([\\. ])((?:19|20)\\d{2})([\\. ])(.+)$", "{{ if and (eq .Result.category_group_id \"4\") (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }}$1$2$3$4S01$4$5{{ else }}$1$2$3$4$5{{ end }}"]
+        # Insert S01 before resolution for Live Action titles without year or season info
+        # e.g. Hotel Del Luna 720p HDTV... -> Hotel Del Luna S01 720p HDTV...
+        - name: re_replace
+          args: ["^(?!.*(?:19|20)\\d{2})(.+?)([\\. ])((?:480|720|1080|2160)[pi])(.*)$", "{{ if and (eq .Result.category_group_id \"4\") (and (eq .Result.title_has_season \"NULL\") (eq .Result.title_has_episode \"NULL\")) }}$1$2S01$2$3$4{{ else }}$1$2$3$4{{ end }}"]
     title:
-      text: "{{ if .Config.sonarr_compatibility }}{{ .Result.title_optional }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+      text: "{{ if .Config.sonarr_compatibility }}{{ .Result.title_live_action }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: td:nth-child(2) a:last-of-type
       attribute: href

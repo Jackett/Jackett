@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -155,28 +156,36 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var pageableRequests = new IndexerPageableRequestChain();
 
-            var offset = query.Offset;
             var limit = query.Limit;
             if (limit == 0)
             {
                 limit = _torznabCaps.LimitsDefault.GetValueOrDefault(100);
             }
 
-            var queryParams = new NebulanceQuery
+            var queryParams = new NameValueCollection
             {
-                Age = ">0"
+                { "action", "search" },
+                { "api_key", _configData.Key.Value },
+                { "age", ">0" },
+                { "per_page", limit.ToString() },
             };
+
+            if (query.Limit > 0 && query.Offset > 0)
+            {
+                var page = query.Offset / query.Limit;
+                queryParams.Add("page", page.ToString());
+            }
 
             if (query.IsTvmazeQuery && query.TvmazeID.HasValue)
             {
-                queryParams.TvMaze = query.TvmazeID;
+                queryParams.Set("tvmaze", query.TvmazeID.ToString());
             }
 
             var searchQuery = query.SanitizedSearchTerm.Trim();
 
             if (searchQuery.IsNotNullOrWhiteSpace())
             {
-                queryParams.Release = searchQuery;
+                queryParams.Set("release", searchQuery);
             }
 
             if (query.Season.HasValue &&
@@ -185,78 +194,60 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 if (searchQuery.IsNotNullOrWhiteSpace())
                 {
-                    queryParams.Name = searchQuery;
+                    queryParams.Set("name", searchQuery);
                 }
 
-                queryParams.Release = showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture);
+                queryParams.Set("release", showDate.ToString("yyyy.MM.dd", CultureInfo.InvariantCulture));
             }
             else
             {
                 if (query.Season.HasValue)
                 {
-                    queryParams.Season = query.Season.Value;
+                    queryParams.Set("season", query.Season.Value.ToString());
                 }
 
                 if (query.Episode.IsNotNullOrWhiteSpace() && int.TryParse(query.Episode, out var episodeNumber))
                 {
-                    queryParams.Episode = episodeNumber;
+                    queryParams.Set("episode", episodeNumber.ToString());
                 }
             }
 
-            if ((queryParams.Season.HasValue || queryParams.Episode.HasValue) &&
-                queryParams.Name.IsNullOrWhiteSpace() &&
-                queryParams.Release.IsNullOrWhiteSpace() &&
-                !queryParams.TvMaze.HasValue)
+            if ((queryParams.Get("season").IsNotNullOrWhiteSpace() || queryParams.Get("episode").IsNotNullOrWhiteSpace()) &&
+                queryParams.Get("name").IsNullOrWhiteSpace() &&
+                queryParams.Get("release").IsNullOrWhiteSpace() &&
+                queryParams.Get("tvmaze").IsNullOrWhiteSpace())
             {
-                _logger.Debug("NBL API does not support season calls without name, series, id, imdb, tvmaze, or time keys.");
+                _logger.Warn("NBL API does not support season calls without name, series, id, imdb, tvmaze, or time keys.");
 
                 return new IndexerPageableRequestChain();
             }
 
-            if (queryParams.Name is { Length: > 0 and < 3 } || queryParams.Release is { Length: > 0 and < 3 })
+            if (queryParams.Get("name") is { Length: > 0 and < 3 } || queryParams.Get("release") is { Length: > 0 and < 3 })
             {
-                _logger.Debug("NBL API does not support release calls that are 2 characters or fewer.");
+                _logger.Warn("NBL API does not support release calls that are 2 characters or fewer.");
 
                 return new IndexerPageableRequestChain();
             }
 
-            pageableRequests.Add(GetPagedRequests(queryParams, limit, offset));
+            pageableRequests.Add(GetPagedRequests(queryParams));
 
             return pageableRequests;
         }
 
-        private IEnumerable<IndexerRequest> GetPagedRequests(NebulanceQuery parameters, int limit, int offset)
+        private IEnumerable<IndexerRequest> GetPagedRequests(NameValueCollection parameters)
         {
             var webRequest = new WebRequest
             {
-                Url = _siteLink + "api.php",
-                Type = RequestType.POST,
+                Url = $"{_siteLink}api.php?{parameters.GetQueryString()}",
+                Type = RequestType.GET,
                 Headers = new Dictionary<string, string>
                 {
-                    { "Accept", "application/json-rpc, application/json" },
-                    { "Content-Type", "application/json-rpc" }
+                    { "Accept", "application/json" },
                 },
-                RawBody = JsonRpcRequest("getTorrents", new JArray
-                {
-                    new JValue(_configData.Key.Value),
-                    JObject.FromObject(parameters),
-                    new JValue(limit),
-                    new JValue(offset)
-                }),
                 EmulateBrowser = false
             };
 
             yield return new IndexerRequest(webRequest);
-        }
-
-        private string JsonRpcRequest(string method, JArray parameters)
-        {
-            dynamic request = new JObject();
-            request["jsonrpc"] = "2.0";
-            request["method"] = method;
-            request["params"] = parameters;
-            request["id"] = Guid.NewGuid().ToString().Substring(0, 8);
-            return request.ToString();
         }
     }
 
@@ -320,9 +311,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             if (indexerResponse.WebResponse.Status != HttpStatusCode.OK)
             {
-                STJson.TryDeserialize<NebulanceRpcResponse<NebulanceErrorResponse>>(indexerResponse.Content, out var errorResponse);
-
-                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request: {errorResponse?.Result?.Error?.Message ?? "Check the logs for more information."}");
+                throw new Exception($"Unexpected response status '{indexerResponse.WebResponse.Status}' code from indexer request. Check the logs for more information.");
             }
 
             if (indexerResponse.Content != null && indexerResponse.Content.Contains("Invalid params"))
@@ -337,30 +326,28 @@ namespace Jackett.Common.Indexers.Definitions
 
             var releases = new List<ReleaseInfo>();
 
-            NebulanceRpcResponse<NebulanceResponse> jsonResponse;
+            NebulanceResponse jsonResponse;
 
             try
             {
-                jsonResponse = STJson.Deserialize<NebulanceRpcResponse<NebulanceResponse>>(indexerResponse.Content);
+                jsonResponse = STJson.Deserialize<NebulanceResponse>(indexerResponse.Content);
             }
             catch (Exception ex)
             {
                 throw new Exception($"Unexpected response from indexer request: {ex.Message}", ex);
             }
 
-            if (jsonResponse.Error != null || jsonResponse.Result == null)
+            if (jsonResponse.Error != null)
             {
-                throw new Exception($"Indexer API call returned an error [{jsonResponse.Error}]");
+                throw new Exception($"Indexer API call returned an error [{jsonResponse.Error?.Message}]");
             }
 
-            if (jsonResponse.Result?.Items == null || jsonResponse.Result.Items.Count == 0)
+            if (jsonResponse.TotalResults == 0 || jsonResponse.Items == null || jsonResponse.Items.Count == 0)
             {
                 return releases;
             }
 
-            var rows = jsonResponse.Result.Items;
-
-            foreach (var row in rows)
+            foreach (var row in jsonResponse.Items)
             {
                 var details = new Uri(_siteLink + "torrents.php?id=" + row.TorrentId);
 
@@ -386,31 +373,31 @@ namespace Jackett.Common.Indexers.Definitions
                 {
                     Guid = details,
                     Details = details,
-                    Link = new Uri(row.Download),
+                    Link = new Uri(row.DownloadLink),
                     Title = title.Trim(),
                     Category = _categories.MapTrackerCatToNewznab(releaseCategories.FirstOrDefault() ?? "TV"),
-                    Size = ParseUtil.CoerceLong(row.Size),
+                    Size = row.Size,
                     Files = row.FileList.Count(),
                     PublishDate = DateTime.Parse(row.PublishDateUtc, CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal),
-                    Grabs = ParseUtil.CoerceInt(row.Snatch),
-                    Seeders = ParseUtil.CoerceInt(row.Seed),
-                    Peers = ParseUtil.CoerceInt(row.Seed) + ParseUtil.CoerceInt(row.Leech),
+                    Grabs = row.Snatch,
+                    Seeders = row.Seed,
+                    Peers = row.Seed + row.Leech,
                     MinimumRatio = 0, // ratioless
-                    MinimumSeedTime = row.Category.ToLower() == "season" ? 432000 : 86400, // 120 hours for seasons and 24 hours for episodes
+                    MinimumSeedTime = row.Category.ToUpperInvariant() == "SEASON" ? 432000 : 86400, // 120 hours for seasons and 24 hours for episodes
                     DownloadVolumeFactor = 0, // ratioless tracker
                     UploadVolumeFactor = 1,
                     Genres = genres,
                     Description = string.Join("<br />\n", descriptions)
                 };
 
-                if (row.TvMazeId.IsNotNullOrWhiteSpace())
+                if (row.ImdbId.IsNotNullOrWhiteSpace())
                 {
-                    release.TVMazeId = ParseUtil.CoerceInt(row.TvMazeId);
+                    release.Imdb = ParseUtil.GetImdbId(row.ImdbId);
                 }
 
-                if (row.Banner.IsNotNullOrWhiteSpace() && !row.Banner.Contains("noimage.png"))
+                if (row.TvMazeId.HasValue)
                 {
-                    release.Poster = new Uri(row.Banner);
+                    release.TVMazeId = row.TvMazeId.Value;
                 }
 
                 releases.Add(release);
@@ -420,62 +407,14 @@ namespace Jackett.Common.Indexers.Definitions
         }
     }
 
-    public class NebulanceQuery
-    {
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Id { get; set; }
-
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Time { get; set; }
-
-        [JsonProperty(PropertyName = "age", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Age { get; set; }
-
-        [JsonProperty(PropertyName = "tvmaze", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int? TvMaze { get; set; }
-
-        [JsonProperty(PropertyName = "imdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Imdb { get; set; }
-
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Hash { get; set; }
-
-        [JsonProperty(PropertyName = "tags", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string[] Tags { get; set; }
-
-        [JsonProperty(PropertyName = "name", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Name { get; set; }
-
-        [JsonProperty(PropertyName = "release", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Release { get; set; }
-
-        [JsonProperty(PropertyName = "category", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Category { get; set; }
-
-        [JsonProperty(DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public string Series { get; set; }
-
-        [JsonProperty(PropertyName = "season", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int? Season { get; set; }
-
-        [JsonProperty(PropertyName = "episode", DefaultValueHandling = DefaultValueHandling.Ignore)]
-        public int? Episode { get; set; }
-
-        public NebulanceQuery Clone()
-        {
-            return MemberwiseClone() as NebulanceQuery;
-        }
-    }
-
-    public class NebulanceRpcResponse<T>
-    {
-        public T Result { get; set; }
-        public JToken Error { get; set; }
-    }
-
     public class NebulanceResponse
     {
-        public List<NebulanceTorrent> Items { get; set; }
+        [JsonPropertyName("total_results")]
+        public int TotalResults { get; set; }
+
+        public IReadOnlyCollection<NebulanceTorrent> Items { get; set; }
+
+        public NebulanceErrorMessage Error { get; set; }
     }
 
     public class NebulanceTorrent
@@ -486,11 +425,13 @@ namespace Jackett.Common.Indexers.Definitions
         [JsonPropertyName("cat")]
         public string Category { get; set; }
 
-        public string Size { get; set; }
-        public string Seed { get; set; }
-        public string Leech { get; set; }
-        public string Snatch { get; set; }
-        public string Download { get; set; }
+        public long Size { get; set; }
+        public int Seed { get; set; }
+        public int Leech { get; set; }
+        public int Snatch { get; set; }
+
+        [JsonPropertyName("download")]
+        public string DownloadLink { get; set; }
 
         [JsonPropertyName("file_list")]
         public IEnumerable<string> FileList { get; set; } = Array.Empty<string>();
@@ -498,24 +439,19 @@ namespace Jackett.Common.Indexers.Definitions
         [JsonPropertyName("group_name")]
         public string GroupName { get; set; }
 
-        [JsonPropertyName("series_banner")]
-        public string Banner { get; set; }
-
         [JsonPropertyName("group_id")]
-        public string TorrentId { get; set; }
+        public int TorrentId { get; set; }
 
-        [JsonPropertyName("series_id")]
-        public string TvMazeId { get; set; }
+        [JsonPropertyName("imdb_id")]
+        public string ImdbId { get; set; }
+
+        [JsonPropertyName("tvmaze_id")]
+        public int? TvMazeId { get; set; }
 
         [JsonPropertyName("rls_utc")]
         public string PublishDateUtc { get; set; }
 
         public IEnumerable<string> Tags { get; set; } = Array.Empty<string>();
-    }
-
-    public class NebulanceErrorResponse
-    {
-        public NebulanceErrorMessage Error { get; set; }
     }
 
     public class NebulanceErrorMessage

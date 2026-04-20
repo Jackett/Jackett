@@ -5,9 +5,12 @@ description: "Bitpalace is a HUNGARIAN Private Torrent Tracker for MOVIES / TV /
 language: hu-HU
 type: private
 encoding: UTF-8
+certificates:
+  - 1453f04660cdfb424857a8ec01936ae026945569 # using cert for .hu domain
 links:
-  - https://bitpalace.hu/
   - https://bitpalace.cc/
+legacylinks:
+  - https://bitpalace.hu/
 
 caps:
   categorymappings:
@@ -38,8 +41,8 @@ caps:
     - {id: 6, cat: XXX/x264, desc: "XXX HD"}
     - {id: 10, cat: XXX/ImageSet, desc: "XXX KÉPEK"}
     - {id: 11, cat: XXX/XviD, desc: "XXX XVID"}
-    - {id: 19, cat: Audio/Video, desc: "ZENE Klipp"}
-    - {id: 20, cat: Audio/MP3, desc: "ZENE"}
+    - {id: 20, cat: Audio, desc: "ZENE Eng"}
+    - {id: 19, cat: Audio, desc: "ZENE Hun"}
 
   modes:
     search: [q]

@@ -10,8 +10,8 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: TV/Sport, desc: "Movies"}
-    - {id: 2, cat: TV/Sport, desc: "TV"}
+    - {id: 1, cat: Movies, desc: "Movies"}
+    - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: TV/Sport, desc: "Formula 1"}
     - {id: 4, cat: TV/Sport, desc: "IndyCar Series"}
     - {id: 5, cat: TV/Sport, desc: "Formula 2"}
@@ -27,6 +27,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
 
 settings:
   - name: apikey
@@ -62,7 +63,7 @@ settings:
       asc: asc
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

@@ -6,9 +6,9 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://www.haidan.video/
-legacylinks:
   - https://www.haidan.cc/
+legacylinks:
+  - https://www.haidan.video/
 
 caps:
   categorymappings:

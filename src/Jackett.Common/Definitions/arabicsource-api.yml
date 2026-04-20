@@ -72,7 +72,7 @@ settings:
     default: "The maximum number of days you can stay away from the site is 40 days, and only if you suspend the account, you will get a grace period of 180 days, but you must contact the administration in advance so that this is added to your personal account and you are not exposed to expulsion."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

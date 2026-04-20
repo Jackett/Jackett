@@ -281,16 +281,15 @@ search:
     submit: "Search"
 
   rows:
-    selector: table.forumline > tbody > tr:has(a[href*="/dl.php?id="])
-    dateheaders:
-      selector: td[colspan="20"] > strong
-      filters:
-        - name: append
-          args: " -07:00" # PDT
-        - name: dateparse
-          args: "MM-dd-yyyy zzz"
+    selector: table.forumline > tbody > tr.hl-tr:has(a[href*="/dl.php?id="])
 
   fields:
+    category:
+      selector: td a[href*="/tracker.php?f="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: f
     title:
       selector: td a[href*="/viewtopic.php?t="]
     details:
@@ -299,12 +298,14 @@ search:
     download:
       selector: td a[href*="/dl.php?id="]
       attribute: href
-    category:
-      selector: td a[href*="/tracker.php?f="]
-      attribute: href
+    date:
+      selector: tr.hl-tr
+      attribute: data-tor-date
       filters:
-        - name: querystring
-          args: f
+        - name: append
+          args: " -07:00" # PDT
+        - name: dateparse
+          args: "dd_MM_yyyy zzz"
     size:
       selector: td:contains(\00a0GB), td:contains(\00a0MB), td:contains(\00a0KB), td:contains(\00a0B)
       optional: true

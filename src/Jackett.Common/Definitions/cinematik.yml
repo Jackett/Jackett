@@ -62,7 +62,7 @@ settings:
     default: "With 2FA enabled, there are no specific requirements for uploading, downloading, or posting. Your membership continues based on the staff's fair assessment of your overall activity and contributions."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

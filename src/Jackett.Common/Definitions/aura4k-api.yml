@@ -57,7 +57,7 @@ settings:
     default: "Accounts with no activity (login/traffic) for more than 90 days may be automatically pruned."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

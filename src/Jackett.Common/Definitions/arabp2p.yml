@@ -42,6 +42,7 @@ settings:
 caps:
   categorymappings:
     # المرئيات العربية Arabic Movies
+    - {id: 117, cat: TV, desc: "ارمضان 2026 (Ramadan)"}
     - {id: 14, cat: Movies, desc: "اسلامي (Islamic)"}
     - {id: 19, cat: TV/Documentary, desc: "وثائقي (Documentary)"}
     - {id: 70, cat: TV, desc: "تعليمي (Educational)"}

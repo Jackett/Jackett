@@ -25,8 +25,8 @@ caps:
     - {id: 1, cat: Movies/HD, desc: "Film/HD/Hun"}
     - {id: 8, cat: Movies/Foreign, desc: "Film/SD/Eng"}
     - {id: 7, cat: Movies/SD, desc: "Film/SD/Hun"}
-    - {id: 10, cat: Movies/Foreign, desc: "Film/XviD/Eng"}
-    - {id: 9, cat: Movies/SD, desc: "Film/XviD/Hun"}
+    - {id: 47, cat: Movies/Foreign, desc: "Film/UHD/Eng"}
+    - {id: 46, cat: Movies/UHD, desc: "Film/UHD/Hun"}
     - {id: 31, cat: Audio/Audiobook, desc: "Hangoskönyv"}
     - {id: 42, cat: PC/Games, desc: "Játék/ISO"}
     - {id: 43, cat: PC/Games, desc: "Játék/RIP"}
@@ -34,15 +34,17 @@ caps:
     - {id: 29, cat: Books/EBook, desc: "Könyv/Hun"}
     - {id: 44, cat: PC/ISO, desc: "Program/ISO"}
     - {id: 45, cat: PC, desc: "Program/RIP"}
+    - {id: 49, cat: TV/Foreign, desc: "Sorozat/DVD/Eng"}
+    - {id: 48, cat: TV/SD, desc: "Sorozat/DVD/Hun"}
     - {id: 14, cat: TV/Foreign, desc: "Sorozat/HD/Eng"}
     - {id: 13, cat: TV/HD, desc: "Sorozat/HD/Hun"}
     - {id: 16, cat: TV/Foreign, desc: "Sorozat/SD/Eng"}
     - {id: 15, cat: TV/SD, desc: "Sorozat/SD/hun"}
+    - {id: 20, cat: Audio/Foreign, desc: "Zene/Mp3/Eng"}
+    - {id: 19, cat: Audio/MP3, desc: "Zene/Mp3/Hun"}
     - {id: 38, cat: XXX/SD, desc: "XXX/HD"}
     - {id: 41, cat: XXX/ImageSet, desc: "XXX/Kép"}
     - {id: 40, cat: XXX/SD, desc: "XXX/SD"}
-    - {id: 20, cat: Audio/Foreign, desc: "Zene/Mp3/Eng"}
-    - {id: 19, cat: Audio/MP3, desc: "Zene/Mp3/Hun"}
 
   modes:
     search: [q]

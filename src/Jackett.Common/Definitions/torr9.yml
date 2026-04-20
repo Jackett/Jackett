@@ -6,8 +6,9 @@ language: fr-FR
 type: private
 encoding: UTF-8
 links:
-  - https://torr9.xyz/
+  - https://torr9.net/
 legacylinks:
+  - https://torr9.xyz/
   - https://torr9.com/
 
 caps:
@@ -18,6 +19,7 @@ caps:
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 4000, cat: PC, desc: "PC/Applications"}
     - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5000, cat: TV/Anime, desc: "Animes"}
     - {id: 6000, cat: XXX, desc: "XXX"}
     - {id: 7000, cat: Books, desc: "Books/eBook"}
     - {id: 8000, cat: Other, desc: "Other"}
@@ -36,7 +38,11 @@ settings:
   - name: info_key
     type: info
     label: About your PassKey
-    default: "You can find the API PassKey by accessing your <a href=\"https://torr9.xyz/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
+    default: "You can find the API PassKey by accessing your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and scrolling down to the <b>Passkey Tracker</b> section."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.torr9.net
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -59,16 +65,16 @@ settings:
   - name: info_3x
     type: info
     label: Including 3X
-    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.xyz/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
+    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
 
 login:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
-  path: "https://api.torr9.xyz/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
+  path: "https://{{ .Config.apiurl }}/api/v1/torznab?apikey={{ .Config.passkey }}&t=caps"
   method: get
 
 search:
   paths:
-    - path: https://api.torr9.xyz/api/v1/torznab
+    - path: "https://{{ .Config.apiurl }}/api/v1/torznab"
       response:
         type: xml
 
@@ -93,7 +99,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title_phase1:
       selector: title
@@ -119,7 +125,7 @@ search:
     download:
       selector: link
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
     date:
       # Thu, 15 Jan 2026 16:24:34 +0000
@@ -130,10 +136,10 @@ search:
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="peers"]'
+      selector: "[name=peers]"
       attribute: value
     downloadvolumefactor:
       text: 1

@@ -28,12 +28,14 @@ caps:
     - {id: 62, cat: TV/Sport, desc: "Indycar Series"}
     - {id: 26, cat: TV/Sport, desc: "MotoGP-2-3-E"}
     - {id: 82, cat: TV/Sport, desc: "Motorcycle Speedway"}
+    - {id: 85, cat: TV/Sport, desc: "MXGP"}
     - {id: 31, cat: TV/Sport, desc: "Nascar"}
     - {id: 25, cat: TV/Sport, desc: "Other Bikes"}
     - {id: 69, cat: TV/Sport, desc: "Other Cars"}
     - {id: 78, cat: TV/Sport, desc: "Porsche Supercup"}
     - {id: 32, cat: TV/Sport, desc: "Stock Car Brazil"}
     - {id: 63, cat: TV/Sport, desc: "Supercars"}
+    - {id: 84, cat: TV/Sport, desc: "Super Formula"}
     - {id: 83, cat: TV/Sport, desc: "Super GT"}
     - {id: 80, cat: TV/Sport, desc: "Touring Cars"}
     - {id: 57, cat: TV/Sport, desc: "WEC"}
@@ -91,7 +93,7 @@ settings:
     default: "After 6 months without any log in or usage of your account, it will be pruned and can only be reactivated by a staff member. Make sure to keep your account active and do not use programs to keep your account active, as your account may still get pruned."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

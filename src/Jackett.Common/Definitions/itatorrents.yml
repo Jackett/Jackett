@@ -68,7 +68,7 @@ settings:
     default: "To not get disabled, you are required to login to the site at least once every 90 days or be actively seeding at least 1 torrent."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -208,4 +208,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.1.7 (custom)
+# json UNIT3D 9.2.0 (custom)

@@ -1,7 +1,7 @@
 ---
 id: emuwarez
 name: eMuwarez (API)
-description: "eMuwarez is a SPANISH Private Torrent Tracker for MOVIES / TV"
+description: "eMuwarez is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: es-ES
 type: private
 encoding: UTF-8
@@ -59,7 +59,7 @@ settings:
       asc: asc
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

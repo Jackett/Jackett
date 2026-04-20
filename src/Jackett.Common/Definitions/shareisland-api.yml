@@ -70,7 +70,7 @@ settings:
     default: "After 60 days of no activity, your account will be automatically deleted."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -228,4 +228,4 @@ search:
     minimumseedtime:
       # 6 days (as seconds = 6 x 24 x 60 x 60)
       text: 518400
-# json UNIT3D 9.1.7 (custom)
+# json UNIT3D 9.2.0 (custom)

@@ -151,7 +151,7 @@ search:
         - name: regexp
           args: "showTorrentThumb\\('(.*?)', "
     date:
-      selector: td:nth-last-child(8)
+      selector: td:nth-last-child(6)
       filters:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2}.\d{2}:\d{2}:\d{2})
@@ -161,8 +161,6 @@ search:
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
-    files:
-      selector: td:nth-last-child(7)
     size:
       selector: td:nth-last-child(5)
     grabs:

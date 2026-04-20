@@ -9,17 +9,18 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://ww2-mania-torrent.com/
-  - https://ww1-cine-torrent.com/
-  - https://www-magnet-torrent.com/
-  - https://www-mega-torrent.com/
-  - https://ww2-zone-torrent.com/
-  - https://www-warez-torrent.com/
+  - https://www.mania-torrent.cc/
+  - https://www.cine-torrent.cc/
+  - https://www.magnet-torrent.cc/
+  - https://www.mega-torrent.pw/
+  - https://www.zone-torrent.org/
+  - https://www.warez-torrent.cc/
 legacylinks:
   # latest domains list
-  - https://www.rantop.org/
+  - https://www.rantop.xyz/
   - https://www.site-torrent.cc/
-  - https://www.torrent-site.com/
+  - https://www.torrent-site.cc/
+  - https://www.torrent-p2p.cc/
   # domain lists no longer working
   - https://www.protege-torrent.com/
   - https://www.torrent.ws/
@@ -28,34 +29,33 @@ legacylinks:
   - https://www.torrent.onl/
   - https://www.site-torrent.com/
   - https://www.rantop.my/
+  - https://www.torrent-site.com/
+  - https://www.rantop.org/
   # actual legacylinks
-  - https://wvw-zetorrents.com/
-  - https://www-zetorrents.com/
-  - https://www.zetorrents1.com/
-  - https://www.zetorrents.diy/
-  - https://www.zetorrents2.com/
-  - https://www.zetorrents.town/
-  - https://zetorrents-proxy.site/
   - https://ww1-zetorrents.me/
   - https://www.zetorrents.rent/
   - https://ww1-zetorrents.town/
-  - https://www.world-torrent.com/
+  - https://ww2-cine-torrent.com/
+  - https://ww3-cine-torrent.com/
+  - https://www.cine-torrent.org/
+  - https://ww2-magnet-torrent.com/
+  - https://www.magnet-torrent.com/
+  - https://www.magnet-torrent.org/
+  - https://ww3-mania-torrent.com/
   - https://www.mania-torrent.com/
-  - https://www.zone-torrent6.com/
-  - https://www.warez-torrent1.com/
-  - https://www.mega-torrent9.com/
-  - https://www.magnet-torrent1.com/
-  - https://www.cine-torrent1.com/
-  - https://ww1-mania-torrent.com/
+  - https://www.mania-torrent.org/
+  - https://ww2-mega-torrent.com/
+  - https://ww3-mega-torrent.com/
+  - https://www.mega-torrent.cc/
+  - https://www-warez-torrent.com/
+  - https://ww2-warez-torrent.com/
+  - https://www.warez-torrent.org/
   - https://www.world-torrent1.com/
-  - https://www-cine-torrent.com/
-  - https://ww1-warez-torrent.com/
-  - https://ww1-magnet-torrent.com/
-  - https://ww1-zone-torrent.com/
-  - https://ww1-mega-torrent.com/
-  - https://www-mania-torrent.com/
   - https://www-world-torrent.com/
   - https://ww1-world-torrent.com/
+  - https://ww3-zone-torrent.com/
+  - https://ww4-zone-torrent.com/
+  - https://www.zone-torrent.com/
 
 caps:
   categorymappings:

@@ -64,7 +64,7 @@ settings:
     default: "If a user has not actively logged in for 30 days, the profile is automatically deactivated and receives the user class 'Disabled'.<br>After deactivation, the profile can be reactivated within 60 days – after which it will be permanently deleted."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

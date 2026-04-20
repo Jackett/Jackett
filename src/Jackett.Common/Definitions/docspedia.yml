@@ -33,6 +33,7 @@ caps:
     - {id: 57, cat: Books/Mags, desc: "Magazine"}
     - {id: 88, cat: Books/EBook, desc: "Math/Science/Tech"}
     - {id: 58, cat: Books, desc: "Medicine"}
+    - {id: 95, cat: Books/EBook, desc: "Non-Fiction"}
     - {id: 70, cat: Books/EBook, desc: "Occult"}
     - {id: 81, cat: Books/EBook, desc: "Photography"}
     - {id: 74, cat: Audio, desc: "Podcasts"}

@@ -22,7 +22,6 @@ caps:
     search: [q]
     tv-search: [q, season, ep, imdbid, doubanid]
     movie-search: [q, imdbid, doubanid]
-    music-search: [q]
 
 settings:
   - name: cookie
@@ -60,7 +59,7 @@ settings:
     default: "Inactive accounts (i.e. not logged in for a long time) are automatically deleted."
 
 login:
-  # using cookie method because site regularly disables login page for certain events during the year
+  # using cookie method because site regularly disables login page and goes into silent mode during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

@@ -26,7 +26,10 @@ caps:
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
-    - {id: 20, cat: TV/Sport, desc: "Freeleech"}
+    - {id: 21, cat: TV/Sport, desc: "UFC"}
+    - {id: 22, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 23, cat: TV/Sport, desc: "Boxing"}
+    - {id: 24, cat: Other, desc: "PDF"}
 
   modes:
     search: [q]
@@ -153,6 +156,6 @@ search:
     minimumratio:
       text: 1.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-#  xbtitFM v4.1.32
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+#  xbtitFM v4.2.12

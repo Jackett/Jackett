@@ -74,7 +74,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: a[href=$"logout.php"]
+    selector: a[href$="logout.php"]
 
 search:
   paths:
@@ -179,10 +179,7 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
-# NexusPHP v1.9.11 2025-11-02
+# NexusPHP v1.10.1 2026-02-17

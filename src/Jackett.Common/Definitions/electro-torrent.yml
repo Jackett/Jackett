@@ -72,6 +72,10 @@ settings:
     options:
       POLISH: POLISH
       MULTi POLISH: MULTi POLISH
+  - name: info_limit
+    type: info
+    label: "Download Limit"
+    default: "Electro-Torrent has a limit on downloads. If downloads <b>fail</b> then you have exceeded your limit. Try again after a few hours."
 
 login:
   path: logowanie

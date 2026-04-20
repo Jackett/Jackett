@@ -79,6 +79,7 @@ search:
       args: ["[\\[!\"#$%&'()*+,\\-.\\/:;<=>?@[\\]^_`{|}~]", " "]
   inputs:
     section: torrents
+    disablegrouping: 1
     searchstr: "{{ .Keywords }}"
     action: basic
     searchtags: "{{ .Query.Genre }}"

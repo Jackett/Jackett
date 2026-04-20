@@ -1,38 +1,38 @@
 ---
 id: dxp
 name: DXP
-description: "Deaf Experts (DXP) is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV with Russian Subtitles."
+description: "Deaf Experts (DXP) is a RUSSIAN Semi-Private Torrent Tracker for MOVIES / TV with Russian Subtitles"
 language: ru-RU
 type: semi-private
-encoding: windows-1251
+encoding: UTF-8
 links:
   - https://dxp.ru/
 
 caps:
   categorymappings:
-    - {id: 14, cat: Movies/HD, desc: "Фильмы HDTV"}
-    - {id: 15, cat: Movies/DVD, desc: "Фильмы DVD"}
-    - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
-    - {id: 12, cat: Movies/Other, desc: "Мультфильмы"}
-    - {id: 9, cat: TV/Documentary, desc: "Документальные"}
-    - {id: 11, cat: TV, desc: "Сериалы"}
-    - {id: 10, cat: Audio, desc: "Музыка"}
-    - {id: 16, cat: Books, desc: "Книги"}
-    - {id: 22, cat: Other, desc: "Картинки"}
+    - {id: 18, cat: Other, desc: "Эксклюзивы"}
+    - {id: 17, cat: Other/Misc, desc: "VIP"}
+    - {id: 25, cat: Other, desc: "OnLine"}
     - {id: 1, cat: PC, desc: "Приложения Windows"}
-    - {id: 3, cat: PC, desc: "Приложения Unix/Linux"}
-    - {id: 4, cat: PC/Mac, desc: "Приложения Mac"}
     - {id: 2, cat: PC/Mobile-Other, desc: "Приложения PDA"}
-    - {id: 5, cat: PC/Games, desc: "Игры PC"}
+    - {id: 3, cat: PC, desc: "Приложения Unix/Linux"}
     - {id: 23, cat: PC/Games, desc: "Игры Unix/Linux"}
+    - {id: 4, cat: PC/Mac, desc: "Приложения Mac"}
+    - {id: 5, cat: PC/Games, desc: "Игры PC"}
     - {id: 6, cat: Console/PS3, desc: "Игры PlayStation 3"}
     - {id: 7, cat: Console/XBox, desc: "Игры X-Box"}
     - {id: 8, cat: Console/PSP, desc: "Игры PSP"}
-    - {id: 18, cat: Other, desc: "Эксклюзивы"}
-    - {id: 21, cat: Other, desc: "Лавка субтитров"}
+    - {id: 9, cat: TV/Documentary, desc: "Документация"}
+    - {id: 10, cat: Audio, desc: "Музыка"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
+    - {id: 12, cat: Movies/Other, desc: "Мультфильмы"}
+    - {id: 14, cat: Movies/HD, desc: "Фильмы HDTV"}
+    - {id: 15, cat: Movies/DVD, desc: "Фильмы DVD"}
+    - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
+    - {id: 16, cat: Books, desc: "Книги"}
     - {id: 20, cat: Other, desc: "DEMO"}
-    - {id: 17, cat: Other/Misc, desc: "VIP"}
-    - {id: 24, cat: Other/Misc, desc: "SuperVIP"}
+    - {id: 21, cat: Other, desc: "Лавка субтитров"}
+    - {id: 22, cat: Other, desc: "Картинки"}
 
   modes:
     search: [q]
@@ -72,6 +72,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Торрентов на страницу</b> setting to <b>100</b> on your account profile.
   - name: info_flaresolverr
     type: info_flaresolverr
 
@@ -92,20 +96,15 @@ download:
   selectors:
     - selector: a[href^="download.php?id="]
       attribute: href
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
-      filters:
-        - name: re_replace
-          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", ""]
 
 search:
-  # https://dxp.ru/torrents.php?search=&sort=4&type=desc
-  # https://dxp.ru/torrents.php?search=&cat=0&incldead=1
+  # https://dxp.ru/torrents.php?search=&sort=4&type=desc&wh=name&incldead=1
   paths:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    wh: name
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
@@ -115,25 +114,14 @@ search:
     - name: re_replace
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
 
-  headers:
-    Referer: ["{{ .Config.sitelink }}torrents.php"]
-
   rows:
-    selector: table#loading-table tbody#highlighted tr:has(a[href^="torrents.php?cat="]), table#loading-table tbody#highlighted tr:has(a[href^="details.php?id="])
-    after: 1
+    selector: div.torrent-item
 
   fields:
-    category:
-      selector: a[href^="torrents.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
-    download:
-      selector: a[href^="torrent-"]
-      attribute: href
+    categorydesc:
+      selector: div.torrent-badge
     title:
-      selector: a[href^="torrent-"]
+      selector: h3.full-title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -187,38 +175,47 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="torrent-"]
+      selector: a[href^="content.php?id="]
       attribute: href
+    download:
+      selector: a[href^="content.php?id="]
+      attribute: href
+    poster:
+      selector: a[href^="content.php?id="] img
+      attribute: src
     date:
-      selector: i
+      selector: span.date-bottom
+      attribute: title
       filters:
+        - name: replace
+          args: ["Обновлен: ", ""]
+        - name: replace
+          args: ["Добавлен: ", ""]
         - name: append
           args: " +03:00" # MSK
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
-    files:
-      selector: td:nth-child(4)
+          args: "dd.MM.yyyy HH:mm zzz"
     size:
-      selector: td:nth-child(6)
+      selector: div.info-row:has(i.fa-database)
+    grabs:
+      selector: span.completed-bottom
     seeders:
-      selector: td:nth-child(7)
-      filters:
-        - name: split
-          args: ["|", 0]
+      selector: span.seeders-bottom
     leechers:
-      selector: td:nth-child(7)
+      selector: span.leechers-bottom
+    genre:
+      selector: div.info-row:has(i.fa-tags)
+    description:
+      selector: div.info-row:has(i.fa-globe)
       filters:
-        - name: split
-          args: ["|", 1]
+        - name: append
+          args: ": {{ .Result.genre }}"
     downloadvolumefactor:
       case:
-        a[href="torrents.php?cat=17"]: 1 # vip
-        a[href="torrents.php?cat=24"]: 1 # super vip
+        div.category-badge:contains("VIP"): 1 # vip
         "*": 0
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 0.3
-    description:
-      selector: a[href^="torrent-"]
 # engine n/a

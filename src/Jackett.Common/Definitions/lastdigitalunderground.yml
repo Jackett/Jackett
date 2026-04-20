@@ -106,7 +106,7 @@ settings:
     default: "You must log in once every 60 days. You must download at least 1 item within your first month."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

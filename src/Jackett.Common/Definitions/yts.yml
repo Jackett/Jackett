@@ -10,7 +10,6 @@ links:
   # if the primary domain changes then don't forget to update the details, download and poster replace args
   - https://yts.bz/
   # official domain list are at https://yifystatus.com/ and official proxies list are at https://ytsproxies.com/
-  - https://yts.unblockninja.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
   - https://yts.proxyninja.net/
@@ -25,6 +24,7 @@ legacylinks:
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.download/
   - https://yts.lt/ # redirects to .bz
+  - https://yts.unblockninja.com/
 
 caps:
   categorymappings:
@@ -39,11 +39,15 @@ caps:
     search: [q]
     movie-search: [q, imdbid]
 
-settings: []
+settings:
+  - name: apiurl
+    label: API URL
+    type: text
+    default: movies-api.accel.li
 
 search:
   paths:
-    - path: api/v2/list_movies.json
+    - path: "https://{{ .Config.apiurl }}/api/v2/list_movies.json"
       response:
         type: json
 
