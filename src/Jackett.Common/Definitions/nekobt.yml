@@ -20,6 +20,13 @@ caps:
     movie-search: [q]
 
 settings:
+  - name: apikey
+    type: text
+    label: API Key (Optional)
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "API key is optional. You can find or generate a new API Key by accessing your <a href=\"https://nekobt.to/\" target=\"_blank\">nekoBT</a> account settings page if needed."
   - name: incltags
     type: checkbox
     label: Include tags in titles.
@@ -85,6 +92,7 @@ search:
   inputs:
     t: search
     q: "{{ .Keywords }}"
+    apikey: "{{ .Config.apikey }}"
     tvdbid: "{{ .Query.TVDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
