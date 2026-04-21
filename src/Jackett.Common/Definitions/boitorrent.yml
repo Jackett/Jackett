@@ -1,0 +1,152 @@
+---
+id: boitorrent
+name: Boi Torrent
+description: "Boi Torrent is a BRAZILIAN Public torrent tracker for MOVIES / TV / CARTOONS"
+language: pt-BR
+type: public
+encoding: UTF-8
+testlinktorrent: false
+
+links:
+  - https://boitorrent.com/
+
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
+
+caps:
+  categorymappings:
+    - {id: Filme,    cat: Movies,   desc: "Filme (genérico)"}
+    - {id: Série,    cat: TV,       desc: "Série (genérica)"}
+    - {id: Desenho,  cat: TV/Anime, desc: "Desenho (genérico)"}
+
+    - {id: filmes-acao, cat: Movies, desc: "Filmes Ação"}
+    - {id: filmes-animacao, cat: Movies, desc: "Filmes Animação"}
+    - {id: filmes-anime, cat: TV/Anime, desc: "Filmes Anime"}
+    - {id: filmes-aventura, cat: Movies, desc: "Filmes Aventura"}
+    - {id: filmes-classico, cat: Movies, desc: "Filmes Clássicos"}
+    - {id: filmes-comedia, cat: Movies, desc: "Filmes Comédia"}
+    - {id: filmes-comediaromantica, cat: Movies, desc: "Filmes Comédia Romântica"}
+    - {id: filmes-documentario, cat: Movies, desc: "Filmes Documentário"}
+    - {id: filmes-drama, cat: Movies, desc: "Filmes Drama"}
+    - {id: filmes-educativo, cat: Movies, desc: "Filmes Educativo"}
+    - {id: filmes-familia, cat: Movies, desc: "Filmes Família"}
+    - {id: filmes-faroeste, cat: Movies, desc: "Filmes Faroeste"}
+    - {id: filmes-ficcao, cat: Movies, desc: "Filmes Ficção"}
+    - {id: filmes-gospel, cat: Movies, desc: "Filmes Gospel"}
+    - {id: filmes-herois, cat: Movies, desc: "Filmes Heróis"}
+    - {id: filmes-musical, cat: Movies, desc: "Filmes Musical"}
+    - {id: filmes-nacional, cat: Movies, desc: "Filmes Nacional"}
+    - {id: filmes-romance, cat: Movies, desc: "Filmes Romance"}
+    - {id: filmes-suspense, cat: Movies, desc: "Filmes Suspense"}
+    - {id: filmes-terror, cat: Movies, desc: "Filmes Terror"}
+    - {id: torrent-filmes-3d, cat: Movies/3D, desc: "Filmes 3D"}
+    - {id: series-acao, cat: TV, desc: "Séries Ação"}
+    - {id: series-aventura, cat: TV, desc: "Séries Aventura"}
+    - {id: series-classico, cat: TV, desc: "Séries Clássicas"}
+    - {id: series-comedia, cat: TV, desc: "Séries Comédia"}
+    - {id: series-comediaromantica, cat: TV, desc: "Séries Comédia Romântica"}
+    - {id: series-documentario, cat: TV, desc: "Séries Documentário"}
+    - {id: series-drama, cat: TV, desc: "Séries Drama"}
+    - {id: series-familia, cat: TV, desc: "Séries Família"}
+    - {id: series-fantasia, cat: TV, desc: "Séries Fantasia"}
+    - {id: series-faroeste, cat: TV, desc: "Séries Faroeste"}
+    - {id: series-ficcao, cat: TV, desc: "Séries Ficção"}
+    - {id: series-gospel, cat: TV, desc: "Séries Gospel"}
+    - {id: series-guerra, cat: TV, desc: "Séries Guerra"}
+    - {id: series-herois, cat: TV, desc: "Séries Heróis"}
+    - {id: series-musical, cat: TV, desc: "Séries Musical"}
+    - {id: series-nacional, cat: TV, desc: "Séries Nacional"}
+    - {id: series-policial, cat: TV, desc: "Séries Policial"}
+    - {id: series-romance, cat: TV, desc: "Séries Romance"}
+    - {id: series-terror, cat: TV, desc: "Séries Terror"}
+    - {id: desenhos-anime, cat: TV/Anime, desc: "Desenhos Anime"}
+    - {id: desenhos-aventura, cat: TV/Anime, desc: "Desenhos Aventura"}
+    - {id: desenhos-classico, cat: TV/Anime, desc: "Desenhos Clássicos"}
+    - {id: desenhos-comedia, cat: TV/Anime, desc: "Desenhos Comédia"}
+    - {id: desenhos-educativo, cat: TV/Anime, desc: "Desenhos Educativo"}
+    - {id: desenhos-familia, cat: TV/Anime, desc: "Desenhos Família"}
+    - {id: desenhos-gospel, cat: TV/Anime, desc: "Desenhos Gospel"}
+    - {id: desenhos-herois, cat: TV/Anime, desc: "Desenhos Heróis"}
+    - {id: desenhos-luta, cat: TV/Anime, desc: "Desenhos Luta"}
+    - {id: desenhos-nacional, cat: TV/Anime, desc: "Desenhos Nacional"}
+    - {id: desenhos-religioso, cat: TV/Anime, desc: "Desenhos Religioso"}
+    - {id: desenhos-romance, cat: TV/Anime, desc: "Desenhos Romance"}
+    - {id: lancamentos-filmes, cat: Movies, desc: "Lançamentos Filmes"}
+    - {id: lancamentos-series, cat: TV, desc: "Lançamentos Séries"}
+    - {id: lancamentos-desenhos, cat: TV/Anime, desc: "Lançamentos Desenhos"}
+    - {id: maisbaixados-filmes, cat: Movies, desc: "Mais Baixados Filmes"}
+    - {id: maisbaixados-series, cat: TV, desc: "Mais Baixados Séries"}
+    - {id: maisbaixados-desenhos, cat: TV/Anime, desc: "Mais Baixados Desenhos"}
+    - {id: melhores-filmes, cat: Movies, desc: "Melhores Filmes"}
+    - {id: melhores-series, cat: TV, desc: "Melhores Séries"}
+    - {id: melhores-desenhos, cat: TV/Anime, desc: "Melhores Desenhos"}
+  modes:
+    search: [q]
+    tv-search: [q]
+    movie-search: [q]
+
+download:
+  selectors:
+    - selector: a.list-group-item.newdawn[href^="magnet:"]
+      attribute: href
+
+search:
+  paths:
+    - path: busca.php
+  inputs:
+    palavraPesquisa: "{{ .Keywords }}"
+
+  rows:
+    selector: "#caixaBusca > a"
+
+  fields:
+    year:
+      selector: ".flutuaPesquisa > span.letraBusca:nth-of-type(4)"
+      optional: true
+
+    title:
+      selector: .flutuaPesquisa
+      filters:
+        - name: re_replace
+          args: ["\\n[\\s\\S]*$", ""]             
+        - name: re_replace
+          args: ["\\s*\\.\\.\\.\\s*$", ""]
+        - name: append
+          args: " {{ .Result.year }}"
+
+    category:
+      selector: ".flutuaPesquisa > span.letraBusca:nth-of-type(2)"
+
+    details:
+      attribute: href
+
+    download:
+      attribute: href
+
+    poster:
+      selector: img
+      attribute: src
+      optional: true
+
+    date:
+      text: now
+
+    size:
+      case:
+        ".flutuaPesquisa > span.letraBusca:nth-of-type(2):contains(\"Filme\")": "8 GB"
+        ".flutuaPesquisa > span.letraBusca:nth-of-type(2):contains(\"Série\")": "1.5 GB"
+        ".flutuaPesquisa > span.letraBusca:nth-of-type(2):contains(\"Desenho\")": "500 MB"
+        "*": "2 GB"
+
+    seeders:
+      text: 1
+
+    leechers:
+      text: 0
+
+    downloadvolumefactor:
+      text: 0
+
+    uploadvolumefactor:
+      text: 1
