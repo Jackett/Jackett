@@ -12,7 +12,7 @@ links:
 caps:
   # use https://nexum-core.com/api/v1/categories?apikey=YOUR-APIKEY for cat mappings, name is desc
   categorymappings:
-    - {id: 10, cat: Books/EBook, desc: "eBooks"}
+    - {id: 10, cat: Books/EBook, desc: "Livres"}
     - {id: 1, cat: Movies, desc: "Films"}
     - {id: 11, cat: Books/Comics, desc: "BD"}
     - {id: 2, cat: TV, desc: "Séries TV"}
