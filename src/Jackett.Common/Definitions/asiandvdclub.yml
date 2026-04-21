@@ -68,16 +68,22 @@ settings:
     default: "No special action required for red ribbons and permanent sponsors and above regardless of time, for others after 1 year of zero activity on tracker and/or website account will be closed."
 
 login:
-  path: login
-  method: post
+  path: /
+  method: form
+  form: form[action$="/login"]
   inputs:
     apple: evil
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
+    rememberme: yes
+  selectorinputs:
+    csrf_token:
+      selector: input[name="csrf_token"]
+      attribute: value
   error:
-    - selector: b:contains("Try again")
+    - selector: div[style*="color:#b40000;"]:contains("Error:")
   test:
-    path: index.php
+    path: /
     selector: a[href="/logout"]
 
 search:
