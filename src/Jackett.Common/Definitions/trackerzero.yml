@@ -55,7 +55,7 @@ settings:
   - name: info_apikey
     type: info
     label: About your API key
-    default: "Find your API key by accessing your <a href=\"https://trackerzero.it/\" target=\"_blank\">TrackerZero</a> <i>Profile</i> page and scrolling down to the <b>img.trackerzero.it</b> section."
+    default: "Find your API key by accessing your <a href=\"https://trackerzero.it/\" target=\"_blank\">TrackerZero</a> <i>Profile</i> page and scrolling down to the <b>img.trackerzero.it</b> section.<br>The API key expires monthly so if your search returns <b>Status=Unauthorized Response={\"detail\":\"Invalid token\"}</b> then fetch your new API key from the site."
   - name: passkey
     type: text
     label: Passkey
