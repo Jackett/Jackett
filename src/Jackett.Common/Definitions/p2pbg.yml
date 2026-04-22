@@ -55,20 +55,22 @@ caps:
     - {id: 5, cat: TV/Sport, desc: "Formula 1"}
     - {id: 51, cat: TV/Sport, desc: "Sport"}
     - {id: 57, cat: TV/Sport, desc: "Formula 2"}
+    - {id: 64, cat: TV/Sport, desc: "Football"}
+    - {id: 65, cat: TV/Sport, desc: "E-Sports"}
     # other
     - {id: 4, cat: Other, desc: "Other"}
     - {id: 6, cat: Books, desc: "Books"}
     - {id: 37, cat: Other/Misc, desc: "Pictures"}
     - {id: 39, cat: Other, desc: "e-Learning"}
-    - {id: 40, cat: PC/Mobile-iOS, desc: "Mobile iPhone"}
-    - {id: 52, cat: PC/Mobile-Other, desc: "Mobile GSM"}
     # 3x
     - {id: 13, cat: XXX, desc: "XXX"}
     - {id: 32, cat: XXX/ImageSet, desc: "XXX Pictures"}
     - {id: 48, cat: XXX, desc: "XXX BG Amateurs"}
     - {id: 53, cat: XXX, desc: "XXX Hentai"}
-    - {id: 54, cat: XXX/x264, desc: "XXX HD"}
-    - {id: 56, cat: XXX, desc: "XXX 3D"}
+    - {id: 54, cat: XXX, desc: "XXX 4K"}
+    - {id: 56, cat: XXX, desc: "XXX VR"}
+    - {id: 61, cat: XXX, desc: "XXX OF"}
+    - {id: 66, cat: XXX, desc: "XXX HD"}
 
   modes:
     search: [q]
