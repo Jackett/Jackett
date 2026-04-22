@@ -25,6 +25,7 @@ caps:
     - {id: 17, cat: Other, desc: "Other"}
     - {id: 18, cat: Other, desc: "Other"}
     - {id: 19, cat: Other, desc: "Other"}
+    - {id: 20, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
