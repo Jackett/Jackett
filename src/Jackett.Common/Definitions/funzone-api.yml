@@ -10,9 +10,9 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Filme HD"}
-    - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Movies, desc: "Filme HD-RO"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 1, cat: Movies, desc: "Filme HD"}
     - {id: 4, cat: PC/Games, desc: "Jocuri PC"}
     - {id: 5, cat: Audio, desc: "Muzica"}
     - {id: 6, cat: PC, desc: "Software"}
@@ -22,10 +22,10 @@ caps:
     - {id: 10, cat: Console, desc: "Jocuri Console"}
     - {id: 11, cat: Movies, desc: "Filme Romanesti"}
     - {id: 12, cat: Movies/Other, desc: "Desene Animate"}
-    - {id: 17, cat: Other, desc: "Other"}
-    - {id: 18, cat: Other, desc: "Other"}
-    - {id: 19, cat: Other, desc: "Other"}
-    - {id: 20, cat: Other, desc: "Other"}
+    - {id: 17, cat: XXX, desc: "XXX"}
+    - {id: 18, cat: PC/Games, desc: "Jocuri Classic"}
+    - {id: 19, cat: Audio/Video, desc: "Videoclipuri"}
+    - {id: 20, cat: Movies, desc: "Filme SD-RO"}
 
   modes:
     search: [q]
