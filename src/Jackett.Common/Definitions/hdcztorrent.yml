@@ -8,7 +8,7 @@ encoding: UTF-8
 links:
   - http://www.hd-cztorrent.cz/
 legacylinks:
-  - https://www.hd-cztorrent.cz/  # site is forcing http
+  - https://www.hd-cztorrent.cz/ # site is forcing http
 
 caps:
   categorymappings:
