@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    # from  https://nostradamus.foo/api?t=caps&apikey=YOUR-API-KEY
+    # from https://nostradamus.foo/api?t=caps&apikey=YOUR-API-KEY
     - {id: 2000, cat: Movies, desc: "Films"}
     - {id: 2020, cat: Movies, desc: "Films/Film"}
     - {id: 2010, cat: Movies/Other, desc: "Films/Animation"}
