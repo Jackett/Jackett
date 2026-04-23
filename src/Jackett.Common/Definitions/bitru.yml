@@ -138,7 +138,7 @@ search:
     date_today:
       # Сегодня в 09:09 от
       # Вчера в 22:47 от
-      selector: td:nth-child(2) div.b-info div span:nth-child(1):contains("Сегодня"),  td:nth-child(2) div.b-info div span:nth-child(1):contains("Вчера")
+      selector: td:nth-child(2) div.b-info div span:nth-child(1):contains("Сегодня"), td:nth-child(2) div.b-info div span:nth-child(1):contains("Вчера")
       optional: true
       filters:
         - name: regexp
