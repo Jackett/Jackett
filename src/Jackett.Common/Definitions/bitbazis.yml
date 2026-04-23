@@ -88,13 +88,13 @@ search:
     - path: browse.php
       categories: [15, 83, 94, 85, 22, 25, 26, 84, 71, 27, 81, 31, 69, 91, 64, 92, 24, 14]
       inputs:
-        # 0 all, 1 active, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
+        # 0 all, 1 active, 2 deadonly, 3 myuploads, 4 zeroseed, 6 re-seeded
         incldead: 0
     - path: browse.php
       categories: [33, 66, 89]
       inputs:
         xxx: 1
-        # 0 active, 1 all, 2 deadonly, 3  myuploads, 4 zeroseed, 6 re-seeded
+        # 0 active, 1 all, 2 deadonly, 3 myuploads, 4 zeroseed, 6 re-seeded
         incldead: 1
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
@@ -133,10 +133,10 @@ search:
       selector: td.torrent-size
     date:
       # 36 perce
-      # 13 órája  és 59 perce
-      # 2 napja  és 10 órája
-      # 1 hete  és 1 napja
-      # 1 éve  és 30 hete
+      # 13 órája és 59 perce
+      # 2 napja és 10 órája
+      # 1 hete és 1 napja
+      # 1 éve és 30 hete
       selector: span.uploader
       filters:
         - name: replace

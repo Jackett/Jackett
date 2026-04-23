@@ -37,7 +37,7 @@ caps:
     华语剧包: TV/HD # TV Packs - KR
     # 音乐 Audio
     (电影原声&Game)OST: Audio # OST - (Movie & Game) Track
-    无损音乐FLAC&APE: Audio/Lossless  # FLAC & APE
+    无损音乐FLAC&APE: Audio/Lossless # FLAC & APE
     MV&amp;演唱会: Audio/Video # MV & Concert
     # 其他 Other
     高清体育节目: TV/Sport # HD Sports

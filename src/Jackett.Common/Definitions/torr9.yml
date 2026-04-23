@@ -65,7 +65,7 @@ settings:
   - name: info_3x
     type: info
     label: Including 3X
-    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling  the <b>Contenu adulte</b> option."
+    default: "IF you want to see 3x torrents access your <a href=\"https://torr9.net/profile\" target=\"_blank\">Torr9 Profile</a> page and enabling the <b>Contenu adulte</b> option."
 
 login:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
