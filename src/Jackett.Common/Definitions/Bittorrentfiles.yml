@@ -198,7 +198,7 @@ search:
     date_day:
       # Heute 13:30:04
       # Gestern 09:10:10
-      selector: td:nth-child(10):contains("Heute"),  td:nth-child(10):contains("Gestern")
+      selector: td:nth-child(10):contains("Heute"), td:nth-child(10):contains("Gestern")
       optional: true
       filters:
         - name: split
