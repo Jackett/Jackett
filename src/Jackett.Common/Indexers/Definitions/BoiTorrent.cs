@@ -85,16 +85,65 @@ namespace Jackett.Common.Indexers.Definitions
                     continue;
 
                 var cleanLine = Regex.Replace(line, @"<[^>]+>", string.Empty);
+                cleanLine = System.Net.WebUtility.HtmlDecode(cleanLine);
+                cleanLine = Regex.Replace(cleanLine, @"\s+", " ");
                 var parts = cleanLine.Split(new[] { ':' }, 2);
                 if (parts.Length != 2)
                     continue;
 
                 var key = parts[0].Trim();
-                var value = parts[1].Trim();
+                var value = parts[1].Trim().Trim('/', ',', '|').Trim();
                 if (!string.IsNullOrEmpty(key) && !string.IsNullOrEmpty(value))
                     fileInfo[key] = value;
             }
-            return fileInfo;
+
+            return NormalizeBoiTorrentKeys(fileInfo);
+        }
+
+        private static Dictionary<string, string> NormalizeBoiTorrentKeys(Dictionary<string, string> raw)
+        {
+            var canonical = new Dictionary<string, string>(raw, StringComparer.OrdinalIgnoreCase);
+
+            AliasKey(canonical, "Titulo Original", "Título Original");
+            AliasKey(canonical, "Titulo Traduzido", "Título Traduzido");
+            AliasKey(canonical, "Titulo", "Título");
+
+            if (canonical.TryGetValue("Gênero", out var genres))
+                canonical["Gênero"] = JoinSlashSeparated(genres);
+
+            if (canonical.TryGetValue("Idioma / Áudio", out var idiomaAudio) && !canonical.ContainsKey("Áudio"))
+                canonical["Áudio"] = JoinSlashSeparated(idiomaAudio);
+            canonical.Remove("Idioma / Áudio");
+
+            if (canonical.TryGetValue("Legendas", out var subtitles) && !canonical.ContainsKey("Legenda"))
+                canonical["Legenda"] = subtitles;
+            canonical.Remove("Legendas");
+
+            if (canonical.TryGetValue("Crítica Especializada", out var critics) && !canonical.ContainsKey("IMDb"))
+            {
+                var match = Regex.Match(critics, @"Imdb\s*:\s*([\d.,]+)", RegexOptions.IgnoreCase);
+                if (match.Success)
+                    canonical["IMDb"] = match.Groups[1].Value;
+            }
+
+            return canonical;
+        }
+
+        private static void AliasKey(Dictionary<string, string> dict, string aliasKey, string canonicalKey)
+        {
+            if (dict.TryGetValue(aliasKey, out var value) && !dict.ContainsKey(canonicalKey))
+                dict[canonicalKey] = value;
+            dict.Remove(aliasKey);
+        }
+
+        private static string JoinSlashSeparated(string value)
+        {
+            if (string.IsNullOrWhiteSpace(value) || !value.Contains('/'))
+                return value;
+            return string.Join(", ",
+                value.Split(new[] { '/' }, StringSplitOptions.RemoveEmptyEntries)
+                    .Select(v => v.Trim())
+                    .Where(v => !string.IsNullOrEmpty(v)));
         }
 
         private static int MapSearchCategory(string text) => text?.Trim().ToLowerInvariant() switch
