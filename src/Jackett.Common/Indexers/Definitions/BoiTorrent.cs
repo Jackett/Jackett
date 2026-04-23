@@ -5,6 +5,7 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using AngleSharp.Dom;
 using AngleSharp.Html.Parser;
+using FlareSolverrSharp.Types;
 using Jackett.Common.Extensions;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
@@ -197,6 +198,7 @@ namespace Jackett.Common.Indexers.Definitions
                     if (string.IsNullOrWhiteSpace(magnetHref))
                         continue;
 
+
                     var magnetUri = new Uri(magnetHref);
                     var release = new ReleaseInfo
                     {
@@ -207,11 +209,14 @@ namespace Jackett.Common.Indexers.Definitions
                         Seeders = 1,
                         DownloadVolumeFactor = 0,
                         UploadVolumeFactor = 1,
-                        Title = ExtractTitleOrDefault(magnetLink, defaultTitle),
                         Languages = fileInfo.Audio?.ToList(),
                         Genres = fileInfo.Genres?.ToList(),
                         Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? null : new[] { fileInfo.Subtitle }
                     };
+                    var resolution = fileInfo.Quality ?? fileInfo.VideoQuality ?? string.Empty;
+                    release.Title = $"{release.Title} {resolution}".Trim();
+                    release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
+
                     release.Category = categoryId > 0
                         ? new List<int> { categoryId }
                         : magnetLink.ExtractCategory(release.Title);
