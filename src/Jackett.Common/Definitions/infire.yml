@@ -202,7 +202,7 @@ search:
         - name: re_replace
           args: ["(?i)(Znanstvena fantastika)", "Znanstvena_fantastika"]
         - name: validate
-          args: "Akcija, Animirani, Animacija, Avantura, Biografski, Dokumentarni, Drама, Družinski, Fantastika, Fantazija, Glasbeni, Grozljivka, Комеdija, Kratek, Kriminalka, Кriminalni, Misterij, Mladinski, Potovanje, Pustolovski, Romantika,  Sport, Sci-Fi, Тriler, Vojni, Western, Zgodovinski, Znanstvena_fantastika"
+          args: "Akcija, Animirani, Animacija, Avantura, Biografski, Dokumentarni, Drама, Družinski, Fantastika, Fantazija, Glasbeni, Grozljivka, Комеdija, Kratek, Kriminalka, Кriminalni, Misterij, Mladinski, Potovanje, Pustolovski, Romantika, Sport, Sci-Fi, Тriler, Vojni, Western, Zgodovinski, Znanstvena_fantastika"
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:
