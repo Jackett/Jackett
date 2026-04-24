@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 115, cat: PC, desc: "2Play! Official"}
+    - {id: 115, cat: PC, desc: "2Play Official"}
     - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
@@ -68,6 +68,7 @@ caps:
     - {id: 97, cat: TV/Other, desc: "Tutorials"}
     - {id: 9, cat: TV, desc: "TV Packs"}
     - {id: 11, cat: TV, desc: "TV Shows"}
+    - {id: 117, cat: Console, desc: "Virtual Reality"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
     - {id: 26, cat: Console, desc: "XBOX"}
     - {id: 12, cat: Console, desc: "XBOX360"}
