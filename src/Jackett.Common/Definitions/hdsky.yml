@@ -78,8 +78,6 @@ search:
 
   rows:
     selector: table.torrents > tbody > tr:has(table.torrentname)
-    filters:
-      - name: andmatch
 
   fields:
     category:
@@ -166,6 +164,5 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
-      remove: a, b, font, img, span
+      selector: table.torrentname td.embedded:first-child > span:not(.optiontag)
 # NexusPHP Standard v1.5 Beta 5 (custom)
