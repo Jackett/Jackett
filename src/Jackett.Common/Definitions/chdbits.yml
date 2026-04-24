@@ -179,4 +179,5 @@ search:
         "*": 1
     description:
       selector: .torrentname .subtitle
+      remove: .tag
 # NexusPHP Standard v1.5 Beta 4 (customised)
