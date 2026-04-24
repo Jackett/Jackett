@@ -9,7 +9,6 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.mania-torrent.cc/
   - https://www.darkflix.cc/
   - https://www.magnet-torrent.cc/
   - https://www.mega-torrent.pw/
@@ -41,9 +40,9 @@ legacylinks:
   - https://ww2-magnet-torrent.com/
   - https://www.magnet-torrent.com/
   - https://www.magnet-torrent.org/
-  - https://ww3-mania-torrent.com/
   - https://www.mania-torrent.com/
   - https://www.mania-torrent.org/
+  - https://www.mania-torrent.cc/
   - https://ww2-mega-torrent.com/
   - https://ww3-mega-torrent.com/
   - https://www.mega-torrent.cc/
