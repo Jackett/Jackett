@@ -165,7 +165,7 @@ login:
     - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href^="logout.php"]
 
 download:
   selectors:
@@ -240,4 +240,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 1 x 24 x 60 x 60)
       text: 86400
-#  xbtitFM v4.1.31
+#  xbtitFM v4.2.12
