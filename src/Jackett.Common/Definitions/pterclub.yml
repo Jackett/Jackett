@@ -187,6 +187,5 @@ search:
     minimumratio:
       text: 0.9
     description:
-      selector: td:has(table.torrentname)
-      remove: a, img
+      selector: td:has(table.torrentname) span:last-child
 # NexusPHP prod#60d2fdc724a 2023-05-10
