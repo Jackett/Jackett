@@ -191,6 +191,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             var searchRows = new List<(IElement Row, Uri DetailUrl)>();
+            var seenDetailUrls = new HashSet<Uri>();
             foreach (var (pageUri, doc) in listingDocs)
             {
                 foreach (var row in doc.QuerySelectorAll("div.row.semelhantes"))
@@ -198,22 +199,32 @@ namespace Jackett.Common.Indexers.Definitions
                     var href = row.QuerySelector("h2 a[href]")?.GetAttribute("href");
                     if (string.IsNullOrWhiteSpace(href))
                         continue;
-                    searchRows.Add((row, new Uri(pageUri, href)));
+                    var detailUrl = new Uri(pageUri, href);
+                    if (seenDetailUrls.Add(detailUrl))
+                        searchRows.Add((row, detailUrl));
                 }
             }
 
-            var detailUris = searchRows.Select(r => r.DetailUrl).Distinct().ToList();
-            var detailDocs = FetchDocumentsAsync(detailUris).GetAwaiter().GetResult()
+            var detailDocs = FetchDocumentsAsync(searchRows.Select(r => r.DetailUrl).ToList())
+                .GetAwaiter().GetResult()
                 .ToDictionary(t => t.Uri, t => t.Document);
 
-            var releases = new List<ReleaseInfo>();
+            var releasesByMagnet = new Dictionary<Uri, ReleaseInfo>();
+            var perRowReleases = new List<ReleaseInfo>();
             foreach (var (row, detailUrl) in searchRows)
             {
                 if (!detailDocs.TryGetValue(detailUrl, out var detailsDom))
                     continue;
-                BuildReleases(row, detailUrl, detailsDom, releases);
+                perRowReleases.Clear();
+                BuildReleases(row, detailUrl, detailsDom, perRowReleases);
+                foreach (var release in perRowReleases)
+                {
+                    if (release.MagnetUri != null && !releasesByMagnet.ContainsKey(release.MagnetUri))
+                        releasesByMagnet.Add(release.MagnetUri, release);
+                }
             }
-            return releases;
+
+            return releasesByMagnet.Values.ToList();
         }
 
         private void BuildReleases(IElement row, Uri detailUrl, IDocument detailsDom, List<ReleaseInfo> releases)
