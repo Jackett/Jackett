@@ -360,13 +360,13 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
 
             // Remove source info
-            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|HDRip|WEBRip|BluRay|Torrent|Download)\b", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|BDRip|HDRip|WEBRip|BluRay|HDTV|Torrent|Download)\b", "", RegexOptions.IgnoreCase);
 
             // Remove language info
             title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub|[AÁ]udio)\b", "", RegexOptions.IgnoreCase);
 
             // Clean up torrent group names
-            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO|VEMTORRENT\.COM|VACATORRENT\.COM", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO|VEMTORRENT\.COM|BLUDV\.COM|VACATORRENT\.COM", "", RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
