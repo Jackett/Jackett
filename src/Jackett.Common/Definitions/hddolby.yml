@@ -175,9 +175,5 @@ search:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
     description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span.tags
-      filters:
-        - name: re_replace
-          args: ["(?i)\\s*(剩余时间:|剩餘時間：|will end in)\\s*", ""]
+      selector: table.torrentname td.embedded:first-child > span:last-child
 # NexusPHP Standard v1.5 Beta 4
