@@ -354,19 +354,29 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 return null;
 
             // Remove size info in parentheses
-            title = Regex.Replace(title, @"\(\d+(?:\.\d+)?\s*(?:GB|MB)\)", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"\(\d+(?:\.\d+)?\s*(?:GB|MB|KB)\)", "", RegexOptions.IgnoreCase);
 
-            // Remove quality info
-            title = Regex.Replace(title, @"\b(?:720p|1080p|2160p|4K)\b", "", RegexOptions.IgnoreCase);
-
-            // Remove source info
-            title = Regex.Replace(title, @"\b(?:WEB-DL|BRRip|BDRip|HDRip|WEBRip|BluRay|HDTV|Torrent|Download)\b", "", RegexOptions.IgnoreCase);
-
-            // Remove language info
-            title = Regex.Replace(title, @"\b(?:Legendado|Leg|Dublado|Dub|[AÁ]udio)\b", "", RegexOptions.IgnoreCase);
-
+            // Remove qualidade, fonte, idioma, codecs e extensões em uma única passada
+            title = Regex.Replace(
+                title,
+                @"\b(?:" +
+                    // Qualidade / resolução
+                    @"144p|240p|360p|480p|720p|1080p|1440p|2160p|4320p|4K|8K|UHD|FHD|HD|SD|HDR(?:10\+?)?|DV|" +
+                    // Codecs
+                    @"x264|x265|H\.?264|H\.?265|HEVC|AVC|XviD|DivX|" +
+                    // Áudio
+                    @"AAC|AC3|DTS|DD5\.1|DDP|MP3|FLAC|TrueHD|Atmos|" +
+                    // Fonte
+                    @"WEB-?DL|WEB-?Rip|BR-?Rip|BD-?Rip|HD-?Rip|HD-?TV|Blu-?Ray|DVD-?Rip|DVDR|REMUX|CAM|TS|TC|R5|Torrent|Download|" +
+                    // Idioma
+                    @"Legendado|Leg|Legenda|Dublado|Dub|Dual|Multi|Nacional|Subtitled|Sub|[AÁ]udio|PT-?BR|EN(?:-US)?|" +
+                    // Extensões de arquivo
+                    @"MKV|MP4|AVI|MOV|WMV|FLV|MPEG|MPG|M4V|WEBM" +
+                @")\b",
+                "",
+                RegexOptions.IgnoreCase);
             // Clean up torrent group names
-            title = Regex.Replace(title, @"HIDRATORRENTS\.ORG|\[?Erai-raws\]?|\[?Anime Time\]?|COMANDO4K\.COM|COMANDO\.TO|VEMTORRENT\.COM|BLUDV\.COM|VACATORRENT\.COM", "", RegexOptions.IgnoreCase);
+            title = Regex.Replace(title,@"(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]*\.(?:com|org|net|to|tv|io|me|info|biz|co|xyz|online|site|top|club|br|us|uk|eu|de|fr|es|it|ru|cn|jp)(?:\.[a-z]{2})?\b","",RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
@@ -377,15 +387,11 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             // Clean up multiple spaces
             title = Regex.Replace(title, @"\s+", " ");
 
-            // Remove file extension from the beginning of title
-            title = Regex.Replace(title, @"MKV|MP4", "", RegexOptions.IgnoreCase);
-
             // Remove dots between words but keep dots in version numbers
             title = Regex.Replace(title, @"(?<!\d)\.(?!\d)", " ", RegexOptions.IgnoreCase);
 
             // Remove any remaining punctuation at start/end
-            title = title.Trim(' ', '.', ',', '-', '_', '~', '/', '\\', '|');
-            return title.Trim();
+            return title.Trim(' ', '.', ',', '-', '_', '~', '/', '\\', '|');
         }
 
         protected abstract INode GetTitleElementOrNull(IElement downloadButton);
