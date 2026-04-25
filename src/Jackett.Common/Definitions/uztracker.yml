@@ -6,6 +6,8 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
+  - https://uztracker.me/
+legacylinks:
   - https://uztracker.net/
 
 caps:

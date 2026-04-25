@@ -124,29 +124,25 @@ search:
           args: src=(.+?) width
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
-    _is_pdf:
-      selector: a[href^="index.php?page=torrents&category=24"]
-      attribute: href
-      optional: true
     size:
-      text: "{{ if .Result._is_pdf }}5MB{{ else }}5GB{{ end }}"
+      selector: td:nth-child(10)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(5)
+      selector: td:nth-child(6)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(9)
       default: 0
     downloadvolumefactor:
       case:

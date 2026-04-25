@@ -111,12 +111,10 @@ search:
       selector: a[href*="download.php?id="]
       attribute: href
     imdbid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a[href$="search_area=4"]
       attribute: href
     doubanid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="movie.douban.com/subject/"]
+      selector: a[href$="search_area=5"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
@@ -162,6 +160,5 @@ search:
         span.torrent-pro-twoup: 2
         "*": 1
     description:
-      selector: td:nth-child(2)
-      remove: a, b, font, img, span
+      selector: div.torrent-smalldescr > span:last-child
 # NexusPHP Standard v1.5 Beta 4 (customised)
