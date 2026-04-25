@@ -164,5 +164,5 @@ search:
         img.pro_2up: 2
         "*": 1
     description:
-      selector: table.torrentname td.embedded:first-child > span:not(.optiontag)
+      selector: table.torrentname td.embedded:first-child > span:last-child
 # NexusPHP Standard v1.5 Beta 5 (custom)
