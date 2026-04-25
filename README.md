@@ -188,7 +188,6 @@ Prior versions of Jackett are no longer supported.
  * xxxtor
  * YTS.ag
  * Zamunda RIP
- * ZkTorrent
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>

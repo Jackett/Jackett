@@ -892,6 +892,7 @@ namespace Jackett.Updater
                 "Definitions/zamundanet.yml",
                 "Definitions/zelkaorg.yml",
                 "Definitions/zetorrents.yml", // renamed to world-torrent #7574
+                "Definitions/zktorrent.yml",
                 "Definitions/zomb.yml",
                 "Definitions/zooqle.yml"
             };
