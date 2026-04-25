@@ -268,12 +268,17 @@ namespace Jackett.Common.Indexers.Definitions
                     Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? null : new[] { fileInfo.Subtitle }
                 };
                 var resolution = fileInfo.Quality ?? fileInfo.VideoQuality ?? string.Empty;
-                release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
+                var titleWithResolution = string.IsNullOrWhiteSpace(resolution)
+                    ? defaultTitle
+                    : $"{defaultTitle} {resolution}".Trim();
+                release.Title = ExtractTitleOrDefault(magnetLink, titleWithResolution);
 
                 release.Category = categoryId > 0
                     ? new List<int> { categoryId }
                     : magnetLink.ExtractCategory(release.Title);
-                release.Size = ExtractSizeByResolution(release.Title);
+                release.Size = !string.IsNullOrWhiteSpace(fileInfo.Size)
+                    ? RowParsingExtensions.GetBytes(fileInfo.Size)
+                    : ExtractSizeByResolution(release.Title);
 
                 if (release.Title.IsNotNullOrWhiteSpace())
                     releases.Add(release);
@@ -315,6 +320,10 @@ namespace Jackett.Common.Indexers.Definitions
                     var response = await _webclient.GetResultAsync(new WebRequest(uri.ToString())).ConfigureAwait(false);
                     IDocument document = new HtmlParser().ParseDocument(response.ContentString ?? string.Empty);
                     return (uri, document);
+                }
+                catch
+                {
+                    return (uri, (IDocument)new HtmlParser().ParseDocument(string.Empty));
                 }
                 finally
                 {
