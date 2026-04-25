@@ -251,6 +251,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             }
             return languages;
         }
+
         private static void ExtractMultiValuesFromField(out List<string> values, in string field)
         {
             if (field.Contains("|"))
@@ -288,8 +289,6 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
     public abstract class PublicBrazilianParser : IParseIndexerResponse
     {
         public abstract IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse);
-
-
 
         public string ExtractTitleOrDefault(IElement downloadButton, string defaultTitle)
         {
@@ -360,23 +359,18 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             title = Regex.Replace(
                 title,
                 @"\b(?:" +
-                    // Qualidade / resolução
-                    @"144p|240p|360p|480p|720p|1080p|1440p|2160p|4320p|4K|8K|UHD|FHD|HD|SD|HDR(?:10\+?)?|DV|" +
-                    // Codecs
-                    @"x264|x265|H\.?264|H\.?265|HEVC|AVC|XviD|DivX|" +
-                    // Áudio
-                    @"AAC|AC3|DTS|DD5\.1|DDP|MP3|FLAC|TrueHD|Atmos|" +
-                    // Fonte
-                    @"WEB-?DL|WEB-?Rip|BR-?Rip|BD-?Rip|HD-?Rip|HD-?TV|Blu-?Ray|DVD-?Rip|DVDR|REMUX|CAM|TS|TC|R5|Torrent|Download|" +
-                    // Idioma
-                    @"Legendado|Leg|Legenda|Dublado|Dub|Dual|Multi|Nacional|Subtitled|Sub|[AÁ]udio|PT-?BR|EN(?:-US)?|" +
-                    // Extensões de arquivo
+                    @"144p|240p|360p|480p|720p|1080p|1440p|2160p|4320p|4K|8K|UHD|FHD|HD|SD|HDR(?:10\+?)?|DV|" +                         // Qualidade / resolução
+                    @"x264|x265|H\.?264|H\.?265|HEVC|AVC|XviD|DivX|" +                                                                  // Codecs
+                    @"AAC|AC3|DTS|DD5\.1|DDP|MP3|FLAC|TrueHD|Atmos|" +                                                                  // Áudio
+                    @"WEB-?DL|WEB-?Rip|BR-?Rip|BD-?Rip|HD-?Rip|HD-?TV|Blu-?Ray|DVD-?Rip|DVDR|REMUX|CAM|TS|TC|R5|Torrent|Download|" +    // Idioma
+                    @"Legendado|Leg|Legenda|Dublado|Dub|Dual|Multi|Nacional|Subtitled|Sub|[AÁ]udio|PT-?BR|EN(?:-US)?|" +                // Extensões de arquivo
                     @"MKV|MP4|AVI|MOV|WMV|FLV|MPEG|MPG|M4V|WEBM" +
                 @")\b",
                 "",
                 RegexOptions.IgnoreCase);
+
             // Clean up torrent group names
-            title = Regex.Replace(title,@"(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]*\.(?:com|org|net|to|tv|io|me|info|biz|co|xyz|online|site|top|club|br|us|uk|eu|de|fr|es|it|ru|cn|jp)(?:\.[a-z]{2})?\b","",RegexOptions.IgnoreCase);
+            title = Regex.Replace(title, @"(?:https?:\/\/)?(?:www\.)?[a-zA-Z0-9][a-zA-Z0-9-]*\.(?:com|org|net|to|tv|io|me|info|biz|co|xyz|online|site|top|club|br|us|uk|eu|de|fr|es|it|ru|cn|jp)(?:\.[a-z]{2})?\b", "", RegexOptions.IgnoreCase);
 
             // Remove brackets/parentheses content
             title = Regex.Replace(title, @"\[(?:.*?)\]|\((?:.*?)\)", "", RegexOptions.IgnoreCase);
