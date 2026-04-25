@@ -257,11 +257,6 @@ namespace Jackett.Common.Indexers.Definitions
                     Subs = string.IsNullOrEmpty(fileInfo.Subtitle) ? null : new[] { fileInfo.Subtitle }
                 };
                 var resolution = fileInfo.Quality ?? fileInfo.VideoQuality ?? string.Empty;
-
-                if (!String.IsNullOrEmpty(release.Title))
-                    release.Title = "";
-
-                release.Title = $"{release.Title} {resolution}".Trim();
                 release.Title = ExtractTitleOrDefault(magnetLink, release.Title);
 
                 release.Category = categoryId > 0
