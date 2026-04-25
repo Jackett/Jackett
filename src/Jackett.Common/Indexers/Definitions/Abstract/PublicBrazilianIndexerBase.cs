@@ -296,7 +296,7 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             var magnetTitle = "";
             RowParsingExtensions.ExtractPattern(downloadButton?.GetAttribute("href"),
                                                 @"&dn=(.+?)&|&dn=(.+?)$",
-                                                mt => magnetTitle = HttpUtility.UrlDecode(mt));
+                                                mt => magnetTitle = HttpUtility.HtmlDecode(HttpUtility.UrlDecode(mt)));
             if (!string.IsNullOrWhiteSpace(magnetTitle))
                 return FormatTitle(CleanTitle(magnetTitle), ExtractResolution(magnetTitle));
             var description = GetTitleElementOrNull(downloadButton);
