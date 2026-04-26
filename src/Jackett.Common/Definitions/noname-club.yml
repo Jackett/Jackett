@@ -869,7 +869,7 @@ search:
         - name: re_replace
           args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
         - name: re_replace
-          args: ["^(.*?)(\\((?:20|19)\\d{2}\\))(.*?)(.*?)\\((\\bS\\d{1,2}E\\d{1,3}(?:-\\d{1,3})?(?:\\s+of\\s+\\d+)?\\b)\\)(.*)", "$1 / $5 $2$4$6"]
+          args: ["^(.*?)(\\((?:(?:20|19)\\d{2}-?)+\\))(.*?)(.*?)\\((\bS\\d{1,2}E\\d{1,3}(?:-\\d{1,3})?(?:\\s+of\\s+[?0-9]+)?)\\)(.*)", "$1 / $5 $2$4$6"]
         - name: append
           args: "{{ if and (ne .Result.category_id \"913\") (.Config.addrussiantotitle) }} RUS{{ else }}{{ end }}"
     details:
