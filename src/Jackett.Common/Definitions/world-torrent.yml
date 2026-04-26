@@ -9,7 +9,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.darkflix.cc/
+  - https://www.darkfox.cc/
   - https://www.vidlox.cc/
   - https://www.sharework.cc/
 legacylinks:
@@ -29,7 +29,6 @@ legacylinks:
   - https://www.torrent-site.com/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://ww1-zetorrents.me/
   - https://www.zetorrents.rent/
   - https://ww1-zetorrents.town/
   - https://ww3-cine-torrent.com/
@@ -53,6 +52,7 @@ legacylinks:
   - https://ww4-zone-torrent.com/
   - https://www.zone-torrent.com/
   - https://www.zone-torrent.org/
+  - https://www.darkflix.cc/
 
 caps:
   categorymappings:
