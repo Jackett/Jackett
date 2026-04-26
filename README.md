@@ -94,6 +94,7 @@ Prior versions of Jackett are no longer supported.
  * BigFANGroup
  * BitRu
  * BlueRoms
+ * BoiTorrent
  * BT.etree
  * BTdirectory (BT目录)
  * btstate
