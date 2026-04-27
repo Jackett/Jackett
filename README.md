@@ -92,7 +92,6 @@ Prior versions of Jackett are no longer supported.
  * AudioBook Bay (ABB)
  * Bangumi Moe
  * BigFANGroup
- * BitRu
  * BlueRoms
  * BT.etree
  * BTdirectory (BT目录)
