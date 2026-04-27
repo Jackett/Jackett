@@ -638,7 +638,6 @@ Prior versions of Jackett are no longer supported.
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
  * Toca Share
- * TokyoPT [![(invite needed)][inviteneeded]](#)
  * Tormac
  * Tornado
  * Torr9
