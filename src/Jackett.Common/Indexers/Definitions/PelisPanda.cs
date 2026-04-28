@@ -108,7 +108,7 @@ namespace Jackett.Common.Indexers.Definitions
                 items.Add((items.Count, raw, detailUrl, type));
             }
 
-            var details = FetchDetailsAsync(items.Select(i => i.DetailUrl).ToList())
+            var details = FetchDetailsAsync(items.Select(i => i.DetailUrl).Distinct().ToList())
                 .GetAwaiter().GetResult();
 
             var seenGuids = new HashSet<string>();
