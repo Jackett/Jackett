@@ -402,9 +402,9 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
             var response = BuildResponse(searchUrl, LoadFixture("search.json"));
             var releases = parser.ParseResponse(response).ToList();
 
-            var detailsAuthorities = releases.Select(r => r.Details.AbsolutePath).Distinct().ToList();
-            Assert.That(detailsAuthorities[0], Does.Contain("pelicula/heroe-de-la-libertad"));
-            Assert.That(detailsAuthorities[1], Does.Contain("serie/stranger-things-relatos-del-85"));
+            var detailPaths = releases.Select(r => r.Details.AbsolutePath).Distinct().ToList();
+            Assert.That(detailPaths[0], Does.Contain("pelicula/heroe-de-la-libertad"));
+            Assert.That(detailPaths[1], Does.Contain("serie/stranger-things-relatos-del-85"));
             Assert.That(releases.Count, Is.EqualTo(5));
         }
     }
