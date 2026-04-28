@@ -23,12 +23,12 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
             return PelisPandaParser.FormatTitle(titleBase, year, quality, language, season, episode);
         }
 
-        [TestCase("720p",  ExpectedResult = 1L * 1024 * 1024 * 1024)]
+        [TestCase("720p", ExpectedResult = 1L * 1024 * 1024 * 1024)]
         [TestCase("1080p", ExpectedResult = (long)(2.5 * 1024 * 1024 * 1024))]
         [TestCase("2160p", ExpectedResult = 5L * 1024 * 1024 * 1024)]
-        [TestCase("4K",    ExpectedResult = 512L * 1024 * 1024)]
-        [TestCase("",      ExpectedResult = 512L * 1024 * 1024)]
-        [TestCase(null,    ExpectedResult = 512L * 1024 * 1024)]
+        [TestCase("4K", ExpectedResult = 512L * 1024 * 1024)]
+        [TestCase("", ExpectedResult = 512L * 1024 * 1024)]
+        [TestCase(null, ExpectedResult = 512L * 1024 * 1024)]
         public long EstimateSizeFromQuality_AllResolutions(string quality) =>
             PelisPandaParser.EstimateSizeFromQuality(quality);
 
@@ -85,10 +85,10 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
         }
 
         [TestCase("pelicula", ExpectedResult = 2000)]
-        [TestCase("anime",    ExpectedResult = 5070)]
-        [TestCase("serie",    ExpectedResult = 5000)]
+        [TestCase("anime", ExpectedResult = 5070)]
+        [TestCase("serie", ExpectedResult = 5000)]
         [TestCase("documental", ExpectedResult = 0)]
-        [TestCase(null,       ExpectedResult = 0)]
+        [TestCase(null, ExpectedResult = 0)]
         public int MapCategory_KnownAndUnknownTypes(string type) =>
             PelisPandaParser.MapCategory(type);
 

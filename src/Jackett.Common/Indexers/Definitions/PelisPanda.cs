@@ -73,7 +73,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         private const int MaxConcurrentRequests = 2;
 
-        private const long EstimateBytes720p  = 1L * 1024 * 1024 * 1024;
+        private const long EstimateBytes720p = 1L * 1024 * 1024 * 1024;
         private const long EstimateBytes1080p = (long)(2.5 * 1024 * 1024 * 1024);
         private const long EstimateBytes2160p = 5L * 1024 * 1024 * 1024;
         private const long EstimateBytesDefault = 512L * 1024 * 1024;
@@ -124,12 +124,13 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string BuildDetailUrl(string type, string slug)
         {
-            if (string.IsNullOrWhiteSpace(slug)) return null;
+            if (string.IsNullOrWhiteSpace(slug))
+                return null;
             return type switch
             {
                 "pelicula" => $"{_siteLink}wp-json/wpreact/v1/movie/{slug}",
-                "anime"    => $"{_siteLink}wp-json/wpreact/v1/anime/{slug}",
-                "serie"    => $"{_siteLink}wp-json/wpreact/v1/serie/{slug}/related",
+                "anime" => $"{_siteLink}wp-json/wpreact/v1/anime/{slug}",
+                "serie" => $"{_siteLink}wp-json/wpreact/v1/serie/{slug}/related",
                 _ => null
             };
         }
@@ -137,7 +138,8 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<Dictionary<string, JObject>> FetchDetailsAsync(IList<string> urls)
         {
             var result = new Dictionary<string, JObject>();
-            if (urls.Count == 0) return result;
+            if (urls.Count == 0)
+                return result;
 
             using var semaphore = new SemaphoreSlim(MaxConcurrentRequests);
             var tasks = urls.Select(async url =>
@@ -255,8 +257,8 @@ namespace Jackett.Common.Indexers.Definitions
         internal static int MapCategory(string type) => type switch
         {
             "pelicula" => TorznabCatType.Movies.ID,
-            "anime"    => TorznabCatType.TVAnime.ID,
-            "serie"    => TorznabCatType.TV.ID,
+            "anime" => TorznabCatType.TVAnime.ID,
+            "serie" => TorznabCatType.TV.ID,
             _ => 0
         };
 
@@ -288,10 +290,10 @@ namespace Jackett.Common.Indexers.Definitions
 
         internal static long EstimateSizeFromQuality(string quality) => quality switch
         {
-            "720p"  => EstimateBytes720p,
+            "720p" => EstimateBytes720p,
             "1080p" => EstimateBytes1080p,
             "2160p" => EstimateBytes2160p,
-            _       => EstimateBytesDefault
+            _ => EstimateBytesDefault
         };
 
         internal static DateTime ResolvePublishDate(string dateStr, int? year)
