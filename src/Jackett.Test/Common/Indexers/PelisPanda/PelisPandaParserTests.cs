@@ -125,7 +125,8 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
 
             public void Dispose()
             {
-                if (System.IO.File.Exists(_path)) System.IO.File.Delete(_path);
+                if (System.IO.File.Exists(_path))
+                    System.IO.File.Delete(_path);
             }
         }
 
@@ -324,11 +325,11 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
             var serieUrl = "https://pelispanda.org/wp-json/wpreact/v1/serie/stranger-things-relatos-del-85/related";
 
             var web = new Jackett.Test.TestHelpers.TestWebClient();
-            web.RegisterRequestCallback(movieUrl, "PelisPanda/movie.json"); 
+            web.RegisterRequestCallback(movieUrl, "PelisPanda/movie.json");
             web.RegisterRequestCallback(animeUrl,
                 new Jackett.Common.Utils.Clients.WebResult
                 {
-                    Status = (System.Net.HttpStatusCode)429, 
+                    Status = (System.Net.HttpStatusCode)429,
                     ContentBytes = System.Text.Encoding.UTF8.GetBytes("rate limited")
                 });
             web.RegisterRequestCallback(serieUrl, "PelisPanda/serie-related.json");
@@ -353,7 +354,7 @@ namespace Jackett.Test.Common.Indexers.PelisPanda
             var serieUrl = "https://pelispanda.org/wp-json/wpreact/v1/serie/stranger-things-relatos-del-85/related";
 
             var web = new Jackett.Test.TestHelpers.TestWebClient();
-            web.RegisterRequestCallback(movieUrl, "PelisPanda/error-html.json"); 
+            web.RegisterRequestCallback(movieUrl, "PelisPanda/error-html.json");
             web.RegisterRequestCallback(animeUrl, "PelisPanda/anime-empty.json");
             web.RegisterRequestCallback(serieUrl, "PelisPanda/serie-related.json");
 
