@@ -25,6 +25,7 @@ caps:
     - {id: 5, cat: PC/0day, desc: "Logiciels"}
     - {id: 6, cat: Audio, desc: "Musique"}
     - {id: 15, cat: Console/Other, desc: "Emulateur"}
+    - {id: 16, cat: TV/Sport, desc: "Sports"}
 
   modes:
     search: [q]
