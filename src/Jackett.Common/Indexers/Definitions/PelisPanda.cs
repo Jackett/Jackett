@@ -91,7 +91,22 @@ namespace Jackett.Common.Indexers.Definitions
 
         public IList<ReleaseInfo> ParseResponse(IndexerResponse indexerResponse)
         {
-            var json = JObject.Parse(indexerResponse.Content);
+            if (indexerResponse == null || string.IsNullOrWhiteSpace(indexerResponse.Content))
+            {
+                _logger?.Warn("PelisPanda: search response was empty or missing; returning no releases");
+                return new List<ReleaseInfo>();
+            }
+
+            JObject json;
+            try
+            {
+                json = JObject.Parse(indexerResponse.Content);
+            }
+            catch (Exception ex)
+            {
+                _logger?.Warn(ex, "PelisPanda: failed to parse search response as JSON; returning no releases");
+                return new List<ReleaseInfo>();
+            }
             var results = json["results"] as JArray ?? new JArray();
 
             var items = new List<(int Index, JObject Item, string DetailUrl, string Type)>();
