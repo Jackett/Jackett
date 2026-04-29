@@ -13,12 +13,9 @@ caps:
     - {id: 87, cat: Movies, desc: "Action Eng"}
     - {id: 88, cat: Movies, desc: "Action Hun"}
     - {id: 79, cat: TV/Documentary, desc: "Dokumentumfilm"}
-    - {id: 72, cat: Movies/HD, desc: "HD Eng"}
-    - {id: 71, cat: Movies/HD, desc: "HD Hun"}
     - {id: 89, cat: Movies, desc: "Horror Anime"}
     - {id: 78, cat: Books, desc: "Horror Ebook"}
     - {id: 66, cat: Movies, desc: "Horror Eng"}
-    - {id: 73, cat: PC/Games, desc: "Horror Game"}
     - {id: 65, cat: Movies, desc: "Horror Hun"}
     - {id: 82, cat: XXX, desc: "Horror XXX"}
     - {id: 94, cat: Movies, desc: "Kamerás filmek"}
@@ -31,6 +28,7 @@ caps:
     - {id: 69, cat: Movies, desc: "Scfi Hun"}
     - {id: 75, cat: TV, desc: "Sorozat Eng"}
     - {id: 74, cat: TV, desc: "Sorozat Hun"}
+    - {id: 100, cat: Movies, desc: "THC Release"}
     - {id: 68, cat: Movies, desc: "Thriller Eng"}
     - {id: 67, cat: Movies, desc: "Thriller Hun"}
     - {id: 84, cat: Movies/SD, desc: "VHS Ritkaságok"}
