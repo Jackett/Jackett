@@ -140,7 +140,13 @@ search:
     grabs:
       selector: grabs
     date:
+      # "addedAt": "2026-04-29T15:45:27.544Z" is returned by Newtonsoft.Json.Linq as 04/29/2026 15:45:27
       selector: addedAt
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     infohash:
       selector: infoHash
       optional: true
