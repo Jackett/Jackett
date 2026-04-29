@@ -1,0 +1,150 @@
+---
+id: ultrabits-api
+name: Ultrabits (API)
+description: "Ultrabits is a Nordic Private Torrent Tracker for MOVIES / TV / MUSIC / GAMES / APPS / BOOKS"
+language: sv-SE
+type: private
+encoding: UTF-8
+links:
+  - https://ultrabits.org/
+
+caps:
+  categorymappings:
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies Subpack"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Movies BluRay"}
+    - {id: 2070, cat: Movies/DVD, desc: "Movies DVDR"}
+    - {id: 2080, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
+    - {id: 5010, cat: TV/WEB-DL, desc: "TV WEB-DL"}
+    - {id: 5020, cat: TV/Foreign, desc: "TV Nordisk"}
+    - {id: 5030, cat: TV/SD, desc: "TV SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 5060, cat: TV/Sport, desc: "TV Sport"}
+    - {id: 5070, cat: TV/Anime, desc: "TV Anime"}
+    - {id: 5080, cat: TV/Documentary, desc: "TV Documentary"}
+    - {id: 3010, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 3020, cat: Audio/Video, desc: "Music Video"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audiobook / Podcast"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: 4010, cat: PC/0day, desc: "Apps 0DAY"}
+    - {id: 4020, cat: PC/ISO, desc: "Apps ISO"}
+    - {id: 4050, cat: PC/Games, desc: "Games PC"}
+    - {id: 4070, cat: PC/Mobile-Android, desc: "Apps Mobile"}
+    - {id: 1090, cat: Console/Other, desc: "Games Switch"}
+    - {id: 1140, cat: Console/XBox One, desc: "Games Xbox"}
+    - {id: 1180, cat: Console/PS4, desc: "Games PlayStation"}
+    - {id: 7010, cat: Books/Mags, desc: "Books Magazine"}
+    - {id: 7020, cat: Books/EBook, desc: "Books eBook"}
+    - {id: 7030, cat: Books/Comics, desc: "Books Comic"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: Passkey or API key
+  - name: info_apikey
+    type: info
+    label: How do I get a key?
+    default: "Paste either your announce passkey (32 hex chars, copied from <a href=\"https://ultrabits.org/profile/settings/account\" target=\"_blank\">/profile/settings/account</a>) OR a personal API key (prefix <code>ubk_</code>, created at <a href=\"https://ultrabits.org/profile/settings/api-keys\" target=\"_blank\">/profile/settings/api-keys</a>). The server detects the format automatically."
+  - name: info_account
+    type: info
+    label: Don't have an account?
+    default: "Ultrabits is invitation-only. Apply at <a href=\"https://ultrabits.org/apply\" target=\"_blank\">/apply</a>; applications are reviewed manually."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+# Ultrabits has no session login — the JSON API takes the apikey as
+# a query parameter on every request. We still issue a 1-result probe
+# at indexer-add time so a bad credential is caught before the user
+# sees empty results from a real search. The error envelope from the
+# server is `{ "error": { "code": ..., "description": "..." } }`,
+# which Cardigann's JSON-to-XML transform exposes as <error><description>...
+login:
+  path: /v1/jackett/search
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    limit: "1"
+  error:
+    - selector: error
+      message:
+        selector: description
+
+search:
+  paths:
+    - path: /v1/jackett/search
+      response:
+        type: json
+  inputs:
+    q: "{{ .Keywords }}"
+    apikey: "{{ .Config.apikey }}"
+    cat: "{{ join .Categories \",\" }}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    limit: 100
+
+  rows:
+    selector: data
+
+  fields:
+    title:
+      selector: name
+    details:
+      selector: detailsUrl
+    download:
+      selector: downloadUrl
+    category:
+      selector: category
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: grabs
+    date:
+      selector: addedAt
+    infohash:
+      selector: infoHash
+      optional: true
+    imdb:
+      selector: imdb
+      optional: true
+    tmdbid:
+      selector: tmdbId
+      optional: true
+    downloadvolumefactor:
+      selector: downloadvolumefactor
+    uploadvolumefactor:
+      selector: uploadvolumefactor
