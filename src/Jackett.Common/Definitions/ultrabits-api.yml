@@ -9,35 +9,45 @@ links:
   - https://ultrabits.org/
 
 caps:
+  # `id` is the site's internal category slug — the JSON search endpoint
+  # echoes it back in each torrent's `category` field, so Cardigann maps
+  # rows 1:1 against what the API returns. `desc` mirrors the labels
+  # users see on ultrabits.org so Sonarr / Radarr / Prowlarr render the
+  # same wording.
   categorymappings:
-    - {id: 1090, cat: Console/Other, desc: "Games Switch"}
-    - {id: 1140, cat: Console/XBox One, desc: "Games Xbox"}
-    - {id: 1180, cat: Console/PS4, desc: "Games PlayStation"}
-    - {id: 2010, cat: Movies/Foreign, desc: "Movies Subpack"}
-    - {id: 2040, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 2045, cat: Movies/UHD, desc: "Movies UHD"}
-    - {id: 2050, cat: Movies/BluRay, desc: "Movies BluRay"}
-    - {id: 2070, cat: Movies/DVD, desc: "Movies DVDR"}
-    - {id: 2080, cat: Movies/WEB-DL, desc: "Movies WEB-DL"}
-    - {id: 3010, cat: Audio/MP3, desc: "Music MP3"}
-    - {id: 3020, cat: Audio/Video, desc: "Music Video"}
-    - {id: 3030, cat: Audio/Audiobook, desc: "Audiobook / Podcast"}
-    - {id: 3040, cat: Audio/Lossless, desc: "Music FLAC"}
-    - {id: 4010, cat: PC/0day, desc: "Apps 0DAY"}
-    - {id: 4020, cat: PC/ISO, desc: "Apps ISO"}
-    - {id: 4050, cat: PC/Games, desc: "Games PC"}
-    - {id: 4070, cat: PC/Mobile-Android, desc: "Apps Mobile"}
-    - {id: 5010, cat: TV/WEB-DL, desc: "TV WEB-DL"}
-    - {id: 5020, cat: TV/Foreign, desc: "TV Nordisk"}
-    - {id: 5030, cat: TV/SD, desc: "TV SD"}
-    - {id: 5040, cat: TV/HD, desc: "TV HD"}
-    - {id: 5045, cat: TV/UHD, desc: "TV UHD"}
-    - {id: 5060, cat: TV/Sport, desc: "TV Sport"}
-    - {id: 5070, cat: TV/Anime, desc: "TV Anime"}
-    - {id: 5080, cat: TV/Documentary, desc: "TV Documentary"}
-    - {id: 7010, cat: Books/Mags, desc: "Books Magazine"}
-    - {id: 7020, cat: Books/EBook, desc: "Books eBook"}
-    - {id: 7030, cat: Books/Comics, desc: "Books Comic"}
+    - {id: Game-NSW, cat: Console/Other, desc: "Console/Switch"}
+    - {id: Game-Xbox, cat: Console/XBox One, desc: "Console/Xbox"}
+    - {id: Game-PS, cat: Console/PS4, desc: "Console/PlayStation"}
+    - {id: Movie-Subpack, cat: Movies/Foreign, desc: "Movies/Subpack"}
+    - {id: Movie-x264, cat: Movies/HD, desc: "Movies/x264"}
+    - {id: Movie-x265, cat: Movies/HD, desc: "Movies/x265"}
+    - {id: Movie-UHD, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: Movie-Remux, cat: Movies/UHD, desc: "Movies/Remux"}
+    - {id: Movie-BD, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: Movie-DVD, cat: Movies/DVD, desc: "Movies/DVDR"}
+    - {id: Movie-WEB, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: MP3, cat: Audio/MP3, desc: "Audio/MP3"}
+    - {id: MusicVid, cat: Audio/Video, desc: "Audio/Video"}
+    - {id: Podcast, cat: Audio/Audiobook, desc: "Audio/Podcast"}
+    - {id: AudioBook, cat: Audio/Audiobook, desc: "Books/Audiobook"}
+    - {id: FLAC, cat: Audio/Lossless, desc: "Audio/FLAC"}
+    - {id: MusicDisc, cat: Audio/Lossless, desc: "Audio/Disc"}
+    - {id: "0DAY", cat: PC/0day, desc: "PC/0DAY"}
+    - {id: App-ISO, cat: PC/ISO, desc: "PC/ISO"}
+    - {id: Game-PC, cat: PC/Games, desc: "PC/Games"}
+    - {id: App-Mobile, cat: PC/Mobile-Android, desc: "PC/Mobile"}
+    - {id: TV-WEB, cat: TV/WEB-DL, desc: "TV/WEB-DL"}
+    - {id: TV-Nordic, cat: TV/Foreign, desc: "TV/Nordic"}
+    - {id: TV-DVD, cat: TV/SD, desc: "TV/DVDR"}
+    - {id: TV-x264, cat: TV/HD, desc: "TV/x264"}
+    - {id: TV-x265, cat: TV/HD, desc: "TV/x265"}
+    - {id: TV-UHD, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: TV-Sport, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: TV-Anime, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: TV-Doc, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: Magazine, cat: Books/Mags, desc: "Books/Magazine"}
+    - {id: eBook, cat: Books/EBook, desc: "Books/eBook"}
+    - {id: Comic, cat: Books/Comics, desc: "Books/Comic"}
 
   modes:
     search: [q]
