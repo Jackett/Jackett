@@ -256,6 +256,7 @@ namespace Jackett.Updater
                 "Definitions/acgsou.yml",
                 "Definitions/acidlounge.yml",
                 "Definitions/adbt.yml",
+                "Definitions/afun.yml",
                 "Definitions/aither.yml", // switch to *-API #8682
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
@@ -306,6 +307,7 @@ namespace Jackett.Updater
                 "Definitions/bitme.yml",
                 "Definitions/bitnova.yml",
                 "Definitions/bitofvalor.yml",
+                "Definitions/bitru.yml",
                 "Definitions/bitsearch.yml",
                 "Definitions/bitsexy.yml",
                 "Definitions/bitsexy-api.yml",
@@ -771,6 +773,7 @@ namespace Jackett.Updater
                 "Definitions/tjangto.yml",
                 "Definitions/tntfork.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/tokyopt.yml",
                 "Definitions/toonsforme.yml",
                 "Definitions/topnow.yml",
                 "Definitions/torlock.yml",
@@ -892,6 +895,7 @@ namespace Jackett.Updater
                 "Definitions/zamundanet.yml",
                 "Definitions/zelkaorg.yml",
                 "Definitions/zetorrents.yml", // renamed to world-torrent #7574
+                "Definitions/zktorrent.yml",
                 "Definitions/zomb.yml",
                 "Definitions/zooqle.yml"
             };

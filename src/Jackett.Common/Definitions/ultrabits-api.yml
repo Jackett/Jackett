@@ -1,0 +1,166 @@
+---
+id: ultrabits-api
+name: Ultrabits (API)
+description: "Ultrabits is a NORDIC Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: sv-SE
+type: private
+encoding: UTF-8
+links:
+  - https://ultrabits.org/
+
+caps:
+  # `id` is the site's internal category slug — the JSON search endpoint
+  # echoes it back in each torrent's `category` field, so Cardigann maps
+  # rows 1:1 against what the API returns. `desc` mirrors the labels
+  # users see on ultrabits.org so Sonarr / Radarr / Prowlarr render the
+  # same wording.
+  categorymappings:
+    - {id: Game-NSW, cat: Console/Other, desc: "Console/Switch"}
+    - {id: Game-Xbox, cat: Console/XBox One, desc: "Console/Xbox"}
+    - {id: Game-PS, cat: Console/PS4, desc: "Console/PlayStation"}
+    - {id: Movie-Subpack, cat: Movies/Foreign, desc: "Movies/Subpack"}
+    - {id: Movie-x264, cat: Movies/HD, desc: "Movies/x264"}
+    - {id: Movie-x265, cat: Movies/HD, desc: "Movies/x265"}
+    - {id: Movie-UHD, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: Movie-Remux, cat: Movies/UHD, desc: "Movies/Remux"}
+    - {id: Movie-BD, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: Movie-DVD, cat: Movies/DVD, desc: "Movies/DVDR"}
+    - {id: Movie-WEB, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: MP3, cat: Audio/MP3, desc: "Audio/MP3"}
+    - {id: MusicVid, cat: Audio/Video, desc: "Audio/Video"}
+    - {id: Podcast, cat: Audio/Audiobook, desc: "Audio/Podcast"}
+    - {id: AudioBook, cat: Audio/Audiobook, desc: "Books/Audiobook"}
+    - {id: FLAC, cat: Audio/Lossless, desc: "Audio/FLAC"}
+    - {id: MusicDisc, cat: Audio/Lossless, desc: "Audio/Disc"}
+    - {id: "0DAY", cat: PC/0day, desc: "PC/0DAY"}
+    - {id: App-ISO, cat: PC/ISO, desc: "PC/ISO"}
+    - {id: Game-PC, cat: PC/Games, desc: "PC/Games"}
+    - {id: App-Mobile, cat: PC/Mobile-Android, desc: "PC/Mobile"}
+    - {id: TV-WEB, cat: TV/WEB-DL, desc: "TV/WEB-DL"}
+    - {id: TV-Nordic, cat: TV/Foreign, desc: "TV/Nordic"}
+    - {id: TV-DVD, cat: TV/SD, desc: "TV/DVDR"}
+    - {id: TV-x264, cat: TV/HD, desc: "TV/x264"}
+    - {id: TV-x265, cat: TV/HD, desc: "TV/x265"}
+    - {id: TV-UHD, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: TV-Sport, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: TV-Anime, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: TV-Doc, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: Magazine, cat: Books/Mags, desc: "Books/Magazine"}
+    - {id: eBook, cat: Books/EBook, desc: "Books/eBook"}
+    - {id: Comic, cat: Books/Comics, desc: "Books/Comic"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Key by accessing your <a href=\"https://ultrabits.org/profile/settings/api-keys\" target=\"_blank\">Ultrabits</a> account <i>API keys</i> page."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Log in to the website at least every 3 months to avoid account deactivation."
+
+login:
+  path: v1/jackett/search
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    limit: 1
+  error:
+    - selector: error
+      message:
+        selector: description
+
+search:
+  paths:
+    - path: /v1/jackett/search
+      response:
+        type: json
+  inputs:
+    q: "{{ .Keywords }}"
+    apikey: "{{ .Config.apikey }}"
+    cat: "{{ join .Categories \",\" }}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+    limit: 100
+
+  rows:
+    selector: data
+    count:
+      selector: total
+
+  fields:
+    title:
+      selector: name
+    details:
+      selector: detailsUrl
+    download:
+      selector: downloadUrl
+    category:
+      selector: category
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: grabs
+    date:
+      # "addedAt": "2026-04-29T15:45:27.544Z" is returned by Newtonsoft.Json.Linq as 04/29/2026 15:45:27
+      selector: addedAt
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    infohash:
+      selector: infoHash
+      optional: true
+    imdb:
+      selector: imdb
+    tmdbid:
+      selector: tmdbId
+    downloadvolumefactor:
+      selector: downloadvolumefactor
+    uploadvolumefactor:
+      selector: uploadvolumefactor
+    minimumratio:
+      text: 1.1
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json api

@@ -139,56 +139,45 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table.torrents tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(img[title=\"Allready Grabbed !!\"]))"
+    selector: div.tor-list div.torrent-item:not(:has(img[title="Allready Grabbed !!"]))
 
   fields:
     category:
-      selector: td.category > a
+      selector: div.tor-cat-col a
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: td.torrent-first a
+      selector: a.torr-link b
     details:
-      selector: td.torrent-first a
+      selector: a.torr-link
       attribute: href
     download:
-      selector: td.torrent-first a
+      selector: a.torr-link
       attribute: href
     poster:
-      selector: td.torrent-first a
+      selector: a.torr-link
       attribute: onmouseover
       filters:
         - name: regexp
           args: "src=(.+?) border"
     date:
       # 6 weeks ago
-      selector: td.torrent-first a
+      selector: a.torr-link
       attribute: onmouseover
       filters:
         - name: regexp
           args: "Added\\:(\\d+ \\w+ \\w+)<"
         - name: timeago
     size:
-      selector: td.size
+      selector: div.torrent-stats div.nth-child(4)
     grabs:
-      selector: td.torrent-first div div
-      filters:
-        - name: regexp
-          args: "^\\d+\\s+\\d+\\s+(.+)"
-        - name: replace
-          args: ["---", "0"]
+      selector: div.torrent-stats div.nth-child(1)
     seeders:
-      selector: td.torrent-first div div
-      filters:
-        - name: regexp
-          args: "^(\\d+)\\s+\\d+\\s+.+"
+      selector: div.torrent-stats div.nth-child(2)
     leechers:
-      selector: td.torrent-first div div
-      filters:
-        - name: regexp
-          args: "^\\d+\\s+(\\d+)\\s+.+"
+      selector: div.torrent-stats div.nth-child(3)
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0

@@ -187,5 +187,9 @@ search:
     minimumratio:
       text: 0.9
     description:
+<<<<<<< fix/pterclub-description-span
       selector: td.embedded > div > div:nth-child(2) > span
+=======
+      selector: td:has(table.torrentname) span:last-child
+>>>>>>> master
 # NexusPHP prod#60d2fdc724a 2023-05-10
