@@ -129,8 +129,8 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[data-src]
-      attribute: data-src
+      selector: img[data-orig]
+      attribute: data-orig
     imdbid:
       selector: a[href$="&search_area=4"]
       attribute: href
@@ -187,5 +187,4 @@ search:
     minimumratio:
       text: 0.9
     description:
-      selector: td:has(table.torrentname) span:last-child
-# NexusPHP prod#60d2fdc724a 2023-05-10
+      selector: td.embedded > div > div:nth-child(2) > span
