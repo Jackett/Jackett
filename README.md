@@ -273,7 +273,6 @@ Prior versions of Jackett are no longer supported.
  * ABtorrents (ABT + RNS)
  * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
  * Aftershock
- * AFUN
  * AGSVPT (Arctic Global Seed Vault)
  * Aidoru!Online
  * Aither

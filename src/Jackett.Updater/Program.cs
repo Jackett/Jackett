@@ -256,6 +256,7 @@ namespace Jackett.Updater
                 "Definitions/acgsou.yml",
                 "Definitions/acidlounge.yml",
                 "Definitions/adbt.yml",
+                "Definitions/afun.yml",
                 "Definitions/aither.yml", // switch to *-API #8682
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
