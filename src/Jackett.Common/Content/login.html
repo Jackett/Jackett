@@ -5,7 +5,8 @@
     <meta charset="utf-8" />
     <meta name="robots" content="noindex, nofollow"/>
 
-    <link rel='shortcut icon' type='image/x-icon' href='../favicon.ico' />
+    <link rel="icon" href="../jacket_medium.png" media="(prefers-color-scheme: light)">
+    <link rel="icon" href="../jacket_medium_dark.png" media="(prefers-color-scheme: dark)">
 
     <script src="../libs/jquery.min.js"></script>
     <script src="../libs/jquery.dataTables.min.js"></script>
@@ -22,9 +23,12 @@
     <title>Jackett</title>
 </head>
 <body>
-    <div id="page">
-
-        <img id="logo" src="../jacket_medium.png" /><span id="header-title">Jackett</span>
+    <div id="page" class="login">
+        <picture>
+            <source srcset="../jacket_medium_dark.png" media="(prefers-color-scheme: dark)">
+            <img id="logo" src="../jacket_medium.png" alt="Logo">
+        </picture>
+        <span id="header-title">Jackett</span>
 
         <hr />
         <h1>Login</h1>
