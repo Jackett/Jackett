@@ -742,6 +742,7 @@ namespace Jackett.Updater
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
                 "Definitions/takeabyte.yml",
+                "Definitions/tangmen.yml",
                 "Definitions/tazmaniaden.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",

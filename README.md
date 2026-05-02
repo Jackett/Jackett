@@ -608,7 +608,6 @@ Prior versions of Jackett are no longer supported.
  * SunnyPT [![(invite needed)][inviteneeded]](#)
  * Superbits (SBS)
  * Swarmazon
- * Tangmen (唐门)
  * TangPT (躺平)
  * Tapochek
  * Tasmanit
