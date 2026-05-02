@@ -93,6 +93,7 @@ Prior versions of Jackett are no longer supported.
  * Bangumi Moe
  * BigFANGroup
  * BlueRoms
+ * BoiTorrent
  * BT.etree
  * BTdirectory (BT目录)
  * btstate
