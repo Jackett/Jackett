@@ -27,6 +27,7 @@ caps:
     - {id: 19, cat: Audio/Video, desc: "Videoclipuri"}
     - {id: 20, cat: Movies, desc: "Filme SD-RO"}
     - {id: 21, cat: Books, desc: "EBooks"}
+    - {id: 22, cat: Movies, desc: "Classic Movies"}
 
   modes:
     search: [q]
