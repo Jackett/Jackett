@@ -36,6 +36,10 @@ settings:
     type: info
     label: About your API key
     default: "Find or Generate a new API Key by accessing your <a href=\"https://anthelion.me/\" target=\"_blank\">Anthelion</a> account <i>Settings</i> page and scrolling down to the <b>API Key</b> section.<br>Tick the <b>Search</b> and <b>Download</b> checkboxes and click the <b>save profile</b> button to generate the key."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -72,6 +76,8 @@ search:
     # cat: "{{ join .Categories \",\" }}"
     limit: 100
     offset: 0
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech, 3 either
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
     selector: item
@@ -164,9 +170,13 @@ search:
     size:
       selector: size
     downloadvolumefactor:
-      text: 1
+      selector: downloadvolumefactor
+      optional: true
+      default: 1
     uploadvolumefactor:
-      text: 1
+      selector: uploadvolumefactor
+      optional: true
+      default: 1
     minimumratio:
       text: 1.0
     minimumseedtime:
