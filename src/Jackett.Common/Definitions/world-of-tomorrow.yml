@@ -176,9 +176,8 @@ search:
       selector: div.sr-cover img
       attribute: src
     imdbid:
-      selector: a.sr-link-badge[href*="imdb.com"], a.sr-link-badge[href*="imdb.com/title/"], a[href*="imdb.com/title/"]
+      selector: a.sr-link-badge[href*="imdb.com"]
       attribute: href
-      optional: true
     size:
       selector: span.sr-detail-size, div.sr-dup-meta span:nth-child(1)
     grabs:
