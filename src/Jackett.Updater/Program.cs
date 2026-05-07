@@ -514,6 +514,7 @@ namespace Jackett.Updater
                 "Definitions/idope.yml",
                 "Definitions/idopeclone.yml",
                 "Definitions/ihdbits.yml",
+                "Definitions/ilcorsaronero.yml",
                 "Definitions/ilcorsaroverde.yml",
                 "Definitions/ilolicon.yml",
                 "Definitions/iloveclassics.yml",
