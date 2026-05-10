@@ -86,15 +86,12 @@ search:
     episode: "{{ .Query.Ep }}"
     category: "{{ range .Categories }}{{.}},{{end}}"
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
-
-  keywordsfilters:
-    - name: re_replace
-      args: ["\\.", " "]
+    limit: 100
+    # 1 name, 2 desc, 3 both, 4 genre
+    tip: 1
 
   rows:
     selector: $
-    filters:
-      - name: andmatch
 
   fields:
     title:
