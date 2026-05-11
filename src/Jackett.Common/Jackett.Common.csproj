@@ -32,6 +32,10 @@
     <PackageReference Include="YamlDotNet" Version="16.3.0" />
   </ItemGroup>
 
+  <ItemGroup Condition="'$(TargetFramework)' != 'netstandard2.0'">
+    <PackageReference Include="NBitcoin.Secp256k1" Version="3.2.0" />
+  </ItemGroup>
+
   <ItemGroup>
     <Content Include="Content\animate.css">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
