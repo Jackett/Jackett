@@ -99,7 +99,6 @@ search:
         - name: dateparse
           args: "dddd dd MMM yyyy"
 
-
   fields:
     category:
       selector: a[href*="browse.php?cat="]
