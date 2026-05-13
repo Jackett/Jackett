@@ -352,6 +352,7 @@ Prior versions of Jackett are no longer supported.
  * CrnaBerza
  * cspt (财神)
  * cyanbug (大青虫)
+ * CyclingArchiveClub
  * CZTeam
  * Darkpeers
  * Das Unerwartete (D-U)
