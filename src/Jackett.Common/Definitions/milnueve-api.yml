@@ -19,8 +19,8 @@ caps:
     - {id: 8, cat: TV/Anime, desc: "Anime en Catalan"}
     - {id: 9, cat: TV/Documentary, desc: "Zona Documentales"}
     - {id: 10, cat: Movies, desc: "Zona Latino"}
-    - {id: 6, cat: Books/comics, desc: "Manga"}
-    - {id: 11, cat: Books/eBook, desc: "Libros"}
+    - {id: 6, cat: Books/Comics, desc: "Manga"}
+    - {id: 11, cat: Books/EBook, desc: "Libros"}
     - {id: 12, cat: Books/Comics, desc: "Cómics"}
 
   modes:
