@@ -43,7 +43,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         // Hard cap on pages fetched per search; prevents runaway requests on very common terms.
         // Same pattern as EpubLibre.MaxSearchPageLimit.
-        private const int MaxSearchPages = 10;
+        private const int MaxSearchPages = 6;
 
         // Selectors are kept as named constants so a future site change touches only this block.
         private const string SearchRowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
