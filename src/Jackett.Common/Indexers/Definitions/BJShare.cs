@@ -39,7 +39,7 @@ namespace Jackett.Common.Indexers.Definitions
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
-        private static readonly Regex _PagerPageRegex = new Regex(@"[?&]page=(\d+)");
+        private static readonly Regex _PagerPageRegex = new Regex(@"[?&]page=(\d+)", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
 
         // Hard cap on pages fetched per search; prevents runaway requests on very common terms.
         // Same pattern as EpubLibre.MaxSearchPageLimit.
@@ -330,6 +330,8 @@ namespace Jackett.Common.Indexers.Definitions
             // up to that, capped by MaxSearchPages as a safety net against very common queries.
             var totalPages = 1;
             var state = new SearchParseState { Query = query, SearchTerm = searchTerm };
+            // HtmlParser is stateless; reuse a single instance across pages to avoid per-page allocations.
+            var parser = new HtmlParser();
 
             for (var page = 1; page <= MaxSearchPages && page <= totalPages; page++)
             {
@@ -343,7 +345,6 @@ namespace Jackett.Common.Indexers.Definitions
 
                 try
                 {
-                    var parser = new HtmlParser();
                     using var document = parser.ParseDocument(results.ContentString);
 
                     if (page == 1)
@@ -459,7 +460,13 @@ namespace Jackett.Common.Indexers.Definitions
             if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent"))
             {
                 var qCatLink = row.QuerySelector(CategoryLinkSelector);
-                state.CategoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
+                var categoryHref = qCatLink?.GetAttribute("href");
+                if (string.IsNullOrEmpty(categoryHref) || !categoryHref.Contains('='))
+                {
+                    logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': missing or malformed category link");
+                    return null;
+                }
+                state.CategoryStr = categoryHref.Split('=')[1].Split('&')[0];
                 category = MapTrackerCatToNewznab(state.CategoryStr);
 
                 var torrentInfoEl = row.QuerySelector(TorrentInfoSelector);
@@ -546,8 +553,8 @@ namespace Jackett.Common.Indexers.Definitions
         // Mutable per-search state shared across rows on a page (group accumulator + query context).
         private sealed class SearchParseState
         {
-            public TorznabQuery Query { get; init; }
-            public string SearchTerm { get; init; }
+            public TorznabQuery Query { get; set; }
+            public string SearchTerm { get; set; }
             public ICollection<int> GroupCategory { get; set; }
             public string GroupTitle { get; set; }
             public string GroupYearStr { get; set; }
