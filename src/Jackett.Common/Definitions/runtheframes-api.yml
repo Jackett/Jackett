@@ -2,7 +2,7 @@
 id: runtheframes-api
 name: RunTheFrames (API)
 description: "RunTheFrames is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
-language: en-US
+language: de-DE
 type: private
 encoding: UTF-8
 links:
@@ -15,7 +15,7 @@ caps:
     - {id: 3, cat: TV/Anime, desc: "Anime"}
     - {id: 4, cat: TV/Documentary, desc: "Dokumentationen"}
     - {id: 5, cat: Audio, desc: "Music"}
-    - {id: 6, cat: PC/Games, desc: "Games"}
+    - {id: 6, cat: Console, desc: "Games"}
     - {id: 7, cat: PC, desc: "Software"}
     - {id: 8, cat: Audio/Other, desc: "Podcast"}
 
@@ -32,7 +32,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://runtheframes.xyz/\" target=\"_blank\">RetroMoviesClub</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://runtheframes.xyz/\" target=\"_blank\">RunTheFrames</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
