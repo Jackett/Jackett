@@ -32,6 +32,7 @@ caps:
     - {id: 7020, cat: Books/EBook, desc: "eBook/Livres"}
     - {id: 7050, cat: Books/Comics, desc: "eBook/Mangas"}
     - {id: 7060, cat: Books/Mags, desc: "eBook/Presse"}
+    - {id: 8000, cat: Books/Mags, desc: "eBook/Littérature & Audio/Autre"}
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3030, cat: Audio/Other, desc: "Audio/Karaoke"}
     - {id: 3010, cat: Audio, desc: "Audio/Musique"}
