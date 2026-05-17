@@ -10,120 +10,120 @@ links:
 
 caps:
   categorymappings:
-    - {id: 15, cat: TV/Other, desc: "Ads"}
-    - {id: 8, cat: XXX, desc: "Adult"}
+    # from https://www.retrotoon.world/torznab.php?t=caps
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2070, cat: Movies, desc: "Movies/Anime"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3030, cat: Audio, desc: "Soundtrack"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7030, cat: Books/Comics, desc: "Comics"}
+    - {id: 8000, cat: XXX, desc: "Adult"}
+    - {id: 1, cat: Movies, desc: "Retro"}
+    - {id: 2, cat: TV, desc: "Modern"}
+    - {id: 3, cat: Movies, desc: "Feature"}
     - {id: 4, cat: TV/Anime, desc: "Anime"}
-    - {id: 13, cat: Other, desc: "Art"}
-    - {id: 9, cat: Other, desc: "CGI"}
+    - {id: 5, cat: TV/Anime, desc: "OVA"}
+    - {id: 6, cat: TV, desc: "Shorts"}
+    - {id: 7, cat: Movies, desc: "Indie"}
+    - {id: 8, cat: XXX, desc: "Adult"}
+    - {id: 9, cat: TV, desc: "CGI"}
     - {id: 10, cat: Other, desc: "Clay"}
     - {id: 11, cat: Books/Comics, desc: "Comics"}
-    - {id: 3, cat: Movies, desc: "Feature"}
-    - {id: 7, cat: Movies, desc: "Indie"}
-    - {id: 2, cat: TV, desc: "Modern"}
+    - {id: 12, cat: Books/Comics, desc: "Manga"}
+    - {id: 13, cat: Other, desc: "Art"}
     - {id: 14, cat: Audio, desc: "OST"}
-    - {id: 5, cat: TV/Anime, desc: "OVA"}
-    - {id: 1, cat: TV, desc: "Retro"}
-    - {id: 6, cat: TV, desc: "Shorts"}
+    - {id: 15, cat: TV/Other, desc: "Ads"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
     book-search: [q]
+    music-search: [q]
 
 settings:
-  - name: cookie
+  - name: apikey
     type: text
-    label: Cookie
-  - name: info_cookie
-    type: info_cookie
-  - name: freeleech
-    type: checkbox
-    label: Filter freeleech only
-    default: false
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 4
-    options:
-      4: created
-      7: seeders
-      5: size
-      1: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: desc
-    options:
-      desc: desc
-      asc: asc
-  - name: info_tpp
+    label: API Key
+  - name: info_key
     type: info
-    label: Results Per Page
-    default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
+    label: About your API Key
+    default: "You can find your API Key by accessing the <a href=\"https://www.retrotoon.world/prowlarr.php\" target=\"_blank\">RetroToon Prowlarr & Torznab integration</a> page and scrolling down to the <b>Your Passkey</b> section. (Passkey is the same as the APIkey)."
 
 login:
-  # using cookie method because login page has embedded Cloudflare turnstile
-  method: cookie
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: torznab.php
+  method: get
   inputs:
-    cookie: "{{ .Config.cookie }}"
-  test:
-    path: my.php
-    selector: a[href*="/logout.php"]
+    apikey: "{{ .Config.apikey }}"
+    t: search
+    limit: 1
 
 search:
   paths:
-    - path: ajax_tsearch.php
+    - path: torznab.php
+      response:
+        type: xml
+
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ .Query.Type }}"
     q: "{{ .Keywords }}"
-    sort: "{{ .Config.sort }}"
-    type: "{{ .Config.type }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 100
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
 
   rows:
-    selector: "table[cellpadding=\"5\"] > tbody > tr:has(a[href^=\"download.php?id=\"]){{ if .Config.freeleech }}:has(span:contains(\"FREE\")){{ else }}{{ end }}"
+    selector: rss > channel > item
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+      selector: "[name=category]"
+      attribute: value
     title:
-      selector: a[href^="details.php?id="]
+      selector: title
     details:
-      selector: a[href^="details.php?id="]
-      attribute: href
+      selector: link
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-    poster:
-      selector: img.hover-poster
-      attribute: src
+      selector: enclosure
+      attribute: url
     date:
-      # 2026-05-11<br />17:36:23
-      selector: td:nth-child(6)
+      # Thu, 15 Jan 2026 16:24:34 +0000
+      selector: pubDate
       filters:
-        - name: append
-          args: " +12:00" # NZD
         - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
-      selector: td:nth-child(7)
-    grabs:
-      selector: td:nth-child(8)
+      selector: "[name=size]"
+      attribute: value
+    imdbid:
+      selector: "[name=imdbid]"
+      attribute: value
     seeders:
-      selector: td:nth-child(9)
+      selector: "[name=seeders]"
+      attribute: value
     leechers:
-      selector: td:nth-child(10)
+      selector: "[name=leechers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
     downloadvolumefactor:
-      case:
-        span:contains("FREE"): 0
-        "*": 1
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
     uploadvolumefactor:
-      text: 1
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# Engine n/a
+# torznab xml

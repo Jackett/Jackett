@@ -414,7 +414,6 @@ Prior versions of Jackett are no longer supported.
  * HD-Torrents (HDT)
  * HD-UNiT3D
  * HDArea (HDA)
- * HDBao
  * HDBits [![(invite needed)][inviteneeded]](#)
  * HDCiTY (HDC)
  * HDClone
@@ -498,6 +497,7 @@ Prior versions of Jackett are no longer supported.
  * MonikaDesign (MDU)
  * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
  * MouseBits
+ * Musopia (音乐乌托邦)
  * Muxuege [![(invite needed)][inviteneeded]](#)
  * MyAnonamouse (MAM)
  * MySpleen [![(invite needed)][inviteneeded]](#)
@@ -598,7 +598,6 @@ Prior versions of Jackett are no longer supported.
  * SiamBIT [PAY2DL]
  * Siqi
  * SkipTheCommercials
- * Slobit Media
  * SnowPT (SSPT)
  * SoulVoice (聆音Club) [![(invite needed)][inviteneeded]](#)
  * SpeedApp (SceneFZ, XtreMeZone / MYXZ, ICE Torrent)

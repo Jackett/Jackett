@@ -12,15 +12,19 @@ caps:
   categorymappings:
     - {id: 1, cat: XXX, desc: "Anal"}
     - {id: 2, cat: XXX, desc: "Asian"}
+    - {id: 15, cat: XXX, desc: "Straight"}
     - {id: 3, cat: XXX, desc: "Amateur"}
+    - {id: 14, cat: XXX, desc: "Creampie"}
+    - {id: 16, cat: XXX, desc: "Teen"}
     - {id: 5, cat: XXX, desc: "Hardcore"}
     - {id: 6, cat: XXX, desc: "Latina"}
     - {id: 7, cat: XXX, desc: "Lesbian"}
+    - {id: 18, cat: XXX, desc: "Blowjob"}
     - {id: 8, cat: XXX, desc: "Milf"}
     - {id: 10, cat: XXX, desc: "Gang Bang"}
     - {id: 11, cat: XXX, desc: "Shemale"}
     - {id: 13, cat: XXX, desc: "Siterip"}
-    - {id: 14, cat: XXX, desc: "Creampie"}
+    - {id: 17, cat: XXX, desc: "Gay / Bi"}
 
   modes:
     search: [q]

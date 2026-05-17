@@ -474,6 +474,7 @@ namespace Jackett.Updater
                 "Definitions/hd4free.yml",
                 "Definitions/hdai.yml",
                 "Definitions/hdatmos.yml",
+                "Definitions/hdbao.yml",
                 "Definitions/hdbc.yml", // renamed to hdbitscom
                 "Definitions/hdbits.yml",
                 "Definitions/hdbitscom.yml",
@@ -631,6 +632,7 @@ namespace Jackett.Updater
                 "Definitions/p2pelite.yml",
                 "Definitions/pandahd.yml",
                 "Definitions/parabellumhd.yml",
+                "Definitions/parabellumhd-api.yml",
                 "Definitions/parnuxi.yml",
                 "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
@@ -730,6 +732,7 @@ namespace Jackett.Updater
                 "Definitions/skytorrents.yml",
                 "Definitions/skytorrentsclone.yml", // renamed to skytorrents-lol
                 "Definitions/skytorrentsclone2.yml", // renamed to skytorrents-to
+                "Definitions/slobitmedia-api.yml",
                 "Definitions/slosoul.yml",
                 "Definitions/solidtorrents.yml", // merged with bitsearch
                 "Definitions/soundpark.yml",
