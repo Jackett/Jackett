@@ -447,7 +447,6 @@ Prior versions of Jackett are no longer supported.
  * IPTorrents (IPT)
  * ItaTorrents
  * JME-REUNIT3D
- * JoyHD (JHD) [![(invite needed)][inviteneeded]](#)
  * JPopsuki
  * JPTV4us
  * KamePT [![(invite needed)][inviteneeded]](#)
