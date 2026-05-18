@@ -35,7 +35,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "You can find your API Key by accessing the <a href=\"https://bluetorrents.com/settings\" target=\"_blank\">BlueTorrents Settings</a>  page, and scrolling down to the <b>API keys</b> section."
+    default: "You can find your API Key by accessing the <a href=\"https://bluetorrents.com/settings\" target=\"_blank\">BlueTorrents Settings</a> page, and scrolling down to the <b>API keys</b> section."
   - name: info_3x
     type: info
     label: Including 3X
