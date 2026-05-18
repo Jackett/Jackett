@@ -99,7 +99,7 @@ search:
     # does not support imdbid searches
 
   rows:
-    selector: "div.torrents-container > table > tbody > tr > td.text > table >  tbody > tr:has(a[href^=\"details.php?id=\"]):not(:has(a[href=\"browse.php?cat=0\"]))"
+    selector: "div.torrents-container > table > tbody > tr > td.text > table > tbody > tr:has(a[href^=\"details.php?id=\"]):not(:has(a[href=\"browse.php?cat=0\"]))"
     after: 1
 
   fields:
