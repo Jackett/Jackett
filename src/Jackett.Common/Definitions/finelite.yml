@@ -109,7 +109,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: table.main > tbody >  tr:has(a[href^="/lataa/"])
+    selector: table.main > tbody > tr:has(a[href^="/lataa/"])
 
   fields:
     category:

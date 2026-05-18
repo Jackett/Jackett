@@ -110,7 +110,7 @@ search:
     # does not support imdbid searching or have imdb links in results.
 
   rows:
-    selector: table.crowdedtablecenter > tbody >  tr:has(a[href^="details.php?id="])
+    selector: table.crowdedtablecenter > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
