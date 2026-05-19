@@ -668,7 +668,6 @@ Prior versions of Jackett are no longer supported.
  * TreZzoR
  * TurkSeed (Aturk)
  * TurkTorrent (TT) [PAY2DL]
- * TV Chaos UK (TVCUK)
  * TVstore
  * U2 (U2分享園@動漫花園) [![(invite needed)][inviteneeded]](#)
  * UBits
