@@ -64,7 +64,7 @@ settings:
     default: "Accounts that have not logged in for 150 days will be disabled, and may be deleted shortly afterwards."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

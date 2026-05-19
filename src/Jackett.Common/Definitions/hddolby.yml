@@ -79,7 +79,7 @@ search:
     - path: torrents.php
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }} {{ else }}{{ end }}{{ .Keywords }}"
     # 0=incldead, 1=active, 2=dead
     incldead: 0
     # show promotions: 0=all, 1=normal, 2=free, 3=2x, 4=2xFree, 5=50%, 6=2x50%, 7=30%
@@ -175,9 +175,5 @@ search:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
     description:
-      selector: td.rowfollow:nth-child(2)
-      remove: a, b, font, img, span.tags
-      filters:
-        - name: re_replace
-          args: ["(?i)\\s*(剩余时间:|剩餘時間：|will end in)\\s*", ""]
+      selector: table.torrentname td.embedded:first-child > span:last-child
 # NexusPHP Standard v1.5 Beta 4

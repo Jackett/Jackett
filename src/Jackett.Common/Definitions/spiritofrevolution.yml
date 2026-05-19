@@ -6,9 +6,10 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://sor-next.top/
+  - https://sor-next.org/
 legacylinks:
   - https://sor-next.tk/
+  - https://sor-next.top/
 
 caps:
   categorymappings:

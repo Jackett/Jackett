@@ -61,7 +61,7 @@ settings:
     default: "The account will be automatically deleted if you are a registered user who is more than 14 days old and has not uploaded or downloaded data."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

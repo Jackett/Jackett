@@ -5,6 +5,8 @@ description: "Vault network is a Private Torrent Tracker for MOVIES / TV / GENER
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - b0d73bb07c3b4cc1f8eb9231a4443e34e876d79e # self-signed.
 links:
   - https://vault-network.net/
 

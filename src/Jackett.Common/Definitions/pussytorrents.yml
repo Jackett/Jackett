@@ -31,6 +31,7 @@ settings:
       seeders: seeders
       size: size
       nameSort: title
+      score: score
   - name: type
     type: select
     label: Order requested from site
@@ -38,6 +39,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_score
+    type: info
+    label: About sorting by score
+    default: "In order to sort by score you first must have edited your <a href=\"https://pussytorrents.org/\" target=\"_blank\">PussyTorrents</a> account profile and changed <b>Results default sorting method</b> to <b>By Score</b>."
 
 login:
   path: user/account/login/
@@ -59,8 +64,8 @@ search:
   inputs:
     query: "{{ .Keywords }}"
     page: 1
-    orderby: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
+    orderby: "{{ if ne .Config.sort \"score\" }}{{ .Config.sort }}{{ else }}{{ end }}"
+    order: "{{ if ne .Config.sort \"score\" }}{{ .Config.type }}{{ else }}{{ end }}"
 
   rows:
     selector: table#torrenttable > tbody > tr:has(a[href^="/download/"])
@@ -95,8 +100,16 @@ search:
       selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
+    description:
+      selector: td.name
+      remove: span.title, span.subnote
     downloadvolumefactor:
-      text: 0
+      text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.4
+    minimumseedtime:
+      # 60 hours (as seconds = 2.5 x 24 x 60 x 60)
+      text: 216000
 # engine n/a

@@ -57,6 +57,8 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.phd/",
             "https://dontorrent.gripe/", // no longer compatible, switched to JS download
             "https://dontorrent.promo/", // no longer compatible, switched to JS download
+            "https://dontorrent.gift/", // no longer compatible, switched to JS download
+            "https://dontorrent.cfd/", // no longer compatible, switched to JS download
         };
         public override string Language => "es-ES";
         public override string Type => "public";

@@ -59,7 +59,7 @@ settings:
     default: "Your account will be automatically disabled after 90 days of inactivity. After 120 days your account will be pruned and is permanently deleted."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -190,4 +190,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 9.1.7
+# json UNIT3D 9.2.0

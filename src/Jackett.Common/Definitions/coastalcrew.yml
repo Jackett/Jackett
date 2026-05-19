@@ -51,6 +51,8 @@ caps:
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
 
+    - {id: 143, cat: Console/PS4, desc: "Game PS4/PS5"}
+    - {id: 144, cat: Console/Other, desc: "Game Nintendo Switch"}
     - {id: 16, cat: Console, desc: "Game Misc"}
     - {id: 17, cat: PC/Games, desc: "Game PC"}
     - {id: 18, cat: Console/PS3, desc: "Game PS2"}

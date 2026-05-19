@@ -62,6 +62,10 @@ settings:
       MULTi POLISH: MULTi POLISH
   - name: info_flaresolverr
     type: info_flaresolverr
+  - name: info_limit
+    type: info
+    label: "Download Limit"
+    default: "If your downloads fail then access the site with your browser and check your messages, you've likely exceeded your limit."
 
 login:
   path: logowanie

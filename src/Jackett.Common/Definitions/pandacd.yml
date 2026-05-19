@@ -1,0 +1,89 @@
+---
+id: pandacd
+name: PandaCD
+description: "PandaCD is a Public Tracker for MUSIC (Creative Commons and artist-permitted content)"
+language: en-US
+type: public
+encoding: UTF-8
+
+links:
+  - https://pandacd.io/
+
+caps:
+  categorymappings:
+    # https://pandacd.io/api/torznab?t=caps
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio/MP3, desc: "MP3"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Lossless"}
+
+  modes:
+    search: [q]
+    music-search: [q, artist, album, genre]
+
+settings: []
+
+search:
+  paths:
+    - path: api/torznab
+      response:
+        type: xml
+
+  inputs:
+    t: "{{ .Query.Type }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    artist: "{{ .Query.Artist }}"
+    album: "{{ .Query.Album }}"
+    genre: "{{ .Query.Genre }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: guid
+    download:
+      selector: enclosure
+      attribute: url
+    date:
+      # Wed, 15 Apr 2026 02:01:34 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=leechers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    files:
+      selector: "[name=files]"
+      attribute: value
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+    genre:
+      selector: "[name=genre]"
+      attribute: value
+    description:
+      text: "{{ .Result.genre }}"
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+# torznab xml

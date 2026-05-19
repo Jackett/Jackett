@@ -50,7 +50,7 @@ search:
     sort: "{{ .Config.type }}"
 
   rows:
-    selector: table  > tbody > tr:has(td.views-field-title)
+    selector: table > tbody > tr:has(td.views-field-title)
 
   fields:
     title:

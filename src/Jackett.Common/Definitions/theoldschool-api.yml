@@ -16,8 +16,8 @@ caps:
     - {id: 7, cat: TV, desc: "Series VOSTFR"}
     - {id: 8, cat: TV, desc: "Series Pack"}
     - {id: 9, cat: TV, desc: "Series Pack VOSTFR"}
-    - {id: 3, cat: Books, desc: "Ebooks"}
     - {id: 4, cat: Console, desc: "Jeux"}
+    - {id: 3, cat: Books, desc: "Ebooks"}
     - {id: 5, cat: PC, desc: "Logiciel"}
     - {id: 10, cat: TV/Sport, desc: "Sports"}
 
@@ -40,6 +40,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: tmdbidonly
     type: checkbox
     label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
@@ -89,7 +93,7 @@ settings:
     default: "'Pruning' account<ul><li>Your membership requires that you remain active at TOS.</li><li>To not be disabled, you must log in to the tracker at least once every 90 days or continuously see at least 1 torrent. If you haven't logged in for more than 90 days and you don't have any seed torrents as of midnight UTC, your account will be deactivated.</li><li>To be reactivated, you also have 30 days to log in and show that your account is back to normal.</li><li>Disabled account: 90 days of inactivity and no seed torrent.</li><li>'Pruned' account: Has been deactivated for 30 days , and 90 days of inactivity.</li></ul>"
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -112,8 +116,8 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    # seasonNumber: "{{ .Query.Season }}" # not supported
-    # episodeNumber: "{{ .Query.Ep }}" # not supported
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
     imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
@@ -133,8 +137,15 @@ search:
   fields:
     category:
       selector: category_id
-    title_phase1:
+    title_optional:
       selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title_phase1:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     title_vfq:
       text: "{{ .Result.title_phase1 }}"
       filters:
@@ -177,13 +188,14 @@ search:
       selector: meta.genres
       filters:
         - name: re_replace
-          args: ["(?i)^None$", ""]
-        - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
-    files:
-      selector: num_file
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -200,7 +212,12 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
       # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
@@ -210,16 +227,20 @@ search:
         75%: 0.25
         100%: 0 # freeleech
         "*": 0 # catch errors
-    uploadvolumefactor:
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
       # api returns False, True
       selector: double_upload
       case:
         False: 1 # normal
         True: 2 # double
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # global MR is 0.6 but torrents must be seeded for 2 days regardless of ratio
 #    minimumratio:
 #      text: 0.6
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D custom edition 1.1.0 (based on 7.2.5)
+# json UNIT3D custom edition 2.3.6 (based on 9.1.1)

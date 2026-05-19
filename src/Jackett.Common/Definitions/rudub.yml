@@ -8,6 +8,7 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 followredirect: true
+
 links:
   - https://r2.rudub.world/
 legacylinks:
@@ -41,13 +42,16 @@ legacylinks:
   - https://dec25.rudub.bet/
   - http://dec26.rudub.bet/
   - https://dec26.rudub.bet/
+
 caps:
   categorymappings:
     - {id: 1, cat: TV, desc: "TV"}
+
   modes:
     search: [q]
     tv-search: [q, season, ep]
   allowrawsearch: true
+
 settings:
   - name: username
     type: text
@@ -83,6 +87,7 @@ settings:
     options:
       desc: desc
       asc: asc
+
 login:
   path: takelogin.php
   method: post
@@ -94,22 +99,27 @@ login:
   test:
     path: browse.php
     selector: a[href="logout.php"]
+
 search:
   paths:
     # http://rudub.tv/browse.php?search=&incldead=1&sort=4&type=desc
     - path: browse.php
+
   inputs:
     search: "{{ .Keywords }}"
     # 0 incldead, 1 active, 2 onlydead, 3 gold, 4 seedfree
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+
   keywordsfilters:
     # strip season and/or ep
     - name: re_replace
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""]
+
   rows:
     selector: div.card__torlist__browse_2
+
   fields:
     category:
       text: 1

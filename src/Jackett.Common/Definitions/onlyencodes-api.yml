@@ -56,7 +56,7 @@ settings:
     default: "You must log in once every 60 days or seed at least 1 torrent to not get disabled."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

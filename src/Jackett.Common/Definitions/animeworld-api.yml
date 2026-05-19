@@ -75,7 +75,7 @@ settings:
     default: "Accounts are set as inactive by the system after 180 days. After 270 days in inactive status, the accounts are automatically deleted from the system."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

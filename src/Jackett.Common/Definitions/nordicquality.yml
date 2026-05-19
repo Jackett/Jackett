@@ -68,7 +68,7 @@ settings:
     default: "Your membership requires that you stay active at NordicQuality. To not get disabled, you are required to login to the site at least once every 90 days."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

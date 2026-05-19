@@ -6,6 +6,8 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://f1gp.xyz/
+legacylinks:
   - https://f1gp.site/
 
 caps:
@@ -26,7 +28,15 @@ caps:
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
-    - {id: 20, cat: TV/Sport, desc: "Freeleech"}
+    - {id: 21, cat: TV/Sport, desc: "UFC"}
+    - {id: 22, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 23, cat: TV/Sport, desc: "Boxing"}
+    - {id: 24, cat: Other, desc: "Magazines - Books"}
+    - {id: 25, cat: TV/Sport, desc: "NNASCAR Cup Series"}
+    - {id: 26, cat: TV/Sport, desc: "Tennis"}
+    - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
+    - {id: 28, cat: TV/Sport, desc: "NBA"}
+    - {id: 29, cat: TV/Sport, desc: "Indy 500"}
 
   modes:
     search: [q]
@@ -78,7 +88,7 @@ login:
 
 search:
   paths:
-    # https://f1gp.site/index.php?page=torrents&search=&category=0&active=0
+    # https://f1gp.xyz/index.php?page=torrents&search=&category=0&active=0
     - path: index.php
   inputs:
     page: torrents
@@ -122,7 +132,7 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(11)
+      selector: td:nth-child(10)
     date:
       # auto adjusted by site account profile
       selector: td:nth-child(6)
@@ -153,6 +163,6 @@ search:
     minimumratio:
       text: 1.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-#  xbtitFM v4.1.32
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+#  xbtitFM v4.2.12

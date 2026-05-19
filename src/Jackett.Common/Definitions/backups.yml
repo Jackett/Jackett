@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: 115, cat: PC, desc: "2Play! Official"}
+    - {id: 115, cat: PC, desc: "2Play Official"}
     - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
@@ -60,6 +60,7 @@ caps:
     - {id: 68, cat: PC, desc: "Schmoomer"}
     - {id: 110, cat: Console, desc: "ScummVM"}
     - {id: 57, cat: Console, desc: "SEGA"}
+    - {id: 116, cat: PC, desc: "SiteRIP"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
     - {id: 75, cat: Audio, desc: "Soundtracks"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
@@ -67,6 +68,7 @@ caps:
     - {id: 97, cat: TV/Other, desc: "Tutorials"}
     - {id: 9, cat: TV, desc: "TV Packs"}
     - {id: 11, cat: TV, desc: "TV Shows"}
+    - {id: 117, cat: Console, desc: "Virtual Reality"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
     - {id: 26, cat: Console, desc: "XBOX"}
     - {id: 12, cat: Console, desc: "XBOX360"}
@@ -184,8 +186,6 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "dd-MM-yyyy HH:mm zzz"
-    minimumratio:
-      text: 1.0
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800

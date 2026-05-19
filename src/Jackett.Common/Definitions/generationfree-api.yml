@@ -18,6 +18,7 @@ caps:
     - {id: 4, cat: Console, desc: "Jeux"}
     - {id: 5, cat: PC, desc: "Logiciel"}
     - {id: 6, cat: Audio, desc: "Musique"}
+    - {id: 8, cat: TV/Sport, desc: "Sport"}
 
   modes:
     search: [q]
@@ -85,9 +86,23 @@ settings:
     type: info
     label: Account Inactivity
     default: "Accounts inactive for 45 days are automatically deleted (all ranks included). To remain active, simply log in and participate (downloads, forums, shoutbox, games). Accounts created solely to build up numbers will be deactivated. As a free tracker with a limited number of spots, we regularly delete inactive accounts."
+  - name: page_for_test
+    type: select
+    label: Page for TEST
+    default: 1
+    options:
+      1: "1"
+      2: "2"
+      3: "3"
+      4: "4"
+      5: "5"
+  - name: info_page
+    type: info
+    label: About TEST page
+    default: "Generation-Free's API only delivers torrents that are at least 12 hours old. Therefore, when there are more than 100 torrents loaded to the site in a day, the indexer TEST may fail with 0 results. To allow the TEST to successed you will need to select another page to fetch."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -119,6 +134,7 @@ search:
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
     perPage: 100
+    page: "{{ .Config.page_for_test }}"
 
   keywordsfilters:
     - name: re_replace

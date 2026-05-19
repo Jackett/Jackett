@@ -62,7 +62,7 @@ search:
       # 今天 00:35	 (Today)
       # 昨天 22:50	 (Yesterday)
       optional: true
-      selector: td:nth-child(1):contains("今天"),  td:nth-child(1):contains("昨天")
+      selector: td:nth-child(1):contains("今天"), td:nth-child(1):contains("昨天")
       filters:
         - name: replace
           args: ["今天", "Today"]

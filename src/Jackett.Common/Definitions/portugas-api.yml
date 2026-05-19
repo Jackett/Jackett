@@ -65,7 +65,7 @@ settings:
     default: "All users must log into their account at least once every 60 days, otherwise the account will be deactivated."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

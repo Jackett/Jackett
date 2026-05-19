@@ -102,7 +102,7 @@ settings:
     default: "<ul><li> login as much as possible – no login for 30 days results in the account as DISABLED.</li><li>Lack of login for another 60 days causes permanent account blocking.</li><li>after 90 days of inactivity, the account is automatically deleted by the system.</li><li>This policy applies to users in the following groups: User, PowerUser, SuperUser, and Leech.</li></ul>"
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

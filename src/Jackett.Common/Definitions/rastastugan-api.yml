@@ -67,7 +67,7 @@ settings:
     default: "You must log in to the website or the tracker must register activity from your Announce URL once every 90 days or your account will be disabled."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -197,4 +197,4 @@ search:
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800
-# json UNIT3D 9.1.7
+# json UNIT3D 9.2.0

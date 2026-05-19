@@ -28,37 +28,35 @@ caps:
     - {id: 10, cat: Movies/DVD, desc: "Movies: DVD-Ro", default: true}
     - {id: 11, cat: Movies/HD, desc: "Movies: HD", default: true}
     - {id: 12, cat: Movies/HD, desc: "Movies: HD-Ro", default: true}
-    - {id: 13, cat: TV/HD, desc: "HDTV Episodes", default: true}
-    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
     - {id: 16, cat: Movies, desc: "Movies: Old", default: true}
     - {id: 17, cat: Movies, desc: "Movies: Old-Ro", default: true}
     - {id: 18, cat: Movies, desc: "Movies: Pack", default: true}
     - {id: 19, cat: Movies, desc: "Movies: Pack-Ro", default: true}
+    - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
+    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
+    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
+    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRo", default: true}
+    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL", default: true}
+    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
+    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
+    - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
+    - {id: 13, cat: TV/HD, desc: "HDTV Episodes", default: true}
+    - {id: 14, cat: TV/HD, desc: "HDTV Episodes-Ro", default: true}
     - {id: 20, cat: TV, desc: "TV Episodes", default: true}
     - {id: 21, cat: TV, desc: "TV Episodes-Ro", default: true}
     - {id: 22, cat: Other, desc: "RoContent", default: true}
-    - {id: 24, cat: Movies/SD, desc: "Movies: XVID", default: true}
-    - {id: 25, cat: Movies/SD, desc: "Movies: XVID-Ro", default: true}
     - {id: 26, cat: PC/0day, desc: "Software", default: true}
     - {id: 28, cat: Audio, desc: "Music", default: true}
     - {id: 30, cat: PC/Games, desc: "Games: PC-ISO", default: true}
-    - {id: 31, cat: Movies/UHD, desc: "Movies: 4K", default: true}
-    - {id: 32, cat: Movies/UHD, desc: "Movies: 4KRo", default: true}
     - {id: 33, cat: PC/Games, desc: "Games: Packs", default: true}
     - {id: 42, cat: TV/Sport, desc: "Sport", default: true}
     - {id: 43, cat: Books, desc: "Documents", default: true}
     - {id: 44, cat: Other, desc: "Images", default: true}
     - {id: 49, cat: Other, desc: "Diverse", default: true}
-    - {id: 51, cat: PC/Mobile-Android, desc: "Android Apps", default: true}
-    - {id: 54, cat: Movies/WEB-DL, desc: "Movies: WEB-DL", default: true}
-    - {id: 55, cat: Movies/WEB-DL, desc: "Movies: WEB-DL Ro", default: true}
     - {id: 56, cat: TV/Documentary, desc: "Documentary", default: true}
     - {id: 57, cat: TV/Documentary, desc: "Documentary-Ro", default: true}
-    - {id: 81, cat: Movies/HD, desc: "Movies: x265-Ro", default: true}
-    - {id: 82, cat: Movies/HD, desc: "Movies: x265", default: true}
     - {id: 27, cat: XXX/x264, desc: "Movies: XXX", default: false}
     - {id: 34, cat: XXX/Pack, desc: "XXX Pack", default: false}
-    - {id: 60, cat: XXX/ImageSet, desc: "ImagesXXX", default: false}
 
   modes:
     search: [q]
@@ -78,13 +76,12 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: sort
+  - name: sort2
     type: select
     label: Sort requested from site
-    default: _
+    default: created_at
     options:
-      _: created
-      name: title
+      created_at: created
       seeders: seeders
       size: size
   - name: type
@@ -119,70 +116,71 @@ search:
   paths:
     # https://lastfiles.ro/torrents?keyword=tt8337290&category=32&genre=&torrent_status=free
     - path: torrents
-      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 51, 54, 55, 56, 57, 81, 82]
+      categories: [1, 2, 5, 6, 9, 10, 11, 12, 13, 14, 16, 17, 18, 19, 20, 21, 22, 24, 25, 26, 28, 30, 31, 32, 33, 42, 43, 44, 49, 54, 55, 56, 57, 81, 82]
       inputs:
         $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     # does not support multi categories
     - path: torrents/adult
-      categories: [27, 34, 60]
+      categories: [27, 34]
 
   inputs:
     keyword: "{{ .Keywords }}"
     # active, dead, free, double, seedbox
     torrent_status: "{{ if .Config.freeleech }}free{{ else }}active{{ end }}"
-    # no option to sort by date, and using direction without sort breaks search, but the default for all is desc,
-    # so we only add sort if it's anything other than date, and only add direction if it's asc
-    sort: "{{ re_replace .Config.sort \"_\" \"\" }}"
-    direction: "{{ re_replace .Config.type \"desc\" \"\" }}"
+    sort: "{{ .Config.sort2 }}"
+    direction: "{{ .Config.type }}"
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
 
   rows:
-    selector: table.table-hover > tbody > tr
+    selector: div.g-0:has(a[href*="/download/"])
 
   fields:
     category:
-      selector: img[src*="images/categories/"], img[src*="images/categoriesNORMALE/"]
+      selector: img[src*="images/categories"]
       attribute: src
       case:
         # not all categories are available at the moment, so some are deduced and unconfirmed
-        img[src$="/anime.png"]: 1
-        img[src$="/anime-ro.png"]: 2
-        img[src$="/bluray.png"]: 5
-        img[src$="/bluray-ro.png"]: 6
-        img[src$="/dvd.png"]: 9
-        img[src$="/dvd-ro.png"]: 10
-        img[src$="/hd.png"]: 11
-        img[src$="/hd-ro.png"]: 12
-        img[src$="/hdtve.png"]: 13
-        img[src$="/hdtve-ro.png"]: 14
-        img[src$="/oldies.png"]: 16
-        img[src$="/oldies-ro.png"]: 17
-        img[src$="/pack.png"]: 18
-        img[src$="/pack-ro.png"]: 19
-        img[src$="/tvepisode.png"]: 20
-        img[src$="/tvepisode-ro.png"]: 21
-        img[src$="/rocontent.png"]: 22
-        img[src$="/xvid.png"]: 24
-        img[src$="/xvid-ro.png"]: 25
-        img[src$="/soft.png"]: 26
-        img[src$="/xxx.png"]: 27
-        img[src$="/music.png"]: 28
-        img[src$="/pciso.png"]: 30
-        img[src$="/4k.png"]: 31
-        img[src$="/4kRO.png"]: 32
-        img[src$="/gpack.png"]: 33
-        img[src$="/packxxx.jpeg"]: 34
-        img[src$="/sport.png"]: 42
-        img[src$="/docs.png"]: 43
-        img[src$="/images.png"]: 44
-        img[src$="/misc.png"]: 49
-        img[src$="/android.png"]: 51
-        img[src$="/web-DL.png"]: 54
-        img[src$="/web-DLRO.png"]: 55
-        img[src$="/doc.png"]: 56
-        img[src$="/doc-ro.png"]: 57
-        img[src$="/imagesxxx.png"]: 60
-        img[src$="/x265ro.png"]: 81
-        img[src$="/x265.png"]: 82
+        img[src*="/anime.png"]: 1
+        img[src*="/anime-ro.png"]: 2
+        img[src*="/bluray.png"]: 5
+        img[src*="/bluray-ro.png"]: 6
+        img[src*="/dvd.png"]: 9
+        img[src*="/dvd-ro.png"]: 10
+        img[src*="/hd.png"]: 11
+        img[src*="/hd-ro.png"]: 12
+        img[src*="/hdtve.png"]: 13
+        img[src*="/hdtve-ro.png"]: 14
+        img[src*="/oldies.png"]: 16
+        img[src*="/oldies-ro.png"]: 17
+        img[src*="/pack.png"]: 18
+        img[src*="/pack-ro.png"]: 19
+        img[src*="/tvepisode.png"]: 20
+        img[src*="/tvepisode-ro.png"]: 21
+        img[src*="/rocontent.png"]: 22
+        img[src*="/xvid.png"]: 24
+        img[src*="/xvid-ro.png"]: 25
+        img[src*="/soft.png"]: 26
+        img[src*="/xxx.jpeg"]: 27
+        img[src*="/music.png"]: 28
+        img[src*="/pciso.png"]: 30
+        img[src*="/4k.png"]: 31
+        img[src*="/4kRO.png"]: 32
+        img[src*="/gpack.png"]: 33
+        img[src*="/xxxpack.jpeg"]: 34
+        img[src*="/sport.png"]: 42
+        img[src*="/docs.png"]: 43
+        img[src*="/images.png"]: 44
+        img[src*="/misc.png"]: 49
+        img[src*="/web-DL.png"]: 54
+        img[src*="/web-DLRO.png"]: 55
+        img[src*="/doc.png"]: 56
+        img[src*="/doc-ro.png"]: 57
+        img[src*="/x265ro.png"]: 81
+        img[src*="/x265.png"]: 82
     title:
       selector: a[href*="/torrents/"]
     details:
@@ -195,7 +193,8 @@ search:
         - name: regexp
           args: "src='(.+?)'"
     genre:
-      selector: div.mt-1, div.torrent-genres
+      selector: div.gap-2
+      remove: style
       filters:
         - name: replace
           args: ["\n", ""]
@@ -290,32 +289,20 @@ search:
     download:
       selector: a[href*="/download/"]
       attribute: href
-    date_elapsed:
-      # torrents
-      selector: td:nth-child(4) div[title]
-      optional: true
-      filters:
-        - name: append
-          args: " +01:00" # CET
-        - name: dateparse
-          args: "MMM dd, yyyy @ h:mm tt zzz"
-    date_added:
-      # torrents/adult
-      selector: td:nth-child(4):not(:has(div))
-      optional: true
-      filters:
-        - name: dateparse
-          args: "dd-MMM-yyyy zzz"
     date:
-      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
+      selector: div.d-none:contains(",")
+      filters:
+        - name: dateparse
+          args: "MMM dd, yyyy"
     size:
-      selector: td:nth-child(5)
+      selector: div.d-none:contains(" GB"), div.d-none:contains(" MB"), div.d-none:contains(" KB"), div.d-none:contains(" TB")
     grabs:
-      selector: td:nth-child(8)
+      selector: div.text-success
+      optional: true # torrents/adult does not have grabs
     seeders:
-      selector: td:nth-child(6)
+      selector: span.text-success
     leechers:
-      selector: td:nth-child(7)
+      selector: span.text-danger
     downloadvolumefactor:
       case:
         div.free-btn: 0
@@ -327,6 +314,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 12h (as seconds = 12 x 60 x 60)
+      text: 43200
 # Last Files V2

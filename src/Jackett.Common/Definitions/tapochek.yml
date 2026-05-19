@@ -105,6 +105,7 @@ caps:
     - {id: 682, cat: TV/Anime, desc: "UnCensored"}
     - {id: 681, cat: TV/Anime, desc: "Censored"}
     - {id: 697, cat: TV/Anime, desc: "Манга, обои, артбуки и др."}
+    - {id: 988, cat: TV/Anime, desc: "Китайская и корейская анимация"}
     # Music and Music Video      # Музыка и Музыкальное видео
     - {id: 450, cat: Audio, desc: "Общий раздел музыки"}
     - {id: 470, cat: Audio, desc: "Классическая музыка"}
@@ -332,12 +333,15 @@ search:
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
+  headers:
+    Cookie: ["tapochek_april_2026=1"]
+
   rows:
     selector: tr[id^="tor_"]:has(a[href^="./download.php?id="])
 
   fields:
     category:
-      selector: td a.gen
+      selector: a.gen
       attribute: href
       filters:
         - name: querystring
@@ -410,9 +414,11 @@ search:
       # unix
       selector: td:last-child > u
     seeders:
-      selector: td.seedmed > b
+      selector: td.seedmed
     leechers:
-      selector: td.leechmed > b
+      selector: td.leechmed
+    grabs:
+      selector: td:nth-child(9)
     downloadvolumefactor:
       case:
         img[src="images/tor_gold.gif"]: 0

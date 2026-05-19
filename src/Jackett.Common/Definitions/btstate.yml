@@ -27,16 +27,16 @@ settings:
 
 search:
   paths:
-    # https://btstate.com/api/searchByKeyword/2025?take=100&skip=0&page=1&pageSize=100
+    # https://btstate.com/api/searchByKeyword/2026?page=1&pageSize=20&category=all&timeSpan=all
     - path: "api/searchByKeyword/{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
       response:
         type: json
 
   inputs:
-    take: 100
-    skip: 0
     page: 1
-    pageSize: 100
+    pageSize: 20
+    category: all
+    timeSpan: all
 
   rows:
     selector: items

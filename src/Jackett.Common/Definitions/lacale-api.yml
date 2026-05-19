@@ -48,6 +48,7 @@ caps:
     # Vidéo
     - {id: video, cat: Movies, desc: "Vidéo"}
     - {id: video, cat: TV, desc: "Vidéo"}
+    - {id: video, cat: TV/Anime, desc: "Anime"}
     - {id: films, cat: Movies, desc: "Films"}
     - {id: spectacles-concerts, cat: TV/Other, desc: "Spectacles & Concerts"}
     - {id: sports, cat: TV/Sport, desc: "Sports"}

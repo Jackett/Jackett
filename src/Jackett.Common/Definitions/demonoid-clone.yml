@@ -1,0 +1,90 @@
+---
+id: demonoid-clone
+name: Demonoid Clone
+description: "Demonoid Clone is a Public Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://demonoid.nl/
+
+caps:
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: "Movies"}
+    - {id: TV Shows, cat: TV, desc: "TV Shows"}
+    - {id: Anime, cat: TV/Anime, desc: "Anime"}
+    - {id: Games, cat: PC/Games, desc: "Games"}
+    - {id: Music, cat: Audio, desc: "Music"}
+    - {id: Software, cat: PC/0day, desc: "Software"}
+    - {id: Books, cat: Books, desc: "Books"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://demonoid.nl/api/torrents.php?action=list&page=1&limit=100&search=720p
+    - path: api/torrents.php
+      response:
+        type: json
+
+  inputs:
+    action: list
+    page: 1
+    limit: 100
+    search: "{{ .Keywords }}"
+
+  keywordsfilters:
+    # replace spaces between words with percent wildcard
+    - name: re_replace
+      args: ["\\W+", "%"]
+
+  rows:
+    selector: torrents
+    count:
+      selector: pagination.total
+
+  fields:
+    category:
+      selector: category
+    title:
+      selector: name
+    download_link:
+      optional: true
+      selector: file_path
+    download:
+      text: "{{ if .Result.download_link }}/{{ .Result.download_link }}{{ else }}{{ end }}"
+    details:
+      selector: id
+      filters:
+        - name: prepend
+          args: "{{ .Config.sitelink }}}#/torrent/"
+    magnet:
+      optional: true
+      selector: magnet_link
+    date:
+      selector: created_at
+      filters:
+        - name: append
+          args: " -12:00" # NUT
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    size:
+      selector: file_size
+    grabs:
+      selector: downloads
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# json api

@@ -56,7 +56,7 @@ search:
     s: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # discount 0 all, 1 none, 2 30%, 3 50%, 4 70%, 5 free, 6 tempo free
     dp: 0
-    # dates 0 all,  1 this week, 2 this month, 3 this season, 4 this year
+    # dates 0 all, 1 this week, 2 this month, 3 this season, 4 this year
     add: 0
     # order: 1 uptime, 2 imdb, 3 comment, 4 size, 5 complete, 6 upload
     or: 1

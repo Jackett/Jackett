@@ -1,7 +1,7 @@
 ---
 id: keepfriends
 name: Keep Friends
-description: "Keep Friends (FRDS-PT)  is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
+description: "Keep Friends (FRDS-PT) is a CHINESE Private Torrent Tracker for HD MOVIES / TV"
 language: zh-CN
 type: private
 encoding: UTF-8
@@ -46,10 +46,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: english_title
-    type: checkbox
-    label: "Use English titles instead of Chinese ones (when available)."
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -86,13 +82,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     # currently supports only one query id at one time.
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if and .Query.DoubanID (eq .Query.IMDBID .False) }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if and (eq .Query.IMDBID .False) (eq .Query.DoubanID .False) }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 1 descr, 3 uploader, 4 imdburl, 5 doubankeywords (not working)
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}1{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if and .Query.DoubanID (eq .Query.IMDBID .False) }}1{{ else }}{{ end }}{{ if and (eq .Query.IMDBID .False) (eq .Query.DoubanID .False) }}0{{ else }}{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -125,8 +121,11 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
+      selector: img[class*="imdb_"]
+      attribute: class
+      filters:
+        - name: regexp
+          args: "imdb_(\\d+)"
     doubanid:
       selector: a[href*="movie.douban.com/subject/"]
       attribute: href
@@ -177,11 +176,16 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
+    title_alt:
+      selector: table.torrentname > tbody > tr > td.embedded:first-child
+      remove: a, b, div, font, img
+    title_raw_has_cjk:
+      text: "{{ .Result.title_raw }}"
+      filters:
+        - name: regexp
+          args: "([\\u4e00-\\u9fff])"
     description:
-      selector: "{{ if .Result._staff_edit }}td:nth-child(3){{ else }}td:nth-child(2){{ end }}"
-      remove: a, b, font, img, span
-    title_english:
-      selector: table.torrentname > tbody > tr > td.embedded
+      text: "{{ if .Result.title_raw_has_cjk }}{{ .Result.title_raw }}{{ else }}{{ .Result.title_alt }}{{ end }}"
     title:
-      text: "{{ if and .Config.english_title .Result.title_english }}{{ .Result.title_english }}{{ else }}{{ .Result.title_raw }}{{ end }}"
+      text: "{{ if .Result.title_raw_has_cjk }}{{ .Result.title_alt }}{{ else }}{{ .Result.title_raw }}{{ end }}"
 # NexusPHP Standard v1.5 Beta 4 (custom title search)

@@ -6,6 +6,8 @@ language: ro-RO
 type: private
 encoding: UTF-8
 links:
+  - https://animetorrents.io/
+legacylinks:
   - https://animetorrents.ro/
 
 caps:
