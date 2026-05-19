@@ -6,6 +6,8 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using AngleSharp.Dom;
+using AngleSharp.Html.Dom;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
@@ -37,6 +39,26 @@ namespace Jackett.Common.Indexers.Definitions
         private string BrowseUrl => SiteLink + "torrents.php";
         private string TodayUrl => SiteLink + "torrents.php?action=today";
         private static readonly Regex _EpisodeRegex = new Regex(@"(?:[SsEe]\d{2,4}){1,2}");
+        private static readonly Regex _PagerPageRegex = new Regex(@"[?&]page=(\d+)", RegexOptions.CultureInvariant, TimeSpan.FromSeconds(1));
+
+        // Hard cap on pages fetched per search; prevents runaway requests on very common terms.
+        // Same pattern as EpubLibre.MaxSearchPageLimit.
+        private const int MaxSearchPages = 6;
+
+        // Selectors are kept as named constants so a future site change touches only this block.
+        private const string SearchRowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
+        private const string PagerLinksSelector = "div.linkbox a[href*=\"page=\"]";
+        private const string EditionInfoSelector = ".edition_info";
+        private const string DetailLinkPrimarySelector = "a[href*=\"torrentid=\"]:not(.tooltip)";
+        private const string DetailLinkAnySelector = "a[href*=\"torrentid=\"]";
+        private const string DetailLinkLegacyPrimarySelector = "a[href^=\"torrents.php?id=\"]:not(.tooltip)";
+        private const string DetailLinkLegacyAnySelector = "a[href^=\"torrents.php?id=\"]";
+        private const string SeriesLinkSelector = "a[href^=\"series.php?id=\"]";
+        private const string CategoryLinkSelector = "a[href^=\"/torrents.php?filter_cat\"]";
+        private const string DownloadLinkSelector = "a[href^=\"torrents.php?action=download\"]";
+        private const string FreeLeechSelector = "strong[title=\"Free\"]";
+        private const string DateTooltipSelector = "span.time.bjtooltip";
+        private const string TorrentInfoSelector = "div.torrent_info";
 
         private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
@@ -279,9 +301,9 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<List<ReleaseInfo>> ParseUserSearchAsync(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchUrl = BrowseUrl;
             var isSearchAnime = query.Categories.Any(s => s == TorznabCatType.TVAnime.ID);
             var searchTerm = FixSearchTerm(query);
+
             var queryCollection = new NameValueCollection
             {
                 {"searchstr", StripSearchString(searchTerm, isSearchAnime)},
@@ -291,9 +313,10 @@ namespace Jackett.Common.Indexers.Definitions
                 {"action", "basic"},
                 {"searchsubmit", "1"}
             };
+            foreach (var cat in MapTorznabCapsToTrackers(query))
+                queryCollection.Add("filter_cat[" + cat + "]", "1");
 
             Dictionary<string, string> headers = null;
-
             if (!string.IsNullOrEmpty(configData.UserAgent.Value))
             {
                 headers = new Dictionary<string, string>
@@ -302,173 +325,240 @@ namespace Jackett.Common.Indexers.Definitions
                 };
             }
 
-            foreach (var cat in MapTorznabCapsToTrackers(query))
-            {
-                queryCollection.Add("filter_cat[" + cat + "]", "1");
-            }
+            // BJ-Share returns ~50 rows per page (configurable per user profile, max 100).
+            // Page 1 also exposes a pager which tells us the real total page count; we iterate
+            // up to that, capped by MaxSearchPages as a safety net against very common queries.
+            var totalPages = 1;
+            var state = new SearchParseState { Query = query, SearchTerm = searchTerm };
+            // HtmlParser is stateless; reuse a single instance across pages to avoid per-page allocations.
+            var parser = new HtmlParser();
 
-            searchUrl += "?" + queryCollection.GetQueryString();
-            var results = await RequestWithCookiesAsync(searchUrl, headers: headers);
-            if (IsSessionIsClosed(results))
+            for (var page = 1; page <= MaxSearchPages && page <= totalPages; page++)
             {
-                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
-                                    "made a mistake when copying it. Please check the settings.");
-            }
+                var pageUrl = BuildSearchUrl(queryCollection, page);
+                var results = await RequestWithCookiesAsync(pageUrl, headers: headers);
+                if (IsSessionIsClosed(results))
+                {
+                    throw new Exception("The user is not logged in. It is possible that the cookie has expired or you " +
+                                        "made a mistake when copying it. Please check the settings.");
+                }
 
-            try
-            {
-                const string rowsSelector = "table.torrent_table > tbody > tr:not(tr.colhead)";
-                var searchResultParser = new HtmlParser();
-                using var searchResultDocument = searchResultParser.ParseDocument(results.ContentString);
-                var rows = searchResultDocument.QuerySelectorAll(rowsSelector);
-                ICollection<int> groupCategory = null;
-                string groupTitle = null;
-                string groupYearStr = null;
-                var categoryStr = "";
-                foreach (var row in rows)
-                    try
+                try
+                {
+                    using var document = parser.ParseDocument(results.ContentString);
+
+                    if (page == 1)
+                        totalPages = Math.Min(MaxSearchPages, DiscoverTotalPages(document));
+
+                    var rows = document.QuerySelectorAll(SearchRowsSelector);
+                    if (rows.Length == 0)
+                        break;
+
+                    foreach (var row in rows)
                     {
-                        // ignore sub groups info row, it's just an row with an info about the next section, something like "Dual Áudio" or "Legendado"
-                        if (row.QuerySelector(".edition_info") != null)
-                            continue;
-
-                        // some torrents has more than one link, and the one with .tooltip is the wrong one in that case,
-                        // so let's try to pick up first without the .tooltip class,
-                        // if nothing is found, then we try again without that filter
-                        var qDetailsLink = row.QuerySelector("a[href*=\"torrentid=\"]:not(.tooltip)");
-                        if (qDetailsLink == null)
-                            qDetailsLink = row.QuerySelector("a[href*=\"torrentid=\"]");
-                        // fallback to old id= format for backward compatibility
-                        if (qDetailsLink == null)
-                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]:not(.tooltip)");
-                        if (qDetailsLink == null)
-                            qDetailsLink = row.QuerySelector("a[href^=\"torrents.php?id=\"]");
-                        if (qDetailsLink == null)
+                        try
                         {
-                            logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
-                            continue;
+                            var release = TryParseSearchRow(row, state);
+                            if (release != null)
+                                releases.Add(release);
                         }
-                        var title = StripSearchString(qDetailsLink.TextContent, false);
-
-                        var seasonEl = row.QuerySelector("a[href*=\"torrentid=\"]");
-                        string seasonEp = null;
-                        if (seasonEl != null)
+                        catch (Exception ex)
                         {
-                            var seasonMatch = _EpisodeRegex.Match(seasonEl.TextContent);
-                            seasonEp = seasonMatch.Success ? seasonMatch.Value : null;
+                            logger.Error(ex, $"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
                         }
-                        seasonEp ??= _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
-
-                        ICollection<int> category = null;
-                        string yearStr = null;
-                        if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent")) // group/ungrouped headers
-                        {
-                            var qCatLink = row.QuerySelector("a[href^=\"/torrents.php?filter_cat\"]");
-                            categoryStr = qCatLink.GetAttribute("href").Split('=')[1].Split('&')[0];
-                            category = MapTrackerCatToNewznab(categoryStr);
-
-                            var torrentInfoEl = row.QuerySelector("div.torrent_info");
-                            if (torrentInfoEl != null)
-                            {
-                                // valid for torrent grouped but that has only 1 episode yet
-                                yearStr = torrentInfoEl.GetAttribute("data-year");
-                            }
-                            yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
-
-                            if (row.ClassList.Contains("group")) // group headers
-                            {
-                                groupCategory = category;
-                                groupTitle = title;
-                                groupYearStr = yearStr;
-                                continue;
-                            }
-                        }
-
-                        var release = new ReleaseInfo
-                        {
-                            MinimumRatio = 1,
-                            MinimumSeedTime = 0
-                        };
-                        var qDlLink = row.QuerySelector("a[href^=\"torrents.php?action=download\"]");
-                        var qSize = row.QuerySelector("td:nth-last-child(4)");
-                        var qGrabs = row.QuerySelector("td:nth-last-child(3)");
-                        var qSeeders = row.QuerySelector("td:nth-last-child(2)");
-                        var qLeechers = row.QuerySelector("td:nth-last-child(1)");
-                        var qFreeLeech = row.QuerySelector("strong[title=\"Free\"]");
-                        var nationalTitle = "";
-                        if (row.ClassList.Contains("group_torrent")) // torrents belonging to a group
-                        {
-                            release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
-                            release.Title = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, true);
-                            nationalTitle = ParseTitle(groupTitle, seasonEp, groupYearStr, categoryStr, false);
-                            release.Category = groupCategory;
-                        }
-                        else if (row.ClassList.Contains("torrent")) // standalone/un grouped torrents
-                        {
-                            release.Description = row.QuerySelector("div.torrent_info").TextContent;
-                            release.Title = ParseTitle(title, seasonEp, yearStr, categoryStr, true);
-                            nationalTitle = ParseTitle(title, seasonEp, yearStr, categoryStr, false);
-                            release.Category = category;
-                        }
-
-                        release.Description = release.Description.Replace(" / Free", ""); // Remove Free Tag
-                        release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL "); // Fix web/web-dl
-                        release.Description = release.Description.Replace("Full HD", "1080p");
-                        // Handles HDR conflict
-                        release.Description = release.Description.Replace("/ HD /", "/ 720p /");
-                        release.Description = release.Description.Replace("/ HD]", "/ 720p]");
-                        release.Description = release.Description.Replace("4K", "2160p");
-                        release.Description = release.Description.Replace("SD", "480p");
-                        release.Description = release.Description.Replace("Dual Áudio", "Dual");
-
-                        // Adjust the description in order to can be read by Radarr and Sonarr
-                        var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
-
-                        release.Title = AppendDescriptionToTitle(release.Title, cleanDescription, release.Description);
-                        nationalTitle = AppendDescriptionToTitle(nationalTitle, cleanDescription, release.Description);
-
-                        // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46")
-                        var dateStr = row.QuerySelector("span.time.bjtooltip")?.GetAttribute("title");
-
-                        if (!string.IsNullOrWhiteSpace(dateStr) &&
-                            DateTime.TryParseExact(dateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var publishDate))
-                        {
-                            release.PublishDate = publishDate;
-                        }
-                        else
-                        {
-                            release.PublishDate = DateTime.Today;
-                        }
-
-                        // check for previously stripped search terms
-                        if (!query.MatchQueryStringAND(release.Title, null, searchTerm) && !query.MatchQueryStringAND(nationalTitle, null, searchTerm))
-                        {
-                            continue;
-                        }
-
-                        var size = qSize.TextContent;
-                        release.Size = ParseUtil.GetBytes(size);
-                        release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
-                        release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
-                        release.Guid = release.Link;
-                        release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
-                        release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
-                        release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
-                        release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
-                        release.UploadVolumeFactor = 1;
-                        releases.Add(release);
                     }
-                    catch (Exception ex)
-                    {
-                        logger.Error(ex, $"{Id}: Error while parsing row '{row.OuterHtml}': {ex.Message}");
-                    }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(results.ContentString, ex);
+                }
+                catch (Exception ex)
+                {
+                    // Partial failure: surface the error and return whatever we have collected so far
+                    // rather than dropping all earlier pages of valid results.
+                    logger.Warn(ex, $"{Id}: Failed to parse page {page} of {totalPages}; returning {releases.Count} releases collected so far.");
+                    OnParseError(results.ContentString, ex);
+                    break;
+                }
+
+                // Honor TorznabQuery.Limit so we do not over-fetch when the caller (e.g. Sonarr) only
+                // wants a small page of results.
+                if (query.Limit > 0 && releases.Count >= query.Limit)
+                    break;
             }
 
             return releases;
+        }
+
+        private string BuildSearchUrl(NameValueCollection parameters, int page)
+        {
+            var builder = new UriBuilder(BrowseUrl);
+            var parts = new List<string>(parameters.Count + 1);
+            foreach (string key in parameters)
+            {
+                var value = parameters[key] ?? string.Empty;
+                parts.Add($"{Uri.EscapeDataString(key)}={Uri.EscapeDataString(value)}");
+            }
+            if (page > 1)
+                parts.Add("page=" + page);
+            builder.Query = string.Join("&", parts);
+            return builder.Uri.ToString();
+        }
+
+        private static int DiscoverTotalPages(IHtmlDocument document)
+        {
+            var maxPage = 1;
+            var pagerLinks = document.QuerySelectorAll(PagerLinksSelector);
+            foreach (var link in pagerLinks)
+            {
+                var href = link.GetAttribute("href") ?? string.Empty;
+                var match = _PagerPageRegex.Match(href);
+                if (match.Success && int.TryParse(match.Groups[1].Value, out var pageNum) && pageNum > maxPage)
+                    maxPage = pageNum;
+            }
+            return maxPage;
+        }
+
+        private ReleaseInfo TryParseSearchRow(IElement row, SearchParseState state)
+        {
+            // Skip sub-group info rows (e.g., "Dual Áudio" / "Legendado" section headers).
+            if (row.QuerySelector(EditionInfoSelector) != null)
+                return null;
+
+            // Some torrents have multiple links to the details page; the one with the .tooltip class
+            // is usually wrong, so try the non-tooltip selector first and fall back progressively.
+            var qDetailsLink = row.QuerySelector(DetailLinkPrimarySelector)
+                               ?? row.QuerySelector(DetailLinkAnySelector)
+                               ?? row.QuerySelector(DetailLinkLegacyPrimarySelector)
+                               ?? row.QuerySelector(DetailLinkLegacyAnySelector);
+            if (qDetailsLink == null)
+            {
+                logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': Can't find the right details link");
+                return null;
+            }
+
+            var title = StripSearchString(qDetailsLink.TextContent, false);
+
+            // For TV/Anime series rows the show name lives in a separate <a href="series.php?id=...">
+            // link; the details link only contains the season label (e.g. "S05"). Use the series link
+            // text so the search filter matches the show name instead of the season label.
+            var qSeriesLink = row.QuerySelector(SeriesLinkSelector);
+            if (qSeriesLink != null)
+            {
+                var seriesName = qSeriesLink.TextContent.Trim();
+                if (!string.IsNullOrEmpty(seriesName))
+                    title = StripSearchString(seriesName, false);
+            }
+
+            var seasonEl = row.QuerySelector(DetailLinkAnySelector);
+            string seasonEp = null;
+            if (seasonEl != null)
+            {
+                var seasonMatch = _EpisodeRegex.Match(seasonEl.TextContent);
+                seasonEp = seasonMatch.Success ? seasonMatch.Value : null;
+            }
+            seasonEp ??= _EpisodeRegex.Match(qDetailsLink.TextContent).Value;
+
+            ICollection<int> category = null;
+            string yearStr = null;
+            if (row.ClassList.Contains("group") || row.ClassList.Contains("torrent"))
+            {
+                var qCatLink = row.QuerySelector(CategoryLinkSelector);
+                var categoryHref = qCatLink?.GetAttribute("href");
+                if (string.IsNullOrEmpty(categoryHref) || !categoryHref.Contains('='))
+                {
+                    logger.Error($"{Id}: Error while parsing row '{row.OuterHtml}': missing or malformed category link");
+                    return null;
+                }
+                state.CategoryStr = categoryHref.Split('=')[1].Split('&')[0];
+                category = MapTrackerCatToNewznab(state.CategoryStr);
+
+                var torrentInfoEl = row.QuerySelector(TorrentInfoSelector);
+                if (torrentInfoEl != null)
+                    yearStr = torrentInfoEl.GetAttribute("data-year");
+                yearStr ??= qDetailsLink.NextSibling.TextContent.Trim().TrimStart('[').TrimEnd(']');
+
+                if (row.ClassList.Contains("group"))
+                {
+                    state.GroupCategory = category;
+                    state.GroupTitle = title;
+                    state.GroupYearStr = yearStr;
+                    return null;
+                }
+            }
+
+            var release = new ReleaseInfo
+            {
+                MinimumRatio = 1,
+                MinimumSeedTime = 0
+            };
+            var qDlLink = row.QuerySelector(DownloadLinkSelector);
+            var qSize = row.QuerySelector("td:nth-last-child(4)");
+            var qGrabs = row.QuerySelector("td:nth-last-child(3)");
+            var qSeeders = row.QuerySelector("td:nth-last-child(2)");
+            var qLeechers = row.QuerySelector("td:nth-last-child(1)");
+            var qFreeLeech = row.QuerySelector(FreeLeechSelector);
+            var nationalTitle = "";
+            if (row.ClassList.Contains("group_torrent"))
+            {
+                release.Description = Regex.Match(qDetailsLink.TextContent, @"\[.*?\]").Value;
+                release.Title = ParseTitle(state.GroupTitle, seasonEp, state.GroupYearStr, state.CategoryStr, true);
+                nationalTitle = ParseTitle(state.GroupTitle, seasonEp, state.GroupYearStr, state.CategoryStr, false);
+                release.Category = state.GroupCategory;
+            }
+            else if (row.ClassList.Contains("torrent"))
+            {
+                release.Description = row.QuerySelector(TorrentInfoSelector).TextContent;
+                release.Title = ParseTitle(title, seasonEp, yearStr, state.CategoryStr, true);
+                nationalTitle = ParseTitle(title, seasonEp, yearStr, state.CategoryStr, false);
+                release.Category = category;
+            }
+
+            release.Description = release.Description.Replace(" / Free", "");
+            release.Description = release.Description.Replace("/ WEB ", "/ WEB-DL ");
+            release.Description = release.Description.Replace("Full HD", "1080p");
+            // Handles HDR conflict
+            release.Description = release.Description.Replace("/ HD /", "/ 720p /");
+            release.Description = release.Description.Replace("/ HD]", "/ 720p]");
+            release.Description = release.Description.Replace("4K", "2160p");
+            release.Description = release.Description.Replace("SD", "480p");
+            release.Description = release.Description.Replace("Dual Áudio", "Dual");
+
+            // Adjust the description so it can be read by Radarr/Sonarr.
+            var cleanDescription = release.Description.Trim().TrimStart('[').TrimEnd(']');
+            release.Title = AppendDescriptionToTitle(release.Title, cleanDescription, release.Description);
+            nationalTitle = AppendDescriptionToTitle(nationalTitle, cleanDescription, release.Description);
+
+            // Extract publish date from the time span tooltip (e.g., title="Feb 09 2026, 15:46").
+            var dateStr = row.QuerySelector(DateTooltipSelector)?.GetAttribute("title");
+            release.PublishDate = !string.IsNullOrWhiteSpace(dateStr) &&
+                                  DateTime.TryParseExact(dateStr, "MMM dd yyyy, HH:mm", CultureInfo.InvariantCulture, DateTimeStyles.None, out var publishDate)
+                ? publishDate
+                : DateTime.Today;
+
+            // Drop rows whose parsed title doesn't actually contain the search term (BJ-Share's
+            // search matches IMDb tags / Titan* prefix / etc., which we don't want surfacing).
+            if (!state.Query.MatchQueryStringAND(release.Title, null, state.SearchTerm) &&
+                !state.Query.MatchQueryStringAND(nationalTitle, null, state.SearchTerm))
+                return null;
+
+            release.Size = ParseUtil.GetBytes(qSize.TextContent);
+            release.Link = new Uri(SiteLink + qDlLink.GetAttribute("href"));
+            release.Details = new Uri(SiteLink + qDetailsLink.GetAttribute("href"));
+            release.Guid = release.Link;
+            release.Grabs = ParseUtil.CoerceLong(qGrabs.TextContent);
+            release.Seeders = ParseUtil.CoerceInt(qSeeders.TextContent);
+            release.Peers = ParseUtil.CoerceInt(qLeechers.TextContent) + release.Seeders;
+            release.DownloadVolumeFactor = qFreeLeech != null ? 0 : 1;
+            release.UploadVolumeFactor = 1;
+            return release;
+        }
+
+        // Mutable per-search state shared across rows on a page (group accumulator + query context).
+        private sealed class SearchParseState
+        {
+            public TorznabQuery Query { get; set; }
+            public string SearchTerm { get; set; }
+            public ICollection<int> GroupCategory { get; set; }
+            public string GroupTitle { get; set; }
+            public string GroupYearStr { get; set; }
+            public string CategoryStr { get; set; } = string.Empty;
         }
 
         private async Task<List<ReleaseInfo>> ParseLast24HoursAsync()
