@@ -843,6 +843,7 @@ namespace Jackett.Updater
                 "Definitions/turknova.yml",
                 "Definitions/turkseed.yml",
                 "Definitions/turktracker.yml",
+                "Definitions/tvchaosuk.yml",
                 "Definitions/tvroad.yml",
                 "Definitions/twilight.yml",
                 "Definitions/twilightszoom.yml",
