@@ -651,6 +651,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentBD
  * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
+ * TorrentClaw [![(invite needed)][inviteneeded]](#)
  * TorrentDay (TD)
  * TorrentDD (TodayBit)
  * Torrenteros (TTR)
