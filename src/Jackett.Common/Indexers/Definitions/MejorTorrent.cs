@@ -173,7 +173,7 @@ namespace Jackett.Common.Indexers.Definitions
             try
             {
                 var searchResultParser = new HtmlParser();
-                using var doc = searchResultParser.ParseDocument(result.ContentString);
+                using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
                 var container = doc.QuerySelector(".gap-y-3 > div:nth-child(1) > div:nth-child(1)");
                 var parsedDetailsLink = new List<string>();
@@ -250,6 +250,7 @@ namespace Jackett.Common.Indexers.Definitions
                         // check there are results
                         var rows = table.Children;
                         if (rows is { Length: > 0 })
+                        {
                             foreach (var row in rows)
                             {
                                 var rowQuality = row.Children[0].Children[0].Children[0].TextContent;
@@ -257,8 +258,9 @@ namespace Jackett.Common.Indexers.Definitions
                                 var rowDetailsLink = row.Children[0].GetAttribute("href");
                                 var rowMejortorrentCat = row.Children[1].TextContent;
                                 await ParseRelease(releases, rowTitle, rowDetailsLink, rowMejortorrentCat,
-                                    null, rowQuality, query, matchWords);
+                                                   null, rowQuality, query, matchWords);
                             }
+                        }
                     }
                     else
                     {
@@ -287,30 +289,42 @@ namespace Jackett.Common.Indexers.Definitions
             // Remove trailing dot. Eg Harry Potter Y La Orden Del Fénix.
             title = title.Trim();
             if (title.EndsWith("."))
+            {
                 title = title.Remove(title.Length - 1).Trim();
+            }
 
             var cat = GetMejortorrentCategory(mejortorrentCat, detailsStr, title, quality);
             if (cat == MejorTorrentCatType.Otro)
+            {
                 return; // skip releases from this category
+            }
 
             var categories = MapTrackerCatToNewznab(cat);
             var publishDate = TryToParseDate(publishStr, DateTime.Now);
 
             // return results only for requested categories
             if (query.Categories.Any() && !query.Categories.Contains(categories.First()))
+            {
                 return;
+            }
 
             // match the words in the query with the titles
             if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
+            {
                 return;
+            }
 
             // parsing is different for each category
             if (cat == MejorTorrentCatType.Serie || cat == MejorTorrentCatType.SerieHd)
+            {
                 await ParseSeriesRelease(releases, query, title, detailsStr, cat, publishDate, quality);
+            }
             else if (query.Episode == null) // if it's scene series, we don't return other categories
             {
                 if (cat == MejorTorrentCatType.Pelicula)
+                {
                     await ParseMovieRelease(releases, query, title, detailsStr, cat, publishDate, quality);
+                }
                 else
                 {
                     var release = GenerateRelease(title, detailsStr, detailsStr, cat, publishDate, 100.Megabytes());
@@ -355,12 +369,16 @@ namespace Jackett.Common.Indexers.Definitions
                 // if the original query was in scene format, we filter the results to match episode
                 // query.Episode != null means scene title
                 if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
+                {
                     continue;
+                }
 
                 // guess size
                 var size = 512.Megabytes();
-                if (title.ToLower().Contains("720p"))
+                if (title.ToLowerInvariant().Contains("720p"))
+                {
                     size = 1.Gigabytes();
+                }
 
                 var release = GenerateRelease(episodeTitle, detailsStr, downloadLink, cat, episodePublish, size);
                 releases.Add(release);
@@ -415,7 +433,9 @@ namespace Jackett.Common.Indexers.Definitions
 
             // add quality
             if (quality != null)
+            {
                 title += " " + quality;
+            }
 
             // guess size 1.5 GB
 
@@ -458,12 +478,12 @@ namespace Jackett.Common.Indexers.Definitions
             var queryMatches = Regex.Matches(queryStr, @"\b[\w']*\b");
             var queryWords = from m in queryMatches.Cast<Match>()
                              where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLowerInvariant()));
 
             var titleMatches = Regex.Matches(title, @"\b[\w']*\b");
             var titleWords = from m in titleMatches.Cast<Match>()
                              where !string.IsNullOrEmpty(m.Value) && m.Value.Length > 2
-                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLower()));
+                             select Encoding.UTF8.GetString(Encoding.GetEncoding("ISO-8859-8").GetBytes(m.Value.ToLowerInvariant()));
             titleWords = titleWords.ToArray();
 
             return queryWords.All(word => titleWords.Contains(word));
@@ -524,11 +544,17 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 newEpisodeTitle = "";
                 foreach (Match m in matches)
+                {
                     if (newEpisodeTitle.Equals(""))
+                    {
                         newEpisodeTitle += "S" + m.Groups[1].Value.PadLeft(2, '0')
                                                + "E" + m.Groups[2].Value.PadLeft(2, '0');
+                    }
                     else
+                    {
                         newEpisodeTitle += "-E" + m.Groups[2].Value.PadLeft(2, '0');
+                    }
+                }
                 // newEpisodeTitle = S05E08-E13
                 // newEpisodeTitle = S02E01-E02-E03
             }
@@ -537,9 +563,11 @@ namespace Jackett.Common.Indexers.Definitions
                 // episodeTitle = 1x04 - 05.
                 var m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)[^0-9]+([0-9]+)[.]?$", RegexOptions.IgnoreCase);
                 if (m.Success)
+                {
                     newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0')
                                           + "E" + m.Groups[2].Value.PadLeft(2, '0') + "-"
                                           + "E" + m.Groups[3].Value.PadLeft(2, '0');
+                }
                 // newEpisodeTitle = S01E04-E05
                 else
                 {
@@ -553,7 +581,9 @@ namespace Jackett.Common.Indexers.Definitions
                                               + "E" + m.Groups[2].Value.PadLeft(2, '0');
                         // newEpisodeTitle = S01E02
                         if (!m.Groups[3].Value.Equals(""))
+                        {
                             newEpisodeTitle += " " + m.Groups[3].Value.Replace(" -", "").Trim();
+                        }
                         // newEpisodeTitle = S01E08 CONTRASEÑA: WWW.​PCTNEW ORG bebe
                     }
                 }
@@ -566,14 +596,17 @@ namespace Jackett.Common.Indexers.Definitions
 
             // add quality
             if (quality != null)
+            {
                 newTitle += " SPANISH " + quality;
-
-            else if (title.ToLower().Contains("[720p]"))
+            }
+            else if (title.ToLowerInvariant().Contains("[720p]"))
+            {
                 newTitle += " SPANISH 720p HDTV x264";
-
+            }
             else
+            {
                 newTitle += " SPANISH SDTV XviD";
-
+            }
 
             // return The Mandalorian S01E04 SPANISH 720p HDTV x264
             return newTitle;
@@ -586,33 +619,43 @@ namespace Jackett.Common.Indexers.Definitions
             if (mejortorrentCat == null)
             {
                 if (detailsStr.Contains("pelicula"))
+                {
                     cat = MejorTorrentCatType.Pelicula;
+                }
                 else if (detailsStr.Contains("serie"))
+                {
                     cat = MejorTorrentCatType.Serie;
+                }
                 else if (detailsStr.Contains("musica"))
+                {
                     cat = MejorTorrentCatType.Musica;
+                }
             }
             else if (mejortorrentCat.Equals(MejorTorrentCatType.Pelicula) ||
                      mejortorrentCat.Equals(MejorTorrentCatType.Serie) ||
                      mejortorrentCat.Equals(MejorTorrentCatType.Musica))
+            {
                 cat = mejortorrentCat;
-
+            }
             else if (mejortorrentCat.Equals("peliculas"))
+            {
                 cat = MejorTorrentCatType.Pelicula;
-
+            }
             else if (mejortorrentCat.Equals("series") || mejortorrentCat.Equals("documentales"))
+            {
                 cat = MejorTorrentCatType.Serie;
-
+            }
 
             // hack to separate SD & HD series
             if (cat.Equals(MejorTorrentCatType.Serie))
             {
-                if (title.ToLower().Contains("720p") ||
-                    title.ToLower().Contains("1080p") ||
-                    quality.ToLower().Contains("720p") ||
-                    quality.ToLower().Contains("1080p"))
+                if (title.ToLowerInvariant().Contains("720p") ||
+                    title.ToLowerInvariant().Contains("1080p") ||
+                    quality.ToLowerInvariant().Contains("720p") ||
+                    quality.ToLowerInvariant().Contains("1080p"))
+                {
                     cat = MejorTorrentCatType.SerieHd;
-
+                }
             }
 
             return cat;
@@ -630,11 +673,18 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var tag = m.Groups[1].Value.Trim().ToUpper();
                 if (tag.Equals("4K")) // Fix 4K quality. Eg Harry Potter Y La Orden Del Fénix [4k]
+                {
                     quality = "(UHD 4K 2160p)";
+                }
                 else if (tag.Equals("FULLBLURAY")) // Fix 4K quality. Eg Harry Potter Y El Cáliz De Fuego (fullbluray)
+                {
                     quality = "(COMPLETE BLURAY)";
+                }
                 else // Add the tag to the title
+                {
                     tags += " " + tag;
+                }
+
                 title = title.Replace(m.Groups[0].Value, "");
             }
             title += tags;
@@ -644,14 +694,22 @@ namespace Jackett.Common.Indexers.Definitions
         private long GuessSize(string title, long initialQuality)
         {
             var size = initialQuality;
-            if (title.ToLower().Contains("microhd"))
+            if (title.ToLowerInvariant().Contains("microhd"))
+            {
                 size = 7.Gigabytes();
-            else if (title.ToLower().Contains("complete bluray") || title.ToLower().Contains("2160p"))
+            }
+            else if (title.ToLowerInvariant().Contains("complete bluray") || title.ToLowerInvariant().Contains("2160p"))
+            {
                 size = 50.Gigabytes();
-            else if (title.ToLower().Contains("bluray"))
+            }
+            else if (title.ToLowerInvariant().Contains("bluray"))
+            {
                 size = 16.Gigabytes();
-            else if (title.ToLower().Contains("bdremux"))
+            }
+            else if (title.ToLowerInvariant().Contains("bdremux"))
+            {
                 size = 20.Gigabytes();
+            }
 
             return size;
         }
@@ -662,7 +720,10 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var queryMatch = Regex.Match(quality, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
                 if (queryMatch.Success)
+                {
                     quality = queryMatch.Groups[1].Value;
+                }
+
                 quality = quality.Trim().Replace("-", " ");
                 quality = Regex.Replace(quality, "HDRip", "BDRip", RegexOptions.IgnoreCase); // fix for Radarr
             }
@@ -671,14 +732,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
         {
-            try
+            if (DateTime.TryParseExact(dateToParse, "yyyy-MM-dd", CultureInfo.InvariantCulture, DateTimeStyles.None, out var result))
             {
-                return DateTime.ParseExact(dateToParse, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                return result;
             }
-            catch
-            {
-                // ignored
-            }
+
             return dateDefault;
         }
 
