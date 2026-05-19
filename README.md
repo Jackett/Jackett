@@ -583,7 +583,7 @@ Prior versions of Jackett are no longer supported.
  * Romanian Metal Torrents (RMT)
  * RoTorrent (ROT)
  * Rousi.pro
- * RunTheFrames [![(invite needed)][inviteneeded]](#)
+ * RunTheFrames
  * SAMARITANO
  * SBPT
  * SceneHD [![(invite needed)][inviteneeded]](#)
