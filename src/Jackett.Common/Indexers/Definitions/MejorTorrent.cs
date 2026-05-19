@@ -134,15 +134,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            Dictionary<string, string> headers = null;
-
-            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
-            {
-                headers = new Dictionary<string, string>
-                {
-                    { "User-Agent", configData.UserAgent.Value }
-                };
-            }
             var matchWords = ((BoolConfigurationItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = query.SearchTerm != "" && matchWords;
 
@@ -167,7 +158,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var url = SiteLink + NewTorrentsUrl;
-            var result = await RequestWithCookiesAsync(url);
+            var result = await RequestWithCookiesAsync(url, headers: GetSearchHeaders());
             if (result.Status != HttpStatusCode.OK)
             {
                 if (result.Status == HttpStatusCode.InternalServerError)
@@ -233,7 +224,7 @@ namespace Jackett.Common.Indexers.Definitions
             for (var i = 1; i <= PagesToSearch; i++)
             {
                 var url = SiteLink + SearchUrl + i + "?" + qc.GetQueryString();
-                var result = await RequestWithCookiesAsync(url);
+                var result = await RequestWithCookiesAsync(url, headers: GetSearchHeaders());
 
                 if (result.Status != HttpStatusCode.OK)
                 {
@@ -331,7 +322,7 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, TorznabQuery query, string title,
             string detailsStr, string cat, DateTime publishDate, string quality)
         {
-            var result = await RequestWithCookiesAsync(detailsStr);
+            var result = await RequestWithCookiesAsync(detailsStr, headers: GetSearchHeaders());
             if (result.Status != HttpStatusCode.OK)
             {
                 if (result.Status == HttpStatusCode.InternalServerError)
@@ -381,7 +372,7 @@ namespace Jackett.Common.Indexers.Definitions
             string detailsStr, string cat, DateTime publishDate, string quality)
         {
 
-            var result = await RequestWithCookiesAsync(detailsStr);
+            var result = await RequestWithCookiesAsync(detailsStr, headers: GetSearchHeaders());
             if (result.Status != HttpStatusCode.OK)
             {
                 if (result.Status == HttpStatusCode.InternalServerError)
@@ -689,6 +680,21 @@ namespace Jackett.Common.Indexers.Definitions
                 // ignored
             }
             return dateDefault;
+        }
+
+        private Dictionary<string, string> GetSearchHeaders()
+        {
+            Dictionary<string, string> headers = null;
+
+            if (!string.IsNullOrWhiteSpace(configData.UserAgent.Value))
+            {
+                headers = new Dictionary<string, string>
+                {
+                    { "User-Agent", configData.UserAgent.Value.Trim() }
+                };
+            };
+
+            return headers;
         }
     }
 }
