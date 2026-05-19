@@ -12,6 +12,9 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Console, desc: "Retro Arcade"}
+    - {id: 4, cat: Movies/Other, desc: "Movies"}
+    - {id: 5, cat: TV/Anime, desc: "TV"}
 
   modes:
     search: [q]
