@@ -64,6 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
         private const string SearchUrl = "busqueda/page/";
 
         private const int PagesToSearch = 3;
+        private new ConfigurationDataCookieUA configData => (ConfigurationDataCookieUA)base.configData;
 
         public MejorTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -71,7 +72,7 @@ namespace Jackett.Common.Indexers.Definitions
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationData())
+                   configData: new ConfigurationDataCookieUA())
         {
             var matchWords = new BoolConfigurationItem("Match words in title") { Value = true };
             configData.AddDynamic("MatchWords", matchWords);
@@ -112,16 +113,36 @@ namespace Jackett.Common.Indexers.Definitions
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
-            var releases = await PerformQuery(new TorznabQuery());
+            CookieHeader = configData.Cookie.Value;
+            try
+            {
+                var releases = await PerformQuery(new TorznabQuery());
 
-            await ConfigureIfOK(string.Empty, releases.Any(), () =>
+                await ConfigureIfOK(string.Empty, releases.Any(), () =>
                 throw new Exception("Could not find releases from this URL"));
 
-            return IndexerConfigurationStatus.Completed;
+                IsConfigured = true;
+                SaveConfig();
+                return IndexerConfigurationStatus.Completed;
+            }
+            catch (Exception e)
+            {
+                IsConfigured = false;
+                throw new Exception("Your cookie did not work: " + e.Message);
+            }
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
+            Dictionary<string, string> headers = null;
+
+            if (!string.IsNullOrEmpty(configData.UserAgent.Value))
+            {
+                headers = new Dictionary<string, string>
+                {
+                    { "User-Agent", configData.UserAgent.Value }
+                };
+            }
             var matchWords = ((BoolConfigurationItem)configData.GetDynamic("MatchWords")).Value;
             matchWords = query.SearchTerm != "" && matchWords;
 
