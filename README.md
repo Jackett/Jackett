@@ -84,7 +84,6 @@ Prior versions of Jackett are no longer supported.
  * 52BT
  * ACG.RIP
  * AniLibria
- * Anime Tosho
  * AniRena
  * AniSource
  * ApacheTorrent
@@ -191,6 +190,7 @@ Prior versions of Jackett are no longer supported.
 
  * AniDUB
  * Anime by Belka (Аниме от Белки)
+ * Anime Tosho
  * AnimeLayer
  * Best-Torrents [PAY2DL]
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
