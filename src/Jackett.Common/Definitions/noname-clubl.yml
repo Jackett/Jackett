@@ -505,6 +505,7 @@ caps:
     - {id: 348, cat: Audio, desc: " |- Psychedelic, psytrance, fullon"}
     - {id: 674, cat: Audio, desc: " |- Radioshow, Live Mixes"}
     - {id: 323, cat: Audio, desc: "Rap, Hip-hop, RnB, Reggae"}
+    - {id: 1369, cat: Audio, desc: "Rap, Hip-hop, RnB, Reggae (Hi-Res)"}
     - {id: 1187, cat: Audio/Lossless, desc: " |- Rap, Hip-hop зарубежный (Lossless)"}
     - {id: 339, cat: Audio, desc: " |- Rap, Hip-hop зарубежный"}
     - {id: 1186, cat: Audio/Lossless, desc: " |- Rap, Hip-hop отечественный (Lossless)"}
