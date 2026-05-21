@@ -37,6 +37,7 @@ caps:
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
     - {id: 29, cat: TV/Sport, desc: "Indy 500"}
+    - {id: 30, cat: TV/Sport, desc: "Football"}
 
   modes:
     search: [q]
