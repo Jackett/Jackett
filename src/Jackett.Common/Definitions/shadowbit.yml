@@ -1,0 +1,119 @@
+---
+id: shadowbit
+name: Shadowbit
+description: "Shadowbit is a ratioless ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://shadowbit.cc/
+
+caps:
+  categorymappings:
+    # from https://shadowbit.cc/api/torznab?t=caps&apikey=YOUR-API-KEY
+    - {id: 1000, cat: Console, desc: "Console"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: 2060, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3020, cat: Audio/Video, desc: "Audio/Video"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 4040, cat: PC/Mobile-Other, desc: "PC/Mobile-Other"}
+    - {id: 4050, cat: PC/Games, desc: "PC/Games"}
+    - {id: 4060, cat: PC/ISO, desc: "PC/Linux"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5020, cat: TV/Foreign, desc: "TV/Foreign"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/EBook"}
+    - {id: 8000, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, year]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API Key
+    default: "You can find your API Key by accessing the <a href=\"https://shadowbit.cc/user_settings.php\" target=\"_blank\">Shadowbit Settings</a> page and copying your <b>Passkey</b>."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts will be pruned after 6 months. Use the parking feature if you need extended absence (up to 2 years)."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if passkey is invalid
+  path: api/torznab
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: caps
+
+search:
+  paths:
+    - path: api/torznab
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.Year }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.Year .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    year: "{{ .Query.Year }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      text: "{{ .Config.sitelink }}"
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+      optional: true
+    date:
+      # Thu, 15 Jan 2026 16:24:34 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml
