@@ -171,7 +171,7 @@ search:
         - name: re_replace
           args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
         - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+          args: ["E(\\d+)[\\s-]+(\\d+)\\b", "E$1-E$2"]
         - name: re_replace
           args: ["\\[\\s*\\]", ""]
         - name: re_replace
