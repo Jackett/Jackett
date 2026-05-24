@@ -1,0 +1,128 @@
+---
+id: bjshare
+name: BJ-Share
+description: "BJ-Share is a BRAZILIAN Private site"
+language: pt-BR
+type: private
+encoding: UTF-8
+links:
+  - https://bj-share.info/
+legacylinks:
+  - https://bj-share.me/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Filmes"}
+    - {id: 2, cat: TV, desc: "Seriados"}
+    - {id: 3, cat: PC, desc: "Aplicativos"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: Books/Comics, desc: "Mangás"}
+    - {id: 7, cat: Other, desc: "Outros"}
+    - {id: 8, cat: TV/Sport, desc: "Esportes"}
+    - {id: 9, cat: Books/Mags, desc: "Revistas"}
+    - {id: 10, cat: Books/EBook, desc: "E-Books"}
+    - {id: 11, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 12, cat: Books/Comics, desc: "HQs"}
+    - {id: 13, cat: TV/Other, desc: "Stand Up Comedy"}
+    - {id: 14, cat: TV/Anime, desc: "Animes"}
+    - {id: 15, cat: XXX/ImageSet, desc: "Fotos Adultas"}
+    - {id: 18, cat: Other, desc: "Cursos"}
+    - {id: 19, cat: XXX, desc: "Filmes Adultos"}
+    - {id: 20, cat: XXX/Other, desc: "Jogos Adultos"}
+    - {id: 21, cat: XXX/Other, desc: "Mangás Adultos"}
+    - {id: 22, cat: XXX/Other, desc: "Animes Adultos"}
+    - {id: 23, cat: XXX/Other, desc: "HQs Adultas"}
+    - {id: 24, cat: Books/Mags, desc: "Jornais"}
+
+  modes:
+    search: [q]
+    tv-search: [q, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+  allowtvsearchimdb: true
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info
+    type: info
+    label: Como obter o Cookie
+    default: "<ol><li>Faça login neste tracker usando seu navegador<li>Abra o painel <b>DevTools</b> pressionando <b>F12</b><li>Selecione a guia <b>Network</b><li>Clique no botão <b>Doc</b> (navegador Chrome) ou no botão <b>HTML</b> (Firefox)<li>Atualize a página pressionando <b>F5</b><li>Clique na primeira linha com o texto <b>index.php</b><li>Encontre <b>Request Headers</b> e copie o valor de <b>cookie:</b> para o campo acima</ol>"
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: torrents.php
+
+search:
+  paths:
+    - path: torrents.php
+      followredirect: true
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    order_by: time
+    order_way: desc
+    group_results: 1
+    action: basic
+    searchsubmit: 1
+
+  rows:
+    selector: "tr.group_torrent[data-torrentname], tr.torrent:has(div.torrent_info[data-torrentname])"
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?filter_cat"]
+      attribute: href
+      filters:
+        - name: querystring
+          args: filter_cat
+    title_group:
+      attribute: data-torrentname
+      optional: true
+    title_search:
+      selector: div.torrent_info[data-torrentname]
+      attribute: data-torrentname
+      optional: true
+    title:
+      text: "{{ if .Result.title_search }}{{ .Result.title_search }}{{ else }}{{ .Result.title_group }}{{ end }}"
+    imdbid:
+      selector: div.torrent_info[data-imdbid]
+      attribute: data-imdbid
+      optional: true
+    details:
+      selector: a[href^="torrents.php?id="], a[href^="torrents.php?torrentid="], a[href^="series.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download"]
+      attribute: href
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    grabs:
+      selector: td:nth-last-child(3)
+    date_raw:
+      selector: span.time.bjtooltip
+      attribute: title
+      optional: true # Date is not available in the group torrents page
+      filters:
+        - name: append
+          args: " -03:00" # BJ-Share time is UTC-3
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm zzz"
+    date:
+      text: "{{ if .Result.date_raw }}{{ .Result.date_raw }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      selector: strong[title="Free"]
+      case:
+        strong[title="Free"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
