@@ -163,9 +163,9 @@ search:
           args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
         - name: re_replace
           args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
-        # Negative lookahead avoids "E05 1080p" collapsing to "E05-E1080p"
+        # Negative lookahead avoids "E05 1080p"/"E05 1080P" collapsing to "E05-E1080p"
         - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)(?![\\dp])", "E$1-E$2"]
+          args: ["E(\\d+)[\\s-]+(\\d+)(?![\\dpP])", "E$1-E$2"]
         - name: re_replace
           args: ["\\[\\s*\\]", ""]
         - name: re_replace
