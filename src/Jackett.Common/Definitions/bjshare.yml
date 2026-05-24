@@ -97,8 +97,6 @@ search:
 
   rows:
     selector: "tr.torrent, tr.group_torrent:not(.season_header)"
-    filters:
-      - name: andmatch
 
   fields:
     category_raw:
