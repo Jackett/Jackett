@@ -36,8 +36,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
   allowtvsearchimdb: true
@@ -50,6 +50,10 @@ settings:
     type: info
     label: Como obter o Cookie
     default: "<ol><li>Faça login neste tracker usando seu navegador<li>Abra o painel <b>DevTools</b> pressionando <b>F12</b><li>Selecione a guia <b>Network</b><li>Clique no botão <b>Doc</b> (navegador Chrome) ou no botão <b>HTML</b> (Firefox)<li>Atualize a página pressionando <b>F5</b><li>Clique na primeira linha com o texto <b>index.php</b><li>Encontre <b>Request Headers</b> e copie o valor de <b>cookie:</b> para o campo acima</ol>"
+  - name: info_grouping
+    type: info
+    label: Agrupamento de Torrents
+    default: "<b>Importante:</b> Você precisa configurar na sua conta do BJ-Share para desativar o agrupamento de torrents. Vá em <b>Configurações</b> > <b>Agrupamento dos torrents</b>, marque a opção <b>Desativar</b> e clique em <b>Salvar Configurações</b>."
 
 login:
   method: cookie
@@ -68,20 +72,29 @@ search:
     searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     order_by: time
     order_way: desc
-    group_results: 1
     action: basic
     searchsubmit: 1
 
   rows:
-    selector: "tr.group_torrent[data-torrentname], tr.torrent:has(div.torrent_info[data-torrentname])"
+    selector: "tr.torrent, tr.group_torrent:not(.season_header)"
 
   fields:
-    category:
-      selector: a[href^="torrents.php?filter_cat"]
+    category_raw:
+      selector: a[href*="filter_cat"]
       attribute: href
+      optional: true
       filters:
-        - name: querystring
-          args: filter_cat
+        - name: regexp
+          args: '(?i)filter_cat(?:\[|%5b|%5B)(\d+)(?:\]|%5d|%5D)'
+    category_details:
+      selector: ":root td:contains('Categoria:') + td a[href*='filter_cat']"
+      attribute: href
+      optional: true
+      filters:
+        - name: regexp
+          args: '(?i)filter_cat(?:\[|%5b|%5B)(\d+)(?:\]|%5d|%5D)'
+    category:
+      text: "{{ if .Result.category_raw }}{{ .Result.category_raw }}{{ else }}{{ .Result.category_details }}{{ end }}"
     title_group:
       attribute: data-torrentname
       optional: true
@@ -91,10 +104,31 @@ search:
       optional: true
     title:
       text: "{{ if .Result.title_search }}{{ .Result.title_search }}{{ else }}{{ .Result.title_group }}{{ end }}"
-    imdbid:
+    imdbid_raw:
       selector: div.torrent_info[data-imdbid]
       attribute: data-imdbid
       optional: true
+    imdbid_global:
+      selector: ":root a[href*='imdb.com/title/tt']"
+      attribute: href
+      optional: true
+      filters:
+        - name: regexp
+          args: 'tt\d+'
+    imdbid:
+      text: "{{ if .Result.imdbid_raw }}{{ .Result.imdbid_raw }}{{ else }}{{ .Result.imdbid_global }}{{ end }}"
+    poster:
+      selector: div.group_image img
+      attribute: src
+      optional: true
+    description_search:
+      selector: div.torrent_info
+      optional: true
+    description_group:
+      selector: a[href*="torrentid="]:not([title])
+      optional: true
+    description:
+      text: "{{ if .Result.description_search }}{{ .Result.description_search }}{{ else }}{{ .Result.description_group }}{{ end }}"
     details:
       selector: a[href^="torrents.php?id="], a[href^="torrents.php?torrentid="], a[href^="series.php?id="]
       attribute: href
@@ -121,9 +155,8 @@ search:
     date:
       text: "{{ if .Result.date_raw }}{{ .Result.date_raw }}{{ else }}now{{ end }}"
     downloadvolumefactor:
-      selector: strong[title="Free"]
       case:
-        strong[title="Free"]: 0
+        "strong.free": 0
         "*": 1
     uploadvolumefactor:
       text: 1
