@@ -161,6 +161,16 @@ search:
           args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[(\\d{4})\\]\\s*\\[م(\\d+)\\]", "S$3E$1 [$2]"]
         - name: re_replace
           args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
+        # English bracket forms used by YANGO / SHAHID / TOD packs:
+        #   [E08 E09] [S01]  -> S01E08-E09  (episode range with explicit season)
+        #   [E81] [S01]      -> S01E81      (episode first, season second)
+        #   [S05] [E02]      -> S05E02      (season first, episode second)
+        - name: re_replace
+          args: ["\\[E(\\d+)\\s+E(\\d+)\\]\\s*\\[S(\\d+)\\]", "S$3E$1-E$2"]
+        - name: re_replace
+          args: ["\\[E(\\d+)\\]\\s*\\[S(\\d+)\\]", "S$2E$1"]
+        - name: re_replace
+          args: ["\\[S(\\d+)\\]\\s*\\[E(\\d+)\\]", "S$1E$2"]
         - name: re_replace
           args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
         - name: re_replace
