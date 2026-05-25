@@ -10,24 +10,28 @@ links:
 
 caps:
   categorymappings:
-    - {id: 3, cat: Movies/HD, desc: "Filme HD-RO"}
+    - {id: 3, cat: Movies/HD, desc: "Movies HD-RO"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 1, cat: Movies, desc: "Filme HD"}
-    - {id: 4, cat: PC/Games, desc: "Jocuri PC"}
-    - {id: 5, cat: Audio, desc: "Muzica"}
-    - {id: 23, cat: Movies/UHD, desc: "Filme UHD-RO"}
+    - {id: 1, cat: Movies, desc: "Movies HD"}
+    - {id: 4, cat: PC/Games, desc: "Games PC"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 23, cat: Movies/UHD, desc: "Movies UHD-RO"}
     - {id: 6, cat: PC, desc: "Software"}
     - {id: 7, cat: TV/Anime, desc: "Anime"}
-    - {id: 8, cat: TV/Documentary, desc: "Documentare"}
+    - {id: 8, cat: TV/Documentary, desc: "Documentaries"}
     - {id: 9, cat: TV/Sport, desc: "Sport"}
-    - {id: 10, cat: Console, desc: "Jocuri Console"}
-    - {id: 11, cat: Movies, desc: "Filme Romanesti"}
-    - {id: 12, cat: Movies/Other, desc: "Desene"}
+    - {id: 10, cat: Console, desc: "Games Console"}
+    - {id: 11, cat: Movies, desc: "Movies Romanian"}
+    - {id: 12, cat: Movies/Other, desc: "Cartoons"}
     - {id: 17, cat: XXX, desc: "XXX"}
-    - {id: 18, cat: PC/Games, desc: "Jocuri Classic"}
-    - {id: 19, cat: Audio/Video, desc: "Videoclipuri"}
-    - {id: 20, cat: Movies/SD, desc: "Filme SD-RO"}
+    - {id: 18, cat: PC/Games, desc: "Classic Games"}
+    - {id: 24, cat: Audio, desc: "Music/Packs"}
+    - {id: 19, cat: Audio/Video, desc: "Videos"}
+    - {id: 25, cat: TV, desc: "TV/Packs"}
+    - {id: 20, cat: Movies/SD, desc: "Movies SD-RO"}
+    - {id: 27, cat: Other, desc: "Pics/Wallpapers"}
     - {id: 21, cat: Books, desc: "EBooks"}
+    - {id: 28, cat: PC, desc: "Software/Packs"}
     - {id: 22, cat: Movies, desc: "Classic Movies"}
 
   modes:
