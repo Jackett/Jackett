@@ -200,7 +200,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "MM-yy-dd HH:mm:ss tt"
+          args: "yy-MM-dd hh:mm:ss tt"
     size:
       selector: span.size
     seeders:
