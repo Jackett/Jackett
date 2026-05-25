@@ -194,6 +194,10 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
       optional: true
+    poster:
+      selector: a.screenshot
+      attribute: rel
+      optional: true
     date:
       selector: span.upload-date > span
       attribute: title
