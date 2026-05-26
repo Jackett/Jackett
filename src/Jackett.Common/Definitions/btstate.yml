@@ -38,6 +38,9 @@ search:
     category: all
     timeSpan: all
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: items
     attribute: _source
