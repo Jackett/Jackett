@@ -364,7 +364,7 @@ namespace Jackett.Common.Indexers.Definitions
                     {
                         Guid = uriMagnet,
                         Details = details,
-                        Link = uriMagnet,
+                        MagnetUri = uriMagnet,
                         Title = $"{post.Title}.{episodePart}{quality}.{language}-LaMovie",
                         Category = categories,
                         Poster = new($"{SiteLink}wp-content/uploads{post.Images.Poster}"),
