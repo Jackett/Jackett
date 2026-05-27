@@ -695,6 +695,7 @@ Prior versions of Jackett are no longer supported.
  * XWTorrents (XWT)
  * YUSCENE
  * Zappateers
+ * Zenith
  * ZmPT (织梦)
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
 </details>
