@@ -77,6 +77,7 @@ caps:
     - {id: nonporn, cat: Other, desc: "NonPorn"}
     - {id: nonporn/Anime, cat: TV/Anime, desc: "Anime"}
     - {id: nonporn/Applications, cat: PC, desc: "Applications"}
+    - {id: nonporn/Asian-BL, cat: TV, desc: "Asian-BL"}
     - {id: nonporn/Comedy, cat: Movies, desc: "Comedy"}
     - {id: nonporn/Comics, cat: Books/Comics, desc: "Comics"}
     - {id: nonporn/Coming-Out, cat: Movies, desc: "Coming-Out"}

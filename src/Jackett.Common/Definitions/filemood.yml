@@ -34,6 +34,9 @@ search:
   keywordsfilters:
     - name: tolower
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: table > tbody > tr:has(a.btn-success)
 

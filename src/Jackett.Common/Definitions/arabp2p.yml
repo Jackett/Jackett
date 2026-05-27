@@ -161,10 +161,17 @@ search:
           args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[(\\d{4})\\]\\s*\\[م(\\d+)\\]", "S$3E$1 [$2]"]
         - name: re_replace
           args: ["\\[(\\d+(?:[\\s-]+\\d+)*)\\]\\s*\\[م(\\d+)\\]", "S$2E$1"]
+        # English bracket forms used by YANGO / SHAHID / TOD packs:
+        #   [E08] [S01] / [E08-E09] [S01]  -> S01E08 / S01E08-E09
+        # [S05] [E02] / [S05] [E02 E03]  -> S05E02 / S05E02 E03
+        - name: re_replace
+          args: ["\\[(E\\d+(?:[\\s-]+E\\d+)?)\\]\\s*\\[(S\\d+)\\]", "$2$1"]
+        - name: re_replace
+          args: ["\\[(S\\d+)\\]\\s*\\[(E\\d+(?:[\\s-]+E\\d+)?)\\]", "$1$2"]
         - name: re_replace
           args: ["^\\[(\\d+(?:[\\s-]+\\d+)*)\\](?!\\s*\\[م)", "S01E$1"]
         - name: re_replace
-          args: ["E(\\d+)[\\s-]+(\\d+)", "E$1-E$2"]
+          args: ["E(\\d+)[\\s-]+(\\d+)\\b", "E$1-E$2"]
         - name: re_replace
           args: ["\\[\\s*\\]", ""]
         - name: re_replace
@@ -187,13 +194,16 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
       optional: true
+    poster:
+      selector: a.screenshot
+      attribute: rel
     date:
       selector: span.upload-date > span
       attribute: title
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "MM-yy-dd HH:mm:ss tt"
+          args: "yy-MM-dd hh:mm:ss tt"
     size:
       selector: span.size
     seeders:

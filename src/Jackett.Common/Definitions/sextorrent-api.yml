@@ -1,7 +1,7 @@
 ---
 id: sextorrent-api
 name: SexTorrent (API)
-description: "SexTorrent is a Private Torrent Tracker for 3X"
+description: "SexTorrent is a Private Torrent Tracker for 3X / MOVIES / TV"
 language: en-US
 type: private
 encoding: UTF-8
@@ -40,8 +40,8 @@ caps:
     - {id: 31, cat: XXX, desc: "SiteRip"}
     - {id: 32, cat: XXX, desc: "Foreign"}
     - {id: 33, cat: XXX, desc: "Latina"}
-    - {id: 34, cat: XXX/Other, desc: "Games All type"}
-    - {id: 35, cat: XXX/Other, desc: "Magazines (Press.)"}
+    - {id: 34, cat: Console, desc: "Games All type"}
+    - {id: 35, cat: Books/Mags, desc: "Magazines (Press.)"}
     - {id: 36, cat: XXX, desc: "Feature"}
     - {id: 37, cat: XXX, desc: "Big-Ass"}
     - {id: 38, cat: XXX/Other, desc: "Other (all.mixt.)"}
@@ -53,15 +53,19 @@ caps:
     - {id: 44, cat: XXX, desc: "GAY"}
     - {id: 45, cat: XXX, desc: "Classic"}
     - {id: 46, cat: XXX, desc: "Threesome"}
-    - {id: 1, cat: XXX, desc: "Movies XXX"}
+    - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 47, cat: XXX, desc: "Unsorted"}
+    - {id: 3, cat: Books, desc: "Books"}
+    - {id: 47, cat: XXX, desc: "Unsorted XXX Videos"}
     - {id: 48, cat: XXX, desc: "OnlyFans .com"}
-    - {id: 49, cat: XXX, desc: "MOVIE"}
+    - {id: 49, cat: Other, desc: "Uncategorized Videos"}
+    - {id: 50, cat: PC/Mobile-Other, desc: "Software for Mobiles"}
 
   modes:
     search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -124,6 +128,11 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -158,6 +167,21 @@ search:
       filters:
         - name: replace
           args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    genre:
+      selector: meta.genres
+      filters:
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
     _internal:
       selector: internal
       case:

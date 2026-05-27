@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 407, cat: Audio/Lossless, desc: "音乐 / Audio"} # wrongly listed as Sports
     - {id: 408, cat: Audio/Lossless, desc: "音乐 / HQ Audio"}
     - {id: 409, cat: Audio/Other, desc: "其他 / Misc"}
 
@@ -161,8 +162,8 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span

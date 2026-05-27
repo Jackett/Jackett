@@ -1,0 +1,182 @@
+---
+id: bjshare
+name: BJ-Share
+description: "BJ-Share is a BRAZILIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: pt-BR
+type: private
+encoding: UTF-8
+links:
+  - https://bj-share.info/
+legacylinks:
+  - https://bj-share.me/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Filmes"}
+    - {id: 2, cat: TV, desc: "Seriados"}
+    - {id: 3, cat: PC, desc: "Aplicativos"}
+    - {id: 4, cat: PC/Games, desc: "Jogos"}
+    - {id: 5, cat: Books/Comics, desc: "Mangás"}
+    - {id: 7, cat: Other, desc: "Outros"}
+    - {id: 8, cat: TV/Sport, desc: "Esportes"}
+    - {id: 9, cat: Books/Mags, desc: "Revistas"}
+    - {id: 10, cat: Books/EBook, desc: "E-Books"}
+    - {id: 11, cat: Audio/Audiobook, desc: "Audiobook"}
+    - {id: 12, cat: Books/Comics, desc: "HQs"}
+    - {id: 13, cat: TV/Other, desc: "Stand Up Comedy"}
+    - {id: 14, cat: TV/Anime, desc: "Animes"}
+    - {id: 15, cat: XXX/ImageSet, desc: "Fotos Adultas"}
+    - {id: 18, cat: Other, desc: "Cursos"}
+    - {id: 19, cat: XXX, desc: "Filmes Adultos"}
+    - {id: 20, cat: XXX/Other, desc: "Jogos Adultos"}
+    - {id: 21, cat: XXX/Other, desc: "Mangás Adultos"}
+    - {id: 22, cat: XXX/Other, desc: "Animes Adultos"}
+    - {id: 23, cat: XXX/Other, desc: "HQs Adultas"}
+    - {id: 24, cat: Books/Mags, desc: "Jornais"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: info_grouping
+    type: info
+    label: Torrent Grouping
+    default: "<b>Important:</b> You must configure your BJ-Share account to disable torrent grouping. Go to <b>Configurações</b> (Settings) > <b>Agrupamento dos torrents</b> (Torrent grouping), select <b>Desativar</b> (Disable), and click <b>Salvar Configurações</b> (Save Settings)."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href^="/logout.php?auth="]
+
+search:
+  paths:
+    - path: torrents.php
+      followredirect: true
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    action: basic
+    searchsubmit: 1
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""] # remove SXXEXX or SXX from search
+
+  rows:
+    selector: "tr.torrent, tr.group_torrent:not(.season_header)"
+
+  fields:
+    category_raw:
+      selector: a[href*="filter_cat"]
+      attribute: href
+      optional: true
+      filters:
+        - name: regexp
+          args: '(?i)filter_cat(?:\[|%5b|%5B)(\d+)(?:\]|%5d|%5D)'
+    category_details:
+      selector: ":root td:contains('Categoria:') + td a[href*='filter_cat']"
+      attribute: href
+      optional: true
+      filters:
+        - name: regexp
+          args: '(?i)filter_cat(?:\[|%5b|%5B)(\d+)(?:\]|%5d|%5D)'
+    category:
+      text: "{{ if .Result.category_raw }}{{ .Result.category_raw }}{{ else }}{{ .Result.category_details }}{{ end }}"
+    title_group:
+      attribute: data-torrentname
+      optional: true
+    title_search:
+      selector: div.torrent_info[data-torrentname]
+      attribute: data-torrentname
+      optional: true
+    title:
+      text: "{{ if .Result.title_search }}{{ .Result.title_search }}{{ else }}{{ .Result.title_group }}{{ end }}"
+    imdbid_raw:
+      selector: div.torrent_info[data-imdbid]
+      attribute: data-imdbid
+      optional: true
+    imdbid_global:
+      selector: ":root a[href*='imdb.com/title/tt']"
+      attribute: href
+      optional: true
+    imdbid:
+      text: "{{ if .Result.imdbid_raw }}{{ .Result.imdbid_raw }}{{ else }}{{ .Result.imdbid_global }}{{ end }}"
+    poster:
+      selector: div.group_image img
+      attribute: src
+    description_search:
+      selector: div.torrent_info
+      optional: true
+    description_group:
+      selector: a[href*="torrentid="]:not([title])
+      optional: true
+    description:
+      text: "{{ if .Result.description_search }}{{ .Result.description_search }}{{ else }}{{ .Result.description_group }}{{ end }}"
+    details:
+      selector: a[href^="torrents.php?id="], a[href^="torrents.php?torrentid="], a[href^="series.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="torrents.php?action=download"]
+      attribute: href
+    size:
+      selector: td:nth-last-child(4)
+    seeders:
+      selector: td:nth-last-child(2)
+    leechers:
+      selector: td:nth-last-child(1)
+    grabs:
+      selector: td:nth-last-child(3)
+    date_raw:
+      selector: span.time.bjtooltip
+      attribute: title
+      optional: true # Date is not available in the group torrents page
+      filters:
+        - name: append
+          args: " -03:00" # BJ-Share time is UTC-3
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm zzz"
+    date:
+      text: "{{ if .Result.date_raw }}{{ .Result.date_raw }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      case:
+        "strong.free": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+# engine n/a
