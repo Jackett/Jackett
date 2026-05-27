@@ -13,26 +13,31 @@ caps:
   # use https://nexum-core.com/api/v1/categories?apikey=YOUR-APIKEY for cat mappings, name is desc
   categorymappings:
     - {id: 10, cat: Books/EBook, desc: "Livres"}
+    - {id: 76, cat: PC/0day, desc: "Windows"}
     - {id: 1, cat: Movies, desc: "Films"}
-    - {id: 23, cat: Movies/Other, desc: "Film documentaire"}
-    - {id: 11, cat: Books/Comics, desc: "BD"}
     - {id: 9, cat: Audio/Audiobook, desc: "Livres audio"}
+    - {id: 11, cat: Books/Comics, desc: "BD"}
+    - {id: 23, cat: Movies/Other, desc: "Film documentaire"}
+    - {id: 77, cat: PC, desc: "Linux"}
     - {id: 12, cat: Books/Comics, desc: "Comics"}
     - {id: 24, cat: TV/Documentary, desc: "Série documentaire"}
+    - {id: 78, cat: PC/Mac, desc: "MacOS"}
     - {id: 2, cat: TV, desc: "Séries TV"}
-    - {id: 18, cat: Audio, desc: "Musique"}
     - {id: 3, cat: TV/Documentary, desc: "Documentaires"}
     - {id: 13, cat: Books/Comics, desc: "Mangas"}
+    - {id: 18, cat: Audio, desc: "Musique"}
+    - {id: 22, cat: TV, desc: "Émissions TV"}
     - {id: 19, cat: Audio/Other, desc: "Podcasts"}
     - {id: 14, cat: Books/Mags, desc: "Journaux"}
-    - {id: 22, cat: TV, desc: "Émissions TV"}
     - {id: 4, cat: TV/Anime, desc: "Animés"}
     - {id: 20, cat: Audio/Other, desc: "Samples"}
-    - {id: 5, cat: TV/Other, desc: "Concerts / Spectacles"}
     - {id: 21, cat: Audio/Other, desc: "DJ Mix"}
+    - {id: 5, cat: TV/Other, desc: "Concerts / Spectacles"}
     - {id: 7, cat: TV/Sport, desc: "Sports"}
     - {id: 8, cat: Books, desc: "eBooks"}
     - {id: 17, cat: Audio, desc: "Audio"}
+    - {id: 74, cat: Other, desc: "Formation"}
+    - {id: 75, cat: PC/Games, desc: "Jeux Vidéo"}
 
   modes:
     search: [q]
