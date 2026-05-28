@@ -54,6 +54,7 @@ caps:
     - {id: 340, cat: Books/EBook, desc: "Lit/RPG"}
     - {id: 341, cat: Books/EBook, desc: "Collections"}
     - {id: 352, cat: Books/EBook, desc: "Westerns"}
+    - {id: 370, cat: Books/EBook, desc: "Dystopian"}
     # Children & Y/A
     - {id: 299, cat: Books/EBook, desc: "Young Adult"}
     - {id: 298, cat: Books/EBook, desc: "Children's"}
