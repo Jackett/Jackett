@@ -1,7 +1,7 @@
 ---
 id: yggreborn-api
-name: YGGReborn (API)
-description: "YGGReborn is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+name: YggReborn (API)
+description: "YggReborn is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -42,6 +42,8 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: passkey
@@ -50,7 +52,11 @@ settings:
   - name: info_key
     type: info
     label: About your PassKey
-    default: "You can find the API PassKey on your <a href=\"https://www.yggreborn.org/\" target=\"_blank\">YGGReborn</a> profile page under <b>Votre passkey API</b>."
+    default: "You can find the API PassKey Key by accessing the <a href=\"https://www.yggreborn.org/guide-api\" target=\"_blank\">YggReborn Guide API</a> page and scrolling down to the <b>Authentification</b> section."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.yggreborn.org
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -72,22 +78,19 @@ settings:
     default: false
 
 login:
-  path: api
+  path: "https://{{ .Config.apiurl }}/api"
   method: get
   inputs:
     t: search
     apikey: "{{ .Config.passkey }}"
     limit: 1
   error:
-    - selector: error
-      message:
-        selector: error[description]
-        attribute: description
+    - selector: ":contains(\"invalid api key\")"
 
 search:
   paths:
-    # docs at https://www.yggreborn.org/api?t=caps&apikey=YOUR-PASSKEY
-    - path: api
+    # docs at https://www.yggreborn.org/guide-api
+    - path: "https://{{ .Config.apiurl }}/api"
       response:
         type: xml
 
@@ -131,15 +134,6 @@ search:
     infohash:
       selector: "[name=infohash]"
       attribute: value
-    imdbid:
-      selector: "[name=imdbid]"
-      attribute: value
-    tmdbid:
-      selector: "[name=tmdbid]"
-      attribute: value
-    tvdbid:
-      selector: "[name=tvdbid]"
-      attribute: value
     date:
       # e.g. Tue, 31 Mar 2026 20:06:13 +0100
       selector: pubDate
@@ -153,7 +147,7 @@ search:
       selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: "[name=peers]"
+      selector: "[name=leechers]"
       attribute: value
     grabs:
       selector: "[name=grabs]"
