@@ -1,13 +1,17 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
+using System.Globalization;
 using System.Linq;
+using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -23,6 +27,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
+        private static readonly Regex _YearRegex = new(@"(\b|[-._ ])((?:19|20)\d{2})(\b|[-._ ])", RegexOptions.Compiled);
+
         public SecretCinema(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs)
             : base(configService: configService,
@@ -34,7 +40,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        private TorznabCapabilities SetCapabilities()
+        private static TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
             {
@@ -59,27 +65,15 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var results = await base.PerformQuery(query);
+
             // results must contain search terms
-            results = results.Where(release => query.MatchQueryStringAND(release.Title));
-            foreach (var release in results)
-            {
-                // SecretCinema loads artist with the movie director and the gazelleTracker abstract
-                // places it in front of the movie separated with a dash.
-                // We need to strip it or Radarr will not get a title match for automatic DL
-                var artistEndsAt = release.Title.IndexOf(" - ");
-                if (artistEndsAt > -1)
-                {
-                    release.Title = release.Title.Substring(artistEndsAt + 3);
-                }
-            }
-            return results;
+            return results.Where(release => query.MatchQueryStringAND(release.Title));
         }
 
         protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
         {
-            var media = (string)torrent["media"];
-            if (string.IsNullOrEmpty(media))
-                return true;
+            var media = torrent.GetValue("media")?.Value<string>();
+
             switch (media)
             {
                 case "SD":
@@ -88,6 +82,7 @@ namespace Jackett.Common.Indexers.Definitions
                     break;
                 case "720p":
                 case "1080p":
+                case "2160p":
                 case "4k": // not verified
                     release.Category.Remove(TorznabCatType.Movies.ID);
                     release.Category.Add(TorznabCatType.MoviesHD.ID);
@@ -101,7 +96,45 @@ namespace Jackett.Common.Indexers.Definitions
                     release.Category.Add(TorznabCatType.MoviesBluRay.ID);
                     break;
             }
+
+            if (IsAnyMovieCategory(release.Category))
+            {
+                var remasterTitle = torrent.GetValue("remasterTitle")?.Value<string>()?.Trim();
+
+                if (!string.IsNullOrWhiteSpace(remasterTitle) && _YearRegex.IsMatch(remasterTitle))
+                {
+                    release.Title = WebUtility.HtmlDecode(remasterTitle);
+                }
+                else
+                {
+                    var title = WebUtility.HtmlDecode(result.GetValue("groupName")?.Value<string>());
+
+                    release.Title = $"{title} ({result.GetValue("groupYear")?.Value<string>()}) {media}".Trim();
+
+                    if (!string.IsNullOrWhiteSpace(remasterTitle))
+                    {
+                        release.Title += $" / {WebUtility.HtmlDecode(remasterTitle)}";
+                    }
+
+                    // Replace media formats with standards
+                    release.Title = Regex.Replace(release.Title, @"\bBDMV\b", "COMPLETE BLURAY", RegexOptions.IgnoreCase);
+                    release.Title = Regex.Replace(release.Title, @"\bSD\b", "DVDRip", RegexOptions.IgnoreCase);
+                }
+            }
+
+            var time = torrent.GetValue("time")?.Value<string>();
+
+            if (!string.IsNullOrWhiteSpace(time))
+            {
+                release.PublishDate = DateTime.ParseExact(time + " +0200", "yyyy-MM-dd HH:mm:ss zzz", CultureInfo.InvariantCulture, DateTimeStyles.AdjustToUniversal);
+            }
+
             return true;
+        }
+
+        private static bool IsAnyMovieCategory(ICollection<int> category)
+        {
+            return category.Contains(TorznabCatType.Movies.ID) || TorznabCatType.Movies.SubCategories.Any(subCat => category.Contains(subCat.ID));
         }
     }
 }
