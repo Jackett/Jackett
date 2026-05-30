@@ -77,6 +77,24 @@ caps:
     - {id: 49, cat: TV, desc: " |- Перевод на узбекский"}
     - {id: 403, cat: TV, desc: " |- Узбекские мультфильмы"}
     - {id: 98, cat: TV, desc: " |- Мультсериалы"}
+    - {id: 462, cat: TV, desc: " |- Мультсериалы (HD)"}
+    - {id: 461, cat: TV, desc: " |- Мультсериалы (FullHD)"}
+    - {id: 460, cat: TV, desc: " |- Мультсериалы (UHD)"}
+    # Документальные фильмы и телепередачи # Documentaries and TV shows
+    - {id: 467, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+    - {id: 480, cat: TV/Documentary, desc: " |- Аварии / Катастрофы / Катаклизмы"}
+    - {id: 479, cat: TV/Documentary, desc: " |- Космос / Авиация"}
+    - {id: 478, cat: TV/Documentary, desc: " |- Криминальная документалистика"}
+    - {id: 477, cat: TV/Documentary, desc: " |- Научно-популярная документалистика"}
+    - {id: 476, cat: TV/Documentary, desc: " |- Военные хроник"}
+    - {id: 475, cat: TV/Documentary, desc: " |- Тайны века / Спецслужбы / Теории Заговоров"}
+    - {id: 474, cat: TV/Documentary, desc: " |- Паранормальные явления"}
+    - {id: 473, cat: TV/Documentary, desc: " |- Биографии. Личности и кумиры"}
+    - {id: 472, cat: TV/Documentary, desc: " |- История"}
+    - {id: 468, cat: TV/Documentary, desc: " |- BBC"}
+    - {id: 471, cat: TV/Documentary, desc: " |- Discovery"}
+    - {id: 470, cat: TV/Documentary, desc: " |- National Geographic"}
+    - {id: 469, cat: TV/Documentary, desc: " |- Разное"}
     # Аниме # Anime
     - {id: 345, cat: TV/Anime, desc: "Сериалы"}
     - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
