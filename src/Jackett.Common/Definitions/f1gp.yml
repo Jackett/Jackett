@@ -39,6 +39,7 @@ caps:
     - {id: 29, cat: TV/Sport, desc: "Indy 500"}
     - {id: 30, cat: TV/Sport, desc: "Football/Soccer"}
     - {id: 33, cat: TV/Sport, desc: "WRC/Rally"}
+    - {id: 34, cat: TV/Sport, desc: "BTCC"}
 
   modes:
     search: [q]
