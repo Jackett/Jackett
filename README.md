@@ -375,7 +375,6 @@ Prior versions of Jackett are no longer supported.
  * F1GP
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
- * FearNoPeer
  * Femdomcult
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
