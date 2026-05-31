@@ -99,7 +99,6 @@ Prior versions of Jackett are no longer supported.
  * Catorrent
  * CrackingPatching
  * DaMagNet
- * Demonoid Clone
  * dmhy
  * DonTorrent
  * E-Hentai

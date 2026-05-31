@@ -376,6 +376,7 @@ namespace Jackett.Updater
                 "Definitions/datascene.yml", // switch to *-API #8682
                 "Definitions/datatalli.yml",
                 "Definitions/demonoid.yml",
+                "Definitions/demonoid-clone.yml",
                 "Definitions/demonsite.yml",
                 "Definitions/denofsimps-api.yml",
                 "Definitions/desireleasers.yml",
