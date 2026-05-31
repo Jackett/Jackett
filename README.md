@@ -206,7 +206,6 @@ Prior versions of Jackett are no longer supported.
  * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
- * HD-CzTorrent [PAY2DL]
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
