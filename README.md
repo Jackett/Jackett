@@ -126,7 +126,6 @@ Prior versions of Jackett are no longer supported.
  * MejorTorrent
  * Mikan
  * MixTapeTorrent
- * MoviesDVDR
  * MyPornClub
  * nekoBT
  * NewStudio

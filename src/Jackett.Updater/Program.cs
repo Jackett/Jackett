@@ -589,6 +589,7 @@ namespace Jackett.Updater
                 "Definitions/montorrent.yml",
                 "Definitions/movcr.yml",
                 "Definitions/moviesite.yml",
+                "Definitions/moviesdvdr.yml",
                 "Definitions/movietorrent.yml", // will need c# #11284
                 "Definitions/movietorrentz.yml",
                 "Definitions/movieworld.yml",
