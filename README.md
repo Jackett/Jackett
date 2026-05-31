@@ -687,6 +687,7 @@ Prior versions of Jackett are no longer supported.
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
+ * YggReborn
  * YUSCENE
  * Zappateers
  * Zenith [![(invite needed)][inviteneeded]](#)
