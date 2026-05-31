@@ -100,7 +100,6 @@ Prior versions of Jackett are no longer supported.
  * CrackingPatching
  * DaMagNet
  * Demonoid Clone
- * DivxTotal
  * dmhy
  * DonTorrent
  * E-Hentai
