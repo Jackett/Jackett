@@ -483,6 +483,7 @@ namespace Jackett.Updater
                 "Definitions/hdchina.yml",
                 "Definitions/hdcity.yml", // moved to pixelados
                 "Definitions/hdclub.yml",
+                "Definitions/hdcztorrent.yml",
                 "Definitions/hddisk.yml",
                 "Definitions/hdfun.yml",
                 "Definitions/hdhouse.yml",
