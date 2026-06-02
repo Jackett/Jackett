@@ -171,7 +171,16 @@ namespace Jackett.Common.Utils.Clients
                 request.Method = HttpMethod.Get;
             }
 
-            using var responseMessage = await client.SendAsync(request);
+            HttpResponseMessage responseMessage;
+            try
+            {
+                responseMessage = await client.SendAsync(request);
+            }
+            catch (HttpRequestException ex) when (!string.IsNullOrEmpty(serverConfig.FlareSolverrUrl))
+            {
+                logger.Debug($"[FlareSolverrFallback] SSL failed ({ex.Message}), retrying via FlareSolverr: {webRequest.Url}");
+                responseMessage = await GetViaFlareSolverrFallbackAsync(webRequest, request.RequestUri);
+            }
 
             var result = new WebResult
             {
@@ -262,6 +271,82 @@ namespace Jackett.Common.Utils.Clients
             }
             ServerUtil.ResureRedirectIsFullyQualified(webRequest, result);
             return result;
+        }
+
+        private async Task<HttpResponseMessage> GetViaFlareSolverrFallbackAsync(WebRequest webRequest, Uri requestUri)
+        {
+            using var flareSolverrClient = new HttpClient
+            {
+                Timeout = TimeSpan.FromMilliseconds(serverConfig.FlareSolverrMaxTimeout + 5000)
+            };
+
+            var cmd = webRequest.Type == RequestType.POST ? "request.post" : "request.get";
+            var requestBody = new System.Text.Json.Nodes.JsonObject
+            {
+                ["cmd"] = cmd,
+                ["url"] = webRequest.Url,
+                ["maxTimeout"] = serverConfig.FlareSolverrMaxTimeout
+            };
+
+            if (webRequest.Type == RequestType.POST)
+            {
+                if (webRequest.PostData != null)
+                {
+                    var postDataStr = string.Join("&", webRequest.PostData.Select(kvp =>
+                        Uri.EscapeDataString(kvp.Key) + "=" + Uri.EscapeDataString(kvp.Value ?? "")));
+                    requestBody["postData"] = postDataStr;
+                }
+                else if (!string.IsNullOrEmpty(webRequest.RawBody))
+                    requestBody["postData"] = webRequest.RawBody;
+            }
+
+            if (!string.IsNullOrWhiteSpace(webRequest.Cookies))
+            {
+                var cookieArray = new System.Text.Json.Nodes.JsonArray();
+                foreach (var kv in CookieUtil.CookieHeaderToDictionary(webRequest.Cookies))
+                    cookieArray.Add(new System.Text.Json.Nodes.JsonObject
+                    {
+                        ["name"] = kv.Key,
+                        ["value"] = kv.Value,
+                        ["domain"] = requestUri.Host
+                    });
+                requestBody["cookies"] = cookieArray;
+            }
+
+            var jsonContent = new StringContent(requestBody.ToJsonString(), Encoding.UTF8, "application/json");
+            var flareResponse = await flareSolverrClient.PostAsync(serverConfig.FlareSolverrUrl + "/v1", jsonContent);
+            var flareJson = await flareResponse.Content.ReadAsStringAsync();
+
+            var doc = System.Text.Json.JsonDocument.Parse(flareJson);
+            var root = doc.RootElement;
+
+            if (root.GetProperty("status").GetString() != "ok")
+                throw new HttpRequestException($"FlareSolverr fallback failed: {flareJson}");
+
+            var solution = root.GetProperty("solution");
+            var statusCode = (System.Net.HttpStatusCode)solution.GetProperty("status").GetInt32();
+            var responseBody = solution.GetProperty("response").GetString() ?? "";
+
+            if (solution.TryGetProperty("cookies", out var solutionCookies))
+            {
+                var cookieUrl = new Uri(requestUri.Scheme + "://" + requestUri.Host);
+                foreach (var cookie in solutionCookies.EnumerateArray())
+                {
+                    try
+                    {
+                        cookies.Add(cookieUrl, new Cookie(
+                            cookie.GetProperty("name").GetString(),
+                            cookie.GetProperty("value").GetString()
+                        ));
+                    }
+                    catch { /* ignore individual cookie errors */ }
+                }
+            }
+
+            return new HttpResponseMessage(statusCode)
+            {
+                Content = new StringContent(responseBody, Encoding.UTF8, "text/html")
+            };
         }
     }
 }
