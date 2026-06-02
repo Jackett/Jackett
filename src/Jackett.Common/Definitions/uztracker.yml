@@ -95,6 +95,27 @@ caps:
     - {id: 471, cat: TV/Documentary, desc: " |- Discovery"}
     - {id: 470, cat: TV/Documentary, desc: " |- National Geographic"}
     - {id: 469, cat: TV/Documentary, desc: " |- Разное"}
+    - {id: 499, cat: TV, desc: "Развлекательные телепередачи и шоу"}
+    - {id: 504, cat: TV, desc: " |- Интеллектуальные игры и викторины"}
+    - {id: 501, cat: TV, desc: " |- КВН"}
+    - {id: 500, cat: TV, desc: " |-  Уральские Пельмени"}
+    - {id: 503, cat: TV, desc: " |- Сатирики и юмористы"}
+    - {id: 502, cat: TV, desc: " |- Реалити и ток-шоу"}
+    - {id: 505, cat: TV, desc: " |- Comedy Club"}
+    # Спорт # Sports
+    - {id: 481, cat: TV/Sport, desc: "Спортивные фильмы и телепередачи"}
+    - {id: 493, cat: TV/Sport, desc: " |-  🚗 Автоспорт / 🏍️ Мотоспорт"}
+    - {id: 492, cat: TV/Sport, desc: " |- 🥊 Бокс"}
+    - {id: 491, cat: TV/Sport, desc: " |- 🤼‍♂️ Смешанные единоборства и K-1"}
+    - {id: 490, cat: TV/Sport, desc: " |- 💪 Рестлинг"}
+    - {id: 489, cat: TV/Sport, desc: " |- 🚴 Велоспорт"}
+    - {id: 488, cat: TV/Sport, desc: " |- ⚽ Футбол"}
+    - {id: 487, cat: TV/Sport, desc: " |- 🏀 Баскетбол"}
+    - {id: 486, cat: TV/Sport, desc: " |- 🏒 Хоккей"}
+    - {id: 485, cat: TV/Sport, desc: " |- 🎾 Теннис"}
+    - {id: 484, cat: TV/Sport, desc: " |- 🎿 Лыжи"}
+    - {id: 483, cat: TV/Sport, desc: " |- ⛷️ Сноуборд"}
+    - {id: 482, cat: TV/Sport, desc: "|- 💪🏻 Бодибилдинг"}
     # Аниме # Anime
     - {id: 345, cat: TV/Anime, desc: "Сериалы"}
     - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
@@ -105,6 +126,9 @@ caps:
     - {id: 366, cat: Movies/Other, desc: " |- Новинки"}
     - {id: 364, cat: Movies/Other, desc: " |- Аниме Фильмы (HD)"}
     - {id: 362, cat: Movies/Other, desc: " |- OVA"}
+    - {id: 508, cat: Audio, desc: " |- Звуковые дорожки и переводы (Аниме)"}
+    - {id: 507, cat: Books, desc: " |- Манга, Манхва, Рэнобе, Артбуки, Журналы"}
+    - {id: 509, cat: Other, desc: " |- Обои, сканы, аватары, арт (Аниме)"}
     # Музыка # Music
     - {id: 225, cat: Audio/MP3, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
     - {id: 228, cat: Audio/MP3, desc: " |- Поп музыка России и стран бывшего СССР"}
