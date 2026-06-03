@@ -246,6 +246,7 @@ Prior versions of Jackett are no longer supported.
  * themixingbowl (TMB)
  * Toloka
  * TorrentMasters
+ * TR4KER
  * TrahT
  * TribalMixes
  * Union Fansub
