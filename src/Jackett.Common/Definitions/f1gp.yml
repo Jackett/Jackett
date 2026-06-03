@@ -40,6 +40,7 @@ caps:
     - {id: 30, cat: TV/Sport, desc: "Football/Soccer"}
     - {id: 33, cat: TV/Sport, desc: "WRC/Rally"}
     - {id: 34, cat: TV/Sport, desc: "BTCC"}
+    - {id: 35, cat: TV/Sport, desc: "Isle of Man TT"}
 
   modes:
     search: [q]
