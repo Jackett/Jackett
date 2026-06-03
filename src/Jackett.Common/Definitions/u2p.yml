@@ -7,6 +7,8 @@ description: "U2P is a FRENCH Public Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
+certificates:
+  - 0d721372a11a1d8d057c22dd753491fda22f96bc # Expired 3rd June 2026
 links:
   - https://ygg.gratis/
 
