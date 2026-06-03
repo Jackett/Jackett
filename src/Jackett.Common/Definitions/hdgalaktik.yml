@@ -85,13 +85,13 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
+  # https://www.trackerpmr.com/browse.php?cat[]=13&cat[]=11&shw_incl_cats=0&incldead=0#results
   paths:
     - path: browse.php
   inputs:
     # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -106,15 +106,7 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
-    dateheaders:
-      selector: a[href*="date="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: date
-        - name: dateparse
-          args: "yyyy-MM-dd"
+    selector: div.vb-item
 
   fields:
     category:
@@ -124,7 +116,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.tr-title-link-compact
+      selector: h3 > a
       attribute: title
       filters:
         # normalize to SXXEYY format
@@ -185,32 +177,38 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.tr-title-link-compact
+      selector: h3 > a
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
       optional: true # for users that do not have DL access
     poster:
-      selector: img.tr-main-poster-compact
+      selector: picture > img
       attribute: src
+      filters:
+        - name: replace
+          args: ["/images/default_torrent.png", ""]
     size:
-      selector: div.tr-stat-block-compact:nth-child(3)
+      selector: div.vb-stats > div:nth-child(3) > span:nth-child(2)
     seeders:
-      selector: div.tr-stat-block-compact:nth-child(4)
+      selector: div.vb-stats > div:nth-child(5) > span:nth-child(2)
     leechers:
-      selector: div.tr-stat-block-compact:nth-child(5)
+      selector: div.vb-stats > div:nth-child(6) > span:nth-child(2)
+    date:
+      selector: div.vb-meta > span:nth-last-child(5)
+      filters:
+        - name: timeago
     grabs:
-      selector: div.tr-meta-info-compact span:has(i.fa-download)
+      selector: div.vb-meta > span:nth-last-child(3)
+    files:
+      selector: div.vb-meta > span:nth-last-child(1)
     downloadvolumefactor:
       case:
-        span.tr-badge-free: 0
+        span.vb-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
-    description:
-      selector: a.tr-tag-item-compact
-      attribute: title
 # engine n/a
