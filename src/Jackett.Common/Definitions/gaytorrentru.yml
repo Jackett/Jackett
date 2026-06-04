@@ -121,34 +121,34 @@ login:
 
 search:
   paths:
-    - path: browse.php
+    - path: search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     # 0 active, 1 both, 2 dead
     incldead: 1
-    # where to search: name, descr, filename, freeleech only, wishlist
-    # where to search: inname=1, indesc=1, infn=1, infl=1, inbook=1
+    # where to search: name,     descr,    filename, freeleech only, wishlist
+    # where to search: inname=1, indesc=1, infn=1,   infl=1,         inbook=1
     inname: 1
     infl: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   headers:
-    Referer: ["{{ .Config.sitelink }}browse.php"]
+    Referer: ["{{ .Config.sitelink }}search.php"]
 
   rows:
-    selector: table.browse_result > tbody > tr:has(a[href^="details.php?id="])
+    selector: table#mysearchtable > tbody > tr:has(a[href^="details.php?id="])
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: .browsedesc > a
+      selector: div.torrent_title
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -169,19 +169,21 @@ search:
         - name: regexp
           args: "src=(.+?) "
     grabs:
-      selector: .tsnatch
+      selector: div.tsnatch
     files:
-      selector: .tfiles
+      selector: div.tfiles
     size:
-      selector: .tsize
+      selector: div.tsize
     seeders:
       optional: true
-      selector: a[href$="&toseeders=1"], span.red
+      default: 0
+      selector: a[href$="&toseeders=1"]
     leechers:
       optional: true
+      default: 0
       selector: a[href$="&todlers=1"]
     date:
-      selector: .tadded
+      selector: div.tadded
       # auto adjusted by site account profile
       filters:
         - name: re_replace
@@ -190,7 +192,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss"
     downloadvolumefactor:
       case:
-        "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": 0
+        td:nth-child(3) > div > font:contains("FREELEECH !"): 0
         "*": 1
     uploadvolumefactor:
       text: 1
