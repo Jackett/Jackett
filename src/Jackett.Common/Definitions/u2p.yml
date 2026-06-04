@@ -10,7 +10,11 @@ encoding: UTF-8
 certificates:
   - 0d721372a11a1d8d057c22dd753491fda22f96bc # Expired 3rd June 2026
 links:
+  - https://u2prelais.eliottb.dev/
+  - https://u2p.anhkagi.net/
+legacylinks:
   - https://ygg.gratis/
+
 
 caps:
   categorymappings:
@@ -74,13 +78,6 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: apiurl
-    type: select
-    label: select an API URL
-    default: u2prelais.eliottb.dev
-    options:
-      u2prelais.eliottb.dev: u2prelais.eliottb.dev
-      u2p.anhkagi.net: u2p.anhkagi.net
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -103,7 +100,7 @@ settings:
 
 search:
   paths:
-    - path: "https://{{ .Config.apiurl }}/torznab"
+    - path: torznab
       response:
         type: xml
 
@@ -146,7 +143,7 @@ search:
       selector: guid
       filters:
         - name: prepend
-          args: "{{ .Config.sitelink }}#/e/"
+          args: "https://ygg.gratis/#/e/"
     download:
       selector: enclosure
       attribute: url
