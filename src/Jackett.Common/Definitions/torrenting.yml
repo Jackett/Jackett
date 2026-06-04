@@ -130,12 +130,9 @@ search:
     date:
       selector: td.al div.sub
       filters:
-        - name: strdump
         - name: re_replace
           args: [".+?\\|", ""]
-        - name: strdump
         - name: timeago
-        - name: strdump
     seeders:
       selector: td:nth-last-child(2)
     leechers:
