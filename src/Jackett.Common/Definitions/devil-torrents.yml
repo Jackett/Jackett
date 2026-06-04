@@ -144,7 +144,7 @@ search:
       selector: img.search-poster
       attribute: data-src
     date:
-      selector: div.search-meta-side
+      selector: div.search-date-badge
       filters:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
@@ -153,19 +153,19 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
-      selector: div.search-meta-side
+      selector: span.search-size-badge
       filters:
         - name: regexp
           args: (\d{1,4}\.\d{2}\s+?[T|G|M|k]B)
     seeders:
-      selector: span.stat-green, span.stat-red
+      selector: span[id^="seed_"]
     leechers:
-      selector: span.stat-green:nth-of-type(2), span.stat-red:nth-of-type(2)
+      selector: span[id^="peer_"]
     grabs:
-      selector: div.search-meta-side
+      selector: span:contains("Pobrano")
       filters:
         - name: regexp
-          args: (\d{1,4}) razy
+          args: Pobrano:(\d{1,4})
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
