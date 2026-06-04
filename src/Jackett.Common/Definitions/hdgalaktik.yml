@@ -85,7 +85,7 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  # https://www.trackerpmr.com/browse.php?cat[]=13&cat[]=11&shw_incl_cats=0&incldead=0#results
+  # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
   paths:
     - path: browse.php
   inputs:
@@ -106,7 +106,15 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: div.vb-item
+    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
+    dateheaders:
+      selector: a[href*="date="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: date
+        - name: dateparse
+          args: "yyyy-MM-dd"
 
   fields:
     category:
@@ -116,7 +124,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: h3 > a
+      selector: a.tr-title-link-compact
       attribute: title
       filters:
         # normalize to SXXEYY format
@@ -177,38 +185,32 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: h3 > a
+      selector: a.tr-title-link-compact
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
       optional: true # for users that do not have DL access
     poster:
-      selector: picture > img
+      selector: img.tr-main-poster-compact
       attribute: src
-      filters:
-        - name: replace
-          args: ["/images/default_torrent.png", ""]
     size:
-      selector: div.vb-stats > div:nth-child(3) > span:nth-child(2)
+      selector: div.tr-stat-block-compact:nth-child(3)
     seeders:
-      selector: div.vb-stats > div:nth-child(5) > span:nth-child(2)
+      selector: div.tr-stat-block-compact:nth-child(4)
     leechers:
-      selector: div.vb-stats > div:nth-child(6) > span:nth-child(2)
-    date:
-      selector: div.vb-meta > span:nth-last-child(5)
-      filters:
-        - name: timeago
+      selector: div.tr-stat-block-compact:nth-child(5)
     grabs:
-      selector: div.vb-meta > span:nth-last-child(3)
-    files:
-      selector: div.vb-meta > span:nth-last-child(1)
+      selector: div.tr-meta-info-compact span:has(i.fa-download)
     downloadvolumefactor:
       case:
-        span.vb-badge-free: 0
+        span.tr-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
-# engine n/a
+    description:
+      selector: a.tr-tag-item-compact
+      attribute: title
+# Tesla v.Core (8.7.18)
