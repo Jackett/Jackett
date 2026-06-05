@@ -33,6 +33,7 @@ caps:
     - {id: 21, cat: Books, desc: "EBooks"}
     - {id: 28, cat: PC, desc: "Software/Packs"}
     - {id: 22, cat: Movies, desc: "Classic Movies"}
+    - {id: 29, cat: Movies/UHD, desc: "Movies UHD"}
 
   modes:
     search: [q]
