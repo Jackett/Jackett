@@ -116,7 +116,7 @@ login:
   error:
     - selector: div.panel:has(h3:contains("Login failed"))
   test:
-    path: browse.php
+    path: my.php
     selector: a[href$="/logout.php"]
 
 search:
