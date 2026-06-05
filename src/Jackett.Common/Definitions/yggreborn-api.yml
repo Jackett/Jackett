@@ -96,7 +96,7 @@ search:
 
   inputs:
     apikey: "{{ .Config.passkey }}"
-    t: "{{ .Query.Type }}"
+    t: search
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     season: "{{ .Query.Season }}"
