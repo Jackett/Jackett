@@ -11,12 +11,11 @@ legacylinks:
   - https://www.gaytorrent.ru/
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -107,14 +106,10 @@ caps:
     book-search: [q]
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.panel:has(h3:contains("Login failed"))
+    cookie: "{{ .Config.cookie }}"
   test:
     path: my.php
     selector: a[href$="/logout.php"]
