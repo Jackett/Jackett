@@ -64,12 +64,11 @@ settings:
     type: info
     label: About Password Expiry
     default: "DS.R has an <b>8 week Password Expiry</b> regime. So if the Indexer has stopped working then the first thing you should do is check if your password has expired by login in at <a href=\"https://ds-reloaded.com/login.php\" target=\"_blank\">DS-Reloaded</a>, and if necessary use the <b>Passwort anfordern</b> (<i>Request password</i>) button to renew it."
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: onlyupload
     type: checkbox
     label: Search OnlyUpload
@@ -84,16 +83,10 @@ settings:
     default: "Inactive accounts will be deactivated after 7 weeks and deleted after another 3 weeks."
 
 login:
-  path: login.php
-  method: form
-  form: form
+  # using cookie method because login page can present second page for a challenge eg. 9+2=?
+  method: cookie
   inputs:
-    login_identifier: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    loggiin: Login
-  error:
-    - selector: div#login_error
-    - selector: div.error-message
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="logout.php"]
