@@ -423,6 +423,7 @@ namespace Jackett.Updater
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
                 "Definitions/exttorrents.yml",
+                "Definitions/f1gp.yml", // renamed to tsdb
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",
                 "Definitions/fastscene.yml",
