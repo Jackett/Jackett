@@ -1,7 +1,9 @@
 ---
-id: f1gp
-name: F1GP
-description: "F1GP is a Private Torrent Tracker for F1, F2, F3, FE, F1 Academy Racing"
+id: tsdb
+replaces:
+  - f1gp
+name: TSDB
+description: "TSDB (The Sports Database) is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
@@ -32,7 +34,7 @@ caps:
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
     - {id: 24, cat: Other, desc: "Magazines - Books"}
-    - {id: 25, cat: TV/Sport, desc: "NNASCAR"}
+    - {id: 25, cat: TV/Sport, desc: "NASCAR"}
     - {id: 26, cat: TV/Sport, desc: "Tennis"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
