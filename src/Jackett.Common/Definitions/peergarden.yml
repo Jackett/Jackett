@@ -18,7 +18,7 @@ caps:
     - {id: 6, cat: Books, desc: "Books"}
     - {id: 7, cat: Audio/Audiobook, desc: "AudioBooks"}
     - {id: 8, cat: Audio/Other, desc: "Podcasts"}
-    - {id: 10, cat: TV/Sports, desc: "Sports"}
+    - {id: 10, cat: TV/Sport, desc: "Sports"}
     - {id: 11, cat: TV/Anime, desc: "Anime"}
 
   modes:
