@@ -99,15 +99,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (IsAnyMovieCategory(release.Category))
             {
-                var remasterTitle = torrent.GetValue("remasterTitle")?.Value<string>()?.Trim();
+                var releaseName = torrent.GetValue("releaseName")?.Value<string>()?.Trim();
 
-                if (!string.IsNullOrWhiteSpace(remasterTitle) && _YearRegex.IsMatch(remasterTitle))
+                if (!string.IsNullOrWhiteSpace(releaseName) && _YearRegex.IsMatch(releaseName))
                 {
-                    release.Title = WebUtility.HtmlDecode(remasterTitle);
+                    release.Title = WebUtility.HtmlDecode(releaseName);
                 }
                 else
                 {
                     var title = WebUtility.HtmlDecode(result.GetValue("groupName")?.Value<string>());
+                    var remasterTitle = torrent.GetValue("remasterTitle")?.Value<string>()?.Trim();
 
                     release.Title = $"{title} ({result.GetValue("groupYear")?.Value<string>()}) {media}".Trim();
 
