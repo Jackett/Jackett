@@ -525,6 +525,7 @@ Prior versions of Jackett are no longer supported.
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
+ * PeerGarden
  * Peers.FM
  * Phoenix Project
  * PigNetwork (猪猪网)
