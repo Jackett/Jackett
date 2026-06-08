@@ -104,7 +104,8 @@ caps:
     - {id: 505, cat: TV, desc: " |- Comedy Club"}
     # Спорт # Sports
     - {id: 481, cat: TV/Sport, desc: "Спортивные фильмы и телепередачи"}
-    - {id: 493, cat: TV/Sport, desc: " |-  🚗 Автоспорт / 🏍️ Мотоспорт"}
+    - {id: 493, cat: TV/Sport, desc: " |- 🚗 Автоспорт"}
+    - {id: 510, cat: TV/Sport, desc: " |- 🏍️ Мотоспорт"}
     - {id: 492, cat: TV/Sport, desc: " |- 🥊 Бокс"}
     - {id: 491, cat: TV/Sport, desc: " |- 🤼‍♂️ Смешанные единоборства и K-1"}
     - {id: 490, cat: TV/Sport, desc: " |- 💪 Рестлинг"}
