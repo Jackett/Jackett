@@ -97,7 +97,6 @@ search:
     name: "{{ .Keywords }}"
     seasonNumber: "{{ .Query.Season }}"
     episodeNumber: "{{ .Query.Ep }}"
-    imdbId: "{{ .Query.IMDBIDShort }}"
     imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
