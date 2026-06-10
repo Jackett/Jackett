@@ -120,30 +120,32 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    view: legacy
     # 0 active, 1 both, 2 dead
     incldead: 1
     # where to search: name,     descr,    filename, freeleech only, wishlist
     # where to search: inname=1, indesc=1, infn=1,   infl=1,         inbook=1
     inname: 1
     infl: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    page: 0
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   headers:
-    Referer: ["{{ .Config.sitelink }}search.php"]
+    Referer: ["{{ .Config.sitelink }}search.php?view=legacy"]
 
   rows:
-    selector: table#mysearchtable > tbody > tr:has(a[href^="details.php?id="])
+    selector: table#browsetable > tbody > tr.browse_row
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: div.torrent_title
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -157,14 +159,8 @@ search:
       # turn href="download.php/0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b/GUARATORO.torrent
       # into href="/download.php?id=0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b&n=GUARATORO.torrent&p=dodownload
       text: "download.php?id={{ .Result._id }}&n={{ .Result.title }}.torrent&p=dodownload"
-    poster:
-      selector: a[href^="details.php?id="]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "src=(.+?) "
     grabs:
-      selector: div.tsnatch
+      selector: div.ttimes
     files:
       selector: div.tfiles
     size:
@@ -178,16 +174,17 @@ search:
       default: 0
       selector: a[href$="&todlers=1"]
     date:
-      selector: div.tadded
-      # auto adjusted by site account profile
+      selector: div.tadded > time
       filters:
-        - name: re_replace
-          args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2}).*", "$1 $2"]
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss"
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    description:
+      selector: div.browsedesc span:last-child
     downloadvolumefactor:
       case:
-        td:nth-child(3) > div > font:contains("FREELEECH !"): 0
+        font:contains("FREELEECH !"): 0
         "*": 1
     uploadvolumefactor:
       text: 1
