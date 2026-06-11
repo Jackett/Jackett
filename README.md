@@ -507,7 +507,6 @@ Prior versions of Jackett are no longer supported.
  * NOBS (NUCLEAR ORDER BIT SYNDICATE)
  * NorBits
  * NordicBytes
- * NORDiCHD
  * NordicQuality
  * Nostradamus
  * NovaHD
