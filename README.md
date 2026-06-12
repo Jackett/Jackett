@@ -99,8 +99,6 @@ Prior versions of Jackett are no longer supported.
  * Catorrent
  * CrackingPatching
  * DaMagNet
- * Demonoid Clone
- * DivxTotal
  * dmhy
  * DonTorrent
  * E-Hentai
@@ -129,7 +127,6 @@ Prior versions of Jackett are no longer supported.
  * MejorTorrent
  * Mikan
  * MixTapeTorrent
- * MoviesDVDR
  * MyPornClub
  * nekoBT
  * NewStudio
@@ -210,7 +207,6 @@ Prior versions of Jackett are no longer supported.
  * Fenyarnyek-Tracker
  * File-Tracker
  * Gay-Torrents.net
- * HD-CzTorrent [PAY2DL]
  * HDGalaKtik
  * HellTorrents [PAY2DL]
  * HunTorrent
@@ -251,6 +247,7 @@ Prior versions of Jackett are no longer supported.
  * themixingbowl (TMB)
  * Toloka
  * TorrentMasters
+ * TR4KER
  * TrahT
  * TribalMixes
  * Union Fansub
@@ -332,7 +329,6 @@ Prior versions of Jackett are no longer supported.
  * C411
  * cangbaoge (CBG)
  * CapybaraBR
- * Carp-Hunter
  * Carpathians
  * CarPT
  * Cathode-Ray.Tube (CRT)
@@ -378,10 +374,8 @@ Prior versions of Jackett are no longer supported.
  * Explosiv-World (E-W)
  * ExtremeBits
  * F1Carreras
- * F1GP
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
- * FearNoPeer
  * Femdomcult
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
@@ -393,7 +387,6 @@ Prior versions of Jackett are no longer supported.
  * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
  * G3MINI TR4CK3R
- * Gay-Torrents.org
  * GAYtorrent.ru
  * GazelleGames (GGn)
  * Generation-Free
@@ -433,6 +426,7 @@ Prior versions of Jackett are no longer supported.
  * Hebits (HB)
  * HellasHut
  * HELLENIC-HD
+ * HeroBit
  * HHanClub
  * HHD
  * House of Devil
@@ -514,7 +508,6 @@ Prior versions of Jackett are no longer supported.
  * NOBS (NUCLEAR ORDER BIT SYNDICATE)
  * NorBits
  * NordicBytes
- * NORDiCHD
  * NordicQuality
  * Nostradamus
  * NovaHD
@@ -528,9 +521,11 @@ Prior versions of Jackett are no longer supported.
  * OurBits (HDPter)
  * P2PBG [PAY2DL]
  * Panda
+ * ParabellumHD
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
+ * PeerGarden
  * Peers.FM
  * Phoenix Project
  * PigNetwork (猪猪网)
@@ -651,6 +646,7 @@ Prior versions of Jackett are no longer supported.
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
  * Torrent.LT
+ * TorrentAvenue
  * TorrentBD
  * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
@@ -668,6 +664,7 @@ Prior versions of Jackett are no longer supported.
  * TranceTraffic
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
  * TreZzoR
+ * TSDB (The Sports Database)
  * TurkSeed (Aturk)
  * TurkTorrent (TT) [PAY2DL]
  * TVstore
@@ -694,8 +691,10 @@ Prior versions of Jackett are no longer supported.
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
+ * YggReborn
  * YUSCENE
  * Zappateers
+ * Zenith [![(invite needed)][inviteneeded]](#)
  * ZmPT (织梦)
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
 </details>

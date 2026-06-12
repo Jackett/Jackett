@@ -50,7 +50,7 @@ namespace Jackett.Common.Indexers.Definitions
             webclient.EmulateBrowser = false;
         }
 
-        private TorznabCapabilities SetCapabilities()
+        private static TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
             {
@@ -210,7 +210,8 @@ namespace Jackett.Common.Indexers.Definitions
                 {"tor[perpage]", limit.ToString()},
                 {"tor[startNumber]", offset.ToString()},
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
-                {"description", "1"} // include the description
+                {"description", "1"}, // include the description
+                { "dlLink", "1" }, // include download link hash
             };
 
             if (configData.SearchInDescription.Value)
@@ -290,7 +291,6 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var item in jsonResponse.Data)
                 {
                     var id = item.Id;
-                    var link = new Uri(sitelink, $"/tor/download.php?tid={id}");
                     var details = new Uri(sitelink, $"/t/{id}");
 
                     var isFreeLeech = item.Free || item.PersonalFreeLeech;
@@ -300,7 +300,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = details,
                         Title = item.Title.Trim(),
                         Description = item.Description.Trim(),
-                        Link = link,
+                        Link = GetDownloadUrl(id, item.DownloadHash),
                         Details = details,
                         Category = MapTrackerCatToNewznab(item.Category),
                         PublishDate = DateTime.ParseExact(item.Added, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
@@ -370,6 +370,15 @@ namespace Jackett.Common.Indexers.Definitions
 
             return releases;
         }
+
+        private Uri GetDownloadUrl(int torrentId, string downloadHash)
+        {
+            return new UriBuilder(SiteLink)
+            {
+                Path = $"/tor/download.php/{downloadHash}",
+                Query = $"tid={torrentId}"
+            }.Uri;
+        }
     }
 
     public class MyAnonamouseResponse
@@ -403,5 +412,7 @@ namespace Jackett.Common.Indexers.Definitions
         public int Leechers { get; set; }
         public int NumFiles { get; set; }
         public string Size { get; set; }
+        [JsonProperty(PropertyName = "dl")]
+        public string DownloadHash { get; set; }
     }
 }

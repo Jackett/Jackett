@@ -91,7 +91,7 @@ search:
   inputs:
     # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -213,4 +213,4 @@ search:
     description:
       selector: a.tr-tag-item-compact
       attribute: title
-# engine n/a
+# Tesla v.Core (8.7.18)

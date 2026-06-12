@@ -1,30 +1,27 @@
 ---
-id: fearnopeer
-name: FearNoPeer
-description: "FearNoPear is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: torrentavenue-api
+name: TorrentAvenue (API)
+description: "TorrentAvenue is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://fearnopeer.com/
+  - https://torrentavenue.online/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: Audio, desc: "Music"}
-    - {id: 4, cat: PC/Games, desc: "Games"}
-    - {id: 5, cat: PC/0day, desc: "Apps"}
-    - {id: 6, cat: TV/Anime, desc: "Anime"}
-    - {id: 9, cat: TV/Sport, desc: "Sport"}
-    - {id: 14, cat: Other, desc: "Tutorials"}
-    - {id: 11, cat: Other, desc: "Assorted"}
+    - {id: 4, cat: PC, desc: "Apps"}
+    - {id: 5, cat: Console, desc: "Games"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey
@@ -33,7 +30,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://fearnopeer.com/\" target=\"_blank\">FearNoPeer</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://torrentavenue.online/\" target=\"_blank\">TorrentAvenue</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -58,10 +55,6 @@ settings:
     options:
       desc: desc
       asc: asc
-  - name: info_activity
-    type: info
-    label: Account Inactivity
-    default: "Accounts that have not logged in for 150 days will be disabled, and may be deleted shortly afterwards."
 
 login:
   path: api/torrents
@@ -137,8 +130,6 @@ search:
       filters:
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
-        - name: re_replace
-          args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
     _internal:
@@ -190,5 +181,8 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumratio:
-      text: 0.81
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # json UNIT3D 9.2.0

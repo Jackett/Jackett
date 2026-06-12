@@ -184,6 +184,6 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # json UNIT3D 9.2.0

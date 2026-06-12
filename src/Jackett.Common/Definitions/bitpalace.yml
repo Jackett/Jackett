@@ -41,8 +41,8 @@ caps:
     - {id: 6, cat: XXX/x264, desc: "XXX HD"}
     - {id: 10, cat: XXX/ImageSet, desc: "XXX KÉPEK"}
     - {id: 11, cat: XXX/XviD, desc: "XXX XVID"}
-    - {id: 20, cat: Audio, desc: "ZENE Eng"}
-    - {id: 19, cat: Audio, desc: "ZENE Hun"}
+    - {id: 82, cat: Audio, desc: "ZENE ENG"}
+    - {id: 83, cat: Audio, desc: "ZENE HUN"}
 
   modes:
     search: [q]
@@ -116,6 +116,8 @@ search:
     categorydesc:
       selector: img
       attribute: alt
+      optional: true # alt may be missing if cat is missing, cat404.jpg is incorrectly defined
+      default: EGYÉBB
     title:
       selector: a[onclick]
       remove: style

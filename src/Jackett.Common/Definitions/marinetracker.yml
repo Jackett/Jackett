@@ -6,6 +6,8 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
+  - https://seatracker.org/
+legacylinks:
   - https://seatracker.ru/
 
 caps:

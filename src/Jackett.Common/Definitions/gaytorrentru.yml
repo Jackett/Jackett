@@ -11,12 +11,11 @@ legacylinks:
   - https://www.gaytorrent.ru/
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -107,38 +106,36 @@ caps:
     book-search: [q]
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.panel:has(h3:contains("Login failed"))
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
+    path: my.php
     selector: a[href$="/logout.php"]
 
 search:
   paths:
-    - path: browse.php
+    - path: search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
+    view: legacy
     # 0 active, 1 both, 2 dead
     incldead: 1
-    # where to search: name, descr, filename, freeleech only, wishlist
-    # where to search: inname=1, indesc=1, infn=1, infl=1, inbook=1
+    # where to search: name,     descr,    filename, freeleech only, wishlist
+    # where to search: inname=1, indesc=1, infn=1,   infl=1,         inbook=1
     inname: 1
     infl: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    page: 0
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
 
   headers:
-    Referer: ["{{ .Config.sitelink }}browse.php"]
+    Referer: ["{{ .Config.sitelink }}search.php?view=legacy"]
 
   rows:
-    selector: table.browse_result > tbody > tr:has(a[href^="details.php?id="])
+    selector: table#browsetable > tbody > tr.browse_row
 
   fields:
     category:
@@ -148,7 +145,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: .browsedesc > a
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -163,34 +160,41 @@ search:
       # into href="/download.php?id=0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b&n=GUARATORO.torrent&p=dodownload
       text: "download.php?id={{ .Result._id }}&n={{ .Result.title }}.torrent&p=dodownload"
     poster:
+      # turn href="details.php?id= ... &hit=1" data-hover-thumbs='[{"p":"2026\/24\/33749943.jpg","x":180,"y":270,"cid":33749944,"full":"2026\/24\/33749944.jpg"}, ... ]'
+      # into https://pic.gaytor.rent/tpics/2026/24/33749943.jpg
       selector: a[href^="details.php?id="]
-      attribute: onmouseover
+      attribute: data-hover-thumbs
       filters:
         - name: regexp
-          args: "src=(.+?) "
+          args: p\"\:\"(.+?)\"
+        - name: prepend
+          args: "https://pic.gaytor.rent/tpics/"
     grabs:
-      selector: .tsnatch
+      selector: div.ttimes
     files:
-      selector: .tfiles
+      selector: div.tfiles
     size:
-      selector: .tsize
+      selector: div.tsize
     seeders:
       optional: true
-      selector: a[href$="&toseeders=1"], span.red
+      default: 0
+      selector: a[href$="&toseeders=1"]
     leechers:
       optional: true
+      default: 0
       selector: a[href$="&todlers=1"]
     date:
-      selector: .tadded
-      # auto adjusted by site account profile
+      selector: div.tadded > time
       filters:
-        - name: re_replace
-          args: ["(\\d{4}-\\d{2}-\\d{2})(\\d{2}:\\d{2}:\\d{2}).*", "$1 $2"]
+        - name: append
+          args: " +02:00" # EET
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss"
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    description:
+      selector: div.browsedesc span:last-child
     downloadvolumefactor:
       case:
-        "td:nth-child(3) > div > nobr > font[color=\"yellow\"]": 0
+        font:contains("FREELEECH !"): 0
         "*": 1
     uploadvolumefactor:
       text: 1

@@ -1,25 +1,30 @@
 ---
-id: nobs
-name: NOBS
-description: "NOBS (NUCLEAR ORDER BIT SYNDICATE) is a SPANISH Private Torrent Tracker for MOVIES / TV"
+id: zenith
+name: Zenith
+description: "Zenith is an Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://nobs.rawsmoke.net/
+  - https://znth.cx/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Console, desc: "Retro Arcade"}
-    - {id: 4, cat: Movies/Other, desc: "Movies"}
-    - {id: 5, cat: TV/Anime, desc: "TV"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 6, cat: Books, desc: "Books"}
+    - {id: 7, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 3, cat: Console, desc: "Games"}
+    - {id: 8, cat: PC, desc: "Software"}
+    - {id: 9, cat: Other, desc: "Misc"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
@@ -28,7 +33,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://nobs.rawsmoke.net/\" target=\"_blank\">NOBS</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://znth.cx/\" target=\"_blank\">Zenith</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -53,6 +58,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts get disabled after 90 days of no logins or any sort of activity. Accounts will also get soft deleted after 120 days."
 
 login:
   path: api/torrents
@@ -107,7 +116,7 @@ search:
     files:
       selector: num_file
     title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }} Spanish"
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
@@ -180,10 +189,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 4 days regardless of ratio
+# global MR is 0.69 but torrents must be seeded for 3 days regardless of ratio
 #    minimumratio:
-#      text: 0.4
+#      text: 0.69
     minimumseedtime:
-      # 4 days (as seconds = 4 x 24 x 60 x 60)
-      text: 345600
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # json UNIT3D 9.2.0

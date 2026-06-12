@@ -1,7 +1,7 @@
 ---
-id: hdforever
-name: HD-Forever
-description: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES"
+id: hdforever2fa
+name: HD-Forever2FA
+description: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES. This indexer uses cookie login for 2FA."
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -25,16 +25,13 @@ caps:
   allowtvsearchimdb: true
 
 settings:
-  - name: info_2fa
-    type: info
-    label: "About 2FA"
-    default: "If you want to enable 2FA then use the HD-Forever2FA indexer instead."
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: info
+    type: info
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -91,14 +88,10 @@ settings:
     default: For more stable release names, enable <b>Afficher les noms de fichiers</b> in your HD-F profile settings.
 
 login:
-  path: login.php
-  method: post
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    keeplogged: 1
-  error:
-    - selector: form#loginform > span.warning
+    cookie: "{{ .Config.cookie }}"
   test:
     path: torrents.php
     selector: a[href^="logout.php?auth="]

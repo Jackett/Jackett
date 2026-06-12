@@ -5,34 +5,31 @@ description: "Bit-Bázis is a HUNGARIAN Private Tracker for MOVIES / TV"
 language: hu-HU
 type: private
 encoding: UTF-8
-requestDelay: 2
 links:
   - https://bitbazis.net/
 
 caps:
-  # dont forget to update the path categories in the search block
   categorymappings:
-    - {id: 15, cat: Movies/SD, desc: "Film-SD", default: true}
-    - {id: 83, cat: Movies/HD, desc: "Film-HD", default: true}
-    - {id: 94, cat: Movies/HD, desc: "Film-FHD", default: true}
-    - {id: 85, cat: Movies/SD, desc: "Film-Cam", default: true}
-    - {id: 22, cat: TV, desc: "Sorozat-Hun", default: true}
-    - {id: 25, cat: Audio/MP3, desc: "Mp3-Hun", default: true}
-    - {id: 26, cat: Audio/MP3, desc: "Mp3-Eng", default: true}
-    - {id: 84, cat: Audio/Lossless, desc: "FLAC-Hun", default: true}
-    - {id: 71, cat: Audio/Lossless, desc: "FLAC-Eng", default: true}
-    - {id: 27, cat: Books/EBook, desc: "Könyv", default: true}
-    - {id: 81, cat: PC/0day, desc: "Program", default: true}
-    - {id: 31, cat: PC/Games, desc: "Játék", default: true}
-    - {id: 69, cat: TV/Anime, desc: "Mese-SD", default: true}
-    - {id: 91, cat: TV/Anime, desc: "Mese-HD", default: true}
-    - {id: 64, cat: Movies, desc: "Film-Pack", default: true}
-    - {id: 92, cat: Movies/UHD, desc: "Film-UHD", default: true}
-    - {id: 66, cat: XXX/ImageSet, desc: "XXX", default: false}
-    - {id: 33, cat: XXX/SD, desc: "XXX-SD", default: false}
-    - {id: 89, cat: XXX/x264, desc: "XXX-HD", default: false}
-    - {id: 24, cat: Audio/Video, desc: "Klip", default: true}
-    - {id: 14, cat: Other, desc: "Egyéb", default: true}
+    - {id: 66, cat: XXX/ImageSet, desc: "XXX"}
+    - {id: 33, cat: XXX/SD, desc: "XXX-SD"}
+    - {id: 89, cat: XXX/x264, desc: "XXX-HD"}
+    - {id: 15, cat: Movies/SD, desc: "Film-SD"}
+    - {id: 83, cat: Movies/HD, desc: "Film-HD"}
+    - {id: 94, cat: Movies/HD, desc: "Film-FHD"}
+    - {id: 22, cat: TV, desc: "Sorozat-Hun"}
+    - {id: 25, cat: Audio/MP3, desc: "Mp3-Hun"}
+    - {id: 26, cat: Audio/MP3, desc: "Mp3-Eng"}
+    - {id: 84, cat: Audio/Lossless, desc: "FLAC-Hun"}
+    - {id: 71, cat: Audio/Lossless, desc: "FLAC-Eng"}
+    - {id: 27, cat: Books/EBook, desc: "Könyv"}
+    - {id: 81, cat: PC/0day, desc: "Program"}
+    - {id: 31, cat: PC/Games, desc: "Játék"}
+    - {id: 69, cat: TV/Anime, desc: "Mese-SD"}
+    - {id: 91, cat: TV/Anime, desc: "Mese-HD"}
+    - {id: 64, cat: Movies, desc: "Film-Pack"}
+    - {id: 92, cat: Movies/UHD, desc: "Film-UHD"}
+    - {id: 24, cat: Audio/Video, desc: "Klip"}
+    - {id: 14, cat: Other, desc: "Egyéb"}
 
   modes:
     search: [q]
@@ -47,10 +44,6 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
-  - name: freeleech
-    type: checkbox
-    label: Filter freeleech only
-    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -76,68 +69,55 @@ settings:
     default: "If the user does not access the site for 1 month, he will receive an e-mail notification. If you stay away for 9 months, your account will be suspended and deleted. After the 9-month absence, the user cannot register again."
 
 login:
+  # using cookie method because login page has embedded Google reCAPTCHA
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
-    selector: a[onclick="confirmLogout()"]
+    selector: a[onclick^="confirmLogout()"]
 
 search:
   paths:
+    # https://bitbazis.net/browse.php?c66=1&c33=1&c89=1&q=&incl=0&sort=&type=&ajax=1
     - path: browse.php
-      categories: [15, 83, 94, 85, 22, 25, 26, 84, 71, 27, 81, 31, 69, 91, 64, 92, 24, 14]
-      inputs:
-        # 0 all, 1 active, 2 deadonly, 3 myuploads, 4 zeroseed, 6 re-seeded
-        incldead: 0
-    - path: browse.php
-      categories: [33, 66, 89]
-      inputs:
-        xxx: 1
-        # 0 active, 1 all, 2 deadonly, 3 myuploads, 4 zeroseed, 6 re-seeded
-        incldead: 1
+      response:
+        type: json
+
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    search: "{{ .Keywords }}"
+    q: "{{ .Keywords }}"
+    # 0 all, 1 active, 2 deadOnly, 3 myUploads, 5 notVerified, 7 zeroSeed, 8 myBookmakrs
+    incl: 0
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
+    ajax: 1
     # site does not support imdbid searching
-    # can support genre searching but you need to know the id, eg &genre23=1 for Comedy (id is 23)
+    # can support genre searching but you need to know the id, eg &genre[3] for Animáció
 
   rows:
-    selector: "tr[class^=\"toriadatok\"]:has(i.status-yes){{ if .Config.freeleech }}:has(i:contains(\"(Free)\")){{ else }}{{ end }}"
+    selector: torrents
 
   fields:
     categorydesc:
-      selector: td[class^="catpic_"]
-      attribute: class
-      filters:
-        - name: replace
-          args: ["catpic_", ""]
+      selector: cat_name
     title:
-      selector: span.torrent-name
+      selector: name
     _id:
-      selector: tr[data-torrent-id]
-      attribute: data-torrent-id
+      selector: id
     details:
-      text: "details.php?id={{ .Result._id }}#adatlap"
+      text: "details.php?id={{ .Result._id }}"
     download:
       text: "download.php?torrent={{ .Result._id }}"
-    poster:
-      selector: a.preview
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
     size:
-      selector: td.torrent-size
+      selector: size
     date:
       # 36 perce
       # 13 órája és 59 perce
       # 2 napja és 10 órája
       # 1 hete és 1 napja
       # 1 éve és 30 hete
-      selector: span.uploader
+      selector: added
       filters:
         - name: replace
           args: ["és ", " "]
@@ -153,32 +133,25 @@ search:
           args: ["éve", "year"]
         - name: timeago
     seeders:
-      selector: td:nth-child(5)
-      optional: true
-      default: 0
+      selector: seeders
     leechers:
-      selector: td:nth-child(6)
-      optional: true
-      default: 0
+      selector: leechers
     grabs:
-      selector: td:nth-child(7)
-      optional: true
-      default: 0
+      selector: times_completed
     genre:
-      selector: span.torrent-genre
+      selector: genre
+    _verified:
+      selector: ellenorizve
+      case:
+        yes: Verified
+        "*": Not Verified
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ .Result._verified }} | {{ .Result.genre }}"
     downloadvolumefactor:
-      case:
-        "i:contains(\"(Free)\")": 0
-        "*": 1
+      text: 1
     uploadvolumefactor:
-      case:
-        "i:contains(\"(2x)\")": 2
-        "i:contains(\"(3x)\")": 3
-        "i:contains(\"(4x)\")": 4
-        "*": 1
+      selector: upload_multiplier
     minimumseedtime:
-      # 1 day (as seconds = 1 x 24 x 60 x 60)
-      text: 86400
-# engine n/a
+      # 16 hours (as seconds = 16 x 60 x 60)
+      text: 57600
+# JSON

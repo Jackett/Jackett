@@ -1,34 +1,41 @@
 ---
-id: nobs
-name: NOBS
-description: "NOBS (NUCLEAR ORDER BIT SYNDICATE) is a SPANISH Private Torrent Tracker for MOVIES / TV"
+id: peergarden
+name: PeerGarden
+description: "PeerGarden (PG) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://nobs.rawsmoke.net/
+  - https://peergarden.org/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Console, desc: "Retro Arcade"}
-    - {id: 4, cat: Movies/Other, desc: "Movies"}
-    - {id: 5, cat: TV/Anime, desc: "TV"}
+    - {id: 3, cat: PC/0day, desc: "Apps"}
+    - {id: 4, cat: PC/Games, desc: "Games"}
+    - {id: 5, cat: Audio, desc: "Music"}
+    - {id: 6, cat: Books, desc: "Books"}
+    - {id: 7, cat: Audio/Audiobook, desc: "AudioBooks"}
+    - {id: 8, cat: Audio/Other, desc: "Podcasts"}
+    - {id: 10, cat: TV/Sport, desc: "Sports"}
+    - {id: 11, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
 
 settings:
   - name: apikey
     type: text
     label: APIKey
-  - name: info_key
+  - name: info_apikey
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://nobs.rawsmoke.net/\" target=\"_blank\">NOBS</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Key by accessing the <a href=\"https://peergarden.org/account/apikey/\" target=\"_blank\">PeerGarden Account API Key</a> page."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -36,7 +43,7 @@ settings:
   - name: single_file_release_use_filename
     type: checkbox
     label: Use filename as title for single file releases
-    default: true
+    default: false
   - name: sort
     type: select
     label: Sort requested from site
@@ -53,6 +60,10 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your account is automatically disabled after 90 days of no activity."
 
 login:
   path: api/torrents
@@ -107,16 +118,18 @@ search:
     files:
       selector: num_file
     title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }} Spanish"
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
       selector: details_link
     download:
       selector: download_link
+    infohash:
+      selector: info_hash
     poster:
       selector: meta.poster
       filters:
         - name: replace
-          args: ["https://via.placeholder.com/90x135", ""]
+          args: ["https://placehold.co/90x135", ""]
     imdbid:
       selector: imdb_id
     tmdbid:
@@ -135,8 +148,8 @@ search:
     _internal:
       selector: internal
       case:
-        False: "{{ .False }}"
-        True: "{{ .True }}"
+        0: "{{ .False }}"
+        1: "{{ .True }}"
     description:
       text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
@@ -180,10 +193,9 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 4 days regardless of ratio
-#    minimumratio:
-#      text: 0.4
+    minimumratio:
+      text: 1.0
     minimumseedtime:
-      # 4 days (as seconds = 4 x 24 x 60 x 60)
-      text: 345600
-# json UNIT3D 9.2.0
+      # 2 day (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json Traxary v0.0.180 (based on UNIT3D 8.2.0)

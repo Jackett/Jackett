@@ -17,8 +17,6 @@ caps:
     - {id: 596, cat: Movies/HD, desc: "Filmy x265/h265"}
     - {id: 3, cat: Movies/DVD, desc: "Filmy DVD"}
     - {id: 5, cat: Movies/3D, desc: "Filmy 3D"}
-    - {id: 2, cat: Movies/HD, desc: "Filmy RMVB"}
-    - {id: 362, cat: Movies/SD, desc: "Filmy IVO"}
     - {id: 7, cat: TV, desc: "TV/Seriale"}
     - {id: 702, cat: Movies/SD, desc: "TS/CAM"}
     - {id: 8, cat: XXX, desc: "Erotyka"}
@@ -86,45 +84,43 @@ login:
     selector: a[href$="/logout.php"]
 
 search:
-  # https://devil-torrents.pl/szukaj.php?search=%&typ=torrent&c4=1&c748=1
+  # https://devil-torrents.pl/szukaj.php?search=2026&typ=torrent
   paths:
-    - path: "{{ if .Keywords }}szukaj.php{{ else }}files-torrent{{ end }}"
+    - path: szukaj.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    typ: "{{ if .Keywords }}torrent{{ else }}{{ end }}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ end }}"
+    typ: torrent
+    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search_in_descr: "{{ if .Keywords }}{{ else }}1{{ end }}"
 
   rows:
-    selector: table.test5 > tbody > tr > td > div[id]:has(a[href^="download/"])
+    selector: div.search-torrent-card
 
   fields:
     category:
-      selector: div#kategoria-gatunek-1
+      selector: span.search-cat-badge
       case:
-        "div#kategoria-gatunek-1:contains(\"Filmy XviD/DivX\")": 1
-        "div#kategoria-gatunek-1:contains(\"Filmy 4K\")": 748
-        "div#kategoria-gatunek-1:contains(\"Filmy Blu-Ray/HD\")": 4
-        "div#kategoria-gatunek-1:contains(\"Filmy x264/h264\")": 642
-        "div#kategoria-gatunek-1:contains(\"Filmy x265/h265\")": 596
-        "div#kategoria-gatunek-1:contains(\"Filmy DVD\")": 3
-        "div#kategoria-gatunek-1:contains(\"Filmy 3D\")": 5
-        "div#kategoria-gatunek-1:contains(\"Filmy RMVB\")": 2
-        "div#kategoria-gatunek-1:contains(\"Filmy IVO\")": 362
-        "div#kategoria-gatunek-1:contains(\"TV/Seriale\")": 7
-        "div#kategoria-gatunek-1:contains(\"TS/CAM\")": 702
-        "div#kategoria-gatunek-1:contains(\"Erotyka\")": 8
-        "div#kategoria-gatunek-1:contains(\"Muzyka\")": 10
-        "div#kategoria-gatunek-1:contains(\"Programy\")": 11
-        "div#kategoria-gatunek-1:contains(\"GSM/PDA\")": 12
-        "div#kategoria-gatunek-1:contains(\"Konsole\")": 13
-        "div#kategoria-gatunek-1:contains(\"Gry PC\")": 14
-        "div#kategoria-gatunek-1:contains(\"Dla Dzieci\")": 15
-        "div#kategoria-gatunek-1:contains(\"Książki\")": 16
-        "div#kategoria-gatunek-1:contains(\"Mac\")": 525
-        "div#kategoria-gatunek-1:contains(\"Linux\")": 18
-        "div#kategoria-gatunek-1:contains(\"Sport\")": 19
-        "div#kategoria-gatunek-1:contains(\"Anime\")": 699
-        "div#kategoria-gatunek-1:contains(\"Inne\")": 21
+        "span.search-cat-badge:contains(\"Filmy XviD/DivX\")": 1
+        "span.search-cat-badge:contains(\"Filmy 4K\")": 748
+        "span.search-cat-badge:contains(\"Filmy Blu-Ray/HD\")": 4
+        "span.search-cat-badge:contains(\"Filmy x264/h264\")": 642
+        "span.search-cat-badge:contains(\"Filmy x265/h265\")": 596
+        "span.search-cat-badge:contains(\"Filmy DVD\")": 3
+        "span.search-cat-badge:contains(\"Filmy 3D\")": 5
+        "span.search-cat-badge:contains(\"TV/Seriale\")": 7
+        "span.search-cat-badge:contains(\"TS/CAM\")": 702
+        "span.search-cat-badge:contains(\"Erotyka\")": 8
+        "span.search-cat-badge:contains(\"Muzyka\")": 10
+        "span.search-cat-badge:contains(\"Programy\")": 11
+        "span.search-cat-badge:contains(\"GSM/PDA\")": 12
+        "span.search-cat-badge:contains(\"Konsole\")": 13
+        "span.search-cat-badge:contains(\"Gry PC\")": 14
+        "span.search-cat-badge:contains(\"Dla Dzieci\")": 15
+        "span.search-cat-badge:contains(\"Książki\")": 16
+        "span.search-cat-badge:contains(\"Mac\")": 525
+        "span.search-cat-badge:contains(\"Linux\")": 18
+        "span.search-cat-badge:contains(\"Sport\")": 19
+        "span.search-cat-badge:contains(\"Anime\")": 699
+        "span.search-cat-badge:contains(\"Inne\")": 21
     title_phase1:
       selector: a[href^="/torrent/"]
       attribute: title
@@ -145,10 +141,10 @@ search:
       selector: a[href^="download/"]
       attribute: href
     poster:
-      selector: img.browse_poster
-      attribute: src
+      selector: img.search-poster
+      attribute: data-src
     date:
-      selector: td.descr3
+      selector: div.search-date-badge
       filters:
         - name: regexp
           args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
@@ -157,19 +153,19 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
-      selector: td.descr3
+      selector: span.search-size-badge
       filters:
         - name: regexp
           args: (\d{1,4}\.\d{2}\s+?[T|G|M|k]B)
     seeders:
-      selector: font[color="green"] > b, font[color="red"] > b
+      selector: span[id^="seed_"]
     leechers:
-      selector: font[color="green"]:nth-of-type(2) > b, font[color="red"]:nth-of-type(2) > b
+      selector: span[id^="peer_"]
     grabs:
-      selector: td.descr3
+      selector: span:contains("Pobrano")
       filters:
         - name: regexp
-          args: (\d{1,4}) razy
+          args: Pobrano:(\d{1,4})
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
