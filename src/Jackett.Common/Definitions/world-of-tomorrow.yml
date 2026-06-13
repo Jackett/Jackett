@@ -165,13 +165,13 @@ search:
           args: ["\\s*\\[[^\\]]+\\]\\s*$", ""]
         - name: trim
     title:
-      selector: a[href^="torrent.php"]:has(span)
+      selector: div.sr-title-row a[href^="torrent.php?id="]
     details:
-      selector: a[href^="torrent.php"]:has(span)
+      selector: div.sr-title-row a[href^="torrent.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?torrent="]
-      attribute: href
+      selector: input[data-url^="download.php?torrent="]
+      attribute: data-url
     poster:
       selector: div.sr-cover img
       attribute: src
