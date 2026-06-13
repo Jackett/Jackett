@@ -23,11 +23,8 @@ settings: []
 
 download:
   selectors:
-    - selector: script:contains("CM_MAGNET_URL")
-      filters:
-        - name: regexp
-          args: /magnet./(.+?)\"
-        - name: urldecode
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
 
 search:
   paths:
@@ -37,18 +34,18 @@ search:
     cat: 0
 
   rows:
-    selector: div.section_inner > div.row > div
+    selector: article.cp-card
 
   fields:
     category:
       text: XXX
     title:
-      selector: a.cm-card-pretitle__badge
+      selector: h3.cp-card__title
     details:
-      selector: a.cm-card-pretitle__badge
+      selector: h3.cp-card__title > a
       attribute: href
     download:
-      selector: a.cm-card-pretitle__badge
+      selector: h3.cp-card__title > a
       attribute: href
     poster:
       selector: img
