@@ -106,12 +106,8 @@ search:
     selector: table.t1 > tbody > tr
 
   fields:
-    category:
-      selector: a[href^="?"]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["?", ""]
+    categorydesc:
+      selector: td.i.p
     title:
       selector: a[href^="/t/"]
     details:
