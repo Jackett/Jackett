@@ -107,16 +107,14 @@ search:
 
   fields:
     # category layout may differ per user
-    category:
-      selector: a[href^="?"]
-      attribute: href
+    categorydesc_alt:
+      selector: a[href^="?"] img
+      attribute: alt
       optional: true
-      filters:
-        - name: replace
-          args: ["?", ""]
     categorydesc:
       selector: td.i.p
       optional: true
+      default: "{{ .Result.categorydesc_alt }}"
     title:
       selector: a[href^="/t/"]
     details:
