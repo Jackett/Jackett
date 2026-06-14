@@ -106,12 +106,15 @@ search:
     selector: table.t1 > tbody > tr
 
   fields:
-    category:
-      selector: a[href^="?"]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["?", ""]
+    # category layout may differ per user
+    categorydesc_alt:
+      selector: a[href^="?"] img
+      attribute: alt
+      optional: true
+    categorydesc:
+      selector: td.i.p
+      optional: true
+      default: "{{ .Result.categorydesc_alt }}"
     title:
       selector: a[href^="/t/"]
     details:
