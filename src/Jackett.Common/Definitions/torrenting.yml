@@ -106,8 +106,17 @@ search:
     selector: table.t1 > tbody > tr
 
   fields:
+    # category layout may differ per user
+    category:
+      selector: a[href^="?"]
+      attribute: href
+      optional: true
+      filters:
+        - name: replace
+          args: ["?", ""]
     categorydesc:
       selector: td.i.p
+      optional: true
     title:
       selector: a[href^="/t/"]
     details:
