@@ -8,7 +8,7 @@ encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # if the primary domain changes then don't forget to update the details, download and poster replace args
-  - https://yts.bz/
+  - https://yts.gg/
   # official domain list are at https://yifystatus.com/ and official proxies list are at https://ytsproxies.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
@@ -16,14 +16,14 @@ links:
   - https://yts.torrentbay.st/
   - https://yts.torrentsbay.org/
 legacylinks:
-  - https://yts.am/ # redirects to .bz
-  - https://yts.ag/ # redirects to .bz
-  - https://yts.gg/ # redirects to .bz
+  - https://yts.bz/ # redirects to .gg
+  - https://yts.am/ # redirects to .gg
+  - https://yts.ag/ # redirects to .gg
+  - https://yts.lt/ # redirects to .gg
   - https://yts.mx/
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.download/
-  - https://yts.lt/ # redirects to .bz
   - https://yts.unblockninja.com/
 
 caps:
@@ -110,19 +110,19 @@ search:
       selector: ..url
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.(mx|lt|bz)\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     download:
       selector: url
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.(mx|lt|bz)\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     infohash:
       selector: hash
     poster:
       selector: ..large_cover_image
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.(mx|lt|bz)\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     imdbid:
       selector: ..imdb_code
     date:
