@@ -212,7 +212,6 @@ namespace Jackett.Common.Indexers.Definitions
                 {"tor[startNumber]", offset.ToString()},
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
                 {"description", "1"}, // include the description
-                { "dlLink", "1" }, // include download link hash
             };
 
             if (configData.SearchInDescription.Value)
@@ -301,7 +300,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = details,
                         Title = item.Title.Trim(),
                         Description = item.Description.Trim(),
-                        Link = GetDownloadUrl(id, item.DownloadHash),
+                        Link = GetDownloadUrl(id),
                         Details = details,
                         Category = MapTrackerCatToNewznab(item.Category),
                         PublishDate = DateTime.ParseExact(item.Added, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
@@ -372,11 +371,11 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        private Uri GetDownloadUrl(int torrentId, string downloadHash)
+        private Uri GetDownloadUrl(int torrentId)
         {
             return new UriBuilder(SiteLink)
             {
-                Path = $"/tor/download.php/{downloadHash}",
+                Path = "/tor/download.php",
                 Query = $"tid={torrentId}"
             }.Uri;
         }
@@ -413,7 +412,5 @@ namespace Jackett.Common.Indexers.Definitions
         public int Leechers { get; set; }
         public int NumFiles { get; set; }
         public string Size { get; set; }
-        [JsonProperty(PropertyName = "dl")]
-        public string DownloadHash { get; set; }
     }
 }
