@@ -92,6 +92,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     # https://f1gp.xyz/index.php?page=torrents&search=&category=0&active=0
@@ -112,7 +117,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.lista > tbody > tr:has(a[href*="downloadcheck&id="])
 
   fields:
     category:
@@ -127,7 +132,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: onmouseover
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
@@ -171,4 +176,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-#  xbtitFM v4.2.12
+#  xbtitFM v4.2.13
