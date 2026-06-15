@@ -98,8 +98,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2092, TorznabCatType.MoviesForeign, "|- Фильмы 2006-2010");
             caps.Categories.AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             caps.Categories.AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
-            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2024");
-            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2025");
+            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2025");
+            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2026");
             caps.Categories.AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы ближнего зарубежья");
             caps.Categories.AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             caps.Categories.AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
@@ -366,8 +366,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(255, TorznabCatType.TVSport, "Спортивные турниры, фильмы и передачи");
             caps.Categories.AddCategoryMapping(256, TorznabCatType.TVSport, "|- Автоспорт");
             caps.Categories.AddCategoryMapping(1986, TorznabCatType.TVSport, "|- Мотоспорт");
-            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2025)");
-            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2024)");
+            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2026)");
+            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2025)");
             caps.Categories.AddCategoryMapping(626, TorznabCatType.TVSport, "|- Формула 1 (до 2011 вкл.)");
             caps.Categories.AddCategoryMapping(262, TorznabCatType.TVSport, "|- Велоспорт");
             caps.Categories.AddCategoryMapping(1326, TorznabCatType.TVSport, "|- Волейбол/Гандбол");
@@ -392,6 +392,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             caps.Categories.AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
             caps.Categories.AddCategoryMapping(2545, TorznabCatType.TVSport, "|- Клубный Чемпионат Мира 2025");
+            caps.Categories.AddCategoryMapping(2147, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (финальный турнир)");
             caps.Categories.AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (отбор)");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (финальный турнир)");
             caps.Categories.AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
@@ -425,7 +426,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2001, TorznabCatType.TVSport, "|- Международные соревнования");
             caps.Categories.AddCategoryMapping(2002, TorznabCatType.TVSport, "|- NBA / NCAA (до 2000 г.)");
             caps.Categories.AddCategoryMapping(283, TorznabCatType.TVSport, "|- NBA / NCAA (2000-2010 гг.)");
-            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2025 гг.)");
+            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2026 гг.)");
             caps.Categories.AddCategoryMapping(2003, TorznabCatType.TVSport, "|- Европейский клубный баскетбол");
             caps.Categories.AddCategoryMapping(2009, TorznabCatType.TVSport, "🏒 Хоккей");
             caps.Categories.AddCategoryMapping(2010, TorznabCatType.TVSport, "|- Хоккей с мячом / Бенди");
