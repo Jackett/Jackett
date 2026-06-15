@@ -153,6 +153,8 @@ search:
 
   rows:
     selector: div.sr-card, div.sr-dup-item
+    filters:
+      - name: andmatch
 
   fields:
     categorydesc:
