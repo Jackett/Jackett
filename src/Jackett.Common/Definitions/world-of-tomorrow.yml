@@ -165,9 +165,9 @@ search:
           args: ["\\s*\\[[^\\]]+\\]\\s*$", ""]
         - name: trim
     title:
-      selector: div.sr-title-row a[href^="torrent.php?id="]
+      selector: div.sr-title-row a[href^="torrent.php?id="], a.sr-dup-title
     details:
-      selector: div.sr-title-row a[href^="torrent.php?id="]
+      selector: div.sr-title-row a[href^="torrent.php?id="], a.sr-dup-title
       attribute: href
     download:
       selector: input[data-url^="download.php?torrent="]
