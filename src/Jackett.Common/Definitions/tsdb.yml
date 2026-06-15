@@ -130,7 +130,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: onmouseover
+      attribute: href
     download:
       selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
