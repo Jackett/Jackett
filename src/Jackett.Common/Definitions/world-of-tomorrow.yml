@@ -140,6 +140,7 @@ search:
   inputs:
     name: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    # wildcard, partial, prefix, suffix, combined, regex, exact, uploadersu
     searchMethod: wildcard
     maxAge: added
     sortBy: "{{ .Config.sortby }}"
