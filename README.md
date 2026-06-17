@@ -368,6 +368,7 @@ Prior versions of Jackett are no longer supported.
  * Empornium (EMP) [![(invite needed)][inviteneeded]](#)
  * eMuwarez
  * eStone (BigTorrent)
+ * Order66
  * Exitorrent.org [![(invite needed)][inviteneeded]](#)
  * ExoticaZ (YourExotic)
  * Explosiv-World (E-W)
