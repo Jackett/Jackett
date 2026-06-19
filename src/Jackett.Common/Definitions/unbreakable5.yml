@@ -94,7 +94,7 @@ settings:
     options:
       desc: desc
       asc: asc
-  
+
 login:
   method: form
   path: login.php
@@ -106,7 +106,7 @@ login:
   test:
     path: index.php
     selector: "a[href*=\"logout.php\"]"
-  error: 
+  error:
     - selector: a[href="login.php"]
 
 search:
