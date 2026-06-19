@@ -83,6 +83,7 @@ settings:
     label: Sort requested from site
     default: seeders
     options:
+      created: added
       name: title
       size: size
       seeders: seeders
