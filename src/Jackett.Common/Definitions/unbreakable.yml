@@ -132,7 +132,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     showsearch: 1
-    # 0 name, 1 descr, 2 both
+    # 0 active, 1 all, 2 dead
     incldead: 1
     orderby: "{{ .Config.sort }}"
     sort: "{{ .Config.type }}"
