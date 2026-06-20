@@ -192,9 +192,12 @@ search:
     _type:
       selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
       optional: true
-    _language:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
+    _language_variant:
+      # Example: "Dual-Audio", "Dublado", "Nacional", "Legendado"
+      selector: p.list-group-item-text span.badge-pill[style$="#b6249d;"]
       optional: true
+    _release_group:
+      selector: p.list-group-item-text font[color="#ff8400"] span.badge-pill
     title:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       filters:
@@ -210,11 +213,19 @@ search:
         # add the type to the title
         - name: append
           args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
-        # add audio to the title
+
+        # add language variant to the title
         - name: append
-          args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
-        - name: re_replace
-          args: ["(Dual|[Nn]acional|[Dd]ublado)", "Brazilian $1"]
+          args: '{{ if eq .Result._language_variant "Dublado" }} Dublado Brazilian{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Nacional" }} Nacional{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Legendado" }} Legendado{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Dual-Audio" }} Dual-Audio Brazilian Original{{ else }}{{ end }}'
+
+        - name: append
+          args: "{{ if .Result._release_group }} {{ .Result._release_group }}{{ else }}{{ end }}"
     details:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       attribute: href
