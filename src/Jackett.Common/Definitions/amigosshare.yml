@@ -74,6 +74,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: username
@@ -152,6 +153,8 @@ search:
     order: "{{ .Config.type }}"
   # torrents-search.php does not support imdbid search or return imdb links.
   keywordsfilters:
+    - name: re_replace
+      args: ["(\\s+:\\s+)", " "] # replace " : " with " " since site does not support colon in search and it is commonly used in titles to separate title from year or season/episode info
     # drop the year from searches since site titles do not include year
     - name: re_replace
       args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
