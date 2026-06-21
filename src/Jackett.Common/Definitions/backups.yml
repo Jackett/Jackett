@@ -49,6 +49,7 @@ caps:
     - {id: 8, cat: PC/Games, desc: "PC Games"}
     - {id: 87, cat: Console, desc: "Playnite"}
     - {id: 30, cat: Console, desc: "Playstation"}
+    - {id: 118, cat: Console, desc: "Playstation PS5.Roms"}
     - {id: 83, cat: PC, desc: "Retro eXo"}
     - {id: 56, cat: PC, desc: "Retro Minis"}
     - {id: 67, cat: PC, desc: "RetroBat"}
