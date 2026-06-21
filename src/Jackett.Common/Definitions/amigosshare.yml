@@ -218,6 +218,9 @@ search:
     download:
       selector: a[href*="download.php?id="]
       attribute: href
+    poster:
+      selector: img.img-thumbnail
+      attribute: src
     date:
       selector: p:contains("Lançado:")
       # auto adjusted by site account profile
@@ -247,7 +250,9 @@ search:
         "span.badge-success:contains(\"FREE\")": 0
         "*": 1
     uploadvolumefactor:
-      text: 1
+      case:
+        "span.badge-pill:contains(\"2X UP\")": 2
+        "*": 1
     minimumratio:
       text: 1.0
 # engine n/a
