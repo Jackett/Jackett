@@ -460,6 +460,7 @@ caps:
     - {id: 332, cat: Audio, desc: " |- Русский рок"}
     - {id: 325, cat: Audio, desc: "Pop"}
     - {id: 1354, cat: Audio, desc: " |- Pop (Hi-Res)"}
+    - {id: 1355, cat: Audio, desc: " |- Eurodance, Disco (Hi-Res)"}
     - {id: 1165, cat: Audio/Lossless, desc: " |- Eurodance, Euro-House, Technopop (Lossless)"}
     - {id: 1166, cat: Audio, desc: " |- Eurodance, Euro-House, Technopop"}
     - {id: 1168, cat: Audio, desc: " |- Disco, Italo-Disco, Euro-Disco, Hi-NRG"}
