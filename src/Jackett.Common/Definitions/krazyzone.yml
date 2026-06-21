@@ -28,21 +28,16 @@ caps:
     - {id: 46, cat: Audio/Video, desc: "Music Video: Music Video"}
     - {id: 24, cat: Audio, desc: "Karaoke: All Karaoke"}
     - {id: 47, cat: Movies/BluRay, desc: "Movies: Bluray-HD"}
-    - {id: 52, cat: Movies, desc: "Pre 90s Movies: Pre90s"}
-    - {id: 28, cat: Movies, desc: "Movies: 2026"}
-    - {id: 102, cat: Movies/HD, desc: "Movies MP4: Movie MP4"}
+    - {id: 110, cat: Movies, desc: "Movies: Movie Packs or movie Collecti"}
     - {id: 25, cat: Movies/WEB-DL, desc: "Movies: Web-DL"}
-    - {id: 105, cat: Movies, desc: "Pre 2000 MP4 Movies: Pre 2000 Mp4"}
     - {id: 48, cat: Movies/SD, desc: "Movies: Xvid-Dvd-Webrip"}
     - {id: 23, cat: Movies/Other, desc: "Movie: Kids-Anime-Family"}
-    - {id: 41, cat: Movies/3D, desc: "Remux-3D: Remux-3D"}
-    - {id: 86, cat: Movies/HD, desc: "1440P QHD: 1440P QHD"}
-    - {id: 9, cat: Movies/DVD, desc: "Movies: Ntsc Dvdr-ISO"}
-    - {id: 27, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 9, cat: Movies/DVD, desc: "Movies: DVD Rip"}
     - {id: 22, cat: Movies/Foreign, desc: "Movies: Foreign"}
-    - {id: 53, cat: Movies, desc: "Movie Packs: Movie Pks"}
-    - {id: 54, cat: Movies, desc: "Movie Pack: Pre-90s"}
-    - {id: 6, cat: Movies/Other, desc: "Kids Movie Pk: Movie Pks"}
+    - {id: 107, cat: Movies, desc: "Movies: Movies 2026"}
+    - {id: 108, cat: Movies, desc: "Movies: Movies Pre90s"}
+    - {id: 111, cat: Movies, desc: "Movies: Movies Assorted"}
+    - {id: 109, cat: Movies/UHD, desc: "Movies: Movies 4K Ultra HD"}
     - {id: 7, cat: TV, desc: "TV: Episodes"}
     - {id: 8, cat: TV/Anime, desc: "TV: Kids - TV"}
     - {id: 75, cat: TV/Documentary, desc: "TV: Documentary"}
