@@ -12,11 +12,11 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
-  - https://www.darkfox2.cc/
-  - https://www.vidlox2.cc/
+  - https://www.darkfox3.cc/
+  - https://www.vidlox3.cc/
   - https://www.sharework1.cc/
   - https://www.worldivx1.cc/
-  - https://www.wikibox1.cc/
+  - https://www.wikibox2.cc/
   - https://www.sharkibox1.cc/
 legacylinks:
   # latest domains list
@@ -35,9 +35,6 @@ legacylinks:
   - https://www.torrent-site.com/
   - https://www.rantop.org/
   # actual legacylinks
-  - https://www.cine-torrent.cc/
-  - https://www.magnet-torrent.cc/
-  - https://www.mania-torrent.cc/
   - https://www.mega-torrent.cc/
   - https://www.warez-torrent.cc/
   - https://ww1-world-torrent.com/
@@ -54,6 +51,9 @@ legacylinks:
   - https://www.worldivx.cc/
   - https://www.sharkibox.cc/
   - https://www.vidlox1.cc/
+  - https://www.darkfox2.cc/
+  - https://www.vidlox2.cc/
+  - https://www.wikibox1.cc/
 
 caps:
   categorymappings:
