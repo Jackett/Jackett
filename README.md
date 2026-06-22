@@ -354,6 +354,7 @@ Prior versions of Jackett are no longer supported.
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
+ * Depth Studio
  * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
  * Diablo Torrent
