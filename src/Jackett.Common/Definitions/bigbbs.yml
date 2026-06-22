@@ -59,6 +59,7 @@ caps:
     - {id: 118, cat: Audio, desc: "Disco Polo"}
     - {id: 119, cat: Audio, desc: "Clubbing"}
     - {id: 120, cat: Audio, desc: "House"}
+    - {id: 116, cat: Audio, desc: "PHC"}
     - {id: 125, cat: Audio, desc: "Elektro"}
     - {id: 127, cat: Audio, desc: "Tranc"}
     - {id: 128, cat: Audio, desc: "Dance"}
@@ -75,7 +76,7 @@ caps:
     - {id: 3, cat: Console/PS3, desc: "Sony PS"}
     - {id: 4, cat: Console/Wii, desc: "Wii"}
     - {id: 26, cat: Console/XBox, desc: "XboX"}
-    - {id: 28, cat: PC/Games, desc: "Gry PC"}
+    - {id: 27, cat: PC/Games, desc: "Gry PC"}
     - {id: 28, cat: Console/NDS, desc: "Nintendo"}
     - {id: 47, cat: Books/EBook, desc: "EEbooki"}
     - {id: 48, cat: Audio/Audiobook, desc: "Audio Book"}
