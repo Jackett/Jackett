@@ -32,6 +32,7 @@ caps:
     - {id: 170, cat: Audio/Audiobook, desc: "Literature"}
     - {id: 175, cat: Audio/Audiobook, desc: "LitRPG"}
     - {id: 180, cat: Audio/Audiobook, desc: "Mystery"}
+    - {id: 190, cat: Audio/Audiobook, desc: "Nonfiction"}
     - {id: 215, cat: Audio/Audiobook, desc: "Paranormal Romance"}
     - {id: 200, cat: Audio/Audiobook, desc: "Radio Drama"}
     - {id: 205, cat: Audio/Audiobook, desc: "Reference & Educational"}
@@ -67,6 +68,7 @@ caps:
     - {id: 560, cat: Books/EBook, desc: "[E] Literary Fiction"}
     - {id: 565, cat: Books/EBook, desc: "[E] LitRPG"}
     - {id: 570, cat: Books/EBook, desc: "[E] Mystery"}
+    - {id: 580, cat: Books/EBook, desc: "[E] Nonfiction"}
     - {id: 590, cat: Books/EBook, desc: "[E] Paranormal Romance"}
     - {id: 600, cat: Books/EBook, desc: "[E] Reference & Educational"}
     - {id: 610, cat: Books/EBook, desc: "[E] Religion & Spirituality"}
