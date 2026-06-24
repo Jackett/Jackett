@@ -579,7 +579,6 @@ Prior versions of Jackett are no longer supported.
  * RevolutionTT [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
- * RoTorrent (ROT)
  * Rousi.pro
  * RunTheFrames
  * SAMARITANO
@@ -588,6 +587,7 @@ Prior versions of Jackett are no longer supported.
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
  * Secret Cinema
+ * SeedCore (RoTorrent)
  * SeedFile (SF)
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
