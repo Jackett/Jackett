@@ -1430,7 +1430,9 @@ namespace Jackett.Common.Indexers.Definitions
                     _capSid = doc.QuerySelector("input[name=\"cap_sid\"]")?.GetAttribute("value");
                 }
                 else
+                {
                     configData.CaptchaImage.Value = null;
+                }
             }
             catch (Exception e)
             {
@@ -1522,7 +1524,9 @@ namespace Jackett.Common.Indexers.Definitions
                 var magnetLink = dom.QuerySelector("table.attach a.magnet-link[href^=\"magnet:?\"]")?.GetAttribute("href");
 
                 if (magnetLink == null)
+                {
                     throw new Exception($"Failed to fetch magnet link from {link}");
+                }
 
                 link = new Uri(magnetLink);
             }
@@ -1598,7 +1602,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                 if (qDownloadLink == null) // Expects moderation
+                {
                     return null;
+                }
 
                 var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
 
@@ -1663,7 +1669,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var seedersString = qSeeders.QuerySelector("b")?.TextContent.Trim();
                 if (!string.IsNullOrWhiteSpace(seedersString))
+                {
                     seeders = ParseUtil.CoerceInt(seedersString);
+                }
             }
             return seeders;
         }
@@ -1740,19 +1748,29 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 // language fix: all rutracker releases contains russian track
-                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.Match(title, "\bRUS\b", RegexOptions.IgnoreCase).Success)
+                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.IsMatch(title, @"\bRUS\b", RegexOptions.IgnoreCase))
+                {
                     title += " RUS";
+                }
 
                 if (stripCyrillicLetters)
+                {
                     title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+                }
 
                 if (moveAllTagsToEndOfReleaseTitle)
+                {
                     title = MoveAllTagsToEndOfReleaseTitle(title);
+                }
                 else if (moveFirstTagsToEndOfReleaseTitle)
+                {
                     title = MoveFirstTagsToEndOfReleaseTitle(title);
+                }
 
                 if (IsAnyAudioCategory(category))
+                {
                     title = DetectRereleaseInReleaseTitle(title);
+                }
 
                 title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -1807,9 +1825,13 @@ namespace Jackett.Common.Indexers.Definitions
                         {
                             var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
                             if (string.IsNullOrWhiteSpace(substring))
+                            {
                                 expectedIndex = match.Index;
+                            }
                             else
+                            {
                                 break;
+                            }
                         }
 
                         var tag = match.ToString();
