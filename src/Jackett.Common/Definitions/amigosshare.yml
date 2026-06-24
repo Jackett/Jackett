@@ -181,16 +181,16 @@ search:
         - name: querystring
           args: cat
     _quality:
-      selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
+      selector: p.list-group-item-text span.badge-pill:contains("1080p"),p.list-group-item-text span.badge-pill:contains("720p"),p.list-group-item-text span.badge-pill:contains("4k")
       optional: true
       filters:
         - name: replace
           args: ["4k", "2160p"]
     _year:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#246AB6;"]
+      selector: p.list-group-item-text span.badge-pill[style$="#246AB6;"]
       optional: true
     _type:
-      selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
+      selector: p.list-group-item-text span.badge-pill:contains("Rip"),p.list-group-item-text span.badge-pill:contains("WEB-"),p.list-group-item-text span.badge-pill:contains("TV"),p.list-group-item-text span.badge-pill:contains("Blu-Ray"),p.list-group-item-text span.badge-pill:contains("BD50"),p.list-group-item-text span.badge-pill:contains("MUX"),p.list-group-item-text span.badge-pill:contains("DVD"),p.list-group-item-text span.badge-pill:contains("320"),p.list-group-item-text span.badge-pill:contains("CAM"),p.list-group-item-text span.badge-pill:contains("rip")
       optional: true
     _language_variant:
       # Example: "Dual-Audio", "Dublado", "Nacional", "Legendado"
@@ -248,7 +248,7 @@ search:
         - name: dateparse
           args: "dd/MM/yy HH:mm:ss"
     size:
-      selector: div.list-group-item-content p.m-0 span.badge-info
+      selector: p.list-group-item-text span.badge-pill[style$="#7C10AF;"]
     seeders:
       selector: div.list-group-item-controls a:nth-child(1)
     leechers:
@@ -256,16 +256,16 @@ search:
     grabs:
       selector: div.list-group-item-controls a:nth-child(3)
     genre:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#1c38c2;"]
+      selector: p.list-group-item-text span.badge-pill[style$="#1c38c2;"]
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
-        "span.badge-success:contains(\"FREE\")": 0
+        "p.list-group-item-text span.badge-success:contains(\"FREE\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-        "span.badge-pill:contains(\"2X UP\")": 2
+        "p.list-group-item-text span.badge-pill:contains(\"2X UP\")": 2
         "*": 1
     minimumratio:
       text: 1.0
