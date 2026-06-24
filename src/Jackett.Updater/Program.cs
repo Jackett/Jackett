@@ -245,6 +245,7 @@ namespace Jackett.Updater
                 "Definitions/2xfree.yml",
                 "Definitions/24rolika.yml",
                 "Definitions/32pages.yml",
+                "Definitions/3changtrai.yml",
                 "Definitions/3evils.yml",
                 "Definitions/3evils-api.yml",
                 "Definitions/3wmg.yml",

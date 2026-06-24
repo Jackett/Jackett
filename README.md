@@ -260,7 +260,6 @@ Prior versions of Jackett are no longer supported.
  * 0day.kiev
  * 13City
  * 1ptbar
- * 3ChangTrai (3CT) [![(invite needed)][inviteneeded]](#)
  * 3D Torrents (3DT)
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
