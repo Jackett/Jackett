@@ -59,7 +59,7 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-    t: "{{ .Query.Type }}"
+    t: "{{ if .Keywords }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
 # all results are currently returned as both 5070 & 2020
 #    cat: "{{ join .Categories \",\" }}"
