@@ -181,7 +181,7 @@ search:
         - name: querystring
           args: cat
     _quality:
-      selector: p.list-group-item-text span.badge-pill:contains("1080p"),p.list-group-item-text span.badge-pill:contains("720p"),p.list-group-item-text span.badge-pill:contains("4k")
+      selector: p.list-group-item-text span.badge-pill:contains("1080p"), p.list-group-item-text span.badge-pill:contains("720p"), p.list-group-item-text span.badge-pill:contains("4k")
       optional: true
       filters:
         - name: replace
@@ -190,7 +190,7 @@ search:
       selector: p.list-group-item-text span.badge-pill[style$="#246AB6;"]
       optional: true
     _type:
-      selector: p.list-group-item-text span.badge-pill:contains("Rip"),p.list-group-item-text span.badge-pill:contains("WEB-"),p.list-group-item-text span.badge-pill:contains("TV"),p.list-group-item-text span.badge-pill:contains("Blu-Ray"),p.list-group-item-text span.badge-pill:contains("BD50"),p.list-group-item-text span.badge-pill:contains("MUX"),p.list-group-item-text span.badge-pill:contains("DVD"),p.list-group-item-text span.badge-pill:contains("320"),p.list-group-item-text span.badge-pill:contains("CAM"),p.list-group-item-text span.badge-pill:contains("rip")
+      selector: p.list-group-item-text span.badge-pill:contains("Rip"), p.list-group-item-text span.badge-pill:contains("WEB-"), p.list-group-item-text span.badge-pill:contains("TV"), p.list-group-item-text span.badge-pill:contains("Blu-Ray"), p.list-group-item-text span.badge-pill:contains("BD50"), p.list-group-item-text span.badge-pill:contains("MUX"), p.list-group-item-text span.badge-pill:contains("DVD"), p.list-group-item-text span.badge-pill:contains("320"), p.list-group-item-text span.badge-pill:contains("CAM"), p.list-group-item-text span.badge-pill:contains("rip")
       optional: true
     _language_variant:
       # Example: "Dual-Audio", "Dublado", "Nacional", "Legendado"
@@ -198,6 +198,7 @@ search:
       optional: true
     _release_group:
       selector: p.list-group-item-text font[color="#ff8400"] span.badge-pill
+      optional: true
     title:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       filters:
@@ -213,7 +214,6 @@ search:
         # add the type to the title
         - name: append
           args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
-
         # add language variant to the title
         - name: append
           args: '{{ if eq .Result._language_variant "Dublado" }} Dublado Brazilian{{ else }}{{ end }}'
@@ -223,7 +223,6 @@ search:
           args: '{{ if eq .Result._language_variant "Legendado" }} Legendado{{ else }}{{ end }}'
         - name: append
           args: '{{ if eq .Result._language_variant "Dual-Audio" }} Dual-Audio Brazilian Original{{ else }}{{ end }}'
-
         - name: append
           args: "{{ if .Result._release_group }} {{ .Result._release_group }}{{ else }}{{ end }}"
     details:
