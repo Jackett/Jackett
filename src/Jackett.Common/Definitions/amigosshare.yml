@@ -74,6 +74,7 @@ caps:
     tv-search: [q, season, ep]
     movie-search: [q]
     book-search: [q]
+  allowrawsearch: true
 
 settings:
   - name: username
@@ -152,6 +153,8 @@ search:
     order: "{{ .Config.type }}"
   # torrents-search.php does not support imdbid search or return imdb links.
   keywordsfilters:
+    - name: re_replace
+      args: ["(\\s+:\\s+)", " "] # replace " : " with " " since site does not support colon in search and it is commonly used in titles to separate title from year or season/episode info
     # drop the year from searches since site titles do not include year
     - name: re_replace
       args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
@@ -178,19 +181,23 @@ search:
         - name: querystring
           args: cat
     _quality:
-      selector: div.list-group-item-content p.m-0 span.badge-primary:contains("1080p"), div.list-group-item-content p.m-0 span.badge-primary:contains("720p"), div.list-group-item-content p.m-0 span.badge-primary:contains("4k")
+      selector: p.list-group-item-text span.badge-pill:contains("1080p"), p.list-group-item-text span.badge-pill:contains("720p"), p.list-group-item-text span.badge-pill:contains("4k")
       optional: true
       filters:
         - name: replace
           args: ["4k", "2160p"]
     _year:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#246AB6;"]
+      selector: p.list-group-item-text span.badge-pill[style$="#246AB6;"]
       optional: true
     _type:
-      selector: div.list-group-item-content p.m-0 span.badge-info:contains("Rip"), div.list-group-item-content p.m-0 span.badge-info:contains("WEB-"), div.list-group-item-content p.m-0 span.badge-info:contains("TV"), div.list-group-item-content p.m-0 span.badge-info:contains("Blu-Ray"), div.list-group-item-content p.m-0 span.badge-info:contains("BD50"), div.list-group-item-content p.m-0 span.badge-info:contains("MUX"), div.list-group-item-content p.m-0 span.badge-info:contains("DVD"), div.list-group-item-content p.m-0 span.badge-info:contains("320"), div.list-group-item-content p.m-0 span.badge-info:contains("CAM"), div.list-group-item-content p.m-0 span.badge-info:contains("rip")
+      selector: p.list-group-item-text span.badge-pill:contains("Rip"), p.list-group-item-text span.badge-pill:contains("WEB-"), p.list-group-item-text span.badge-pill:contains("TV"), p.list-group-item-text span.badge-pill:contains("Blu-Ray"), p.list-group-item-text span.badge-pill:contains("BD50"), p.list-group-item-text span.badge-pill:contains("MUX"), p.list-group-item-text span.badge-pill:contains("DVD"), p.list-group-item-text span.badge-pill:contains("320"), p.list-group-item-text span.badge-pill:contains("CAM"), p.list-group-item-text span.badge-pill:contains("rip")
       optional: true
-    _language:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#b6249d;"]
+    _language_variant:
+      # Example: "Dual-Audio", "Dublado", "Nacional", "Legendado"
+      selector: p.list-group-item-text span.badge-pill[style$="#b6249d;"]
+      optional: true
+    _release_group:
+      selector: p.list-group-item-text font[color="#ff8400"] span.badge-pill
       optional: true
     title:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
@@ -207,11 +214,17 @@ search:
         # add the type to the title
         - name: append
           args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
-        # add audio to the title
+        # add language variant to the title
         - name: append
-          args: "{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}"
-        - name: re_replace
-          args: ["(Dual|[Nn]acional|[Dd]ublado)", "Brazilian $1"]
+          args: '{{ if eq .Result._language_variant "Dublado" }} Dublado Brazilian{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Nacional" }} Nacional{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Legendado" }} Legendado{{ else }}{{ end }}'
+        - name: append
+          args: '{{ if eq .Result._language_variant "Dual-Audio" }} Dual-Audio Brazilian Original{{ else }}{{ end }}'
+        - name: append
+          args: "{{ if .Result._release_group }} {{ .Result._release_group }}{{ else }}{{ end }}"
     details:
       selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
       attribute: href
@@ -234,7 +247,7 @@ search:
         - name: dateparse
           args: "dd/MM/yy HH:mm:ss"
     size:
-      selector: div.list-group-item-content p.m-0 span.badge-info
+      selector: p.list-group-item-text span.badge-pill[style$="#7C10AF;"]
     seeders:
       selector: div.list-group-item-controls a:nth-child(1)
     leechers:
@@ -242,16 +255,16 @@ search:
     grabs:
       selector: div.list-group-item-controls a:nth-child(3)
     genre:
-      selector: div.list-group-item-content p.m-0 span.badge-primary[style$="#1c38c2;"]
+      selector: p.list-group-item-text span.badge-pill[style$="#1c38c2;"]
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:
       case:
-        "span.badge-success:contains(\"FREE\")": 0
+        "p.list-group-item-text span.badge-success:contains(\"FREE\")": 0
         "*": 1
     uploadvolumefactor:
       case:
-        "span.badge-pill:contains(\"2X UP\")": 2
+        "p.list-group-item-text span.badge-pill:contains(\"2X UP\")": 2
         "*": 1
     minimumratio:
       text: 1.0
