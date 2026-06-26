@@ -57,6 +57,7 @@ caps:
     movie-search: [q, imdbid, genre]
     music-search: [q, genre]
     book-search: [q, genre]
+  allowrawsearch: true
 
 settings:
   - name: username
@@ -159,7 +160,7 @@ search:
       selector: div.box_feltoltve2
       filters:
         - name: append
-          args: " +01:00" # CET
+          args: " +02:00" # EET
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:

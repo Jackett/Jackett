@@ -1,0 +1,194 @@
+---
+id: unbreakable
+name: Unbreakable
+description: "Unbreakable is a GERMAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://unbreakable5.eu/
+
+caps:
+  categorymappings:
+    - {id: 157, cat: TV/Documentary, desc: "Doku 1080p"}
+    - {id: 167, cat: TV/Documentary, desc: "Doku 2160p"}
+    - {id: 156, cat: TV/Documentary, desc: "Doku 720p"}
+    - {id: 165, cat: TV/Documentary, desc: "Doku Pack 1080p"}
+    - {id: 164, cat: TV/Documentary, desc: "Doku Pack 720p"}
+    - {id: 163, cat: TV/Documentary, desc: "Doku Pack SD"}
+    - {id: 135, cat: TV/Documentary, desc: "Doku Packs 2160p"}
+    - {id: 155, cat: TV/Documentary, desc: "Doku SD x264/x265"}
+    - {id: 152, cat: Books/EBook, desc: "E-Books"}
+    - {id: 168, cat: Movies/Other, desc: "Filme Anime"}
+    - {id: 103, cat: Movies/BluRay, desc: "Filme Blu-Ray"}
+    - {id: 104, cat: Movies/DVD, desc: "Filme DVD-R"}
+    - {id: 141, cat: Movies/HD, desc: "Filme HD 1080p"}
+    - {id: 154, cat: Movies/HD, desc: "Filme HD 720p"}
+    - {id: 166, cat: Movies/Foreign, desc: "Filme International"}
+    - {id: 139, cat: Movies/HD, desc: "Filme Packs HD 1080p"}
+    - {id: 106, cat: Movies/HD, desc: "Filme Packs HD 720p"}
+    - {id: 105, cat: Movies/SD, desc: "Filme Packs SD x264/x265"}
+    - {id: 119, cat: Movies/UHD, desc: "Filme Packs UHD 2160p"}
+    - {id: 153, cat: Movies/SD, desc: "Filme SD x264/x265"}
+    - {id: 140, cat: Movies/UHD, desc: "Filme UHD 2160p"}
+    - {id: 102, cat: Movies/Other, desc: "Filmklassiker"}
+    - {id: 127, cat: Movies/Other, desc: "Filmklassiker Packs"}
+    - {id: 118, cat: Audio/Audiobook, desc: "Hörbücher"}
+    - {id: 109, cat: Audio/Lossless, desc: "Musik Flac"}
+    - {id: 129, cat: Audio/MP3, desc: "Musik MP3"}
+    - {id: 111, cat: Audio/Lossless, desc: "Musik Packs Flac"}
+    - {id: 112, cat: Audio/MP3, desc: "Musik Packs MP3"}
+    - {id: 161, cat: Console/NDS, desc: "Nintendo Switch"}
+    - {id: 162, cat: Console/PS3, desc: "Playstation"}
+    - {id: 115, cat: TV/Anime, desc: "Series Anime"}
+    - {id: 113, cat: TV/HD, desc: "Serie HD 1080p"}
+    - {id: 125, cat: TV/HD, desc: "Serie HD 720p"}
+    - {id: 144, cat: TV/Anime, desc: "Serie Packs Anime"}
+    - {id: 138, cat: TV/HD, desc: "Serie Packs HD 1080p"}
+    - {id: 116, cat: TV/HD, desc: "Serie Packs HD 720p"}
+    - {id: 137, cat: TV/SD, desc: "Serie Packs SD x264/x265"}
+    - {id: 143, cat: TV/UHD, desc: "Serie Packs UHD 2160p"}
+    - {id: 133, cat: TV/SD, desc: "Serie SD x264/x265"}
+    - {id: 114, cat: TV/UHD, desc: "Serie UHD 2160p"}
+    - {id: 169, cat: TV/Sport, desc: "Sport"}
+    - {id: 150, cat: PC/0day, desc: "Windows Apps"}
+    - {id: 149, cat: PC/Games, desc: "Windows Spiele"}
+    - {id: 69, cat: XXX, desc: "XXX"}
+    - {id: 151, cat: Books/Mags, desc: "Zeitschriften"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: pin
+    type: text
+    label: Pin
+  - name: onlyupload
+    type: checkbox
+    label: Filter OnlyUpload only
+    default: false
+  - name: info_free
+    type: info
+    label: About OnlyUpload at Unbreakable
+    default: "<ul><li>OnlyUpload are torrents where download is not counted but upload is. Good for building your Ratio up. (On the Jackett dashboard search results these are tagged as Freeleech).</li></ul>"
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeds: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_tpp
+    type: info
+    label: Results Per Page
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your <b>UserCP</b> page. The default is <i>15</i>.
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Inactive accounts are automatically deleted after 42 days."
+  - name: info_seedhours
+    type: info
+    label: Seeding Hours
+    default: Before using this indexer, make sure that you have set <b>Meine Seedzeit</b> on your <b>UserCP</b> page.
+
+login:
+  path: login.php
+  method: form
+  cookies: ["JAVA=OK"] # avoid jscheck redirect
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    secure_pin: "{{ .Config.pin }}"
+    returnto: /
+  error:
+    - selector: table.tableinborder:contains("Anmeldung Gescheitert!") > tbody > tr > td.tablea
+  test:
+    path: index.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    showsearch: 1
+    # 0 active, 1 all, 2 dead
+    incldead: 1
+    orderby: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    # site does not support imdbid searching or display imdb links in results.
+
+  rows:
+    selector: "table.tableinborder[border=\"0\"][cellspacing=\"1\"][cellpadding=\"0\"][style=\"width:100%\"] > tbody > tr:has(a[href^=\"download.php?torrent=\"]){{ if .Config.onlyupload }}:has(img[src=\"pic/oupic.gif\"]){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]:has(b)
+    details:
+      selector: a[href*="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?torrent="]
+      attribute: href
+    poster:
+      selector: img#img-1
+      attribute: src
+    size:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
+    grabs:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(3) > b
+    files:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(2)
+    seeders:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(1)
+    leechers:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(2) > b:nth-child(3)
+    date:
+      selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(5)
+      filters:
+        - name: replace
+          args: ["\u00a0", " "]
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "dd.MM.yyyy HH:mm:ss zzz"
+    downloadvolumefactor:
+      case:
+        img[src="pic/oupic.gif"]: 0 # only upload is counted
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="pic/freeleech.gif"]: 0 # nothing is counted
+        "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# NetVision

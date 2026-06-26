@@ -8,21 +8,23 @@ encoding: UTF-8
 requestDelay: 2.5 # 2.5 requests per second (2 causes problems)
 links:
   # if the primary domain changes then don't forget to update the details, download and poster replace args
-  - https://yts.mx/
-# official domain list are at https://yifystatus.com/ and  official proxies list are at https://ytsproxies.com/
-  - https://yts.unblockninja.com/
+  - https://yts.gg/
+  # official domain list are at https://yifystatus.com/ and official proxies list are at https://ytsproxies.com/
   - https://yts.ninjaproxy1.com/
   - https://yts.proxyninja.org/
   - https://yts.proxyninja.net/
   - https://yts.torrentbay.st/
   - https://yts.torrentsbay.org/
 legacylinks:
-  - https://yts.lt/
-  - https://yts.am/
-  - https://yts.ag/
+  - https://yts.bz/ # redirects to .gg
+  - https://yts.am/ # redirects to .gg
+  - https://yts.ag/ # redirects to .gg
+  - https://yts.lt/ # redirects to .gg
+  - https://yts.mx/
   - https://yts.mrunblock.bond/
   - https://yts.nocensor.cloud/
   - https://yts.unblockit.download/
+  - https://yts.unblockninja.com/
 
 caps:
   categorymappings:
@@ -37,11 +39,15 @@ caps:
     search: [q]
     movie-search: [q, imdbid]
 
-settings: []
+settings:
+  - name: apiurl
+    label: API URL
+    type: text
+    default: movies-api.accel.li
 
 search:
   paths:
-    - path: api/v2/list_movies.json
+    - path: "https://{{ .Config.apiurl }}/api/v2/list_movies.json"
       response:
         type: json
 
@@ -104,19 +110,19 @@ search:
       selector: ..url
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     download:
       selector: url
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     infohash:
       selector: hash
     poster:
       selector: ..large_cover_image
       filters:
         - name: re_replace
-          args: ["^https?:\\/\\/yts\\.mx\\/", "{{ .Config.sitelink }}"] # fix for 12494
+          args: ["^https?:\\/\\/yts\\.(mx|lt|bz|gg)\\/", "{{ .Config.sitelink }}"] # fix for 12494
     imdbid:
       selector: ..imdb_code
     date:

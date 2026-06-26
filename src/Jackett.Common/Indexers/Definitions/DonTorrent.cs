@@ -29,33 +29,36 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://dontorrent.international/";
+        public override string SiteLink { get; protected set; } = "https://todotorrents.org/";
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.international/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
-            "https://seriesblanco.one/",
             "https://verdetorrent.com/",
+            "https://seriesblanco.one/",
             "https://naranjatorrent.com/"
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.webcam/",
-            "https://dontorrent.schule/",
-            "https://dontorrent.stream/",
-            "https://dontorrent.website/",
-            "https://dontorrent.group/",
-            "https://dontorrent.download/",
-            "https://dontorrent.gift/",
-            "https://dontorrent.report/",
-            "https://dontorrent.homes/",
             "https://dontorrent.haus/",
             "https://dontorrent.news/",
             "https://dontorrent.institute/",
             "https://dontorrent.jetzt/",
             "https://dontorrent.loan/",
             "https://dontorrent.graphics/",
+            "https://dontorrent.international/",
+            "https://dontorrent.irish/",
+            "https://dontorrent.lighting/",
+            "https://dontorrent.istanbul/",
+            "https://dontorrent.onl/",
+            "https://dontorrent.kids/",
+            "https://dontorrent.kiwi/",
+            "https://dontorrent.live/",
+            "https://dontorrent.phd/",
+            "https://dontorrent.gripe/", // no longer compatible, switched to JS download
+            "https://dontorrent.promo/", // no longer compatible, switched to JS download
+            "https://dontorrent.gift/", // no longer compatible, switched to JS download
+            "https://dontorrent.cfd/", // no longer compatible, switched to JS download
         };
         public override string Language => "es-ES";
         public override string Type => "public";

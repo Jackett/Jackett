@@ -6,6 +6,8 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
+  - https://catorrent.net/
+legacylinks:
   - https://catorrent.org/
 
 caps:

@@ -1,0 +1,175 @@
+---
+id: abnormal-api
+name: Abnormal (API)
+description: "ABNormal (ABN) is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2.1
+links:
+  - https://abn.lol/
+legacylinks:
+  - https://abnormal.ws
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV, desc: "Series"}
+    - {id: 2, cat: Movies, desc: "Movies"}
+    - {id: 3, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 4, cat: TV/Anime, desc: "Anime"}
+    - {id: 5, cat: PC/Games, desc: "Games"}
+    - {id: 6, cat: PC, desc: "Applications"}
+    - {id: 7, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 9, cat: TV, desc: "Emissions"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find your API key on your <a href=\"https://abn.lol/User/Parameters\" target=\"_blank\">Parameters</a> page. The API key is read-only and never expires."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.abn.lol
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: Created
+    options:
+      Created: created
+      Seeders: seeders
+      Size: size
+      ReleaseName: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts are automatically deactivated after 4 months of inactivity (no connection to the site)."
+
+login:
+  path: "https://{{ .Config.apiurl }}/api/Release/Search?name=test&resultByPage=1"
+  method: get
+  error:
+    - selector: :root:contains("Unauthorized")
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    - path: "https://{{ .Config.apiurl }}/api/Release/Search"
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    $raw: "{{ range .Categories }}categoryId={{.}}&{{end}}"
+    name: "{{ .Keywords }}"
+    resultByPage: 100
+    sort: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: $
+
+  fields:
+    category:
+      selector: categoryId
+    title_phase1:
+      selector: name
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    _id:
+      selector: id
+    details:
+      # api returns https://api.abn.lol/api/Release/671444 which is not valid for browsing
+      text: "{{ .Config.sitelink }}Torrent/Details?ReleaseId={{ .Result._id }}"
+    download:
+      selector: downloadUrl
+    infohash:
+      selector: infoHash
+    date:
+      # created": "2026-03-07T06:59:22.137408" is returned by Newtonsoft.Json.Linq as 03/07/2026 06:59:22
+      selector: created
+      filters:
+        - name: append
+          args: " +00:01" # CET
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: completed
+    downloadvolumefactor:
+      selector: freeleech
+      case:
+        False: 1 # not free
+        True: 0 # freeleech
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
+# JSON

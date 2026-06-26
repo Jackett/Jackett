@@ -96,10 +96,11 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             };
 
-            caps.Categories.AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             caps.Categories.AddCategoryMapping(25, TorznabCatType.MoviesSD, "Movies/480p");
+            caps.Categories.AddCategoryMapping(96, TorznabCatType.MoviesUHD, "Movie/4K");
             caps.Categories.AddCategoryMapping(11, TorznabCatType.MoviesBluRay, "Movies/Bluray");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.MoviesBluRay, "Movies/Bluray-Full");
+            caps.Categories.AddCategoryMapping(103, TorznabCatType.MoviesSD, "Movies/Cam");
             caps.Categories.AddCategoryMapping(3, TorznabCatType.MoviesDVD, "Movies/DVD-R");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.MoviesSD, "Movies/MP4");
             caps.Categories.AddCategoryMapping(22, TorznabCatType.MoviesForeign, "Movies/Non-English");
@@ -109,6 +110,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies/XviD");
 
             caps.Categories.AddCategoryMapping(24, TorznabCatType.TVSD, "TV/480p");
+            caps.Categories.AddCategoryMapping(104, TorznabCatType.TVUHD, "TV/4K");
             caps.Categories.AddCategoryMapping(32, TorznabCatType.TVHD, "TV/Bluray");
             caps.Categories.AddCategoryMapping(31, TorznabCatType.TVSD, "TV/DVD-R");
             caps.Categories.AddCategoryMapping(33, TorznabCatType.TVSD, "TV/DVD-Rip");
@@ -120,10 +122,10 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(34, TorznabCatType.TVUHD, "TV/x265");
             caps.Categories.AddCategoryMapping(2, TorznabCatType.TVSD, "TV/XviD");
 
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.PCGames, "PC/Games");
             caps.Categories.AddCategoryMapping(18, TorznabCatType.ConsolePS3, "PS");
             caps.Categories.AddCategoryMapping(8, TorznabCatType.ConsolePSP, "PSP");
-            caps.Categories.AddCategoryMapping(10, TorznabCatType.ConsoleNDS, "Nintendo");
             caps.Categories.AddCategoryMapping(9, TorznabCatType.ConsoleXBox, "Xbox");
 
             caps.Categories.AddCategoryMapping(17, TorznabCatType.AudioMP3, "Music/Audio");

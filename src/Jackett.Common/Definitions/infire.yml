@@ -125,6 +125,8 @@ settings:
     options:
       DESC: desc
       ASC: asc
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -187,7 +189,7 @@ search:
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "dd/MM/yyyy HH:mm:ss"
+          args: "dd/MM/yyyyHH:mm:ss"
     seeders:
       selector: td:nth-last-child(3)
     leechers:
@@ -200,7 +202,7 @@ search:
         - name: re_replace
           args: ["(?i)(Znanstvena fantastika)", "Znanstvena_fantastika"]
         - name: validate
-          args: "Akcija, Animirani, Animacija, Avantura, Biografski, Dokumentarni, Drама, Družinski, Fantastika, Fantazija, Glasbeni, Grozljivka, Комеdija, Kratek, Kriminalka, Кriminalni, Misterij, Mladinski, Potovanje, Pustolovski, Romantika,  Sport, Sci-Fi, Тriler, Vojni, Western, Zgodovinski, Znanstvena_fantastika"
+          args: "Akcija, Animirani, Animacija, Avantura, Biografski, Dokumentarni, Drама, Družinski, Fantastika, Fantazija, Glasbeni, Grozljivka, Комеdija, Kratek, Kriminalka, Кriminalni, Misterij, Mladinski, Potovanje, Pustolovski, Romantika, Sport, Sci-Fi, Тriler, Vojni, Western, Zgodovinski, Znanstvena_fantastika"
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:

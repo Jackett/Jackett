@@ -31,6 +31,12 @@ search:
   inputs:
     q: "{{ .Keywords }}{{ if .Keywords }} in:title{{ else }}{{ end }}"
 
+  keywordsfilters:
+    - name: tolower
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: table > tbody > tr:has(a.btn-success)
 

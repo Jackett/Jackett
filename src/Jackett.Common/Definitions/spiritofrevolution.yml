@@ -6,9 +6,10 @@ language: de-DE
 type: private
 encoding: UTF-8
 links:
-  - https://sor-next.top/
+  - https://sor-next.org/
 legacylinks:
   - https://sor-next.tk/
+  - https://sor-next.top/
 
 caps:
   categorymappings:
@@ -25,6 +26,7 @@ caps:
     - {id: 174, cat: TV/Anime, desc: "Filme Anime"}
     - {id: 140, cat: TV/SD, desc: "Serien SD"}
     - {id: 135, cat: TV/HD, desc: "Serien HD"}
+    - {id: 192, cat: TV/UHD, desc: "Serien UHD"}
     - {id: 136, cat: TV/SD, desc: "Serien Pack/SD"}
     - {id: 180, cat: TV/HD, desc: "Serien Pack/HD"}
     - {id: 184, cat: TV/UHD, desc: "Serien Pack/UHD"}

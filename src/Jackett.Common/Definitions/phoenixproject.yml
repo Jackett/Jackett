@@ -1,0 +1,139 @@
+---
+id: phoenixproject
+name: Phoenix Project
+description: "Phoenix Project is a Private MacOS software tracker"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://phoenixproject.app/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: PC/Mac, desc: Applications}
+    - {id: 2, cat: PC/Games, desc: Games}
+    - {id: 3, cat: PC/Mobile-iOS, desc: IOS Applications}
+    - {id: 4, cat: PC/Mobile-iOS, desc: IOS Games}
+    - {id: 5, cat: Other, desc: Graphics}
+    - {id: 6, cat: Audio, desc: Audio}
+    - {id: 7, cat: Other, desc: Tutorials}
+    - {id: 8, cat: Other, desc: Other}
+
+  modes:
+    search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2fa_code
+    type: text
+    label: 2FA code
+  - name: info_2fa
+    type: info
+    label: "About 2FA code"
+    default: "Only fill in the <b>2FA code</b> box if you have enabled <b>2FA</b> on the Phoenix Project Web Site. Otherwise just leave it empty."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    twofa: "{{ .Config.2fa_code }}"
+    keeplogged: 1
+  error:
+    - selector: div.main div.warning-login
+  test:
+    path: torrents.php
+    selector: a[href^="logout.php?auth="]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    $raw: "{{ range .Categories }}filter_cat[{{.}}]=1&{{end}}"
+    searchstr: "{{ .Keywords }}"
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    group_results: 0
+    action: advanced
+    order: "{{ .Config.sort }}"
+    sort: "{{ .Config.type }}"
+    searchsubmit: 1
+
+  rows:
+    selector: table.torrent_table tr.torrent:has(a[title="Download"])
+
+  fields:
+    category:
+      selector: a[href*="filter_cat"]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "\\[(\\d+?)\\]"
+    title:
+      selector: a[href^="torrents.php?id="]
+    details:
+      selector: a[href^="torrents.php?id="]
+      attribute: href
+    genre:
+      selector: div.tags a[href*="taglist"]
+    download:
+      selector: span > a[href^="torrents.php?action=download&id="]
+      attribute: href
+    poster:
+      selector: div.group_image > img
+      attribute: src
+    description:
+      text: "{{ .Result.genre }}"
+    date:
+      selector: span.time.tooltip
+      attribute: title
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm zzz"
+    size:
+      selector: td.td_size
+    files:
+      selector: td.td_file_count
+    seeders:
+      selector: td.td_seeders
+    leechers:
+      selector: td.td_leechers
+    grabs:
+      selector: td.td_snatched
+    downloadvolumefactor:
+      case:
+        strong.torrent_label.tl_free: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.6
+# Gazelle

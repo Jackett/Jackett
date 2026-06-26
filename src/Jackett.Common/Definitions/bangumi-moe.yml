@@ -5,7 +5,7 @@ description: "Bangumi Moe is a Public torrent site for ANIME"
 language: en-US
 type: public
 encoding: UTF-8
-requestDelay: 3
+requestDelay: 4
 links:
   - https://bangumi.moe/
 

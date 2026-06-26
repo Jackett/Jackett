@@ -5,6 +5,8 @@ description: "leech24 is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - 5d263f5abbb3448711801378991bf115c95d9a33 # invalid subject
 links:
   - https://leech24.net/
 
@@ -36,6 +38,7 @@ caps:
     - {id: 4, cat: Movies/Other, desc: "Movies - Other"}
     - {id: 47, cat: Movies, desc: "Movies - Packs"}
     - {id: 2, cat: Movies/SD, desc: "Movies - SD/Xvid"}
+    - {id: 61, cat: Movies/WEB-DL, desc: "Movies - Web-DL"}
     - {id: 56, cat: Movies/HD, desc: "Movies - x265"}
     - {id: 24, cat: Audio/Video, desc: "Music - DVD"}
     - {id: 23, cat: Audio/Lossless, desc: "Music - Lossless"}
@@ -59,6 +62,7 @@ caps:
     - {id: 48, cat: TV/Other, desc: "TV - Packs"}
     - {id: 53, cat: TV/SD, desc: "TV - SD/x264"}
     - {id: 7, cat: TV/SD, desc: "TV - SVCD/VCD"}
+    - {id: 62, cat: TV/WEB-DL, desc: "TV - Web-DL"}
     - {id: 41, cat: TV/HD, desc: "TV - x264"}
     - {id: 60, cat: TV/HD, desc: "TV - x265"}
 
@@ -106,12 +110,12 @@ login:
 
 search:
   paths:
-    # https://leech24.net/torrents-search.php?c3=1&c1=1&c2=1&c42=1&c4=1&c7=1&search=&cat=0&incldead=1&freeleech=0&lang=0
+    # https://leech24.net/torrents-search.php?&search=&incldead=1&freeleech=0&lang=0
     - path: torrents-search.php
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    cat: 0
+#    cat: 0 # causes 0 results
     # 0 active, 1 incldead, 2 onlydead
     incldead: 1
     # 0 all, 1 notfree, 2 onlyfree

@@ -91,7 +91,7 @@ search:
 
   fields:
     category:
-      selector: a[href^="torrents.php?cat="]
+      selector: a[href^="?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -110,14 +110,14 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img.tooltip
-      attribute: src
+      selector: img[data-src]
+      attribute: data-src
       filters:
         - name: replace
           args: ["pic/imdb_pic/nophoto.gif", ""]
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(5) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -127,7 +127,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(5):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -137,13 +137,21 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(6)
+      selector: td.rowfollow:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
-      selector: td.rowfollow:nth-child(7)
+      selector: td.rowfollow:nth-child(6)
+      optional: true
+      default: 0
     leechers:
-      selector: td.rowfollow:nth-child(8)
+      selector: td.rowfollow:nth-child(7)
+      optional: true
+      default: 0
     grabs:
-      selector: td.rowfollow:nth-child(9)
+      selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -158,4 +166,4 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-# NexusPHP custom 22082802
+# NexusPHP v1.10.1 2026-02-17

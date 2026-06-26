@@ -1,0 +1,89 @@
+---
+id: magnetz
+name: Magnetz
+description: "Magnetz is a Public torrent meta-search engine"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://magnetz.eu/
+
+caps:
+  categorymappings:
+    - {id: Other, cat: Other, desc: Other}
+    - {id: Movie, cat: Movies, desc: Movie}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: TV, cat: TV, desc: TV}
+    - {id: XXX, cat: XXX, desc: XXX}
+    - {id: eBook, cat: Books, desc: eBook}
+    - {id: App, cat: PC, desc: App}
+    - {id: Game, cat: Console, desc: Game}
+    - {id: Anime, cat: TV/Anime, desc: Anime}
+    - {id: ABook, cat: Audio/Audiobook, desc: ABook}
+    - {id: Banned, cat: Other, desc: Banned}
+    - {id: Bookware, cat: Other, desc: Bookware}
+    - {id: MusicVideo, cat: Audio/Video, desc: MusicVideo}
+    - {id: Sports, cat: TV/Sport, desc: Sports}
+    - {id: Font, cat: Other, desc: Font}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: date
+    options:
+      date: created
+      seeders: seeders
+      size: size
+
+download:
+  selectors:
+    - selector: a[href^="magnet:?xt="]
+      attribute: href
+
+search:
+  paths:
+    - path: search
+  inputs:
+    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+
+  rows:
+    selector: article.result-card
+
+  fields:
+    category:
+      selector: span.meta-chip--type
+    title:
+      selector: a
+    details:
+      selector: a
+      attribute: href
+    download:
+      selector: a
+      attribute: href
+    date:
+      text: now
+    size:
+      selector: span.meta-chip--size
+    seeders:
+      selector: span.meta-chip--seeders
+    leechers:
+      selector: span.meta-chip--leechers
+    description:
+      selector: span.meta-chip--unverified, span.meta-chip--verified
+      case:
+        span.meta-chip--unverified: Unverified
+        span.meta-chip--verified: Verified
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# engine n/a

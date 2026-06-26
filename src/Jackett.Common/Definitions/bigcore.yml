@@ -97,11 +97,16 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.tooltip[href$="details"]
+      selector: a#torrentName
       attribute: title
-    details:
-      selector: a.tooltip[href$="details"]
+    _id:
+      selector: a[href^="download.php?torrent="]
       attribute: href
+      filters:
+        - name: querystring
+          args: torrent
+    details:
+      text: "details.php?id={{ .Result._id }}"
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href

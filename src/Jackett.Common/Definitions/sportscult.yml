@@ -99,7 +99,11 @@ caps:
     - {id: 99, cat: TV/Sport, desc: "Darts"}
     - {id: 100, cat: TV/Sport, desc: "ESport"}
     - {id: 6, cat: TV/Sport, desc: "European Soccer"}
+    - {id: 101, cat: TV/Sport, desc: "EuroCup"}
+    - {id: 102, cat: TV/Sport, desc: "Ultimate Diskk"}
+    - {id: 104, cat: TV/Sport, desc: "WinterOlympicGames"}
     - {id: 52, cat: TV/Sport, desc: "Field Hockey"}
+    - {id: 103, cat: TV/Sport, desc: "Basketball Champions"}
     - {id: 58, cat: TV/Sport, desc: "UFC"}
     - {id: 57, cat: TV/Sport, desc: "NRL"}
 
@@ -180,6 +184,9 @@ search:
       filters:
         - name: querystring
           args: category
+        # change broken/missing cat 0 to Uncategorised
+        - name: re_replace
+          args: ["\\b0\\b", "48"]
     title:
       selector: a[href^="index.php?page=torrent-details&id="]
       filters:

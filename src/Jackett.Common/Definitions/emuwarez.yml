@@ -1,22 +1,29 @@
 ---
 id: emuwarez
 name: eMuwarez (API)
-description: "eMuwarez is a SPANISH Private Torrent Tracker for MOVIES / TV"
+description: "eMuwarez is a SPANISH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: es-ES
 type: private
 encoding: UTF-8
 links:
+  - https://emuwarez.com/
+legacylinks:
   - https://emuwarez.it/
 
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Películas"}
     - {id: 2, cat: TV, desc: "Series"}
+    - {id: 4, cat: TV/Documentary, desc: "Documentales"}
+    - {id: 5, cat: Audio, desc: "Musica"}
+    - {id: 6, cat: Console, desc: "Juegos"}
+    - {id: 7, cat: PC, desc: "Software"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
@@ -25,7 +32,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://emuwarez.it/\" target=\"_blank\">eMuwarez</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://emuwarez.com/\" target=\"_blank\">eMuwarez</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -52,7 +59,7 @@ settings:
       asc: asc
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -109,8 +116,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -131,8 +136,13 @@ search:
           args: ["(?i)(Película de TV)", "Película_de_TV"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -179,4 +189,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json UNIT3D 9.0.8
+# json UNIT3D 9.2.0

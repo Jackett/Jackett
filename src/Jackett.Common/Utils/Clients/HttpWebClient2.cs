@@ -33,14 +33,19 @@ namespace Jackett.Common.Utils.Clients
         {
             cookies = new CookieContainer
             {
-                PerDomainCapacity = 100 // By default only 20 cookies are allowed per domain
+                PerDomainCapacity = 100 // By default, only 20 cookies are allowed per domain
             };
             CreateClient();
         }
 
         [DebuggerNonUserCode] // avoid "Exception User-Unhandled" Visual Studio messages
-        public static bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
+        public bool ValidateCertificate(HttpRequestMessage request, X509Certificate2 certificate, X509Chain chain, SslPolicyErrors sslPolicyErrors)
         {
+            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
+            {
+                return true;
+            }
+
             var hash = certificate.GetCertHashString();
 
             trustedCertificates.TryGetValue(hash, out var hosts);
@@ -70,15 +75,11 @@ namespace Jackett.Common.Utils.Clients
                 AllowAutoRedirect = false, // Do not use this - Bugs ahoy! Lost cookies and more.
                 UseCookies = true,
                 Proxy = webProxy,
-                UseProxy = (webProxy != null),
-                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate
+                UseProxy = webProxy != null,
+                AutomaticDecompression = DecompressionMethods.GZip | DecompressionMethods.Deflate,
+                MaxConnectionsPerServer = 20,
+                ServerCertificateCustomValidationCallback = ValidateCertificate,
             };
-
-            // custom certificate validation handler (netcore version)
-            if (serverConfig.RuntimeSettings.IgnoreSslErrors == true)
-                clientHandlr.ServerCertificateCustomValidationCallback = (sender, certificate, chain, sslPolicyErrors) => true;
-            else
-                clientHandlr.ServerCertificateCustomValidationCallback = ValidateCertificate;
 
             clearanceHandlr.InnerHandler = clientHandlr;
             client = new HttpClient(clearanceHandlr);
@@ -101,13 +102,6 @@ namespace Jackett.Common.Utils.Clients
         {
             ClientTimeout = seconds;
             client.Timeout = TimeSpan.FromSeconds(ClientTimeout);
-        }
-
-        public override void Init()
-        {
-            base.Init();
-
-            ServicePointManager.SecurityProtocol = (SecurityProtocolType)192 | (SecurityProtocolType)768 | (SecurityProtocolType)3072;
         }
 
         protected override async Task<WebResult> Run(WebRequest webRequest)

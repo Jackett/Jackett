@@ -10,16 +10,18 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Filmes", default: true}
-    - {id: 2, cat: TV, desc: "Séries", default: true}
-    - {id: 3, cat: TV/Anime, desc: "Animes", default: true}
-    - {id: 4, cat: Other, desc: "Cursos", default: false}
-    - {id: 5, cat: Console, desc: "Games", default: true}
-    - {id: 6, cat: Books/EBook, desc: "Livros", default: true}
-    - {id: 7, cat: Books/Comics, desc: "HQs", default: true}
-    - {id: 8, cat: Audio/Audiobook, desc: "AudioBooks", default: true}
-    - {id: 9, cat: PC, desc: "Programas", default: true}
-    - {id: 10, cat: Other, desc: "Materiais de Apoio", default: true}
+    - {id: 1, cat: Movies, desc: "Filmes"}
+    - {id: 2, cat: TV, desc: "Séries"}
+    - {id: 3, cat: TV/Anime, desc: "Animes"}
+    - {id: 4, cat: Other, desc: "Cursos"}
+    - {id: 5, cat: Console, desc: "Games"}
+    - {id: 6, cat: Books/EBook, desc: "Livros"}
+    - {id: 7, cat: Books/Comics, desc: "HQs e Mangas"}
+    - {id: 8, cat: Audio/Audiobook, desc: "AudioBooks"}
+    - {id: 9, cat: PC, desc: "Programas"}
+    - {id: 11, cat: Other, desc: "Diversos"}
+    - {id: 10, cat: Other, desc: "Materiais de Apoio"}
+    - {id: 12, cat: Audio, desc: "Músicas"}
 
   modes:
     search: [q]
@@ -66,7 +68,7 @@ settings:
     default: "Your account will be considered inactive if you have not logged in to the site for more than 90 days. After 30 days of inactivity (i.e. 30 days without logging in), your account will be removed from the tracker. Please note: The groups that suffer from inactivity are: User and Leech."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -123,8 +125,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -145,8 +145,13 @@ search:
           args: ["(?i)(Ficção científica)", "Ficção_científica"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -194,4 +199,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 8.2.0
+# json UNIT3D 9.2.0 (custom)

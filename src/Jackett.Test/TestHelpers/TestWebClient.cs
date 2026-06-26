@@ -48,9 +48,5 @@ namespace Jackett.Test.TestHelpers
                     });
             throw new Exception($"You have to mock the URL {request.Url} with RegisterRequestCallback");
         }
-
-        public override void Init()
-        {
-        }
     }
 }

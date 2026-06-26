@@ -81,8 +81,9 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: seeders
+    default: created
     options:
+      created: created
       name: title
       size: size
       seeders: seeders

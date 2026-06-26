@@ -1,7 +1,7 @@
 ---
 id: siambit
 name: SiamBIT
-description: "SiamBIT is a THAI Private Torrent Tracker for GENERAL"
+description: "SiamBIT is a THAI PAY2DL Private Torrent Tracker for GENERAL"
 language: th-TH
 type: private
 encoding: tis-620
@@ -148,8 +148,7 @@ search:
 
   fields:
     category:
-      # the last selector is temporary as the site has apparently not yet updated their html for the cat links ;-)
-      selector: a[href^="viewno18sbx.php?cat="], a[href^="viewbrsb.php?cat="], a[href^="viewno18sb.php?cat="]
+      selector: a[href*=".php?cat="]
       attribute: href
       filters:
         - name: querystring
@@ -162,59 +161,62 @@ search:
     download:
       selector: a[href^="details.php?id="]
       attribute: href
+    poster:
+      selector: img[alt="Poster"]
+      attribute: src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     files:
-      selector: td:nth-child(5)
+      selector: td:nth-child(6)
     date:
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       filters:
         - name: append
           args: " +07:00" # ICT
         - name: dateparse
           args: "dd-MM-yyyyHH:mm:ss zzz"
     size:
-      selector: td:nth-child(8)
-    grabs:
       selector: td:nth-child(9)
-    seeders:
+    grabs:
       selector: td:nth-child(10)
-    leechers:
+    seeders:
       selector: td:nth-child(11)
+    leechers:
+      selector: td:nth-child(12)
     downloadvolumefactor:
       case:
-        "td:nth-child(3):contains(\"100%\")": 0
-        "td:nth-child(3):contains(\"95%\")": 0.05
-        "td:nth-child(3):contains(\"90%\")": 0.1
-        "td:nth-child(3):contains(\"85%\")": 0.15
-        "td:nth-child(3):contains(\"80%\")": 0.2
-        "td:nth-child(3):contains(\"75%\")": 0.25
-        "td:nth-child(3):contains(\"70%\")": 0.3
-        "td:nth-child(3):contains(\"65%\")": 0.35
-        "td:nth-child(3):contains(\"60%\")": 0.4
-        "td:nth-child(3):contains(\"55%\")": 0.45
-        "td:nth-child(3):contains(\"50%\")": 0.5
-        "td:nth-child(3):contains(\"45%\")": 0.55
-        "td:nth-child(3):contains(\"40%\")": 0.6
-        "td:nth-child(3):contains(\"35%\")": 0.65
-        "td:nth-child(3):contains(\"30%\")": 0.7
-        "td:nth-child(3):contains(\"25%\")": 0.75
-        "td:nth-child(3):contains(\"20%\")": 0.8
-        "td:nth-child(3):contains(\"15%\")": 0.85
-        "td:nth-child(3):contains(\"10%\")": 0.9
-        "td:nth-child(3):contains(\"5%\")": 0.95
+        "td:nth-child(4):contains(\"100%\")": 0
+        "td:nth-child(4):contains(\"95%\")": 0.05
+        "td:nth-child(4):contains(\"90%\")": 0.1
+        "td:nth-child(4):contains(\"85%\")": 0.15
+        "td:nth-child(4):contains(\"80%\")": 0.2
+        "td:nth-child(4):contains(\"75%\")": 0.25
+        "td:nth-child(4):contains(\"70%\")": 0.3
+        "td:nth-child(4):contains(\"65%\")": 0.35
+        "td:nth-child(4):contains(\"60%\")": 0.4
+        "td:nth-child(4):contains(\"55%\")": 0.45
+        "td:nth-child(4):contains(\"50%\")": 0.5
+        "td:nth-child(4):contains(\"45%\")": 0.55
+        "td:nth-child(4):contains(\"40%\")": 0.6
+        "td:nth-child(4):contains(\"35%\")": 0.65
+        "td:nth-child(4):contains(\"30%\")": 0.7
+        "td:nth-child(4):contains(\"25%\")": 0.75
+        "td:nth-child(4):contains(\"20%\")": 0.8
+        "td:nth-child(4):contains(\"15%\")": 0.85
+        "td:nth-child(4):contains(\"10%\")": 0.9
+        "td:nth-child(4):contains(\"5%\")": 0.95
         "*": 1
     uploadvolumefactor:
       case:
-        "td:nth-child(4):contains(\"x2\")": 2
-        "td:nth-child(4):contains(\"x3\")": 3
-        "td:nth-child(4):contains(\"x4\")": 4
-        "td:nth-child(4):contains(\"x5\")": 5
-        "td:nth-child(4):contains(\"x6\")": 6
-        "td:nth-child(4):contains(\"x7\")": 7
-        "td:nth-child(4):contains(\"x8\")": 8
-        "td:nth-child(4):contains(\"x9\")": 9
+        "td:nth-child(5):contains(\"x2\")": 2
+        "td:nth-child(5):contains(\"x3\")": 3
+        "td:nth-child(5):contains(\"x4\")": 4
+        "td:nth-child(5):contains(\"x5\")": 5
+        "td:nth-child(5):contains(\"x6\")": 6
+        "td:nth-child(5):contains(\"x7\")": 7
+        "td:nth-child(5):contains(\"x8\")": 8
+        "td:nth-child(5):contains(\"x9\")": 9
         "*": 1
     minimumratio:
       text: 1.0

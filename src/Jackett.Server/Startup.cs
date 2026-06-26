@@ -1,6 +1,7 @@
 using System;
 using System.Diagnostics;
 using System.IO;
+using System.Net;
 using System.Text;
 using Autofac;
 using Autofac.Extensions.DependencyInjection;
@@ -22,7 +23,8 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-#if !NET462
+using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
+#if !NET471
 using Microsoft.Extensions.Hosting;
 #endif
 
@@ -56,7 +58,20 @@ namespace Jackett.Server
                             options.Cookie.Name = "Jackett";
                         });
 
-#if NET462
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                // When adjusting these parameters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                options.ForwardLimit = 10;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fc00::"), 7));
+                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fe80::"), 10));
+            });
+
+#if NET471
             services.AddMvc(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
@@ -115,7 +130,7 @@ namespace Jackett.Server
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-#if NET462
+#if NET471
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, IApplicationLifetime applicationLifetime)
         {
             applicationLifetime.ApplicationStarted.Register(OnStarted);
@@ -134,13 +149,7 @@ namespace Jackett.Server
                 app.UsePathBase(serverBasePath);
             }
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                // When adjusting these pareamters make sure it's well tested with various environments
-                // See https://github.com/Jackett/Jackett/issues/3517
-                ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-            });
+            app.UseForwardedHeaders();
 
             var rewriteOptions = new RewriteOptions()
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route
@@ -177,13 +186,7 @@ namespace Jackett.Server
                 app.UsePathBase(serverBasePath);
             }
 
-            app.UseForwardedHeaders(new ForwardedHeadersOptions
-            {
-                // When adjusting these pareamters make sure it's well tested with various environments
-                // See https://github.com/Jackett/Jackett/issues/3517
-                ForwardLimit = 10,
-                ForwardedHeaders = ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost
-            });
+            app.UseForwardedHeaders();
 
             var rewriteOptions = new RewriteOptions()
                 .AddRewrite(@"^torznab\/([\w-]*)", "api/v2.0/indexers/$1/results/torznab", skipRemainingRules: true) //legacy torznab route

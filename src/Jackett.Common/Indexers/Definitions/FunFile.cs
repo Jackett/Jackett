@@ -101,8 +101,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var parser = new HtmlParser();
                 using var dom = parser.ParseDocument(result.ContentString);
-                var errorMessage = dom.QuerySelector("td.mf_content").TextContent;
-                throw new ExceptionWithConfigData(errorMessage, configData);
+                var errorMessage = dom.QuerySelector("td.mf_content")?.TextContent.Trim();
+
+                throw new ExceptionWithConfigData(errorMessage ?? "Login failed.", configData);
             });
             return IndexerConfigurationStatus.RequiresTesting;
         }

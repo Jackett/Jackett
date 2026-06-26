@@ -1,0 +1,146 @@
+---
+id: rousi-pro
+name: Rousi.pro
+description: "Rousi.pro is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
+type: private
+encoding: UTF-8
+links:
+  - https://rousi.pro/
+
+caps:
+  categorymappings:
+    - {id: movie, cat: Movies, desc: "电影"}
+    - {id: tv, cat: TV, desc: "电视剧"}
+    - {id: documentary, cat: TV/Documentary, desc: "纪录片"}
+    - {id: animation, cat: TV/Anime, desc: "动漫"}
+    - {id: music, cat: Audio, desc: "音乐"}
+    - {id: variety, cat: TV, desc: "综艺"}
+    - {id: sports, cat: TV/Sport, desc: "体育"}
+    - {id: software, cat: PC, desc: "软件"}
+    - {id: ebook, cat: Books, desc: "电子书"}
+    - {id: 9kg, cat: XXX, desc: "9KG"}
+    - {id: other, cat: Other, desc: "其它"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API key
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Network</b> tab</li><li>Click on the <b>Fetch/XHR</b> button (Chrome Browser) or <b>XHR</b> button (FireFox)</li><li>Perform any search on the web site</li><li>Click on the first <i>search?query=</i> entry</li><li>Select the <b>Headers</b> tab on the Right panel</li><li>Find <b>'cookie:'</b> in the <b>Request Headers</b> section</li><li><b>Select</b> and <b>Copy</b> the API key from the <b>Authorization</b> string <i>(everything after 'Authorization: Bearer ')</i> and <b>Paste</b> here.</li></ol>"
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_passkey
+    type: info
+    label: About your Passkey
+    default: "You can find the Passkey on your <a href=\"https://rousi.pro/account?tab=passkey\" target=\"_blank\">Passkey settings</a> page."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: desc
+      ASC: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules (Inactive Accounts):<ol><li>Not logged in for more than 30 days: Send email reminders</li><li>Not logged in for more than 60 days: 5000 Mana points are deducted daily</li><li>After the mana value is deducted to 0: the account is banned</li><li>If the user expects to be unable to log in for a period of time, they can pay in advance 150,000 mana to protect account for 60 days</li></ol>"
+
+login:
+  path: api/torrent/latest
+  method: get
+
+search:
+  paths:
+    - path: api/torrent/search
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    query: "{{ .Keywords }}"
+    # "" both, title title, subtitle desc
+    search_field: title
+    sort: "{{ .Config.sort }}+{{ .Config.type }}"
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["[\\.\\s]", "%"]
+
+  rows:
+    selector: data.torrents
+
+  fields:
+    _id:
+      selector: uuid
+    title:
+      selector: title
+    category:
+      selector: type
+    details:
+      text: "{{ .Config.sitelink }}torrent/{{ .Result._id }}"
+    download:
+      text: "{{ .Config.sitelink }}api/torrent/{{ .Result._id }}/download/{{ .Config.passkey }}"
+    infohash:
+      selector: info_hash
+    poster:
+      selector: poster
+    imdbid:
+      selector: attributes.imdb_id
+    tmdbid:
+      selector: attributes.tmdb_id
+    doubanid:
+      selector: attributes.douban_id
+    description:
+      selector: subtitle
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: downloads
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    genre:
+      selector: genre
+    downloadvolumefactor:
+      selector: promotion.down_multiplier
+      optional: true
+      default: 1
+    uploadvolumefactor:
+      selector: promotion.up_multiplier
+      optional: true
+      default: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# json api

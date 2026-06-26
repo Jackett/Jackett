@@ -68,7 +68,7 @@ settings:
     default: "Accounts that do not download a 15GB torrent from our site within a month will receive a warning (will be closed)! Accounts that do not upload (seed, share) 20gb on our site within a month will receive a warning (will be closed)! The account that receives three warnings will be automatically closed! No objections are accepted to the deletion of accounts that have not been on our site for six months and have not been active in any way!"
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -151,8 +151,13 @@ search:
           args: ["(?i)(Vahşi Batı)", "Vahşi_Batı"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:

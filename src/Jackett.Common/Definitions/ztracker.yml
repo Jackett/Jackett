@@ -6,9 +6,10 @@ language: hu-HU
 type: semi-private
 encoding: ISO-8859-2
 links:
-  - http://ztracker.cc/ # site does not support https invalid certificate
+  - https://ztracker.cc/
 legacylinks:
   - http://ztracker.org/
+  - http://ztracker.cc/
 
 caps:
   categorymappings:

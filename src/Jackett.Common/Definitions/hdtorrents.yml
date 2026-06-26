@@ -152,8 +152,12 @@ search:
       attribute: href
     genre:
       selector: td:nth-child(3) span
+    _internal:
+      case:
+        img[src$="internal.png"]: "{{ .True }}"
+        "*": "{{ .False }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     date:
       # auto adjusted by site account profile
       selector: td:nth-child(7)
@@ -183,7 +187,7 @@ search:
         img[src$="no_ratio.png"]: 0
         "*": 1
     minimumratio:
-      text: 1.0
+      text: 0.7
     minimumseedtime:
       # 2 days (as seconds = 2 x 24 x 60 x 60)
       text: 172800

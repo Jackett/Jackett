@@ -8,10 +8,8 @@ using System.Xml.Linq;
 using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
-using Jackett.Common.Serializer;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
-using Microsoft.AspNetCore.Http;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
@@ -25,12 +23,13 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "anilibria";
         public override string Name => "Anilibria";
         public override string Description => "Anilibria is a russian-language anime distribution platform";
-        public override string SiteLink { get; protected set; } = "https://anilibria.top/";
+        public override string SiteLink { get; protected set; } = "https://aniliberty.top/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.anilibria.tv/",
+            "https://anilibria.top/",
         };
-        // API DOCS at https://anilibria.top/api/docs/v1
+        // API DOCS at https://aniliberty.top/api/docs/v1
         private string ApiBase => $"{SiteLink}api/v1/";
         public override string Language => "ru-RU";
         public override string Type => "public";
@@ -106,8 +105,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var releaseId in torrentIds)
             {
-                var torrentsResponse = await RequestWithCookiesAsync($"{ApiBase}anime/torrents/{releaseId}");
-                releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                var url = $"{ApiBase}anime/torrents/{releaseId}";
+                try
+                {
+                    var torrentsResponse = await RequestWithCookiesAsync(url);
+                    releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Anilibria: Failed to load url [{0}]: {1}", url, ex.Message);
+                }
             }
 
             return releases;
@@ -123,8 +130,16 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var releaseId in releaseIds)
             {
-                var torrentsResponse = await RequestWithCookiesAsync($"{ApiBase}anime/torrents/release/{releaseId}");
-                releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                var url = $"{ApiBase}anime/torrents/release/{releaseId}";
+                try
+                {
+                    var torrentsResponse = await RequestWithCookiesAsync(url);
+                    releases.AddRange(MapToReleaseInfo(torrentsResponse));
+                }
+                catch (Exception ex)
+                {
+                    logger.Error(ex, "Anilibria: Failed to load url [{0}]: {1}", url, ex.Message);
+                }
             }
 
             return releases;
@@ -204,44 +219,36 @@ namespace Jackett.Common.Indexers.Definitions
             seasonPart = Regex.Replace(seasonPart, @"\b\d{4}\b$", "");
             var hasPartNumber = Regex.IsMatch(seasonPart, @"\bPart\s+\d+\b", RegexOptions.IgnoreCase);
             var seasonMatch = Regex.Match(seasonPart,
-                @"\b(?:Season|S|Series)\s*(\d+)|\b(\d+)(?:st|nd|rd|th)?\s*Season\b|\b([IVXLCDM]+)\b|\b(\d+)\b",
+                @"\b(?:Season|S|Series)\s*(?<season_number>\d+)|\b(?<season_number>\d+)(?:st|nd|rd|th)?\s*Season\b|\b(?<roman_number>M{0,4}(CM|CD|D?C{0,3})(XC|XL|L?X{0,3})(IX|IV|V?I{0,3}))\b|\b(?<season_number>\d+)\b",
                 RegexOptions.IgnoreCase);
             var season = "S01";
 
             if (seasonMatch.Success && !hasPartNumber)
             {
-                if (!string.IsNullOrEmpty(seasonMatch.Groups[1].Value))
+                if (seasonMatch.Groups["season_number"].Success
+                    && !string.IsNullOrWhiteSpace(seasonMatch.Groups["season_number"].Value)
+                    && int.TryParse(seasonMatch.Groups["season_number"].Value, out var seasonNumber))
                 {
-                    season = $"S{int.Parse(seasonMatch.Groups[1].Value):D2}";
+                    season = $"S{seasonNumber:D2}";
                 }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[2].Value))
-                {
-                    season = $"S{int.Parse(seasonMatch.Groups[2].Value):D2}";
-                }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[3].Value))
+                else if (seasonMatch.Groups["roman_number"].Success && !string.IsNullOrWhiteSpace(seasonMatch.Groups["roman_number"].Value))
                 {
                     season = $"S{RomanToArabic(seasonMatch.Groups[3].Value):D2}";
-                }
-                else if (!string.IsNullOrEmpty(seasonMatch.Groups[4].Value))
-                {
-                    season = $"S{int.Parse(seasonMatch.Groups[4].Value):D2}";
                 }
             }
 
             var episodes = string.Empty;
             var epMatch = Regex.Match(episodesPart, @"(\d+)(?:[-–—](\d+))?");
 
-            if (epMatch.Success)
+            if (epMatch.Success && int.TryParse(epMatch.Groups[1].Value, out var episodeStartNumber))
             {
-                var start = int.Parse(epMatch.Groups[1].Value);
                 if (epMatch.Groups[2].Success)
                 {
-                    var end = int.Parse(epMatch.Groups[2].Value);
-                    episodes = $"E{start:D2}-E{end:D2}";
+                    episodes = $"E{episodeStartNumber:D2}-E{int.Parse(epMatch.Groups[2].Value):D2}";
                 }
                 else
                 {
-                    episodes = $"E{start:D2}";
+                    episodes = $"E{episodeStartNumber:D2}";
                 }
             }
 
@@ -250,11 +257,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         private static int RomanToArabic(string roman)
         {
-            int[] values = { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
-            string[] numerals = { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
+            roman = roman.ToUpperInvariant();
+
+            var values = new[] { 1000, 900, 500, 400, 100, 90, 50, 40, 10, 9, 5, 4, 1 };
+            var numerals = new[] { "M", "CM", "D", "CD", "C", "XC", "L", "XL", "X", "IX", "V", "IV", "I" };
             var result = 0;
             var i = 0;
-            roman = roman.ToUpper();
             while (roman.Length > 0)
             {
                 if (roman.StartsWith(numerals[i]))

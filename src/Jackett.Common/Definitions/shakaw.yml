@@ -1,0 +1,127 @@
+---
+id: shakaw
+name: ShaKaw
+description: "ShaKaw is a BRAZILIAN Private Torrent Tracker for ANIME"
+language: pt-BR
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://tracker.shakaw.com.br/
+
+caps:
+  categorymappings:
+    - {id: 0, cat: TV/Anime, desc: "Selecione"}
+    - {id: 1, cat: TV/Anime, desc: "Completo"}
+    - {id: 2, cat: TV/Anime, desc: "Série"}
+    - {id: 3, cat: Movies, desc: "Filme"}
+    - {id: 4, cat: TV/Anime, desc: "OVA"}
+    - {id: 5, cat: Books, desc: "Manga"}
+    - {id: 6, cat: TV/Anime, desc: "Especial"}
+    - {id: 7, cat: TV/Anime, desc: "Promo"}
+    - {id: 8, cat: TV, desc: "Tokusatsu"}
+    - {id: 9, cat: TV, desc: "Live Action"}
+    - {id: 12, cat: TV, desc: "Dorama"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  method: form
+  path: entrar.php
+  submitpath: pagina_inicial.php?acao=login
+  form: form[action="pagina_inicial.php?acao=login"]
+  captcha:
+    type: image
+    selector: img[alt="Carregando captcha..."]
+    input: captcha
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: h1#h1_aviso
+      message:
+        selector: div#div_aviso > p
+  test:
+    path: pagina_inicial.php
+    selector: a[href="sair.php"]
+
+search:
+  paths:
+    - path: torrents.php
+  inputs:
+    palavra_chave: "{{ .Keywords }}"
+    # selecione (default), Com seeders (has seeders), Sem seeders (without seeders), Golden, Sem Golden (not Golden)
+    situacao: "{{ if .Config.freeleech }}golden{{ else }}selecione{{ end }}"
+
+  rows:
+    selector: table#tabela_torrents > tbody > tr
+
+  fields:
+    category:
+      selector: div.div_categoria_torrent > a
+      attribute: href
+      filters:
+        - name: querystring
+          args: categoria_id
+    title:
+      selector: a.link_torrent, a.link_golden_torrent
+    details:
+      selector: a.link_torrent, a.link_golden_torrent
+      attribute: href
+    download:
+      selector: a.link_download
+      attribute: href
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: trim
+        - name: replace
+          args: ["h", ":"]
+        - name: re_replace
+          args: ["^(.{5})", "$1 "]
+        - name: append
+          args: " -03:00" # America/Sao_Paulo
+        - name: dateparse
+          args: "HH:mm dd/MM/yyyy zzz"
+    size:
+      selector: td[title="Tamanho"]
+    files:
+      selector: td[title="Quantidade de Arquivos"] > a
+    grabs:
+      selector: td[title="Quantos Completaram"]
+    seeders:
+      selector: td[title="Quantidade de Seeders"] > a
+    leechers:
+      selector: td[title="Quantidade de Leechers"] > a
+    genre:
+      selector: div.tags_da_linha_da_tabela
+      filters:
+        - name: regexp
+          args: "\\[(.+?)\\]"
+    description:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        span.icone_golden_torrent: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.6
+# engine n/a

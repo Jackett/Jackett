@@ -28,8 +28,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, tvdbid, tmdbid]
-    movie-search: [q, tmdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
 
@@ -44,6 +44,10 @@ settings:
   - name: freeleech
     type: checkbox
     label: Search freeleech only
+    default: false
+  - name: tmdbidonly
+    type: checkbox
+    label: Disable IMDB and TVDB ID search (only support TMDB ID) to potentially improve Sonarr and Radarr results
     default: false
   - name: single_file_release_use_filename
     type: checkbox
@@ -71,7 +75,7 @@ settings:
     default: "Accounts are set as inactive by the system after 180 days. After 270 days in inactive status, the accounts are automatically deleted from the system."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -94,11 +98,11 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    # seasonNumber: "{{ .Query.Season }}" # disabled due to Prowlarr/Indexers#486
-    # episodeNumber: "{{ .Query.Ep }}" # disabled due to Prowlarr/Indexers#486
-    # imdbId: "{{ .Query.IMDBIDShort }}" # disabled due to #14776
+    # seasonNumber: "{{ .Query.Season }}" # not supported
+    # episodeNumber: "{{ .Query.Ep }}" # not supported
+    imdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.IMDBIDShort }}{{ end }}"
     tmdbId: "{{ .Query.TMDBID }}"
-    tvdbId: "{{ .Query.TVDBID }}"
+    tvdbId: "{{ if .Config.tmdbidonly }}{{ else }}{{ .Query.TVDBID }}{{ end }}"
     "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
     sortField: "{{ .Config.sort }}"
     sortDirection: "{{ .Config.type }}"
@@ -148,8 +152,13 @@ search:
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        0: "{{ .False }}"
+        1: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:

@@ -5,8 +5,6 @@ description: "HDGalaKtik is a RUSSIAN Semi-Private tracker for MOVIES / TV / GEN
 language: ru-RU
 type: semi-private
 encoding: UTF-8
-certificates:
-  - 89cb539248b0d0cb0e92aa3f286ddfdd8347c3be # CN=mail.trackerpmr.com
 links:
   - https://www.trackerpmr.com/
   - https://freetmd.com/
@@ -16,20 +14,20 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 13, cat: Movies, desc: "Фильмы (Movies)"}
-    - {id: 6, cat: TV, desc: "Мультфильмы (Cartoons)"}
-    - {id: 10, cat: Audio, desc: "Музыка (Music)"}
-    - {id: 26, cat: PC, desc: "Программы (Programs)"}
-    - {id: 5, cat: Console, desc: "Игры (Games)"}
-    - {id: 25, cat: Other, desc: "Картинки (Pictures)"}
-    - {id: 11, cat: TV, desc: "Сериалы (TV Series)"}
-    - {id: 12, cat: TV/Anime, desc: "Аниме (Anime)"}
-    - {id: 16, cat: Books, desc: "Книги (Books)"}
-    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики (Clips / Trailers)"}
-    - {id: 22, cat: TV, desc: "ТВ / Передачи (TV)"}
-    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК (Mobile)"}
-    - {id: 1, cat: PC/ISO, desc: "Образы (ISO)"}
-    - {id: 4, cat: Other, desc: "Другое (Other)"}
+    - {id: 13, cat: Movies, desc: "Фильмы"}
+    - {id: 11, cat: TV, desc: "Сериалы"}
+    - {id: 6, cat: TV, desc: "Мультфильмы"}
+    - {id: 10, cat: Audio, desc: "Музыка"}
+    - {id: 26, cat: PC, desc: "Программы"}
+    - {id: 5, cat: Console, desc: "Игры"}
+    - {id: 25, cat: Other, desc: "Картинки"}
+    - {id: 12, cat: TV/Anime, desc: "Аниме"}
+    - {id: 16, cat: Books, desc: "Книги"}
+    - {id: 18, cat: Audio/Video, desc: "Клипы / Ролики"}
+    - {id: 22, cat: TV, desc: "ТВ / Передачи"}
+    - {id: 27, cat: PC/Mobile-Other, desc: "Игры - Мобила / КПК"}
+    - {id: 1, cat: PC/ISO, desc: "Образы"}
+    - {id: 4, cat: Other, desc: "Другое"}
 
   modes:
     search: [q]
@@ -64,7 +62,7 @@ settings:
       4: created
       1: title
       5: size
-      8: seeders
+      7: seeders
   - name: type
     type: select
     label: Order requested from site
@@ -87,22 +85,13 @@ login:
     selector: a[href="mybonus.php"]
 
 search:
-  # https://www.trackerpmr.com/browse.php?search=&stype=0&s=0&cat=0&gr=0&kp=0&im=0&incldead=1&sort=0&type=desc
+  # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
   paths:
     - path: browse.php
   inputs:
-    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
+    incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
     search: "{{ .Keywords }}"
-    # 0 title, 1 descr, 2 filename, 4 infohash
-    stype: 0
-    # 0 AND 1 OR
-    s: 0
-    # release group
-    gr: 0
-    # ratings
-    kp: 0
-    # 1 active, 2 dead, 3 gold, 4 sticky, lots of others
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -117,24 +106,27 @@ search:
       args: ["[^a-zA-Z0-9]+", "%"]
 
   rows:
-    selector: table.table > tbody > tr.torcontduo
+    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
+    dateheaders:
+      selector: a[href*="date="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: date
+        - name: dateparse
+          args: "yyyy-MM-dd"
 
   fields:
     category:
       selector: a[href^="browse.php?cat="]
       attribute: href
-      optional: true
-      default: 4
       filters:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="details.php?id="]
+      selector: a.tr-title-link-compact
       attribute: title
       filters:
-        - name: regexp
-          args: \'>(.+?)</div
-        - name: htmldecode
         # normalize to SXXEYY format
         - name: re_replace
           args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
@@ -193,64 +185,32 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a.tr-title-link-compact
       attribute: href
     download:
-      selector: a[href^="details.php?id="]
+      selector: a[href^="download.php?id="]
       attribute: href
-      filters:
-        - name: replace
-          args: ["details", "download"]
+      optional: true # for users that do not have DL access
     poster:
-      selector: img.s
+      selector: img.tr-main-poster-compact
       attribute: src
-    imdbid:
-      selector: a[href^="browse.php?imdb="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: imdb
     size:
-      selector: td:nth-child(4)
+      selector: div.tr-stat-block-compact:nth-child(3)
     seeders:
-      selector: span[title="Раздают"]
+      selector: div.tr-stat-block-compact:nth-child(4)
     leechers:
-      selector: span[title="Качают"]
-    date_day:
-      # Сегодня в 18:22
-      # Вчера в 20:52
-      selector: a[href^="browse.php?date="]:contains("Сегодня"), a[href^="browse.php?date="]:contains("Вчера")
-      optional: true
-      filters:
-        - name: regexp
-          args: "((Вчера в|Сегодня в)( \\d{2}:\\d{2}))"
-        - name: replace
-          args: ["Сегодня в", "Today"]
-        - name: replace
-          args: ["Вчера в", "Yesterday"]
-        - name: fuzzytime
-    date_year:
-      # 23:48 24/07
-      selector: a[href^="browse.php?date="]:contains("/")
-      optional: true
-      filters:
-        - name: regexp
-          args: "(\\d{2}:\\d{2} \\d{2}/\\d{2})"
-        - name: append
-          args: " +03:00" # MSK
-        - name: dateparse
-          args: "HH:mm dd/MM zzz"
-    date:
-      text: "{{ if or .Result.date_year .Result.date_day }}{{ or .Result.date_year .Result.date_day }}{{ else }}now{{ end }}"
+      selector: div.tr-stat-block-compact:nth-child(5)
+    grabs:
+      selector: div.tr-meta-info-compact span:has(i.fa-download)
     downloadvolumefactor:
       case:
-        img[src="/pic/freedownload.gif"]: 0
+        span.tr-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: a[href*="?tag="]
+      selector: a.tr-tag-item-compact
       attribute: title
-# engine n/a
+# Tesla v.Core (8.7.18)

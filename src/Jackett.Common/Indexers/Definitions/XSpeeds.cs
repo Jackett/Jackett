@@ -96,6 +96,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(112, TorznabCatType.MoviesOther, "Anime Movies");
             caps.Categories.AddCategoryMapping(111, TorznabCatType.MoviesOther, "Anime TV");
             caps.Categories.AddCategoryMapping(150, TorznabCatType.PC, "Apps");
+            caps.Categories.AddCategoryMapping(166, TorznabCatType.PCMac, "Apps MacOS");
             caps.Categories.AddCategoryMapping(153, TorznabCatType.Books, "Books");
             caps.Categories.AddCategoryMapping(154, TorznabCatType.AudioAudiobook, "Books Audiobooks");
             caps.Categories.AddCategoryMapping(155, TorznabCatType.Books, "Books eBooks & Magazines");
@@ -143,6 +144,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(138, TorznabCatType.TV, "TOTW (x2 upload)");
             caps.Categories.AddCategoryMapping(139, TorznabCatType.Movies, "TOTM (Freeleech)");
             caps.Categories.AddCategoryMapping(138, TorznabCatType.Movies, "TOTW (x2 upload)");
+            caps.Categories.AddCategoryMapping(167, TorznabCatType.Movies, "Weekend Deluxe 4K pack");
             caps.Categories.AddCategoryMapping(20, TorznabCatType.TVSport, "Sports");
             caps.Categories.AddCategoryMapping(88, TorznabCatType.TVSport, "Sports/Football");
             caps.Categories.AddCategoryMapping(86, TorznabCatType.TVSport, "Sports/MotorSports");

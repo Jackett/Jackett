@@ -31,7 +31,10 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://rutracker.org/",
             "https://rutracker.net/",
-            "https://rutracker.nl/"
+        };
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://rutracker.nl/",
         };
         public override Encoding Encoding => Encoding.GetEncoding("windows-1251");
         public override string Language => "ru-RU";
@@ -95,9 +98,9 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2092, TorznabCatType.MoviesForeign, "|- Фильмы 2006-2010");
             caps.Categories.AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             caps.Categories.AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
-            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2023");
-            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2024");
-            caps.Categories.AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы Ближнего Зарубежья");
+            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2025");
+            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2026");
+            caps.Categories.AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы ближнего зарубежья");
             caps.Categories.AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             caps.Categories.AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
             caps.Categories.AddCategoryMapping(212, TorznabCatType.MoviesForeign, "|- Сборники фильмов");
@@ -164,15 +167,15 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(33, TorznabCatType.TVAnime, "Аниме");
             caps.Categories.AddCategoryMapping(1106, TorznabCatType.TVAnime, "|- Онгоинги (HD Video)");
             caps.Categories.AddCategoryMapping(1105, TorznabCatType.TVAnime, "|- Аниме (HD Video)");
-            caps.Categories.AddCategoryMapping(599, TorznabCatType.TVAnime, "|- Аниме (DVD)");
-            caps.Categories.AddCategoryMapping(1389, TorznabCatType.TVAnime, "|- Аниме (основной подраздел)");
+            caps.Categories.AddCategoryMapping(599, TorznabCatType.TVAnime, "|- Аниме (DVD Video)");
+            caps.Categories.AddCategoryMapping(1389, TorznabCatType.TVAnime, "|- Аниме (SD Video)");
             caps.Categories.AddCategoryMapping(1391, TorznabCatType.TVAnime, "|- Аниме (плеерный подраздел)");
             caps.Categories.AddCategoryMapping(2491, TorznabCatType.TVAnime, "|- Аниме (QC подраздел)");
             caps.Categories.AddCategoryMapping(2544, TorznabCatType.TVAnime, "|- Ван-Пис");
             caps.Categories.AddCategoryMapping(1642, TorznabCatType.TVAnime, "|- Гандам");
             caps.Categories.AddCategoryMapping(1390, TorznabCatType.TVAnime, "|- Наруто");
             caps.Categories.AddCategoryMapping(404, TorznabCatType.TVAnime, "|- Покемоны");
-            caps.Categories.AddCategoryMapping(893, TorznabCatType.TVAnime, "|- Японские мультфильмы");
+            caps.Categories.AddCategoryMapping(1277, TorznabCatType.TVAnime, "|- Дунхуа и Эни");
             caps.Categories.AddCategoryMapping(809, TorznabCatType.Audio, "|- Звуковые дорожки (Аниме)");
             caps.Categories.AddCategoryMapping(2484, TorznabCatType.TVAnime, "|- Артбуки и журналы (Аниме)");
             caps.Categories.AddCategoryMapping(1386, TorznabCatType.TVAnime, "|- Обои, сканы, аватары, арт");
@@ -331,37 +334,40 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(114, TorznabCatType.TVOther, "|- [Видео Юмор] Сатирики и юмористы");
             caps.Categories.AddCategoryMapping(1332, TorznabCatType.TVOther, "|- Юмористические аудиопередачи");
             caps.Categories.AddCategoryMapping(1495, TorznabCatType.TVOther, "|- Аудио и видео ролики (Приколы и юмор)");
-            caps.Categories.AddCategoryMapping(1346, TorznabCatType.TVSport, "XXXIII Летние Олимпийские игры 2024");
-            caps.Categories.AddCategoryMapping(2493, TorznabCatType.TVSport, "|- Легкая атлетика. Плавание. Прыжки в воду. Синхронное плавание. Гим..");
+            caps.Categories.AddCategoryMapping(926, TorznabCatType.TVOther, "XXV Зимние Олимпийские игры 2026");
+            caps.Categories.AddCategoryMapping(1311, TorznabCatType.TVOther, "|- Биатлон");
+            caps.Categories.AddCategoryMapping(2171, TorznabCatType.TVOther, "|- Лыжные гонки");
+            caps.Categories.AddCategoryMapping(2455, TorznabCatType.TVOther, "|- Горные лыжи. Сноубординг. Фристайл. Прыжки на лыжах с трамплина.Лы..");
+            caps.Categories.AddCategoryMapping(1434, TorznabCatType.TVOther, "|- Конькобежный спорт. Шорт-трек. Бобслей. Санный спорт. Скелетон ");
+            caps.Categories.AddCategoryMapping(1339, TorznabCatType.TVOther, "|- Фигурное катание ");
+            caps.Categories.AddCategoryMapping(922, TorznabCatType.TVOther, "|- Хоккей");
+            caps.Categories.AddCategoryMapping(918, TorznabCatType.TVOther, "|- Керлинг");
+            caps.Categories.AddCategoryMapping(1315, TorznabCatType.TVOther, "XXIV Зимние Олимпийские игры 2022");
+            caps.Categories.AddCategoryMapping(1336, TorznabCatType.TVOther, "|- Биатлон.Лыжные гонки.Прыжки с трамп.Двоеборье.Горные лыжи.Сноуборд..");
+            caps.Categories.AddCategoryMapping(2350, TorznabCatType.TVOther, "|- Конькобежный спорт. Шорт-трек. Бобслей. Санный спорт. Скелетон");
+            caps.Categories.AddCategoryMapping(1472, TorznabCatType.TVOther, "|- Фигурное катание ");
+            caps.Categories.AddCategoryMapping(2068, TorznabCatType.TVOther, "|- Хоккей");
+            caps.Categories.AddCategoryMapping(2016, TorznabCatType.TVOther, "|- Керлинг");
+            caps.Categories.AddCategoryMapping(1346, TorznabCatType.TVOther, "XXXIII Летние Олимпийские игры 2024");
+            caps.Categories.AddCategoryMapping(2493, TorznabCatType.TVSport, "|- Легкая атлетика. Плавание. Прыжки в воду. Синхронное плавание. Гимнастика");
             caps.Categories.AddCategoryMapping(2103, TorznabCatType.TVSport, "|- Велоспорт. Академическая гребля. Гребля на байдарках и каноэ");
-            caps.Categories.AddCategoryMapping(2485, TorznabCatType.TVSport, "|- Футбол. Баскетбол. Волейбол. Гандбол. Водное поло. Регби. Хоккей н..");
+            caps.Categories.AddCategoryMapping(2485, TorznabCatType.TVSport, "|- Футбол. Баскетбол. Волейбол. Гандбол. Водное поло. Регби. Хоккей на траве");
             caps.Categories.AddCategoryMapping(2479, TorznabCatType.TVSport, "|- Теннис. Настольный теннис. Бадминтон");
             caps.Categories.AddCategoryMapping(2089, TorznabCatType.TVSport, "|- Фехтование. Стрельба. Стрельба из лука. Современное пятиборье");
             caps.Categories.AddCategoryMapping(2338, TorznabCatType.TVSport, "|- Бокс. Борьба Вольная и Греко-римская. Дзюдо. Карате. Тхэквондо");
             caps.Categories.AddCategoryMapping(927, TorznabCatType.TVSport, "|- Другие виды спорта");
             caps.Categories.AddCategoryMapping(1392, TorznabCatType.TVSport, "XXXII Летние Олимпийские игры 2020");
             caps.Categories.AddCategoryMapping(2475, TorznabCatType.TVSport, "|- Легкая атлетика. Плавание. Прыжки в воду. Синхронное плавание");
-            caps.Categories.AddCategoryMapping(2113, TorznabCatType.TVSport, "|- Гимнастика. Прыжки на батуте. Фехтование. Стрельба. Современное пя..");
+            caps.Categories.AddCategoryMapping(2113, TorznabCatType.TVSport, "|- Гимнастика. Прыжки на батуте. Фехтование. Стрельба. Современное пятиборье");
             caps.Categories.AddCategoryMapping(2482, TorznabCatType.TVSport, "|- Велоспорт. Академическая гребля. Гребля на байдарках и каноэ");
             caps.Categories.AddCategoryMapping(2522, TorznabCatType.TVSport, "|- Бокс. Борьба Вольная и Греко-римская. Дзюдо. Карате. Тхэквондо");
-            caps.Categories.AddCategoryMapping(2486, TorznabCatType.TVSport, "|- Баскетбол. Волейбол. Гандбол. Водное поло. Регби. Хоккей на траве");
+            caps.Categories.AddCategoryMapping(2486, TorznabCatType.TVSport, "|- Футбол. Баскетбол. Волейбол. Гандбол. Водное поло. Регби. Хоккей на траве");
             caps.Categories.AddCategoryMapping(1794, TorznabCatType.TVSport, "|- Другие виды спорта");
-            caps.Categories.AddCategoryMapping(1315, TorznabCatType.TVSport, "XXIV Зимние Олимпийские игры 2022");
-            caps.Categories.AddCategoryMapping(1336, TorznabCatType.TVSport, "|- Биатлон");
-            caps.Categories.AddCategoryMapping(2171, TorznabCatType.TVSport, "|- Лыжные гонки");
-            caps.Categories.AddCategoryMapping(1339, TorznabCatType.TVSport, "|- Прыжки на лыжах с трамплина / Лыжное двоеборье");
-            caps.Categories.AddCategoryMapping(2455, TorznabCatType.TVSport, "|- Горные лыжи / Сноубординг / Фристайл");
-            caps.Categories.AddCategoryMapping(1434, TorznabCatType.TVSport, "|- Бобслей / Санный спорт / Скелетон");
-            caps.Categories.AddCategoryMapping(2350, TorznabCatType.TVSport, "|- Конькобежный спорт / Шорт-трек");
-            caps.Categories.AddCategoryMapping(1472, TorznabCatType.TVSport, "|- Фигурное катание");
-            caps.Categories.AddCategoryMapping(2068, TorznabCatType.TVSport, "|- Хоккей");
-            caps.Categories.AddCategoryMapping(2016, TorznabCatType.TVSport, "|- Керлинг");
-            caps.Categories.AddCategoryMapping(1311, TorznabCatType.TVSport, "|- Обзорные и аналитические программы");
             caps.Categories.AddCategoryMapping(255, TorznabCatType.TVSport, "Спортивные турниры, фильмы и передачи");
             caps.Categories.AddCategoryMapping(256, TorznabCatType.TVSport, "|- Автоспорт");
             caps.Categories.AddCategoryMapping(1986, TorznabCatType.TVSport, "|- Мотоспорт");
-            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2024)");
-            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2023)");
+            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2026)");
+            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2025)");
             caps.Categories.AddCategoryMapping(626, TorznabCatType.TVSport, "|- Формула 1 (до 2011 вкл.)");
             caps.Categories.AddCategoryMapping(262, TorznabCatType.TVSport, "|- Велоспорт");
             caps.Categories.AddCategoryMapping(1326, TorznabCatType.TVSport, "|- Волейбол/Гандбол");
@@ -385,17 +391,18 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1319, TorznabCatType.TVSport, "|- Спорт (видео)");
             caps.Categories.AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             caps.Categories.AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
-            caps.Categories.AddCategoryMapping(2545, TorznabCatType.TVSport, "|- Клубный чемпионат мира 2025");
+            caps.Categories.AddCategoryMapping(2545, TorznabCatType.TVSport, "|- Клубный Чемпионат Мира 2025");
+            caps.Categories.AddCategoryMapping(2147, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (финальный турнир)");
             caps.Categories.AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (отбор)");
-            caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (отбор)");
+            caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (финальный турнир)");
             caps.Categories.AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
             caps.Categories.AddCategoryMapping(592, TorznabCatType.TVSport, "|- Лига Наций");
             caps.Categories.AddCategoryMapping(1229, TorznabCatType.TVSport, "|- Чемпионат Мира 2022");
             caps.Categories.AddCategoryMapping(2533, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (игры)");
             caps.Categories.AddCategoryMapping(1952, TorznabCatType.TVSport, "|- Чемпионат Мира 2018 (обзорные передачи, документалистика)");
             caps.Categories.AddCategoryMapping(1621, TorznabCatType.TVSport, "|- Чемпионаты Мира");
+            caps.Categories.AddCategoryMapping(1668, TorznabCatType.TVSport, "|- Россия 2025-2026");
             caps.Categories.AddCategoryMapping(2075, TorznabCatType.TVSport, "|- Россия 2024-2025");
-            caps.Categories.AddCategoryMapping(1668, TorznabCatType.TVSport, "|- Россия 2023-2024");
             caps.Categories.AddCategoryMapping(1613, TorznabCatType.TVSport, "|- Россия/СССР");
             caps.Categories.AddCategoryMapping(1614, TorznabCatType.TVSport, "|- Англия");
             caps.Categories.AddCategoryMapping(1623, TorznabCatType.TVSport, "|- Испания");
@@ -405,13 +412,13 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2514, TorznabCatType.TVSport, "|- Украина");
             caps.Categories.AddCategoryMapping(1616, TorznabCatType.TVSport, "|- Другие национальные чемпионаты и кубки");
             caps.Categories.AddCategoryMapping(2014, TorznabCatType.TVSport, "|- Международные турниры");
+            caps.Categories.AddCategoryMapping(1491, TorznabCatType.TVSport, "|- Еврокубки 2025-2026");
             caps.Categories.AddCategoryMapping(1442, TorznabCatType.TVSport, "|- Еврокубки 2024-2025");
-            caps.Categories.AddCategoryMapping(1491, TorznabCatType.TVSport, "|- Еврокубки 2023-2024");
-            caps.Categories.AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2023");
+            caps.Categories.AddCategoryMapping(1987, TorznabCatType.TVSport, "|- Еврокубки 2011-2024");
             caps.Categories.AddCategoryMapping(1617, TorznabCatType.TVSport, "|- Еврокубки");
             caps.Categories.AddCategoryMapping(1620, TorznabCatType.TVSport, "|- Чемпионаты Европы");
             caps.Categories.AddCategoryMapping(1998, TorznabCatType.TVSport, "|- Товарищеские турниры и матчи");
-            caps.Categories.AddCategoryMapping(1343, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи 2018-2023");
+            caps.Categories.AddCategoryMapping(1343, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи 2018-2025");
             caps.Categories.AddCategoryMapping(751, TorznabCatType.TVSport, "|- Обзорные и аналитические передачи");
             caps.Categories.AddCategoryMapping(497, TorznabCatType.TVSport, "|- Документальные фильмы (футбол)");
             caps.Categories.AddCategoryMapping(1697, TorznabCatType.TVSport, "|- Мини-футбол/Пляжный футбол");
@@ -419,7 +426,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2001, TorznabCatType.TVSport, "|- Международные соревнования");
             caps.Categories.AddCategoryMapping(2002, TorznabCatType.TVSport, "|- NBA / NCAA (до 2000 г.)");
             caps.Categories.AddCategoryMapping(283, TorznabCatType.TVSport, "|- NBA / NCAA (2000-2010 гг.)");
-            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2024 гг.)");
+            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2026 гг.)");
             caps.Categories.AddCategoryMapping(2003, TorznabCatType.TVSport, "|- Европейский клубный баскетбол");
             caps.Categories.AddCategoryMapping(2009, TorznabCatType.TVSport, "🏒 Хоккей");
             caps.Categories.AddCategoryMapping(2010, TorznabCatType.TVSport, "|- Хоккей с мячом / Бенди");
@@ -448,7 +455,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2223, TorznabCatType.Books, "|- Путешествия и туризм");
             caps.Categories.AddCategoryMapping(2447, TorznabCatType.Books, "|- Знаменитости и кумиры");
             caps.Categories.AddCategoryMapping(39, TorznabCatType.Books, "|- Разное (книги)");
-            caps.Categories.AddCategoryMapping(2086, TorznabCatType.Books, "|- Самиздат, статьи из журналов, фрагменты книг");
+            caps.Categories.AddCategoryMapping(2086, TorznabCatType.Books, "|- Самиздат, статьи из журналов, фрагменты книг, любительские переводы");
             caps.Categories.AddCategoryMapping(1101, TorznabCatType.Books, "Для детей, родителей и учителей");
             caps.Categories.AddCategoryMapping(745, TorznabCatType.Books, "|- Учебная литература для детского сада и начальной школы (до 4 класса)");
             caps.Categories.AddCategoryMapping(1689, TorznabCatType.Books, "|- Учебная литература для старших классов (5-11 класс)");
@@ -544,7 +551,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1686, TorznabCatType.Books, "Вера и религия");
             caps.Categories.AddCategoryMapping(2215, TorznabCatType.Books, "|- Христианство");
             caps.Categories.AddCategoryMapping(2216, TorznabCatType.Books, "|- Ислам");
-            caps.Categories.AddCategoryMapping(2217, TorznabCatType.Books, "|- Религии Индии, Тибета и Восточной Азии / Иудаизм");
+            caps.Categories.AddCategoryMapping(2546, TorznabCatType.Books, "|- Иудаизм");
+            caps.Categories.AddCategoryMapping(2217, TorznabCatType.Books, "|- Религии Индии, Тибета и Восточной Азии");
             caps.Categories.AddCategoryMapping(2218, TorznabCatType.Books, "|- Нетрадиционные религиозные, духовные и мистические учения");
             caps.Categories.AddCategoryMapping(2252, TorznabCatType.Books, "|- Религиоведение. История Религии");
             caps.Categories.AddCategoryMapping(2543, TorznabCatType.Books, "|- Атеизм. Научный атеизм");
@@ -621,9 +629,9 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2441, TorznabCatType.BooksEBook, "|- Кулинария. Цветоводство. Домоводство");
             caps.Categories.AddCategoryMapping(2442, TorznabCatType.BooksEBook, "|- Культура. Искусство. История");
             caps.Categories.AddCategoryMapping(2125, TorznabCatType.Books, "Медицина и здоровье");
-            caps.Categories.AddCategoryMapping(2133, TorznabCatType.Books, "|- Клиническая медицина до 1980 год");
+            caps.Categories.AddCategoryMapping(2133, TorznabCatType.Books, "|- Клиническая медицина до 1980 года");
             caps.Categories.AddCategoryMapping(2130, TorznabCatType.Books, "|- Клиническая медицина с 1980 по 2000 год");
-            caps.Categories.AddCategoryMapping(2313, TorznabCatType.Books, "|- Клиническая медицина после 2000 год");
+            caps.Categories.AddCategoryMapping(2313, TorznabCatType.Books, "|- Клиническая медицина после 2000 года");
             caps.Categories.AddCategoryMapping(2528, TorznabCatType.Books, "|- Научная медицинская периодика (газеты и журналы)");
             caps.Categories.AddCategoryMapping(2129, TorznabCatType.Books, "|- Медико-биологические науки");
             caps.Categories.AddCategoryMapping(2141, TorznabCatType.Books, "|- Фармация и фармакология");
@@ -842,7 +850,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1770, TorznabCatType.AudioMP3, "|- Dancehall, Raggamuffin (lossy)");
             caps.Categories.AddCategoryMapping(1768, TorznabCatType.AudioLossless, "|- Reggae, Dancehall, Dub (lossless)");
             caps.Categories.AddCategoryMapping(1774, TorznabCatType.AudioLossless, "|- Ska, Ska-Punk, Ska-Jazz (lossless)");
-            caps.Categories.AddCategoryMapping(1772, TorznabCatType.Audio, "|- Отечественный Reggae, Dub (lossy и lossless)");
+            caps.Categories.AddCategoryMapping(1772, TorznabCatType.Audio, "|- Отечественный Reggae, Ska, Dub (lossy и lossless)");
             caps.Categories.AddCategoryMapping(2233, TorznabCatType.Audio, "|- Reggae, Ska, Dub (компиляции) (lossy и lossless)");
             caps.Categories.AddCategoryMapping(416, TorznabCatType.Audio, "Саундтреки, караоке и мюзиклы");
             caps.Categories.AddCategoryMapping(2377, TorznabCatType.AudioVideo, "|- Караоке");
@@ -873,11 +881,11 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1226, TorznabCatType.Audio, "|- Менестрели и ролевики (lossy и lossless)");
             caps.Categories.AddCategoryMapping(782, TorznabCatType.Audio, "Лейбл- и сцен-паки. Неофициальные сборники и ремастеринги. AI-музыка");
             caps.Categories.AddCategoryMapping(577, TorznabCatType.Audio, "|- AI-Music - музыка ИИ, нейросетей (lossy и lossless)");
-            caps.Categories.AddCategoryMapping(1842, TorznabCatType.AudioLossless, "Label Packs (lossless)");
-            caps.Categories.AddCategoryMapping(1648, TorznabCatType.AudioMP3, "Label packs, Scene packs (lossy)");
+            caps.Categories.AddCategoryMapping(1842, TorznabCatType.AudioLossless, "|- Лейбл-паки (lossless)");
+            caps.Categories.AddCategoryMapping(1648, TorznabCatType.AudioMP3, "|- Лейбл-паки, Сцен-паки (lossy)");
             caps.Categories.AddCategoryMapping(134, TorznabCatType.AudioLossless, "|- Неофициальные сборники и ремастеринги (lossless)");
             caps.Categories.AddCategoryMapping(965, TorznabCatType.AudioMP3, "|- Неофициальные сборники (lossy)");
-            caps.Categories.AddCategoryMapping(2495, TorznabCatType.AudioMP3, "Отечественная поп-музыка ");
+            caps.Categories.AddCategoryMapping(2495, TorznabCatType.AudioMP3, "Отечественная поп-музыка");
             caps.Categories.AddCategoryMapping(424, TorznabCatType.AudioMP3, "|- Популярная музыка России и стран бывшего СССР (lossy)");
             caps.Categories.AddCategoryMapping(1361, TorznabCatType.AudioMP3, "|- Популярная музыка России и стран бывшего СССР (сборники) (lossy)");
             caps.Categories.AddCategoryMapping(425, TorznabCatType.AudioLossless, "|- Популярная музыка России и стран бывшего СССР (lossless)");
@@ -1097,7 +1105,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(453, TorznabCatType.Audio, "|- Конверсии Quadraphonic");
             caps.Categories.AddCategoryMapping(1170, TorznabCatType.Audio, "|- Конверсии SACD");
             caps.Categories.AddCategoryMapping(1759, TorznabCatType.Audio, "|- Конверсии Blu-Ray, ADVD и DVD-Audio");
-            caps.Categories.AddCategoryMapping(1852, TorznabCatType.Audio, "|- Апмиксы-Upmixes/Даунмиксы-Downmix");
+            caps.Categories.AddCategoryMapping(1852, TorznabCatType.Audio, "|- Апмиксы-Upmixes");
             caps.Categories.AddCategoryMapping(413, TorznabCatType.AudioVideo, "Музыкальное SD видео");
             caps.Categories.AddCategoryMapping(445, TorznabCatType.AudioVideo, "|- Классическая и современная академическая музыка (Видео)");
             caps.Categories.AddCategoryMapping(702, TorznabCatType.AudioVideo, "|- Опера, Оперетта и Мюзикл (Видео)");
@@ -1156,7 +1164,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2529, TorznabCatType.AudioVideo, "|- New Age, Relax, Meditative, Рэп, Хип-Хоп, R'n'B, Reggae, Ska, Dub (HD Видео)");
             caps.Categories.AddCategoryMapping(1781, TorznabCatType.AudioVideo, "|- Музыка других жанров, Разножанровые сборные концерты (HD видео)");
             caps.Categories.AddCategoryMapping(2508, TorznabCatType.AudioVideo, "|- Зарубежная поп-музыка (HD Видео)");
-            caps.Categories.AddCategoryMapping(2426, TorznabCatType.AudioVideo, "|- Отечественная поп-музыка (HD видео)");
+            caps.Categories.AddCategoryMapping(2426, TorznabCatType.AudioVideo, "|- Отечественная поп-музыка (HD Видео)");
             caps.Categories.AddCategoryMapping(2351, TorznabCatType.AudioVideo, "|- Восточноазиатская Поп-музыка (HD Видео)");
             caps.Categories.AddCategoryMapping(1340, TorznabCatType.AudioVideo, "|- Восточноазиатский Rock (HD Видео)");
             caps.Categories.AddCategoryMapping(2306, TorznabCatType.AudioVideo, "|- Джаз и Блюз (HD Видео)");
@@ -1218,8 +1226,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(595, TorznabCatType.ConsolePSVita, "|- PS Vita");
             caps.Categories.AddCategoryMapping(887, TorznabCatType.ConsoleXBox, "|- Original Xbox");
             caps.Categories.AddCategoryMapping(510, TorznabCatType.ConsoleXBox360, "|- Xbox 360");
-            caps.Categories.AddCategoryMapping(773, TorznabCatType.ConsoleWii, "|- Wii/WiiU");
-            caps.Categories.AddCategoryMapping(774, TorznabCatType.ConsoleNDS, "|- NDS/3DS");
+            caps.Categories.AddCategoryMapping(773, TorznabCatType.ConsoleWii, "|- Wii U/Wii/GameCube");
+            caps.Categories.AddCategoryMapping(774, TorznabCatType.ConsoleNDS, "|- 3DS/DS");
             caps.Categories.AddCategoryMapping(1605, TorznabCatType.Console, "|- Switch");
             caps.Categories.AddCategoryMapping(968, TorznabCatType.Console, "|- Dreamcast");
             caps.Categories.AddCategoryMapping(129, TorznabCatType.Console, "|- Остальные платформы");
@@ -1363,19 +1371,23 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1375, TorznabCatType.PCMac, "|- Офисные программы (Mac OS)");
             caps.Categories.AddCategoryMapping(1371, TorznabCatType.PCMac, "|- Программы для интернета и сетей (Mac OS)");
             caps.Categories.AddCategoryMapping(1374, TorznabCatType.PCMac, "|- Другие программы (Mac OS)");
+            caps.Categories.AddCategoryMapping(1933, TorznabCatType.PCMobileiOS, "iOS");
             caps.Categories.AddCategoryMapping(1935, TorznabCatType.PCMobileiOS, "|- Программы для iOS");
             caps.Categories.AddCategoryMapping(1003, TorznabCatType.PCMobileiOS, "|- Игры для iOS");
             caps.Categories.AddCategoryMapping(1937, TorznabCatType.PCMobileiOS, "|- Разное для iOS");
+            caps.Categories.AddCategoryMapping(2235, TorznabCatType.PCMobileiOS, "Видео");
             caps.Categories.AddCategoryMapping(1908, TorznabCatType.PCMobileiOS, "|- Фильмы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(864, TorznabCatType.PCMobileiOS, "|- Сериалы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(863, TorznabCatType.PCMobileiOS, "|- Мультфильмы для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(2535, TorznabCatType.PCMobileiOS, "|- Аниме для iPod, iPhone, iPad");
             caps.Categories.AddCategoryMapping(2534, TorznabCatType.PCMobileiOS, "|- Музыкальное видео для iPod, iPhone, iPad");
+            caps.Categories.AddCategoryMapping(2238, TorznabCatType.PCMac, "Видео HD");
             caps.Categories.AddCategoryMapping(1936, TorznabCatType.PCMac, "|- Фильмы HD для Apple TV");
             caps.Categories.AddCategoryMapping(315, TorznabCatType.PCMac, "|- Сериалы HD для Apple TV");
             caps.Categories.AddCategoryMapping(1363, TorznabCatType.PCMac, "|- Мультфильмы HD для Apple TV");
             caps.Categories.AddCategoryMapping(2082, TorznabCatType.PCMac, "|- Документальное видео HD для Apple TV");
             caps.Categories.AddCategoryMapping(2241, TorznabCatType.PCMac, "|- Музыкальное видео HD для Apple TV");
+            caps.Categories.AddCategoryMapping(2236, TorznabCatType.Audio, "Аудио");
             caps.Categories.AddCategoryMapping(1909, TorznabCatType.AudioAudiobook, "|- Аудиокниги (AAC, ALAC)");
             caps.Categories.AddCategoryMapping(1927, TorznabCatType.AudioLossless, "|- Музыка lossless (ALAC)");
             caps.Categories.AddCategoryMapping(2240, TorznabCatType.Audio, "|- Музыка Lossy (AAC-iTunes)");
@@ -1418,7 +1430,9 @@ namespace Jackett.Common.Indexers.Definitions
                     _capSid = doc.QuerySelector("input[name=\"cap_sid\"]")?.GetAttribute("value");
                 }
                 else
+                {
                     configData.CaptchaImage.Value = null;
+                }
             }
             catch (Exception e)
             {
@@ -1510,7 +1524,9 @@ namespace Jackett.Common.Indexers.Definitions
                 var magnetLink = dom.QuerySelector("table.attach a.magnet-link[href^=\"magnet:?\"]")?.GetAttribute("href");
 
                 if (magnetLink == null)
+                {
                     throw new Exception($"Failed to fetch magnet link from {link}");
+                }
 
                 link = new Uri(magnetLink);
             }
@@ -1586,7 +1602,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                 if (qDownloadLink == null) // Expects moderation
+                {
                     return null;
+                }
 
                 var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
 
@@ -1651,7 +1669,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var seedersString = qSeeders.QuerySelector("b")?.TextContent.Trim();
                 if (!string.IsNullOrWhiteSpace(seedersString))
+                {
                     seeders = ParseUtil.CoerceInt(seedersString);
+                }
             }
             return seeders;
         }
@@ -1721,26 +1741,36 @@ namespace Jackett.Common.Indexers.Definitions
                     // rutracker movies titles look like: russian name / english name (russian director / english director) other stuff
                     // Ирландец / The Irishman (Мартин Скорсезе / Martin Scorsese) [2019, США, криминал, драма, биография, WEB-DL 1080p] Dub (Пифагор) + MVO (Jaskier) + AVO (Юрий Сербин) + Sub Rus, Eng + Original Eng
                     // this part should be removed: (Мартин Скорсезе / Martin Scorsese)
-                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)\s/\s(.+?)\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+                    title = Regex.Replace(title, @"(\([\p{IsCyrillic}\W]+)(?:\s/\s(.+?))?\)", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
                     // Bluray quality fix: radarr parse Blu-ray Disc as Bluray-1080p but should be BR-DISK
                     title = Regex.Replace(title, @"\bBlu-ray Disc\b", "BR-DISK", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 }
 
                 // language fix: all rutracker releases contains russian track
-                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.Match(title, "\bRUS\b", RegexOptions.IgnoreCase).Success)
+                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.IsMatch(title, @"\bRUS\b", RegexOptions.IgnoreCase))
+                {
                     title += " RUS";
+                }
 
                 if (stripCyrillicLetters)
+                {
                     title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+                }
 
                 if (moveAllTagsToEndOfReleaseTitle)
+                {
                     title = MoveAllTagsToEndOfReleaseTitle(title);
+                }
                 else if (moveFirstTagsToEndOfReleaseTitle)
+                {
                     title = MoveFirstTagsToEndOfReleaseTitle(title);
+                }
 
                 if (IsAnyAudioCategory(category))
+                {
                     title = DetectRereleaseInReleaseTitle(title);
+                }
 
                 title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -1795,9 +1825,13 @@ namespace Jackett.Common.Indexers.Definitions
                         {
                             var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
                             if (string.IsNullOrWhiteSpace(substring))
+                            {
                                 expectedIndex = match.Index;
+                            }
                             else
+                            {
                                 break;
+                            }
                         }
 
                         var tag = match.ToString();

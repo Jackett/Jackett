@@ -15,10 +15,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "retroflix";
         public override string Name => "RetroFlix";
         public override string Description => "RetroFlix is a Private site for Classic Movies / TV / General Releases";
-        public override string SiteLink { get; protected set; } = "https://retroflix.club/";
-        public override string[] LegacySiteLinks => new[]
+        public override string SiteLink { get; protected set; } = "https://retroflix.net/";
+        public override string[] AlternativeSiteLinks => new[]
         {
-            "https://retroflix.net/"
+            "https://retroflix.net/",
+            "https://retroflix.club/"
         };
         public override string Language => "en-US";
         public override string Type => "private";

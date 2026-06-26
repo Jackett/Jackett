@@ -61,10 +61,10 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must seed at least 1 torrent or log in every 30 days to avoid being pruned."
+    default: "If a user has not actively logged in for 30 days, the profile is automatically deactivated and receives the user class 'Disabled'.<br>After deactivation, the profile can be reactivated within 60 days – after which it will be permanently deleted."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -87,8 +87,8 @@ search:
   # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
     $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
     name: "{{ .Keywords }}"
-    seasonNumber: "{{ .Query.Season }}"
-    episodeNumber: "{{ .Query.Ep }}"
+    # seasonNumber: "{{ .Query.Season }}" # not supported
+    # episodeNumber: "{{ .Query.Ep }}" # not supported
     imdbId: "{{ .Query.IMDBIDShort }}"
     tmdbId: "{{ .Query.TMDBID }}"
     tvdbId: "{{ .Query.TVDBID }}"
@@ -162,4 +162,4 @@ search:
     minimumseedtime:
       # 4 days (as seconds = 4 x 24 x 60 x 60)
       text: 345600
-# json UNIT3D 6.0.4
+# json UNIT3D 6.0.4 (custom)

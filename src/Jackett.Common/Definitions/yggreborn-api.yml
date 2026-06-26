@@ -1,0 +1,163 @@
+---
+id: yggreborn-api
+name: YggReborn (API)
+description: "YggReborn is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2.1
+links:
+  - https://www.yggreborn.org/
+
+caps:
+  categorymappings:
+    # from https://www.yggreborn.org/api?t=caps&apikey=YOUR-PASSKEY
+    - {id: 1000, cat: PC/Games, desc: "PC/Games"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
+    - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 2050, cat: Movies/BluRay, desc: "Movies/BluRay"}
+    - {id: 2060, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 2070, cat: Movies/DVD, desc: "Movies/DVD"}
+    - {id: 2080, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5010, cat: TV/WEB-DL, desc: "TV/WEB-DL"}
+    - {id: 5020, cat: TV/Foreign, desc: "TV/Foreign"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5050, cat: TV/Other, desc: "TV/Other"}
+    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 8000, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: PassKey
+  - name: info_key
+    type: info
+    label: About your PassKey
+    default: "You can find the API PassKey Key by accessing the <a href=\"https://www.yggreborn.org/guide-api\" target=\"_blank\">YggReborn Guide API</a> page and scrolling down to the <b>Authentification</b> section."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.yggreborn.org
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: "https://{{ .Config.apiurl }}/api"
+  method: get
+  inputs:
+    t: search
+    apikey: "{{ .Config.passkey }}"
+    limit: 1
+  error:
+    - selector: ":contains(\"invalid api key\")"
+
+search:
+  paths:
+    # docs at https://www.yggreborn.org/guide-api
+    - path: "https://{{ .Config.apiurl }}/api"
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.passkey }}"
+    t: "{{ if .Keywords }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 50
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: comments
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+    date:
+      # e.g. Tue, 31 Mar 2026 20:06:13 +0100
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=leechers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumratio:
+      text: 1.0
+# torznab xml

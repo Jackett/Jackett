@@ -6,10 +6,10 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - https://riper.online/
+  - https://riperam.org/
 legacylinks:
   - http://riperam.org/
-  - https://riperam.org/
+  - https://riper.online/
 
 caps:
   categorymappings:
@@ -990,6 +990,7 @@ search:
       selector: dd.posts span.leech
     grabs:
       selector: dd.views span.complet
+      optional: true
     date:
       # 12 янв 2019, 11:26
       selector: dt

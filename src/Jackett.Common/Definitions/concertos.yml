@@ -1,6 +1,6 @@
 ---
 id: concertos
-name: Concertos
+name: Concertos (API)
 description: "Concertos is a Private Torrent Tracker for Live Concerts with Strict Quality Control"
 language: en-US
 type: private
@@ -13,28 +13,34 @@ caps:
     - {id: 1, cat: TV, desc: "Live Concert"}
     - {id: 2, cat: Audio/Video, desc: "Music Video"}
     - {id: 4, cat: TV, desc: "Music Documentary"}
+    - {id: 11, cat: TV, desc: "Music TV Series"}
     - {id: 5, cat: Audio/Lossless, desc: "Pure Audio"}
     - {id: 7, cat: TV, desc: "Opera"}
     - {id: 8, cat: TV, desc: "Musical"}
     - {id: 9, cat: Audio, desc: "Podcast"}
+    - {id: 10, cat: TV, desc: "Educational"}
 
   modes:
     search: [q]
-    tv-search: [q, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     music-search: [q]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://concertos.live/\" target=\"_blank\">Concertos</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: sort
     type: select
     label: Sort requested from site
@@ -43,6 +49,7 @@ settings:
       created_at: created
       seeders: seeders
       size: size
+      name: title
   - name: type
     type: select
     label: Order requested from site
@@ -50,120 +57,141 @@ settings:
     options:
       desc: desc
       asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Your membership requires that you stay active at Blutopia. To not get disabled, you are required to login to the site at least once every 30 days or be actively seeding at least 1 torrent."
 
 login:
-  path: login
-  method: form
-  form: form[action$="/login"]
-  inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    remember: on
-  selectorinputs:
-    _token:
-      selector: input[name="_token"]
-      attribute: value
+  path: api/torrents
+  method: get
   error:
-    - selector: form[action$="/login"] .text-red
-#    test:
-#      path: /
-#      selector: a[href$="/logout"]
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("Account is Banned")
 
 search:
   paths:
-    - path: torrents
+    # https://hdinnovations.github.io/UNIT3D/torrent_api.html
+    # https://github.com/HDInnovations/UNIT3D/blob/master/app/Http/Controllers/API/TorrentController.php#L657
+    - path: api/torrents/filter
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
   inputs:
-    $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
-    title: "{{ if .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}" # for dashboard imdbid search
-    imdb: "{{ .Query.IMDBIDShort }}"
-    freeleech: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
-    order_by: "{{ .Config.sort }}"
-    direction: "{{ .Config.type }}"
+  # if we have an id based search, add Season and Episode as query in name for UNIT3D < v6.  Else pass S/E Params for UNIT3D >= v6
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    seasonNumber: "{{ .Query.Season }}"
+    episodeNumber: "{{ .Query.Ep }}"
+    imdbId: "{{ .Query.IMDBIDShort }}"
+    tmdbId: "{{ .Query.TMDBID }}"
+    tvdbId: "{{ .Query.TVDBID }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
 
   rows:
-    selector: table > tbody > tr
+    selector: data
+    attribute: attributes
 
   fields:
     category:
-      selector: a[href*="?category_"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: "category_(\\d+)"
+      selector: category_id
+    title_optional:
+      selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
     title:
-      selector: a[href*="/torrent/"]
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
     details:
-      selector: a[href*="/torrent/"]
-      attribute: href
+      selector: details_link
     download:
-      selector: a[href*="/torrent/"]
-      attribute: href
+      selector: download_link
+    poster:
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://via.placeholder.com/90x135", ""]
+    imdbid:
+      selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
+    tvdbid:
+      selector: tvdb_id
+    genre:
+      selector: meta.genres
+      filters:
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    description:
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # "created_at": "2021-10-18T00:34:50.000000Z" is returned by Newtonsoft.Json.Linq as 18/10/2021 00:34:50
+      selector: created_at
       filters:
         - name: append
-          args: "/download"
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
-      selector: td.torrents__size
-    date:
-      selector: td.torrents__age
-      filters:
-        # translations for Turkish|Estonian|Danish|Italian|Polish|Norwegian|Portuguese|Czech|Russian|Romanian|Spanish|French|German|Bulgarian|Dutch|Chinese|Japanese|Swedish
-        - name: re_replace
-          args: ["(?i)(önce|tagasi|geleden|fa|temu|siden|há|atrás|nazpět|назад|acum|în urmă|hace|il y a|vor|преди|前|sedan)", " ago"]
-        - name: re_replace
-          args: ["(?i)(saniye|sekundit|sekunder|secondi|sekund|segundos|sekundami|секунд|secunde|secondes|Sekunden|секунди|seconden|秒前)", "seconds"]
-        - name: re_replace
-          args: ["(?i)(minutit|minutter|minuti|minuty|minutos|минуты|минут|Minuten|минути|minuten|minuter)", "minutes"]
-        - name: re_replace
-          args: ["(?i)(dakika|minut|minuto|minuta|minutt|минута|Minute|minuut|分钟|分)", " minute"]
-        - name: re_replace
-          args: ["(?i)(tundi|timer|ore|godziny|horas|hodiny|hoden|часа|часов|ore|heures|Stunden|timmar)", "hours"]
-        - name: re_replace
-          args: ["(?i)(saat|tund|time|ora|godzina|hora|hodina|час|oră|heure|Stunde|uur|小时|時間|timme)", " hour"]
-        - name: re_replace
-          args: ["(?i)(päeva|dage|giorni|dni|dias|dny|дня|дней|zile|días|jours|Tagen|дни|dagen|dagar)", "days"]
-        - name: re_replace
-          args: ["(?i)(gün|päev|dag|giorno|dzień|dia|den|день|zi|día|jour|Tag|ден|天|日)", " day"]
-        - name: re_replace
-          args: ["(?i)(nädalat|uger|settimane|tygodnie|uker|semanas|týdny|недели|недель|săptămâni|semaines|Wochen|седмици|weken|veckor)", "weeks"]
-        - name: re_replace
-          args: ["(?i)(hafta|nädal|uge|settimana|tydzień|uke|semana|týden|неделю|săptămână|semaine|Woche|седмица|周|週間|vecka)", " week"]
-        - name: re_replace
-          args: ["(?i) (ay)", "month"]
-        - name: re_replace
-          args: ["(?i)(kuud|måneder|mesi|miesiące|meses|měsíce|месяца|месяцев|luni|meses|mois|Monaten|месеца|maanden|månader)", "months"]
-        - name: re_replace
-          args: ["(?i)(kuu|måned|mese|miesiąc|mês|měsíc|месяц|lună|mes|Monat|месец|maand|个月|ヶ月|månad)", " month"]
-        - name: re_replace
-          args: ["(?i)(aastat|anni|lata|anos|roky|года|ani|años|ans|Jahren|години)", " years"]
-        - name: re_replace
-          args: ["(?i)(yil|aasta|år|anno|rok|ano|год|año|Jahr|година|jaar|年)", " year"]
-        - name: re_replace
-          args: ["(?i) (an)", "year"]
-        - name: re_replace
-          args: ["(?i)(För |und)", ""] # Misc removals
-        - name: timeago
-    seeders:
-      selector: td:nth-last-child(3)
-    leechers:
-      selector: td:nth-last-child(2)
-    grabs:
-      selector: td:nth-last-child(1)
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
+      selector: size
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
+      # api returns 0%, 25%, 50%, 75%, 100%
+      selector: freeleech
+      case:
+        0%: 1 # not free
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0 # freeleech
+        "*": 0 # catch errors
     downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      # api returns False, True
+      selector: double_upload
       case:
-        i.fa-star: 0 # Freeleech
-        i.fa-certificate: 0 # Featured
-        "*": 1
+        False: 1 # normal
+        True: 2 # double
     uploadvolumefactor:
-      case:
-        i.fa-certificate: 2 # Featured
-        i.fa-gem: 2 # Double Upload
-        "*": 1
-    minimumratio:
-      text: 1.0
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+# global MR is 1.0 but torrents must be seeded for 7 days regardless of ratio
+#    minimumratio:
+#      text: 1.0
     minimumseedtime:
-      # 7 day (as seconds = 7 x 24 x 60 x 60)
+      # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# UNIT3D
+# json UNIT3D 9.1.7

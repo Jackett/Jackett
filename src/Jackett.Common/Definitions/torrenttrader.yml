@@ -11,6 +11,8 @@ links:
 caps:
   categorymappings:
     - {id: 119, cat: Other, desc: "Bilder"}
+    - {id: 142, cat: TV/Documentary, desc: "Doku - Sonstige"}
+    - {id: 120, cat: Books, desc: "Ebook"}
     - {id: 135, cat: Movies/HD, desc: "Filme - 1080p"}
     - {id: 130, cat: Movies/UHD, desc: "Filme - 2160p"}
     - {id: 134, cat: Movies/HD, desc: "Filme - 720p"}
@@ -18,25 +20,24 @@ caps:
     - {id: 146, cat: Movies, desc: "Filme - Klassiker"}
     - {id: 105, cat: Movies, desc: "Filme - x264/x265"}
     - {id: 127, cat: Movies, desc: "Für Unsere kleinsten"}
+    - {id: 121, cat: Other, desc: "Handy Stuff"}
     - {id: 149, cat: Movies/HD, desc: "Movie Pack HD"}
     - {id: 150, cat: Movies/SD, desc: "Movie Pack SD"}
+    - {id: 124, cat: Audio, desc: "Musik - Alben"}
+    - {id: 123, cat: Audio, desc: "Musik - Discography"}
+    - {id: 122, cat: Audio/Audiobook, desc: "Musik - Hörbuch"}
+    - {id: 133, cat: Audio/MP3, desc: "Musik - MP3/Mp4"}
+    - {id: 125, cat: Audio/Video, desc: "Musik - Video"}
+    - {id: 113, cat: PC, desc: "Programme - Linux"}
+    - {id: 114, cat: PC/Mac, desc: "Programme - Mac"}
+    - {id: 115, cat: PC/0day, desc: "Programme - Windows"}
     - {id: 137, cat: TV/HD, desc: "Serien - 1080p"}
     - {id: 138, cat: TV/UHD, desc: "Serien - 2160p"}
     - {id: 144, cat: TV/HD, desc: "Serien - 720p"}
     - {id: 116, cat: TV, desc: "Serien - Pack"}
     - {id: 143, cat: TV/Other, desc: "Serien - Sonstige"}
-    - {id: 142, cat: TV/Documentary, desc: "Doku - Sonstige"}
-    - {id: 133, cat: Audio/MP3, desc: "Musik - MP3/Mp4"}
-    - {id: 123, cat: Audio, desc: "Musik - Discography"}
-    - {id: 122, cat: Audio/Audiobook, desc: "Musik - Hörbuch"}
-    - {id: 124, cat: Audio, desc: "Musik - Alben"}
-    - {id: 125, cat: Audio/Video, desc: "Musik - Video"}
-    - {id: 120, cat: Books, desc: "Ebook"}
-    - {id: 115, cat: PC/0day, desc: "Programme - Windows"}
-    - {id: 114, cat: PC/Mac, desc: "Programme - Mac"}
-    - {id: 113, cat: PC, desc: "Programme - Linux"}
-    - {id: 121, cat: Other, desc: "Handy Stuff"}
     - {id: 129, cat: Other, desc: "Sonstiges"}
+    - {id: 151, cat: Other, desc: "Sonstiges"}
     - {id: 109, cat: PC/Mobile-Other, desc: "Spiele - Handy"}
     - {id: 112, cat: Console, desc: "Spiele - Konsolen"}
     - {id: 111, cat: PC/Games, desc: "Spiele - Mac / Linux"}
@@ -88,7 +89,11 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your <b>UserCP</b> page. The default is <i>15</i>.
+  - name: info_seedhours
+    type: info
+    label: Seeding Hours
+    default: Before using this indexer, make sure that you have set <b>Seed-Angaben</b> on your <b>UserCP</b> page.
 
 login:
   path: login.php

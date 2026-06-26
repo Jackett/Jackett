@@ -53,6 +53,7 @@ caps:
     - {id: 41, cat: PC/Games, desc: "  |-- Pc"}
     - {id: 42, cat: Console/PS3, desc: "  |-- Ps3"}
     - {id: 43, cat: Console/PS4, desc: "  |-- Ps4"}
+    - {id: 67, cat: Console/PS4, desc: "  |-- Ps5"}
     - {id: 44, cat: Console/Wii, desc: "  |-- Wii"}
     - {id: 45, cat: Console/WiiU, desc: "  |-- Wii-U"}
     - {id: 46, cat: Console/XBox, desc: "  |-- Xbox"}

@@ -84,7 +84,7 @@ login:
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    returnto: /
+    returnto: /browse.php
   error:
     - selector: td:contains("Login failed!")
       message:

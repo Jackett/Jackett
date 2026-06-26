@@ -131,13 +131,29 @@ search:
           args: ["/static/common/noartwork/noimage.png", ""]
     files:
       selector: td:nth-child(3)
-    date:
-      selector: td:nth-child(5) > span
+    date_elapsed:
+      # time type: time elapsed
+      # <span class="time" title="Sep 22 2025, 07:47">1 week ago</span>
+      selector: span.time:contains("ago")
+      attribute: title
+      optional: true
       filters:
         - name: append
           args: " +00:00" # GMT
         - name: dateparse
           args: "MMM dd yyyy, HH:mm zzz"
+    date_added:
+      # time added
+      # <span class="time" title="1 week ago">May 08 2025, 01:05</span>
+      selector: span.time:not(:contains("ago"))
+      optional: true
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MMM dd yyyy, HH:mm zzz"
+    date:
+      text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(6)
     grabs:

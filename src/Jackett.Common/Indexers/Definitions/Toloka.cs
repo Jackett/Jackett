@@ -384,11 +384,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             private readonly Regex _tvTitleMultipleSeasonsRegex = new Regex(@"(?:Сезон|Seasons?)\s*[:]*\s+(\d+-\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-            private readonly Regex _tvTitleUkrSeasonEpisodeOfRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серії|Серія|Серій|Епізод)+\s*[:]*\s+(\d+(?:-\d+)?)\s*з\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            private readonly Regex _tvTitleUkrSeasonEpisodeRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серії|Серія|Серій|Епізод)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleUkrSeasonEpisodeOfRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серії|Серія|Серій|Епізоди?)+\s*[:]*\s+(\d+(?:-\d+)?)\s*з\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleUkrSeasonEpisodeRegex = new Regex(@"Сезон\s*[:]*\s+(\d+).+(?:Серії|Серія|Серій|Епізоди?)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleUkrSeasonRegex = new Regex(@"Сезон\s*[:]*\s+(\d+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            private readonly Regex _tvTitleUkrEpisodeOfRegex = new Regex(@"(?:Серії|Серія|Серій|Епізод)+\s*[:]*\s+(\d+(?:-\d+)?)\s*з\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-            private readonly Regex _tvTitleUkrEpisodeRegex = new Regex(@"(?:Серії|Серія|Серій|Епізод)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleUkrEpisodeOfRegex = new Regex(@"(?:Серії|Серія|Серій|Епізоди?)+\s*[:]*\s+(\d+(?:-\d+)?)\s*з\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+            private readonly Regex _tvTitleUkrEpisodeRegex = new Regex(@"(?:Серії|Серія|Серій|Епізоди?)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
             private readonly Regex _tvTitleEngSeasonEpisodeOfRegex = new Regex(@"Season\s*[:]*\s+(\d+).+(?:Episodes?)+\s*[:]*\s+(\d+(?:-\d+)?)\s*of\s*([\w?])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
             private readonly Regex _tvTitleEngSeasonEpisodeRegex = new Regex(@"Season\s*[:]*\s+(\d+).+(?:Episodes?)+\s*[:]*\s+(\d+(?:-\d+)?)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -442,7 +442,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 title = Regex.Replace(title, @"[\[\(]\s*[\)\]]", "", RegexOptions.Compiled);
 
-                title = title.Trim(' ', '&', ',', '.', '!', '?', '+', '-', '_', '|', '/', '\\', ':');
+                title = title.Trim(' ', '&', ',', '.', '!', '?', '+', '-', '_', '|', '/', '\\', ':', ';', 'ʼ', '`');
 
                 // replace multiple spaces with a single space
                 title = Regex.Replace(title, @"\s+", " ");
@@ -454,7 +454,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             private static string MoveFirstTagsToEndOfReleaseTitle(string input)
             {
-                var output = input;
+                var output = input.Trim(' ', '&', ',', '.', '!', '?', '+', '-', '_', '|', '/', '\\', ':', ';', 'ʼ', '`');
                 foreach (var findTagsRegex in _FindTagsInTitlesRegexList)
                 {
                     var expectedIndex = 0;

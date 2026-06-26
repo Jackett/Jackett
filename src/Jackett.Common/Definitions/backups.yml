@@ -10,67 +10,70 @@ links:
 
 caps:
   categorymappings:
+    - {id: 115, cat: PC, desc: "2Play Official"}
+    - {id: 100, cat: Console, desc: "Anbernic"}
     - {id: 15, cat: PC/Mobile-Android, desc: "Android"}
     - {id: 35, cat: TV/Anime, desc: "Anime"}
-    - {id: 51, cat: PC/Mac, desc: "Apple"}
     - {id: 3, cat: PC, desc: "Apps"}
+    - {id: 109, cat: PC, desc: "Attract"}
     - {id: 64, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 71, cat: Console, desc: "Batocera"}
+    - {id: 108, cat: Console, desc: "Bazpacks"}
     - {id: 4, cat: Movies/BluRay, desc: "Blu-Ray"}
-    - {id: 86, cat: Console, desc: "Chinese Systems"}
-    - {id: 22, cat: Console, desc: "CoinOps"}
+    - {id: 112, cat: Console, desc: "Brojack & Laws"}
     - {id: 42, cat: Console, desc: "CoinOPS Official"}
     - {id: 65, cat: Console, desc: "CoinOps Unofficial"}
+    - {id: 22, cat: Console, desc: "CoinOps Xbox"}
     - {id: 63, cat: Books/Comics, desc: "Comics"}
-    - {id: 60, cat: Console, desc: "Core"}
+    - {id: 60, cat: Console, desc: "CORE"}
     - {id: 72, cat: Console, desc: "CORE Community"}
     - {id: 44, cat: Console, desc: "CP78"}
     - {id: 16, cat: TV/Documentary, desc: "Docu"}
     - {id: 41, cat: Console, desc: "Dragon"}
-    - {id: 5, cat: Books, desc: "EBooks"}
-    - {id: 80, cat: PC, desc: "Emulation Media"}
-    - {id: 61, cat: PC, desc: "emuxtras"}
-    - {id: 69, cat: TV, desc: "Entertainment"}
+    - {id: 5, cat: Books, desc: "eBooks"}
     - {id: 89, cat: PC, desc: "Ghostware"}
-    - {id: 84, cat: TV, desc: "GOG DRM FREE"}
+    - {id: 84, cat: TV, desc: "GOG"}
     - {id: 77, cat: PC, desc: "Hyperspin"}
     - {id: 34, cat: TV, desc: "Kids"}
-    - {id: 43, cat: Console, desc: "LB No Intro"}
-    - {id: 85, cat: PC, desc: "MAME Rom Sets"}
-    - {id: 33, cat: TV/Sport, desc: "MMA/Boxing"}
+    - {id: 107, cat: Console, desc: "KinHanK"}
+    - {id: 43, cat: Console, desc: "LaunchBox"}
+    - {id: 85, cat: PC, desc: "MAME"}
     - {id: 32, cat: Movies, desc: "Movie Pack"}
-    - {id: 6, cat: Movies, desc: "Movies/XVID"}
+    - {id: 106, cat: Movies/UHD, desc: "Movie Pack 4K"}
+    - {id: 6, cat: Movies, desc: "Movies"}
+    - {id: 105, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 82, cat: PC, desc: "MS-DOS"}
     - {id: 7, cat: Audio, desc: "Music"}
     - {id: 31, cat: Console, desc: "Nintendo"}
     - {id: 59, cat: Console, desc: "P-R-U"}
     - {id: 8, cat: PC/Games, desc: "PC Games"}
-    - {id: 50, cat: Console, desc: "PlayBox"}
     - {id: 87, cat: Console, desc: "Playnite"}
     - {id: 30, cat: Console, desc: "Playstation"}
-    - {id: 62, cat: PC, desc: "RaspberryPi"}
+    - {id: 118, cat: Console, desc: "Playstation PS5.Roms"}
     - {id: 83, cat: PC, desc: "Retro eXo"}
     - {id: 56, cat: PC, desc: "Retro Minis"}
-    - {id: 81, cat: PC, desc: "Retro Scene Releases"}
-    - {id: 67, cat: PC, desc: "Retrobat"}
+    - {id: 67, cat: PC, desc: "RetroBat"}
     - {id: 88, cat: PC, desc: "RetroFE"}
-    - {id: 79, cat: PC, desc: "RGB-Pi"}
     - {id: 76, cat: Console, desc: "RGS"}
-    - {id: 27, cat: PC, desc: "Roms and Emulators"}
-    - {id: 68, cat: PC, desc: "Schmoomer's"}
-    - {id: 57, cat: Console, desc: "Sega"}
+    - {id: 27, cat: PC, desc: "ROM Packs"}
+    - {id: 62, cat: PC, desc: "RPi"}
+    - {id: 81, cat: PC, desc: "Scene"}
+    - {id: 68, cat: PC, desc: "Schmoomer"}
+    - {id: 110, cat: Console, desc: "ScummVM"}
+    - {id: 57, cat: Console, desc: "SEGA"}
+    - {id: 116, cat: PC, desc: "SiteRIP"}
     - {id: 74, cat: PC, desc: "Sleyk/SGC"}
-    - {id: 40, cat: TV, desc: "Soaps"}
+    - {id: 75, cat: Audio, desc: "Soundtracks"}
     - {id: 29, cat: TV/Sport, desc: "Sport"}
-    - {id: 9, cat: TV, desc: "TV-Boxsets"}
-    - {id: 11, cat: TV, desc: "TV/x264"}
-    - {id: 10, cat: TV, desc: "TV/Xvid"}
-    - {id: 75, cat: Audio, desc: "Video Game Music"}
+    - {id: 90, cat: PC, desc: "TeknoParrot"}
+    - {id: 97, cat: TV/Other, desc: "Tutorials"}
+    - {id: 9, cat: TV, desc: "TV Packs"}
+    - {id: 11, cat: TV, desc: "TV Shows"}
+    - {id: 117, cat: Console, desc: "Virtual Reality"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
-    - {id: 14, cat: TV/Sport, desc: "WWE"}
-    - {id: 26, cat: Console, desc: "Xbox"}
+    - {id: 26, cat: Console, desc: "XBOX"}
     - {id: 12, cat: Console, desc: "XBOX360"}
-    - {id: 23, cat: XXX, desc: "xxx18+"}
+    - {id: 23, cat: XXX, desc: "XXX18+"}
 
   modes:
     search: [q]
@@ -184,4 +187,7 @@ search:
           args: " +00:00" # GMT
         - name: dateparse
           args: "dd-MM-yyyy HH:mm zzz"
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # TS Special Edition v.8.0

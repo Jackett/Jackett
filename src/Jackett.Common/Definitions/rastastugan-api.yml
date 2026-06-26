@@ -19,6 +19,7 @@ caps:
     - {id: 8, cat: Books, desc: "Book"}
     - {id: 9, cat: Audio/Other, desc: "Podcast"}
     - {id: 10, cat: TV/Sport, desc: "Sport"}
+    - {id: 11, cat: Other, desc: "3D Printable"}
     - {id: 6, cat: XXX, desc: "XXX"}
 
   modes:
@@ -66,7 +67,7 @@ settings:
     default: "You must log in to the website or the tracker must register activity from your Announce URL once every 90 days or your account will be disabled."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -123,8 +124,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -145,8 +144,13 @@ search:
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -188,10 +192,9 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.8 but torrents must be seeded for 7 days regardless of ratio
-#    minimumratio:
-#      text: 0.8
+    minimumratio:
+      text: 1.0
     minimumseedtime:
-      # 5 days (as seconds = 5 x 24 x 60 x 60)
-      text: 432000
-# json UNIT3D 9.0.6
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# json UNIT3D 9.2.0

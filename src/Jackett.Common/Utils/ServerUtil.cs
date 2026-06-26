@@ -1,4 +1,5 @@
 using System;
+using System.Runtime.InteropServices;
 using System.Security.Principal;
 using Jackett.Common.Utils.Clients;
 
@@ -75,7 +76,11 @@ namespace Jackett.Common.Utils
 
         public static bool IsUserAdministrator()
         {
-            //bool value to hold our return value
+            if (!RuntimeInformation.IsOSPlatform(OSPlatform.Windows))
+            {
+                return false;
+            }
+
             bool isAdmin;
             try
             {

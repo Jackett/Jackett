@@ -1,0 +1,155 @@
+---
+id: cyclingarchiveclub
+name: CyclingArchiveClub
+description: "CyclingArchiveClub is a Private tracker for Professional road and Cyclocross racing VIDEOS"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://cyclingarchive.club/
+
+caps:
+  categorymappings:
+    - {id: 25, cat: TV, desc: "BMX"}
+    - {id: 28, cat: TV, desc: "Cross"}
+    - {id: 21, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 24, cat: TV, desc: "MTB"}
+    - {id: 26, cat: TV, desc: "Real Life Video"}
+    - {id: 22, cat: TV, desc: "Road"}
+    - {id: 23, cat: TV, desc: "Track"}
+    - {id: 27, cat: TV, desc: "Triathlon"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      desc: DESC
+      asc: ASC
+
+login:
+  path: takelogin.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: td.embedded:contains("Login failed")
+      message:
+        selector: td.text
+  test:
+    path: index.php
+    selector: a[href$="logout.php"]
+
+download:
+  selectors:
+    # https://cyclingarchive.club/download.php?12345&a-title-goes-here-2026.torrent
+    - selector: a[href*="download.php?"]
+      attribute: href
+
+search:
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    search: "{{ .Keywords }}"
+    # 0 name, 1 descr, 2 both, 3 uploader
+    _by: 0
+    # 0 all formats, 10 FullHD, 11 720p, 3 SD, 6 Documents, 8 Subtitles, 9 x265, 2 ts raw streams, 1 DVD, 4 Old HD, 12 4K
+    format: 0
+    # 0 active & dead, 1 only active, 2 only dead
+    incldead: 0
+    # 0 all, 2 English, 6 Other, etc.
+    language: 0
+    freebrowse: "{{ if .Config.freeleech }}Free{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
+
+  rows:
+    selector: table[width="95%"] > tbody > tr.trhover
+
+    dateheaders:
+      selector: ":has(td.ui-widget-header:contains(\"Torrents added\") > b)"
+      filters:
+        - name: replace
+          args: ["Torrents added ", ""]
+        - name: dateparse
+          args: "dddd dd MMM yyyy"
+
+  fields:
+    category:
+      selector: a[href*="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    _type:
+      selector: a[href*="browse.php?cat="]
+      attribute: title
+    _language:
+      selector: td:nth-child(2) img
+      attribute: title
+    _format:
+      selector: td:nth-child(3) img
+      attribute: title
+    title:
+      selector: a[href*="details.php?hit="]
+    details:
+      selector: a[href*="details.php?hit="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["hit=1&", ""]
+    download:
+      selector: a[href*="details.php?hit="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["hit=1&", ""]
+    files:
+      selector: td:nth-child(6)
+    size:
+      selector: td:nth-child(9)
+      filters:
+        - name: regexp
+          args: ^(.*?)B
+        - name: append
+          args: B
+    grabs:
+      selector: td:nth-child(9) > b
+    seeders:
+      selector: td:nth-child(10)
+    leechers:
+      selector: td:nth-child(11)
+    description:
+      text: " {{ .Result._type }} {{ .Result._language }} {{ .Result._format }}"
+    downloadvolumefactor:
+      case:
+        span:contains("Free"): 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# TBdev (custom)

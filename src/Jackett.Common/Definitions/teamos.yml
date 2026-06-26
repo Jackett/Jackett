@@ -99,12 +99,17 @@ caps:
     - {id: 102, cat: Other, desc: "Post And Share"}
     - {id: 100, cat: Other, desc: "Tutorials"} # undocumented
     - {id: 103, cat: Other, desc: "Other Topic"} # undocumented
+    - {id: 166, cat: PC, desc: "Windows 64 Bit"} # undocumented
 
   modes:
     search: [q]
     book-search: [q]
 
 settings:
+  - name: info_novpn
+    type: info
+    label: VPN Not Allowed
+    default: "You may be banned if you use a VPN, proxy, TOR or data center to access the TeamOS web site.​ This mean all brands of VPNS, no exceptions!!"
   # using cookie method because login page is dynamically generated using JS #5572
   - name: cookie
     type: text

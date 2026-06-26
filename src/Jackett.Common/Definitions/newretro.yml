@@ -94,11 +94,15 @@ settings:
   - name: info_tpp
     type: info
     label: Results Per Page
-    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your Control Panel. The default is <i>15</i>.
+    default: For best results, change the <b>Torrents pro Seite:</b> setting to <b>100</b> on your <b>UserCP</b> page. The default is <i>15</i>.
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "Inactive accounts are automatically deleted after 42 days."
+  - name: info_seedhours
+    type: info
+    label: Seeding Hours
+    default: Before using this indexer, make sure that you have set <b>Meine Seedzeit</b> on your <b>UserCP</b> page.
 
 login:
   path: login.php
@@ -151,6 +155,9 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: img#img-1
+      attribute: src
     size:
       selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
     grabs:
@@ -178,4 +185,9 @@ search:
       case:
         img[src="pic/freeleech.gif"]: 0 # nothing is counted
         "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # NetVision

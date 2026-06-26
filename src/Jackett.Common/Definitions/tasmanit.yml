@@ -21,7 +21,7 @@ caps:
     - {id: 21, cat: TV, desc: "AU-Lifestyle"}
     - {id: 11, cat: TV, desc: "AU-News/Current Affair"}
     - {id: 76, cat: TV/Other, desc: "AU-Other"}
-    - {id: 82, cat: Audio, desc: "AU-Podcasts"}
+    - {id: 82, cat: Audio/Other, desc: "AU-Podcasts"}
     - {id: 15, cat: TV, desc: "AU-Real Crime"}
     - {id: 13, cat: TV, desc: "AU-Reality TV"}
     - {id: 17, cat: TV, desc: "AU-Science/Medical"}

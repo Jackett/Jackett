@@ -1,45 +1,51 @@
 ---
 id: huntorrent
+replaces:
+  - huntorrent-bithorlo
 name: HunTorrent
 description: "HunTorrent is a HUNGARIAN Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: hu-HU
 type: semi-private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://huntorrent.org/
 legacylinks:
   - https://huntorrent.net/
+  - https://huntorrent.eu/
 
 caps:
   categorymappings:
-    - {id: 28, cat: Movies/SD, desc: "Cam/ENG"}
-    - {id: 27, cat: Movies/SD, desc: "Cam/HUN"}
-    - {id: 4, cat: Movies/DVD, desc: "DVDR/ENG"}
-    - {id: 3, cat: Movies/DVD, desc: "DVDR/HUN"}
-    - {id: 6, cat: Movies/HD, desc: "HD/ENG"}
-    - {id: 5, cat: Movies/HD, desc: "HD/HUN"}
-    - {id: 29, cat: Movies, desc: "Mese/ENG"}
-    - {id: 30, cat: Movies, desc: "Mese/HUN"}
-    - {id: 8, cat: TV/SD, desc: "Sorozat/ENG"}
-    - {id: 31, cat: TV/HD, desc: "Sorozat/HD/ENG"}
-    - {id: 9, cat: TV/HD, desc: "Sorozat/HD/HUN"}
-    - {id: 7, cat: TV/SD, desc: "Sorozat/HUN"}
-    - {id: 2, cat: Movies/SD, desc: "XviD/ENG"}
-    - {id: 1, cat: Movies/SD, desc: "XviD/HUN"}
-    - {id: 25, cat: Other, desc: "Kép"}
-    - {id: 24, cat: Books, desc: "eBook/ENG"}
-    - {id: 23, cat: Books, desc: "eBook/HUN"}
-    - {id: 38, cat: Audio/Audiobook, desc: "Hangoskönyv"}
-    - {id: 17, cat: PC/Games, desc: "Játék/ISO"}
-    - {id: 18, cat: PC/Games, desc: "Játék/RIP"}
-    - {id: 19, cat: Console, desc: "Konzol"}
-    - {id: 26, cat: PC/Mobile-Other, desc: "Mobil"}
-    - {id: 20, cat: PC/ISO, desc: "Program/ISO"}
-    - {id: 21, cat: PC/0day, desc: "Program/RIP"}
-    - {id: 13, cat: Audio/Video, desc: "Klip/ENG"}
-    - {id: 12, cat: Audio/Video, desc: "Klip/HUN"}
-    - {id: 11, cat: Audio/MP3, desc: "MP3/ENG"}
-    - {id: 10, cat: Audio/MP3, desc: "MP3/HUN"}
+    - {id: 28, cat: Movies/SD, desc: "Cam/Külföldi", default: true}
+    - {id: 27, cat: Movies/SD, desc: "Cam/Magyar", default: true}
+    - {id: 4, cat: Movies/DVD, desc: "DVDR/Külföldi", default: true}
+    - {id: 3, cat: Movies/DVD, desc: "DVDR/Magyar", default: true}
+    - {id: 6, cat: Movies/HD, desc: "HD/Külföldi", default: true}
+    - {id: 5, cat: Movies/HD, desc: "HD/Magyar", default: true}
+    - {id: 2, cat: Movies/SD, desc: "XviD/Külföldi", default: true}
+    - {id: 1, cat: Movies/SD, desc: "XviD/Magyar", default: true}
+    - {id: 17, cat: PC/Games, desc: "Játék/ISO", default: true}
+    - {id: 18, cat: PC/Games, desc: "Játék/RIP", default: true}
+    - {id: 19, cat: Console, desc: "Konzol", default: true}
+    - {id: 25, cat: Other, desc: "Kép", default: true}
+    - {id: 24, cat: Books, desc: "eBook/Külföldi", default: true}
+    - {id: 23, cat: Books, desc: "eBook/Magyar", default: true}
+    - {id: 38, cat: Audio/Audiobook, desc: "Hangoskönyv", default: true}
+    - {id: 26, cat: PC/Mobile-Other, desc: "Mobil", default: true}
+    - {id: 20, cat: PC/ISO, desc: "Program/ISO", default: true}
+    - {id: 21, cat: PC/0day, desc: "Program/RIP", default: true}
+    - {id: 31, cat: TV/HD, desc: "Sorozat/HD/Külföldi", default: true}
+    - {id: 9, cat: TV/HD, desc: "Sorozat/HD/Magyar", default: true}
+    - {id: 8, cat: TV/SD, desc: "Sorozat/Külföldi", default: true}
+    - {id: 7, cat: TV/SD, desc: "Sorozat/Magyar", default: true}
+    - {id: 13, cat: Audio/Video, desc: "Klip/Külföldi", default: true}
+    - {id: 12, cat: Audio/Video, desc: "Klip/Külföldi", default: true}
+    - {id: 11, cat: Audio/MP3, desc: "MP3/Külföldi", default: true}
+    - {id: 10, cat: Audio/MP3, desc: "MP3/Magyar", default: true}
+    - {id: 16, cat: XXX/DVD, desc: "XXX/DVD", default: false}
+    - {id: 32, cat: XXX/x264, desc: "XXX/HD", default: false}
+    - {id: 14, cat: XXX/ImageSet, desc: "XXX/Kép", default: false}
+    - {id: 15, cat: XXX/SD, desc: "XXX/XVID", default: false}
 
   modes:
     search: [q]
@@ -86,62 +92,56 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: browse.php
-    selector: a[href^="logout.php?k="]
+    path: browse/
+    selector: a[href*="logout.php?k="]
 
 search:
   headers:
     User-Agent: ["{{ .Config.useragent }}"]
   paths:
-    # https://huntorrent.net/browse.php?time=1616615308&korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
-    - path: browse.php
+    # https://huntorrent.net/browse/?korhatar=0&incldead=1&xyz=yes&c28=1&c27=1&c6=1&c5=1&sort=4&type=desc
+    - path: browse/
+      categories: [28, 27, 4, 3, 6, 5, 2, 1, 17, 18, 19, 25, 24, 23, 38, 26, 20, 21, 31, 9, 8, 7, 13, 12, 11, 10]
+      inputs:
+        search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    - path: browse/xxx
+      categories: [16, 32, 14, 15]
+      inputs:
+        search: "{{ .Keywords }}"
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
-    viewMode: ""
     xyz: yes
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     # Age Limit: 0 all, 1 no, 5 6, 2 12, 3 16, 4 18
     korhatar: 0
-    # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4  waiting for seed, 7 my bookmarks, 12 reseeded by me
+    # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4 waiting for seed, 7 my bookmarks, 12 reseeded by me
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
-    # no freeleech atm
-    # can search by genre but you need to know the id. &mufaj[]=20 for Romantikus
 
   rows:
-    selector: table[align="center"][cellpadding="5"] > tbody > tr[id^="torrent-main-"]
+    selector: table.torrent-table > tbody > tr.torrent-row
 
   fields:
-    _id:
-      selector: a.download-link
-      attribute: data-id
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href*="/?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: a[href^="#details_tr_"]
-      attribute: title
-      filters:
-        - name: replace
-          args: ["Név: ", ""]
+      selector: a.torrent-title-link
+      attribute: data-name
     details:
-      text: "details.php?id={{ .Result._id }}"
+      selector: a.torrent-title-link
+      attribute: data-detail-url
     download:
-      selector: a.download-link
+      selector: a[href^="/download/"]
       attribute: href
-      filters:
-        - name: replace
-          args: ["please_wait=1&", ""]
-        - name: replace
-          args: ["&please_wait=1", ""]
     genre:
-      selector: "span[style=\"font-size: 6pt; font-weight: bold;\"]"
+      selector: a[data-mufaj]
+      attribute: data-mufaj
     description:
-      selector: td:nth-child(2) div:nth-child(2)
+      selector: div.torrent-subtitle
       filters:
         - name: append
           args: "{{ if .Result.genre }}</br>{{ .Result.genre }}{{ else }}{{ end }}"
@@ -149,21 +149,26 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     poster:
-      selector: a[href^="torrents_data/posters/"]
-      attribute: href
+      selector: a[data-poster]
+      attribute: data-poster
+      filters:
+        - name: prepend
+          args: "/"
     date:
-      selector: td:nth-last-child(5)
+      selector: a[data-added]
+      attribute: data-added
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
+          args: "yyyy-MM-dd HH:mm zzz"
     size:
-      selector: td:nth-last-child(4) b
+      selector: a[data-size]
+      attribute: data-size
     grabs:
       selector: td:nth-last-child(3)
     seeders:
-      selector: td:nth-last-child(2) a b
+      selector: td:nth-last-child(2)
     leechers:
       selector: td:nth-last-child(1)
     downloadvolumefactor:

@@ -49,8 +49,8 @@ search:
     t: "{{ .Query.Type }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
-    imdbId: "{{ .Query.IMDBIDShort }}"
-    tmdbId: "{{ .Query.TMDBID }}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tmdbid: "{{ .Query.TMDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
     limit: 100

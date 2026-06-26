@@ -6,6 +6,8 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
+  - https://seatracker.org/
+legacylinks:
   - https://seatracker.ru/
 
 caps:
@@ -58,6 +60,7 @@ caps:
     - {id: 107, cat: Books, desc: "Electrical Technical Officer's Library-ETO Handbooks"}
     - {id: 105, cat: Books, desc: "Electrical Technical Officer's Library-Sources of electricity"}
     - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
+    - {id: 420, cat: Books, desc: "Organization and management of maritime transport-Annual reports"}
     - {id: 6, cat: PC, desc: "Maritime Software"}
     - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
     - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
@@ -159,8 +162,8 @@ caps:
     - {id: 340, cat: Books, desc: "Examinations-Text books"}
     - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
-    - {id: 287, cat: Audio, desc: "Audio-Non-Fiction"}
-    - {id: 373, cat: Audio, desc: "Audio-Fiction"}
+    - {id: 287, cat: Audio/Audiobook, desc: "Audio-Non-Fiction"}
+    - {id: 373, cat: Audio/Audiobook, desc: "Audio-Fiction"}
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
     - {id: 389, cat: Books, desc: "Yachting, sailing, boating-Sailboat terminology"}
@@ -261,6 +264,7 @@ caps:
   modes:
     search: [q]
     movie-search: [q]
+    music-search: [q]
     book-search: [q]
 
 settings:

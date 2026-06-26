@@ -98,7 +98,7 @@ search:
     # 0 all, 1 polish, 2 not polish
     polish: 0
     cat_film: ""
-    # subtitles: 0 everything,  1 yes,  2 no
+    # subtitles: 0 everything, 1 yes, 2 no
     napisy: 0
     # can search by genre but you need the id. &cat_film=1 for akcja.
 

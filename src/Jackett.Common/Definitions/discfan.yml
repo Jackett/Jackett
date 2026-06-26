@@ -109,24 +109,27 @@ search:
 
   fields:
     category:
-      selector: a[href^="?cat="]
+      selector: a[href*="?cat="]
       attribute: href
       filters:
         - name: querystring
           args: cat
     title_default:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
+      selector: a[title][href*="details.php?id="]
       attribute: title
       optional: true
       default: "{{ .Result.title_default }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a[href*="details.php?id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href*="download.php?id="]
       attribute: href
+    poster:
+      selector: img[data-src]
+      attribute: data-src
     imdbid:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
@@ -153,12 +156,20 @@ search:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
       selector: td:nth-child(5)
+      optional: true
+      default: 512MB
     seeders:
       selector: td:nth-child(6)
+      optional: true
+      default: 0
     leechers:
       selector: td:nth-child(7)
+      optional: true
+      default: 0
     grabs:
       selector: td:nth-child(8)
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -184,4 +195,4 @@ search:
           args: "cat={{ .Result.category_title }} - "
     minimumratio:
       text: 0.9
-# NexusPHP v1.9.7 2025-06-29
+# NexusPHP v1.10.3 2026-06-12

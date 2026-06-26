@@ -32,6 +32,7 @@ caps:
     - {id: 16, cat: Other, desc: "Foto,obrázky"}
     - {id: 21, cat: PC/Mobile-Android, desc: "Mobilmánia"}
     - {id: 20, cat: Console, desc: "Konzole"}
+    - {id: 43, cat: Other, desc: "Online tvorba"}
     - {id: 22, cat: Other, desc: "Ostatní CZ/SK scéna"}
     - {id: 23, cat: Other, desc: "Na prani non CZ/SK"}
 

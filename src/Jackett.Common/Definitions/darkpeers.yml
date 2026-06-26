@@ -1,7 +1,7 @@
 ---
 id: darkpeers-api
 name: Darkpeers (API)
-description: "Darkpeers is a NORDIC Private Torrent Tracker for MOVIES / TV"
+description: "Darkpeers is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
@@ -12,11 +12,13 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 7, cat: Audio/Audiobook, desc: "Audiobooks"}
     - {id: 4, cat: Console, desc: "Games"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 5, cat: PC, desc: "Software"}
     - {id: 6, cat: XXX, desc: "XXX"}
+    - {id: 7, cat: Other, desc: "Assorted"}
+    - {id: 8, cat: Books, desc: "Books"}
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
@@ -24,6 +26,7 @@ caps:
     movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: apikey
@@ -60,10 +63,10 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "If you do not log in for (number) days, your account will be closed/deleted."
+    default: "Users must log in or be seeding for their account to be considered active. If the account is not active for a consecutive 90 days, the account will be deactivated. After a consecutive 120 days, the account will be pruned."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -120,8 +123,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -142,8 +143,13 @@ search:
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
+    _internal:
+      selector: internal
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
     description:
-      text: "{{ .Result.genre }}"
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
@@ -185,10 +191,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 3 days or 1:1
+# global MR is 0.8 but torrents must be seeded for 6 days or 1:1
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-# json UNIT3D 9.1.5
+      # 6 days (as seconds = 6 x 24 x 60 x 60)
+      text: 518400
+# json UNIT3D 9.2.0

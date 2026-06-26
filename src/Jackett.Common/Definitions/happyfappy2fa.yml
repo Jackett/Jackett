@@ -6,10 +6,13 @@ language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://www.happyfappy.net/
+legacylinks:
   - https://www.happyfappy.org/
 
 caps:
   categorymappings:
+    - {id: 15, cat: XXX, desc: "AI"}
     - {id: 11, cat: XXX, desc: "Asian"}
     - {id: 6, cat: XXX, desc: "Fansite"}
     - {id: 13, cat: XXX, desc: "Games"}
@@ -97,7 +100,7 @@ search:
       selector: a[href^="/torrents.php?id="]
       attribute: href
     download:
-      selector: a[href^="torrents.php?action=download&id="]
+      selector: a[href^="/torrents.php?action=download&id="]
       attribute: href
     description_tags:
       selector: div.tags

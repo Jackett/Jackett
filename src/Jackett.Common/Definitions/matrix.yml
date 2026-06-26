@@ -15,9 +15,9 @@ caps:
     - {id: 23, cat: Movies/Other, desc: "Animációk"}
 #    - {id: 61, cat: Movies/Other, desc: "Cam/EN"}
     - {id: 60, cat: Movies/Other, desc: "Cam/HU"}
-#    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
+    - {id: 45, cat: Books/EBook, desc: "eBook/EN"}
     - {id: 40, cat: Books/EBook, desc: "eBook/HU"}
-#    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
+    - {id: 20, cat: Movies/DVD, desc: "Film/DVD9"}
     - {id: 48, cat: Movies/HD, desc: "Film/EN/1080p"}
     - {id: 32, cat: Movies/HD, desc: "Film/EN/720p"}
     - {id: 38, cat: Movies/BluRay, desc: "Film/EN/Blu-ray"}
@@ -28,11 +28,12 @@ caps:
     - {id: 35, cat: Movies/BluRay, desc: "Film/HU/Blu-ray"}
     - {id: 26, cat: Movies/DVD, desc: "Film/HU/DVD-R"}
     - {id: 5, cat: Movies/SD, desc: "Film/HU/SD"}
+    - {id: 62, cat: Movies/UHD, desc: "Film/HU/UHD"}
     - {id: 4, cat: PC/Games, desc: "Játékok/ISO"}
     - {id: 39, cat: PC/Games, desc: "Játékok/Rip/Dox"}
-#    - {id: 47, cat: Other, desc: "Klippek"}
+    - {id: 47, cat: Other, desc: "Klippek"}
     - {id: 30, cat: Audio/Lossless, desc: "Lossless/EN"}
-#    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
+    - {id: 29, cat: Audio/Lossless, desc: "Lossless/HU"}
     - {id: 25, cat: Audio/MP3, desc: "MP3/EN"}
     - {id: 6, cat: Audio/MP3, desc: "MP3/HU"}
     - {id: 33, cat: PC, desc: "Program/egyéb"}
@@ -93,7 +94,7 @@ settings:
     default: "If you do not log in to the site for 6 months, the system will automatically delete it!"
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -124,9 +125,9 @@ search:
         img[src="/pic/categories/cat_anime.gif"]: 23
 #        img[src="/pic/categories/061.png"]: 61
         img[src="/pic/categories/061.png"]: 60
-#        img[]: 45
+        img[src="/pic/categories/017.png"]: 45
         img[src="/pic/categories/016.png"]: 40
-#        img[]: 20
+        img[src="/pic/categories/cat_movies.gif"]: 20
         img[src="/pic/categories/010.png"]: 48
         img[src="/pic/categories/9.png"]: 32
         img[src="/pic/categories/011.png"]: 38
@@ -137,11 +138,12 @@ search:
         img[src="/pic/categories/5.png"]: 35
         img[src="/pic/categories/2.png"]: 26
         img[src="/pic/categories/1.png"]: 5
+        img[src="/pic/categories/uhd_hun.png"]: 62
         img[src="/pic/categories/021.png"]: 4
         img[src="/pic/categories/cat_games.gif"]: 39
-#        img[]: 47
+        img[src="/pic/categories/026.png"]: 47
         img[src="/pic/categories/024.png"]: 30
-#        img[]: 29
+        img[src="/pic/categories/019.png" ]: 29
         img[src="/pic/categories/023.png"]: 25
         img[src="/pic/categories/018.png"]: 6
         img[src="/pic/categories/025.png"]: 33
@@ -154,7 +156,7 @@ search:
         img[src="/pic/categories/6.png"]: 44
 #        img[src="/pic/categories/6.png"]: 43
     title:
-      selector: td:nth-child(2) > div > a
+      selector: a[onclick]
     _id:
       selector: a[onclick]
       attribute: onclick
@@ -175,25 +177,26 @@ search:
       selector: a[href*="imdb.com/title/tt"]
       attribute: href
     date:
-      selector: td:nth-child(3)
+      selector: td:nth-child(4)
       filters:
         - name: append
           args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     size:
-      selector: td:nth-child(4)
-    grabs:
       selector: td:nth-child(5)
-    seeders:
+    grabs:
       selector: td:nth-child(6)
-    leechers:
+    seeders:
       selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
     _verified:
-      selector: span.torrent-ok, span.torrent-unchecked
+      selector: span.torrent-ok, span.torrent-unchecked, span.torrent-error
       case:
         span.torrent-ok: Verified
         span.torrent-unchecked: Unchecked
+        span.torrent-error: Faulty Upload
     genre:
       selector: td:nth-child(2) > div > i.small
       filters:

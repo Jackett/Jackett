@@ -74,6 +74,7 @@ namespace Jackett.Common.Models
         public List<CategorymappingBlock> Categorymappings { get; set; }
         public Dictionary<string, List<string>> Modes { get; set; }
         public bool Allowrawsearch { get; internal set; }
+        public bool Allowtvsearchimdb { get; internal set; }
     }
 
     public class captchaBlock

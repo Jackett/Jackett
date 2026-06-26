@@ -84,6 +84,8 @@ search:
       filters:
         - name: split
           args: [",", -1]
+        - name: re_replace
+          args: ["1\\d{5}", "2000"]
     year:
       selector: year
       optional: true

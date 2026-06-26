@@ -63,17 +63,17 @@ settings:
       asc: asc
 
 login:
-  path: https://foro.unionfansub.com/member.php
-  method: post
+  path: https://foro.unionfansub.com/member.php?action=login
+  method: form
+  form: form[action="member.php"]
   inputs:
-    quick_username: "{{ .Config.username }}"
-    quick_password: "{{ .Config.password }}"
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
     action: do_login
     url: "{{ .Config.sitelink }}"
-    quick_login: 1
-    quick_remember: yes
+    remember: yes
   error:
-    - selector: div.error
+    - selector: td:contains("usuario/contraseña inválida")
   test:
     path: /
     selector: div#statusbar

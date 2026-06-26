@@ -1,11 +1,13 @@
 ---
 id: pterclub
 name: PTerClub (PT之友俱乐部)
-description: "PTerClub (PT之友俱乐部) is a CHINESE Private Torrent Tracker for HD MUSIC VIDEOS / MOVIES / TV  / ANIME"
+description: "PTerClub (PT之友俱乐部) is a CHINESE Private Torrent Tracker for HD MUSIC VIDEOS / MOVIES / TV / ANIME"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
+  - https://pterclub.net/
+legacylinks:
   - https://pterclub.com/
 
 caps:
@@ -73,7 +75,7 @@ settings:
     default: "Account retention rules:<ol><li>All accounts will be permanently protected and will not be deleted; however, due to site security, some users will be temporarily banned due to activity rules</li><li>New users with no traffic changes will be disabled after 7 days of registration (not the actual download volume)</li><li>Those who download free torrents without generating any upload volume, or simply auxiliary torrents that generate magic power without any uploads will still be banned</li><li>Users with a non-parked account will be disabled if they do not log in for 60 consecutive days</li><li>Users with a parked account will be disabled if they do not log in for 180 consecutive days</li><li>Angora/Veteran User and above will not be disabled after parking</li><li>Sichuan Jianzhou Cat/Nexus Master users and above will be retained forever.</li></ol>"
 
 login:
-  # using cookie method because login page has embedded Clouflare turnstile
+  # using cookie method because login page has embedded Cloudflare turnstile
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
@@ -90,13 +92,13 @@ search:
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     # currently supports only one query id at one time.
-    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }} {{ else }}{{ .Keywords }}{{ end }}{{ if .Query.DoubanID }}{{ .Query.DoubanID }}{{ else }}{{ end }}"
+    search: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}{{ if and .Query.DoubanID (eq .Query.IMDBID .False) }}{{ .Query.DoubanID }}{{ else }}{{ end }}{{ if and (eq .Query.IMDBID .False) (eq .Query.DoubanID .False) }}{{ .Keywords }}{{ else }}{{ end }}"
     # 0 incldead, 1 active, 2 dead
     incldead: 0
     # 0 all, 1 normal, 2 free, 3 2x, 4 2xfree, 5 50%, 6 2x50%, 7 30%
     spstate: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
     # 0 title, 3 uploader, 4 imdburl, 5 DoubanID
-    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if .Query.DoubanID }}5{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.DoubanID }}{{ else }}0{{ end }}"
+    search_area: "{{ if .Query.IMDBID }}4{{ else }}{{ end }}{{ if and .Query.DoubanID (eq .Query.IMDBID .False) }}5{{ else }}{{ end }}{{ if and (eq .Query.IMDBID .False) (eq .Query.DoubanID .False) }}0{{ else }}{{ end }}"
     # 0 AND, 1 OR, 2 exact
     search_mode: 0
     sort: "{{ .Config.sort }}"
@@ -127,8 +129,8 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img[data-src]
-      attribute: data-src
+      selector: img[data-orig]
+      attribute: data-orig
     imdbid:
       selector: a[href$="&search_area=4"]
       attribute: href
@@ -185,6 +187,5 @@ search:
     minimumratio:
       text: 0.9
     description:
-      selector: td:has(table.torrentname)
-      remove: a, img
+      selector: td.embedded > div > div:nth-child(2) > span
 # NexusPHP prod#60d2fdc724a 2023-05-10

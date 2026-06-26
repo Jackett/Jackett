@@ -108,7 +108,6 @@ search:
     keywords: "{{ .Keywords }}"
     # name, description, both, uploader
     search_type: name
-    searchin: title
     "sortOptions[sortBy]": "{{ .Config.sort }}"
     "sortOptions[sortOrder]": "{{ .Config.type }}"
 # Drop error trap to stop Sonarr disabling indexer, see https://github.com/Jackett/Jackett/issues/1415

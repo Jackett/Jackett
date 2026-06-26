@@ -1,0 +1,149 @@
+---
+id: czteam-api
+name: CZTeam (API)
+description: "CZTeam (CZT) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ro-RO
+type: private
+encoding: UTF-8
+links:
+  - https://czteam.me/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX, desc: "XxX"}
+    - {id: 4, cat: PC/ISO, desc: "Games/PC ISO"}
+    - {id: 5, cat: TV/HD, desc: "TvEps/HD"}
+    - {id: 6, cat: Audio, desc: "Music/Audio"}
+    - {id: 7, cat: TV, desc: "TvEps"}
+    - {id: 9, cat: PC/Mobile-Other, desc: "Mobile"}
+    - {id: 12, cat: Console, desc: "Games/Consoles"}
+    - {id: 19, cat: Movies/SD, desc: "Movies/XviD"}
+    - {id: 20, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 21, cat: PC/Games, desc: "Games/PC Rips"}
+    - {id: 22, cat: PC, desc: "Software"}
+    - {id: 23, cat: TV/Anime, desc: "Anime"}
+    - {id: 24, cat: Other, desc: "Images"}
+    - {id: 25, cat: Books, desc: "Docs"}
+    - {id: 28, cat: Movies/DVD, desc: "Movies/DVD-RO"}
+    - {id: 29, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 30, cat: Audio/Video, desc: "Music/MVID"}
+    - {id: 31, cat: PC/Mac, desc: "MAC"}
+    - {id: 32, cat: TV/Sport, desc: "Sports"}
+    - {id: 33, cat: Movies/HD, desc: "Movies/HDTV-RO"}
+    - {id: 34, cat: TV/HD, desc: "TvEps/HD-RO"}
+    - {id: 35, cat: Audio/Lossless, desc: "Music/Lossless"}
+    - {id: 36, cat: Movies/BluRay, desc: "Full BluRay-RO"}
+    - {id: 37, cat: Movies/3D, desc: "Movies/3D"}
+    - {id: 38, cat: Movies, desc: "Movies-RO"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_passkey
+    type: info
+    label: About your Passkey
+    default: "Find your passkey by accessing your <a href=\"https://czteam.me/my.php\" target=\"_blank\">CZTeam profile</a> and scrolling down to the Passkey section."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  # Validate the credentials by hitting the cheapest endpoint that requires
+  # them. /api.php?action=latest-torrents&limit=1 returns 200 + JSON when the
+  # passkey is right and 401/403 otherwise.
+  path: api.php
+  method: get
+  inputs:
+    action: latest-torrents
+    passkey: "{{ .Config.passkey }}"
+    limit: 1
+  error:
+    - selector: ":root:contains(\"error\")"
+
+search:
+  paths:
+    - path: api.php
+      response:
+        type: json
+        noResultsMessage: ""
+
+  inputs:
+    action: search-torrents
+    passkey: "{{ .Config.passkey }}"
+    type: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
+    query: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    name: "{{ if .Query.IMDBID }}{{ .Keywords }}{{ else }}{{ end }}"
+    season: "{{ .Query.Season }}"
+    episode: "{{ .Query.Ep }}"
+    category: "{{ range .Categories }}{{.}},{{end}}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    limit: 100
+    # 1 name, 2 desc, 3 both, 4 genre
+    tip: 1
+
+  rows:
+    selector: $
+
+  fields:
+    title:
+      selector: name
+    details:
+      selector: url
+    download:
+      selector: download_link
+    category:
+      selector: category_id
+    imdbid:
+      selector: imdb
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    files:
+      selector: files
+    size:
+      selector: size
+    date:
+      # api.php returns "2026-05-09 18:57:50" (server time, Europe/Bucharest)
+      selector: upload_date
+      filters:
+        - name: append
+          args: " +03:00" # EEST (Bucharest, summer)
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    downloadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: freeleech
+      case:
+        0: 1 # not free
+        1: 0 # freeleech
+    uploadvolumefactor:
+      # api returns 0=false, 1=true
+      selector: doubleup
+      case:
+        0: 1 # not double
+        1: 2 # double upload
+    genre:
+      selector: tags
+    _internal:
+      selector: internal
+      case:
+        0: "{{ .False }}"
+        1: "{{ .True }}"
+    description:
+      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# json czteam-api 2026-05-09

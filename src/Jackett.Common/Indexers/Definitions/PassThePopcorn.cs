@@ -24,7 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "passthepopcorn";
         public override string Name => "PassThePopcorn";
-        public override string Description => "PassThePopcorn (PTP) is a Private site for MOVIES / TV";
+        public override string Description => "PassThePopcorn (PTP) is a Private site for MOVIES";
         // Status: https://ptp.trackerstatus.info/
         public override string SiteLink { get; protected set; } = "https://passthepopcorn.me/";
         public override string Language => "en-US";
@@ -61,10 +61,6 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 LimitsDefault = 50,
                 LimitsMax = 50,
-                TvSearchParams = new List<TvSearchParam>
-                {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
-                },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
                     MovieSearchParam.Q, MovieSearchParam.ImdbId
@@ -73,7 +69,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies, "Feature Film");
             caps.Categories.AddCategoryMapping(2, TorznabCatType.Movies, "Short Film");
-            caps.Categories.AddCategoryMapping(3, TorznabCatType.TV, "Miniseries");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.Movies, "Miniseries");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.Movies, "Stand-up Comedy");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.Movies, "Live Performance");
             caps.Categories.AddCategoryMapping(6, TorznabCatType.Movies, "Movie Collection");

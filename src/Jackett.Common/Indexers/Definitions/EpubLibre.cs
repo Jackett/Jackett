@@ -104,7 +104,7 @@ namespace Jackett.Common.Indexers.Definitions
             var maxPages = 2; // we scrape only 2 pages for recent torrents
             if (!string.IsNullOrWhiteSpace(query.GetQueryString()))
             {
-                searchString = Uri.EscapeUriString(query.GetQueryString());
+                searchString = Uri.EscapeDataString(query.GetQueryString());
                 maxPages = MaxSearchPageLimit;
             }
 

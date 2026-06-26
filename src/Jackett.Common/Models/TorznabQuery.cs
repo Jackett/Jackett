@@ -127,7 +127,6 @@ namespace Jackett.Common.Models
                                                  || c == ']'
                                                  || c == '+'
                                                  || c == '%'
-                                                 || c == ':'
                                                ));
 
                 return string.Concat(safeTitle);

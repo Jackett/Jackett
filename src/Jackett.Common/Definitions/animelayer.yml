@@ -6,6 +6,8 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
+  - https://animelayer.ru/
+legacylinks:
   - https://www.animelayer.ru/
 
 caps:
@@ -40,7 +42,7 @@ settings:
       dorama: Дорама
 
 login:
-  path: login.php
+  path: layer/login/
   method: form
   form: form#loginForm
   inputs:

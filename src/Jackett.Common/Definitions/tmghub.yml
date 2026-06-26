@@ -21,6 +21,7 @@ caps:
     - {id: 17, cat: Movies/WEB-DL, desc: "WEB-DL/DTH"}
     - {id: 14, cat: Movies/DVD, desc: "DVD-Rips"}
     - {id: 15, cat: Movies/HD, desc: "DTH/HD-Rip"}
+    - {id: 45, cat: Movies/Other, desc: "AI Encodes"}
     - {id: 20, cat: Movies/SD, desc: "VHS/TV-Rip"}
     - {id: 21, cat: Movies, desc: "Video CDs"}
     - {id: 19, cat: Movies, desc: "Pre Releases "}
@@ -114,7 +115,7 @@ download:
       comment: "{{ .Config.thankyou }}"
       confirm: Confirm
   selectors:
-    - selector: td a[href^="download.php"]
+    - selector: a[href*="download.php?id="]
       attribute: href
 
 search:
@@ -138,48 +139,45 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: "table#tottest[width=\"100%\"] tr:has(a[href^=\"index.php?page=torrent-details\"]):not(:has(img[title=\"Allready Grabbed !!\"]))"
+    selector: div.tor-list div.torrent-item:not(:has(img[title="Allready Grabbed !!"]))
 
   fields:
     category:
-      selector: td a[href^="index.php?page=torrents&category="]
+      selector: div.tor-cat-col a
       attribute: href
       filters:
         - name: querystring
           args: category
     title:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a.torr-link b
     details:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a.torr-link
       attribute: href
     download:
-      selector: td a[href^="index.php?page=torrent-details"]
-      attribute: href
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
+      selector: a.torr-link
       attribute: href
     poster:
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a.torr-link
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?)  width"
+          args: "src=(.+?) border"
     date:
       # 6 weeks ago
-      selector: td a[href^="index.php?page=torrent-details"]
+      selector: a.torr-link
       attribute: onmouseover
       filters:
         - name: regexp
           args: "Added\\:(\\d+ \\w+ \\w+)<"
         - name: timeago
     size:
-      selector: td:nth-child(5)
+      selector: div.torrent-stats div.nth-child(4)
     grabs:
-      selector: td:nth-child(6)
+      selector: div.torrent-stats div.nth-child(1)
     seeders:
-      selector: td:nth-child(7)
+      selector: div.torrent-stats div.nth-child(2)
     leechers:
-      selector: td:nth-child(8)
+      selector: div.torrent-stats div.nth-child(3)
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0

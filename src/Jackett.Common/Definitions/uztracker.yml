@@ -1,0 +1,577 @@
+---
+id: uztracker
+name: UzTracker
+description: "UzTracker is an UZBEK Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: ru-RU
+type: semi-private
+encoding: UTF-8
+links:
+  - https://uztracker.me/
+legacylinks:
+  - https://uztracker.net/
+
+caps:
+  categorymappings:
+    # Кинофильмы # Movies
+    - {id: 3, cat: Movies/Foreign, desc: "Зарубежные кинофильмы"}
+    - {id: 13, cat: Movies/Foreign, desc: " |- Новинки 2026"}
+    - {id: 12, cat: Movies/Foreign, desc: " |- Фильмы 2021-2025 годов"}
+    - {id: 11, cat: Movies/Foreign, desc: " |- Фильмы 2011-2020 годов"}
+    - {id: 10, cat: Movies/Foreign, desc: " |- Зарубежные фильмы до 2011 года"}
+    - {id: 215, cat: Movies/Foreign, desc: " |- Классика мирового кинематографа"}
+    - {id: 5, cat: Movies/Foreign, desc: " |- Фильмы (HDvideo)"}
+    - {id: 189, cat: Movies/Foreign, desc: " |- Фильмы в 4K и 3D"}
+    - {id: 349, cat: Movies/Foreign, desc: " |- Кинофильмы (48-120 FPS)"}
+    - {id: 8, cat: Movies/Foreign, desc: " |- Фильмологии"}
+    - {id: 242, cat: Movies/Foreign, desc: " |- Индийское кино"}
+    - {id: 7, cat: Movies/Foreign, desc: " |- DVDScr, TS, CAMRip и т.п."}
+    - {id: 6, cat: Movies/Foreign, desc: " |- HD-AVC"}
+    - {id: 33, cat: Movies/Foreign, desc: " |- Перевод на узбекский"}
+    - {id: 14, cat: Movies, desc: "Российские кинофильмы"}
+    - {id: 344, cat: Movies, desc: " |- Новинки 2026"}
+    - {id: 24, cat: Movies, desc: " |- Российские фильмы 2021-2025 годов"}
+    - {id: 430, cat: Movies, desc: " |- Российские фильмы 2011-2020 годов"}
+    - {id: 223, cat: Movies, desc: " |- Кино СССР"}
+    - {id: 16, cat: Movies, desc: " |- Фильмы (HDvideo)"}
+    - {id: 190, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
+    - {id: 34, cat: Movies, desc: " |- Перевод на узбекский"}
+    - {id: 25, cat: Movies, desc: "Узбекские кинофильмы"}
+    - {id: 32, cat: Movies, desc: " |- Пр-во Узбекфильм (на русском)"}
+    - {id: 30, cat: Movies, desc: " |- Пр-во Узбекфильм (на узбекском языке)"}
+    # Сериалы, Видео и ТВ # Series, Videos and TV
+    - {id: 410, cat: TV/Foreign, desc: "Зарубежные сериалы"}
+    - {id: 412, cat: TV/Foreign, desc: " |- Зарубежные сериалы (HD)"}
+    - {id: 427, cat: TV/Foreign, desc: " |- Зарубежные сериалы (FullHD)"}
+    - {id: 411, cat: TV/Foreign, desc: " |- Зарубежные сериалы (UHD)"}
+    - {id: 333, cat: TV, desc: " |- Игра престолов / Game of Thrones"}
+    - {id: 313, cat: TV, desc: " |- Секретные материалы \ The X-Files"}
+    - {id: 418, cat: TV, desc: "Российские сериалы"}
+    - {id: 419, cat: TV, desc: " |- Российские сериалы (HD)"}
+    - {id: 428, cat: TV, desc: " |- Российские сериалы (FullHD)"}
+    - {id: 420, cat: TV, desc: " |- Российские сериалы (UHD)"}
+    - {id: 421, cat: TV/Foreign, desc: "Азиатские сериалы"}
+    - {id: 423, cat: TV/Foreign, desc: " |- Азиатские сериалы (HD)"}
+    - {id: 429, cat: TV/Foreign, desc: " |- Азиатские сериалы (FullHD)"}
+    - {id: 422, cat: TV/Foreign, desc: " |- Азиатские сериалы (UHD)"}
+    - {id: 97, cat: TV, desc: "Сериалы"}
+    - {id: 100, cat: TV, desc: " |- Турецкие сериалы"}
+    - {id: 99, cat: TV, desc: " |- Узбекские сериалы"}
+    - {id: 398, cat: TV, desc: " |- Подготовка и оформления раздач R.G. Serials"}
+    # Мультфильмы # Cartoons
+    - {id: 36, cat: TV/Foreign, desc: "Зарубежные мультфильмы"}
+    - {id: 48, cat: TV/Foreign, desc: " |- Новинки 2026"}
+    - {id: 61, cat: TV/Foreign, desc: " |- Мультфильмы 2011-2025 годов"}
+    - {id: 60, cat: TV/Foreign, desc: " |- Мультфильмы 2000-2010 годов"}
+    - {id: 59, cat: TV/Foreign, desc: " |- Мультфильмы до 2000 года"}
+    - {id: 46, cat: TV/Foreign, desc: " |- Полнометражные мультфильмы"}
+    - {id: 45, cat: TV/Foreign, desc: " |- Короткометражные мультфильмы"}
+    - {id: 41, cat: TV/Foreign, desc: " |- Иностранные мультфильмы (HD Video)"}
+    - {id: 188, cat: TV/Foreign, desc: " |- Мультфильмы 4K, 3D"}
+    - {id: 39, cat: TV/Foreign, desc: " |- Перевод на узбекский"}
+    - {id: 37, cat: TV, desc: "Российские мультфильмы"}
+    - {id: 58, cat: TV, desc: " |- Новинки 2025"}
+    - {id: 56, cat: TV, desc: " |- Полнометражные мультфильмы"}
+    - {id: 54, cat: TV, desc: " |- Короткометражные мультфильмы"}
+    - {id: 51, cat: TV, desc: " |- Мультфильмы (HDvideo)"}
+    - {id: 187, cat: TV, desc: " |- Мультфильмы 4K, 3D"}
+    - {id: 49, cat: TV, desc: " |- Перевод на узбекский"}
+    - {id: 403, cat: TV, desc: " |- Узбекские мультфильмы"}
+    - {id: 98, cat: TV, desc: " |- Мультсериалы"}
+    - {id: 462, cat: TV, desc: " |- Мультсериалы (HD)"}
+    - {id: 461, cat: TV, desc: " |- Мультсериалы (FullHD)"}
+    - {id: 460, cat: TV, desc: " |- Мультсериалы (UHD)"}
+    # Документальные фильмы и телепередачи # Documentaries and TV shows
+    - {id: 467, cat: TV/Documentary, desc: "Документальные фильмы и телепередачи"}
+    - {id: 480, cat: TV/Documentary, desc: " |- Аварии / Катастрофы / Катаклизмы"}
+    - {id: 479, cat: TV/Documentary, desc: " |- Космос / Авиация"}
+    - {id: 478, cat: TV/Documentary, desc: " |- Криминальная документалистика"}
+    - {id: 477, cat: TV/Documentary, desc: " |- Научно-популярная документалистика"}
+    - {id: 476, cat: TV/Documentary, desc: " |- Военные хроник"}
+    - {id: 475, cat: TV/Documentary, desc: " |- Тайны века / Спецслужбы / Теории Заговоров"}
+    - {id: 474, cat: TV/Documentary, desc: " |- Паранормальные явления"}
+    - {id: 473, cat: TV/Documentary, desc: " |- Биографии. Личности и кумиры"}
+    - {id: 472, cat: TV/Documentary, desc: " |- История"}
+    - {id: 468, cat: TV/Documentary, desc: " |- BBC"}
+    - {id: 471, cat: TV/Documentary, desc: " |- Discovery"}
+    - {id: 470, cat: TV/Documentary, desc: " |- National Geographic"}
+    - {id: 469, cat: TV/Documentary, desc: " |- Разное"}
+    - {id: 499, cat: TV, desc: "Развлекательные телепередачи и шоу"}
+    - {id: 504, cat: TV, desc: " |- Интеллектуальные игры и викторины"}
+    - {id: 501, cat: TV, desc: " |- КВН"}
+    - {id: 500, cat: TV, desc: " |-  Уральские Пельмени"}
+    - {id: 503, cat: TV, desc: " |- Сатирики и юмористы"}
+    - {id: 502, cat: TV, desc: " |- Реалити и ток-шоу"}
+    - {id: 505, cat: TV, desc: " |- Comedy Club"}
+    # Спорт # Sports
+    - {id: 481, cat: TV/Sport, desc: "Спортивные фильмы и телепередачи"}
+    - {id: 493, cat: TV/Sport, desc: " |- 🚗 Автоспорт"}
+    - {id: 510, cat: TV/Sport, desc: " |- 🏍️ Мотоспорт"}
+    - {id: 492, cat: TV/Sport, desc: " |- 🥊 Бокс"}
+    - {id: 491, cat: TV/Sport, desc: " |- 🤼‍♂️ Смешанные единоборства и K-1"}
+    - {id: 490, cat: TV/Sport, desc: " |- 💪 Рестлинг"}
+    - {id: 489, cat: TV/Sport, desc: " |- 🚴 Велоспорт"}
+    - {id: 488, cat: TV/Sport, desc: " |- ⚽ Футбол"}
+    - {id: 487, cat: TV/Sport, desc: " |- 🏀 Баскетбол"}
+    - {id: 486, cat: TV/Sport, desc: " |- 🏒 Хоккей"}
+    - {id: 485, cat: TV/Sport, desc: " |- 🎾 Теннис"}
+    - {id: 484, cat: TV/Sport, desc: " |- 🎿 Лыжи"}
+    - {id: 483, cat: TV/Sport, desc: " |- ⛷️ Сноуборд"}
+    - {id: 482, cat: TV/Sport, desc: "|- 💪🏻 Бодибилдинг"}
+    # Аниме # Anime
+    - {id: 345, cat: TV/Anime, desc: "Сериалы"}
+    - {id: 346, cat: TV/Anime, desc: " |- Новинки (Онгоинги)"}
+    - {id: 347, cat: TV/Anime, desc: " |- Аниме Сериалы"}
+    - {id: 348, cat: TV/Anime, desc: " |- Аниме Сериалы (HD)"}
+    - {id: 365, cat: TV/Anime, desc: " |- OVA"}
+    - {id: 361, cat: Movies/Other, desc: "Фильмы"}
+    - {id: 366, cat: Movies/Other, desc: " |- Новинки"}
+    - {id: 364, cat: Movies/Other, desc: " |- Аниме Фильмы (HD)"}
+    - {id: 362, cat: Movies/Other, desc: " |- OVA"}
+    - {id: 508, cat: Audio, desc: " |- Звуковые дорожки и переводы (Аниме)"}
+    - {id: 507, cat: Books, desc: " |- Манга, Манхва, Рэнобе, Артбуки, Журналы"}
+    - {id: 509, cat: Other, desc: " |- Обои, сканы, аватары, арт (Аниме)"}
+    # Музыка # Music
+    - {id: 225, cat: Audio/MP3, desc: "♫ Российские исполнители ♫ (Mp3)♫"}
+    - {id: 228, cat: Audio/MP3, desc: " |- Поп музыка России и стран бывшего СССР"}
+    - {id: 229, cat: Audio/MP3, desc: " |- Русские поп сборники"}
+    - {id: 226, cat: Audio/MP3, desc: " |- Русский шансон и авторская песня"}
+    - {id: 308, cat: Audio/MP3, desc: " |- Военная песня"}
+    - {id: 227, cat: Audio/MP3, desc: " |- Сборники Русского шансона"}
+    - {id: 230, cat: Audio/MP3, desc: " |- Русский Rap, Hip-Hop"}
+    - {id: 450, cat: Audio/MP3, desc: " |- Российский джаз и блюз"}
+    - {id: 343, cat: Audio/MP3, desc: " |- 🎵 МУЗЫКА ИИ и НЕЙРОСЕТЕЙ (MP3, FLAC)"}
+    - {id: 122, cat: Audio/MP3, desc: "♫ Зарубежная музыка (Mp3)"}
+    - {id: 315, cat: Audio/MP3, desc: " |- Зарубежные Сборники DISCO, ITALO-DISCO"}
+    - {id: 239, cat: Audio/MP3, desc: " |- Зарубежная поп музыка (альбомы, дискографии)"}
+    - {id: 128, cat: Audio/MP3, desc: " |- Зарубежные сборники поп музыки"}
+    - {id: 244, cat: Audio/MP3, desc: " |- Зарубежный Chanson"}
+    - {id: 131, cat: Audio/MP3, desc: " |- Джаз и блюз"}
+    - {id: 245, cat: Audio/MP3, desc: " |- Инструментальная музыка"}
+    - {id: 129, cat: Audio/MP3, desc: " |- Рэп, Хип-Хоп, R'n'B"}
+    - {id: 126, cat: Audio/MP3, desc: " |- Reggae, Ska, Dub"}
+    - {id: 132, cat: Audio/MP3, desc: " |- Классическая музыка"}
+    - {id: 125, cat: Audio/MP3, desc: " |- New Age, Relax, Meditative & Flamenco"}
+    - {id: 124, cat: Audio/MP3, desc: " |- Фольклор, Народная и Этническая музыка"}
+    - {id: 338, cat: Audio/MP3, desc: " |- Country"}
+    - {id: 231, cat: Audio/MP3, desc: " |- 🎵 Сборники и альбомы выходившие неофициальными изданиями."}
+    - {id: 201, cat: Audio/MP3, desc: " |- Русский Rock, Metal (mp3)"}
+    - {id: 202, cat: Audio/MP3, desc: " |- Сборники Русского рока (mp3)"}
+    - {id: 156, cat: Audio/MP3, desc: " |- Classic & Hard Rock"}
+    - {id: 334, cat: Audio/MP3, desc: " |- Progressive & Art-Rock"}
+    - {id: 213, cat: Audio/MP3, desc: " |- Melodic & Folk Rock"}
+    - {id: 214, cat: Audio/MP3, desc: " |- Soft & Pop-Rock"}
+    - {id: 212, cat: Audio/MP3, desc: " |- Instrumental & Guitar Rock"}
+    - {id: 241, cat: Audio/MP3, desc: " |- Rock'n'Roll, Rockabilly, Psychobilly"}
+    - {id: 211, cat: Audio/MP3, desc: " |- Сборники зарубежного Рока"}
+    - {id: 394, cat: Audio/MP3, desc: " |- Зарубежный Metal (альбомы, дискографии)"}
+    - {id: 154, cat: Audio/MP3, desc: " |- Зарубежный Metal (сборники)"}
+    - {id: 216, cat: Audio/MP3, desc: "♫ Alternative, Punk, Industrial, Gothic ♫ (Mp3)♫"}
+    - {id: 219, cat: Audio/MP3, desc: " |- Alternative"}
+    - {id: 220, cat: Audio/MP3, desc: " |- Punk"}
+    - {id: 217, cat: Audio/MP3, desc: " |- Hardcore"}
+    - {id: 309, cat: Audio/MP3, desc: " |- Indie Rock, Indie Pop"}
+    - {id: 310, cat: Audio/MP3, desc: " |- Post-Rock, Post-Punk"}
+    - {id: 218, cat: Audio/MP3, desc: " |- Industrial"}
+    - {id: 311, cat: Audio/MP3, desc: " |- Metalcore, Post-hardcore"}
+    - {id: 221, cat: Audio/MP3, desc: " |- Gothic Rock"}
+    - {id: 292, cat: Audio/MP3, desc: "♫ Электронная музыка ♫(Mp3)♫"}
+    - {id: 298, cat: Audio/MP3, desc: " |- Trance, Psy-Trance"}
+    - {id: 318, cat: Audio/MP3, desc: " |- Hardcore, Hardstyle, Jumpstyle"}
+    - {id: 296, cat: Audio/MP3, desc: " |- House"}
+    - {id: 297, cat: Audio/MP3, desc: " |- Techno"}
+    - {id: 299, cat: Audio/MP3, desc: " |- Drum & Bass, Breakbeat"}
+    - {id: 301, cat: Audio/MP3, desc: " |- Synthpop"}
+    - {id: 302, cat: Audio/MP3, desc: " |- Downtempo, Chillout"}
+    - {id: 300, cat: Audio/MP3, desc: " |- EBM, Industrial"}
+    - {id: 303, cat: Audio/MP3, desc: " |- Остальные жанры и направления"}
+    - {id: 234, cat: Audio/Lossless, desc: "♫ HI-RES Audio ♫"}
+    - {id: 312, cat: Audio/Lossless, desc: " |- ♫ Classics in processing (Hi-Res)"}
+    - {id: 235, cat: Audio/Lossless, desc: " |- ♫ Поп-музыка Hi-Res"}
+    - {id: 238, cat: Audio/Lossless, desc: " |- ♫ Электронная музыка Hi-Res"}
+    - {id: 237, cat: Audio/Lossless, desc: " |- ♫ Рок-музыка Hi-Res"}
+    - {id: 236, cat: Audio/Lossless, desc: " |- ♫ Джаз и Блюз	Hi-Res"}
+    - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
+    - {id: 330, cat: Audio, desc: " |- ♫ Зарубежная поп музыка (оцифровки)"}
+    - {id: 466, cat: Audio, desc: " |- Советская и Российская эстрада (оцифровки)"}
+    - {id: 453, cat: Audio, desc: " |- ♫ Шансон и авторская песня (оцифровки"}
+    - {id: 455, cat: Audio, desc: " |- ♫ Зарубежный и Отечественный Metal (оцифровки)"}
+    - {id: 331, cat: Audio, desc: " |- ♫ Русский рок (оцифровки)"}
+    - {id: 326, cat: Audio, desc: " |- ♫ Rock (оцифровки)"}
+    - {id: 325, cat: Audio, desc: " |- ♫ Электронная музыка (оцифрофки)"}
+    - {id: 454, cat: Audio, desc: " |- ♫ Джаз и блюз (оцифровки)"}
+    - {id: 452, cat: Audio, desc: " |- ♫ Classical (оцифровки)"}
+    - {id: 451, cat: Audio, desc: " |- ♫ Easy Listening (оцифровки)"}
+    - {id: 133, cat: Audio/Lossless, desc: "♫ Музыка в формате ♫ (lossless)"}
+    - {id: 203, cat: Audio/Lossless, desc: " |- Музыка России и стран бывшего СССР (lossless)"}
+    - {id: 139, cat: Audio/Lossless, desc: " |- Поп музыка, Eurodance, Disco (lossless)"}
+    - {id: 339, cat: Audio/Lossless, desc: " |- Rock, Metal (Lossless)"}
+    - {id: 340, cat: Audio/Lossless, desc: " |- Русский Rock, Metal (Lossless)"}
+    - {id: 141, cat: Audio/Lossless, desc: " |- Электронная музыка (lossless)"}
+    - {id: 142, cat: Audio/Lossless, desc: " |- Джаз и блюз (lossless)"}
+    - {id: 138, cat: Audio/Lossless, desc: " |- Шансон и Военная песня (lossless)"}
+    - {id: 157, cat: Audio/Video, desc: "Музыкальные видеоклипы и концерты"}
+    - {id: 161, cat: Audio/Video, desc: " |- Поп"}
+    - {id: 160, cat: Audio/Video, desc: " |- Электронная музыка"}
+    - {id: 159, cat: Audio/Video, desc: " |- Рэп, Хип-Хоп, R'n'B"}
+    - {id: 295, cat: Audio/Video, desc: " |- Рок музыка (Video)"}
+    - {id: 294, cat: Audio/Video, desc: " |- Музыкальные шоу"}
+    - {id: 158, cat: Audio/Video, desc: " |- Другие направления"}
+    # Литература # Literature
+    - {id: 167, cat: Audio/Audiobook, desc: "Аудиокниги"}
+    - {id: 464, cat: Audio/Audiobook, desc: " |- ♫ История"}
+    - {id: 335, cat: Audio/Audiobook, desc: " |- ♫ Русская литература ХХ-ХХI века"}
+    - {id: 232, cat: Audio/Audiobook, desc: " |- ♫ Детективы, приключения, триллеры"}
+    - {id: 337, cat: Audio/Audiobook, desc: " |- ♫ Детективы  Дарьи Донцовой"}
+    - {id: 210, cat: Audio/Audiobook, desc: " |- ♫ Зарубежные авторы. Романы, повести, рассказы"}
+    - {id: 233, cat: Audio/Audiobook, desc: " |- ♫ Любовные романы"}
+    - {id: 176, cat: Audio/Audiobook, desc: " |- ♫ Мистика, фантастика, ужасы"}
+    - {id: 175, cat: Audio/Audiobook, desc: " |- ♫ Любовно-фантастический роман"}
+    - {id: 174, cat: Audio/Audiobook, desc: " |- Аудиокниги на других языках (Audio)"}
+    - {id: 319, cat: Audio/Audiobook, desc: " |- Аудиокниги для детей"}
+    - {id: 166, cat: Books, desc: "Книги FB2"}
+    - {id: 173, cat: Books, desc: " |- Художественная литература"}
+    - {id: 314, cat: Books, desc: " |- Учебно-техническая литература"}
+    - {id: 434, cat: Books/Mags, desc: "Журналы"}
+    - {id: 456, cat: Books/Mags, desc: " |- Музыка"}
+    - {id: 435, cat: Books/Mags, desc: " |- Авто-мото"}
+    - {id: 437, cat: Books/Mags, desc: " |- Строительство и ремонт"}
+    - {id: 441, cat: Books/Mags, desc: " |- Сад и огород"}
+    - {id: 436, cat: Books/Mags, desc: " |- Кулинория"}
+    - {id: 442, cat: Books/Mags, desc: " |- Наука"}
+    - {id: 440, cat: Books/Mags, desc: " |- Космос"}
+    - {id: 439, cat: Books/Mags, desc: " |- История"}
+    - {id: 438, cat: Books/Mags, desc: " |- Хобби"}
+    - {id: 350, cat: Books, desc: "Медицина и здоровье"}
+    - {id: 351, cat: Books, desc: " |- Клиническая медицина до 1980 года"}
+    - {id: 352, cat: Books, desc: " |- Клиническая медицина с 1980 по 2000 год"}
+    - {id: 353, cat: Books, desc: " |- Клиническая медицина после 2000 года"}
+    - {id: 354, cat: Books/Mags, desc: " |- Научная медицинская периодика (газеты и журналы)"}
+    - {id: 357, cat: Books/Mags, desc: " |- Популярная медицинская периодика (газеты и журналы)"}
+    - {id: 355, cat: Books, desc: " |- Медико-биологические науки"}
+    - {id: 356, cat: Books, desc: " |- Фармация и фармакология"}
+    - {id: 358, cat: Books, desc: " |- Нетрадиционная, народная медицина и популярные книг..."}
+    - {id: 360, cat: Books, desc: " |- Видеоуроки и лекции по медицине"}
+    - {id: 359, cat: Books, desc: " |- Ветеринария, разное"}
+    # Игры # Games
+    - {id: 105, cat: PC/Games, desc: "Игры для ПК"}
+    - {id: 120, cat: PC/Games, desc: " |- Горячие новинки (License`s)"}
+    - {id: 119, cat: PC/Games, desc: " |- Горячие новинки (Repack`s)"}
+    - {id: 118, cat: PC/Games, desc: " |- Early Access, Demo, Alpha, Beta версии"}
+    - {id: 117, cat: PC/Games, desc: " |- Action"}
+    - {id: 116, cat: PC/Games, desc: " |- RPG"}
+    - {id: 289, cat: PC/Games, desc: " |- Horror"}
+    - {id: 307, cat: PC/Games, desc: " |- Logic"}
+    - {id: 304, cat: PC/Games, desc: " |- Lifestyle"}
+    - {id: 336, cat: PC/Games, desc: " |- Sports"}
+    - {id: 306, cat: PC/Games, desc: " |- Exploration"}
+    - {id: 305, cat: PC/Games, desc: " |- Management"}
+    - {id: 115, cat: PC/Games, desc: " |- Аркады"}
+    - {id: 114, cat: PC/Games, desc: " |- Стратегии"}
+    - {id: 113, cat: PC/Games, desc: " |- Гоночные симуляторы"}
+    - {id: 112, cat: PC/Games, desc: " |- Другие симуляторы"}
+    - {id: 111, cat: PC/Games, desc: " |- Приключения и квесты"}
+    - {id: 110, cat: PC/Games, desc: " |- Мини-игры"}
+    - {id: 109, cat: PC/Games, desc: " |- Многопользовательские и онлайн игры"}
+    - {id: 108, cat: PC/Games, desc: " |- Старые игры"}
+    - {id: 107, cat: PC/Games, desc: " |- Игровое видео"}
+    - {id: 106, cat: PC/Games, desc: " |- Патчи, моды, дополнения, DLC и т.п."}
+    - {id: 414, cat: Console/PS4, desc: " |- PS4 / PS5"}
+    - {id: 402, cat: Console/PS3, desc: " |- PS/PS2/PS3"}
+    - {id: 415, cat: Console/PSP, desc: " |- PSP / Игры PS1 для PSP"}
+    - {id: 431, cat: Console/Other, desc: " |- Switch"}
+    - {id: 416, cat: Console/XBox 360, desc: " |- Xbox 360"}
+    - {id: 417, cat: PC/Games, desc: " |- SteamMachine"}
+    # Софт # Software
+    - {id: 76, cat: PC/ISO, desc: "Операционные системы"}
+    - {id: 80, cat: PC/ISO, desc: " |- Windows 11"}
+    - {id: 79, cat: PC/ISO, desc: " |- Windows 10"}
+    - {id: 78, cat: PC/ISO, desc: " |- Windows 8.x"}
+    - {id: 77, cat: PC/ISO, desc: " |- Windows 7"}
+    - {id: 250, cat: PC/ISO, desc: " |- Windows Vista , Windows XP , Windows выпущенные до 20..."}
+    - {id: 81, cat: PC/ISO, desc: " |- Серверные ОС от Microsoft"}
+    - {id: 83, cat: PC/ISO, desc: " |- Linux, Unix, Mac и другие ОС"}
+    - {id: 82, cat: PC/ISO, desc: " |- Разное (RC, Beta, Service Packs, Cracks)"}
+    - {id: 93, cat: PC/0day, desc: "Системные программы"}
+    - {id: 86, cat: PC/0day, desc: " |- Драйверы и ресурсные библиотеки"}
+    - {id: 251, cat: PC/0day, desc: " |- Обслуживание и диагностика компьютера"}
+    - {id: 252, cat: PC/0day, desc: " |- Работа с жёсткими дисками"}
+    - {id: 457, cat: PC/0day, desc: " |- Резервирование и восстановление данных"}
+    - {id: 253, cat: PC/0day, desc: " |- Работа с внешними носителями информации"}
+    - {id: 254, cat: PC/0day, desc: " |- Архиваторы и файловые менеджеры"}
+    - {id: 91, cat: PC/0day, desc: " |- Программы для интернета и сетей"}
+    - {id: 256, cat: PC/0day, desc: " |- Настройка и оптимизация, изменение интерфейса ОС"}
+    - {id: 257, cat: PC/0day, desc: " |- WPI и прочие сборники программ"}
+    - {id: 258, cat: PC/0day, desc: " |- LiveCD/DVD/USB"}
+    - {id: 92, cat: PC/0day, desc: "Безопасность"}
+    - {id: 259, cat: PC/0day, desc: " |- Антивирусы, брандмауэры"}
+    - {id: 260, cat: PC/0day, desc: " |- Антишпионское, антирекламное и антиблокировочное ПО"}
+    - {id: 261, cat: PC/0day, desc: " |- Средства шифрования и защиты информации"}
+    - {id: 262, cat: PC/0day, desc: " |- Комплексная защита ПК"}
+    - {id: 263, cat: PC/0day, desc: "Программы для бизнеса, офиса, научной и проектной работы"}
+    - {id: 272, cat: PC/0day, desc: " |- Офисные системы"}
+    - {id: 271, cat: PC/0day, desc: " |- Системы для бизнеса"}
+    - {id: 270, cat: PC/0day, desc: " |- Системы для научной работы"}
+    - {id: 269, cat: PC/0day, desc: " |- САПР, софт для архитекторов, дизайнеров и пр."}
+    - {id: 268, cat: PC/0day, desc: " |- Справочные системы, базы данных"}
+    - {id: 267, cat: PC/0day, desc: " |- Программы для верстки, печати и работы со шрифтами"}
+    - {id: 266, cat: PC/0day, desc: " |- Работа с PDF, DjVu, FB2, EPUB, MOBI и пр."}
+    - {id: 265, cat: PC/0day, desc: " |- Словари, переводчики, программы обучения языкам"}
+    - {id: 264, cat: PC/0day, desc: " |- Распознавание текста, звука и синтез речи"}
+    - {id: 273, cat: PC/0day, desc: "Программирование и веб-разработка"}
+    - {id: 89, cat: PC/0day, desc: " |- Среды программирования, компиляторы и вспомогател..."}
+    - {id: 276, cat: PC/0day, desc: " |- Текстовые редакторы с подсветкой кода"}
+    - {id: 275, cat: PC/0day, desc: " |- Системы управления базами данных (СУБД)"}
+    - {id: 277, cat: PC/0day, desc: " |- WYSIWYG-редакторы для веб-дизайна"}
+    - {id: 274, cat: PC/0day, desc: " |- Скрипты и шаблоны"}
+    - {id: 278, cat: PC/0day, desc: "Графика и мультимедиа"}
+    - {id: 316, cat: PC/0day, desc: " |- 3D моделирование, рендеринг и плагины для них"}
+    - {id: 287, cat: PC/0day, desc: " |- Графические редакторы и каталогизаторы"}
+    - {id: 288, cat: PC/0day, desc: " |- Графические грабберы и конвертеры"}
+    - {id: 286, cat: PC/0day, desc: " |- Аудио- Видео- редакторы"}
+    - {id: 284, cat: PC/0day, desc: " |- Аудио- Видео- проигрыватели и каталогизаторы"}
+    - {id: 283, cat: PC/0day, desc: " |- Аудио- Видео- грабберы, рипперы и конвертеры"}
+    - {id: 282, cat: PC/0day, desc: " |- Анимация"}
+    - {id: 281, cat: PC/0day, desc: " |- Программные комплекты"}
+    - {id: 279, cat: PC/0day, desc: " |- Разное (Графика и мультимедиа)"}
+    - {id: 332, cat: PC/0day, desc: "Системы навигации и карты"}
+    - {id: 94, cat: PC/0day, desc: " |- Утилиты"}
+    - {id: 88, cat: PC/0day, desc: " |- Мультимедия"}
+    # Графика и Дизайн # Graphics and Design
+    - {id: 178, cat: Other, desc: "Графические изображения"}
+    - {id: 184, cat: Other, desc: " |- Обои"}
+    - {id: 183, cat: Other, desc: " |- Картинки"}
+    - {id: 182, cat: Other, desc: " |- Фотографии"}
+    - {id: 181, cat: Other, desc: " |- Обложки"}
+    - {id: 180, cat: Other, desc: " |- Аватарки, Иконки и пр."}
+    - {id: 179, cat: Other, desc: "Дизайнерские материалы"}
+    - {id: 186, cat: Other, desc: " |- Всё для 2d графики"}
+    - {id: 185, cat: Other, desc: " |- Всё для 3d графики"}
+    # Мобильные устройства # Mobile devices
+    - {id: 376, cat: PC/Mobile-Other, desc: "Помощь по разделу (Мобильные устройства)"}
+    - {id: 375, cat: PC/Mobile-Other, desc: "Игры"}
+    - {id: 393, cat: PC/Mobile-Other, desc: " |- Java"}
+    - {id: 390, cat: PC/Mobile-Other, desc: " |- Windows Mobile / Windows Phone"}
+    - {id: 387, cat: PC/Mobile-iOS, desc: " |- iOS"}
+    - {id: 383, cat: PC/Mobile-Android, desc: " |- Android"}
+    - {id: 380, cat: PC/Mobile-Other, desc: " |- Symbian"}
+    - {id: 374, cat: PC/Mobile-Other, desc: "Приложения"}
+    - {id: 392, cat: PC/Mobile-Other, desc: " |- Java"}
+    - {id: 389, cat: PC/Mobile-Other, desc: " |- Windows Mobile / Windows Phone"}
+    - {id: 386, cat: PC/Mobile-iOS, desc: " |- iOS"}
+    - {id: 382, cat: PC/Mobile-Android, desc: " |- Android"}
+    - {id: 379, cat: PC/Mobile-Other, desc: " |- Symbian"}
+    - {id: 367, cat: PC/Mobile-Other, desc: "Дополнительно"}
+    - {id: 373, cat: PC/Mobile-Other, desc: " |- Прошивки"}
+    - {id: 368, cat: PC/Mobile-Other, desc: " |- Софт для работы с телефоном"}
+    - {id: 370, cat: PC/Mobile-Other, desc: " |- Видео для КПК"}
+    - {id: 369, cat: PC/Mobile-Other, desc: " |- Темы и Обои"}
+    - {id: 426, cat: PC/Mobile-Other, desc: " |- Подготовка и оформления раздач R.G. Mobile"}
+    # TorrentPier
+    - {id: 205, cat: Other, desc: "Ресурсы для TorrentPier"}
+    - {id: 209, cat: Other, desc: " |- Модификации для TorrentPier"}
+    - {id: 207, cat: Other, desc: " |- Графика и стили для TorrentPier"}
+    - {id: 206, cat: Other, desc: " |- Шаблоны для TorrentPier"}
+    - {id: 449, cat: Other, desc: " |- Ресурсы для скачивания"}
+    # Технический форум # Technical Forum
+    - {id: 163, cat: Other, desc: "Временные раздачи"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: stripcyrillic
+    type: checkbox
+    label: Strip Cyrillic Letters
+    default: false
+  - name: addrussiantotitle
+    type: checkbox
+    label: Add RUS to end of all titles to improve language detection by Sonarr and Radarr. Will cause English-only results to be misidentified.
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 1
+    options:
+      1: created
+      10: seeders
+      7: size
+      2: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+
+login:
+  path: login
+  method: form
+  form: form[action="/login"]
+  inputs:
+    "login_username": "{{ .Config.username }}"
+    "login_password": "{{ .Config.password }}"
+    autologin: 1
+    redirect: /
+    login: "Вход"
+  selectorinputs:
+    _token:
+      selector: input[name="_token"]
+      attribute: value
+  error:
+    - selector: table.error
+  test:
+    path: search
+    selector: a[href="/login?logout=1"]
+
+search:
+  paths:
+    - path: tracker
+  inputs:
+    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    prev_allw: 1
+    prev_a: 0
+    prev_dla: 0
+    prev_dlc: 0
+    prev_dld: 0
+    prev_dlw: 0
+    prev_my: 0
+    prev_new: 0
+    prev_sd: 0
+    prev_da: 1
+    prev_dc: 0
+    prev_df: 1
+    prev_ds: 0
+    prev_tor_type: 0
+    # sort by 1=registered, 2=topicTitle, 4=completed, 10=seed, 11=leech, 12=up, 13=down, 5=replies, 6=views, 7=size, 8=lastPost, 9=seedLastSeen
+    o: "{{ .Config.sort }}"
+    # 1=asc, 2=desc
+    s: "{{ .Config.type }}"
+    # -1=all time
+    tm: -1
+    # seed not seen -1=disregard
+    sns: -1
+    # group releases -1=not selected
+    srg: -1
+    # show category
+    dc: 0
+    # show forum
+    df: 1
+    # show author
+    da: 1
+    # show speed
+    ds: 0
+    nm: "{{ .Keywords }}"
+    # search by partial word
+    allw: 0
+
+  keywordsfilters:
+    - name: diacritics
+      args: replace
+    - name: re_replace # S01 to сезон 1
+      args: ["(?i)\\bS0*(\\d+)\\b", "сезон $1"]
+    - name: re_replace # E02 to сери 1
+      args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
+    - name: re_replace # S01E02 to сезон 1 сери 2
+      args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
+
+  rows:
+    selector: tr[id^="tor_"]:has(a[href^="/dl/"]), tr[id^="tor_"]:has(a[href^="magnet:?xt="])
+
+  fields:
+    category:
+      selector: a.gen
+      attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)$
+    title:
+      selector: a.tLink
+      filters:
+        # normalize to SXXEYY format
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))?", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)\\s*(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "S$1E$2 of $3"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*[CС]езоны?.+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?).+?(\\d+(?:-\\d+)?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "S$1E$2"]
+        - name: re_replace
+          args: ["(?i)[CС]езоны?[\\s:]*(\\d+(?:-\\d+)?)", "S$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+[CС]езоны?", "S$1"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s*из\\s*(\\w?)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))\\s+из\\s*(\\w?)", "E$1 of $2"]
+        - name: re_replace
+          args: ["(?i)(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))[\\s:]*(\\d+(?:-\\d+)?)", "E$1"]
+        - name: re_replace
+          args: ["(?i)(\\d+(?:-\\d+)?)\\s+(?:\\s*(?:[CС]ери[ияй]|Эпизод|Выпуски?))", "E$1"]
+        - name: re_replace
+          args: ["(\\([\\p{IsCyrillic}\\W]+\\))|(^[\\p{IsCyrillic}\\W\\d]+\\/ )|([\\p{IsCyrillic} \\-]+,+)|([\\p{IsCyrillic}]+)", "{{ if .Config.stripcyrillic }}{{ else }}$1$2$3$4{{ end }}"]
+        - name: re_replace
+          args: ["(?i)\\bHDTV[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bSAT[-\\s]?Rip\\b", "HDTV"]
+        - name: re_replace
+          args: ["(?i)\\bWEB[-\\s]?DL[-\\s]?Rip\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sRip\\b", "WEBRip"]
+        - name: re_replace
+          args: ["(?i)\\bWEB\\sDL\\b", "WEB-DL"]
+        - name: re_replace
+          args: ["[\\[\\(\\{<«][\\s\\W]*[\\]\\)\\}>»]", ""]
+        - name: re_replace
+          args: ["^[\\s&,\\.!\\?\\+\\-_\\|\\/':]+", ""]
+        - name: append
+          args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
+    details:
+      selector: a.tLink
+      attribute: href
+    download:
+      selector: a[href^="/dl/"]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+    size:
+      selector: td:nth-child(6) > u
+    seeders:
+      selector: td.seedmed > b
+    leechers:
+      selector: td.leechmed > b
+    grabs:
+      selector: td:nth-child(9) p.med
+    date:
+      # unix
+      selector: td:last-child > u
+    downloadvolumefactor:
+      case:
+        img[src="images/tor_gold.gif"]: 0
+        img[src="images/tor_silver.gif"]: 0.5
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# TorrentPier II
