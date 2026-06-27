@@ -17,6 +17,7 @@ caps:
     - {id: 2030, cat: TV/Documentary, desc: "Films/Documentaire"}
     - {id: 2040, cat: Audio/Video, desc: "Films/Spectacle"}
     - {id: 2060, cat: Audio/Video, desc: "Films/Concert"}
+    - {id: 2510, cat: Movies/Other, desc: "Films/Court-métrage"}
     - {id: 5000, cat: TV, desc: "Séries TV"}
     - {id: 5040, cat: TV, desc: "Séries TV/Série TV"}
     - {id: 5070, cat: TV/Anime, desc: "Séries TV/Animation Série"}
@@ -32,7 +33,6 @@ caps:
     - {id: 7020, cat: Books/EBook, desc: "eBook/Livres"}
     - {id: 7050, cat: Books/Comics, desc: "eBook/Mangas"}
     - {id: 7060, cat: Books/Mags, desc: "eBook/Presse"}
-    - {id: 8000, cat: Books/Mags, desc: "eBook/Littérature & Audio/Autre"}
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3030, cat: Audio/Other, desc: "Audio/Karaoke"}
     - {id: 3010, cat: Audio, desc: "Audio/Musique"}
@@ -48,6 +48,7 @@ caps:
     - {id: 1080, cat: Console/PS4, desc: "Jeu vidéo/Sony"}
     - {id: 1061, cat: Console/Other, desc: "Jeu vidéo/Tablette"}
     - {id: 1090, cat: PC/Games, desc: "Jeu vidéo/Windows"}
+    - {id: 8000, cat: Other, desc: "eBook/Littérature & Audio/Autre & Séries TV/Documentaire"}
 
   modes:
     search: [q]
