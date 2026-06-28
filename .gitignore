@@ -201,3 +201,4 @@ launchSettings.json
 
 # JetBrains Rider
 /src/.run
+publish-test/

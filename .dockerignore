@@ -1,0 +1,14 @@
+.git
+.github
+bin/
+obj/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+.vscode/
+.vs/
+TestResults/
+*.log
+Dockerfile
+.dockerignore

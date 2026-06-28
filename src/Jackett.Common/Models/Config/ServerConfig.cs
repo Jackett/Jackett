@@ -105,20 +105,18 @@ namespace Jackett.Common.Models.Config
 
         public string[] GetListenAddresses(bool? external = null)
         {
-            if (external == null)
+            var envPortStr = Environment.GetEnvironmentVariable("PORT");
+            var hasEnvPort = int.TryParse(envPortStr, out var envPort);
+            var portToUse = hasEnvPort ? envPort : Port;
+            if (portToUse == 0) portToUse = 9117; // fallback
+
+            var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
+            if (!string.IsNullOrWhiteSpace(urls))
             {
-                external = AllowExternal;
+                return urls.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             }
-            if (external.Value)
-            {
-                return new string[] { "http://*:" + Port + "/" };
-            }
-            else
-            {
-                return new string[] {
-                    $"http://{LocalBindAddress}:{Port}/"
-                };
-            }
+
+            return new string[] { $"http://0.0.0.0:{portToUse}/" };
         }
 
         public IDisposable Subscribe(IObserver<ServerConfig> observer)
