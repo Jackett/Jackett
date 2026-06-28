@@ -1,11 +1,36 @@
 FROM mcr.microsoft.com/dotnet/sdk:9.0-alpine AS build
 WORKDIR /source
 
-# Copy the source code
+# Copy the solution file and projects to optimize Docker layer caching
+# This ensures that `dotnet restore` runs only when dependencies change, not every time source code changes.
+COPY src/Jackett.Common/Jackett.Common.csproj src/Jackett.Common/
+COPY src/DateTimeRoutines/DateTimeRoutines.csproj src/DateTimeRoutines/
+COPY src/Jackett.Server/Jackett.Server.csproj src/Jackett.Server/
+
+# Restore dependencies for the Server project
+# This will also restore referenced projects (Common, DateTimeRoutines)
+RUN dotnet restore src/Jackett.Server/Jackett.Server.csproj -r linux-musl-x64
+
+# Copy the remaining source files
 COPY . .
 
-# Publish the application targeting net9.0
-RUN dotnet publish src/Jackett.Server/Jackett.Server.csproj -c Release -f net9.0 -r linux-musl-x64 -o /app/publish /p:PublishTrimmed=false
+# Run clean to ensure no conflicting artifacts are left over before publishing
+RUN dotnet clean src/Jackett.Server/Jackett.Server.csproj -c Release
+
+# Publish the application with parallel compilation disabled
+# /m:1 disables MSBuild multiprocessor compilation.
+# /p:UseSharedCompilation=false disables the MSBuild node reuse.
+# These flags together eliminate the file-locking ("The process cannot access the file... because it is being used by another process")
+# issue that can occur in constrained Docker build environments like Heroku's builder.
+RUN dotnet publish src/Jackett.Server/Jackett.Server.csproj \
+    -c Release \
+    -f net9.0 \
+    -r linux-musl-x64 \
+    --no-restore \
+    -o /app/publish \
+    /p:PublishTrimmed=false \
+    /m:1 \
+    /p:UseSharedCompilation=false
 
 # Final stage
 FROM mcr.microsoft.com/dotnet/aspnet:9.0-alpine
@@ -22,6 +47,9 @@ COPY --from=build /app/publish .
 
 # Expose default port
 EXPOSE 9117
+
+# Ensure Jackett binds to 0.0.0.0 (and respects PORT environment variable, handled via ServerConfig.cs natively)
+ENV ASPNETCORE_URLS=http://0.0.0.0:9117
 
 # Create non-root user
 RUN addgroup -S jackett && adduser -S jackett -G jackett && \
