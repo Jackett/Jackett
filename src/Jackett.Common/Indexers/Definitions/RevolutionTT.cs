@@ -22,9 +22,10 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "revolutiontt";
         public override string Name => "RevolutionTT";
         public override string Description => "RevolutionTT is a Private site. The Revolution has begun";
-        public override string SiteLink { get; protected set; } = "https://revott.me/";
+        public override string SiteLink { get; protected set; } = "https://revopeers.me/";
         public override string[] LegacySiteLinks => new[]
         {
+            "https://revott.me/",
             "https://revolutiontt.me/",
         };
         public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
@@ -50,7 +51,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
         }
 
-        private TorznabCapabilities SetCapabilities()
+        private static TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
             {
@@ -149,8 +150,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
+            {
                 foreach (var cat in cats)
+                {
                     qc.Add($"c{cat}", "1");
+                }
+            }
 
             var searchUrl = SearchUrl + "?" + qc.GetQueryString();
             var results = await RequestWithCookiesAndRetryAsync(searchUrl);
@@ -178,7 +183,10 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                     var qLink = row.QuerySelector("td:nth-child(4) > a");
                     if (qLink == null)
+                    {
                         continue; // support/donation banner
+                    }
+
                     var link = new Uri(SiteLink + qLink.GetAttribute("href"));
 
                     // dateString format "yyyy-MMM-dd hh:mm:ss" => eg "2015-04-25 23:38:12"
