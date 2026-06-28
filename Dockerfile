@@ -45,12 +45,6 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false
 # Copy the published output from the build stage
 COPY --from=build /app/publish .
 
-# Expose default port
-EXPOSE 9117
-
-# Ensure Jackett binds to 0.0.0.0 (and respects PORT environment variable, handled via ServerConfig.cs natively)
-ENV ASPNETCORE_URLS=http://0.0.0.0:9117
-
 # Create non-root user
 RUN addgroup -S jackett && adduser -S jackett -G jackett && \
     chown -R jackett:jackett /app

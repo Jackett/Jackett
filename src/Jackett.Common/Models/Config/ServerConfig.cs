@@ -105,16 +105,16 @@ namespace Jackett.Common.Models.Config
 
         public string[] GetListenAddresses(bool? external = null)
         {
-            var envPortStr = Environment.GetEnvironmentVariable("PORT");
-            var hasEnvPort = int.TryParse(envPortStr, out var envPort);
-            var portToUse = hasEnvPort ? envPort : Port;
-            if (portToUse == 0) portToUse = 9117; // fallback
-
             var urls = Environment.GetEnvironmentVariable("ASPNETCORE_URLS");
             if (!string.IsNullOrWhiteSpace(urls))
             {
                 return urls.Split(new[] { ';' }, StringSplitOptions.RemoveEmptyEntries);
             }
+
+            var envPortStr = Environment.GetEnvironmentVariable("PORT");
+            var hasEnvPort = int.TryParse(envPortStr, out var envPort);
+            var portToUse = hasEnvPort ? envPort : Port;
+            if (portToUse == 0) portToUse = 9117; // fallback
 
             return new string[] { $"http://0.0.0.0:{portToUse}/" };
         }
