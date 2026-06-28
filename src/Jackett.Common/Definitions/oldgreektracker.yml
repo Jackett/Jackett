@@ -163,7 +163,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="download.php?id="]):has(img[title="Locked"])
 
   fields:
     category:
@@ -189,24 +189,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(10)
+      selector: td:nth-child(11)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(5)
+      selector: td:nth-child(6)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(9)
       default: 0
     downloadvolumefactor:
       case:
