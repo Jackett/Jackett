@@ -19,6 +19,7 @@ namespace Jackett.Common.Utils
             var logLevel = settings.TracingEnabled ? NLog.LogLevel.Debug : NLog.LogLevel.Info;
 
             var logConfig = new LoggingConfiguration();
+            var disableFileLogging = !string.IsNullOrWhiteSpace(Environment.GetEnvironmentVariable("HEROKU"));
 
             var logFile = new CleanseFileTarget
             {
@@ -30,7 +31,10 @@ namespace Jackett.Common.Utils
                 KeepFileOpen = false,
                 ArchiveNumbering = ArchiveNumberingMode.DateAndSequence
             };
-            logConfig.AddTarget("file", logFile);
+            if (!disableFileLogging)
+            {
+                logConfig.AddTarget("file", logFile);
+            }
 
             var microsoftRule = new LoggingRule
             {
@@ -38,7 +42,10 @@ namespace Jackett.Common.Utils
                 Final = true
             };
             microsoftRule.SetLoggingLevels(LogLevel.Warn, LogLevel.Fatal);
-            microsoftRule.Targets.Add(logFile);
+            if (!disableFileLogging)
+            {
+                microsoftRule.Targets.Add(logFile);
+            }
 
             var microsoftDebugRule = new LoggingRule
             {
@@ -46,14 +53,17 @@ namespace Jackett.Common.Utils
             };
             microsoftDebugRule.SetLoggingLevels(LogLevel.Debug, LogLevel.Info);
             microsoftDebugRule.Final = true;
-            if (settings.TracingEnabled)
+            if (settings.TracingEnabled && !disableFileLogging)
             {
                 microsoftDebugRule.Targets.Add(logFile);
             }
             logConfig.LoggingRules.Add(microsoftDebugRule);
 
-            var logFileRule = new LoggingRule("*", logLevel, logFile);
-            logConfig.LoggingRules.Add(logFileRule);
+            if (!disableFileLogging)
+            {
+                var logFileRule = new LoggingRule("*", logLevel, logFile);
+                logConfig.LoggingRules.Add(logFileRule);
+            }
 
             if (!fileOnly)
             {

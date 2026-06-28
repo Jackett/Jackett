@@ -1,0 +1,1 @@
+web: ./jackett --NoUpdates

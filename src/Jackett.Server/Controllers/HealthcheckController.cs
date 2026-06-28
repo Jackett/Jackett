@@ -1,7 +1,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json.Linq;
 
 namespace Jackett.Server.Controllers
 {
@@ -13,11 +12,7 @@ namespace Jackett.Server.Controllers
         [HttpHead]
         public Task<IActionResult> Health()
         {
-            var jsonReply = new JObject
-            {
-                ["status"] = "OK"
-            };
-            return Task.FromResult<IActionResult>(Json(jsonReply));
+            return Task.FromResult<IActionResult>(Content("OK", "text/plain", System.Text.Encoding.UTF8));
         }
     }
 }

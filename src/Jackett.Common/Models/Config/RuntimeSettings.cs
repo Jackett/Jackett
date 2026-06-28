@@ -30,6 +30,12 @@ namespace Jackett.Common.Models.Config
         {
             get
             {
+                var jackettConfigDir = Environment.GetEnvironmentVariable("JACKETT_CONFIG_DIR");
+                if (!string.IsNullOrWhiteSpace(jackettConfigDir))
+                {
+                    return jackettConfigDir;
+                }
+
                 if (!string.IsNullOrWhiteSpace(CustomDataFolder))
                 {
                     return CustomDataFolder;
