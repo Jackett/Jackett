@@ -5,6 +5,8 @@ description: "TOrrent-tuRK (TORK) is a TURKISH Private Torrent Tracker for HD MO
 language: tr-TR
 type: private
 encoding: UTF-8
+certificates:
+  - 0ada0a28308d9af9ad428cc96dc873beeb707d56 # Expired 30th June 2026
 links:
   - https://torrent-turk.de/
 legacylinks:
