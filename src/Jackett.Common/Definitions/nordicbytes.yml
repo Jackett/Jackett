@@ -152,13 +152,8 @@ search:
           args: ["(?i)(TV Movie)", "TV_Movie"]
         - name: replace
           args: [" & ", "_&_"]
-    _internal:
-      selector: internal
-      case:
-        0: "{{ .False }}"
-        1: "{{ .True }}"
     description:
-      text: "{{ if .Result._internal }}Internal{{ else }}{{ end }}{{ if and .Result._internal .Result.genre }} | {{ else }}{{ end }}{{ .Result.genre }}"
+      text: "{{ .Result.genre }}"
     seeders:
       selector: seeders
     leechers:
