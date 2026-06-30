@@ -456,7 +456,7 @@ Prior versions of Jackett are no longer supported.
  * Kufirc
  * Kunlun (昆仑)
  * lajidui
- * LandOfDesi
+ * LandOfDesi (LoD)
  * Last Digital Underground (LDU)
  * LastFiles (LF)
  * Lat-Team
