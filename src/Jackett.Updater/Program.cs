@@ -657,6 +657,7 @@ namespace Jackett.Updater
                 "Definitions/polishsource.yml",
                 "Definitions/polishtracker.yml",
                 "Definitions/pornbits.yml",
+                "Definitions/pornbytes-api.yml",
                 "Definitions/pornforall.yml",
                 "Definitions/pornleech.yml",
                 "Definitions/pornolive.yml",
