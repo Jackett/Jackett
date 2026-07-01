@@ -1,9 +1,9 @@
 ---
-id: tsdb
+id: f1gp
 replaces:
-  - f1gp
-name: TSDB
-description: "TSDB (The Sports Database) is a Private Torrent Tracker for SPORTS"
+  - tsdb
+name: F1GP
+description: "F1GP is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
@@ -90,12 +90,7 @@ login:
     - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href^="logout.php"]
-
-download:
-  selectors:
-    - selector: a[href^="download.php?id="]
-      attribute: href
+    selector: a[href="logout.php"]
 
 search:
   paths:
@@ -117,7 +112,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista > tbody > tr:has(a[href*="downloadcheck&id="])
+    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
@@ -130,9 +125,9 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: href
+      attribute: onmouseover
     download:
-      selector: a[href^="index.php?page=downloadcheck&id="]
+      selector: a[href^="download.php?id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
@@ -143,24 +138,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(10)
+      selector: td:nth-child(9)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
       default: 0
     downloadvolumefactor:
       case:
