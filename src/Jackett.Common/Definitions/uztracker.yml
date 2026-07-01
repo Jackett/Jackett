@@ -19,6 +19,7 @@ caps:
     - {id: 11, cat: Movies/Foreign, desc: " |- Фильмы 2011-2020 годов"}
     - {id: 10, cat: Movies/Foreign, desc: " |- Зарубежные фильмы до 2011 года"}
     - {id: 215, cat: Movies/Foreign, desc: " |- Классика мирового кинематографа"}
+    - {id: 517, cat: Movies/Foreign, desc: " |- Фильмы со смешным переводом"}
     - {id: 5, cat: Movies/Foreign, desc: " |- Фильмы (HDvideo)"}
     - {id: 189, cat: Movies/Foreign, desc: " |- Фильмы в 4K и 3D"}
     - {id: 349, cat: Movies/Foreign, desc: " |- Кинофильмы (48-120 FPS)"}
