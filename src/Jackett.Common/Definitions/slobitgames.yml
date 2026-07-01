@@ -23,6 +23,7 @@ caps:
     - {id: 27, cat: Other, desc: "Music - Other"}
     - {id: 33, cat: PC, desc: "Other - Emulation"}
     - {id: 28, cat: Console/PS4, desc: "PS4 - PS4"}
+    - {id: 47, cat: Console/PS4, desc: "PS5 - PS"}
 
   modes:
     search: [q]
