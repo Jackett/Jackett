@@ -847,6 +847,7 @@ namespace Jackett.Updater
                 "Definitions/trackeros.yml", // switch to *-API #12807
                 "Definitions/trellas.yml", // renamed to magico
                 "Definitions/trupornolabs.yml",
+                "Definitions/tsdb.yml", // renamed to f1gp
                 "Definitions/tspate.yml",
                 "Definitions/ttobogo.yml",
                 "Definitions/ttsweb.yml",
