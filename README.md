@@ -394,7 +394,6 @@ Prior versions of Jackett are no longer supported.
  * Generation-Free
  * GGPT
  * GigaTorrents
- * GimmePeers (formerly ILT) [PAY2DL]
  * GiroTorrent
  * GreatPosterWall (GPW)
  * HaiDan

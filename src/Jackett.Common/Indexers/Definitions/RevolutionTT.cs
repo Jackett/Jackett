@@ -20,6 +20,7 @@ namespace Jackett.Common.Indexers.Definitions
     public class RevolutionTT : IndexerBase
     {
         public override string Id => "revolutiontt";
+        public override string[] Replaces => new[] { "gimmepeers" };
         public override string Name => "RevolutionTT";
         public override string Description => "RevolutionTT is a Private site. The Revolution has begun";
         public override string SiteLink { get; protected set; } = "https://revopeers.me/";
