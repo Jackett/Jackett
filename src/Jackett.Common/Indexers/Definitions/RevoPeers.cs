@@ -26,7 +26,7 @@ namespace Jackett.Common.Indexers.Definitions
             "gimmepeers"
         };
         public override string Name => "RevoPeers";
-        public override string Description => "RevoPeers is a Private Torrent Tracker for MOVIES / TV / GENERAL";
+        public override string Description => "RevoPeers is a Private PAY2DL Torrent Tracker for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://revopeers.me/";
         public override string[] LegacySiteLinks => new[]
         {
