@@ -1,0 +1,111 @@
+---
+id: landofdesi
+name: LandOfDesi
+description: "LandOfDesi (LoD) is a Ratioless SOUTH ASIAN Private Torrent Tracker for MOVIES / TV"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://samosa.opensignup.xyz/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Movie"}
+    - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Audio Track"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: 2fa_code
+    type: text
+    label: 2FA code
+  - name: info_flaresolverr
+    type: info_flaresolverr
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: uploaded_at
+    options:
+      uploaded_at: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: login
+  method: form
+  form: form#login_form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+    2fa_code: "{{ .Config.2fa_code }}"
+    lock_ip: false
+    stay_logged_in: true
+  error:
+    - selector: div.message-error
+  test:
+    path: /
+    selector: a[hx-post^="/logout?auth="]
+
+search:
+  paths:
+    # https://samosa.opensignup.xyz/torrents?sort_by=uploaded_at&sort_order=desc&search=&category_id=3&medium_id=&codec_id=&language=&genre_id=&imdb=&tmdb=
+    - path: torrents
+  inputs:
+    search: "{{ .Keywords }}"
+    sort_by: "{{ .Config.sort }}"
+    sort_order: "{{ .Config.type }}"
+    imdb: "{{ .Query.IMDBID }}"
+    tmdb: "{{ .Query.TMDBID }}"
+
+  rows:
+    selector: table.torrents-table > tbody > tr:has(a.torrent-action-link)
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a.torrent-name-link
+    details:
+      selector: a.torrent-name-link
+      attribute: href
+    download:
+      selector: a.torrent-action-link
+      attribute: href
+    size:
+      selector: td.col-size
+    date:
+      selector: td.col-time-alive
+      filters:
+        - name: timeago
+    grabs:
+      selector: td.col-snatched
+    seeders:
+      selector: td.col-seeders
+    leechers:
+      selector: td.col-leechers
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
