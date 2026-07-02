@@ -17,18 +17,23 @@ using NLog;
 namespace Jackett.Common.Indexers.Definitions
 {
     [ExcludeFromCodeCoverage]
-    public class RevolutionTT : IndexerBase
+    public class RevoPeers : IndexerBase
     {
-        public override string Id => "revolutiontt";
-        public override string Name => "RevolutionTT";
-        public override string Description => "RevolutionTT is a Private site. The Revolution has begun";
+        public override string Id => "revopeers";
+        public override string[] Replaces => new[]
+        {
+            "revolutiontt",
+            "gimmepeers"
+        };
+        public override string Name => "RevoPeers";
+        public override string Description => "RevoPeers is a Private PAY2DL Torrent Tracker for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://revopeers.me/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://revott.me/",
             "https://revolutiontt.me/",
+            "https://www.gimmepeers.com/"
         };
-        public override Encoding Encoding => Encoding.GetEncoding("iso-8859-1");
         public override string Language => "en-US";
         public override string Type => "private";
 
@@ -40,7 +45,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+        public RevoPeers(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(configService: configService,
                    client: wc,
@@ -96,10 +101,12 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping("46", TorznabCatType.AudioOther, "Music/Packs");
             caps.Categories.AddCategoryMapping("29", TorznabCatType.AudioVideo, "MusicVideos");
             caps.Categories.AddCategoryMapping("21", TorznabCatType.TVSport, "Sports");
+            caps.Categories.AddCategoryMapping("70", TorznabCatType.TVUHD, "TV/4K");
             caps.Categories.AddCategoryMapping("43", TorznabCatType.TVOther, "TV/DVDR");
             caps.Categories.AddCategoryMapping("42", TorznabCatType.TVHD, "TV/HDx264");
             caps.Categories.AddCategoryMapping("45", TorznabCatType.TVOther, "TV/Packs");
             caps.Categories.AddCategoryMapping("41", TorznabCatType.TVSD, "TV/SDx264");
+            caps.Categories.AddCategoryMapping("52", TorznabCatType.TVHD, "TV/x265");
             caps.Categories.AddCategoryMapping("7", TorznabCatType.TVSD, "TV/XViD");
             caps.Categories.AddCategoryMapping("9", TorznabCatType.XXX, "XXX");
             caps.Categories.AddCategoryMapping("49", TorznabCatType.XXX, "XXX/0DAY");

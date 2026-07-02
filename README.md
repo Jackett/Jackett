@@ -394,7 +394,6 @@ Prior versions of Jackett are no longer supported.
  * Generation-Free
  * GGPT
  * GigaTorrents
- * GimmePeers (formerly ILT) [PAY2DL]
  * GiroTorrent
  * GreatPosterWall (GPW)
  * HaiDan
@@ -576,7 +575,7 @@ Prior versions of Jackett are no longer supported.
  * RetroFlix
  * RetroMoviesClub (RMC)
  * RetroToon
- * RevolutionTT [![(invite needed)][inviteneeded]](#)
+ * RevoPeers
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
