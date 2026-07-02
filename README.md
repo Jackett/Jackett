@@ -575,7 +575,7 @@ Prior versions of Jackett are no longer supported.
  * RetroFlix
  * RetroMoviesClub (RMC)
  * RetroToon
- * RevolutionTT [![(invite needed)][inviteneeded]](#)
+ * RevoPeers
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
