@@ -483,6 +483,7 @@ Prior versions of Jackett are no longer supported.
  * Mansão dos Animes (MDAN)
  * March [![(invite needed)][inviteneeded]](#)
  * Matrix
+ * Memphis
  * MeseVilág (Fairytale World)
  * MetalGuru [![(invite needed)][inviteneeded]](#)
  * MidnightScene
