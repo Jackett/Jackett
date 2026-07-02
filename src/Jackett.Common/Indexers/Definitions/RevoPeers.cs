@@ -45,7 +45,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
 
-        public RevolutionTT(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
+        public RevoPeers(IIndexerConfigurationService configService, Utils.Clients.WebClient wc, Logger l,
             IProtectionService ps, ICacheService cs)
             : base(configService: configService,
                    client: wc,
