@@ -13,11 +13,14 @@ encoding: UTF-8
 # to fetch current domain use https://www.rantop.org/
 links:
   - https://www.darkfox3.cc/
-  - https://www.vidlox3.cc/
+  - https://www.vidlox4.cc/
   - https://www.sharework2.cc/
   - https://www.worldivx.cc/
   - https://www.wikibox2.cc/
   - https://www.sharkibox.cc/
+  - https://www.workino.cc/
+  - https://www.oxtorrent2.ws/
+  - https://www.torrent911.wiki/
 legacylinks:
   # latest domains list
   - https://www.rantop.xyz/
@@ -38,12 +41,14 @@ legacylinks:
   - https://www.darkflix.cc/
   - https://www.nortorrent.org/
   - https://www.nortorrent.cc/
-  - https://www.vidlox.cc/
   - https://www.darkfox.cc/
   - https://www.darkfox1.cc/
   - https://www.darkfox2.cc/
   - https://www.vidlox1.cc/
   - https://www.vidlox2.cc/
+  - https://vidlox5.cc/
+  - https://ww1.fit/vidlox/
+  - https://www.vidlox3.cc/
   - https://www.sharework.cc/
   - https://www.sharework1.cc/
   - https://www.wikibox.cc/
@@ -121,10 +126,11 @@ search:
 
   fields:
     category:
-      selector: i
-      attribute: class
+      selector: td:nth-child(1)
+      attribute: title
     title_phase1:
       selector: a[href^="/detail/"]
+      remove: span
       filters:
         - name: replace
           args: ["WEBRIP", "WEBDL"]
