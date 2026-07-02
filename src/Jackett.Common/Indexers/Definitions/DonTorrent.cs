@@ -34,9 +34,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             "https://todotorrents.org/",
             "https://tomadivx.net/",
-            "https://verdetorrent.com/",
             "https://seriesblanco.one/",
-            "https://naranjatorrent.com/"
         };
         public override string[] LegacySiteLinks => new[]
         {
@@ -59,6 +57,8 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.promo/", // no longer compatible, switched to JS download
             "https://dontorrent.gift/", // no longer compatible, switched to JS download
             "https://dontorrent.cfd/", // no longer compatible, switched to JS download
+            "https://verdetorrent.com/", // redirects to https://privtr.ee/@DonTorrent
+            "https://naranjatorrent.com/", // redirects to https://privtr.ee/@DonTorrent
         };
         public override string Language => "es-ES";
         public override string Type => "public";
