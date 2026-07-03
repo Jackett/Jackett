@@ -612,6 +612,7 @@ namespace Jackett.Updater
                 "Definitions/newpct-me.yml",
                 "Definitions/nextjav.yml",
                 "Definitions/nexttorrent.yml",
+                "Definitions/nexum-api.yml",
                 "Definitions/nforce.yml",
                 "Definitions/nitro.yml",
                 "Definitions/nnm-club.yml", // renamed to noname-club
