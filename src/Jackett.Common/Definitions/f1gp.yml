@@ -90,7 +90,12 @@ login:
     - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href^="logout.php"]
+
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
 
 search:
   paths:
@@ -112,7 +117,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista > tbody > tr:has(a[href^="download.php?id="])
+    selector: table.lista > tbody > tr:has(a[href*="downloadcheck&id="])
 
   fields:
     category:
@@ -125,9 +130,9 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: onmouseover
+      attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
