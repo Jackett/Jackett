@@ -170,20 +170,20 @@ search:
     files:
       selector: td:nth-child(6)
     date:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
       filters:
         - name: append
           args: " +07:00" # ICT
         - name: dateparse
           args: "dd-MM-yyyyHH:mm:ss zzz"
     size:
-      selector: td:nth-child(9)
+      selector: td:nth-child(8)
     grabs:
-      selector: td:nth-child(10)
+      selector: td:nth-child(9)
     seeders:
-      selector: td:nth-child(11)
+      selector: td:nth-child(10)
     leechers:
-      selector: td:nth-child(12)
+      selector: td:nth-child(11)
     downloadvolumefactor:
       case:
         "td:nth-child(4):contains(\"100%\")": 0
