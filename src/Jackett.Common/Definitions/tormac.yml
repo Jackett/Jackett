@@ -217,18 +217,47 @@ search:
       selector: a[href^="/dl?t="]
       attribute: href
     size:
-      selector: td.tor-size > u
+      selector: a[href^="/dl?t="]
     seeders:
-      selector: td[title="Сиды"] b
+      selector: span.seedmed
       filters:
         - name: replace
           args: ["никогда", "0"]
     leechers:
-      selector: td.leechmed > b
+      selector: span.leechmed
     grabs:
-      selector: td:nth-child(9)
+      selector: span.med
     date:
-      selector: td[title="Добавлен"] > u
+      selector: div > p.small
+      filters:
+        - name: regexp
+          args: "Создан:(.+?)Автор:"
+        - name: replace
+          args: ["Янв", "Jan"]
+        - name: replace
+          args: ["Фев", "Feb"]
+        - name: replace
+          args: ["Мар", "Mar"]
+        - name: replace
+          args: ["Апр", "Apr"]
+        - name: replace
+          args: ["Май", "May"]
+        - name: replace
+          args: ["Июн", "Jun"]
+        - name: replace
+          args: ["Июл", "Jul"]
+        - name: replace
+          args: ["Авг", "Aug"]
+        - name: replace
+          args: ["Сен", "Sep"]
+        - name: replace
+          args: ["Окт", "Oct"]
+        - name: replace
+          args: ["Ноя", "Nov"]
+        - name: replace
+          args: ["Дек", "Dec"]
+        - name: dateparse
+          args: "dd-MMM-yy"
     downloadvolumefactor:
       case:
         img[src$="default/images/tor_gold.gif"]: 0
