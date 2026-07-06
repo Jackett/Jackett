@@ -152,6 +152,8 @@ search:
       selector: span[title="Zaman"]
       filters:
         - name: replace
+          args: ["dk", "minutes"]
+        - name: replace
           args: ["h", "weeks"]
         - name: replace
           args: ["sa", "hours"]
