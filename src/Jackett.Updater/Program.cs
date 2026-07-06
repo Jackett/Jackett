@@ -525,6 +525,7 @@ namespace Jackett.Updater
                 "Definitions/ilcorsaroverde.yml",
                 "Definitions/ilolicon.yml",
                 "Definitions/iloveclassics.yml",
+                "Definitions/infinity-api.yml",
                 "Definitions/infinityt.yml",
                 "Definitions/inperil.yml",
                 "Definitions/irishtv.yml",
