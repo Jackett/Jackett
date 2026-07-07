@@ -820,6 +820,7 @@ namespace Jackett.Updater
                 "Definitions/torrentmax.yml",
                 "Definitions/torrentparadise.yml",
                 "Definitions/torrentproject.yml",
+                "Definitions/torrentqq.yml",
                 "Definitions/torrentquest.yml",
                 "Definitions/torrentrex.yml",
                 "Definitions/torrentsectorcrew.yml",
