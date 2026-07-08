@@ -66,8 +66,6 @@ login:
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
-  error:
-    - selector: td.embedded:has(h2:contains("失败"))
   test:
     path: index.php
     selector: a[href="logout.php"]
