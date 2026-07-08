@@ -814,6 +814,7 @@ namespace Jackett.Updater
                 "Definitions/torrentgalaxy.yml",
                 "Definitions/torrentgalaxyorg.yml", // renamed to torrentgalaxy
                 "Definitions/torrenthane.yml",
+                "Definitions/torrenthr.yml", // // switch to *-API #16943
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentland.yml",
                 "Definitions/torrentland-api.yml",
@@ -849,7 +850,7 @@ namespace Jackett.Updater
                 "Definitions/totallykids.yml",
                 "Definitions/totheglorycookie.yml", // renamed totheglory2fa
                 "Definitions/trackeros-api.yml",
-                "Definitions/trackeros.yml", // switch to *-API #12807
+                "Definitions/trackeros.yml", // switch to *-API #12808
                 "Definitions/trellas.yml", // renamed to magico
                 "Definitions/trupornolabs.yml",
                 "Definitions/tsdb.yml", // renamed to f1gp
