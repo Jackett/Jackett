@@ -69,7 +69,7 @@ settings:
   - name: info_token
     type: info
     label: About your CSRF Token
-    default: "<ol><li>Login to this tracker with your browser</li><li>Open the <b>DevTools</b> panel by pressing <b>F12</b></li><li>Select the <b>Elements</b> tab (Chrome Browser) or <b>Inspector</b> tab (FireFox)</li><li>Press <b>Ctrl+F</b> to search the HTML</li><li>Search for <i>csrf-token</i> and find the first result</li><li><b>Copy</b> the value of the <i>content</i> attribute and <b>Paste</b> here.</li></ol>"
+    default: "<ol><li>From the same place you fetched the cookie,</li><li>Select the <b>Elements</b> tab (Chrome Browser) or <b>Inspector</b> tab (FireFox)</li><li>Press <b>Ctrl+F</b> to search the HTML</li><li>Search for <i>csrf-token</i> and find the first result</li><li><b>Copy</b> the value of the <i>content</i> attribute and <b>Paste</b> here.</li></ol>"
 
   - name: freeleech
     type: checkbox
