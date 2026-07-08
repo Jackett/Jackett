@@ -674,6 +674,7 @@ Prior versions of Jackett are no longer supported.
  * Upscale Vault
  * UTOPIA
  * Vault network
+ * VC-Lib
  * VietMediaF
  * White Angel
  * WinterSakura [![(invite needed)][inviteneeded]](#)
