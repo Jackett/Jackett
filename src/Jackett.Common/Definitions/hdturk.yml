@@ -105,10 +105,7 @@ login:
 
 download:
   before:
-#    pathselector:
-#      selector: button[data-url$="/thanks"]
-#      attribute: data-url
-    path: "{{ re_replace .DownloadUri.AbsoluteUri \"/download\" \"/thanks\" }}"
+    path: "{{ .DownloadUri.AbsoluteUri }}/thanks"
     method: post
   selectors:
     - selector: a[href$="/download"]
@@ -167,7 +164,7 @@ search:
           args: " ago"
         - name: timeago
     download:
-      selector: a[href$="/download"]
+      selector: a[href*="/torrents/"]
       attribute: href
     size:
       selector: span[title="Boyut"]
