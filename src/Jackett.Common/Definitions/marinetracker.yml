@@ -23,6 +23,7 @@ caps:
     - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
     - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
     - {id: 21, cat: Books, desc: "Deckofficer's Library"}
+    - {id: 425, cat: Books, desc: "Deckofficer's Library-ECDIS"}
     - {id: 283, cat: Books, desc: "Deckofficer's Library-Radar at sea"}
     - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}
     - {id: 115, cat: Books, desc: "Deckofficer's Library-Keeping the ship documentation"}
