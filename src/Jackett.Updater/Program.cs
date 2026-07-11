@@ -279,6 +279,7 @@ namespace Jackett.Updater
                 "Definitions/anitoons.yml",
                 "Definitions/aox.yml",
                 "Definitions/apollo.yml", // migrated to C# gazelle base tracker
+                "Definitions/arabtorrents-com.yml",
                 "Definitions/arenabg.yml",
                 "Definitions/archetorrent.yml",
                 "Definitions/asgaard.yml",
