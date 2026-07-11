@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 406, cat: Audio/Video, desc: "音乐MV / Music Videos"}
     - {id: 407, cat: Audio/Lossless, desc: "音乐 / Audio"} # wrongly listed as Sports
     - {id: 408, cat: Audio/Lossless, desc: "音乐 / HQ Audio"}
     - {id: 409, cat: Audio/Other, desc: "其他 / Misc"}
