@@ -21,6 +21,7 @@ caps:
     - {id: 184, cat: TV/Anime, desc: "Anime SD"}
     - {id: 186, cat: TV/Anime, desc: "Anime 4K"}
     # Movie
+    - {id: 217, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 208, cat: Movies/UHD, desc: "Movie 4 K"}
     - {id: 124, cat: Movies, desc: "Movie Pack"}
@@ -157,6 +158,7 @@ search:
 
   rows:
     selector: div.selection_wrap
+
   fields:
     category_p1:
       selector: div.kat_cat_pic_name
