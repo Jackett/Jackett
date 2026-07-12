@@ -518,7 +518,7 @@ Prior versions of Jackett are no longer supported.
  * OurBits (HDPter)
  * P2PBG [PAY2DL]
  * Panda
- * ParabellumHD
+ * ParabellumHD [![(invite needed)][inviteneeded]](#)
  * Party-Tracker
  * PassThePopcorn (PTP) [![(invite needed)][inviteneeded]](#)
  * Peeratiko
