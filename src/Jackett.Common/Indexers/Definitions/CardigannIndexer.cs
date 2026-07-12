@@ -1944,7 +1944,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        protected async Task<WebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        protected async Task<WebResult> HandleRequestAsync(requestBlock request, Dictionary<string, object> variables = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
 
@@ -1980,7 +1980,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");
 
-            var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
+            var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs, headers);
 
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
 
@@ -2079,7 +2079,7 @@ namespace Jackett.Common.Indexers.Definitions
                         beforeBlock.Path = MatchSelector(response, beforeBlock.Pathselector, variables);
                     }
 
-                    response = await handleRequest(beforeBlock, variables, link.ToString());
+                    response = await HandleRequestAsync(beforeBlock, variables, link.ToString(), headers);
                 }
 
                 if (Download.Method == "post")
