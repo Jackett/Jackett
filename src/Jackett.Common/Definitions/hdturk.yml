@@ -14,42 +14,42 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 231, cat: Movies, desc: "FİLMLER"}
-    - {id: 247, cat: Movies, desc: "BLURAY"}
-    - {id: 234, cat: Movies, desc: "NETFLİX"}
-    - {id: 235, cat: Movies, desc: "AMAZON PRİME"}
-    - {id: 237, cat: Movies, desc: "DİSNEY+"}
-    - {id: 239, cat: Movies, desc: "HBOMAX"}
-    - {id: 236, cat: Movies, desc: "TOD"}
-    - {id: 242, cat: Movies, desc: "TV+"}
-    - {id: 240, cat: Movies, desc: "MUBi"}
-    - {id: 243, cat: Movies, desc: "TİVİBU"}
-    - {id: 238, cat: Movies, desc: "GAiN"}
-    - {id: 241, cat: Movies, desc: "TABii"}
-    - {id: 244, cat: Movies, desc: "APPLE TV"}
-    - {id: 245, cat: Movies, desc: "GOOGLE PLAY"}
-    - {id: 246, cat: Movies, desc: "HDTV"}
-    - {id: 248, cat: Movies, desc: "DİĞER"}
+    - {id: 247, cat: Movies, desc: "FİLMLER - BLURAY"}
+    - {id: 234, cat: Movies, desc: "FİLMLER - NETFLİX"}
+    - {id: 235, cat: Movies, desc: "FİLMLER - AMAZON PRİME"}
+    - {id: 237, cat: Movies, desc: "FİLMLER - DİSNEY+"}
+    - {id: 239, cat: Movies, desc: "FİLMLER - HBOMAX"}
+    - {id: 236, cat: Movies, desc: "FİLMLER - TOD"}
+    - {id: 242, cat: Movies, desc: "FİLMLER - TV+"}
+    - {id: 240, cat: Movies, desc: "FİLMLER - MUBi"}
+    - {id: 243, cat: Movies, desc: "FİLMLER - TİVİBU"}
+    - {id: 238, cat: Movies, desc: "FİLMLER - GAiN"}
+    - {id: 241, cat: Movies, desc: "FİLMLER - TABii"}
+    - {id: 244, cat: Movies, desc: "FİLMLER - APPLE TV"}
+    - {id: 245, cat: Movies, desc: "FİLMLER - GOOGLE PLAY"}
+    - {id: 246, cat: Movies, desc: "FİLMLER - HDTV"}
+    - {id: 248, cat: Movies, desc: "FİLMLER - DİĞER"}
     - {id: 249, cat: TV, desc: "DİZİLER"}
-    - {id: 250, cat: TV, desc: "NETFLİX"}
-    - {id: 251, cat: TV, desc: "AMAZON PRİME"}
-    - {id: 252, cat: TV, desc: "DİSNEY+"}
-    - {id: 253, cat: TV, desc: "HBOMAX"}
-    - {id: 254, cat: TV, desc: "TV+"}
-    - {id: 258, cat: TV, desc: "TOD"}
-    - {id: 256, cat: TV, desc: "TABii"}
-    - {id: 255, cat: TV, desc: "GAiN"}
-    - {id: 261, cat: TV, desc: "TİVİBU"}
-    - {id: 260, cat: TV, desc: "HDTV"}
-    - {id: 259, cat: TV, desc: "BLURAY"}
-    - {id: 269, cat: TV, desc: "DİĞER"}
-    - {id: 257, cat: TV, desc: "YERLİ DİZİ"}
+    - {id: 250, cat: TV, desc: "DİZİLER - NETFLİX"}
+    - {id: 251, cat: TV, desc: "DİZİLER - AMAZON PRİME"}
+    - {id: 252, cat: TV, desc: "DİZİLER - DİSNEY+"}
+    - {id: 253, cat: TV, desc: "DİZİLER - HBOMAX"}
+    - {id: 254, cat: TV, desc: "DİZİLER - TV+"}
+    - {id: 258, cat: TV, desc: "DİZİLER - TOD"}
+    - {id: 256, cat: TV, desc: "DİZİLER - TABii"}
+    - {id: 255, cat: TV, desc: "DİZİLER - GAiN"}
+    - {id: 261, cat: TV, desc: "DİZİLER - TİVİBU"}
+    - {id: 260, cat: TV, desc: "DİZİLER - HDTV"}
+    - {id: 259, cat: TV, desc: "DİZİLER - BLURAY"}
+    - {id: 257, cat: TV, desc: "DİZİLER - YERLİ DİZİ"}
+    - {id: 269, cat: TV, desc: "DİZİLER - DİĞER"}
     - {id: 267, cat: PC/Games, desc: "OYUN"}
-    - {id: 268, cat: PC/Games, desc: "PC"}
+    - {id: 268, cat: PC/Games, desc: "OYUN - PC"}
     - {id: 265, cat: PC/0day, desc: "PROGRAM"}
-    - {id: 266, cat: PC/0day, desc: "WİNDOWS"}
+    - {id: 266, cat: PC/0day, desc: "PROGRAM - WİNDOWS"}
     - {id: 262, cat: Audio, desc: "MÜZİK"}
-    - {id: 263, cat: Audio, desc: "DİSKOGRAFİ"}
-    - {id: 264, cat: Audio, desc: "ALBÜM"}
+    - {id: 263, cat: Audio, desc: "MÜZİK - DİSKOGRAFİ"}
+    - {id: 264, cat: Audio, desc: "MÜZİK - ALBÜM"}
 
   modes:
     search: [q]
@@ -70,7 +70,6 @@ settings:
     type: info
     label: About your CSRF Token
     default: "<ol><li>From the same place you fetched the cookie,</li><li>Select the <b>Elements</b> tab (Chrome Browser) or <b>Inspector</b> tab (FireFox)</li><li>Press <b>Ctrl+F</b> to search the HTML</li><li>Search for <i>csrf-token</i> and find the first result</li><li><b>Copy</b> the value of the <i>content</i> attribute and <b>Paste</b> here.</li></ol>"
-
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -93,7 +92,7 @@ settings:
       asc: asc
 
 login:
-  # switched from the form method to the cookie method due to #9270
+  # using the cookie method as the CSRF token is tied to that session
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
