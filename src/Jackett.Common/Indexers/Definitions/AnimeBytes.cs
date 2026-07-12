@@ -259,6 +259,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (!response.ContentString.StartsWith("{")) // not JSON => error
             {
+                if (response.Status is HttpStatusCode.Unauthorized or HttpStatusCode.NotFound)
+                {
+                    throw new ExceptionWithConfigData("Invalid response, please check if your credentials are valid.", ConfigData);
+                }
+
                 throw new ExceptionWithConfigData("Unexpected response (not JSON)", ConfigData);
             }
 
