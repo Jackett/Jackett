@@ -13,80 +13,49 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 37, cat: Other, desc: "Diğer"}
-    - {id: 210, cat: Books/EBook, desc: "E-Kitap"}
-    - {id: 208, cat: Other, desc: "Eğitim"}
-    - {id: 101, cat: Other, desc: "Resim"}
-    - {id: 15, cat: TV, desc: "TV Dizi/Show/Spor"}
-    - {id: 18, cat: TV, desc: "TV Dublaj"}
-    - {id: 81, cat: TV, desc: "TV Show"}
-    - {id: 207, cat: TV/Sport, desc: "TV Spor"}
-    - {id: 17, cat: TV, desc: "TV Yabancı"}
-    - {id: 16, cat: TV, desc: "TV Yerli"}
-    - {id: 19, cat: TV/HD, desc: "TV Yerli HD"}
-    - {id: 170, cat: Movies/HD, desc: "Movies HD"}
-    - {id: 175, cat: Movies/HD, desc: "Movies 1080p Remux DUAL"}
-    - {id: 226, cat: Movies/HD, desc: "Movies 1080p Remux TR"}
-    - {id: 183, cat: Movies/HD, desc: "Movies 1080p Remux Yabancı"}
-    - {id: 174, cat: Movies/3D, desc: "Movies 3D DUAL"}
-    - {id: 180, cat: Movies/3D, desc: "Movies 3D TR"}
-    - {id: 181, cat: Movies/3D, desc: "Movies 3D Yabancı"}
-    - {id: 217, cat: Movies/UHD, desc: "Movies 4K DUAL"}
-    - {id: 224, cat: Movies/UHD, desc: "Movies 4K Remux DUAL"}
-    - {id: 225, cat: Movies/UHD, desc: "Movies 4K Remux Yabanci"}
-    - {id: 218, cat: Movies/UHD, desc: "Movies 4K TR"}
-    - {id: 216, cat: Movies/UHD, desc: "Movies 4K Yabancı"}
-    - {id: 205, cat: Movies/DVD, desc: "Movies DVD DUAL"}
-    - {id: 206, cat: Movies/DVD, desc: "Movies DVD TR/Yerli"}
-    - {id: 219, cat: Movies/DVD, desc: "Movies DVD Yabancı"}
-    - {id: 173, cat: Movies/BluRay, desc: "Movies Full BD"}
-    - {id: 171, cat: Movies/HD, desc: "Movies x264 DUAL"}
-    - {id: 176, cat: Movies/HD, desc: "Movies x264 TR"}
-    - {id: 177, cat: Movies/HD, desc: "Movies x264 Yabancı"}
-    - {id: 172, cat: Movies/HD, desc: "Movies x265 DUAL"}
-    - {id: 178, cat: Movies/HD, desc: "Movies x265 TR"}
-    - {id: 179, cat: Movies/HD, desc: "Movies x265 Yabancı"}
-    - {id: 198, cat: Movies/HD, desc: "Movies XviD DUAL"}
-    - {id: 200, cat: Movies/HD, desc: "Movies XviD TR"}
-    - {id: 202, cat: Movies/HD, desc: "Movies XviD Yabancı"}
-    - {id: 33, cat: Audio, desc: "MÜZİK"}
-    - {id: 34, cat: Audio, desc: "MÜZİK Albüm"}
-    - {id: 35, cat: Audio, desc: "MÜZİK Diskografi"}
-    - {id: 98, cat: Audio, desc: "MÜZİK Single"}
-    - {id: 36, cat: Audio/Video, desc: "MÜZİK Video"}
-    - {id: 56, cat: Console, desc: "OYUN"}
-    - {id: 59, cat: Console, desc: "Konsol"}
-    - {id: 58, cat: PC/Mobile-Android, desc: "Mobil/PDA"}
-    - {id: 57, cat: PC/Games, desc: "PC"}
-    - {id: 52, cat: PC, desc: "PROGRAM"}
-    - {id: 55, cat: PC/Mobile-Android, desc: "Android"}
-    - {id: 223, cat: PC, desc: "Linux"}
-    - {id: 54, cat: PC/Mac, desc: "macOS"}
-    - {id: 53, cat: PC/0day, desc: "Windows"}
-    - {id: 182, cat: Movies/SD, desc: "SD"}
-    - {id: 191, cat: Movies/SD, desc: "x264 DUAL"}
-    - {id: 192, cat: Movies/SD, desc: "x264 TR"}
-    - {id: 193, cat: Movies/SD, desc: "x264 Yabancı"}
-    - {id: 194, cat: Movies/SD, desc: "x265 DUAL"}
-    - {id: 195, cat: Movies/SD, desc: "x265 TR"}
-    - {id: 196, cat: Movies/SD, desc: "x265 Yabancı"}
-    - {id: 201, cat: Movies/SD, desc: "XviD DUAL"}
-    - {id: 197, cat: Movies/SD, desc: "XviD TR"}
-    - {id: 199, cat: Movies/SD, desc: "XviD Yabancı"}
-    - {id: 221, cat: Other, desc: "VIP"}
-    - {id: 85, cat: XXX, desc: "XXX"}
-    - {id: 92, cat: XXX/Other, desc: "XXX E-Magazin"}
-    - {id: 220, cat: XXX/Other, desc: "XXX Hentai"}
-    - {id: 93, cat: XXX, desc: "XXX Movie"}
-    - {id: 95, cat: XXX/Pack, desc: "XXX Packs"}
-    - {id: 96, cat: XXX/ImageSet, desc: "XXX Pics"}
+    - {id: 231, cat: Movies, desc: "FİLMLER"}
+    - {id: 247, cat: Movies, desc: "FİLMLER - BLURAY"}
+    - {id: 234, cat: Movies, desc: "FİLMLER - NETFLİX"}
+    - {id: 235, cat: Movies, desc: "FİLMLER - AMAZON PRİME"}
+    - {id: 237, cat: Movies, desc: "FİLMLER - DİSNEY+"}
+    - {id: 239, cat: Movies, desc: "FİLMLER - HBOMAX"}
+    - {id: 236, cat: Movies, desc: "FİLMLER - TOD"}
+    - {id: 242, cat: Movies, desc: "FİLMLER - TV+"}
+    - {id: 240, cat: Movies, desc: "FİLMLER - MUBi"}
+    - {id: 243, cat: Movies, desc: "FİLMLER - TİVİBU"}
+    - {id: 238, cat: Movies, desc: "FİLMLER - GAiN"}
+    - {id: 241, cat: Movies, desc: "FİLMLER - TABii"}
+    - {id: 244, cat: Movies, desc: "FİLMLER - APPLE TV"}
+    - {id: 245, cat: Movies, desc: "FİLMLER - GOOGLE PLAY"}
+    - {id: 246, cat: Movies, desc: "FİLMLER - HDTV"}
+    - {id: 248, cat: Movies, desc: "FİLMLER - DİĞER"}
+    - {id: 249, cat: TV, desc: "DİZİLER"}
+    - {id: 250, cat: TV, desc: "DİZİLER - NETFLİX"}
+    - {id: 251, cat: TV, desc: "DİZİLER - AMAZON PRİME"}
+    - {id: 252, cat: TV, desc: "DİZİLER - DİSNEY+"}
+    - {id: 253, cat: TV, desc: "DİZİLER - HBOMAX"}
+    - {id: 254, cat: TV, desc: "DİZİLER - TV+"}
+    - {id: 258, cat: TV, desc: "DİZİLER - TOD"}
+    - {id: 256, cat: TV, desc: "DİZİLER - TABii"}
+    - {id: 255, cat: TV, desc: "DİZİLER - GAiN"}
+    - {id: 261, cat: TV, desc: "DİZİLER - TİVİBU"}
+    - {id: 260, cat: TV, desc: "DİZİLER - HDTV"}
+    - {id: 259, cat: TV, desc: "DİZİLER - BLURAY"}
+    - {id: 257, cat: TV, desc: "DİZİLER - YERLİ DİZİ"}
+    - {id: 269, cat: TV, desc: "DİZİLER - DİĞER"}
+    - {id: 267, cat: PC/Games, desc: "OYUN"}
+    - {id: 268, cat: PC/Games, desc: "OYUN - PC"}
+    - {id: 265, cat: PC/0day, desc: "PROGRAM"}
+    - {id: 266, cat: PC/0day, desc: "PROGRAM - WİNDOWS"}
+    - {id: 262, cat: Audio, desc: "MÜZİK"}
+    - {id: 263, cat: Audio, desc: "MÜZİK - DİSKOGRAFİ"}
+    - {id: 264, cat: Audio, desc: "MÜZİK - ALBÜM"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     music-search: [q]
-    book-search: [q]
 
 settings:
   - name: cookie
@@ -94,84 +63,117 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: csrf_token
+    type: text
+    label: CSRF Token
+  - name: info_token
+    type: info
+    label: About your CSRF Token
+    default: "<ol><li>From the same place you fetched the cookie,</li><li>Select the <b>Elements</b> tab (Chrome Browser) or <b>Inspector</b> tab (FireFox)</li><li>Press <b>Ctrl+F</b> to search the HTML</li><li>Search for <i>csrf-token</i> and find the first result</li><li><b>Copy</b> the value of the <i>content</i> attribute and <b>Paste</b> here.</li></ol>"
   - name: freeleech
     type: checkbox
-    label: Filter freeleech only
+    label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
 
 login:
-  # switched from the form method to the cookie method due to #9270
+  # using the cookie method as the CSRF token is tied to that session
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
-    selector: a[href*="/logout.php?logouthash="]
+    path: /
+    selector: form[action$="/logout"]
 
 download:
   before:
-    path: takethanks.php
+    path: "{{ .DownloadUri.AbsoluteUri }}/thanks"
     method: post
-    inputs:
-      torrentid: "{{ .DownloadUri.Query.id }}"
   selectors:
-    - selector: a[href*="download.php?id="]
+    - selector: a[href$="/download"]
       attribute: href
 
 search:
   paths:
-    - path: browse.php
-  keywordsfilters:
-    - name: re_replace # E01 to BL01
-      args: ["(?i)\\bE(\\d+)\\b", "E$1"]
+    - path: torrents
   inputs:
-    # does not support multi categories so defaulting to ALL
     do: search
     keywords: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
-    category: 0
-    # t_name, t_description, t_both, t_uploader, t_genre
+    cats: "{{ range .Categories }}{{.}},{{end}}"
+    # t_both, t_name, t_description, t_uploader, t_genre
     search_type: "{{ if .Query.IMDBID }}t_genre{{ else }}t_name{{ end }}"
-    include_dead_torrents: yes
-    # does not return imdb link in results
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    f_sort: "{{ .Config.sort }}"
+    f_order: "{{ .Config.type }}"
+
+  headers:
+    x-csrf-token: ["{{ .Config.csrf_token }}"]
 
   rows:
-    selector: "table#sortabletable tbody tr:has(div[id^=\"port-target-\"]){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
+    selector: div#torrent-list > div
 
   fields:
     title:
-      selector: div[id^="port-target-"] a
-      filters:
-        - name: re_replace # BL01 to E01
-          args: ["(?i)\\bBL(\\d+)\\b", " E$1 "]
+      selector: a[href*="/torrents/"]
     details:
-      selector: div[id^="port-target-"] a
+      selector: a[href*="/torrents/"]
       attribute: href
     category:
-      selector: a[href*="browse.php?category="]
+      selector: a[href*="torrents?category="]
       attribute: href
       filters:
         - name: querystring
           args: category
     poster:
-      selector: div[id^="port-content-"] img
+      selector: span.hidden img
       attribute: src
+    imdbid:
+      selector: a[href*="imdb.com/title/tt"]
+      attribute: href
     date:
-      selector: td:nth-child(2) > div:nth-last-child(1)
-      # auto adjusted by site account profile
+      selector: span[title="Zaman"]
       filters:
-        - name: dateparse
-          args: "dd-MM-yyyy HH:mm"
+        - name: replace
+          args: ["dk", "minutes"]
+        - name: replace
+          args: ["h", "weeks"]
+        - name: replace
+          args: ["sa", "hours"]
+        - name: replace
+          args: ["ay", "months"]
+        - name: replace
+          args: ["y", "years"]
+        - name: replace
+          args: ["g", "days"]
+        - name: append
+          args: " ago"
+        - name: timeago
     download:
-      selector: div[id^="port-target-"] a
+      selector: a[href*="/torrents/"]
       attribute: href
     size:
-      selector: td:nth-child(5)
+      selector: span[title="Boyut"]
     grabs:
-      selector: td:nth-child(6)
+      selector: span[title="Tamamlanma (snatch)"]
     seeders:
-      selector: td:nth-child(7)
+      selector: span[title="Gönderen"]
     leechers:
-      selector: td:nth-child(8)
+      selector: span[title="İndiren"]
     downloadvolumefactor:
       case:
         img[src$="/freedownload.gif"]: 0
@@ -184,6 +186,6 @@ search:
     minimumratio:
       text: 1.0
     minimumseedtime:
-      # 3.75days (as seconds = 3.75 x 24 x 60 x 60)
-      text: 324000
+      # 140 hours (as seconds = 140 x 60 x 60)
+      text: 504000
 # TS Special Edition v.7.5
