@@ -170,4 +170,10 @@ search:
     description:
       selector: td:nth-child(2)
       remove: a, b, font, img, span
+# global MR is 0.8 but torrents must be seeded for 1 days regardless of ratio
+#    minimumratio:
+#      text: 0.8
+    minimumseedtime:
+      # 1 days (as seconds = 24 x 60 x 60)
+      text: 86400
 # NexusPHP v1.10.2 2026-04-11
