@@ -350,6 +350,7 @@ Prior versions of Jackett are no longer supported.
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
+ * DaXiangJiao (大香蕉)
  * Depth Studio
  * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
