@@ -8,7 +8,8 @@ language: fr-FR
 type: semi-private
 encoding: UTF-8
 links:
-  - https://hydracker.com/
+  - https://hydracker.com/ # French version
+  - https://hydracker.net/ # English version
 legacylinks:
   - https://darkiworld16.com/
   - https://darkiworld.com/
