@@ -47,6 +47,7 @@ caps:
     - {id: 37, cat: TV/Sport, desc: "Porsche Mobil 1 Supercup"}
     - {id: 38, cat: TV/Sport, desc: "Skateboarding"}
     - {id: 39, cat: TV/Sport, desc: "Baseball-MLB"}
+    - {id: 40, cat: TV/Sport, desc: "World Endurance Championship"}
 
   modes:
     search: [q]
