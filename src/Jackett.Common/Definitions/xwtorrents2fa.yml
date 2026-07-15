@@ -1,7 +1,7 @@
 ---
-id: xwtorrents
-name: XWtorrents
-description: "XtremeWrestlingTorrents (XWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA"
+id: xwtorrents2fa
+name: XWtorrents2FA
+description: "XtremeWrestlingTorrents (XWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING / MMA. This indexer uses cookie login for 2FA."
 language: en-US
 type: private
 encoding: windows-1252
@@ -80,16 +80,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_2fa
-    type: info
-    label: "About 2FA"
-    default: "If you want to enable 2FA then use the XWtorrents2FA indexer instead."
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -118,16 +113,10 @@ settings:
     type: info_flaresolverr
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: /
-  error:
-    - selector: table.main:contains("Login failed!")
-      message:
-        selector: table tr td.text
+    cookie: "{{ .Config.cookie }}"
   test:
     path: browse.php
     selector: a[href="logout.php"]
