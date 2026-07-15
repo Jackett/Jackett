@@ -48,6 +48,12 @@ caps:
     - {id: 38, cat: TV/Sport, desc: "Skateboarding"}
     - {id: 39, cat: TV/Sport, desc: "Baseball-MLB"}
     - {id: 40, cat: TV/Sport, desc: "World Endurance Championship"}
+    - {id: 41, cat: TV/Sport, desc: "FIM Speedway Gp"}
+    - {id: 42, cat: TV/Sport, desc: "FIM MXGP"}
+    - {id: 43, cat: TV/Sport, desc: "Supercars"}
+    - {id: 44, cat: TV/Sport, desc: "WSBK"}
+    - {id: 46, cat: TV/Sport, desc: "NHRA"}
+    - {id: 47, cat: TV/Sport, desc: "Boat Racing"}
 
   modes:
     search: [q]
