@@ -127,7 +127,7 @@ search:
       selector: td:nth-child(5)
       filters:
         - name: append
-          args: " -02:00" # GMT
+          args: " -02:00" # WGST
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:
