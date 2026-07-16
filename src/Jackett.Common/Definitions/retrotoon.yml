@@ -12,7 +12,6 @@ caps:
   categorymappings:
     # from https://www.retrotoon.world/torznab.php?t=caps
     - {id: 2000, cat: Movies, desc: "Movies"}
-    - {id: 2070, cat: Movies, desc: "Movies/Anime"}
     - {id: 3000, cat: Audio, desc: "Audio"}
     - {id: 3030, cat: Audio, desc: "Soundtrack"}
     - {id: 5000, cat: TV, desc: "TV"}
@@ -21,21 +20,6 @@ caps:
     - {id: 7000, cat: Books, desc: "Books"}
     - {id: 7030, cat: Books/Comics, desc: "Comics"}
     - {id: 8000, cat: XXX, desc: "Adult"}
-    - {id: 1, cat: Movies, desc: "Retro"}
-    - {id: 2, cat: TV, desc: "Modern"}
-    - {id: 3, cat: Movies, desc: "Feature"}
-    - {id: 4, cat: TV/Anime, desc: "Anime"}
-    - {id: 5, cat: TV/Anime, desc: "OVA"}
-    - {id: 6, cat: TV, desc: "Shorts"}
-    - {id: 7, cat: Movies, desc: "Indie"}
-    - {id: 8, cat: XXX, desc: "Adult"}
-    - {id: 9, cat: TV, desc: "CGI"}
-    - {id: 10, cat: Other, desc: "Clay"}
-    - {id: 11, cat: Books/Comics, desc: "Comics"}
-    - {id: 12, cat: Books/Comics, desc: "Manga"}
-    - {id: 13, cat: Other, desc: "Art"}
-    - {id: 14, cat: Audio, desc: "OST"}
-    - {id: 15, cat: TV/Other, desc: "Ads"}
 
   modes:
     search: [q]
