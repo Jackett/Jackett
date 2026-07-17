@@ -42,6 +42,7 @@ caps:
     - {id: 24, cat: Console, desc: "Spiel > Konsole"}
     - {id: 126, cat: Console/Other, desc: "Spiel > Mobil"}
     - {id: 121, cat: Console, desc: "Spiel > Wimmelbild"}
+    - {id: 151, cat: TV/Sport, desc: "Sport > UHD"}
     - {id: 61, cat: TV/Sport, desc: "Sport > HD"}
     - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
     - {id: 96, cat: Books/Mags, desc: "ePaper > Zeitungen"}
