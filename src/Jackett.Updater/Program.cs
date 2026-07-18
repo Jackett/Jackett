@@ -661,6 +661,7 @@ namespace Jackett.Updater
                 "Definitions/plusteca.yml",
                 "Definitions/polishsource.yml",
                 "Definitions/polishtracker.yml",
+                "Definitions/pornbay.yml",
                 "Definitions/pornbits.yml",
                 "Definitions/pornbytes-api.yml",
                 "Definitions/pornforall.yml",
