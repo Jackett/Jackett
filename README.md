@@ -83,6 +83,7 @@ Prior versions of Jackett are no longer supported.
  * 1337x
  * 52BT
  * ACG.RIP
+ * Anibt
  * AniLibria
  * AniRena
  * AniSource
