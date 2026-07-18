@@ -451,6 +451,7 @@ namespace Jackett.Updater
                 "Definitions/frozenlayer.yml",
                 "Definitions/fsm.yml",
                 "Definitions/fullmixmusic.yml",
+                "Definitions/funkytorrents.yml",
                 "Definitions/funreleases.yml",
                 "Definitions/fusionmayhem.yml",
                 "Definitions/gainbound.yml",

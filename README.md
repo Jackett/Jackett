@@ -382,7 +382,6 @@ Prior versions of Jackett are no longer supported.
  * Flood (FLD)
  * Free Farm (自由农场)
  * FunFile (FF)
- * FunkyTorrents (FT) [![(invite needed)][inviteneeded]](#)
  * funZone
  * FutureTorrent [PAY2DL]
  * Fuzer (FZ)
