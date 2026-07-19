@@ -54,7 +54,7 @@ namespace Jackett.Test.Common.Indexers
             Assert.AreEqual(null, firstRelease.InfoHash);
             Assert.AreEqual("https://image.tmdb.org/t/p/w92/iBjkm6oxTPrvNkzr63cmnrpsQPR.jpg", firstRelease.Poster.ToString());
             Assert.AreEqual(2021, firstRelease.PublishDate.Year);
-            Assert.AreEqual(17964744704, firstRelease.Size);
+            Assert.AreEqual(17964744495L, firstRelease.Size);
             Assert.AreEqual(27, firstRelease.Seeders);
             Assert.AreEqual(30, firstRelease.Peers);
             Assert.AreEqual(1, firstRelease.Files);
@@ -63,7 +63,7 @@ namespace Jackett.Test.Common.Indexers
             Assert.AreEqual(1, firstRelease.UploadVolumeFactor);
             Assert.AreEqual(null, firstRelease.MinimumRatio);
             Assert.AreEqual(345600, firstRelease.MinimumSeedTime);
-            Assert.AreEqual(451.73625183105469, firstRelease.Gain);
+            Assert.AreEqual(451.7362465756014d, firstRelease.Gain);
             Assert.AreEqual(9115530, firstRelease.Imdb);
             Assert.AreEqual(null, firstRelease.RageID);
             Assert.AreEqual(601470, firstRelease.TMDb);
