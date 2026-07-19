@@ -1,0 +1,40 @@
+{
+  "id": 1,
+  "slug": "heroe-de-la-libertad",
+  "title": "Héroe de la Libertad",
+  "original_title": "Hero of Liberty",
+  "year": 2024,
+  "type": "pelicula",
+  "downloads": [
+    {
+      "download_link": "magnet:?xt=urn:btih:AAA1111111111111111111111111111111111111&dn=hero-1080p",
+      "quality": "1080p",
+      "language": "Latino",
+      "size": "3.80 GB",
+      "subs": 1,
+      "date": "20240105",
+      "download_type": "link",
+      "total_download": "0"
+    },
+    {
+      "download_link": "magnet:?xt=urn:btih:BBB2222222222222222222222222222222222222&dn=hero-720p",
+      "quality": "720p",
+      "language": "Latino/Inglés",
+      "size": "1.50 GB",
+      "subs": 0,
+      "date": "20240106",
+      "download_type": "link",
+      "total_download": "0"
+    },
+    {
+      "download_link": "https://example.com/dl/hero-4k.torrent",
+      "quality": "2160p",
+      "language": "Castellano",
+      "size": "12.00 GB",
+      "subs": 1,
+      "date": "20240107",
+      "download_type": "link",
+      "total_download": "0"
+    }
+  ]
+}
