@@ -97,7 +97,7 @@ search:
       args: ["(?i)\\b(?:[SE]\\d{1,4}){1,2}\\b\\s?", ""] # remove SXXEXX or SXX from search
 
   rows:
-    selector: "tr.torrent, tr.group_torrent:not(.season_header)"
+    selector: "tr.torrent, tr.group_torrent:not(.season_header){{ if .Config.freeleech }}:has(strong.free){{ else }}{{ end }}"
 
   fields:
     category_raw:
