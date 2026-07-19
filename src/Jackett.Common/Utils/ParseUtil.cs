@@ -176,12 +176,12 @@ namespace Jackett.Common.Utils
             return (long)value;
         }
 
-        public static long BytesFromTB(double tb) => BytesFromGB(tb * 1024f);
+        public static long BytesFromTB(double tb) => BytesFromGB(tb * 1024d);
 
-        public static long BytesFromGB(double gb) => BytesFromMB(gb * 1024f);
+        public static long BytesFromGB(double gb) => BytesFromMB(gb * 1024d);
 
-        public static long BytesFromMB(double mb) => BytesFromKB(mb * 1024f);
+        public static long BytesFromMB(double mb) => BytesFromKB(mb * 1024d);
 
-        public static long BytesFromKB(double kb) => (long)(kb * 1024f);
+        public static long BytesFromKB(double kb) => (long)(kb * 1024d);
     }
 }
