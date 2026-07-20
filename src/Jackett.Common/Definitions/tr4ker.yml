@@ -90,7 +90,7 @@ login:
 
 search:
   paths:
-    - path: api/torznab
+    - path: api/torznab/all
       response:
         type: xml
 
