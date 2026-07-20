@@ -54,6 +54,9 @@ caps:
     - {id: 44, cat: TV/Sport, desc: "WSBK"}
     - {id: 46, cat: TV/Sport, desc: "NHRA"}
     - {id: 47, cat: TV/Sport, desc: "Boat Racing"}
+    - {id: 48, cat: TV/Sport, desc: "F1 Complete Packs"}
+    - {id: 49, cat: TV/Sport, desc: "GAA"}
+    - {id: 51, cat: TV/Sport, desc: "IndyNXT"}
 
   modes:
     search: [q]
