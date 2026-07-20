@@ -143,6 +143,11 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  selectors:
+    - selector: a[href^="download.php?id="]
+      attribute: href
+
 search:
   paths:
     # https://oldgreektracker.xyz/index.php?page=torrents&search=&category=0&active=0
@@ -163,7 +168,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="download.php?id="]):has(img[title="Locked"])
+    selector: table.lista[width="100%"] > tbody > tr:has(a[href*="downloadcheck&id="]):has(img[title="Locked"])
 
   fields:
     category:
@@ -178,7 +183,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=downloadcheck&id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
