@@ -13,30 +13,58 @@ caps:
   categorymappings:
     # from https://www.yggreborn.org/api?t=caps&apikey=YOUR-PASSKEY
     - {id: 1000, cat: PC/Games, desc: "PC/Games"}
+    - {id: 1100, cat: PC/Games, desc: "PC/Games/Windows"}
+    - {id: 1101, cat: Console, desc: "PC/Games/Nintendo"}
+    - {id: 1102, cat: Console, desc: "PC/Games/Sony"}
+    - {id: 1103, cat: PC/Games, desc: "PC/Games/Microsoft"}
+    - {id: 1104, cat: PC/Games, desc: "PC/Games/Linux"}
+    - {id: 1105, cat: PC/Games, desc: "PC/Games/macOS"}
+    - {id: 1106, cat: Console, desc: "PC/Games/Smartphone"}
+    - {id: 1107, cat: Console, desc: "PC/Games/Tablette"}
+    - {id: 1108, cat: Console, desc: "PC/Games/Autre"}
+    - {id: 1110, cat: PC/Games, desc: "PC/Games/Émulateurs"}
+    - {id: 1111, cat: PC/Games, desc: "PC/Games/ROMs"}
     - {id: 2000, cat: Movies, desc: "Movies"}
-    - {id: 2010, cat: Movies/Foreign, desc: "Movies/Foreign"}
-    - {id: 2020, cat: Movies/Other, desc: "Movies/Other"}
-    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
-    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
-    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
-    - {id: 2050, cat: Movies/BluRay, desc: "Movies/BluRay"}
-    - {id: 2060, cat: Movies/3D, desc: "Movies/3D"}
-    - {id: 2070, cat: Movies/DVD, desc: "Movies/DVD"}
-    - {id: 2080, cat: Movies/WEB-DL, desc: "Movies/WEB-DL"}
+    - {id: 2100, cat: Movies, desc: "Movies/Film"}
+    - {id: 2101, cat: Movies, desc: "Movies/Animation"}
+    - {id: 2102, cat: Movies, desc: "Movies/Documentaire"}
+    - {id: 2103, cat: Movies, desc: "Movies/Concert"}
+    - {id: 2104, cat: Movies, desc: "Movies/Sport"}
+    - {id: 2105, cat: Movies, desc: "Movies/Spectacle"}
+    - {id: 2106, cat: Movies, desc: "Movies/Vidéoclips"}
     - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3100, cat: Audio, desc: "Audio/Musique"}
+    - {id: 3101, cat: Audio, desc: "Audio/Podcast / Radio"}
+    - {id: 3102, cat: Audio, desc: "Audio/Samples"}
+    - {id: 3103, cat: Audio, desc: "Audio/Karaoké"}
     - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 4100, cat: PC, desc: "PC/Windows"}
+    - {id: 4101, cat: PC, desc: "PC/macOS"}
+    - {id: 4102, cat: PC, desc: "PC/Linux"}
+    - {id: 4103, cat: PC, desc: "PC/Smartphone"}
+    - {id: 4104, cat: PC, desc: "PC/Tablette"}
+    - {id: 4105, cat: PC, desc: "PC/Formation"}
+    - {id: 4106, cat: PC, desc: "PC/Autre"}
+    - {id: 4110, cat: PC, desc: "PC/GPS Applications"}
+    - {id: 4111, cat: PC, desc: "PC/GPS Cartes"}
+    - {id: 4112, cat: PC, desc: "PC/GPS Divers"}
     - {id: 5000, cat: TV, desc: "TV"}
-    - {id: 5010, cat: TV/WEB-DL, desc: "TV/WEB-DL"}
-    - {id: 5020, cat: TV/Foreign, desc: "TV/Foreign"}
-    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
-    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
-    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
-    - {id: 5050, cat: TV/Other, desc: "TV/Other"}
-    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
-    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
-    - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
+    - {id: 5100, cat: TV, desc: "TV/Série TV"}
+    - {id: 5101, cat: TV, desc: "TV/Animation série"}
+    - {id: 5102, cat: TV, desc: "TV/Émission TV"}
     - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7100, cat: Books, desc: "Books/Livres"}
+    - {id: 7101, cat: Books, desc: "Books/Presse"}
+    - {id: 7102, cat: Books, desc: "Books/Bandes dessinées"}
+    - {id: 7103, cat: Books, desc: "Books/Mangas"}
+    - {id: 7104, cat: Books, desc: "Books/Comics"}
+    - {id: 7105, cat: Books, desc: "Books/Livres audio"}
     - {id: 8000, cat: Other, desc: "Other"}
+    - {id: 8100, cat: Other, desc: "Other/Objets 3D"}
+    - {id: 8101, cat: Other, desc: "Other/Personnages 3D"}
+    - {id: 8110, cat: Other, desc: "Other/Scripts PHP / CMS"}
+    - {id: 8111, cat: Other, desc: "Other/WordPress"}
+    - {id: 8112, cat: Other, desc: "Other/Divers"}
 
   modes:
     search: [q]
