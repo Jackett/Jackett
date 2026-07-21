@@ -5,6 +5,7 @@ description: "Torr9 is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERA
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 4 # 15 request per minute limitation
 links:
   - https://torr9.net/
 legacylinks:
