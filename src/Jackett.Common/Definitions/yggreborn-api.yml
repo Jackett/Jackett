@@ -52,6 +52,12 @@ caps:
     - {id: 5100, cat: TV, desc: "TV/Série TV"}
     - {id: 5101, cat: TV, desc: "TV/Animation série"}
     - {id: 5102, cat: TV, desc: "TV/Émission TV"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+#    - {id: 6000, cat: XXX, desc: "XXX/Films"}
+    - {id: 6001, cat: XXX, desc: "XXX/Images"}
+    - {id: 6002, cat: XXX, desc: "XXX/Hentai"}
+    - {id: 6003, cat: XXX, desc: "XXX/Ebooks"}
+    - {id: 6004, cat: XXX, desc: "XXX/Jeux"}
     - {id: 7000, cat: Books, desc: "Books"}
     - {id: 7100, cat: Books, desc: "Books/Livres"}
     - {id: 7101, cat: Books, desc: "Books/Presse"}
