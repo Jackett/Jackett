@@ -20,6 +20,7 @@ caps:
     - {id: 7000, cat: Books, desc: "Books"}
     - {id: 7030, cat: Books/Comics, desc: "Comics"}
     - {id: 8000, cat: TV/Anime, desc: "Adult Animation"}
+    - {id: 100008, cat: TV/Anime, desc: "Adult Animation"}
 
   modes:
     search: [q]
@@ -60,11 +61,6 @@ search:
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
     limit: 100
-
-  keywordsfilters:
-    # replace spaces between words with percent wildcard
-    - name: re_replace
-      args: ["\\W+", "%"]
 
   rows:
     selector: rss > channel > item
