@@ -1,0 +1,8 @@
+@import 'bootstrap/dist/css/bootstrap-reboot.css';
+@import 'bootstrap/dist/css/bootstrap.css';
+@import url('datatables.net-bs5');
+@import 'bootstrap-multiselect/dist/css/bootstrap-multiselect.css';
+@import '@yaireo/tagify/dist/tagify.css';
+@import '@fortawesome/fontawesome-free/css/all.css';
+
+@import './custom.css';
