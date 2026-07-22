@@ -19,7 +19,7 @@ caps:
     - {id: 5080, cat: TV/Documentary, desc: "TV/Documentary"}
     - {id: 7000, cat: Books, desc: "Books"}
     - {id: 7030, cat: Books/Comics, desc: "Comics"}
-    - {id: 8000, cat: XXX, desc: "Adult"}
+    - {id: 8000, cat: TV/Anime, desc: "Adult Animation"}
 
   modes:
     search: [q]
