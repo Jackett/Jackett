@@ -215,4 +215,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# json TorrentHR v2.0 (based on UNIT3D 9.2.0)
+# json TorrentHR v2.2 (based on UNIT3D 9.2.0)
