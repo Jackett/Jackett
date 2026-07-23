@@ -48,6 +48,7 @@ caps:
     - {id: 12, cat: PC/0day, desc: "App Win"}
     # Game
     - {id: 120, cat: Console/PS3, desc: "Game PlayStation"}
+    - {id: 218, cat: Console/Other, desc: "Game Nintendo Switch"}
     - {id: 16, cat: Console, desc: "Game Wimmelbild"}
     - {id: 17, cat: PC/Games, desc: "Game PC"}
     - {id: 20, cat: Console/PSP, desc: "Game PSP"}
