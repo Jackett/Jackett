@@ -47,8 +47,8 @@ settings:
     label: Order requested from site
     default: DESC
     options:
-      desc: DESC
-      asc: ASC
+      DESC: desc
+      ASC: asc
 
 login:
   path: takelogin.php
