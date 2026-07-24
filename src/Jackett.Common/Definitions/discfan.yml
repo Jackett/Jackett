@@ -195,4 +195,4 @@ search:
           args: "cat={{ .Result.category_title }} - "
     minimumratio:
       text: 0.9
-# NexusPHP v1.10.3 2026-06-12
+# NexusPHP v1.10.3 2026-06-28
