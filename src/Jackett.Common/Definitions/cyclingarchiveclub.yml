@@ -85,6 +85,8 @@ search:
     # 0 all, 2 English, 6 Other, etc.
     language: 0
     freebrowse: "{{ if .Config.freeleech }}Free{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+    d: "{{ .Config.type }}"
 
   rows:
     selector: table[width="95%"] > tbody > tr.trhover
