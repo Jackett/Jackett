@@ -33,7 +33,23 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: DESC
+    options:
+      DESC: DESC
+      ASC: ASC
+      
 login:
   path: takelogin.php
   method: post
