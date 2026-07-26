@@ -15,6 +15,13 @@ caps:
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: PC, desc: "Apps"}
     - {id: 5, cat: Console, desc: "Games"}
+    - {id: 7, cat: TV/Sport, desc: "Boxing"}
+    - {id: 9, cat: TV/Sport, desc: "Wresting"}
+    - {id: 10, cat: TV/Sport, desc: "formula 1"}
+    - {id: 13, cat: TV/Sport, desc: "Snooker"}
+    - {id: 15, cat: TV/Sport, desc: "Bare Knuckle Fighting Championship"}
+    - {id: 17, cat: Audio/Lossless, desc: "Music Flac"}
+    - {id: 20, cat: TV, desc: "Tv/Packs"}
 
   modes:
     search: [q]
