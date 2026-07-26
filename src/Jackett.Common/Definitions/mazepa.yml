@@ -291,6 +291,7 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     size:
       selector: a[href^="./dl.php?id="]
     seeders:
