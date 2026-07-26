@@ -71,6 +71,7 @@ caps:
     - {id: 19, cat: TV/HD, desc: "TV HD"}
     - {id: 16, cat: TV, desc: "TV Pack"}
     - {id: 17, cat: TV/SD, desc: "TV SD"}
+    - {id: 39, cat: Books/Mags, desc: "Magazines"}
 
   modes:
     search: [q]
