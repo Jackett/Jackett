@@ -244,7 +244,6 @@ Prior versions of Jackett are no longer supported.
  * themixingbowl (TMB)
  * Toloka
  * TorrentMasters
- * TR4KER
  * TrahT
  * TribalMixes
  * Union Fansub
@@ -654,6 +653,7 @@ Prior versions of Jackett are no longer supported.
  * Torrenting (TT)
  * TorrentLeech (TL)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
+ * TR4KER
  * TrackerMK
  * TrackerZero [PAY2DL]
  * TranceTraffic
