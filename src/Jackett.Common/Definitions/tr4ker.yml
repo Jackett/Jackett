@@ -137,9 +137,6 @@ search:
     download:
       selector: enclosure
       attribute: url
-    infohash:
-      selector: "[name=infohash]"
-      attribute: value
     imdbid:
       selector: "[name=imdbid]"
       attribute: value
