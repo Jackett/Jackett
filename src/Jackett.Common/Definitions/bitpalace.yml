@@ -40,7 +40,7 @@ caps:
     - {id: 10, cat: XXX/ImageSet, desc: "XXX KÉPEK"}
     - {id: 11, cat: XXX/XviD, desc: "XXX XVID"}
     - {id: 19, cat: Audio, desc: "ZENE ENG"}
-    - {id: 20, cat: Audio, desc: "ZENE MP3"}
+    - {id: 20, cat: Audio, desc: "ZENE HUN"}
 
   modes:
     search: [q]
