@@ -20,6 +20,7 @@ caps:
     - {id: 10, cat: TV/Sport, desc: "formula 1"}
     - {id: 13, cat: TV/Sport, desc: "Snooker"}
     - {id: 15, cat: TV/Sport, desc: "Bare Knuckle Fighting Championship"}
+    - {id: 16, cat: Audio/MP3, desc: "Music mp3"}
     - {id: 17, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 20, cat: TV, desc: "Tv/Packs"}
 
