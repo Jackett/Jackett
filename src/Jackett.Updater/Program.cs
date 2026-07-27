@@ -822,6 +822,7 @@ namespace Jackett.Updater
                 "Definitions/torrentkim.yml",
                 "Definitions/torrentland.yml",
                 "Definitions/torrentland-api.yml",
+                "Definitions/torrentleech-pl.yml",
                 "Definitions/torrentmax.yml",
                 "Definitions/torrentparadise.yml",
                 "Definitions/torrentproject.yml",
