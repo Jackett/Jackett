@@ -38,8 +38,6 @@ search:
       args: ["(?i)E(\\d{2,3})", " $1 "]
   inputs:
     s: "{{ .Keywords }}"
-    x: 0
-    y: 0
 
   rows:
     selector: "#principal .miniboxs-ficha li:has(span:nth-of-type(2))"
