@@ -109,7 +109,7 @@ settings:
   - name: info_novpn
     type: info
     label: VPN Not Allowed
-    default: "You may be banned if you use a VPN, proxy, TOR or data center to access the TeamOS web site.​ This mean all brands of VPNS, no exceptions!!"
+    default: "You may be banned if you use a VPN, proxy, TOR or data center to access the TeamOS web site. This mean all brands of VPNS, no exceptions!!"
   # using cookie method because login page is dynamically generated using JS #5572
   - name: cookie
     type: text
@@ -145,9 +145,13 @@ search:
   paths:
     # 25 results per page
     - path: "torrents/?filename={{ .Keywords }}&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}"
+      followredirect: true
     - path: "torrents/?filename={{ .Keywords }}&page=2&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}"
+      followredirect: true
     - path: "torrents/?filename={{ .Keywords }}&page=3&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}"
+      followredirect: true
     - path: "torrents/?filename={{ .Keywords }}&page=4&freeleech={{ if .Config.freeleech }}1{{ else }}{{ end }}"
+      followredirect: true
 
   rows:
     selector: tr.dataList-row:has(td.download)
