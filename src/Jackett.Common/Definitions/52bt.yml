@@ -1,8 +1,8 @@
 ---
 id: 52bt
 name: 52BT
-description: "52BT is a CHINESE Public tracker for MOVIES / TV / MUSIC / GENERAL"
-language: zh-CN
+description: "52BT is a Public tracker for MOVIES / TV / MUSIC / GENERAL"
+language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
