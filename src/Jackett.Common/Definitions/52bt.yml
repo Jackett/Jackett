@@ -29,14 +29,14 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 影视, cat: TV, desc: 影视}
-    - {id: 影视, cat: Movies, desc: 影视}
-    - {id: 音乐, cat: Audio, desc: 音乐}
-    - {id: 图像, cat: Other, desc: 图像}
-    - {id: 文档书籍, cat: Books, desc: 文档书籍}
-    - {id: 压缩文件, cat: Other, desc: 压缩文件}
-    - {id: 安装包, cat: PC, desc: 安装包}
-    - {id: 其他, cat: Other, desc: 其他}
+    - {id: Video, cat: TV, desc: Video}
+    - {id: Video, cat: Movies, desc: Video}
+    - {id: Music, cat: Audio, desc: Music}
+    - {id: Images, cat: Other, desc: Images}
+    - {id: Documents, cat: Books, desc: Documents}
+    - {id: Archives, cat: Other, desc: Archives}
+    - {id: Apps, cat: PC, desc: Apps}
+    - {id: Other, cat: Other, desc: Other}
 
   modes:
     search: [q]
@@ -72,40 +72,45 @@ settings:
 
 search:
   paths:
-    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-1.html"
-    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-2.html"
+    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-1.html?lang=en"
+    - path: "search-{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}-{{ .Config.cat-id }}-{{ .Config.sort }}-2.html?lang=en"
   error:
     - selector: :root:contains("Internal Server Error")
 
   rows:
-    selector: div.ssbox
+    selector: article.resource-card
 
   fields:
     categorydesc:
-      selector: div.title > h3 > span
+      selector: div.meta span:nth-child(1)
       filters:
-        - name: re_replace
-          args: ["([\\[\\]]+)", ""]
+        - name: replace
+          args: ["Type：", ""]
     title:
       selector: a[href^="/hash/"]
     details:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="/hash/"]
       attribute: href
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("添加时间:") > b
+      selector: div.meta span:nth-child(2)
       filters:
+        - name: replace
+          args: ["Added：", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("大小:") > b
+      selector: div.meta span:nth-child(3)
+      filters:
+        - name: replace
+          args: ["Size：", ""]
     seeders:
       text: 1
     leechers:
