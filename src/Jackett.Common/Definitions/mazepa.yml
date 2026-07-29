@@ -47,7 +47,8 @@ caps:
     - {id: 79, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2017-2021"}
     - {id: 21, cat: TV/Sport, desc: "Спорт Формула 1 Сезони 2007-2016"}
     - {id: 75, cat: TV/Sport, desc: "Спорт Формула 1 Сезони до 2006"}
-    - {id: 77, cat: TV/Sport, desc: "Автоспорт"}
+    - {id: 77, cat: TV/Sport, desc: "Мотоперегони"}
+    - {id: 189, cat: TV/Sport, desc: "Автоспорт"}
     - {id: 47, cat: TV/Sport, desc: "Автоспорт Чемпіонат та кубок України"}
     - {id: 46, cat: TV/Sport, desc: "Автоспорт Єврокубки"}
     - {id: 48, cat: TV/Sport, desc: "Автоспорт Чемпіонат Світу"}
