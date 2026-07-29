@@ -14,6 +14,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 45, cat: TV/Sport, desc: "40"}
     - {id: 11, cat: TV/Sport, desc: "F1 Races"}
     - {id: 1, cat: TV/Sport, desc: "F1 Qualifying"}
     - {id: 2, cat: TV/Sport, desc: "F1 Sprint Races"}
@@ -47,16 +48,20 @@ caps:
     - {id: 37, cat: TV/Sport, desc: "Porsche Mobil 1 Supercup"}
     - {id: 38, cat: TV/Sport, desc: "Skateboarding"}
     - {id: 39, cat: TV/Sport, desc: "Baseball-MLB"}
-    - {id: 40, cat: TV/Sport, desc: "World Endurance Championship"}
+    - {id: 40, cat: TV/Sport, desc: "WEC"}
     - {id: 41, cat: TV/Sport, desc: "FIM Speedway Gp"}
     - {id: 42, cat: TV/Sport, desc: "FIM MXGP"}
     - {id: 43, cat: TV/Sport, desc: "Supercars"}
     - {id: 44, cat: TV/Sport, desc: "WSBK"}
     - {id: 46, cat: TV/Sport, desc: "NHRA"}
-    - {id: 47, cat: TV/Sport, desc: "Boat Racing"}
+    - {id: 47, cat: TV/Sport, desc: "F1H2O"}
     - {id: 48, cat: TV/Sport, desc: "F1 Complete Packs"}
     - {id: 49, cat: TV/Sport, desc: "GAA"}
     - {id: 51, cat: TV/Sport, desc: "IndyNXT"}
+    - {id: 52, cat: TV/Sport, desc: "Snooker/Pool"}
+    - {id: 53, cat: TV/Sport, desc: "Horse Racing"}
+    - {id: 54, cat: TV/Sport, desc: "Goodwood Festival"}
+    - {id: 55, cat: TV/Sport, desc: "Motorsports Special Events"}
 
   modes:
     search: [q]
