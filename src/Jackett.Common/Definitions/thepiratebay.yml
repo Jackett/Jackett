@@ -142,6 +142,22 @@ settings:
     label: API URL
     type: text
     default: apibay.org
+  - name: top100
+    type: select
+    label: Top100
+    default: recent
+    options:
+      recent: All
+      100: Audio
+      200: Movies/TV
+      300: Apps
+      400: Games
+      500: XXX
+      600: Books
+  - name: info_top100
+    type: info
+    label: About the top100 selection
+    default: "TPB indexer uses <b>top100_recent</b> for its <i>TEST</i> and <i>keyword-less</i> searches. However TPB will often only include Movies and TV in its top100_recent list which makes setting up Lidarr for Audio or other similar *Arr apps problematic. By changing the top100 selector you will make the indexer use a more focused top100 for the category group your *Arr app uses."
   - name: uploader
     type: text
     label: Filter by Uploader
@@ -152,7 +168,7 @@ settings:
 
 search:
   paths:
-    - path: "https://{{ .Config.apiurl }}/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
+    - path: "https://{{ .Config.apiurl }}/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_{{ .Config.top100 }}.json{{ end }}"
       response:
         type: json
 
