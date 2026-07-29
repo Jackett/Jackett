@@ -14,6 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "TV EP"}
     - {id: 21, cat: Other/Misc, desc: "VIP"}
     - {id: 6, cat: TV/Sport, desc: "Football"}
+    - {id: 22, cat: TV/Anime, desc: "Cartoons"}
     - {id: 3, cat: Audio, desc: "Music"}
     - {id: 4, cat: PC, desc: "Apps"}
     - {id: 5, cat: Console, desc: "Games"}
