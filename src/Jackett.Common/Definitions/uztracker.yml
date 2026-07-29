@@ -191,6 +191,7 @@ caps:
     - {id: 238, cat: Audio/Lossless, desc: " |- ♫ Электронная музыка Hi-Res"}
     - {id: 237, cat: Audio/Lossless, desc: " |- ♫ Рок-музыка Hi-Res"}
     - {id: 236, cat: Audio/Lossless, desc: " |- ♫ Джаз и Блюз	Hi-Res"}
+    - {id: 498, cat: Audio/Lossless, desc: " |- ♫ Остальные жанры Hi-Res"}
     - {id: 324, cat: Audio, desc: "Оцифровки с аналоговых носителей"}
     - {id: 330, cat: Audio, desc: " |- ♫ Зарубежная поп музыка (оцифровки)"}
     - {id: 466, cat: Audio, desc: " |- Советская и Российская эстрада (оцифровки)"}
