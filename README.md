@@ -234,7 +234,6 @@ Prior versions of Jackett are no longer supported.
  * RGFootball
  * RinTor
  * RiperAM
- * RockBox
  * RUDUB (ex-BaibaKoTV)
  * Rustorka
  * RuTracker.org
