@@ -234,6 +234,92 @@ caps:
     - {id: 1691, cat: Audio/Lossless, desc: " |- Зарубежный Рэп, Хип-Хоп (lossless)"}
     - {id: 1692, cat: Audio/Lossless, desc: " |- Классическая и инструментальная музыка (Lossless)"}
     - {id: 1693, cat: Audio/Lossless, desc: " |- Остальные муз.жанры (Lossless)"}
+    # Rock sub-genres (Foreign, Lossless)
+    - {id: 1702, cat: Audio/Lossless, desc: " |- Classic Rock & Hard Rock (Lossless)"}
+    - {id: 1704, cat: Audio/Lossless, desc: " |- Progressive & Art-Rock (Lossless)"}
+    - {id: 1706, cat: Audio/Lossless, desc: " |- Folk-Rock (Lossless)"}
+    - {id: 2329, cat: Audio/Lossless, desc: " |- AOR / Melodic Hard Rock (Lossless)"}
+    - {id: 1708, cat: Audio/Lossless, desc: " |- Pop-Rock & Soft Rock (Lossless)"}
+    - {id: 1710, cat: Audio/Lossless, desc: " |- Instrumental Guitar Rock (Lossless)"}
+    - {id: 1712, cat: Audio/Lossless, desc: " |- Rockabilly, Psychobilly, Rock'n'Roll (Lossless)"}
+    - {id: 731, cat: Audio/Lossless, desc: " |- Foreign Rock Compilations (Lossless)"}
+    - {id: 1714, cat: Audio/Lossless, desc: " |- Blues-Rock, Country, Indie-Rock (Lossless)"}
+    # Metal sub-genres (Foreign, Lossless)
+    - {id: 1718, cat: Audio/Lossless, desc: " |- All Metal Combined (Lossless)"}
+    - {id: 1796, cat: Audio/Lossless, desc: " |- Avant-garde/Experimental Metal (Lossless)"}
+    - {id: 1719, cat: Audio/Lossless, desc: " |- Black Metal (Lossless)"}
+    - {id: 1779, cat: Audio/Lossless, desc: " |- Death, Doom Metal (Lossless)"}
+    - {id: 1720, cat: Audio/Lossless, desc: " |- Folk, Pagan, Viking Metal (Lossless)"}
+    - {id: 1724, cat: Audio/Lossless, desc: " |- Gothic Metal (Lossless)"}
+    - {id: 1730, cat: Audio/Lossless, desc: " |- Grind, Brutal Death (Lossless)"}
+    - {id: 1726, cat: Audio/Lossless, desc: " |- Heavy, Power, Progressive Metal (Lossless)"}
+    - {id: 1815, cat: Audio/Lossless, desc: " |- Sludge, Stoner, Post-Metal (Lossless)"}
+    - {id: 1728, cat: Audio/Lossless, desc: " |- Thrash, Speed Metal (Lossless)"}
+    - {id: 2230, cat: Audio/Lossless, desc: " |- Metal Compilations (Lossless)"}
+    # Alternative/Punk/Indie sub-genres (Foreign, Lossless)
+    - {id: 1736, cat: Audio/Lossless, desc: " |- Alternative & Nu-Metal (Lossless)"}
+    - {id: 1738, cat: Audio/Lossless, desc: " |- Punk (Lossless)"}
+    - {id: 1773, cat: Audio/Lossless, desc: " |- Indie Rock/Pop, Dream Pop, Brit-Pop (Lossless)"}
+    - {id: 172, cat: Audio/Lossless, desc: " |- Post-Punk, Shoegaze, Garage Rock (Lossless)"}
+    - {id: 1742, cat: Audio/Lossless, desc: " |- Post-Rock (Lossless)"}
+    - {id: 1744, cat: Audio/Lossless, desc: " |- Industrial & Post-Industrial (Lossless)"}
+    - {id: 1748, cat: Audio/Lossless, desc: " |- Gothic Rock & Dark Folk (Lossless)"}
+    - {id: 2175, cat: Audio/Lossless, desc: " |- Avant-garde/Experimental Rock (Lossless)"}
+    # Electronic sub-genres (Lossless)
+    - {id: 1844, cat: Audio/Lossless, desc: " |- Goa Trance/Psy-Trance (Lossless)"}
+    - {id: 1894, cat: Audio/Lossless, desc: " |- PsyChill, Ambient, Dub (Lossless)"}
+    - {id: 1818, cat: Audio/Lossless, desc: " |- Trance (Lossless)"}
+    - {id: 1829, cat: Audio/Lossless, desc: " |- Hardcore, Hardstyle, Jumpstyle (Lossless)"}
+    - {id: 1857, cat: Audio/Lossless, desc: " |- House (Lossless)"}
+    - {id: 1825, cat: Audio/Lossless, desc: " |- Techno (Lossless)"}
+    - {id: 797, cat: Audio/Lossless, desc: " |- Electro, Nu Electro (Lossless)"}
+    - {id: 1832, cat: Audio/Lossless, desc: " |- Drum & Bass, Jungle (Lossless)"}
+    - {id: 1836, cat: Audio/Lossless, desc: " |- Breakbeat (Lossless)"}
+    - {id: 1839, cat: Audio/Lossless, desc: " |- Dubstep (Lossless)"}
+    - {id: 1840, cat: Audio/Lossless, desc: " |- IDM (Lossless)"}
+    - {id: 1861, cat: Audio/Lossless, desc: " |- Chillout, Lounge, Downtempo (Lossless)"}
+    - {id: 1947, cat: Audio/Lossless, desc: " |- Nu Jazz, Acid Jazz, Future Jazz (Lossless)"}
+    - {id: 1945, cat: Audio/Lossless, desc: " |- Trip Hop, Abstract Hip-Hop (Lossless)"}
+    - {id: 1864, cat: Audio/Lossless, desc: " |- Traditional Electronic, Ambient (Lossless)"}
+    - {id: 1871, cat: Audio/Lossless, desc: " |- Modern Classical, Electroacoustic (Lossless)"}
+    - {id: 1869, cat: Audio/Lossless, desc: " |- Experimental Electronic (Lossless)"}
+    - {id: 1868, cat: Audio/Lossless, desc: " |- EBM, Dark Electro, Aggrotech (Lossless)"}
+    - {id: 1877, cat: Audio/Lossless, desc: " |- Industrial, Noise (Lossless)"}
+    - {id: 1880, cat: Audio/Lossless, desc: " |- Synthpop, Futurepop, New Wave (Lossless)"}
+    - {id: 466, cat: Audio/Lossless, desc: " |- Synthwave, Retrowave, Outrun (Lossless)"}
+    - {id: 1866, cat: Audio/Lossless, desc: " |- Darkwave, Neoclassical, Dungeon Synth (Lossless)"}
+    # Classical sub-genres (Lossless)
+    - {id: 560, cat: Audio/Lossless, desc: " |- Classical CD Rips (Lossless)"}
+    - {id: 794, cat: Audio/Lossless, desc: " |- Opera (Lossless)"}
+    - {id: 556, cat: Audio/Lossless, desc: " |- Vocal Music (Lossless)"}
+    - {id: 2307, cat: Audio/Lossless, desc: " |- Choral Music (Lossless)"}
+    - {id: 557, cat: Audio/Lossless, desc: " |- Orchestral / Symphonic (Lossless)"}
+    - {id: 2308, cat: Audio/Lossless, desc: " |- Concertos (Lossless)"}
+    - {id: 558, cat: Audio/Lossless, desc: " |- Chamber Music (Lossless)"}
+    - {id: 793, cat: Audio/Lossless, desc: " |- Keyboard / Organ (Lossless)"}
+    - {id: 969, cat: Audio/Lossless, desc: " |- Classical Crossover (Lossless)"}
+    # Hi-Res stereo genre sub-forums
+    - {id: 1884, cat: Audio/Lossless, desc: " |- Pop & Collections (Hi-Res stereo)"}
+    - {id: 1755, cat: Audio/Lossless, desc: " |- Rock Music (Hi-Res stereo)"}
+    - {id: 1893, cat: Audio/Lossless, desc: " |- Electronic Music (Hi-Res stereo)"}
+    - {id: 2302, cat: Audio/Lossless, desc: " |- Jazz & Blues (Hi-Res stereo)"}
+    - {id: 2513, cat: Audio/Lossless, desc: " |- New Age/Relax/Flamenco (Hi-Res stereo)"}
+    - {id: 2512, cat: Audio/Lossless, desc: " |- Rock/Metal/Alternative (Hi-Res stereo)"}
+    # Multichannel / Surround formats
+    - {id: 1170, cat: Audio/Lossless, desc: " |- SACD (DSD)"}
+    - {id: 1759, cat: Audio/Lossless, desc: " |- Blu-Ray Audio / DVD-Audio"}
+    - {id: 453, cat: Audio/Lossless, desc: " |- Quadraphonic (4.0)"}
+    - {id: 1852, cat: Audio/Lossless, desc: " |- Stereo-to-Surround Upmixes"}
+    # Vinyl rips — additional foreign sub-forums
+    - {id: 1625, cat: Audio/Lossless, desc: " |- Classical & Opera (Vinyl Rip)"}
+    - {id: 1835, cat: Audio/Lossless, desc: " |- Rap/Hip-Hop/R'n'B/Reggae (Vinyl Rip)"}
+    - {id: 1754, cat: Audio/Lossless, desc: " |- Electronic Music (Vinyl Rip)"}
+    - {id: 1444, cat: Audio/Lossless, desc: " |- Foreign Pop Music (Vinyl Rip)"}
+    - {id: 1217, cat: Audio/Lossless, desc: " |- Rock/Alt/Punk/Hardcore/Metal (Vinyl Rip)"}
+    - {id: 2301, cat: Audio/Lossless, desc: " |- Jazz & Blues (Vinyl Rip)"}
+    - {id: 123, cat: Audio/Lossless, desc: " |- Alternative/Punk/Independent (Vinyl Rip)"}
+    - {id: 1756, cat: Audio/Lossless, desc: " |- Foreign Rock Music (Vinyl Rip)"}
+    - {id: 1766, cat: Audio/Lossless, desc: " |- Foreign & Russian Metal (Vinyl Rip)"}
     # Программное обеспечение Software
     - {id: 105, cat: PC, desc: "Операционные системы"}
     - {id: 1663, cat: PC, desc: " |- Windows 11"}
