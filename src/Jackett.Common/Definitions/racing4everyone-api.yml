@@ -21,6 +21,7 @@ caps:
     - {id: 3, cat: TV/Sport, desc: "DTM"}
     - {id: 61, cat: TV/Sport, desc: "ERC"}
     - {id: 81, cat: TV/Sport, desc: "Extreme E"}
+    - {id: 86, cat: TV/Sport, desc: "EWC"}
     - {id: 67, cat: TV/Sport, desc: "Formula 1"}
     - {id: 22, cat: TV/Sport, desc: "Formula 2"}
     - {id: 68, cat: TV/Sport, desc: "Formula 3"}
@@ -44,12 +45,7 @@ caps:
     - {id: 71, cat: TV/Sport, desc: "WSBK"}
     - {id: 74, cat: TV/Sport, desc: "WTCR"}
     - {id: 58, cat: TV/Sport, desc: "W Series"}
-    - {id: 55, cat: TV/Sport, desc: "Season Reviews"}
-    - {id: 66, cat: TV/Sport, desc: "Documentaries"}
-    - {id: 2, cat: TV/Sport, desc: "TV-Documentaries"}
     - {id: 24, cat: TV/Sport, desc: "Misc"}
-    - {id: 70, cat: TV/Sport, desc: "Motorsport Movies"}
-    - {id: 79, cat: TV/Sport, desc: "TV Series"}
 
   modes:
     search: [q]
