@@ -12,7 +12,7 @@ caps:
   categorymappings:
     - {id: Anime, cat: TV/Anime, desc: "Anime"}
 # all results are currently returned as both 5070 & 2020
-#    # from https://animetosho.xyz/api/torznab?apikey=YOUR-API-KEY&t=caps
+#    # from https://feed.animetosho.xyz/api/torznab?t=caps&apikey=YOUR-API-KEY
 #    - {id: 5070, cat: TV/Anime, desc: "Anime (TV)"}
 #    - {id: 2020, cat: Movies/Other, desc: "Anime (Movies)"}
 
@@ -29,6 +29,10 @@ settings:
     type: info
     label: About your API key
     default: "You can find or generate a new API Key by accessing the <a href=\"https://animetosho.xyz/profile\" target=\"_blank\">Anime Tosho profile</a> page."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: feed.animetosho.xyz
   - name: sonarr_compatibility
     type: checkbox
     label: Improve Sonarr compatibility by trying to add Season information into Release Titles
@@ -44,7 +48,7 @@ settings:
 
 login:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
-  path: api/torznab
+  path: "https://{{ .Config.apiurl }}/api/torznab"
   method: get
   inputs:
     apikey: "{{ .Config.apikey }}"
@@ -53,7 +57,7 @@ login:
 
 search:
   paths:
-    - path: api/torznab
+    - path: "https://{{ .Config.apiurl }}/api/torznab"
       response:
         type: xml
 
