@@ -403,6 +403,7 @@ namespace Jackett.Updater
                 "Definitions/elitehd.yml",
                 "Definitions/elitetorrent-biz.yml",
                 "Definitions/elitetorrent-pl.yml",
+                "Definitions/elitetorrent-wf.yml",
                 "Definitions/elittracker.yml",
                 "Definitions/emmidtracker.yml",
                 "Definitions/emtrek.yml",
