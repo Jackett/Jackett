@@ -112,6 +112,11 @@ search:
     categorydesc:
       selector: a[href*="?cat="] img
       attribute: title
+    download:
+      selector: a[href^="download.php/"]
+      attribute: href
+      # DL will be missing for nuked titles but the row after1 means we cant trap it with a has(a[href^="download.php/"])
+      optional: true
     title_default:
       selector: a[href^="details.php?id="]
       filters:
@@ -189,11 +194,10 @@ search:
         # move quality tags to end
         - name: re_replace
           args: ["^(\\[.+?\\]) (.+?)$", "$2 $1"]
+        - name: prepend
+          args: "{{ if .Result.download }}{{ else }}*NUKEADO* {{ end }}"
     details:
       selector: a[href^="details.php?id="]
-      attribute: href
-    download:
-      selector: a[href^="download.php/"]
       attribute: href
     date:
       selector: td:nth-child(5)
