@@ -103,7 +103,6 @@ Prior versions of Jackett are no longer supported.
  * DonTorrent
  * E-Hentai
  * EBook Bay (EBB)
- * Elitetorrent.wf
  * EpubLibre
  * ExtraTorrent.st
  * EZTV
