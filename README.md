@@ -572,7 +572,6 @@ Prior versions of Jackett are no longer supported.
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
- * RunTheFrames
  * SAMARITANO
  * SBPT
  * SceneHD [![(invite needed)][inviteneeded]](#)
