@@ -560,7 +560,6 @@ Prior versions of Jackett are no longer supported.
  * Racing4Everyone (R4E)
  * RacingForMe (RFM)
  * RailgunPT
- * Rain (雨)
  * Rastastugan
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)

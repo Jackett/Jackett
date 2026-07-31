@@ -690,6 +690,7 @@ namespace Jackett.Updater
                 "Definitions/qctorrent.yml",
                 "Definitions/qxr.yml",
                 "Definitions/racing4everyone.yml", // switch to *-API #12870 #8682
+                "Definitions/rain.yml",
                 "Definitions/rapidetracker.yml",
                 "Definitions/rapidzona.yml",
                 "Definitions/rarbg.yml", // migrated to C#
