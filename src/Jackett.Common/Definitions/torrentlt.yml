@@ -159,13 +159,18 @@ search:
       filters:
         - name: querystring
           args: cats
-    title:
-      selector: div[class^="torrent-name"] a
-    details:
-      selector: div[class^="torrent-name"] a
-      attribute: href
     download:
       selector: td a[href^="download?id="]
+      attribute: href
+      # DL will be missing for banned titles but the row after1 means we cant trap it with a has(a[href^="download.php/"])
+      optional: true
+    title:
+      selector: div[class^="torrent-name"] a
+      filters:
+        - name: prepend
+          args: "{{ if .Result.download }}{{ else }}*uždraustas* {{ end }}"
+    details:
+      selector: div[class^="torrent-name"] a
       attribute: href
     poster:
       selector: div[class^="torrent-name"] a
