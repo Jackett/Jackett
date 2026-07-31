@@ -38,6 +38,7 @@ caps:
     - {id: 129, cat: Audio/MP3, desc: "Musik MP3"}
     - {id: 111, cat: Audio/Lossless, desc: "Musik Packs Flac"}
     - {id: 112, cat: Audio/MP3, desc: "Musik Packs MP3"}
+    - {id: 170, cat: Audio/Video, desc: "Musik Videos"}
     - {id: 161, cat: Console/NDS, desc: "Nintendo Switch"}
     - {id: 162, cat: Console/PS3, desc: "Playstation"}
     - {id: 115, cat: TV/Anime, desc: "Series Anime"}
