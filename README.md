@@ -402,7 +402,7 @@ Prior versions of Jackett are no longer supported.
  * HD-Olimpo [![(invite needed)][inviteneeded]](#)
  * HD-Only (HDO)
  * HD-Space (HDS)
- * HD-Torrents (HDT)
+ * HD-Torrents (HDT) [![(invite needed)][inviteneeded]](#)
  * HD-UNiT3D
  * HDArea (HDA)
  * HDBao
