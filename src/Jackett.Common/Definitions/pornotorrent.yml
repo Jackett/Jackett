@@ -14,7 +14,6 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 6000, cat: XXX, desc: "XXX"}
-    - {id: 6010, cat: XXX/DVD, desc: "XXX/DVD"}
     - {id: 6070, cat: XXX/SD, desc: "XXX/SD"}
     - {id: 6080, cat: XXX/WEB-DL, desc: "XXX/WEB-DL"}
 
@@ -41,6 +40,7 @@ search:
 
   fields:
     category:
+      # the feed puts the specific category first, the 6000 parent second
       selector: "[name=category]"
       attribute: value
     title:
