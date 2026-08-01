@@ -14,54 +14,64 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: XXX, cat: XXX, desc: XXX}
+    # from https://pornotorrent.com.br/torznab?t=caps
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 6080, cat: XXX/SD, desc: "XXX/SD"}
+    - {id: 6090, cat: XXX/WEB-DL, desc: "XXX/WEB-DL"}
 
   modes:
     search: [q]
+    movie-search: [q]
 
 settings: []
 
-download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
-
 search:
   paths:
-    - path: /
+    - path: torznab/
+      method: get
+      response:
+        type: xml
+
   inputs:
-    s: "{{ .Keywords }}"
-    cat: 0
+    t: search
+    q: "{{ .Keywords }}"
+    limit: 100
 
   rows:
-    selector: article.cp-card
+    selector: channel > item
 
   fields:
     category:
-      text: XXX
+      # the feed puts the specific category first, the 6000 parent second
+      selector: "[name=category]"
+      attribute: value
     title:
-      selector: h3.cp-card__title
+      selector: title
     details:
-      selector: h3.cp-card__title > a
-      attribute: href
-    download:
-      selector: h3.cp-card__title > a
-      attribute: href
-    poster:
-      selector: img
-      attribute: src
-    date:
-      text: now
+      selector: guid
+    magnet:
+      selector: enclosure
+      attribute: url
+    size_check:
+      selector: size
     size:
-      text: 5GB
+      text: "{{ if eq .Result.size_check \"0\" }}5GB{{ else }}{{ .Result.size_check }}{{ end }}"
+    date:
+      # Sat, 01 Aug 2026 01:00:00 GMT
+      selector: pubDate
+      filters:
+        - name: replace
+          args: ["GMT", "+00:00"]
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     seeders:
       text: 1
     leechers:
-      text: 1
-    downloadvolumefactor:
       text: 0
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
     uploadvolumefactor:
-      text: 1
-    description:
-      selector: span:has(span.cm-ico-clock)
-# engine n/a
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+# torznab xml
