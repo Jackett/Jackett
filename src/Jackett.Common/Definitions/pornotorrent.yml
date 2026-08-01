@@ -9,10 +9,12 @@ testlinktorrent: false
 links:
   - https://pornotorrent.com.br/
 legacylinks:
+  - https://www.pornotorrent.eu/
   - https://pornotorrent.net.br/
 
 caps:
   categorymappings:
+    # from https://pornotorrent.com.br/torznab?t=caps
     - {id: 6000, cat: XXX, desc: "XXX"}
     - {id: 6080, cat: XXX/SD, desc: "XXX/SD"}
     - {id: 6090, cat: XXX/WEB-DL, desc: "XXX/WEB-DL"}
@@ -50,8 +52,10 @@ search:
     magnet:
       selector: enclosure
       attribute: url
-    size:
+    size_check:
       selector: size
+    size:
+      text: "{{ if eq .Result.size_check \"0\" }}5GB{{ else }}{{ .Result.size_check }}{{ end }}"
     date:
       # Sat, 01 Aug 2026 01:00:00 GMT
       selector: pubDate
@@ -65,7 +69,9 @@ search:
     leechers:
       text: 0
     downloadvolumefactor:
-      text: 0
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
     uploadvolumefactor:
-      text: 1
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
 # torznab xml
