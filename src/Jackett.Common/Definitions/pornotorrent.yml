@@ -56,6 +56,8 @@ search:
       # Sat, 01 Aug 2026 01:00:00 GMT
       selector: pubDate
       filters:
+        - name: replace
+          args: ["GMT", "+00:00"]
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     seeders:
