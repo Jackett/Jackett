@@ -807,6 +807,7 @@ namespace Jackett.Updater
                 "Definitions/torlock.yml",
                 "Definitions/torlook.yml",
                 "Definitions/toros.yml", // renamed to bulltorrent
+                "Definitions/torr9.yml",
                 "Definitions/torrent-explosiv.yml", // renamed to explosiv-world #6183
                 "Definitions/torrent9-tel.yml", // renamed to NorTorrent #15217
                 "Definitions/torrent911.yml", // renamed to oxtorrent-vip #15411
