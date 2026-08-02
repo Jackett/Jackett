@@ -29,6 +29,7 @@ caps:
     - {id: 107, cat: Movies, desc: "Movies: Movies 2026"}
     - {id: 109, cat: Movies/UHD, desc: "Movies 4K Ultra: Movies 4K UHD - Remuxes"}
     - {id: 7, cat: TV, desc: "TV-Episodes: All Episodes"}
+    - {id: 112, cat: TV/Documentary, desc: "Documentaries: Documentaries"}
     - {id: 26, cat: TV/Sport, desc: "TV-Sport: Sports"}
     - {id: 42, cat: TV, desc: "TV Packs: TV Packs & Full Seasons"}
     - {id: 84, cat: Audio/Audiobook, desc: "Audio Books: Audio Books"}
