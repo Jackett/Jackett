@@ -95,6 +95,10 @@ search:
     - path: "page/3/"
     - path: "page/4/"
     - path: "page/5/"
+  keywordsfilters:
+    # the site search is case sensitive and a query containing uppercase
+    # characters is redirected to the site root, returning no results
+    - name: tolower
   inputs:
     s: "{{ .Keywords }}"
 
