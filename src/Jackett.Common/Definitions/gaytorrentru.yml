@@ -146,6 +146,10 @@ search:
           args: cat
     title:
       selector: a[href^="details.php?id="]
+    title_download:
+      text: "{{ .Result.title }}"
+      filters:
+        - name: urlencode
     details:
       selector: a[href^="details.php?id="]
       attribute: href
@@ -158,7 +162,7 @@ search:
     download:
       # turn href="download.php/0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b/GUARATORO.torrent
       # into href="/download.php?id=0738d444362fa610a08fb87b5c1bec798ca1731adbf3175b&n=GUARATORO.torrent&p=dodownload
-      text: "download.php?id={{ .Result._id }}&n={{ .Result.title }}.torrent&p=dodownload"
+      text: "download.php?id={{ .Result._id }}&n={{ .Result.title_download }}.torrent&p=dodownload"
     poster:
       # turn href="details.php?id= ... &hit=1" data-hover-thumbs='[{"p":"2026\/24\/33749943.jpg","x":180,"y":270,"cid":33749944,"full":"2026\/24\/33749944.jpg"}, ... ]'
       # into https://pic.gaytor.rent/tpics/2026/24/33749943.jpg
