@@ -189,24 +189,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(11)
+      selector: td:nth-child(12)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(9)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-child(10)
       default: 0
     downloadvolumefactor:
       case:
