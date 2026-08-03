@@ -171,13 +171,13 @@ search:
           args: "Added\\:(\\d+ \\w+ \\w+)<"
         - name: timeago
     size:
-      selector: div.torrent-stats div.nth-child(4)
+      selector: div.torrent-stats div.stat-item:nth-child(4)
     grabs:
-      selector: div.torrent-stats div.nth-child(1)
+      selector: div.torrent-stats div.stat-item:nth-child(3)
     seeders:
-      selector: div.torrent-stats div.nth-child(2)
+      selector: div.torrent-stats div.stat-item:nth-child(1)
     leechers:
-      selector: div.torrent-stats div.nth-child(3)
+      selector: div.torrent-stats div.stat-item:nth-child(2)
     downloadvolumefactor:
       case:
         img[src="gold/gold.gif"]: 0
