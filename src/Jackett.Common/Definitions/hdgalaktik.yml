@@ -102,11 +102,11 @@ search:
       args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
-    - name: re_replace # replace special characters with "%" (wildcard)
-      args: ["[^a-zA-Z0-9]+", "%"]
+  headers:
+    Cookie: ["torrentviewblock=1"]
 
   rows:
-    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
+    selector: div.tv-card
     dateheaders:
       selector: a[href*="date="]
       attribute: href
@@ -117,15 +117,10 @@ search:
           args: "yyyy-MM-dd"
 
   fields:
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: span.tv-card-cat
     title:
-      selector: a.tr-title-link-compact
-      attribute: title
+      selector: a.tv-card-title
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -185,32 +180,34 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.tr-title-link-compact
+      selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
       optional: true # for users that do not have DL access
     poster:
-      selector: img.tr-main-poster-compact
+      selector: img.tv-avatars
       attribute: src
+    size_nodl:
+      selector: span.tv-dl-btn
+      optional: true
     size:
-      selector: div.tr-stat-block-compact:nth-child(3)
+      selector: a.tv-dl-btn
+      optional: true
+      default: "{{ .Result.size_nodl }}"
     seeders:
-      selector: div.tr-stat-block-compact:nth-child(4)
+      selector: span.up
     leechers:
-      selector: div.tr-stat-block-compact:nth-child(5)
-    grabs:
-      selector: div.tr-meta-info-compact span:has(i.fa-download)
+      selector: span.down
     downloadvolumefactor:
       case:
-        span.tr-badge-free: 0
+        span.tv-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: a.tr-tag-item-compact
-      attribute: title
+      selector: div.tv-card-tags
 # Tesla v.Core (8.7.18)
