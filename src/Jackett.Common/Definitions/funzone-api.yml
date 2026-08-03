@@ -35,6 +35,7 @@ caps:
     - {id: 22, cat: Movies, desc: "Classic Movies"}
     - {id: 29, cat: Movies/UHD, desc: "Movies UHD"}
     - {id: 30, cat: TV, desc: "Shows"}
+    - {id: 31, cat: Audio/Audiobook, desc: "AudioBooks"}
 
   modes:
     search: [q]
