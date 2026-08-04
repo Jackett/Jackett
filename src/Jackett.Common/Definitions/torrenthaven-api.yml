@@ -19,7 +19,7 @@ caps:
     - {id: 21, cat: Other/Misc, desc: "VIP"}
     - {id: 6, cat: TV/Sport, desc: "Football"}
     - {id: 22, cat: TV/Anime, desc: "Cartoons"}
-    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 3, cat: Audio/MP3, desc: "MP3 Music"}
     - {id: 4, cat: PC, desc: "Apps"}
     - {id: 5, cat: Console, desc: "Games"}
     - {id: 7, cat: TV/Sport, desc: "Boxing"}
@@ -31,7 +31,6 @@ caps:
     - {id: 13, cat: TV/Sport, desc: "Snooker"}
     - {id: 14, cat: TV/Sport, desc: "Darts"}
     - {id: 15, cat: TV/Sport, desc: "Bare Knuckle Fighting Championship"}
-    - {id: 16, cat: Audio/MP3, desc: "Music mp3"}
     - {id: 17, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 18, cat: Movies/BluRay, desc: "Bluray"}
     - {id: 19, cat: Movies/UHD, desc: "4K"}
