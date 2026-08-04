@@ -54,14 +54,14 @@ settings:
     label: Category
     default: 0
     options:
-      0: All categories
-      1: Movies and TV shows
-      2: Music
-      3: Images
-      4: Documents and books
-      5: Compressed files
-      6: Installer packages
-      7: Other
+      0: 全部(All categories)
+      1: 影视(Movies and TV shows)
+      2: 音乐(Music)
+      3: 图像(Images)
+      4: 文档书籍(Documents)
+      5: 压缩文件(Archives)
+      6: 安装包(Apps)
+      7: 其他(Other)
   - name: sort
     type: select
     label: Sort requested from site
@@ -78,34 +78,46 @@ search:
     - selector: :root:contains("Internal Server Error")
 
   rows:
-    selector: div.ssbox
+    selector: article
 
   fields:
     categorydesc:
-      selector: div.title > h3 > span
+      selector: span:first-child
       filters:
         - name: re_replace
-          args: ["([\\[\\]]+)", ""]
+          args: ["分类：", ""]
+        - name: re_replace
+          args: ["Category：", ""]
     title:
       selector: a[href^="/hash/"]
     details:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="/hash/"]
       attribute: href
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("Date added:") > b, div.sbar > span:contains("添加时间:") > b
+      selector: span:nth-child(2)
       filters:
+        - name: re_replace
+          args: ["添加时间：", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("Size:") > b, div.sbar > span:contains("大小:") > b
+      selector: span:nth-child(3)
+      filters:
+        - name: re_replace
+          args: ["大小：", ""]
+    files:
+      selector: span:nth-child(5)
+      filters:
+        - name: re_replace
+          args: ["文件：", ""]
     seeders:
       text: 1
     leechers:
