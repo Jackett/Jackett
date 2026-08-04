@@ -121,6 +121,7 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
     view: legacy
+    setview: 1
     # 0 active, 1 both, 2 dead
     incldead: 1
     # where to search: name,     descr,    filename, freeleech only, wishlist
