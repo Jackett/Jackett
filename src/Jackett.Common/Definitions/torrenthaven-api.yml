@@ -1,11 +1,15 @@
 ---
-id: torrentavenue-api
-name: TorrentAvenue (API)
-description: "TorrentAvenue is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: torrenthaven-api
+replaces:
+  - torrentavenue-api
+name: TorrentHaven (API)
+description: "TorrentHaven is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://torrenthaven.org/
+legacylinks:
   - https://torrentavenue.online/
 
 caps:
@@ -47,7 +51,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://torrentavenue.online/\" target=\"_blank\">TorrentAvenue</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://torrenthaven.org/\" target=\"_blank\">TorrentHaven</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only

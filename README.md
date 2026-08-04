@@ -637,7 +637,6 @@ Prior versions of Jackett are no longer supported.
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
  * Torrent.LT
- * TorrentAvenue
  * TorrentBD
  * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
@@ -645,6 +644,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentDay (TD)
  * TorrentDD (TodayBit)
  * Torrenteros (TTR)
+ * TorrentHaven
  * TorrentHR
  * Torrenting (TT)
  * TorrentLeech (TL)
