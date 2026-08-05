@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers.Definitions
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   has2Fa: true)
+                   useApiKey: true)
         {
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, sign in and browse the site at least once every 90 days. Seeding torrents does not count as account activity."));
         }
