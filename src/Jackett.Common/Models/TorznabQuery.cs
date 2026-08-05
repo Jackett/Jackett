@@ -48,6 +48,8 @@ namespace Jackett.Common.Models
 
         public bool IsTest { get; set; }
 
+        public bool IsJson { get; set; }
+
         public string ImdbIDShort => ImdbID?.TrimStart('t');
 
         protected string[] QueryStringParts;
