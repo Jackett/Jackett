@@ -40,8 +40,8 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var caps = new TorznabCapabilities();
 
-            caps.Categories.AddCategoryMapping(3, TorznabCatType.Audio, "E-Books");
-            caps.Categories.AddCategoryMapping(4, TorznabCatType.Audio, "Audiobooks");
+            caps.Categories.AddCategoryMapping(3, TorznabCatType.BooksEBook, "E-Books");
+            caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
 
             return caps;
         }
