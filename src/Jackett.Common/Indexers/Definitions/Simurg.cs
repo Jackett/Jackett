@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Type => "private";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
-
+        protected override int ApiKeyLength => 116;
         public Simurg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs)
             : base(configService: configService,
