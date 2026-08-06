@@ -127,7 +127,7 @@ download:
       action: "say_thanks"
       id: "{{ .DownloadUri.Query.id }}"
   selectors:
-    - selector: a[href^="downloadnew.php?id="]
+    - selector: a[href*="downloadnew.php?id="]
       attribute: href
 
 search:
