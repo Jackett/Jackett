@@ -26,6 +26,7 @@ caps:
     - {id: ApplicationsWindows, cat: PC/0day, desc: "Applications Windows"}
     - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: AudioMusic, cat: Audio/MP3, desc: "Audio Music"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
