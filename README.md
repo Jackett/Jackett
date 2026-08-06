@@ -586,6 +586,7 @@ Prior versions of Jackett are no longer supported.
  * Shareisland
  * Shazbat
  * SiamBIT [PAY2DL]
+ * Simurg
  * Siqi
  * SkipTheCommercials
  * Slobit Games
