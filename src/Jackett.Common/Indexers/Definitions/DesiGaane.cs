@@ -22,7 +22,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Type => "private";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
-
+        protected override int ApiKeyLength => 116;
         public DesiGaane(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs)
             : base(configService: configService,
@@ -31,7 +31,7 @@ namespace Jackett.Common.Indexers.Definitions
                    p: ps,
                    cs: cs,
                    supportsFreeleechTokens: true,
-                   has2Fa: true)
+                   useApiKey: true)
         {
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "To keep your account active, sign in and browse the site at least once every 90 days. Seeding torrents does not count as account activity."));
         }
