@@ -1,0 +1,42 @@
+{
+    "name": "jackett",
+    "private": true,
+    "version": "0.0.0",
+    "type": "module",
+    "scripts": {
+        "dev": "vite",
+        "build": "vite build",
+        "preview": "vite preview",
+        "test": "vitest",
+        "test:ui": "vitest --ui"
+    },
+    "dependencies": {
+        "@fortawesome/fontawesome-free": "^5.15.4",
+        "@popperjs/core": "^2.11.8",
+        "@yaireo/tagify": "^4.36.0",
+        "bootstrap": "^5.3.8",
+        "bootstrap-multiselect": "^2.0.0",
+        "datatables.net-bs5": "^2.3.7",
+        "handlebars": "^4.7.8",
+        "jquery": "^3.7.1"
+    },
+    "devDependencies": {
+        "@types/bootstrap": "^5.2.10",
+        "@types/jquery": "^3.5.33",
+        "@types/yaireo__tagify": "^4.27.0",
+        "@vitejs/plugin-legacy": "^7.2.1",
+        "@vitest/ui": "^4.0.18",
+        "jsdom": "^28.0.0",
+        "terser": "^5.46.0",
+        "typescript": "^5.9.3",
+        "vite": "^7.3.1",
+        "vitest": "^4.0.18"
+    },
+    "pnpm": {
+        "onlyBuiltDependencies": [
+            "@fortawesome/fontawesome-free",
+            "core-js",
+            "esbuild"
+        ]
+    }
+}
