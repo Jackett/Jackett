@@ -24,6 +24,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
         protected override int ApiKeyLength => 116;
         protected override string AuthorizationFormat => "token {0}";
+
         public Simurg(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                             ICacheService cs)
             : base(configService: configService,
