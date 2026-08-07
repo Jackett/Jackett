@@ -20,7 +20,6 @@ caps:
     - {id: 39, cat: Audio/Lossless, desc: "Glasba FLAC"}
     - {id: 40, cat: PC/Games, desc: "Igre PC"}
     - {id: 41, cat: Console/PS3, desc: "Igre PS3"}
-    - {id: 42, cat: Console/PS4, desc: "Igre PS4"}
     - {id: 43, cat: Console/XBox, desc: "Igre Xbox"}
     - {id: 47, cat: Console/NDS, desc: "Igre Nintendo"}
     - {id: 44, cat: PC, desc: "Programi"}
@@ -28,6 +27,7 @@ caps:
     - {id: 46, cat: Books/Mags, desc: "E-Revije"}
     - {id: 48, cat: TV, desc: "TV-Rip"}
     - {id: 49, cat: XXX/ImageSet, desc: "Slike"}
+    - {id: 53, cat: TV/Sport, desc: "Sport"}
     - {id: 50, cat: XXX/DVD, desc: "Erotika"}
     - {id: 51, cat: Other/Misc, desc: "Ostalo"}
     - {id: 52, cat: Other, desc: "VIP"}
