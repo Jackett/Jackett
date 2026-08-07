@@ -1,0 +1,110 @@
+---
+id: torrentclaw
+name: TorrentClaw
+description: "TorrentClaw is a Private aggregate indexer of 10+ Public Torrent Trackers, with additional 'TrueSpec' metadata and quality score"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://torrentclaw.com/
+  - https://torrentclaw.to/
+
+caps:
+  categorymappings:
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, tmdbid]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "You can find your API Key by accessing the <a href=\"https://torrentclaw.com/profile?tab=apikey\" target=\"_blank\">TorrentClaw API Key</a> page."
+  - name: info_truespec
+    type: info
+    label: "TrueSpec verification tags"
+    default: "Verified releases include <b>[TC-xx]</b> (quality score 0-100) and <b>[TrueSpec]</b> tags in the title. These can be used for Sonarr and Radarr custom formats."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if passkey is invalid
+  path: api/v1/torznab
+  method: get
+  inputs:
+    t: search
+    limit: 1
+
+search:
+  paths:
+    - path: api/v1/torznab
+      method: get
+      response:
+        type: xml
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.TMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  rows:
+    selector: channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      text: "{{ .Config.sitelink }}"
+    magnet:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+    imdbid:
+      selector: "[name=imdbid]"
+      attribute: value
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+    date:
+      # Sun, 08 Mar 2026 17:51:00 GMT
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml

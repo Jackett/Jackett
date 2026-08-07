@@ -1,15 +1,20 @@
 ---
 id: f1gp
+replaces:
+  - tsdb
 name: F1GP
-description: "F1GP is a Private Torrent Tracker for F1, F2, F3, FE, F1 Academy Racing"
+description: "F1GP is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
 links:
+  - https://f1gp.xyz/
+legacylinks:
   - https://f1gp.site/
 
 caps:
   categorymappings:
+    - {id: 45, cat: TV/Sport, desc: "40"}
     - {id: 11, cat: TV/Sport, desc: "F1 Races"}
     - {id: 1, cat: TV/Sport, desc: "F1 Qualifying"}
     - {id: 2, cat: TV/Sport, desc: "F1 Sprint Races"}
@@ -26,9 +31,37 @@ caps:
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
-    - {id: 20, cat: TV/Sport, desc: "Freeleech"}
     - {id: 21, cat: TV/Sport, desc: "UFC"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 23, cat: TV/Sport, desc: "Boxing"}
+    - {id: 24, cat: Other, desc: "Magazines - Books"}
+    - {id: 25, cat: TV/Sport, desc: "NASCAR"}
+    - {id: 26, cat: TV/Sport, desc: "Tennis"}
+    - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
+    - {id: 28, cat: TV/Sport, desc: "NBA"}
+    - {id: 29, cat: TV/Sport, desc: "Indy 500"}
+    - {id: 30, cat: TV/Sport, desc: "Football/Soccer"}
+    - {id: 33, cat: TV/Sport, desc: "WRC/Rally"}
+    - {id: 34, cat: TV/Sport, desc: "BTCC"}
+    - {id: 35, cat: TV/Sport, desc: "Isle of Man TT"}
+    - {id: 36, cat: TV/Sport, desc: "Surfing"}
+    - {id: 37, cat: TV/Sport, desc: "Porsche Mobil 1 Supercup"}
+    - {id: 38, cat: TV/Sport, desc: "Skateboarding"}
+    - {id: 39, cat: TV/Sport, desc: "Baseball-MLB"}
+    - {id: 40, cat: TV/Sport, desc: "WEC"}
+    - {id: 41, cat: TV/Sport, desc: "FIM Speedway Gp"}
+    - {id: 42, cat: TV/Sport, desc: "FIM MXGP"}
+    - {id: 43, cat: TV/Sport, desc: "Supercars"}
+    - {id: 44, cat: TV/Sport, desc: "WSBK"}
+    - {id: 46, cat: TV/Sport, desc: "NHRA"}
+    - {id: 47, cat: TV/Sport, desc: "F1H2O"}
+    - {id: 48, cat: TV/Sport, desc: "F1 Complete Packs"}
+    - {id: 49, cat: TV/Sport, desc: "GAA"}
+    - {id: 51, cat: TV/Sport, desc: "IndyNXT"}
+    - {id: 52, cat: TV/Sport, desc: "Snooker/Pool"}
+    - {id: 53, cat: TV/Sport, desc: "Horse Racing"}
+    - {id: 54, cat: TV/Sport, desc: "Goodwood Festival"}
+    - {id: 55, cat: TV/Sport, desc: "Motorsports Special Events"}
 
   modes:
     search: [q]
@@ -76,11 +109,11 @@ login:
     - selector: tr td span[style="color:#FF0000;"]
   test:
     path: index.php
-    selector: a[href="logout.php"]
+    selector: a[href^="logout.php"]
 
 search:
   paths:
-    # https://f1gp.site/index.php?page=torrents&search=&category=0&active=0
+    # https://f1gp.xyz/index.php?page=torrents&search=&category=0&active=0
     - path: index.php
   inputs:
     page: torrents
@@ -111,7 +144,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
     details:
       selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: onmouseover
+      attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
@@ -124,24 +157,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(11)
+      selector: td:nth-child(12)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(6)
+      selector: td:nth-child(7)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(8)
+      selector: td:nth-child(9)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-child(10)
       default: 0
     downloadvolumefactor:
       case:
@@ -155,6 +188,6 @@ search:
     minimumratio:
       text: 1.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
-#  xbtitFM v4.1.32
+      # 5 days (as seconds = 5 x 24 x 60 x 60)
+      text: 432000
+#  xbtitFM v4.2.13

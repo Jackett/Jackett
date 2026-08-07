@@ -63,7 +63,7 @@ settings:
       asc: asc
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

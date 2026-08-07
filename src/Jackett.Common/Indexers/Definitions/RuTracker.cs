@@ -98,8 +98,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2092, TorznabCatType.MoviesForeign, "|- Фильмы 2006-2010");
             caps.Categories.AddCategoryMapping(2093, TorznabCatType.MoviesForeign, "|- Фильмы 2011-2015");
             caps.Categories.AddCategoryMapping(2200, TorznabCatType.MoviesForeign, "|- Фильмы 2016-2020");
-            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2024");
-            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2025");
+            caps.Categories.AddCategoryMapping(1950, TorznabCatType.MoviesForeign, "|- Фильмы 2021-2025");
+            caps.Categories.AddCategoryMapping(252, TorznabCatType.MoviesForeign, "|- Фильмы 2026");
             caps.Categories.AddCategoryMapping(2540, TorznabCatType.MoviesForeign, "|- Фильмы ближнего зарубежья");
             caps.Categories.AddCategoryMapping(934, TorznabCatType.MoviesForeign, "|- Азиатские фильмы");
             caps.Categories.AddCategoryMapping(505, TorznabCatType.MoviesForeign, "|- Индийское кино");
@@ -181,6 +181,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1386, TorznabCatType.TVAnime, "|- Обои, сканы, аватары, арт");
             caps.Categories.AddCategoryMapping(1387, TorznabCatType.TVAnime, "|- AMV и другие ролики");
             caps.Categories.AddCategoryMapping(9, TorznabCatType.TV, "Русские сериалы");
+            caps.Categories.AddCategoryMapping(812, TorznabCatType.TVUHD, "|- Русские сериалы (UHD Video)");
             caps.Categories.AddCategoryMapping(81, TorznabCatType.TVHD, "|- Русские сериалы (HD Video)");
             caps.Categories.AddCategoryMapping(920, TorznabCatType.TVSD, "|- Русские сериалы (DVD Video)");
             caps.Categories.AddCategoryMapping(80, TorznabCatType.TV, "|- Сельский детектив");
@@ -206,11 +207,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(387, TorznabCatType.TVForeign, "|- Сериалы совместного производства нескольких стран");
             caps.Categories.AddCategoryMapping(1359, TorznabCatType.TVForeign, "|- Веб-сериалы, Вебизоды к сериалам и Пилотные серии сериалов");
             caps.Categories.AddCategoryMapping(184, TorznabCatType.TVForeign, "|- Бесстыжие / Shameless (US)");
-            caps.Categories.AddCategoryMapping(1171, TorznabCatType.TVForeign, "|- Викинги / Vikings");
             caps.Categories.AddCategoryMapping(1417, TorznabCatType.TVForeign, "|- Во все тяжкие / Breaking Bad");
-            caps.Categories.AddCategoryMapping(625, TorznabCatType.TVForeign, "|- Доктор Хаус / House M.D.");
             caps.Categories.AddCategoryMapping(1449, TorznabCatType.TVForeign, "|- Игра престолов / Game of Thrones");
-            caps.Categories.AddCategoryMapping(273, TorznabCatType.TVForeign, "|- Карточный Домик / House of Cards");
             caps.Categories.AddCategoryMapping(504, TorznabCatType.TVForeign, "|- Клан Сопрано / The Sopranos");
             caps.Categories.AddCategoryMapping(372, TorznabCatType.TVForeign, "|- Сверхъестественное / Supernatural");
             caps.Categories.AddCategoryMapping(110, TorznabCatType.TVForeign, "|- Секретные материалы / The X-Files");
@@ -218,10 +216,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(507, TorznabCatType.TVForeign, "|- Теория большого взрыва + Детство Шелдона");
             caps.Categories.AddCategoryMapping(536, TorznabCatType.TVForeign, "|- Форс-мажоры / Костюмы в законе / Suits");
             caps.Categories.AddCategoryMapping(1144, TorznabCatType.TVForeign, "|- Ходячие мертвецы + Бойтесь ходячих мертвецов");
-            caps.Categories.AddCategoryMapping(173, TorznabCatType.TVForeign, "|- Черное зеркало / Black Mirror");
             caps.Categories.AddCategoryMapping(195, TorznabCatType.TVForeign, "|- Для некондиционных раздач");
             caps.Categories.AddCategoryMapping(2366, TorznabCatType.TVHD, "Зарубежные сериалы (HD Video)");
-            caps.Categories.AddCategoryMapping(119, TorznabCatType.TVUHD, "|- Зарубежные сериалы (UHD Video)");
             caps.Categories.AddCategoryMapping(1803, TorznabCatType.TVHD, "|- Новинки и сериалы в стадии показа (HD Video)");
             caps.Categories.AddCategoryMapping(266, TorznabCatType.TVHD, "|- Сериалы США и Канады (HD Video)");
             caps.Categories.AddCategoryMapping(193, TorznabCatType.TVHD, "|- Сериалы Великобритании и Ирландии (HD Video)");
@@ -231,17 +227,21 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(825, TorznabCatType.TVHD, "|- Сериалы Австралии и Новой Зеландии (HD Video)");
             caps.Categories.AddCategoryMapping(1248, TorznabCatType.TVHD, "|- Сериалы Ближнего Зарубежья (HD Video)");
             caps.Categories.AddCategoryMapping(1288, TorznabCatType.TVHD, "|- Сериалы совместного производства нескольких стран (HD Video)");
-            caps.Categories.AddCategoryMapping(1669, TorznabCatType.TVHD, "|- Викинги / Vikings (HD Video)");
-            caps.Categories.AddCategoryMapping(2393, TorznabCatType.TVHD, "|- Доктор Хаус / House M.D. (HD Video)");
             caps.Categories.AddCategoryMapping(265, TorznabCatType.TVHD, "|- Игра престолов / Game of Thrones (HD Video)");
-            caps.Categories.AddCategoryMapping(2406, TorznabCatType.TVHD, "|- Карточный домик (HD Video)");
             caps.Categories.AddCategoryMapping(2404, TorznabCatType.TVHD, "|- Сверхъестественное / Supernatural (HD Video)");
             caps.Categories.AddCategoryMapping(2405, TorznabCatType.TVHD, "|- Секретные материалы / The X-Files (HD Video)");
             caps.Categories.AddCategoryMapping(2370, TorznabCatType.TVHD, "|- Твин пикс / Twin Peaks (HD Video)");
             caps.Categories.AddCategoryMapping(2396, TorznabCatType.TVHD, "|- Теория Большого Взрыва / The Big Bang Theory (HD Video)");
             caps.Categories.AddCategoryMapping(2398, TorznabCatType.TVHD, "|- Ходячие мертвецы + Бойтесь ходячих мертвецов (HD Video)");
-            caps.Categories.AddCategoryMapping(1949, TorznabCatType.TVHD, "|- Черное зеркало / Black Mirror (HD Video)");
             caps.Categories.AddCategoryMapping(1498, TorznabCatType.TVHD, "|- Для некондиционных раздач (HD Video)");
+            caps.Categories.AddCategoryMapping(119, TorznabCatType.TVUHD, "Зарубежные сериалы (UHD Video)");
+            caps.Categories.AddCategoryMapping(1171, TorznabCatType.TVUHD, "З|- Новинки и сериалы в стадии показа (UHD Video)");
+            caps.Categories.AddCategoryMapping(1669, TorznabCatType.TVUHD, "|- Сериалы США и Канады (UHD Video)");
+            caps.Categories.AddCategoryMapping(2393, TorznabCatType.TVUHD, "|- Сериалы Великобритании и Ирландии (UHD Video)");
+            caps.Categories.AddCategoryMapping(625, TorznabCatType.TVUHD, "|- Европейские сериалы (UHD Video)");
+            caps.Categories.AddCategoryMapping(1949, TorznabCatType.TVUHD, "|- Сериалы Австралии и Новой Зеландии (UHD Video)");
+            caps.Categories.AddCategoryMapping(173, TorznabCatType.TVUHD, "|- Сериалы совместного производства нескольких стран (UHD Video)");
+            caps.Categories.AddCategoryMapping(273, TorznabCatType.TVUHD, "|- Для некондиционных раздач (UHD Video)");
             caps.Categories.AddCategoryMapping(911, TorznabCatType.TVForeign, "Сериалы Латинской Америки, Турции и Индии");
             caps.Categories.AddCategoryMapping(325, TorznabCatType.TVForeign, "|- Сериалы Аргентины");
             caps.Categories.AddCategoryMapping(534, TorznabCatType.TVForeign, "|- Сериалы Бразилии");
@@ -366,8 +366,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(255, TorznabCatType.TVSport, "Спортивные турниры, фильмы и передачи");
             caps.Categories.AddCategoryMapping(256, TorznabCatType.TVSport, "|- Автоспорт");
             caps.Categories.AddCategoryMapping(1986, TorznabCatType.TVSport, "|- Мотоспорт");
-            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2025)");
-            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2024)");
+            caps.Categories.AddCategoryMapping(660, TorznabCatType.TVSport, "|- Формула-1 (2026)");
+            caps.Categories.AddCategoryMapping(1551, TorznabCatType.TVSport, "|- Формула-1 (2012-2025)");
             caps.Categories.AddCategoryMapping(626, TorznabCatType.TVSport, "|- Формула 1 (до 2011 вкл.)");
             caps.Categories.AddCategoryMapping(262, TorznabCatType.TVSport, "|- Велоспорт");
             caps.Categories.AddCategoryMapping(1326, TorznabCatType.TVSport, "|- Волейбол/Гандбол");
@@ -392,6 +392,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1608, TorznabCatType.TVSport, "⚽ Футбол");
             caps.Categories.AddCategoryMapping(2294, TorznabCatType.TVSport, "|- UHDTV");
             caps.Categories.AddCategoryMapping(2545, TorznabCatType.TVSport, "|- Клубный Чемпионат Мира 2025");
+            caps.Categories.AddCategoryMapping(2147, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (финальный турнир)");
             caps.Categories.AddCategoryMapping(1693, TorznabCatType.TVSport, "|- Чемпионат Мира 2026 (отбор)");
             caps.Categories.AddCategoryMapping(136, TorznabCatType.TVSport, "|- Чемпионат Европы 2024 (финальный турнир)");
             caps.Categories.AddCategoryMapping(2532, TorznabCatType.TVSport, "|- Чемпионат Европы 2020 [2021] (финальный турнир)");
@@ -425,7 +426,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2001, TorznabCatType.TVSport, "|- Международные соревнования");
             caps.Categories.AddCategoryMapping(2002, TorznabCatType.TVSport, "|- NBA / NCAA (до 2000 г.)");
             caps.Categories.AddCategoryMapping(283, TorznabCatType.TVSport, "|- NBA / NCAA (2000-2010 гг.)");
-            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2025 гг.)");
+            caps.Categories.AddCategoryMapping(1997, TorznabCatType.TVSport, "|- NBA / NCAA (2010-2026 гг.)");
             caps.Categories.AddCategoryMapping(2003, TorznabCatType.TVSport, "|- Европейский клубный баскетбол");
             caps.Categories.AddCategoryMapping(2009, TorznabCatType.TVSport, "🏒 Хоккей");
             caps.Categories.AddCategoryMapping(2010, TorznabCatType.TVSport, "|- Хоккей с мячом / Бенди");
@@ -1197,6 +1198,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(2205, TorznabCatType.PCGames, "|- Старые игры (Стратегии)");
             caps.Categories.AddCategoryMapping(2225, TorznabCatType.PCGames, "|- Старые игры (Приключения и квесты)");
             caps.Categories.AddCategoryMapping(2206, TorznabCatType.PCGames, "|- Старые игры (Симуляторы)");
+            caps.Categories.AddCategoryMapping(1007, TorznabCatType.PCGames, "|- Старые игры (Аркады)");
             caps.Categories.AddCategoryMapping(2228, TorznabCatType.PCGames, "|- IBM-PC-несовместимые компьютеры");
             caps.Categories.AddCategoryMapping(139, TorznabCatType.PCGames, "Прочее для Windows-игр");
             caps.Categories.AddCategoryMapping(2478, TorznabCatType.PCGames, "|- Официальные патчи, моды, плагины, дополнения");
@@ -1429,7 +1431,9 @@ namespace Jackett.Common.Indexers.Definitions
                     _capSid = doc.QuerySelector("input[name=\"cap_sid\"]")?.GetAttribute("value");
                 }
                 else
+                {
                     configData.CaptchaImage.Value = null;
+                }
             }
             catch (Exception e)
             {
@@ -1521,7 +1525,9 @@ namespace Jackett.Common.Indexers.Definitions
                 var magnetLink = dom.QuerySelector("table.attach a.magnet-link[href^=\"magnet:?\"]")?.GetAttribute("href");
 
                 if (magnetLink == null)
+                {
                     throw new Exception($"Failed to fetch magnet link from {link}");
+                }
 
                 link = new Uri(magnetLink);
             }
@@ -1597,7 +1603,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var qDownloadLink = row.QuerySelector("td.tor-size > a.tr-dl");
                 if (qDownloadLink == null) // Expects moderation
+                {
                     return null;
+                }
 
                 var link = new Uri(SiteLink + "forum/" + qDownloadLink.GetAttribute("href"));
 
@@ -1662,7 +1670,9 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var seedersString = qSeeders.QuerySelector("b")?.TextContent.Trim();
                 if (!string.IsNullOrWhiteSpace(seedersString))
+                {
                     seeders = ParseUtil.CoerceInt(seedersString);
+                }
             }
             return seeders;
         }
@@ -1739,19 +1749,29 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 // language fix: all rutracker releases contains russian track
-                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.Match(title, "\bRUS\b", RegexOptions.IgnoreCase).Success)
+                if (addRussianToTitle && (IsAnyTvCategory(category) || IsAnyMovieCategory(category)) && !Regex.IsMatch(title, @"\bRUS\b", RegexOptions.IgnoreCase))
+                {
                     title += " RUS";
+                }
 
                 if (stripCyrillicLetters)
+                {
                     title = _stripCyrillicRegex.Replace(title, string.Empty).Trim(' ', '-');
+                }
 
                 if (moveAllTagsToEndOfReleaseTitle)
+                {
                     title = MoveAllTagsToEndOfReleaseTitle(title);
+                }
                 else if (moveFirstTagsToEndOfReleaseTitle)
+                {
                     title = MoveFirstTagsToEndOfReleaseTitle(title);
+                }
 
                 if (IsAnyAudioCategory(category))
+                {
                     title = DetectRereleaseInReleaseTitle(title);
+                }
 
                 title = Regex.Replace(title, @"\b-Rip\b", "Rip", RegexOptions.Compiled | RegexOptions.IgnoreCase);
                 title = Regex.Replace(title, @"\bHDTVRip\b", "HDTV", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -1806,9 +1826,13 @@ namespace Jackett.Common.Indexers.Definitions
                         {
                             var substring = output.Substring(expectedIndex, match.Index - expectedIndex);
                             if (string.IsNullOrWhiteSpace(substring))
+                            {
                                 expectedIndex = match.Index;
+                            }
                             else
+                            {
                                 break;
+                            }
                         }
 
                         var tag = match.ToString();

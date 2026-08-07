@@ -14,22 +14,30 @@ settings:
 
 caps:
   categorymappings:
-    # Anime
-    - {id: 1, cat: TV/Anime, desc: "Raw Animes"}
-    - {id: 2, cat: TV/Anime, desc: "Anime"}
-    - {id: 3, cat: TV/Anime, desc: "Hentai"}
-    - {id: 4, cat: TV/Anime, desc: "Drama"}
-    - {id: 9, cat: TV/Anime, desc: "Anime Music Videos"}
-    - {id: 10, cat: TV/Anime, desc: "Non-English"}
-    # Software
-    - {id: 5, cat: PC/ISO, desc: "DVD/ISO"}
-    - {id: 6, cat: PC, desc: "Hentai-Game"}
-    # Literature
-    - {id: 7, cat: Books, desc: "Manga"}
-    # Audio
-    - {id: 8, cat: Audio, desc: "Audio"}
-    # Other
-    - {id: 11, cat: Other, desc: "Other"}
+    - {id: Anime, cat: TV/Anime, desc: "Anime"}
+    - {id: "Anime / Music Video", cat: Audio/Video, desc: "Anime / Music Video"}
+    - {id: "Anime / Subtitle(s) and/or Audio(s)", cat: TV/Anime, desc: "Anime / Subtitle(s) and/or Audio(s)"}
+    - {id: "Anime / RAW", cat: TV/Anime, desc: "Anime / RAW"}
+    - {id: "Manga/Manhwa/Comic", cat: Books/Comics, desc: "Manga/Manhwa/Comic"}
+    - {id: "Manga/Manhwa/Comic / Doujinshi", cat: Books/Comics, desc: "Manga/Manhwa/Comic / Doujinshi"}
+    - {id: "Manga/Manhwa/Comic / RAW", cat: Books/Comics, desc: "Manga/Manhwa/Comic / RAW"}
+    - {id: Audio, cat: Audio, desc: "Audio"}
+    - {id: "Audio / Lossless", cat: Audio/Lossless, desc: "Audio / Lossless"}
+    - {id: "Audio / Lossy", cat: Audio/MP3, desc: "Audio / Lossy"}
+    - {id: Literature, cat: Books, desc: "Literature"}
+    - {id: "Literature / Subtitle(s) and/or Text", cat: Books, desc: "Literature / Subtitle(s) and/or Text"}
+    - {id: "Literature / RAW", cat: Books, desc: "Literature / RAW"}
+    - {id: Live Action, cat: TV/Anime, desc: "Live Action"}
+    - {id: "Live Action / Subtitle(s) and/or Audio(s)", cat: TV, desc: "Live Action / Subtitle(s) and/or Audio(s)"}
+    - {id: "Live Action / Idol/Promotional Video", cat: TV, desc: "Live Action / Idol/Promotional Video"}
+    - {id: "Live Action / RAW", cat: TV, desc: "Live Action / RAW"}
+    - {id: Pictures, cat: Other, desc: "Pictures"}
+    - {id: "Pictures / Graphics", cat: Other, desc: "Pictures / Graphics"}
+    - {id: "Pictures / Photos", cat: Other, desc: "Pictures / Photos"}
+    - {id: Software, cat: Other, desc: "Software"}
+    - {id: "Software / Application", cat: PC/ISO, desc: "Software / Application"}
+    - {id: "Software / Game", cat: PC/Games, desc: "Software / Game"}
+    - {id: Other, cat: Other/Misc, desc: "Other"}
 
   modes:
     search: [q]
@@ -41,45 +49,40 @@ search:
   paths:
     - path: /
   inputs:
-    s: "{{ .Keywords }}"
+    q: "{{ .Keywords }}"
+    page: 1
 
   rows:
-    selector: table tbody tr:has(td.torrents_small_type_data1)
+    selector: table.tl-table > tbody > tr
 
   fields:
-    title:
-      selector: .torrents_small_info_data1 div
-    download:
-      selector: .torrents_small_info_data2 a[title="Download Torrent"]
-      attribute: href
-    magnet:
-      selector: .torrents_small_info_data2 a[title="Magnet Link"]
-      attribute: href
-    date:
-      text: now
-    size:
-      selector: .torrents_small_size_data1
-    seeders:
-      selector: .torrents_small_seeders_data1 b big
-    leechers:
-      selector: .torrents_small_leechers_data1 b big
-    grabs:
-      selector: .torrents_small_downloads_data1
     category:
-      selector: .torrents_small_type_data1 img
-      attribute: src
-      case:
-        "[src=\"./styles/tracker/imageset/cat_raw_small.png\"]": 1
-        "[src=\"./styles/tracker/imageset/cat_anime_small.png\"]": 2
-        "[src=\"./styles/tracker/imageset/cat_hentai_small.png\"]": 3
-        "[src=\"./styles/tracker/imageset/cat_drama_small.png\"]": 4
-        "[src=\"./styles/tracker/imageset/cat_dvd_small.png\"]": 5
-        "[src=\"./styles/tracker/imageset/cat_hgame2_small.png\"]": 6
-        "[src=\"./styles/tracker/imageset/cat_manga_small.png\"]": 7
-        "[src=\"./styles/tracker/imageset/cat_music_small.png\"]": 8
-        "[src=\"./styles/tracker/imageset/cat_musicvid_small.png\"]": 9
-        "[src=\"./styles/tracker/imageset/cat_noneng_small.png\"]": 10
-        "[src=\"./styles/tracker/imageset/cat_other_small.png\"]": 11
+      selector: td.col-cat
+      attribute: title
+    title:
+      selector: a.tl-torrent-name
+    details:
+      selector: a.tl-torrent-name
+      attribute: href
+    download:
+      selector: a[title="Download Torrent"]
+      attribute: href
+    poster:
+      selector: a.tl-torrent-name
+      attribute: data-anime-thumb
+    date:
+      selector: td.col-date
+      filters:
+        - name: dateparse
+          args: yyyy-MM-dd HH:mm
+    size:
+      selector: td.col-size
+    seeders:
+      selector: td.col-se
+    leechers:
+      selector: td.col-le
+    grabs:
+      selector: td.col-dl
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

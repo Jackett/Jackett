@@ -102,7 +102,7 @@ settings:
     default: "Generation-Free's API only delivers torrents that are at least 12 hours old. Therefore, when there are more than 100 torrents loaded to the site in a day, the indexer TEST may fail with 0 results. To allow the TEST to successed you will need to select another page to fetch."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

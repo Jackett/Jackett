@@ -1,0 +1,142 @@
+---
+id: memphis
+name: Memphis
+description: "Memphis is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://memphis.fit/
+
+caps:
+  categorymappings:
+    # from https://memphis.fit/api/torznab?t=caps&apikey=YOUR-PASSKEY
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 4050, cat: PC/Games, desc: "PC/Games"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 4000, cat: PC, desc: "PC"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: passkey
+    type: text
+    label: PassKey
+  - name: info_key
+    type: info
+    label: About your PassKey
+    default: "You can find the API PassKey Key by accessing the <a href=\"https://memphis.fit/?view=member-api\" target=\"_blank\">Memphis API</a> page and scrolling down to the <b>Cross-seed</b> section."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  path: api/torznab
+  method: get
+  inputs:
+    t: search
+    apikey: "{{ .Config.passkey }}"
+    limit: 1
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
+
+search:
+  paths:
+    # docs at https://memphis.fit/?view=member-api
+    - path: api/torznab
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.passkey }}"
+    t: "{{ if .Keywords }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: comments
+      filters:
+        - name: htmldecode
+    download:
+      selector: enclosure
+      attribute: url
+    tmdbid:
+      selector: comments
+      filters:
+        - name: regexp
+          args: media=tmdb.+?(\d+)
+    date:
+      # e.g. Tue, 31 Mar 2026 20:06:13 +0100
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml

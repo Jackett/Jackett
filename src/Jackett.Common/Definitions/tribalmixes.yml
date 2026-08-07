@@ -1,7 +1,7 @@
 ---
 id: tribalmixes
 name: TribalMixes
-description: "TribalMixes is a ratioless Semi-Private Torrent Tracker for DJ MIXES"
+description: "TribalMixes is a Semi-Private Torrent Tracker for DJ MIXES"
 language: en-GB
 type: semi-private
 encoding: ISO-8859-1
@@ -137,4 +137,9 @@ search:
       text: 1
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 0.8
+    minimumseedtime:
+      # 12 hours (as seconds = 12 x 60 x 60)
+      text: 43200
 # engine n/a

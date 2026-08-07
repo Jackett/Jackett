@@ -53,6 +53,7 @@ caps:
     - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
     - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
     - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
+    - {id: 53, cat: XXX/Other, desc: "Mature: Ebooks"}
     - {id: 47, cat: PC/0day, desc: "Software: PC"}
     - {id: 48, cat: PC/Mac, desc: "Software: Mac"}
     - {id: 49, cat: PC, desc: "Software: Linux/Unix"}
@@ -106,7 +107,7 @@ settings:
     default: "You must log in once every 60 days. You must download at least 1 item within your first month."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -163,8 +164,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -239,4 +238,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.0.5
+# json UNIT3D 9.2.0

@@ -66,7 +66,7 @@ settings:
     default: "Users must log in or be seeding for their account to be considered active. If the account is not active for a consecutive 90 days, the account will be deactivated. After a consecutive 120 days, the account will be pruned."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

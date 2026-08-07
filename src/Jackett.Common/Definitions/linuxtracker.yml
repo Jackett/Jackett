@@ -76,6 +76,7 @@ caps:
     - {id: 2192, cat: PC/ISO, desc: "Devuan"}
     - {id: 2287, cat: PC/ISO, desc: "Doge Linux"}
     - {id: 144, cat: PC/ISO, desc: "DragonFly BSD"}
+    - {id: 2307, cat: PC/ISO, desc: "Drauger OS"}
     - {id: 2226, cat: PC/ISO, desc: "DuZeru OS"}
     - {id: 148, cat: PC/ISO, desc: "Dynebolic"}
     - {id: 2261, cat: PC/ISO, desc: "Eagle Mode"}

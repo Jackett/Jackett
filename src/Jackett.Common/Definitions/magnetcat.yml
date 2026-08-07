@@ -9,28 +9,26 @@ encoding: UTF-8
 links:
   - https://magnetcatcat.com/
   - https://clmclm.com/
-  - https://www.8800552.xyz/
-  - https://www.8800554.xyz/
-  - https://www.8800556.xyz/
-  - https://www.8800557.xyz/
+  - https://g9u2pm8t.8800591.xyz/
+  - https://ghtzsn85.8800592.xyz/
+  - https://m3hto8t0.8800593.xyz/
+  - https://bgsewc83.8800594.xyz/
 legacylinks:
-  - https://www.clm472.sbs/
-  - https://www.8800536.xyz/
-  - https://www.8800537.xyz/
-  - https://www.8800538.xyz/
-  - https://www.8800539.xyz/
-  - https://www.8800540.xyz/
-  - https://www.8800541.xyz/
-  - https://www.8800542.xyz/
-  - https://www.8800543.xyz/
-  - https://www.8800544.xyz/
-  - https://www.8800545.xyz/
-  - https://www.8800546.xyz/
-  - https://www.8800547.xyz/
-  - https://www.8800548.xyz/
-  - https://www.8800549.xyz/
-  - https://www.8800550.xyz/
-  - https://www.8800551.xyz/
+  - https://www.8800581.xyz/
+  - https://www.8800578.xyz/
+  - https://www.8800582.xyz/
+  - https://www.8800583.xyz/
+  - https://www.8800584.xyz/
+  - https://www.8800585.xyz/
+  - https://www.8800586.xyz/
+  - https://www.8800588.xyz/
+  - https://www.8800587.xyz/
+  - https://www.8800589.xyz/
+  - https://www.8800590.xyz/
+  - https://www.8800591.xyz/
+  - https://www.8800592.xyz/
+  - https://www.8800593.xyz/
+  - https://www.8800594.xyz/
 
 caps:
   categorymappings:
@@ -56,14 +54,14 @@ settings:
     label: Category
     default: 0
     options:
-      0: All categories
-      1: Movies and TV shows
-      2: Music
-      3: Images
-      4: Documents and books
-      5: Compressed files
-      6: Installer packages
-      7: Other
+      0: 全部(All categories)
+      1: 影视(Movies and TV shows)
+      2: 音乐(Music)
+      3: 图像(Images)
+      4: 文档书籍(Documents)
+      5: 压缩文件(Archives)
+      6: 安装包(Apps)
+      7: 其他(Other)
   - name: sort
     type: select
     label: Sort requested from site
@@ -80,34 +78,46 @@ search:
     - selector: :root:contains("Internal Server Error")
 
   rows:
-    selector: div.ssbox
+    selector: article
 
   fields:
     categorydesc:
-      selector: div.title > h3 > span
+      selector: span:first-child
       filters:
         - name: re_replace
-          args: ["([\\[\\]]+)", ""]
+          args: ["分类：", ""]
+        - name: re_replace
+          args: ["Category：", ""]
     title:
       selector: a[href^="/hash/"]
     details:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="/hash/"]
       attribute: href
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("Date added:") > b, div.sbar > span:contains("添加时间:") > b
+      selector: span:nth-child(2)
       filters:
+        - name: re_replace
+          args: ["添加时间：", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("Size:") > b, div.sbar > span:contains("大小:") > b
+      selector: span:nth-child(3)
+      filters:
+        - name: re_replace
+          args: ["大小：", ""]
+    files:
+      selector: span:nth-child(5)
+      filters:
+        - name: re_replace
+          args: ["文件：", ""]
     seeders:
       text: 1
     leechers:

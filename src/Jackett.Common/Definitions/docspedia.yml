@@ -36,7 +36,7 @@ caps:
     - {id: 95, cat: Books/EBook, desc: "Non-Fiction"}
     - {id: 70, cat: Books/EBook, desc: "Occult"}
     - {id: 81, cat: Books/EBook, desc: "Photography"}
-    - {id: 74, cat: Audio, desc: "Podcasts"}
+    - {id: 74, cat: Audio/Other, desc: "Podcasts"}
     - {id: 69, cat: Other, desc: "PS Resources"}
     - {id: 91, cat: Books/EBook, desc: "Romance"}
     - {id: 89, cat: Books/EBook, desc: "Scinece Fiction"}

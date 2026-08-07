@@ -1,7 +1,7 @@
 ---
 id: nostradamus
 name: Nostradamus
-description: "Nostradamus is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Nostradamus is a ratioless FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -10,13 +10,14 @@ links:
 
 caps:
   categorymappings:
-    # from  https://nostradamus.foo/api?t=caps&apikey=YOUR-API-KEY
+    # from https://nostradamus.foo/api?t=caps&apikey=YOUR-API-KEY
     - {id: 2000, cat: Movies, desc: "Films"}
     - {id: 2020, cat: Movies, desc: "Films/Film"}
     - {id: 2010, cat: Movies/Other, desc: "Films/Animation"}
     - {id: 2030, cat: TV/Documentary, desc: "Films/Documentaire"}
     - {id: 2040, cat: Audio/Video, desc: "Films/Spectacle"}
     - {id: 2060, cat: Audio/Video, desc: "Films/Concert"}
+    - {id: 2510, cat: Movies/Other, desc: "Films/Court-métrage"}
     - {id: 5000, cat: TV, desc: "Séries TV"}
     - {id: 5040, cat: TV, desc: "Séries TV/Série TV"}
     - {id: 5070, cat: TV/Anime, desc: "Séries TV/Animation Série"}
@@ -47,6 +48,7 @@ caps:
     - {id: 1080, cat: Console/PS4, desc: "Jeu vidéo/Sony"}
     - {id: 1061, cat: Console/Other, desc: "Jeu vidéo/Tablette"}
     - {id: 1090, cat: PC/Games, desc: "Jeu vidéo/Windows"}
+    - {id: 8000, cat: Other, desc: "eBook/Littérature & Audio/Autre & Séries TV/Documentaire"}
 
   modes:
     search: [q]
@@ -119,7 +121,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title_phase1:
       selector: title
@@ -143,7 +145,7 @@ search:
       selector: enclosure
       attribute: url
     infohash:
-      selector: '[name="infohash"]'
+      selector: "[name=infohash]"
       attribute: value
     date:
       # Thu, 15 Jan 2026 16:24:34 +0000
@@ -152,32 +154,27 @@ search:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
-      selector: '[name="size"]'
+      selector: "[name=size]"
       attribute: value
     imdbid:
-      selector: '[name="imdbid"]'
+      selector: "[name=imdbid]"
       attribute: value
     tmdbid:
-      selector: '[name="tmdbid"]'
+      selector: "[name=tmdbid]"
       attribute: value
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="leechers"]'
+      selector: "[name=leechers]"
       attribute: value
     grabs:
-      selector: '[name="grabs"]'
+      selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
-      selector: '[name="downloadvolumefactor"]'
-      attribute: value
+      text: 0
     uploadvolumefactor:
-      selector: '[name="uploadvolumefactor"]'
-      attribute: value
-# global MR is 0.5 but torrents must be seeded for 3 days regardless of ratio
-#    minimumratio:
-#      text: 0.5
+      text: 1
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200

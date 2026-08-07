@@ -53,6 +53,9 @@ login:
     - selector: ":root:contains(\"No API_KEY provided\")"
       message:
         text: "You did not enter an API key."
+    - selector: ":root:contains(\"not have MFA\")"
+      message:
+        text: "User does not have MFA enabled on the account."
 
 search:
   paths:

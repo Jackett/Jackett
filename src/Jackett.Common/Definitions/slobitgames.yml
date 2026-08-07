@@ -1,0 +1,141 @@
+---
+id: slobitgames
+name: Slobit Games
+description: "Slobit Games is a Private Torrent Tracker for GAMES"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://games.slo-bitcloud.eu/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: PC/Games, desc: "Games - PC"}
+    - {id: 11, cat: Console/PS3, desc: "Games - PS2"}
+    - {id: 12, cat: Console/PSP, desc: "Games - PSP"}
+    - {id: 43, cat: Console/PS3, desc: "Games - PS3"}
+    - {id: 13, cat: Console/XBox, desc: "Games - Xbox"}
+    - {id: 14, cat: Console/XBox 360, desc: "Games - Xbox360"}
+    - {id: 15, cat: Console/PS3, desc: "Games - PS1"}
+    - {id: 44, cat: Console/Wii, desc: "Games - Wii"}
+    - {id: 45, cat: Console/NDS, desc: "Games - DS"}
+    - {id: 46, cat: Console/Other, desc: "Games - GameCube"}
+    - {id: 27, cat: Other, desc: "Music - Other"}
+    - {id: 33, cat: PC, desc: "Other - Emulation"}
+    - {id: 28, cat: Console/PS4, desc: "PS4 - PS4"}
+    - {id: 47, cat: Console/PS4, desc: "PS5 - PS"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: id
+    options:
+      id: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_results
+    type: info
+    label: Search results
+    default: "If you are getting <b>0 results</b> then access the site with your browser and <b>mark as read</b> all PMs."
+
+login:
+  path: account-login.php
+  method: post
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.myFrame:contains("Access denied")
+      message:
+        text: "The specified username or password was incorrect."
+  test:
+    path: index.php
+    selector: a[href="account-logout.php"]
+
+search:
+  paths:
+    # https://games.slo-bitcloud.eu/torrents-search.php?c45=1&c46=1&search=&cat=0&incldead=1&freeleech=0&inclexternal=0&lang=0
+    - path: torrents-search.php
+  inputs:
+#    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}" # using this causes internal server error
+    search: "{{ .Keywords }}"
+    cat: 0
+    # 0 active, 1 incldead, 2 onlydead
+    incldead: 1
+    # 0 all, 1 notfree, 2 onlyfree
+    freeleech: "{{ if .Config.freeleech }}2{{ else }}0{{ end }}"
+    # 0 both, 1 local, 2 external
+    inclexternal: 0
+    # 0 all, 1 English, 2 French, 3 German, 4 Italian, 5 Japanese, 6 Spanish, 7 Russian
+    lang: 0
+    sort: "{{ .Config.sort }}"
+    order: "{{ .Config.type }}"
+
+  rows:
+    selector: table.ttable_headinner > tbody > tr.t-row
+    filters:
+      - name: andmatch
+
+  fields:
+    category:
+      selector: a[href^="torrents.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: title
+    details:
+      selector: a[href^="torrents-details.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    size:
+      selector: td:nth-child(6)
+    date:
+      text: now
+    seeders:
+      selector: td:nth-child(7)
+    leechers:
+      selector: td:nth-child(8)
+    description:
+      selector: td:nth-child(11)
+      filters:
+        - name: prepend
+          args: "Wait: "
+    downloadvolumefactor:
+      case:
+        span.badge-free: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# TorrentTrader v3.0

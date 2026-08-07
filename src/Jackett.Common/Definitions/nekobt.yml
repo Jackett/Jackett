@@ -90,7 +90,7 @@ search:
         type: xml
 
   inputs:
-    t: "search"
+    t: search
     q: "{{ .Keywords }}"
     apikey: "{{ .Config.apikey }}"
     tvdbid: "{{ .Query.TVDBID }}"
@@ -134,18 +134,18 @@ search:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     size:
       selector: size
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="leechers"]'
+      selector: "[name=leechers]"
       attribute: value
     grabs:
-      selector: '[name="grabs"]'
+      selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
       text: 0

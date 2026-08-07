@@ -62,7 +62,7 @@ settings:
     default: "If it has been 60 days since your last login, your account will be inactive. After another 30 days without logging in, your account will be Disabled!"
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

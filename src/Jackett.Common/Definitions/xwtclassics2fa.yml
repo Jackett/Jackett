@@ -1,0 +1,144 @@
+---
+id: xwtclassics2fa
+name: XWT-Classics2FA
+description: "XWT-Classics is a Private Torrent Tracker for CLASSIC PROFESSIONAL WRESTLING. This indexer uses cookie login for 2FA."
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://xwt-classics.net/
+legacylinks:
+  - http://xwt-classics.net/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: TV/Sport, desc: "DVD"}
+    - {id: 9, cat: TV/Sport, desc: "Florida"}
+    - {id: 7, cat: TV/Sport, desc: "International"}
+    - {id: 6, cat: TV/Sport, desc: "Japan"}
+    - {id: 8, cat: TV/Sport, desc: "Misc"}
+    - {id: 11, cat: TV/Sport, desc: "NWA"}
+    - {id: 4, cat: TV/Sport, desc: "UWF/Mid-South"}
+    - {id: 12, cat: TV/Sport, desc: "WCW"}
+    - {id: 5, cat: TV/Sport, desc: "World Class"}
+    - {id: 10, cat: TV/Sport, desc: "WWE 24/7"}
+    - {id: 13, cat: TV/Sport, desc: "WWE Network"}
+    - {id: 2, cat: TV/Sport, desc: "WWF"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: seedbox
+    type: checkbox
+    label: "Use SeedBox Download Link"
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts inactive for more than 42 days are automatically deleted."
+
+login:
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: browse.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # http://xwt-classics.net/browse.php?search=ricks&cat=0&incldead=1
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table[border="0"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
+
+  fields:
+    category_optional:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      optional: true
+      filters:
+        - name: querystring
+          args: cat
+    category:
+      text: "{{ if .Result.category_optional }}{{ .Result.category_optional }}{{ else }}8{{ end }}"
+    title:
+      selector: a[href^="details.php?id="]
+      attribute: title
+    download_1:
+      selector: a[href^="download.php"]
+      attribute: href
+    download_2:
+      selector: a[href^="download2.php"]
+      attribute: href
+    download:
+      text: "{{ if .Config.seedbox }}{{ .Result.download_2 }}{{ else }}{{ .Result.download_1 }}{{ end }}"
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    files:
+      selector: td:nth-child(3)
+    grabs:
+      selector: td:nth-child(7)
+    size:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-last-child(3)
+    leechers:
+      selector: td:nth-last-child(2)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " -02:00" # WGST
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    downloadvolumefactor:
+      case:
+        img[src="pic/freeleech.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# engine n/a

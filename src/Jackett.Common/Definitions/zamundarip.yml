@@ -70,7 +70,7 @@ search:
 
   fields:
     category:
-      selector: '[name="category"]'
+      selector: "[name=category]"
       attribute: value
     title:
       selector: title
@@ -85,13 +85,13 @@ search:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
-      selector: '[name="size"]'
+      selector: "[name=size]"
       attribute: value
     seeders:
-      selector: '[name="seeders"]'
+      selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: '[name="peers"]'
+      selector: "[name=peers]"
       attribute: value
     downloadvolumefactor:
       text: 0

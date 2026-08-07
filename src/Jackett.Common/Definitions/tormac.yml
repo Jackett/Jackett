@@ -116,11 +116,11 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: "a[onclick=\"return post2url('login.php', {logout: 1});\"]"
+    selector: "a[onclick=\"return post2url('\/login', {logout: 1});\"]"
 
 search:
   paths:
-    - path: tracker.php
+    - path: tracker
   inputs:
     $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
     prev_my: 0
@@ -147,17 +147,17 @@ search:
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
   rows:
-    selector: tr.tCenter:has(a[href^="dl.php?t="])
+    selector: tr.tCenter:has(a[href^="/dl?t="])
 
   fields:
     category:
-      selector: a[href^="tracker.php?f="]
+      selector: a[href^="/tracker?f="]
       attribute: href
       filters:
         - name: querystring
           args: f
     title:
-      selector: a[href^="./viewtopic.php?t="]
+      selector: a.hl-tags
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -211,24 +211,53 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="./viewtopic.php?t="]
+      selector: a.hl-tags
       attribute: href
     download:
-      selector: a[href^="dl.php?t="]
+      selector: a[href^="/dl?t="]
       attribute: href
     size:
-      selector: td.tor-size > u
+      selector: a[href^="/dl?t="]
     seeders:
-      selector: td[title="Сиды"] b
+      selector: span.seedmed
       filters:
         - name: replace
           args: ["никогда", "0"]
     leechers:
-      selector: td.leechmed > b
+      selector: span.leechmed
     grabs:
-      selector: td:nth-child(9)
+      selector: span.med
     date:
-      selector: td[title="Добавлен"] > u
+      selector: div > p.small
+      filters:
+        - name: regexp
+          args: "Создан:(.+?)Автор:"
+        - name: replace
+          args: ["Янв", "Jan"]
+        - name: replace
+          args: ["Фев", "Feb"]
+        - name: replace
+          args: ["Мар", "Mar"]
+        - name: replace
+          args: ["Апр", "Apr"]
+        - name: replace
+          args: ["Май", "May"]
+        - name: replace
+          args: ["Июн", "Jun"]
+        - name: replace
+          args: ["Июл", "Jul"]
+        - name: replace
+          args: ["Авг", "Aug"]
+        - name: replace
+          args: ["Сен", "Sep"]
+        - name: replace
+          args: ["Окт", "Oct"]
+        - name: replace
+          args: ["Ноя", "Nov"]
+        - name: replace
+          args: ["Дек", "Dec"]
+        - name: dateparse
+          args: "dd-MMM-yy"
     downloadvolumefactor:
       case:
         img[src$="default/images/tor_gold.gif"]: 0
@@ -244,7 +273,7 @@ search:
         span.tor-not-approved: "Unverified:"
         span.tor-dup: "Temporary:"
     description:
-      selector: a[href^="./viewtopic.php?t="]
+      selector: a.hl-tags
       filters:
         - name: prepend
           args: "{{ .Result.description_verified }} "

@@ -27,7 +27,9 @@ namespace Jackett.Common.Utils
             if (isInt)
             {
                 if (valStr.Contains(',') && valStr.Contains('.'))
+                {
                     return valStr;
+                }
 
                 valStr = valStr.Length == 0 ? "0" : valStr.Replace(".", ",");
 
@@ -66,7 +68,10 @@ namespace Jackett.Common.Utils
         public static string GetArgumentFromQueryString(string url, string argument)
         {
             if (url == null || argument == null)
+            {
                 return null;
+            }
+
             var qsStr = url.Split(new char[] { '?' }, 2)[1];
             qsStr = qsStr.Split(new char[] { '#' }, 2)[0];
             var qs = QueryHelpers.ParseQuery(qsStr);
@@ -76,7 +81,9 @@ namespace Jackett.Common.Utils
         public static long? GetLongFromString(string str)
         {
             if (string.IsNullOrWhiteSpace(str))
+            {
                 return null;
+            }
 
             var extractedLong = string.Empty;
 
@@ -85,7 +92,9 @@ namespace Jackett.Common.Utils
                 if (c < '0' || c > '9')
                 {
                     if (extractedLong.Length > 0)
+                    {
                         break;
+                    }
 
                     continue;
                 }
@@ -137,30 +146,42 @@ namespace Jackett.Common.Utils
                 valStr = valStr.Substring(0, lastOcc).Replace(".", string.Empty) + valStr.Substring(lastOcc);
             }
             var unit = new string(str.Where(char.IsLetter).ToArray());
-            var val = CoerceFloat(valStr);
+            var val = CoerceDouble(valStr);
             return GetBytes(unit, val);
         }
 
-        public static long GetBytes(string unit, float value)
+        public static long GetBytes(string unit, double value)
         {
             unit = unit.Replace("i", "").ToLowerInvariant();
             if (unit.Contains("kb"))
+            {
                 return BytesFromKB(value);
+            }
+
             if (unit.Contains("mb"))
+            {
                 return BytesFromMB(value);
+            }
+
             if (unit.Contains("gb"))
+            {
                 return BytesFromGB(value);
+            }
+
             if (unit.Contains("tb"))
+            {
                 return BytesFromTB(value);
+            }
+
             return (long)value;
         }
 
-        public static long BytesFromTB(float tb) => BytesFromGB(tb * 1024f);
+        public static long BytesFromTB(double tb) => BytesFromGB(tb * 1024d);
 
-        public static long BytesFromGB(float gb) => BytesFromMB(gb * 1024f);
+        public static long BytesFromGB(double gb) => BytesFromMB(gb * 1024d);
 
-        public static long BytesFromMB(float mb) => BytesFromKB(mb * 1024f);
+        public static long BytesFromMB(double mb) => BytesFromKB(mb * 1024d);
 
-        public static long BytesFromKB(float kb) => (long)(kb * 1024f);
+        public static long BytesFromKB(double kb) => (long)(kb * 1024d);
     }
 }

@@ -2,7 +2,7 @@
 id: nobs
 name: NOBS
 description: "NOBS (NUCLEAR ORDER BIT SYNDICATE) is a SPANISH Private Torrent Tracker for MOVIES / TV"
-language: en-US
+language: es-ES
 type: private
 encoding: UTF-8
 links:
@@ -12,6 +12,9 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Console, desc: "Retro Arcade"}
+    - {id: 4, cat: Movies/Other, desc: "Movies"}
+    - {id: 5, cat: TV/Anime, desc: "TV"}
 
   modes:
     search: [q]
@@ -52,7 +55,7 @@ settings:
       asc: asc
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]
@@ -177,10 +180,10 @@ search:
         True: 2 # double
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
-# global MR is 0.4 but torrents must be seeded for 7 days regardless of ratio
+# global MR is 0.4 but torrents must be seeded for 4 days regardless of ratio
 #    minimumratio:
 #      text: 0.4
     minimumseedtime:
-      # 7 days (as seconds = 7 x 24 x 60 x 60)
-      text: 604800
+      # 4 days (as seconds = 4 x 24 x 60 x 60)
+      text: 345600
 # json UNIT3D 9.2.0

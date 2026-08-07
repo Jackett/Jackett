@@ -8,7 +8,7 @@ encoding: UTF-8
 followredirect: true
 testlinktorrent: false
 links:
-  - https://www.torrent9.club/
+  - https://www6.torrent9.to/
 legacylinks:
   - https://www.torrent9.pl/ # this is a proxy for torrent9clone
   - https://torrent9.black-mirror.xyz/ # this is a proxy for torrent9clone
@@ -16,23 +16,24 @@ legacylinks:
   - https://torrent9.proxyportal.fun/ # this is a proxy for torrent9clone
   - https://torrent9.uk-unblock.xyz/ # this is a proxy for torrent9clone
   - https://torrent9.ind-unblock.xyz/ # this is a proxy for torrent9clone
+  - https://www.torrent9.fi/ # this is the torrent9clone domain
+  - https://torrent9.ninjaproxy1.com/ # no response data
+  - https://torrent9.proxyninja.org/ # Error 1007
+  - https://torrent9.unblockninja.com/ # 403 forbidden
   - https://ww1.torrent9.to/
   - https://www.torrent9.is/
   - https://torrent9.li/ # not a proxy for torrent9 or torrent9clone
   - https://www.oxtorrent.me/
   - https://www.torrent9.gg/
-  - https://www.torrent9.fi/ # this is the torrent9clone domain
   - https://www.torrent9.fm/
   - https://torrent9.se/ # redirect to www.
-  - https://torrent9.ninjaproxy1.com/ # no response data
-  - https://torrent9.proxyninja.org/ # Error 1007
   - https://www.torrent9.se/
-  - https://torrent9.unblockninja.com/ # 403 forbidden
   - https://ww1.torrent9.fm/
   - https://www.torrent9.zone/ # clone? details links are broken
   - https://torrent9.to/
   - https://ww2.torrent9.to/
   - https://www5.torrent9.to/
+  - https://www.torrent9.club/
 
 caps:
   # dont forget to update the search fields category case block

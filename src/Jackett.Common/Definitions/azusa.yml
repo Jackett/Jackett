@@ -53,7 +53,7 @@ settings:
     default: For best results, change the <b>Torrents per page:</b> setting to <b>100</b> on your account profile.
 
 login:
-  # using cookie method because site regularly disables login page for certain events during the year
+  # using cookie method because site regularly disables login page and goes into silent mode during the year
   method: cookie
   inputs:
     cookie: "{{ .Config.cookie }}"

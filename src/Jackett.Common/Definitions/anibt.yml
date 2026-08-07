@@ -1,0 +1,108 @@
+---
+id: anibt
+name: Anibt
+description: Anibt is a CHINESE Public aggregate indexer for ANIME"
+language: zh-CN
+type: public
+encoding: UTF-8
+links:
+  - https://anibt.net/
+
+caps:
+  categorymappings:
+    - {id: anime, cat: TV/Anime, desc: "Anime", default: true}
+    - {id: manga, cat: Books/Comics, desc: "Manga", default: false}
+    - {id: music, cat: Audio/Lossless, desc: "Music", default: false}
+    - {id: raw, cat: TV/Anime, desc: "Raw", default: false}
+    - {id: stage, cat: Audio/Video, desc: "Stage", default: false}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: publishedAt
+    options:
+      publishedAt: created
+      fileSize: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+search:
+  paths:
+    - path: rss/magnets.xml
+      categories: [anime]
+      response:
+        type: xml
+    - path: rss/other/manga.xml
+      categories: [manga]
+      response:
+        type: xml
+    - path: rss/other/music.xml
+      categories: [music]
+      response:
+        type: xml
+    - path: rss/other/raw.xml
+      categories: [raw]
+      response:
+        type: xml
+    - path: rss/other/stage.xml
+      categories: [stage]
+      response:
+        type: xml
+
+  inputs:
+    # defaults (e.g. limit=100) cause redirects if used in URL
+    q: "{{ .Keywords }}"
+    sortField: "{{ re_replace .Config.sort \"publishedAt\" \"\" }}"
+    sortOrder: "{{ re_replace .Config.type \"desc\" \"\" }}"
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    title:
+      selector: title
+    description:
+      selector: animeTitle
+    details:
+      selector: link
+    download:
+      selector: enclosure
+      attribute: url
+      optional: true
+    magnet:
+      selector: magneturi
+    date:
+      # Sat, 18 Jul 2026 07:33:19 +0800
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    category_default:
+      selector: type
+    category:
+      selector: category
+      optional: true
+      default: "{{ .Result.category_default }}"
+    size:
+      selector: fileSize
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+# torznab xml

@@ -56,7 +56,7 @@ settings:
     default: "All members must engage with the site, through either logging in or navigating upload.cx. Any account that remains inactive for over two months will be deactivated and pruned after an additional two months of deactivation."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

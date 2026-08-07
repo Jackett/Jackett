@@ -60,7 +60,7 @@ settings:
     default: "Accounts that are inactive for 90 days are deactivated."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

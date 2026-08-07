@@ -10,25 +10,17 @@ links:
 
 caps:
   categorymappings:
+    - {id: 26, cat: Movies, desc: "Новинки кино"}
     - {id: 18, cat: Other, desc: "Эксклюзивы"}
     - {id: 17, cat: Other/Misc, desc: "VIP"}
     - {id: 25, cat: Other, desc: "OnLine"}
-    - {id: 1, cat: PC, desc: "Приложения Windows"}
-    - {id: 2, cat: PC/Mobile-Other, desc: "Приложения PDA"}
-    - {id: 3, cat: PC, desc: "Приложения Unix/Linux"}
-    - {id: 23, cat: PC/Games, desc: "Игры Unix/Linux"}
-    - {id: 4, cat: PC/Mac, desc: "Приложения Mac"}
-    - {id: 5, cat: PC/Games, desc: "Игры PC"}
-    - {id: 6, cat: Console/PS3, desc: "Игры PlayStation 3"}
-    - {id: 7, cat: Console/XBox, desc: "Игры X-Box"}
-    - {id: 8, cat: Console/PSP, desc: "Игры PSP"}
     - {id: 9, cat: TV/Documentary, desc: "Документация"}
     - {id: 10, cat: Audio, desc: "Музыка"}
     - {id: 11, cat: TV, desc: "Сериалы"}
     - {id: 12, cat: Movies/Other, desc: "Мультфильмы"}
+    - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
     - {id: 14, cat: Movies/HD, desc: "Фильмы HDTV"}
     - {id: 15, cat: Movies/DVD, desc: "Фильмы DVD"}
-    - {id: 13, cat: Movies/SD, desc: "Фильмы XviD"}
     - {id: 16, cat: Books, desc: "Книги"}
     - {id: 20, cat: Other, desc: "DEMO"}
     - {id: 21, cat: Other, desc: "Лавка субтитров"}

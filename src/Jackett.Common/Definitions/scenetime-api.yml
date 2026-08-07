@@ -1,0 +1,139 @@
+---
+id: scenetime-api
+name: SceneTime (API)
+description: "SceneTime is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.scenetime.com/
+
+caps:
+  categorymappings:
+    # from https://www.scenetime.com/rss.php?apikey=YOUR-API-KEY&t=caps
+    - {id: 1000, cat: Console, desc: "Console"}
+    - {id: 100015, cat: Console/Other, desc: "Games Dreamcast"}
+    - {id: 100055, cat: Console/NDS, desc: "Games Nintendo"}
+    - {id: 100012, cat: Console/PS4, desc: "Games PS"}
+    - {id: 100051, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 100048, cat: Console/XBox, desc: "Games XBOX"}
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 100047, cat: Movies, desc: "Movie Packs"}
+    - {id: 100064, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 100082, cat: Movies/Other, desc: "Movies CAM/TS"}
+    - {id: 100059, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 100057, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 100016, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 100004, cat: Audio, desc: "Music"}
+    - {id: 100116, cat: Audio, desc: "Music Packs"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 100006, cat: PC/Games, desc: "Games PC-ISO"}
+    - {id: 100053, cat: PC/0day, desc: "Apps"}
+    - {id: 100052, cat: PC/Mac, desc: "Mac/Linux"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 100001, cat: TV/Anime, desc: "TV ANIME"}
+    - {id: 100009, cat: TV/HD, desc: "TV HD"}
+    - {id: 100043, cat: TV, desc: "TV Packs"}
+    - {id: 100077, cat: TV/SD, desc: "TV SD"}
+    - {id: 100002, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 100010, cat: XXX, desc: "Movies Adult"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 100007, cat: Books, desc: "Books and Magazines"}
+    - {id: 100065, cat: Books/Comics, desc: "Comic Books"}
+    - {id: 8000, cat: Other, desc: "Other"}
+    - {id: 100024, cat: PC/Mobile-Other, desc: "Mobile Apps"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "You can find your API Key by accessing the <a href=\"https://scenetime.com/rss.php\" target=\"_blank\">SceneTime RSS</a> page, scrolling down to the <b>Torznab API</b> section, and copying the <b>API Key</b>."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Unused accounts (accounts with no activity) and inactive unparked accounts may be deleted."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if passkey is invalid
+  path: "rss.php?apikey={{ .Config.apikey }}&view=html"
+  method: get
+
+search:
+  paths:
+    - path: rss.php
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    limit: 100
+    downloadvolumefactor: "{{ if .Config.freeleech }}0{{ else }}{{ end }}"
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: link
+    download:
+      selector: enclosure
+      attribute: url
+    imdbid:
+      selector: "[name=imdbid]"
+      attribute: value
+    date:
+      # Tue, 07 Apr 2026 20:41:08 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=leechers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# torznab xml

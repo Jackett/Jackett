@@ -4,6 +4,7 @@ using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
+using System.Net;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Jackett.Common.Extensions;
@@ -11,10 +12,10 @@ using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
-using Jackett.Common.Utils.Clients;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
+using WebClient = Jackett.Common.Utils.Clients.WebClient;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -50,7 +51,7 @@ namespace Jackett.Common.Indexers.Definitions
             webclient.EmulateBrowser = false;
         }
 
-        private TorznabCapabilities SetCapabilities()
+        private static TorznabCapabilities SetCapabilities()
         {
             var caps = new TorznabCapabilities
             {
@@ -210,7 +211,7 @@ namespace Jackett.Common.Indexers.Definitions
                 {"tor[perpage]", limit.ToString()},
                 {"tor[startNumber]", offset.ToString()},
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
-                {"description", "1"} // include the description
+                {"description", "1"}, // include the description
             };
 
             if (configData.SearchInDescription.Value)
@@ -290,7 +291,6 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var item in jsonResponse.Data)
                 {
                     var id = item.Id;
-                    var link = new Uri(sitelink, $"/tor/download.php?tid={id}");
                     var details = new Uri(sitelink, $"/t/{id}");
 
                     var isFreeLeech = item.Free || item.PersonalFreeLeech;
@@ -300,7 +300,7 @@ namespace Jackett.Common.Indexers.Definitions
                         Guid = details,
                         Title = item.Title.Trim(),
                         Description = item.Description.Trim(),
-                        Link = link,
+                        Link = GetDownloadUrl(id),
                         Details = details,
                         Category = MapTrackerCatToNewznab(item.Category),
                         PublishDate = DateTime.ParseExact(item.Added, "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture, DateTimeStyles.AssumeUniversal).ToLocalTime(),
@@ -322,7 +322,7 @@ namespace Jackett.Common.Indexers.Definitions
                         try
                         {
                             var authorInfoList = JsonConvert.DeserializeObject<Dictionary<string, string>>(authorInfo);
-                            var author = authorInfoList?.Take(5).Select(v => v.Value).ToList();
+                            var author = authorInfoList?.Take(5).Select(v => WebUtility.HtmlDecode(v.Value)).ToList();
 
                             if (author != null && author.Any())
                             {
@@ -369,6 +369,15 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             return releases;
+        }
+
+        private Uri GetDownloadUrl(int torrentId)
+        {
+            return new UriBuilder(SiteLink)
+            {
+                Path = "/tor/download.php",
+                Query = $"tid={torrentId}"
+            }.Uri;
         }
     }
 

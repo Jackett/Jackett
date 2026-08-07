@@ -113,7 +113,7 @@ search:
     xyz: yes
     # Age Limit: 0 all, 1 no, 5 6, 2 12, 3 16, 4 18
     korhatar: 0
-    # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4  waiting for seed, 7 my bookmarks, 12 reseeded by me
+    # 0 active, 1 active+dead, 2 dead, 3 my uploads, 4 waiting for seed, 7 my bookmarks, 12 reseeded by me
     incldead: 1
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"

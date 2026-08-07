@@ -99,7 +99,7 @@ settings:
     default: "You must log in to the site at least once a month; otherwise, your account will be suspended."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

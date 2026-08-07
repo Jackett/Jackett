@@ -74,25 +74,26 @@ caps:
     - {id: 845, cat: TV, desc: "|- Отечественные cериалы"}
     - {id: 850, cat: TV, desc: "|-- Обсуждение сериалов"}
     - {id: 854, cat: TV, desc: "|-- Исторические, военные"}
-    - {id: 846, cat: TV/Foreign, desc: "|- Зарубежные сериалы"}
-    - {id: 856, cat: TV/Foreign, desc: "|-- Исторические, военные"}
     - {id: 847, cat: TV, desc: "|- Отечественные сериалы (HD, DVD Video)"}
     - {id: 1188, cat: TV, desc: "|-- Детектив, боевик, криминал"}
     - {id: 857, cat: TV, desc: "|-- Исторические, военные"}
+    - {id: 846, cat: TV/Foreign, desc: "|- Зарубежные сериалы"}
+    - {id: 856, cat: TV/Foreign, desc: "|-- Исторические, военные"}
     - {id: 848, cat: TV/Foreign, desc: "|- Зарубежные сериалы (HD, DVD Video)"}
     - {id: 858, cat: TV/Foreign, desc: "|-- Исторические, военные"}
     # Мультипликация
     - {id: 869, cat: Movies/Other, desc: "|- Мультфильмы"}
+    - {id: 890, cat: Movies/Other, desc: "|-- Мультфильмы 3D"}
+    - {id: 871, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы"}
+    - {id: 875, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы (DVD, HD Video)"}
     - {id: 1068, cat: Movies/Other, desc: "|- Короткометражные отечественные мультфильмы"}
+    - {id: 1189, cat: Movies/Other, desc: "|- Короткометражные отечественные мультфильмы (DVD, HD Video)"}
+    - {id: 877, cat: Movies/Other, desc: "|-- Сборники отечественных мультфильмов"}
+    - {id: 870, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы"}
+    - {id: 874, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы (DVD, HD Video)"}
     - {id: 1067, cat: Movies/Other, desc: "|- Короткометражные иностранные мультфильмы"}
     - {id: 1066, cat: Movies/Other, desc: "|- Короткометражные мультфильмы (DVD, HD Video)"}
-    - {id: 871, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы"}
-    - {id: 870, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы"}
-    - {id: 875, cat: Movies/Other, desc: "|-- Отечественные Мультфильмы (DVD, HD Video)"}
-    - {id: 874, cat: Movies/Other, desc: "|-- Зарубежные Мультфильмы (DVD, HD Video)"}
-    - {id: 877, cat: Movies/Other, desc: "|-- Сборники отечественных мультфильмов"}
     - {id: 876, cat: Movies/Other, desc: "|-- Сборники зарубежных мультфильмов"}
-    - {id: 890, cat: Movies/Other, desc: "|-- Мультфильмы 3D"}
     - {id: 872, cat: TV/Anime, desc: "|- Мультсериалы"}
     - {id: 878, cat: TV/Anime, desc: "|-- Отечественные Мультсериалы"}
     - {id: 879, cat: TV/Anime, desc: "|-- Зарубежные Мультсериалы"}
@@ -214,7 +215,7 @@ caps:
     - {id: 628, cat: Audio/MP3, desc: "|- House (Singles, EPs) (lossy)"}
     - {id: 629, cat: Audio/Lossless, desc: "|- Techno (lossless)"}
     - {id: 630, cat: Audio/MP3, desc: "|- Techno (lossy)"}
-    - {id: 631, cat: Audio, desc: "|- Techno (Radioshows, Podcasts, Livesets, Mixes)"}
+    - {id: 631, cat: Audio/Other, desc: "|- Techno (Radioshows, Podcasts, Livesets, Mixes)"}
     - {id: 632, cat: Audio/MP3, desc: "|- Techno (Singles, EPs) (lossy)"}
     - {id: 643, cat: Audio/Lossless, desc: "|- Dubstep, Future Garage, Bass Music, UK Garage (lossless)"}
     - {id: 644, cat: Audio/MP3, desc: "|- Dubstep, Future Garage, Bass Music, UK Garage (lossy)"}

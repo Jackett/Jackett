@@ -60,7 +60,7 @@ settings:
     default: "Inactive users are regularly deleted. To keep an account, you must visit the site at least once a season."
 
 login:
-  path: /api/torrents
+  path: api/torrents
   method: get
   error:
     - selector: a[href*="/login"]

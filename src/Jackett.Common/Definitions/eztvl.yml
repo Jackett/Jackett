@@ -41,6 +41,8 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 login:
   path: login/
