@@ -93,7 +93,7 @@ search:
     - path: szukaj.php
   inputs:
     typ: torrent
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search: "{{ .Keywords }}"
     search_in_descr: "{{ if .Keywords }}{{ else }}1{{ end }}"
 
   rows:
