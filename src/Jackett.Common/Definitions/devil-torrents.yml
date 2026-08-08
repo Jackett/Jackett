@@ -64,6 +64,10 @@ settings:
     type: info
     label: "Download Limit"
     default: "If your downloads fail then access the site with your browser and check your messages, you've likely exceeded your limit."
+  - name: info_zero
+    type: info
+    label: "Zero Results"
+    default: "If the indexer starts to return zero results then access the <a href=\"https://devil-torrents.pl/szukaj.php?today=1\" target=\"_blank\">Devil-Torrents search page</a>, you may have a notice you need to read first."
 
 login:
   path: logowanie
