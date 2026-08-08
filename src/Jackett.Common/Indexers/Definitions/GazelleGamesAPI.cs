@@ -267,8 +267,11 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 // reason for failure should be explained.
                 var jsonError = JObject.Parse(response.ContentString);
-                var errorReason = (string)jsonError["error"];
-                throw new Exception(errorReason);
+
+                if (jsonError.TryGetValue("error", out var errorReason) && errorReason.Value<string>().IsNotNullOrWhiteSpace())
+                {
+                    throw new Exception($"Unexpected response from indexer request: \"{errorReason.Value<string>()}\"");
+                }
             }
 
             try

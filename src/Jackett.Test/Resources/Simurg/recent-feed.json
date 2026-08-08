@@ -1,0 +1,54 @@
+{
+    "status": "success",
+    "response": {
+        "currentPage": 1,
+        "pages": 20,
+        "results": [
+            {
+                "groupId": "1",
+                "groupName": "A Spot of Tea and Sorcery: Volume 1",
+                "torrentId": 10,
+                "tags": [
+                    "romance"
+                ],
+                "category": "E-Books",
+                "fileCount": 1,
+                "groupTime": "2026-08-08 08:18:49",
+                "size": 3059860,
+                "snatches": 0,
+                "seeders": 1,
+                "leechers": 0,
+                "isFreeleech": false,
+                "isNeutralLeech": false,
+                "isPersonalFreeleech": false,
+                "canUseToken": true,
+                "hasSnatched": false
+            },
+            {
+                "groupId": "2",
+                "groupName": "The Gate of the Feral Gods",
+                "torrentId": 11,
+                "tags": [
+                    "science.fiction",
+                    "utter.failure"
+                ],
+                "category": "Audiobooks",
+                "fileCount": 1,
+                "groupTime": "2026-08-07 19:41:22",
+                "size": 1031604777,
+                "snatches": 0,
+                "seeders": 1,
+                "leechers": 0,
+                "isFreeleech": false,
+                "isNeutralLeech": false,
+                "isPersonalFreeleech": false,
+                "canUseToken": true,
+                "hasSnatched": false
+            }
+        ]
+    },
+    "info": {
+        "source": "Simurg",
+        "version": 2
+    }
+}
