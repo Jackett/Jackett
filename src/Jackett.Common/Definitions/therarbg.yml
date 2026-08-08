@@ -8,11 +8,8 @@ encoding: UTF-8
 links:
   - https://therarbg.to/
   - https://therarbg.com/
-  - https://therar.site/
-  - https://rarbg.unblockninja.com/
   - https://rarbg.ninjaproxy1.com/
   - https://rarbg.proxyninja.org/
-  - https://rarbg.proxyninja.net/
   - https://rarbg.torrentbay.st/
 legacylinks:
   - https://t-rb.org/
@@ -22,6 +19,9 @@ legacylinks:
   - https://trb.themirror.wiki/
   - https://torrentlite.org/ # fork, dead
   - https://rarbg.torrentsbay.org/
+  - https://rarbg.unblockninja.com/
+  - https://rarbg.proxyninja.net/
+  - https://therar.site/
 
 caps:
   categorymappings:
