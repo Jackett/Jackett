@@ -158,6 +158,8 @@ search:
           args: ([A-F|a-f|0-9]{40})
     details:
       text: "torrents/{{ .Result._hash }}"
+    download:
+      text: "download.php?id={{ .Result._hash }}&f={{ .Result.title }}.torrent"
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
