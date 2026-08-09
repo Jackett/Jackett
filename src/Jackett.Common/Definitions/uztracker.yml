@@ -35,9 +35,14 @@ caps:
     - {id: 223, cat: Movies, desc: " |- Кино СССР"}
     - {id: 16, cat: Movies, desc: " |- Фильмы (HDvideo)"}
     - {id: 190, cat: Movies, desc: " |- Фильмы в 4K и 3D"}
-    - {id: 34, cat: Movies, desc: " |- Перевод на узбекский"}
+    - {id: 463, cat: Movies, desc: " |- HD-AVC"}
     - {id: 25, cat: Movies, desc: "Узбекские кинофильмы"}
-    - {id: 32, cat: Movies, desc: " |- Пр-во Узбекфильм (на русском)"}
+    - {id: 32, cat: Movies, desc: " |- Новинки 2026"}
+    - {id: 514, cat: Movies, desc: " |- Узбекские фильмы 2021-2025"}
+    - {id: 513, cat: Movies, desc: " |- Узбекские фильмы 2011-2020"}
+    - {id: 512, cat: Movies, desc: " |- Узбекские фильмы до 2011 года"}
+    - {id: 515, cat: Movies, desc: " |- Узбекские фильмы (HD-AVC)"}
+    - {id: 516, cat: Movies, desc: " |- Узбекские фильмы (HDvideo)"}
     - {id: 30, cat: Movies, desc: " |- Пр-во Узбекфильм (на узбекском языке)"}
     # Сериалы, Видео и ТВ # Series, Videos and TV
     - {id: 410, cat: TV/Foreign, desc: "Зарубежные сериалы"}
@@ -95,7 +100,9 @@ caps:
     - {id: 468, cat: TV/Documentary, desc: " |- BBC"}
     - {id: 471, cat: TV/Documentary, desc: " |- Discovery"}
     - {id: 470, cat: TV/Documentary, desc: " |- National Geographic"}
+    - {id: 518, cat: TV/Documentary, desc: " |- Viasat Nature"}
     - {id: 469, cat: TV/Documentary, desc: " |- Разное"}
+    # Развлекательные телепередачи и шоу # tv shows
     - {id: 499, cat: TV, desc: "Развлекательные телепередачи и шоу"}
     - {id: 504, cat: TV, desc: " |- Интеллектуальные игры и викторины"}
     - {id: 501, cat: TV, desc: " |- КВН"}
