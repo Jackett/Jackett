@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Threading.Tasks;
@@ -43,6 +44,11 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Audio, "Music");
 
             return caps;
+        }
+
+        protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
+        {
+            return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
