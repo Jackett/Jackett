@@ -150,14 +150,20 @@ search:
           args: category
     title:
       selector: td:nth-child(2) a
-    _hash:
+    title_download:
+      text: "{{ .Result.title }}"
+      filters:
+        - name: urlencode
+    infohash:
       selector: td:nth-child(2) a
       attribute: onclick
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     details:
-      text: "torrents/{{ .Result._hash }}"
+      text: "torrents/{{ .Result.infohash }}"
+    download:
+      text: "download.php?id={{ .Result.infohash }}&f={{ .Result.title_download }}.torrent"
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
