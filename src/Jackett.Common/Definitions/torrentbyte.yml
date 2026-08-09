@@ -1,0 +1,76 @@
+---
+id: torrentbyte
+name: TorrentByte
+description: "TorrentByte is a Public DHT Crawler"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://torrentbyte.cc/
+
+caps:
+  categorymappings:
+    - {id: Movies, cat: Movies, desc: "Movies"}
+    - {id: TV, cat: TV, desc: "TV"}
+    - {id: Games, cat: PC/Games, desc: "Games"}
+    - {id: Anime, cat: TV/Anime, desc: "Anime"}
+    - {id: Music, cat: Audio, desc: "Music"}
+    - {id: Software, cat: PC/0day, desc: "Software"}
+    - {id: XXX, cat: XXX, desc: "XXX"}
+    - {id: Other, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+
+settings: []
+
+search:
+  paths:
+    - path: /
+  inputs:
+    q: "{{ .Keywords }}"
+
+  rows:
+    selector: table > tbody > tr
+
+  fields:
+    category:
+      selector: td:nth-child(2)
+    title:
+      selector: td:nth-child(1)
+      attribute: title
+    details:
+      selector: a[href^="?view="]
+      attribute: href
+    infohash:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      filters:
+        - name: regexp
+          args: "btih:([A-F|a-f|0-9]{40})"
+    size:
+      selector: td:nth-child(3)
+    files:
+      selector: td:nth-child(4)
+    date:
+      selector: td:nth-child(5)
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: td:nth-child(6)
+      remove: a
+# engine n/a
