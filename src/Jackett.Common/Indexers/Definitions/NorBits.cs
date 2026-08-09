@@ -199,29 +199,6 @@ namespace Jackett.Common.Indexers.Definitions
         }
 
         /// <summary>
-        /// Check logged-in state for provider
-        /// </summary>
-        /// <returns></returns>
-        private async Task CheckLoginAsync()
-        {
-            // Checking ...
-            logger.Debug("NorBits -  Checking logged-in state....");
-            var loggedInCheck = await RequestWithCookiesAsync(SearchUrl);
-            if (!loggedInCheck.ContentString.Contains("logout.php"))
-            {
-                // Cookie expired, renew session on provider
-                logger.Debug("NorBits - Not logged, login now...\n");
-
-                await DoLoginAsync();
-            }
-            else
-            {
-                // Already logged, session active
-                logger.Debug("NorBits - Already logged, continue...\n");
-            }
-        }
-
-        /// <summary>
         /// Execute our search query
         /// </summary>
         /// <param name="query">Query</param>
@@ -231,9 +208,6 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var exactSearchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
-
-            // Check login before performing a query
-            await CheckLoginAsync();
 
             var searchTerms = new List<string> { exactSearchTerm };
 
@@ -250,7 +224,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var request = BuildQuery(searchTerm, query, searchUrl);
 
                 // Getting results & Store content
-                var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+                var response = await SearchWithLoginRetryAsync(request);
                 var parser = new HtmlParser();
                 using var dom = parser.ParseDocument(response.ContentString);
 
@@ -350,6 +324,25 @@ namespace Jackett.Common.Indexers.Definitions
             }
             // Return found releases
             return releases;
+        }
+
+        private async Task<WebResult> SearchWithLoginRetryAsync(string request)
+        {
+            var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+            if (response.ContentString.Contains("logout.php"))
+            {
+                return response;
+            }
+
+            logger.Debug("NorBits - Session expired, logging in and retrying search...");
+            await DoLoginAsync();
+            response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+            if (!response.ContentString.Contains("logout.php"))
+            {
+                throw new Exception("NorBits login succeeded, but the retried search is not authenticated.");
+            }
+
+            return response;
         }
 
         /// <summary>
