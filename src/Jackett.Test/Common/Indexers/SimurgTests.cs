@@ -35,7 +35,7 @@ namespace Jackett.Test.Common.Indexers
             firstRelease.Category.Should().HaveCount(2);
             firstRelease.Category.Should().BeEquivalentTo(new[] { 7020, 100003 });
             firstRelease.Title.Should().Be("A Spot of Tea and Sorcery: Volume 1");
-            firstRelease.Link.Should().Be("https://simurg.world/torrents.php?action=download&id=10");
+            firstRelease.Link.Should().Be("https://simurg.world/ajax.php?action=download&id=10");
             firstRelease.Guid.Should().Be("https://simurg.world/torrents.php?torrentid=10");
             firstRelease.Size.Should().Be(3059860L);
             firstRelease.Seeders.Should().Be(1);
