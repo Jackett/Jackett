@@ -56,7 +56,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
@@ -69,7 +69,8 @@ namespace Jackett.Common.Indexers.Definitions
                 BookSearchParams = new List<BookSearchParam>
                 {
                     BookSearchParam.Q
-                }
+                },
+                TvSearchImdbAvailable = true
             };
 
             caps.Categories.AddCategoryMapping("main_cat[]=1", TorznabCatType.Movies, "Filmer");
@@ -208,6 +209,7 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var exactSearchTerm = query.GetQueryString();
             var searchUrl = SearchUrl;
+            var requestedImdbId = ParseUtil.GetLongFromString(query.ImdbID);
 
             var searchTerms = new List<string> { exactSearchTerm };
 
@@ -261,6 +263,13 @@ namespace Jackett.Common.Indexers.Definitions
                         var title = qDetails?.GetAttribute("title").Trim();
                         var details = new Uri(SiteLink + qDetails?.GetAttribute("href").TrimStart('/'));
 
+                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
+                        var imdbId = ParseUtil.GetLongFromString(imdbLink);
+                        if (query.IsTVSearch && query.IsImdbQuery && (!imdbId.HasValue || imdbId != requestedImdbId))
+                        {
+                            continue;
+                        }
+
                         var mainCategory = row.QuerySelector("td:nth-of-type(1) a[href*=\"main_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
                         var secondCategory = row.QuerySelector("td:nth-of-type(1) a[href*=\"sub2_cat[]\"]")?.GetAttribute("href")?.Split('?').Last();
 
@@ -298,9 +307,7 @@ namespace Jackett.Common.Indexers.Definitions
                             release.Genres = release.Genres.Union(genres.Split(',')).ToList();
                         }
 
-                        // IMDB
-                        var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]")?.GetAttribute("href");
-                        release.Imdb = ParseUtil.GetLongFromString(imdbLink);
+                        release.Imdb = imdbId;
 
                         if (row.QuerySelector("img[title=\"100% freeleech\"]") != null)
                         {
@@ -374,6 +381,12 @@ namespace Jackett.Common.Indexers.Definitions
             if (!string.IsNullOrWhiteSpace(query.ImdbID))
             {
                 searchterm = "imdbsearch=" + query.ImdbID;
+
+                var episodeSearchTerm = query.GetEpisodeSearchString();
+                if (!string.IsNullOrWhiteSpace(episodeSearchTerm))
+                {
+                    searchterm += "&search=" + WebUtilityHelpers.UrlEncode(episodeSearchTerm, Encoding.GetEncoding(28591));
+                }
             }
             else if (!string.IsNullOrWhiteSpace(term))
             {
