@@ -225,8 +225,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                 // Getting results & Store content
                 var response = await SearchWithLoginRetryAsync(request);
+
                 var parser = new HtmlParser();
-                using var dom = parser.ParseDocument(response.ContentString);
+                using var dom = await parser.ParseDocumentAsync(response.ContentString);
 
                 try
                 {
@@ -329,14 +330,18 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task<WebResult> SearchWithLoginRetryAsync(string request)
         {
             var response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+
             if (response.ContentString.Contains("logout.php"))
             {
                 return response;
             }
 
-            logger.Debug("NorBits - Session expired, logging in and retrying search...");
+            logger.Debug("NorBits: Invalid session, logging in and retrying search");
+
             await DoLoginAsync();
+
             response = await RequestWithCookiesAndRetryAsync(request, ConfigData.CookieHeader.Value);
+
             if (!response.ContentString.Contains("logout.php"))
             {
                 throw new Exception("NorBits login succeeded, but the retried search is not authenticated.");
