@@ -113,11 +113,6 @@ search:
       filters:
         - name: re_replace
           args: ["大小：", ""]
-    files:
-      selector: span:nth-child(5)
-      filters:
-        - name: re_replace
-          args: ["文件：", ""]
     seeders:
       text: 1
     leechers:
