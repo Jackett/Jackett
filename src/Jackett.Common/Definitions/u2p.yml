@@ -2,8 +2,6 @@
 id: u2p
 name: U2P
 description: "U2P is a FRENCH Public Torrent Tracker for MOVIES / TV / GENERAL"
-# For now, all their content is based on yggtorrent, but it'll be populated more later
-# so some caps features may start working after they begin adding their own content
 language: fr-FR
 type: public
 encoding: UTF-8
@@ -11,9 +9,9 @@ certificates:
   - 0d721372a11a1d8d057c22dd753491fda22f96bc # Expired 3rd June 2026
 links:
   - https://u2prelais.eliottb.dev/
-  - https://u2p.anhkagi.net/
 legacylinks:
   - https://ygg.gratis/
+  - https://u2p.anhkagi.net/
 
 caps:
   categorymappings:
