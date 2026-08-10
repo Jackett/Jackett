@@ -91,6 +91,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(423, TorznabCatType.PCGames, "PCGame(PC遊戲)");
             caps.Categories.AddCategoryMapping(448, TorznabCatType.ConsoleOther, "TvGame(TV遊戲)");
             caps.Categories.AddCategoryMapping(405, TorznabCatType.TVAnime, "Anime(動畫)");
+            caps.Categories.AddCategoryMapping(453, TorznabCatType.TVAnime, "Anime(動畫)/BluRay");
             caps.Categories.AddCategoryMapping(407, TorznabCatType.TVSport, "Sports(運動)");
             caps.Categories.AddCategoryMapping(427, TorznabCatType.BooksEBook, "Study/Edu ebook(教育書面)");
             caps.Categories.AddCategoryMapping(422, TorznabCatType.PC0day, "Software(軟體)");
