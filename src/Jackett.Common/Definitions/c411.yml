@@ -5,6 +5,7 @@ description: "C411 (Community 411) is a FRENCH Private Torrent Tracker for MOVIE
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 4.1 # rate limit: 15req/min
 links:
   - https://c411.org/
 legacylinks:
