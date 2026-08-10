@@ -215,7 +215,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             // duplicate search without diacritics
             var baseSearchTerm = StringUtil.RemoveDiacritics(exactSearchTerm);
-            if (baseSearchTerm != exactSearchTerm)
+            if (!query.IsImdbQuery && baseSearchTerm != exactSearchTerm)
             {
                 searchTerms.Add(baseSearchTerm);
             }
