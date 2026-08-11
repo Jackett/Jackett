@@ -59,6 +59,22 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 5
+    options:
+      5: created
+      6: seeders
+      4: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -84,6 +100,8 @@ search:
     search: "{{ .Keywords }}"
     imdb: "{{ .Query.IMDBID }}"
     freeleech: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
+    s: "{{ .Config.sort }}"
+    t: "{{ .Config.type }}"
 
   rows:
     selector: table#torrenttable > tbody > tr
