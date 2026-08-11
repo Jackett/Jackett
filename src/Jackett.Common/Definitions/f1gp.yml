@@ -62,6 +62,7 @@ caps:
     - {id: 53, cat: TV/Sport, desc: "Horse Racing"}
     - {id: 54, cat: TV/Sport, desc: "Goodwood Festival"}
     - {id: 55, cat: TV/Sport, desc: "Motorsports Special Events"}
+    - {id: 56, cat: TV/Sport, desc: "FIM World Supercross"}
 
   modes:
     search: [q]
