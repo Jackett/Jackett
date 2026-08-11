@@ -447,7 +447,6 @@ Prior versions of Jackett are no longer supported.
  * KrazyZone
  * Kufei (库非)
  * Kufirc
- * Kunlun (昆仑)
  * lajidui
  * Last Digital Underground (LDU)
  * LastFiles (LF)
