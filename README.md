@@ -486,7 +486,6 @@ Prior versions of Jackett are no longer supported.
  * MOJBLiNK
  * MomentPT [![(invite needed)][inviteneeded]](#)
  * MonikaDesign (MDU)
- * MoreThanTV (MTV) [![(invite needed)][inviteneeded]](#)
  * MouseBits
  * Musopia (音乐乌托邦)
  * Muxuege [![(invite needed)][inviteneeded]](#)
