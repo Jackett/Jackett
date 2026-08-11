@@ -6,7 +6,7 @@ language: el-GR
 type: private
 encoding: UTF-8
 certificates:
-  - 0ad8e189bb7d9e15499ba434d77b1e1b3656099f # Expired 30 Jun 2025
+  - cb5c4aa5cd3eb94bd999ecf5ee61e03e87e8fb2e  # Expired 11 Aug 2026
 links:
   - https://peeratiko.org/
 
