@@ -44,12 +44,13 @@ caps:
     - {id: 105, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 82, cat: PC, desc: "MS-DOS"}
     - {id: 7, cat: Audio, desc: "Music"}
+    - {id: 121, cat: Audio/Video, desc: "Music Videos"}
     - {id: 31, cat: Console, desc: "Nintendo"}
     - {id: 59, cat: Console, desc: "P-R-U"}
     - {id: 8, cat: PC/Games, desc: "PC Games"}
     - {id: 87, cat: Console, desc: "Playnite"}
     - {id: 30, cat: Console, desc: "Playstation"}
-    - {id: 118, cat: Console, desc: "Playstation PS5.Roms"}
+    - {id: 118, cat: Console, desc: "PS5.Roms"}
     - {id: 83, cat: PC, desc: "Retro eXo"}
     - {id: 56, cat: PC, desc: "Retro Minis"}
     - {id: 67, cat: PC, desc: "RetroBat"}
@@ -74,6 +75,7 @@ caps:
     - {id: 26, cat: Console, desc: "XBOX"}
     - {id: 12, cat: Console, desc: "XBOX360"}
     - {id: 23, cat: XXX, desc: "XXX18+"}
+    - {id: 120, cat: XXX, desc: "trans.xxx"}
 
   modes:
     search: [q]
