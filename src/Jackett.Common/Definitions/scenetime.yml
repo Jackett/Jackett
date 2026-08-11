@@ -1,0 +1,150 @@
+---
+id: scenetime
+name: SceneTime
+description: "SceneTime is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+requestDelay: 3
+links:
+  - https://www.scenetime.com/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: XXX, desc: "Movies Adult"}
+    - {id: 47, cat: Movies, desc: "Movie Packs"}
+    - {id: 57, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 59, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 64, cat: Movies/3D, desc: "Movies 3D"}
+    - {id: 82, cat: Movies/Other, desc: "Movies CAM/TS"}
+    - {id: 16, cat: Movies/UHD, desc: "Movies UHD"}
+    - {id: 2, cat: TV/UHD, desc: "TV UHD"}
+    - {id: 43, cat: TV, desc: "TV Packs"}
+    - {id: 9, cat: TV/HD, desc: "TV HD"}
+    - {id: 77, cat: TV/SD, desc: "TV SD"}
+    - {id: 1, cat: TV/Anime, desc: "TV ANIME"}
+    - {id: 6, cat: PC/Games, desc: "Games PC-ISO"}
+    - {id: 48, cat: Console/XBox, desc: "Games XBOX"}
+    - {id: 51, cat: Console/Wii, desc: "Games Wii"}
+    - {id: 55, cat: Console/NDS, desc: "Games Nintendo"}
+    - {id: 12, cat: Console/PS4, desc: "Games PS"}
+    - {id: 15, cat: Console/Other, desc: "Games Dreamcast"}
+    - {id: 52, cat: PC/Mac, desc: "Mac/Linux"}
+    - {id: 53, cat: PC/0day, desc: "Apps"}
+    - {id: 24, cat: PC/Mobile-Other, desc: "Mobile Apps"}
+    - {id: 7, cat: Books, desc: "Books and Magazines"}
+    - {id: 65, cat: Books/Comics, desc: "Books Comics"}
+    - {id: 4, cat: Audio, desc: "Music"}
+    - {id: 116, cat: Audio, desc: "Music Packs"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 5
+    options:
+      5: created
+      6: seeders
+      4: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: 2
+    options:
+      2: desc
+      1: asc
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Unused accounts (accounts with no activity) and inactive unparked accounts may be deleted."
+
+login:
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: index.php
+    selector: a[href*="logout.php"]
+
+search:
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
+
+  paths:
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    cata: "yes"
+    search: "{{ .Keywords }}"
+    imdb: "{{ .Query.IMDBID }}"
+    freeleech: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
+    s: "{{ .Config.sort }}"
+    t: "{{ .Config.type }}"
+
+  rows:
+    selector: table#torrenttable > tbody > tr
+
+  fields:
+    category:
+      selector: a[href^="/browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: span.bw-torrent-name
+    details:
+      selector: a[href*="details.php?id="]
+      attribute: href
+    download:
+      selector: a[href*="download.php"]
+      attribute: href
+    date:
+      # Thursday, August 6, 2026 at 6:43pm
+      selector: span[class="elapsedDate"][title]
+      attribute: title
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "dddd, MMMM d, yyyy \\a\\t h:mmtt zzz"
+    size:
+      selector: td.bw-td-size
+    seeders:
+      selector: td.bw-td-seed
+    leechers:
+      selector: td.bw-td-leech
+    downloadvolumefactor:
+      case:
+        "span.bw-tag.bw-tag-fl": 0
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# engine n/a
