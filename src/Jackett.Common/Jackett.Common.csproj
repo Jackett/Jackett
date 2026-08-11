@@ -11,7 +11,7 @@
 
   <ItemGroup>
     <PackageReference Include="AngleSharp" Version="1.7.1" />
-    <PackageReference Include="AngleSharp.Xml" Version="1.0.0" />
+    <PackageReference Include="AngleSharp.Xml" Version="1.1.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
     <PackageReference Include="FlareSolverrSharp" Version="4.0.0" />
