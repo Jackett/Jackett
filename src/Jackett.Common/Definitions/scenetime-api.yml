@@ -64,6 +64,10 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: info_vip
+    type: info
+    label: VIP
+    default: "Torznab API requires VIP/Donor status. Use the 'SceneTime' indexer if your account does not meet this requirement."
   - name: info_activity
     type: info
     label: Account Inactivity
