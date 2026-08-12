@@ -6,6 +6,8 @@ language: cs-CZ
 type: private
 encoding: UTF-8
 links:
+  - https://hd-czech.eu/
+legacylinks:
   - https://freecztorrent.eu/
 
 caps:
@@ -48,6 +50,10 @@ settings:
   - name: password
     type: password
     label: Password
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "HD-CLUB allows only certain IP addressess. The error <b>Redirected to https://hd-czech.eu/blocked.php?country=xx</b> means your IP was not accepted."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
