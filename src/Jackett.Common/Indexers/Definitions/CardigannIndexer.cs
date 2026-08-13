@@ -1478,6 +1478,8 @@ namespace Jackett.Common.Indexers.Definitions
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
+            var searchUrls = new List<string>();
+
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
@@ -1552,11 +1554,19 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                 }
 
-                if (method == RequestType.GET)
+                if (method == RequestType.GET && queryCollection.Count > 0)
                 {
-                    if (queryCollection.Count > 0)
-                        searchUrl += "?" + queryCollection.GetQueryString(Encoding);
+                    searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
+
+                if (method == RequestType.GET && searchUrls.Contains(searchUrl))
+                {
+                    logger.Debug("Skipping duplicated request for {0}: {1}", Definition.Name, searchUrl);
+
+                    continue;
+                }
+
+                searchUrls.Add(searchUrl);
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
