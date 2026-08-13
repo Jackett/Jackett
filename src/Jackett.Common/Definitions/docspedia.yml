@@ -52,12 +52,11 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -88,18 +87,10 @@ settings:
     default: "Accounts without activity in the first 28 days will be deleted automatically by the system."
 
 login:
-  path: login.php
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img.cimage
-    input: captcha
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.subheader:contains("failed")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: my.php
     selector: a[href$="logout.php"]
@@ -110,13 +101,14 @@ search:
   inputs:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
-    # 0 active, 1 incldead, 2 onlydead, 3 freeleech, 4 480p, 5 720p, 6 1080p, 7 4k
-    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    # 1 active, 0 incldead, 2 onlydead
+    incldead: 0
+    free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
   rows:
-    selector: div.torrentrow:has(a[href^="download.php?torrent="])
+    selector: table.torrent-table > tbody > tr:has(a[href^="download.php?torrent="])
     filters:
       - name: andmatch
 
@@ -136,45 +128,30 @@ search:
       selector: a[href^="download.php?torrent="]
       attribute: href
     poster:
-      selector: a[onmouseover]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: src=([^\s]+)
-    files:
-      selector: div.torrenttable:nth-last-child(6)
+      selector: a[href^="details.php?id="]
+      attribute: data-poster
+    date:
+      text: now
     size:
-      selector: div.torrenttable:nth-last-child(4)
+      selector: td.tt-size
     grabs:
-      selector: div.torrenttable:nth-last-child(3)
+      selector: a.val-grab
+      optional: true
+      default: 0
     seeders:
-      selector: div.torrenttable:nth-last-child(2)
+      selector: a.val-seed
+      optional: true
+      default: 0
     leechers:
-      selector: div.torrenttable:nth-last-child(1)
+      selector: a.val-leech
+      optional: true
+      default: 0
     downloadvolumefactor:
       case:
-        img[src$="images/free.png"]: 0
+        span.tag-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
-    date_day:
-      remove: a
-      # Today 02:40 PM
-      # Yesterday 09:10 AM
-      selector: div.torrenttable:nth-child(2):contains("day")
-      # auto adjusted by site account profile
-      optional: true
-    date_year:
-      remove: a
-      # Jul 4 2019 08:04 AM
-      selector: div.torrenttable:nth-child(2):not(:contains("day"))
-      # auto adjusted by site account profile
-      optional: true
-      filters:
-        - name: dateparse
-          args: "MMM d yyyy hh:mm tt"
-    date:
-      text: "{{ if or .Result.date_day .Result.date_year }}{{ or .Result.date_day .Result.date_year }}{{ else }}now{{ end }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
