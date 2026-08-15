@@ -5,6 +5,7 @@ description: "Magnet Cat is a Public Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 # current domain finder https://魔法猫咪.lol/ or https://哆啦a猫.com/
 links:
   - https://magnetcatcat.com/
