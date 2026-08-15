@@ -101,7 +101,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(table.torrentname):not(:has(a[href^="details.php?id="]:contains("请不要下载")))
 
   fields:
     category:
