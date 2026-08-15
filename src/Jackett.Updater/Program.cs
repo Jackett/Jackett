@@ -728,6 +728,7 @@ namespace Jackett.Updater
                 "Definitions/scenelinks.yml",
                 "Definitions/scenepalace.yml",
                 "Definitions/scenereactor.yml",
+                "Definitions/scenetime.yml", // switch to *-API #14878 #16719
                 "Definitions/scenexpress.yml",
                 "Definitions/sdbits.yml",
                 "Definitions/sdkino.yml",
