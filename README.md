@@ -259,6 +259,7 @@ Prior versions of Jackett are no longer supported.
  * 3D Torrents (3DT)
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
+ * 720pier
  * Abnormal (ABN)
  * ABtorrents (ABT + RNS)
  * AcrossTheTasman [![(invite needed)][inviteneeded]](#)
