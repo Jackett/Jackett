@@ -1,0 +1,72 @@
+---
+id: pornxlab
+replaces:
+  - ptorrents
+name: PornXLab
+description: "PornXLab is a Public tracker for 3X"
+language: en-US
+type: public
+encoding: UTF-8
+links:
+  - https://www.pornxlab.com/
+legacylinks:
+  - https://www.ptorrents.com/
+
+caps:
+  categories:
+    XXX: XXX
+
+  modes:
+    search: [q]
+
+settings: []
+
+download:
+  selectors:
+    - selector: a.download-button
+      attribute: href
+
+search:
+  paths:
+    - path: "s.php?search={{ if .Keywords }}{{ .Keywords }}{{ else }}%20{{ end }}"
+
+  rows:
+    selector: div.image-wrapper
+
+  fields:
+    category:
+      text: XXX
+    title:
+      selector: a.overlay
+      filters:
+        - name: re_replace
+          args: ["^.+?\\] ", ""]
+    details:
+      selector: a.overlay
+      attribute: href
+    download:
+      selector: a.overlay
+      attribute: href
+      filters:
+        - name: regexp
+          args: "-(\\d+).html"
+        - name: prepend
+          args: "/dl.php?t="
+    poster:
+      selector: img
+      attribute: src
+    date:
+      text: now
+    size:
+      selector: span.size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: div.catalog a
+# engine n/a
