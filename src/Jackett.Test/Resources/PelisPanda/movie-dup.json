@@ -1,0 +1,26 @@
+{
+  "id": 7,
+  "slug": "dup",
+  "title": "Dup Test",
+  "original_title": "Dup Test",
+  "year": 2024,
+  "type": "pelicula",
+  "downloads": [
+    {
+      "download_link": "magnet:?xt=urn:btih:DUP1111111111111111111111111111111111111&dn=dup",
+      "quality": "1080p",
+      "language": "Latino",
+      "size": "2.0 GB",
+      "subs": 0,
+      "date": "20240115"
+    },
+    {
+      "download_link": "magnet:?xt=urn:btih:DUP1111111111111111111111111111111111111&dn=dup",
+      "quality": "1080p",
+      "language": "Latino",
+      "size": "2.0 GB",
+      "subs": 0,
+      "date": "20240115"
+    }
+  ]
+}
