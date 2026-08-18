@@ -13,6 +13,7 @@ caps:
     # from https://memphis.fit/api/torznab?t=caps&apikey=YOUR-PASSKEY
     - {id: 2000, cat: Movies, desc: "Movies"}
     - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5060, cat: TV/Sport, desc: "Sport"}
     - {id: 4050, cat: PC/Games, desc: "PC/Games"}
     - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
     - {id: 3000, cat: Audio, desc: "Audio"}
@@ -139,4 +140,9 @@ search:
       text: 0
     uploadvolumefactor:
       text: 1
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # torznab xml
