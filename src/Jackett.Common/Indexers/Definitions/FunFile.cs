@@ -123,7 +123,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 pairs.Add("captcha_code", configData.CaptchaText.Value);
             }
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
+            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
