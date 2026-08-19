@@ -203,7 +203,6 @@ search:
         False: "{{ .False }}"
         True: "{{ .True }}"
     downloadvolumefactor_freeleech:
-      # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
         0%: 1 # not free
