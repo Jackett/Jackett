@@ -33,7 +33,11 @@ namespace Jackett.Common.Indexers.Definitions
         private string LoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
 
-        private new ConfigurationDataBasicLogin configData => (ConfigurationDataBasicLogin)base.configData;
+        private new ConfigurationDataCaptchaLogin configData
+        {
+            get => (ConfigurationDataCaptchaLogin)base.configData;
+            set => base.configData = value;
+        }
 
         public FunFile(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
             ICacheService cs)
@@ -42,7 +46,7 @@ namespace Jackett.Common.Indexers.Definitions
                    logger: l,
                    p: ps,
                    cacheService: cs,
-                   configData: new ConfigurationDataBasicLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
+                   configData: new ConfigurationDataCaptchaLogin("For best results, change the 'Torrents per page' setting to 100 in your profile."))
         {
             configData.AddDynamic("freeleech", new BoolConfigurationItem("Search freeleech only") { Value = false });
             configData.AddDynamic("Account Inactivity", new DisplayInfoConfigurationItem("Account Inactivity", "User accounts that are inactive for more than 42 days (ie haven't logged into the site) and NOT PARKED are automatically AND irretrievably deleted. Those with Donor VIP status are immune to the 42 day purging up to 1 year."));
@@ -84,7 +88,27 @@ namespace Jackett.Common.Indexers.Definitions
 
             return caps;
         }
-
+        public override async Task<ConfigurationData> GetConfigurationForSetup()
+        {
+            // Some IP addresses get a captcha
+            var loginPage = await RequestWithCookiesAsync(LoginUrl, string.Empty);
+            var parser = new HtmlParser();
+            using var document = parser.ParseDocument(loginPage.ContentString);
+            var qCaptchaImg = document.QuerySelector("img#captcha");
+            if (qCaptchaImg != null)
+            {
+                var captchaUrl = SiteLink + qCaptchaImg.GetAttribute("src").TrimStart('/');
+                var captchaImage = await RequestWithCookiesAsync(captchaUrl, loginPage.Cookies);
+                configData.CaptchaImage.Value = captchaImage.ContentBytes;
+            }
+            else
+            {
+                configData.CaptchaImage.Value = Array.Empty<byte>();
+            }
+            configData.CaptchaCookie.Value = loginPage.Cookies;
+            UpdateCookieHeader(loginPage.Cookies);
+            return configData;
+        }
         public override async Task<IndexerConfigurationStatus> ApplyConfiguration(JToken configJson)
         {
             LoadValuesFromJson(configJson);
@@ -95,7 +119,10 @@ namespace Jackett.Common.Indexers.Definitions
                 { "returnto", "" },
                 { "login", "Login" }
             };
-
+            if (!string.IsNullOrWhiteSpace(configData.CaptchaText.Value))
+            {
+                pairs.Add("captcha_code", configData.CaptchaText.Value);
+            }
             var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, null, true, null, LoginUrl);
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
