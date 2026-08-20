@@ -1,0 +1,83 @@
+---
+id: v3x
+name: V3X
+description: "V3X is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+links:
+  - https://api.v3x.club/
+
+caps:
+  categorymappings:
+    - {id: 2000, cat: Movies, desc: "Films"}
+    - {id: 5000, cat: TV, desc: "Séries"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 7000, cat: Books, desc: "Ebooks"}
+    - {id: 4000, cat: PC, desc: "Applications"}
+    - {id: 1000, cat: Console, desc: "Jeux vidéo"}
+    - {id: 8000, cat: Other, desc: "Divers"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tmdbid]
+    movie-search: [q, tmdbid]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Create your API key on V3X in Réglages -> Intégrations (needs the torznab scope)."
+
+# no login block: the tracker authenticates every request with ?apikey=
+search:
+  paths:
+    - path: indexer/search
+      response:
+        type: json
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 100
+
+  rows:
+    selector: results
+
+  fields:
+    title:
+      selector: title
+    details:
+      selector: details
+    download:
+      selector: download
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: grabs
+    infohash:
+      selector: infohash
+    category:
+      selector: category
+    date:
+      selector: pubdate
+    tmdbid:
+      selector: tmdbid
+      optional: true
+    downloadvolumefactor:
+      selector: downloadvolumefactor
+    uploadvolumefactor:
+      selector: uploadvolumefactor
