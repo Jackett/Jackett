@@ -28,7 +28,7 @@ download:
 
 search:
   paths:
-    - path: "s.php?search={{ if .Keywords }}{{ .Keywords }}{{ else }}%20{{ end }}"
+    - path: "{{ if .Keywords }}s.php?search={{ .Keywords }}{{ else }}{{ end }}"
 
   rows:
     selector: div.image-wrapper
