@@ -10,29 +10,31 @@ links:
 
 caps:
   categorymappings:
-    - {id: 47, cat: PC/0day, desc: "APP: WINDOWS/O/S"}
-    - {id: 18, cat: PC, desc: "Apps: PC"}
+    - {id: 47, cat: PC/0day, desc: "Apps: WINDOWS/O/S"}
     - {id: 20, cat: PC, desc: "Apps: Linux"}
+    - {id: 18, cat: PC, desc: "Apps: PC"}
+    - {id: 62, cat: Console, desc: "Games: XBOX360/ALL"}
     - {id: 10, cat: PC/Games, desc: "Games: PC"}
-    - {id: 61, cat: Movies/SD, desc: "Movies: Xvid"}
+    - {id: 49, cat: Movies/SD, desc: "Movies: 480p"}
+    - {id: 50, cat: Movies/UHD, desc: "Movies: 4K"}
+    - {id: 51, cat: Movies/BluRay, desc: "Movies: BD-R"}
+    - {id: 52, cat: Movies/BluRay, desc: "Movies: BD-Rip"}
+    - {id: 48, cat: Movies/BluRay, desc: "Movies: BluRay/AVI/MKV"}
+    - {id: 53, cat: Movies/SD, desc: "Movies: Cam"}
     - {id: 54, cat: Movies/DVD, desc: "Movies: DVD-R"}
     - {id: 55, cat: Movies/BluRay, desc: "Movies: HD/Bluray"}
     - {id: 56, cat: Movies, desc: "Movies: Kids"}
     - {id: 57, cat: Movies/HD, desc: "Movies: MP4"}
     - {id: 58, cat: Movies, desc: "Movies: Packs"}
+    - {id: 1, cat: Movies/Other, desc: "Movies: R3-En-Code"}
     - {id: 59, cat: Movies/WEB-DL, desc: "Movies: WEBRip/Web-DL"}
     - {id: 60, cat: Movies/HD, desc: "Movies: x265"}
-    - {id: 53, cat: Movies/SD, desc: "Movies: Cam"}
-    - {id: 52, cat: Movies/BluRay, desc: "Movies: BD-Rip"}
-    - {id: 51, cat: Movies/BluRay, desc: "Movies: BD-R"}
-    - {id: 50, cat: Movies/UHD, desc: "Movies: 4K"}
-    - {id: 49, cat: Movies/SD, desc: "Movies: 480p"}
-    - {id: 48, cat: Movies/BluRay, desc: "Movies: BluRay/AVI/MKV"}
-    - {id: 1, cat: Movies/Other, desc: "Movies: R3-En-Code"}
-    - {id: 9, cat: Audio, desc: "music: All"}
+    - {id: 61, cat: Movies/SD, desc: "Movies: Xvid"}
     - {id: 22, cat: Audio, desc: "Music: MP3/Flac"}
     - {id: 26, cat: Audio, desc: "Music: SiteDJExclusivemix"}
     - {id: 41, cat: TV/HD, desc: "TV: HD"}
+    - {id: 63, cat: Books/Mags, desc: "Mags: mags"}
+    - {id: 9, cat: Audio, desc: "Music: All"}
 
   modes:
     search: [q]
