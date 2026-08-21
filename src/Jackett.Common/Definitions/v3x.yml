@@ -1,0 +1,137 @@
+---
+id: v3x
+name: V3X
+description: "V3X is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://v3x.club/
+  - https://v3x.tw/
+
+caps:
+  categorymappings:
+    - {id: 2000, cat: Movies, desc: "Films"}
+    - {id: 5000, cat: TV, desc: "Séries"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 7000, cat: Books, desc: "Ebooks"}
+    - {id: 4000, cat: PC, desc: "Applications"}
+    - {id: 1000, cat: Console, desc: "Jeux vidéo"}
+    - {id: 8000, cat: Other, desc: "Divers"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, tmdbid]
+    movie-search: [q, tmdbid]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Create your API key on V3X in <b>Réglages -> Intégrations</b> (needs the torznab scope)."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.v3x.club
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: "https://{{ .Config.apiurl }}/indexer/search"
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    limit: 1
+
+search:
+  paths:
+    - path: "https://{{ .Config.apiurl }}/indexer/search"
+      response:
+        type: json
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    limit: 100
+
+  rows:
+    selector: results
+
+  fields:
+    category:
+      selector: category
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: details
+    download:
+      selector: download
+    infohash:
+      selector: infohash
+    tmdbid:
+      selector: tmdbid
+    date:
+      # "created_at": "2026-08-21T01:28:14.004Z" is returned by Newtonsoft.Json.Linq as 08/21/2026 01:28:14
+      selector: pubdate
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: grabs
+    downloadvolumefactor:
+      selector: downloadvolumefactor
+    uploadvolumefactor:
+      selector: uploadvolumefactor
+    minimumratio:
+      text: 0.8
+# json v0.18
