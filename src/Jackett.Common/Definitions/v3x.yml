@@ -7,7 +7,8 @@ type: private
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://api.v3x.club/
+  - https://v3x.club/
+  - https://v3x.tw/
 
 caps:
   categorymappings:
@@ -34,12 +35,23 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Create your API key on V3X in Réglages -> Intégrations (needs the torznab scope)."
+    default: "Create your API key on V3X in <b>Réglages -> Intégrations</b> (needs the torznab scope)."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.v3x.club
 
-# no login block: the tracker authenticates every request with ?apikey=
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: "https://{{ .Config.apiurl }}/indexer/search"
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    limit: 1
+
 search:
   paths:
-    - path: indexer/search
+    - path: "https://{{ .Config.apiurl }}/indexer/search"
       response:
         type: json
   inputs:
