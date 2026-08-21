@@ -5,6 +5,7 @@ description: "V3X is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://api.v3x.club/
 
