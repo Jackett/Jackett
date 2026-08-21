@@ -143,10 +143,11 @@ search:
           args: ["X", ""]
     genre:
       selector: td.row2 span[style="float:left"]
-      optional: true
+      filters:
+        - name: validate
+          args: "action, adventure, animation, biography, comedy, crime, documentary, drama, family, fantasy, game-show, history, home_&_garden, home_and_garden, horror, music, musical, mystery, news, reality, reality-tv, romance, sci-fi, science-fiction, short, sport, talk-show, thriller, travel, war, western"
     description:
-      selector: td.row2 span[style="float:left"]
-      optional: true
+      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:
