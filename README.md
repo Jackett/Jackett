@@ -665,6 +665,7 @@ Prior versions of Jackett are no longer supported.
  * upload.cx (ULCX)
  * Upscale Vault
  * UTOPIA
+ * V3X
  * Vault network
  * VC-Lib [![(invite needed)][inviteneeded]](#)
  * VietMediaF
