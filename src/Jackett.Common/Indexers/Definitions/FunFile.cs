@@ -30,7 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private string LoginUrl => SiteLink + "takelogin.php";
+        private string LoginUrl => SiteLink + "login.php";
         private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataCaptchaLogin configData
