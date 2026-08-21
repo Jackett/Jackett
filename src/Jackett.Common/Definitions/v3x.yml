@@ -132,4 +132,6 @@ search:
       selector: downloadvolumefactor
     uploadvolumefactor:
       selector: uploadvolumefactor
+    minimumratio:
+      text: 0.8
 # json v0.18
