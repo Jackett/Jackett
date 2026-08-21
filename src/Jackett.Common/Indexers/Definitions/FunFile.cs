@@ -75,6 +75,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             };
 
+            caps.Categories.AddCategoryMapping(45, TorznabCatType.Other, "0Day");
             caps.Categories.AddCategoryMapping(44, TorznabCatType.TVAnime, "Anime");
             caps.Categories.AddCategoryMapping(22, TorznabCatType.PC, "Applications");
             caps.Categories.AddCategoryMapping(43, TorznabCatType.AudioAudiobook, "Audio Books");
@@ -86,6 +87,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(31, TorznabCatType.PCMobileOther, "Portable");
             caps.Categories.AddCategoryMapping(49, TorznabCatType.Other, "Tutorials");
             caps.Categories.AddCategoryMapping(7, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(48, TorznabCatType.XXXOther, "XXX 0Day");
+            caps.Categories.AddCategoryMapping(46, TorznabCatType.XXX, "XXX Movies");
 
             return caps;
         }
