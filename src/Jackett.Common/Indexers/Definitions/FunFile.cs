@@ -31,6 +31,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
         private string LoginUrl => SiteLink + "login.php";
+        private string TakeLoginUrl => SiteLink + "takelogin.php";
         private string SearchUrl => SiteLink + "browse.php";
 
         private new ConfigurationDataCaptchaLogin configData
@@ -123,7 +124,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 pairs.Add("captcha_code", configData.CaptchaText.Value);
             }
-            var result = await RequestLoginAndFollowRedirect(LoginUrl, pairs, configData.CaptchaCookie.Value, true);
+            var result = await RequestLoginAndFollowRedirect(TakeLoginUrl, pairs, configData.CaptchaCookie.Value, true);
             await ConfigureIfOK(result.Cookies, result.ContentString?.Contains("logout.php") == true, () =>
             {
                 var parser = new HtmlParser();
