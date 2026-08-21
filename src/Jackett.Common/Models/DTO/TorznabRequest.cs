@@ -10,6 +10,7 @@ namespace Jackett.Common.Models.DTO
         public string imdbid { get; set; }
         public string ep { get; set; }
         public string t { get; set; }
+        public string o { get; set; }
         public string extended { get; set; }
         public string limit { get; set; }
         public string offset { get; set; }
