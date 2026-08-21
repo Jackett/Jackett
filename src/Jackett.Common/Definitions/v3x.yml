@@ -95,7 +95,6 @@ search:
           args: "MM/dd/yyyy HH:mm:ss zzz"
     tmdbid:
       selector: tmdbid
-      optional: true
     downloadvolumefactor:
       selector: downloadvolumefactor
     uploadvolumefactor:
