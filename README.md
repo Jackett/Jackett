@@ -607,7 +607,6 @@ Prior versions of Jackett are no longer supported.
  * TeamFlix
  * TeamHD
  * TeamOS
- * TEKNO3D [![(invite needed)][inviteneeded]](#)
  * The Brothers
  * The Crazy Ones
  * The Empire (TE)

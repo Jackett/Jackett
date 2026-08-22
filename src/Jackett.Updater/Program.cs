@@ -776,6 +776,7 @@ namespace Jackett.Updater
                 "Definitions/tazmaniaden.yml",
                 "Definitions/tbplus.yml",
                 "Definitions/tehconnection.yml",
+                "Definitions/tekno3d.yml",
                 "Definitions/tellytorrent-api.yml",
                 "Definitions/tellytorrent.yml", // switch to *-API #8682
                 "Definitions/tenyardtracker.yml", // to be migrated to c#, #795
