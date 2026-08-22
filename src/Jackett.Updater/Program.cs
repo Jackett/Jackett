@@ -288,6 +288,7 @@ namespace Jackett.Updater
                 "Definitions/at12project.yml",
                 "Definitions/audiobookbay.yml", // migrated to C#
                 "Definitions/audiobooktorrents.yml", // renamed to abtorrents
+                "Definitions/aura4k-api.yml",
                 "Definitions/avg.yml",
                 "Definitions/awesomehd.yml", // migrated to C#
                 "Definitions/axeltorrents.yml",
