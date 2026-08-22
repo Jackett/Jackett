@@ -161,6 +161,7 @@ search:
     magnet:
       selector: a[href^="magnet:?xt="]
       attribute: href
+      optional: true
     size:
       selector: td:nth-child(5)
     grabs:
