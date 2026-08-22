@@ -40,19 +40,19 @@ caps:
     book-search: [q]
 
 settings:
-  - name: downloadlink
+  - name: primarydownloadlink
     type: select
-    label: Download link
+    label: Primary Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/": iTorrents.org
+      "//itorrents.": iTorrents
       "magnet:": magnet
-  - name: downloadlink2
+  - name: fallbackdownloadlink
     type: select
-    label: Download link (fallback)
-    default: "http://itorrents.org/"
+    label: Fallback Download link
+    default: "//itorrents."
     options:
-      "http://itorrents.org/": iTorrents.org
+      "//itorrents.": iTorrents
       "magnet:": magnet
   - name: info_download
     type: info
@@ -74,9 +74,9 @@ settings:
 download:
   # the .torrent url is on the on the details page
   selectors:
-    - selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
+    - selector: a.csprite_dltorrent[href*="{{ .Config.primarydownloadlink }}"]
       attribute: href
-    - selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink2 }}"]
+    - selector: a.csprite_dltorrent[href*="{{ .Config.fallbackdownloadlink }}"]
       attribute: href
 
 search:
