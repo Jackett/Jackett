@@ -176,7 +176,9 @@ namespace Jackett.Common.Indexers.Definitions
             else if (query.Season > 0 && int.TryParse(query.Episode, out var episode) && episode > 0)
             {
                 // Standard (S/E) Episode
-                parameters.Name = $"S{query.Season:00}E{episode:00}%";
+                parameters.Name = episode is > 0 and < 100
+                    ? $"S{query.Season:00}E%{episode:00}%"
+                    : $"S{query.Season:00}E{episode:00}%";
                 parameters.Category = "Episode";
                 pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
             }
