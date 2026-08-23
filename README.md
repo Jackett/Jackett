@@ -357,6 +357,7 @@ Prior versions of Jackett are no longer supported.
  * DimeADozen (EzTorrent)
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
+ * DreadVault
  * Drugari
  * DS-Reloaded
  * dubhe (天枢) [![(invite needed)][inviteneeded]](#)
