@@ -129,19 +129,19 @@ settings:
     default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of 1337x titles, eg -GalaxyRG."
   - name: info_flaresolverr
     type: info_flaresolverr
-  - name: downloadlink
+  - name: primarydownloadlink
     type: select
-    label: Download link
-    default: "http://itorrents.org/"
-    options:
-      "http://itorrents.org/": iTorrents.org
-      "magnet:": magnet
-  - name: downloadlink2
-    type: select
-    label: Download link (fallback)
+    label: Primary Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/": iTorrents.org
+      "//itorrents.": iTorrents
+      "magnet:": magnet
+  - name: fallbackdownloadlink
+    type: select
+    label: Fallback Download link
+    default: "//itorrents."
+    options:
+      "//itorrents.": iTorrents
       "magnet:": magnet
   - name: info_download
     type: info
@@ -170,10 +170,16 @@ settings:
 download:
   # the .torrent URL and magnet URI are on the details page
   selectors:
-    - selector: ul li a[href^="{{ .Config.downloadlink }}"]
+    - selector: ul li a[href*="{{ .Config.primarydownloadlink }}"]
       attribute: href
-    - selector: ul li a[href^="{{ .Config.downloadlink2 }}"]
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
+    - selector: ul li a[href*="{{ .Config.fallbackdownloadlink }}"]
       attribute: href
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
 
 search:
   paths:
