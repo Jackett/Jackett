@@ -129,24 +129,6 @@ settings:
     default: "You can filter by Uploader by entering a Case Sensitive username, or leave empty to get all results.<br>Note: this is the username of the Uploader and not the Groupname that often show up at the end of 1337x titles, eg -GalaxyRG."
   - name: info_flaresolverr
     type: info_flaresolverr
-  - name: downloadlink
-    type: select
-    label: Download link
-    default: "http://itorrents.org/"
-    options:
-      "http://itorrents.org/": iTorrents.org
-      "magnet:": magnet
-  - name: downloadlink2
-    type: select
-    label: Download link (fallback)
-    default: "magnet:"
-    options:
-      "http://itorrents.org/": iTorrents.org
-      "magnet:": magnet
-  - name: info_download
-    type: info
-    label: About the Download links
-    default: As the iTorrents .torrent download link on this site is known to fail from time to time, we suggest using the magnet link as a fallback. The BTCache and Torrage services are not supported because they require additional user interaction (a captcha for BTCache and a download button on Torrage.)
   - name: disablesort
     type: checkbox
     label: Disable sorting - 1337x prevents sorting searches during high server load, which breaks the indexer when performing a keyword search - disable if you get zero results
@@ -168,11 +150,9 @@ settings:
       asc: asc
 
 download:
-  # the .torrent URL and magnet URI are on the details page
+  # the magnet URI is on the details page
   selectors:
-    - selector: ul li a[href^="{{ .Config.downloadlink }}"]
-      attribute: href
-    - selector: ul li a[href^="{{ .Config.downloadlink2 }}"]
+    - selector: ul li a[href^="magnet:"]
       attribute: href
 
 search:
