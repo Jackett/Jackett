@@ -76,8 +76,14 @@ download:
   selectors:
     - selector: a.csprite_dltorrent[href*="{{ .Config.primarydownloadlink }}"]
       attribute: href
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
     - selector: a.csprite_dltorrent[href*="{{ .Config.fallbackdownloadlink }}"]
       attribute: href
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
 
 search:
   paths:
