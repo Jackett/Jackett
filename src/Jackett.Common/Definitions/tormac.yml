@@ -146,6 +146,9 @@ search:
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
 
+  headers:
+    Cookie: ["tr_simple=0"]
+
   rows:
     selector: tr.tCenter:has(a[href^="/dl?t="])
 
@@ -217,47 +220,18 @@ search:
       selector: a[href^="/dl?t="]
       attribute: href
     size:
-      selector: a[href^="/dl?t="]
+      selector: td.tor-size > u
     seeders:
-      selector: span.seedmed
+      selector: td[title="Сиды"] b
       filters:
         - name: replace
           args: ["никогда", "0"]
     leechers:
-      selector: span.leechmed
+      selector: td.leechmed > b
     grabs:
-      selector: span.med
+      selector: td:nth-child(9)
     date:
-      selector: div > p.small
-      filters:
-        - name: regexp
-          args: "Создан:(.+?)Автор:"
-        - name: replace
-          args: ["Янв", "Jan"]
-        - name: replace
-          args: ["Фев", "Feb"]
-        - name: replace
-          args: ["Мар", "Mar"]
-        - name: replace
-          args: ["Апр", "Apr"]
-        - name: replace
-          args: ["Май", "May"]
-        - name: replace
-          args: ["Июн", "Jun"]
-        - name: replace
-          args: ["Июл", "Jul"]
-        - name: replace
-          args: ["Авг", "Aug"]
-        - name: replace
-          args: ["Сен", "Sep"]
-        - name: replace
-          args: ["Окт", "Oct"]
-        - name: replace
-          args: ["Ноя", "Nov"]
-        - name: replace
-          args: ["Дек", "Dec"]
-        - name: dateparse
-          args: "dd-MMM-yy"
+      selector: td[title="Добавлен"] > u
     downloadvolumefactor:
       case:
         img[src$="default/images/tor_gold.gif"]: 0
