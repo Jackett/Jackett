@@ -681,6 +681,7 @@ namespace Jackett.Updater
                 "Definitions/prostylex.yml",
                 "Definitions/ps4-torrent.yml",
                 "Definitions/pt99.yml",
+                "Definitions/ptcdy.yml",
                 "Definitions/ptchina.yml",
                 "Definitions/ptlsp.yml",
                 "Definitions/ptmsg.yml",
