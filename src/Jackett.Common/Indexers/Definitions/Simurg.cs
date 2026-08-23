@@ -46,6 +46,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(3, TorznabCatType.BooksEBook, "E-Books");
             caps.Categories.AddCategoryMapping(4, TorznabCatType.AudioAudiobook, "Audiobooks");
             caps.Categories.AddCategoryMapping(7, TorznabCatType.BooksComics, "Comics");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.BooksMags, "Magazines");
 
             return caps;
         }
