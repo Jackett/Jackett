@@ -384,6 +384,8 @@ caps:
     - {id: 242, cat: Other, desc: "|- Другое"}
     # Скрытые разделы
     - {id: 1184, cat: Other, desc: "|- Для оформления релизов AVP Studio"}
+    # undocumented
+    - {id: 556, cat: Audio, desc: "Архив раздач (общий музыкальный)"}
 
   modes:
     search: [q]
