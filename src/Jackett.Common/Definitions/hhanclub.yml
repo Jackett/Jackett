@@ -86,6 +86,8 @@ login:
     two_step_code: "{{ .Config.2facode }}"
     ssl: yes
     trackerssl: yes
+    logout: ""
+    securelogin: ""
   error:
     - selector: div#Container > div.flex:has(div:contains("失败"))
   test:
