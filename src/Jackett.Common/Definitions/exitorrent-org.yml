@@ -10,29 +10,31 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: PC, desc: "Aplikacje PC"}
-    - {id: 43, cat: Audio/Audiobook, desc: "Audiobooki"}
     - {id: 33, cat: Movies/BluRay, desc: "BluRay"}
     - {id: 28, cat: Movies/Other, desc: "Dla dzieci"}
     - {id: 20, cat: Movies/DVD, desc: "DVD-R 5/9"}
     - {id: 37, cat: Movies/SD, desc: "DVDFan"}
-    - {id: 31, cat: Books/EBook, desc: "eBooki / PDF"}
     - {id: 30, cat: Movies/3D, desc: "Filmy/3D "}
     - {id: 38, cat: Movies/SD, desc: "Filmy/BDRip-BRRip"}
     - {id: 35, cat: Movies/HD, desc: "Filmy/x264-BluRay/HD"}
     - {id: 45, cat: Movies/HD, desc: "Filmy/x265-BluRay/HD"}
-    - {id: 4, cat: PC/Games, desc: "Gry PC"}
-    - {id: 21, cat: PC/Mobile-Other, desc: "GSM/PDA"}
-    - {id: 2, cat: TV/HD, desc: "HDTV"}
-    - {id: 19, cat: Movies/SD, desc: "HQ / DVDRip"}
-    - {id: 6, cat: Audio, desc: "Muzyka"}
-    - {id: 39, cat: Movies/HD, desc: "Remux"}
-    - {id: 29, cat: Other, desc: "Różne"}
-    - {id: 7, cat: TV, desc: "Seriale"}
-    - {id: 22, cat: Audio/Video, desc: "Teledyski / Koncerty"}
     - {id: 44, cat: Movies/UHD, desc: "UHD BluRay"}
     - {id: 42, cat: Movies/UHD, desc: "UHD Remux"}
     - {id: 23, cat: Movies/WEB-DL, desc: "WEB-DL / WEBRip"}
+    - {id: 19, cat: Movies/SD, desc: "HQ / DVDRip"}
+    - {id: 39, cat: Movies/HD, desc: "Remux"}
+    - {id: 49, cat: Movies, desc: "Filmy/BluRay-AV1/HD"}
+    - {id: 7, cat: TV, desc: "Seriale"}
+    - {id: 2, cat: TV/HD, desc: "HDTV"}
+    - {id: 30, cat: TV/Documentary, desc: "Filmy-Seriale/Dokumentalne"}
+    - {id: 43, cat: Audio/Audiobook, desc: "Audiobooki"}
+    - {id: 22, cat: Audio/Video, desc: "Teledyski / Koncerty"}
+    - {id: 6, cat: Audio, desc: "Muzyka"}
+    - {id: 31, cat: Books/EBook, desc: "eBooki / PDF"}
+    - {id: 1, cat: PC, desc: "Aplikacje PC"}
+    - {id: 4, cat: PC/Games, desc: "Gry PC"}
+    - {id: 21, cat: PC/Mobile-Other, desc: "GSM/PDA"}
+    - {id: 29, cat: Other, desc: "Różne"}
     - {id: 9, cat: XXX, desc: "XXX"}
 
   modes:
