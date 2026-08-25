@@ -84,12 +84,15 @@ search:
 
   fields:
     categorydesc:
-      selector: div.meta span:nth-child(1)
+      selector: a[href^="/hash/"] span
       filters:
         - name: replace
-          args: ["Type：", ""]
+          args: ["【", ""]
+        - name: replace
+          args: ["】", ""]
     title:
       selector: a[href^="/hash/"]
+      remove: span
     details:
       selector: a[href^="/hash/"]
       attribute: href
@@ -100,7 +103,7 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.meta span:nth-child(2)
+      selector: div.meta span:nth-child(1)
       filters:
         - name: replace
           args: ["Added：", ""]
@@ -109,7 +112,7 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.meta span:nth-child(3)
+      selector: div.meta span:nth-child(2)
       filters:
         - name: replace
           args: ["Size：", ""]
