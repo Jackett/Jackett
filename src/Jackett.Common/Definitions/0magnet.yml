@@ -62,9 +62,12 @@ search:
       selector: a
       attribute: href
     date:
-      text: now
+      selector: div.result-date
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-dd"
     size:
-      selector: td.td-size
+      selector: td.result-meta > div
     seeders:
       text: 1
     leechers:
