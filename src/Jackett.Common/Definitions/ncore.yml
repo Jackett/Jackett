@@ -140,13 +140,11 @@ search:
     date:
       text: now
 #      selector: TBD
-    downloadvolumefactor_freeleech:
+    downloadvolumefactor:
       selector: freeleech
       case:
-        true: "{{ .True }}"
-        false: "{{ .False }}"
-    downloadvolumefactor:
-      text: "{{ if .Result.downloadvolumefactor_freeleech }}0{{ else }}1{{ end }}"
+        true: 0
+        false: 1
     uploadvolumefactor:
       text: 1
     minimumratio:
