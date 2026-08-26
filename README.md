@@ -597,7 +597,6 @@ Prior versions of Jackett are no longer supported.
  * SportsCora
  * SportsCult
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
- * SunnyPT [![(invite needed)][inviteneeded]](#)
  * Superbits (SBS)
  * Swarmazon
  * TangPT (躺平)

@@ -769,6 +769,7 @@ namespace Jackett.Updater
                 "Definitions/sportscraze.yml",
                 "Definitions/sugoimusic.yml",
                 "Definitions/sukebei-pantsu.yml",
+                "Definitions/sunnypt.yml",
                 "Definitions/swarmazon.yml", //  switched to *-API #13725
                 "Definitions/t411.yml",
                 "Definitions/t411v2.yml",
