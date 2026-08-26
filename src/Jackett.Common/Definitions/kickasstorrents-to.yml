@@ -9,10 +9,8 @@ requestDelay: 2
 links:
   - https://kickass.torrentbay.st/
   - https://kickass.torrentsbay.org/
-  - https://kickasstorrents.unblockninja.com/
   - https://kickasstorrents.ninjaproxy1.com/
   - https://kickasstorrents.proxyninja.org/
-  - https://kickasstorrents.proxyninja.net/
 legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
@@ -20,6 +18,8 @@ legacylinks:
   - https://kickasstorrent.cr/ # blocks Jackett UA, 'new' page broken
   - https://katcr.to/ # blocks Jackett UA
   - https://www.kickasstorrents.do/ # blocks Jackett UA
+  - https://kickasstorrents.unblockninja.com/
+  - https://kickasstorrents.proxyninja.net/
 
 caps:
   categorymappings:
