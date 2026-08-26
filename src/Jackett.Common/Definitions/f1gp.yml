@@ -65,6 +65,7 @@ caps:
     - {id: 56, cat: TV/Sport, desc: "FIM World Supercross"}
     - {id: 57, cat: TV/Sport, desc: "Deutsche Tourenwagen Masters"}
     - {id: 58, cat: TV/Sport, desc: "Athletics"}
+    - {id: 59, cat: TV/Sport, desc: "Cycling"}
 
   modes:
     search: [q]
