@@ -208,8 +208,8 @@ namespace Jackett.Common.Indexers.Definitions
                 {"tor[srchIn][narrator]", "true"},
                 {"tor[searchIn]", "torrents"},
                 {"tor[sortType]", "default"},
-                {"tor[perpage]", limit.ToString()},
-                {"tor[startNumber]", offset.ToString()},
+                {"tor[startNumber]", offset.ToString(CultureInfo.InvariantCulture)},
+                {"perpage", limit.ToString(CultureInfo.InvariantCulture)},
                 {"thumbnails", "1"}, // gives links for thumbnail sized versions of their posters
                 {"description", "1"}, // include the description
             };
