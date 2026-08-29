@@ -6,12 +6,13 @@ language: ru-RU
 type: semi-private
 encoding: windows-1251
 links:
-  - https://kinozal.tv/
+  - https://kinozal.me/
   - https://kinozal.guru/
 legacylinks:
   - https://kinozal-tv.appspot.com/
   - http://kinozal.tv/
   - https://kinozal-guru.appspot.com/
+  - https://kinozal.tv/
 
 caps:
   categorymappings:
