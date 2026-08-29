@@ -23,6 +23,7 @@ caps:
     - {id: 10, cat: Console, desc: "Games Console"}
     - {id: 11, cat: Movies, desc: "Movies Romanian"}
     - {id: 12, cat: Movies/Other, desc: "Cartoons"}
+    - {id: 32, cat: Movies/Other, desc: "Cartoons RO"}
     - {id: 17, cat: XXX, desc: "XXX"}
     - {id: 18, cat: PC/Games, desc: "Classic Games"}
     - {id: 24, cat: Audio, desc: "Music/Packs"}
