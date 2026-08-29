@@ -257,6 +257,7 @@ Prior versions of Jackett are no longer supported.
  * 13City
  * 1ptbar
  * 3D Torrents (3DT)
+ * 3D Vault
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
  * 720pier
