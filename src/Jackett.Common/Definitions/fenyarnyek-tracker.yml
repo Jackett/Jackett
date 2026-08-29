@@ -35,6 +35,7 @@ caps:
     - {id: 33, cat: Audio, desc: "Zene Eng"}
     - {id: 34, cat: Other, desc: "Képek"}
     - {id: 35, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 36, cat: PC, desc: "Program"}
 
   modes:
     search: [q]
