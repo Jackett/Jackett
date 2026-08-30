@@ -355,6 +355,7 @@ Prior versions of Jackett are no longer supported.
  * Diablo Torrent
  * DICMusic [![(invite needed)][inviteneeded]](#)
  * DigitalCore (DC)
+ * Diginette
  * DimeADozen (EzTorrent)
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
