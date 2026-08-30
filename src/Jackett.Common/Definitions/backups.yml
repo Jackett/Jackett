@@ -39,7 +39,7 @@ caps:
     - {id: 135, cat: Movies, desc: "Movie Pack"}
     - {id: 132, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 137, cat: Movies/UHD, desc: "Movie Pack 4K"}
-    - {id: 136, cat: Movies/Bluray, desc: "Movies Bluray"}
+    - {id: 136, cat: Movies/BluRay, desc: "Movies Bluray"}
     - {id: 133, cat: Movies/HD, desc: "Movies HD"}
     - {id: 134, cat: Movies/SD, desc: "Movies SD"}
     - {id: 82, cat: PC, desc: "MS-DOS"}
