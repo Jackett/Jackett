@@ -1,9 +1,9 @@
 ---
 id: yggrasil
 name: Yggrasil
-description: "Yggrasil is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Yggrasil is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
-type: private
+type: semi-private
 encoding: UTF-8
 requestDelay: 0.5 # 120 requests per minute per API key
 links:
