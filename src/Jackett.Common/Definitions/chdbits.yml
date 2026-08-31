@@ -180,4 +180,4 @@ search:
     description:
       selector: table.torrentname font.subtitle
       remove: div
-# NexusPHP Standard v1.5 Beta 4 (customised)
+# NexusPHP 6bf5cbaa71 2025-04-04 18:14:25 (customised)

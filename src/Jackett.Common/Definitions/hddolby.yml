@@ -176,4 +176,4 @@ search:
       text: 172800
     description:
       selector: table.torrentname td.embedded:first-child > span:last-child
-# NexusPHP Standard v1.5 Beta 4
+# NexusPHP 4edb324 2025-09-15
