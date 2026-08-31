@@ -248,6 +248,7 @@ Prior versions of Jackett are no longer supported.
  * TribalMixes
  * Union Fansub
  * UniOtaku
+ * Yggrasil
  * Ztracker
 </details>
 
