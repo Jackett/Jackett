@@ -52,6 +52,25 @@ settings:
     type: info
     label: About your API key
     default: "Your API key is your personal announce key. You can find it on your <b>Profil › Paramètres</b> page on the site."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
 
 login:
   # invalid apikey returns HTTP 200 with a Torznab <error code="100"/> document
@@ -90,8 +109,22 @@ search:
     category:
       selector: "[name=category]"
       attribute: value
-    title:
+    title_phase1:
       selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
     details:
       selector: comments
     download:
