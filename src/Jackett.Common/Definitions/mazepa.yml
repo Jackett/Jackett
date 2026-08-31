@@ -196,11 +196,11 @@ search:
 
   fields:
     category:
-      selector: a[onclick]
-      attribute: onclick
+      selector: a.gen
+      attribute: href
       filters:
-        - name: regexp
-          args: f=(\d+)
+        - name: querystring
+          args: f
     title:
       selector: a.genmed, a.seedmed, a.leechmed
       filters:
@@ -300,7 +300,11 @@ search:
     leechers:
       selector: td.leechmed
     grabs:
-      selector: td:nth-last-child(2)
+      selector: td:nth-last-child(2) p:last-child
+      attribute: title
+      filters:
+        - name: regexp
+          args: (\d+)
     date:
       # 11:51 31-Жов-23
       # Вчора 00:04 3-Лис-23
