@@ -1,0 +1,171 @@
+---
+id: yggrasil
+name: Yggrasil
+description: "Yggrasil is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: semi-private
+encoding: UTF-8
+requestDelay: 0.5 # 120 requests per minute per API key
+links:
+  - https://yggrasil.xyz/
+
+caps:
+  categorymappings:
+    # from https://yggrasil.xyz/torznab/api?t=caps&apikey=YOUR-API-KEY
+    - {id: 1000, cat: Console, desc: "Consoles"}
+    - {id: 2000, cat: Movies, desc: "Films"}
+    - {id: 2030, cat: Movies/SD, desc: "Films SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Films HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Films UHD"}
+    - {id: 3000, cat: Audio, desc: "Musique"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Livres audio"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Musique lossless"}
+    - {id: 4000, cat: PC, desc: "Logiciels"}
+    - {id: 4030, cat: PC/Mac, desc: "Logiciels macOS"}
+    - {id: 4040, cat: PC/Mobile-Other, desc: "Logiciels mobiles"}
+    - {id: 4050, cat: PC/Games, desc: "Jeux"}
+    - {id: 5000, cat: TV, desc: "Séries"}
+    - {id: 5030, cat: TV/SD, desc: "Séries SD"}
+    - {id: 5040, cat: TV/HD, desc: "Séries HD"}
+    - {id: 5045, cat: TV/UHD, desc: "Séries UHD"}
+    - {id: 5060, cat: TV/Sport, desc: "Sport"}
+    - {id: 5070, cat: TV/Anime, desc: "Animation"}
+    - {id: 7000, cat: Books, desc: "Livres"}
+    - {id: 7010, cat: Books/Mags, desc: "Presse"}
+    - {id: 7020, cat: Books/EBook, desc: "eBooks"}
+    - {id: 7030, cat: Books/Comics, desc: "BD / Comics"}
+    - {id: 8000, cat: Other, desc: "Autres"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Your API key is your personal announce key. You can find it on your <b>Profil › Paramètres</b> page on the site."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  # invalid apikey returns HTTP 200 with a Torznab <error code="100"/> document
+  path: torznab/api
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: caps
+  error:
+    - selector: error[code]
+      message:
+        selector: error[code]
+        attribute: description
+
+search:
+  paths:
+    - path: torznab/api
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ .Query.Type }}"
+    # .Keywords already carries the SxxEyy episode string for tv searches
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    # first category attr is the most precise standard id (2045, 5040, ...)
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    details:
+      selector: comments
+    download:
+      selector: enclosure
+      attribute: url
+    imdbid:
+      selector: "[name=imdb]"
+      attribute: value
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+    date:
+      # Tue, 02 Jun 2026 19:24:18 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    files:
+      selector: files
+    grabs:
+      selector: grabs
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=leechers]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumseedtime:
+      selector: "[name=minimumseedtime]"
+      attribute: value
+    minimumratio:
+      # only present while the ratio-enforcement flag is active on the site
+      selector: "[name=minimumratio]"
+      attribute: value
+      optional: true
+# torznab xml
