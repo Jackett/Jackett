@@ -429,6 +429,7 @@ namespace Jackett.Updater
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
                 "Definitions/exttorrents.yml",
+                "Definitions/f1gp.yml",
                 "Definitions/falkonvisionteam.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",

@@ -1,16 +1,18 @@
 ---
-id: f1gp
+id: sportz247
 replaces:
   - tsdb
-name: F1GP
-description: "F1GP is a Private Torrent Tracker for SPORTS"
+  - f1gp
+name: Sportz247
+description: "Sportz247 is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://f1gp.xyz/
+  - https://sportz247.bar/
 legacylinks:
   - https://f1gp.site/
+  - https://f1gp.xyz/
 
 caps:
   categorymappings:
@@ -66,6 +68,7 @@ caps:
     - {id: 57, cat: TV/Sport, desc: "Deutsche Tourenwagen Masters"}
     - {id: 58, cat: TV/Sport, desc: "Athletics"}
     - {id: 59, cat: TV/Sport, desc: "Cycling"}
+    - {id: 60, cat: TV/Sport, desc: "Golf"}
 
   modes:
     search: [q]
@@ -161,24 +164,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(12)
+      selector: td:nth-last-child(4)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(9)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(8)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(7)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(6)
       default: 0
     downloadvolumefactor:
       case:
