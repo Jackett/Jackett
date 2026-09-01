@@ -199,8 +199,8 @@ search:
       selector: a.gen
       attribute: href
       filters:
-        - name: querystring
-          args: f
+        - name: regexp
+          args: f=(\d+)
     title:
       selector: a.genmed, a.seedmed, a.leechmed
       filters:
@@ -299,12 +299,6 @@ search:
       selector: td.seedmed
     leechers:
       selector: td.leechmed
-    grabs:
-      selector: td:nth-last-child(2) p:last-child
-      attribute: title
-      filters:
-        - name: regexp
-          args: (\d+)
     date:
       # 11:51 31-Жов-23
       # Вчора 00:04 3-Лис-23
