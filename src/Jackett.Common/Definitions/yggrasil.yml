@@ -1,5 +1,7 @@
 ---
-id: yggrasil
+id: draupnirr
+replaces:
+  - yggrasil
 name: Draupnirr
 description: "Draupnirr (formerly Yggrasil) is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
