@@ -213,7 +213,7 @@ search:
           args: id
         - name: toupper
         - name: prepend
-          args: http://itorrents.org/torrent/
+          args: https://itorrents.net/torrent/
         - name: append
           args: ".torrent"
     infohash:
