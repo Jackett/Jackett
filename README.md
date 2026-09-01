@@ -471,7 +471,6 @@ Prior versions of Jackett are no longer supported.
  * M-Team - TP (MTTP) [![(invite needed)][inviteneeded]](#)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
- * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
  * March [![(invite needed)][inviteneeded]](#)

@@ -586,6 +586,7 @@ namespace Jackett.Updater
                 "Definitions/magicheaven.yml",
                 "Definitions/magnet4you.yml",
                 "Definitions/magnetdl.yml",
+                "Definitions/makingoff.yml",
                 "Definitions/maniatorrent.yml",
                 "Definitions/manicomioshare.yml",
                 "Definitions/masters-tb.yml",
