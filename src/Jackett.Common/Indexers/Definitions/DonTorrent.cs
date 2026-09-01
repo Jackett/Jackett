@@ -38,6 +38,7 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
+            "https://dontorrent.ch/", // parking page with JavaScript redirect
             "https://dontorrent.haus/",
             "https://dontorrent.news/",
             "https://dontorrent.institute/",
