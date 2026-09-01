@@ -1,17 +1,21 @@
 ---
-id: yggrasil
-name: Yggrasil
-description: "Yggrasil is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
+id: draupnirr
+replaces:
+  - yggrasil
+name: Draupnirr
+description: "Draupnirr (Yggrasil) is a FRENCH Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: semi-private
 encoding: UTF-8
 requestDelay: 0.5 # 120 requests per minute per API key
 links:
+  - https://draupnirr.xyz/
+legacylinks:
   - https://yggrasil.xyz/
 
 caps:
   categorymappings:
-    # from https://yggrasil.xyz/torznab/api?t=caps&apikey=YOUR-API-KEY
+    # from https://draupnirr.xyz/torznab/api?t=caps&apikey=YOUR-API-KEY
     - {id: 1000, cat: Console, desc: "Consoles"}
     - {id: 2000, cat: Movies, desc: "Films"}
     - {id: 2030, cat: Movies/SD, desc: "Films SD"}

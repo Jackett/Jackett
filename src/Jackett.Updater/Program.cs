@@ -429,7 +429,7 @@ namespace Jackett.Updater
                 "Definitions/extremetorrents.yml",
                 "Definitions/extremlymtorrents.yml",
                 "Definitions/exttorrents.yml",
-                "Definitions/f1gp.yml",
+                "Definitions/f1gp.yml", // renamed to Sportz247
                 "Definitions/falkonvisionteam.yml",
                 "Definitions/fantasticheaven.yml",
                 "Definitions/fantastiko.yml",
@@ -928,6 +928,7 @@ namespace Jackett.Updater
                 "Definitions/ydypt.yml",
                 "Definitions/yggcookie-turbo.yml",
                 "Definitions/yggcookie.yml",
+                "Definitions/yggrasil.yml", // renamed to Draupnirr
                 "Definitions/yggtorrent-turbo.yml",
                 "Definitions/yggtorrent.yml",
                 "Definitions/yingk.yml",
