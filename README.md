@@ -622,6 +622,7 @@ Prior versions of Jackett are no longer supported.
  * The Vault (TVBZ)
  * The-New-Fun
  * TheLeachZone (TLZ)
+ * Thor HUB
  * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
