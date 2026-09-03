@@ -37,7 +37,6 @@ caps:
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
     - {id: 24, cat: Other, desc: "Magazines - Books"}
-    - {id: 25, cat: TV/Sport, desc: "NASCAR"}
     - {id: 26, cat: TV/Sport, desc: "Tennis"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
@@ -69,6 +68,13 @@ caps:
     - {id: 58, cat: TV/Sport, desc: "Athletics"}
     - {id: 59, cat: TV/Sport, desc: "Cycling"}
     - {id: 60, cat: TV/Sport, desc: "Golf"}
+    - {id: 61, cat: TV/Sport, desc: "IMSA"}
+    - {id: 62, cat: TV/Sport, desc: "NASCAR Craftsman Truck Series"}
+    - {id: 65, cat: TV/Sport, desc: "Nascar ARCA Menards Series"}
+    - {id: 25, cat: TV/Sport, desc: "NASCAR Cup Series"}
+    - {id: 66, cat: TV/Sport, desc: "NASCAR O'Reilly Auto Parts"}
+    - {id: 64, cat: TV/Sport, desc: "IROC"}
+    - {id: 67, cat: TV/Sport, desc: "Sports TV Shows"}
 
   modes:
     search: [q]
