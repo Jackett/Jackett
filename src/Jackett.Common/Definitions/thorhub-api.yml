@@ -17,7 +17,7 @@ caps:
     - {id: 10, cat: XXX, desc: "xXx (Video (Compilations))"}
     - {id: 5, cat: Movies, desc: "Trumped (Movies)"}
     - {id: 7, cat: TV, desc: "Trumped (Series)"}
-    - {id: 8, cat: Other, desc: "rumped (everything else)"}
+    - {id: 8, cat: Other, desc: "Trumped (everything else)"}
 
   modes:
     search: [q]
