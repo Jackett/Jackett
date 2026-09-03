@@ -181,6 +181,11 @@ hr {
     width: 25px;
 }
 
+.alert {
+    overflow: scroll;
+    max-height: 150px;
+}
+
 .modal-fillwidth {
     width: 1200px;
     min-width:80%;
