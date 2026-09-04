@@ -1,0 +1,50 @@
+{
+  "id": 5,
+  "slug": "bad-links",
+  "title": "Bad Links Test",
+  "original_title": "Bad Links Test",
+  "year": 2024,
+  "type": "pelicula",
+  "downloads": [
+    {
+      "download_link": "magnet:?xt=urn:btih:EEE5555555555555555555555555555555555555&dn=valid-row",
+      "quality": "1080p",
+      "language": "Latino",
+      "size": "2.00 GB",
+      "subs": 0,
+      "date": "20240108"
+    },
+    {
+      "download_link": null,
+      "quality": "720p",
+      "language": "Latino",
+      "size": "1.00 GB",
+      "subs": 0,
+      "date": "20240109"
+    },
+    {
+      "download_link": "",
+      "quality": "480p",
+      "language": "Latino",
+      "size": "0.50 GB",
+      "subs": 0,
+      "date": "20240110"
+    },
+    {
+      "download_link": "magnet://[invalid-magnet-host",
+      "quality": "1080p",
+      "language": "Latino",
+      "size": "1.00 GB",
+      "subs": 0,
+      "date": "20240111"
+    },
+    {
+      "download_link": "http://[invalid-host",
+      "quality": "720p",
+      "language": "Latino",
+      "size": "1.00 GB",
+      "subs": 0,
+      "date": "20240112"
+    }
+  ]
+}
