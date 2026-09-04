@@ -96,6 +96,7 @@ caps:
     - {id: MoviesOtherMovies, cat: Movies/Other, desc: "Movies Other"}
     - {id: MoviesUltraHD, cat: Movies/UHD, desc: "Movies UltraHD"}
     - {id: Music, cat: Audio, desc: Music}
+    - {id: MusicAAC, cat: Audio, desc: "Music AAC"}
     - {id: MusicLossless, cat: Audio/Lossless, desc: "Music Lossless"}
     - {id: MusicMP3, cat: Audio/MP3, desc: "Music MP3"}
     - {id: MusicMusicvideos, cat: Audio/Video, desc: "Music videos"}
