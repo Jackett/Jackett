@@ -346,6 +346,7 @@ Prior versions of Jackett are no longer supported.
  * cyanbug (大青虫)
  * CyclingArchiveClub [![(invite needed)][inviteneeded]](#)
  * CZTeam
+ * DanishBits
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
