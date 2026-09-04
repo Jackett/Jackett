@@ -196,8 +196,8 @@ search:
 
   fields:
     category:
-      selector: a[onclick]
-      attribute: onclick
+      selector: a.gen
+      attribute: href
       filters:
         - name: regexp
           args: f=(\d+)
@@ -299,8 +299,6 @@ search:
       selector: td.seedmed
     leechers:
       selector: td.leechmed
-    grabs:
-      selector: td:nth-last-child(2)
     date:
       # 11:51 31-Жов-23
       # Вчора 00:04 3-Лис-23

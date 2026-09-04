@@ -1,16 +1,18 @@
 ---
-id: f1gp
+id: sportz247
 replaces:
   - tsdb
-name: F1GP
-description: "F1GP is a Private Torrent Tracker for SPORTS"
+  - f1gp
+name: Sportz247
+description: "Sportz247 is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://f1gp.xyz/
+  - https://sportz247.bar/
 legacylinks:
   - https://f1gp.site/
+  - https://f1gp.xyz/
 
 caps:
   categorymappings:
@@ -35,7 +37,6 @@ caps:
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
     - {id: 24, cat: Other, desc: "Magazines - Books"}
-    - {id: 25, cat: TV/Sport, desc: "NASCAR"}
     - {id: 26, cat: TV/Sport, desc: "Tennis"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
@@ -65,6 +66,15 @@ caps:
     - {id: 56, cat: TV/Sport, desc: "FIM World Supercross"}
     - {id: 57, cat: TV/Sport, desc: "Deutsche Tourenwagen Masters"}
     - {id: 58, cat: TV/Sport, desc: "Athletics"}
+    - {id: 59, cat: TV/Sport, desc: "Cycling"}
+    - {id: 60, cat: TV/Sport, desc: "Golf"}
+    - {id: 61, cat: TV/Sport, desc: "IMSA"}
+    - {id: 62, cat: TV/Sport, desc: "NASCAR Craftsman Truck Series"}
+    - {id: 65, cat: TV/Sport, desc: "Nascar ARCA Menards Series"}
+    - {id: 25, cat: TV/Sport, desc: "NASCAR Cup Series"}
+    - {id: 66, cat: TV/Sport, desc: "NASCAR O'Reilly Auto Parts"}
+    - {id: 64, cat: TV/Sport, desc: "IROC"}
+    - {id: 67, cat: TV/Sport, desc: "Sports TV Shows"}
 
   modes:
     search: [q]
@@ -160,24 +170,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(12)
+      selector: td:nth-last-child(4)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(7)
+      selector: td:nth-last-child(9)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-last-child(8)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-last-child(7)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(10)
+      selector: td:nth-last-child(6)
       default: 0
     downloadvolumefactor:
       case:

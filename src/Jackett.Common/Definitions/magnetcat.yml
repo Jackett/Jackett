@@ -10,27 +10,27 @@ requestDelay: 2
 links:
   - https://magnetcatcat.com/
   - https://clmclm.com/
+  - https://b8fqdtud.8800591.xyz/
+  - https://qvcqsr7u.8800592.xyz/
+  - https://r8n2a4mz.8800593.xyz/
+  - https://zg40q60t.8800594.xyz/
+legacylinks:
   - https://ybn047zx.8800591.xyz/
   - https://ey6scihw.8800592.xyz/
   - https://taz20hww.8800593.xyz/
   - https://yhz95dan.8800594.xyz/
-legacylinks:
-  - https://qypps6pv.8800591.xyz/
-  - https://ex63q204.8800592.xyz/
-  - https://keazk8jq.8800593.xyz/
-  - https://5tlgtpjx.8800594.xyz/
-  - https://fklfd1rs.8800591.xyz/
-  - https://ztlhz2x4.8800592.xyz/
-  - https://ahqhg6ly.8800593.xyz/
-  - https://nzxck6hx.8800594.xyz/
-  - https://va9waqr4.8800591.xyz/
-  - https://dlo8pm0s.8800592.xyz/
-  - https://medgyfpk.8800593.xyz/
-  - https://1a7o4z6n.8800594.xyz/
-  - https://d53epkxe.8800591.xyz/
-  - https://iqknbg8x.8800592.xyz/
-  - https://s0ehr3ed.8800593.xyz/
-  - https://zgt38z1t.8800594.xyz/
+  - https://5ai7ltse.8800591.xyz/
+  - https://doxz6u16.8800592.xyz/
+  - https://a6oup1h1.8800593.xyz/
+  - https://ddunus9l.8800594.xyz/
+  - https://x3sosw88.8800591.xyz/
+  - https://sdrclvjj.8800592.xyz/
+  - https://w4n3wjju.8800593.xyz/
+  - https://59h47o93.8800594.xyz/
+  - https://v4remfka.8800591.xyz/
+  - https://wfb4bl8b.8800592.xyz/
+  - https://rrujxrr9.8800593.xyz/
+  - https://ybhcxsg4.8800594.xyz/
 
 caps:
   categorymappings:
@@ -80,18 +80,19 @@ search:
     - selector: :root:contains("Internal Server Error")
 
   rows:
-    selector: article
+    selector: article.zsky-result-row
 
   fields:
     categorydesc:
-      selector: span:first-child
+      selector: a[href^="/hash/"] span
       filters:
-        - name: re_replace
-          args: ["分类：", ""]
-        - name: re_replace
-          args: ["Category：", ""]
+        - name: replace
+          args: ["【", ""]
+        - name: replace
+          args: ["】", ""]
     title:
       selector: a[href^="/hash/"]
+      remove: span
     details:
       selector: a[href^="/hash/"]
       attribute: href
@@ -102,7 +103,7 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: span:nth-child(2)
+      selector: div.zsky-result-meta span:nth-child(1)
       filters:
         - name: re_replace
           args: ["添加时间：", ""]
@@ -111,7 +112,7 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: span:nth-child(3)
+      selector: div.zsky-result-meta span:nth-child(2)
       filters:
         - name: re_replace
           args: ["大小：", ""]

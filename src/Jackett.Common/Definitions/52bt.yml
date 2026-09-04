@@ -8,18 +8,10 @@ encoding: UTF-8
 requestDelay: 2
 links:
   # Send any content to 52btbtbt@gmail.com to get the latest address. or visit https://www.52btbt.icu/
-  - https://l3qi32fp.529075.xyz/
-  - https://290e01vd.529076.xyz/
+  - https://frsb31dm.529075.xyz/
+  - https://bp3wq4vc.529076.xyz/
 legacylinks:
   - https://www.52btbt.icu/ # latest address page
-  - https://www.529075.xyz/
-  - https://www.529076.xyz/
-  - https://wusbklns.529076.xyz/
-  - https://xetmbveo.529075.xyz/
-  - https://axququsw.529075.xyz/
-  - https://aybvkhal.529076.xyz/
-  - https://cwbuaguy.529075.xyz/
-  - https://cszt3b1l.529076.xyz/
   - https://2esrozvx.529075.xyz/
   - https://q6nvk9f5.529076.xyz/
   - https://gk8u60tw.529075.xyz/
@@ -28,6 +20,14 @@ legacylinks:
   - https://wj05w7bl.529076.xyz/
   - https://nd8xavjv.529075.xyz/
   - https://zf6c657p.529076.xyz/
+  - https://l3qi32fp.529075.xyz/
+  - https://290e01vd.529076.xyz/
+  - https://ody4n381.529075.xyz/
+  - https://1xpswim9.529076.xyz/
+  - https://eufo9g1k.529075.xyz/
+  - https://ktcbzh8o.529076.xyz/
+  - https://8fvgrwkm.529075.xyz/
+  - https://wh8badr7.529076.xyz/
 
 caps:
   categorymappings:
@@ -84,12 +84,15 @@ search:
 
   fields:
     categorydesc:
-      selector: div.meta span:nth-child(1)
+      selector: a[href^="/hash/"] span
       filters:
         - name: replace
-          args: ["Type：", ""]
+          args: ["【", ""]
+        - name: replace
+          args: ["】", ""]
     title:
       selector: a[href^="/hash/"]
+      remove: span
     details:
       selector: a[href^="/hash/"]
       attribute: href
@@ -100,7 +103,7 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.meta span:nth-child(2)
+      selector: div.meta span:nth-child(1)
       filters:
         - name: replace
           args: ["Added：", ""]
@@ -109,7 +112,7 @@ search:
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.meta span:nth-child(3)
+      selector: div.meta span:nth-child(2)
       filters:
         - name: replace
           args: ["Size：", ""]

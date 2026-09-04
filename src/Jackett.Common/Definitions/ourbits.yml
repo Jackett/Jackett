@@ -183,4 +183,4 @@ search:
       filters:
         - name: replace
           args: [" 剩余时间：", ""]
-# Ourbits 1.1.0 (Based on NexusPHP Standard v1.5 Beta 4) b0d8f5d 2025-10-23
+# Ourbits 1.1.0 (Based on NexusPHP Standard v1.5 Beta 4) 447716f 2026-06-08

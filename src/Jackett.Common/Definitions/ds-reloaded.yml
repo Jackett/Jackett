@@ -110,13 +110,11 @@ search:
     $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
 
   rows:
-    selector: $
+    selector: items
 
   fields:
-    categorydesc:
-      selector: category
-      filters:
-        - name: htmldecode
+    category:
+      selector: category_id
     title:
       selector: name
     _id:
@@ -148,9 +146,7 @@ search:
       text: "{{ if .Result._onlyup }}0{{ else }}1{{ end }}"
     uploadvolumefactor:
       text: 1
-    minimumratio:
-      text: 1.0
     minimumseedtime:
-      # 1.5 days (as seconds = 1.5 x 24 x 60 x 60)
-      text: 129600
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # THX JSON

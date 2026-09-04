@@ -195,6 +195,7 @@ Prior versions of Jackett are no longer supported.
  * comicat
  * Deildu
  * Devil-Torrents
+ * Draupnirr (Yggrasil)
  * DreamingTree
  * DXP (Deaf Experts)
  * Electro-Torrent
@@ -257,6 +258,7 @@ Prior versions of Jackett are no longer supported.
  * 13City
  * 1ptbar
  * 3D Torrents (3DT)
+ * 3D Vault
  * 4thD (4th Dimension) [![(invite needed)][inviteneeded]](#)
  * 52PT
  * 720pier
@@ -344,6 +346,7 @@ Prior versions of Jackett are no longer supported.
  * cyanbug (大青虫)
  * CyclingArchiveClub [![(invite needed)][inviteneeded]](#)
  * CZTeam
+ * DanishBits
  * Darkpeers
  * Das Unerwartete (D-U)
  * DataScene (DS)
@@ -371,7 +374,6 @@ Prior versions of Jackett are no longer supported.
  * Explosiv-World (E-W)
  * ExtremeBits
  * F1Carreras
- * F1GP
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
  * Femdomcult
@@ -470,7 +472,6 @@ Prior versions of Jackett are no longer supported.
  * M-Team - TP (MTTP) [![(invite needed)][inviteneeded]](#)
  * MaDs Revolution
  * Majomparádé (TurkDepo)
- * Making Off
  * Malayabits
  * Mansão dos Animes (MDAN)
  * March [![(invite needed)][inviteneeded]](#)
@@ -596,8 +597,8 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCora
  * SportsCult
+ * Sportz247
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
- * SunnyPT [![(invite needed)][inviteneeded]](#)
  * Superbits (SBS)
  * Swarmazon
  * TangPT (躺平)
@@ -622,6 +623,7 @@ Prior versions of Jackett are no longer supported.
  * The Vault (TVBZ)
  * The-New-Fun
  * TheLeachZone (TLZ)
+ * Thor HUB
  * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
@@ -671,6 +673,7 @@ Prior versions of Jackett are no longer supported.
  * WinterSakura [![(invite needed)][inviteneeded]](#)
  * World-In-HD [![(invite needed)][inviteneeded]](#)
  * World-of-Tomorrow [![(invite needed)][inviteneeded]](#)
+ * XDY (修道院)
  * Xingtan (杏坛) [![(invite needed)][inviteneeded]](#)
  * Xingwan (星湾) [![(invite needed)][inviteneeded]](#)
  * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)

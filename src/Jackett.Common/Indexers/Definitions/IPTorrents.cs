@@ -32,7 +32,6 @@ namespace Jackett.Common.Indexers.Definitions
             "https://iptorrents.me/",
             "https://nemo.iptorrents.com/",
             "https://ip.findnemo.net/",
-            "https://ip.venom.global/",
             "https://ip.getcrazy.me/",
             "https://ip.workisboring.net/",
             "https://ipt.cool/",
@@ -55,8 +54,9 @@ namespace Jackett.Common.Indexers.Definitions
             "https://ipt.findnemo.net/",
             "https://ipt.beelyrics.net/",
             "https://ipt.venom.global/",
-            "https://ipt.workisboring.net/"
-        };
+            "https://ipt.workisboring.net/",
+            "https://ip.venom.global/",
+       };
         public override string Language => "en-US";
         public override string Type => "private";
 

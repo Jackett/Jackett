@@ -40,20 +40,20 @@ caps:
   allowrawsearch: true
 
 settings:
-  - name: downloadlink
+  - name: primarydownloadlink
     type: select
-    label: Download link
+    label: Primary Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/": "iTorrents.org"
-      "magnet:": "magnet"
-  - name: downloadlink2
+      "//itorrents.": iTorrents
+      "magnet:": magnet
+  - name: fallbackdownloadlink
     type: select
-    label: Download link (fallback)
-    default: "http://itorrents.org/"
+    label: Fallback Download link
+    default: "//itorrents."
     options:
-      "http://itorrents.org/": "iTorrents.org"
-      "magnet:": "magnet"
+      "//itorrents.": iTorrents
+      "magnet:": magnet
   - name: info_download
     type: info
     label: About the Download links
@@ -61,9 +61,9 @@ settings:
 
 download:
   selectors:
-    - selector: a[href^="{{ .Config.downloadlink }}"]
+    - selector: a[href*="{{ .Config.primarydownloadlink }}"]
       attribute: href
-    - selector: a[href^="{{ .Config.downloadlink2 }}"]
+    - selector: a[href*="{{ .Config.fallbackdownloadlink }}"]
       attribute: href
 
 search:
