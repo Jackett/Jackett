@@ -20,7 +20,8 @@ caps:
     - {id: 4101, cat: Audio, desc: "小品 Sketch", default: true}
     - {id: 4104, cat: Audio, desc: "二人转 Duets", default: true}
     - {id: 4105, cat: TV, desc: "小剧种 Puppet shows", default: true}
-    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobooks", default: false}
+    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobook", default: false}
+    - {id: 4108, cat: Books/EBook, desc: "电子书 Ebook", default: false}
 
   modes:
     search: [q]
@@ -84,7 +85,7 @@ search:
     - path: torrents.php
       categories: [1, 4091, 4097, 4098, 4099, 4101, 4104, 4105]
     - path: live.php
-      categories: [4103]
+      categories: [4103, 4108]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -101,7 +102,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname):not(:has(a[href^="details.php?id="]:contains("请不要下载")))
+    selector: table.torrents > tbody > tr:has(table.torrentname):not(:contains("请不要下载")):not(:contains("请勿下载"))
 
   fields:
     category:
@@ -125,7 +126,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-child(4) > span[title]
       attribute: title
       optional: true
       filters:
@@ -135,7 +136,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-child(4):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -145,13 +146,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(5)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(7)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-child(8)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -172,6 +173,6 @@ search:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
 # NexusPHP v1.1 2021-10-15
