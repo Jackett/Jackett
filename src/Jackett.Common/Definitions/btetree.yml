@@ -19,6 +19,8 @@ caps:
     music-search: [q, artist]
 
 settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
   - name: sort
     type: select
     label: Sort requested from site
