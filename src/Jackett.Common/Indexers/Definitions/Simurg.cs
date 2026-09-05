@@ -6,6 +6,7 @@ using Jackett.Common.Indexers.Definitions.Abstract;
 using Jackett.Common.Models;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 
@@ -54,6 +55,23 @@ namespace Jackett.Common.Indexers.Definitions
         protected override Uri GetDownloadUrl(int torrentId, bool canUseToken)
         {
             return new Uri($"{SiteLink}ajax.php?action=download{(useTokens && canUseToken ? "&usetoken=1" : "")}&id={torrentId}");
+        }
+
+        protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
+        {
+            // the response does not contain category for ebooks so we try to detect using the format
+            switch ((string)torrent["format"])
+            {
+                case "PDF":
+                case "MOBI":
+                case "EPUB":
+                    release.Category = new List<int> { TorznabCatType.BooksEBook.ID };
+                    break;
+                default:
+                    break;
+            }
+
+            return true;
         }
 
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
