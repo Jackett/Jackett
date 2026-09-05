@@ -134,6 +134,12 @@ search:
     genre:
       selector: meta.genres
       filters:
+        - name: re_replace
+          args: ["(?i)(Action og eventyr)", "Action_og_eventyr"]
+        - name: re_replace
+          args: ["(?i)(Sci-fi og Fantasy)", "Sci-fi_og_Fantasy"]
+        - name: re_replace
+          args: ["(?i)(TV film)", "TV_film"]
         - name: replace
           args: [" & ", "_&_"]
     _internal:
