@@ -86,9 +86,12 @@ caps:
     - {id: Movies, cat: Movies, desc: Movies}
     - {id: Movies3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
     - {id: MoviesBollywood, cat: Movies, desc: "Movies Bollywood"}
+    - {id: MoviesAnimation, cat: Movies, desc: "Movies Animation"}
+    - {id: MoviesAsian, cat: Movies, desc: "Movies Asian"}
     - {id: MoviesDVD, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: MoviesDocumentary, cat: Movies/Other, desc: "Movies Documentary"}
     - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed"}
+    - {id: MoviesLowresMovies, cat: Movies/SD, desc: "Movies Lowres"}
     - {id: MoviesHighresMovies, cat: Movies/HD, desc: "Movies Highres"}
     - {id: MoviesMP4, cat: Movies/HD, desc: "Movies MP4"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Music videos"}
