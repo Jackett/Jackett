@@ -102,7 +102,7 @@ search:
     notnewword: 1
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname):not(:contains("请不要下载")):not(:contains("请勿下载"))
+    selector: table.torrents > tbody > tr:has(table.torrentname)
 
   fields:
     category:
@@ -126,7 +126,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-last-child(7) > span[title]
       attribute: title
       optional: true
       filters:
@@ -136,7 +136,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-last-child(7):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -146,13 +146,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(5)
+      selector: td.rowfollow:nth-last-child(6)
     seeders:
-      selector: td.rowfollow:nth-child(6)
+      selector: td.rowfollow:nth-last-child(5)
     leechers:
-      selector: td.rowfollow:nth-child(7)
+      selector: td.rowfollow:nth-last-child(4)
     grabs:
-      selector: td.rowfollow:nth-child(8)
+      selector: td.rowfollow:nth-last-child(3)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -167,11 +167,9 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 1
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 10 day (as seconds = 10 x 24 x 60 x 60)
+      text: 864000
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
