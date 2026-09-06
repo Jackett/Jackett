@@ -50,12 +50,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -86,13 +85,10 @@ settings:
     default: "Be active here, you must login at least once a month. Also, not downloading anything is considered being inactive (except if you're an uploader or VIP). Accounts that are inactive for 30 days are deleted unless you have told staff in advance."
 
 login:
-  path: account-login.php
-  method: post
+  # using cookie method because form now has a human slider that locks login
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.myFrame:contains("Access Denied")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: index.php
     selector: a[href="account-logout.php"]
