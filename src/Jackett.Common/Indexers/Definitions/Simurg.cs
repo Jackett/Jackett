@@ -65,6 +65,7 @@ namespace Jackett.Common.Indexers.Definitions
                 case "PDF":
                 case "MOBI":
                 case "EPUB":
+                case "AZW3":
                     release.Category = new List<int> { TorznabCatType.BooksEBook.ID };
                     break;
                 default:
