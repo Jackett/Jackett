@@ -1,7 +1,7 @@
 ---
 id: torrenteros-api
 name: Torrenteros (API)
-description: "Torrenteros (TTR) is a SPANISH Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Torrenteros (TTR) is a SPANISH Torrent Tracker for MOVIES / TV / MUSIC"
 language: es-ES
 type: private
 encoding: UTF-8
@@ -12,11 +12,13 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 3, cat: Audio, desc: "Musica"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
 
 settings:
   - name: apikey
