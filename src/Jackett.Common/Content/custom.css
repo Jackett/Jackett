@@ -181,9 +181,9 @@ hr {
     width: 25px;
 }
 
-.alert {
-    overflow: scroll;
-    max-height: 150px;
+.alert-danger {
+    overflow: auto;
+    max-height: 250px;
 }
 
 .modal-fillwidth {
