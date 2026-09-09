@@ -59,7 +59,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
         {
-            // the response does not contain category for ebooks so we try to detect using the format
+            // the response does not contain category for group releases so we try to detect using the format
             switch ((string)torrent["format"])
             {
                 case "PDF":
@@ -67,6 +67,10 @@ namespace Jackett.Common.Indexers.Definitions
                 case "EPUB":
                 case "AZW3":
                     release.Category = new List<int> { TorznabCatType.BooksEBook.ID };
+                    break;
+                case "CBR":
+                case "CBZ":
+                    release.Category = new List<int> { TorznabCatType.BooksComics.ID };
                     break;
                 default:
                     break;
