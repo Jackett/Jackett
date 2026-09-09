@@ -21,6 +21,7 @@ caps:
     - {id: AAC, cat: Audio, desc: Music AAC}
     - {id: "Adult / Porn", cat: XXX, desc: "Adult / Porn"}
     - {id: Android, cat: PC/Mobile-Android, desc: Software Android}
+    - {id: Animation, cat: Movies, desc: Animation}
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: Audio books, cat: Audio/Audiobook, desc: Books Audiobook}
     - {id: Bollywood, cat: Movies, desc: Bollywood}
