@@ -181,7 +181,7 @@ hr {
     width: 25px;
 }
 
-.alert-danger {
+[data-notify="container"].alert-danger {
     overflow: auto;
     max-height: 250px;
 }
