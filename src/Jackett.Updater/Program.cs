@@ -299,6 +299,7 @@ namespace Jackett.Updater
                 "Definitions/beyond-hd-oneurl.yml", // #12993
                 "Definitions/beyond-hd.yml", // migrated to C# API
                 "Definitions/biatch.yml",
+                "Definitions/bigbbs.yml", // needs C# re-write #16279
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/biho.yml",
