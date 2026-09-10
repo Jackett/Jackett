@@ -16,30 +16,17 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
         public ConfigurationDataBigBbs()
         {
-            Freeleech = new BoolConfigurationItem("Filter freeleech only")
-            {
-                Value = false
-            };
+            Freeleech = new BoolConfigurationItem("Filter freeleech only") { Value = false };
 
             Sort = new SingleSelectConfigurationItem(
                 "Sort requested from site",
-                new Dictionary<string, string>
-                {
-                    { "added", "created" },
-                    { "seeders", "seeders" },
-                    { "size", "size" }
-                })
+                new Dictionary<string, string> { { "added", "created" }, { "seeders", "seeders" }, { "size", "size" } })
                 {
                     Value = "added"
                 };
 
             Type = new SingleSelectConfigurationItem(
-                "Order requested from site",
-                new Dictionary<string, string>
-                {
-                    { "desc", "desc" },
-                    { "asc", "asc" }
-                })
+                "Order requested from site", new Dictionary<string, string> { { "desc", "desc" }, { "asc", "asc" } })
                 {
                     Value = "desc"
                 };
