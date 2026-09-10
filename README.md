@@ -255,6 +255,7 @@ Prior versions of Jackett are no longer supported.
 <details> <summary> <b> Supported Private Trackers </b> </summary>
 
  * 0day.kiev
+ * 0DayFiles
  * 13City
  * 1ptbar
  * 3D Torrents (3DT)
