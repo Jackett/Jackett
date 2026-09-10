@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers.Definitions
                     { "loginbox_membername", _configData.Username.Value },
                     { "loginbox_password", _configData.Password.Value },
                     { "loginbox_remember", "1" },
-                     { "securitytoken", securityToken }
+                    { "securitytoken", securityToken }
                 };
 
                 var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
