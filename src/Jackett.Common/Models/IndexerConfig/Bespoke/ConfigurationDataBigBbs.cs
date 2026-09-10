@@ -21,15 +21,15 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
             Sort = new SingleSelectConfigurationItem(
                 "Sort requested from site",
                 new Dictionary<string, string> { { "added", "created" }, { "seeders", "seeders" }, { "size", "size" } })
-                {
-                    Value = "added"
-                };
+            {
+                Value = "added"
+            };
 
             Type = new SingleSelectConfigurationItem(
                 "Order requested from site", new Dictionary<string, string> { { "desc", "desc" }, { "asc", "asc" } })
-                {
-                    Value = "desc"
-                };
+            {
+                Value = "desc"
+            };
 
             ProfileInfo = new DisplayInfoConfigurationItem(
                 "Layout",
