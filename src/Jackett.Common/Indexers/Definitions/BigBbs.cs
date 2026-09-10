@@ -366,7 +366,6 @@ namespace Jackett.Common.Indexers.Definitions
             if (string.IsNullOrEmpty(dateStr))
                 return dateStr;
 
-
             dateStr = dateStr.Replace("Wstawione", "Uploaded");
             dateStr = dateStr.Replace("Dzisiaj o", "Today at");
             dateStr = dateStr.Replace("Wczoraj o", "Yesterday at");
