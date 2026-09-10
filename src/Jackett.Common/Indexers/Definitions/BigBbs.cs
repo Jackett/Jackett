@@ -192,6 +192,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var dom = parser.ParseDocument(loginPage.ContentString);
 
                 var scripts = dom.QuerySelectorAll("script");
+
                 var securityToken =
                     (from script in scripts
                      where script.TextContent.Contains("stKey:")
@@ -201,9 +202,7 @@ namespace Jackett.Common.Indexers.Definitions
                      select match.Groups[1].Value).FirstOrDefault();
 
                 if (string.IsNullOrEmpty(securityToken))
-                {
                     throw new Exception("Could not find security token");
-                }
 
                 var loginFormUrl = SiteLink + "ajax/login.php";
                 var loginData = new Dictionary<string, string>
@@ -218,15 +217,13 @@ namespace Jackett.Common.Indexers.Definitions
                 var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
 
                 if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
-                {
                     throw new Exception("Invalid username or password");
-                }
+
 
                 var searchResults = await PerformQuery(new TorznabQuery());
                 if (!searchResults.Any())
-                {
                     throw new Exception("Found 0 results in the tracker");
-                }
+
 
                 IsConfigured = true;
                 SaveConfig();
@@ -246,9 +243,8 @@ namespace Jackett.Common.Indexers.Definitions
 
             var cats = MapTorznabCapsToTrackers(query);
             if (cats.Count > 0)
-            {
                 searchUrl += "&" + string.Join("&", cats.Select(c => $"cid[]={c}"));
-            }
+
 
             var sort = _configData.Sort.Value;
             var type = _configData.Type.Value;
@@ -265,9 +261,8 @@ namespace Jackett.Common.Indexers.Definitions
             var response = await RequestWithCookiesAsync(searchUrl);
 
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
-            {
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
-            }
+
 
             try
             {
@@ -295,15 +290,13 @@ namespace Jackett.Common.Indexers.Definitions
                         var magnetLink = row.QuerySelector("a[href^=\"magnet:?xt=\"]");
 
                         if (titleLink == null || downloadLink == null)
-                        {
                             continue;
-                        }
+
 
                         var title = titleLink.TextContent.Trim();
                         if (!query.MatchQueryStringAND(title))
-                        {
                             continue;
-                        }
+
 
                         var categoryStr = categoryLink?.GetAttribute("href")?.Split(new[] { "cid=" }, StringSplitOptions.None).LastOrDefault() ?? "1";
                         var category = MapTrackerCatToNewznab(categoryStr);
@@ -346,9 +339,8 @@ namespace Jackett.Common.Indexers.Definitions
                         };
 
                         if (!string.IsNullOrEmpty(magnetLink?.GetAttribute("href")))
-                        {
                             release.MagnetUri = new Uri(magnetLink.GetAttribute("href"));
-                        }
+
 
                         releases.Add(release);
                     }
@@ -359,9 +351,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 if (response.ContentString.Contains("There are no results found."))
-                {
                     logger.Info("No results found");
-                }
             }
             catch (Exception ex)
             {
@@ -374,9 +364,8 @@ namespace Jackett.Common.Indexers.Definitions
         private string NormalizeDateString(string dateStr)
         {
             if (string.IsNullOrEmpty(dateStr))
-            {
                 return dateStr;
-            }
+
 
             dateStr = dateStr.Replace("Wstawione", "Uploaded");
             dateStr = dateStr.Replace("Dzisiaj o", "Today at");
@@ -389,9 +378,8 @@ namespace Jackett.Common.Indexers.Definitions
         private DateTime ParsePublishDate(string dateStr)
         {
             if (string.IsNullOrEmpty(dateStr))
-            {
                 return DateTime.Now;
-            }
+
 
             var todayMatch = Regex.Match(dateStr, @"Uploaded Today at (\d{2}:\d{2}:\d{2})");
             if (todayMatch.Success)
@@ -423,9 +411,7 @@ namespace Jackett.Common.Indexers.Definitions
             var torrentId = ExtractTorrentIdFromLink(link);
 
             if (!string.IsNullOrEmpty(torrentId))
-            {
                 await SendThankYouAsync(torrentId);
-            }
 
             return await base.Download(link);
         }
@@ -438,9 +424,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var tid = query.Get("tid");
 
                 if (!string.IsNullOrEmpty(tid))
-                {
                     return tid;
-                }
             }
             catch (Exception ex)
             {
@@ -453,9 +437,7 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task SendThankYouAsync(string torrentId)
         {
             if (string.IsNullOrEmpty(torrentId))
-            {
                 return;
-            }
 
             try
             {
@@ -478,13 +460,9 @@ namespace Jackett.Common.Indexers.Definitions
                 var response = await RequestWithCookiesAsync(thankUrl, method: RequestType.POST, data: thankData);
 
                 if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
-                {
                     logger.Warn($"Failed to send thank you for torrent {torrentId}");
-                }
                 else
-                {
                     logger.Debug($"Thank you sent successfully for torrent {torrentId}");
-                }
             }
             catch (Exception ex)
             {
@@ -504,15 +482,11 @@ namespace Jackett.Common.Indexers.Definitions
                 foreach (var script in scripts)
                 {
                     if (!script.TextContent.Contains("stKey:"))
-                    {
                         continue;
-                    }
 
                     var match = Regex.Match(script.TextContent, "stKey: \"(.+?)\",");
                     if (match.Success)
-                    {
                         return match.Groups[1].Value;
-                    }
                 }
             }
             catch (Exception ex)
