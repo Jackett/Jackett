@@ -5,7 +5,9 @@ using System.Globalization;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Web;
 using AngleSharp.Html.Parser;
+using Jackett.Common.Extensions;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig.Bespoke;
 using Jackett.Common.Services.Interfaces;
@@ -201,7 +203,7 @@ namespace Jackett.Common.Indexers.Definitions
                      where match.Success
                      select match.Groups[1].Value).FirstOrDefault();
 
-                if (string.IsNullOrEmpty(securityToken))
+                if (securityToken.IsNullOrWhiteSpace())
                     throw new Exception("Could not find security token");
 
                 var loginFormUrl = SiteLink + "ajax/login.php";
@@ -239,30 +241,31 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            var searchUrl = SearchUrl;
-
             var cats = MapTorznabCapsToTrackers(query);
-            if (cats.Count > 0)
-                searchUrl += "&" + string.Join("&", cats.Select(c => $"cid[]={c}"));
 
+            var queryParams = cats
+                              .Select(cat => new KeyValuePair<string, string>("cid[]", cat))
+                              .ToList();
 
             var sort = _configData.Sort.Value;
             var type = _configData.Type.Value;
             var freeleech = _configData.Freeleech.Value;
 
-            if (!string.IsNullOrEmpty(query.GetQueryString()))
+            if (query.GetQueryString().IsNotNullOrWhiteSpace())
             {
                 var keywords = Regex.Replace(query.GetQueryString(), "[^a-zA-Z0-9]+", "%25");
-                searchUrl += $"&keywords={keywords}";
+                queryParams.Add(new KeyValuePair<string, string>("keywords", keywords));
             }
 
-            searchUrl += $"&search_type=name&sortOptions[sortBy]={sort}&sortOptions[sortOrder]={type}";
+            queryParams.Add(new KeyValuePair<string, string>("search_type", "name"));
+            queryParams.Add(new KeyValuePair<string, string>("sortOptions[sortBy]", sort));
+            queryParams.Add(new KeyValuePair<string, string>("sortOptions[sortOrder]", type));
 
+            var searchUrl = SearchUrl + "&" + string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
             var response = await RequestWithCookiesAsync(searchUrl);
 
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
                 throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
-
 
             try
             {
@@ -292,11 +295,9 @@ namespace Jackett.Common.Indexers.Definitions
                         if (titleLink == null || downloadLink == null)
                             continue;
 
-
                         var title = titleLink.TextContent.Trim();
                         if (!query.MatchQueryStringAND(title))
                             continue;
-
 
                         var categoryStr = categoryLink?.GetAttribute("href")?.Split(new[] { "cid=" }, StringSplitOptions.None).LastOrDefault() ?? "1";
                         var category = MapTrackerCatToNewznab(categoryStr);
@@ -338,9 +339,8 @@ namespace Jackett.Common.Indexers.Definitions
                             MinimumSeedTime = 172800
                         };
 
-                        if (!string.IsNullOrEmpty(magnetLink?.GetAttribute("href")))
+                        if (magnetLink is not null && magnetLink.GetAttribute("href").IsNullOrWhiteSpace())
                             release.MagnetUri = new Uri(magnetLink.GetAttribute("href"));
-
 
                         releases.Add(release);
                     }
@@ -363,7 +363,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string NormalizeDateString(string dateStr)
         {
-            if (string.IsNullOrEmpty(dateStr))
+            if (dateStr.IsNullOrWhiteSpace())
                 return dateStr;
 
             dateStr = dateStr.Replace("Wstawione", "Uploaded");
@@ -376,9 +376,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         private DateTime ParsePublishDate(string dateStr)
         {
-            if (string.IsNullOrEmpty(dateStr))
+            if (dateStr.IsNullOrWhiteSpace())
                 return DateTime.Now;
-
 
             var todayMatch = Regex.Match(dateStr, @"Uploaded Today at (\d{2}:\d{2}:\d{2})");
             if (todayMatch.Success)
@@ -409,7 +408,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var torrentId = ExtractTorrentIdFromLink(link);
 
-            if (!string.IsNullOrEmpty(torrentId))
+            if (torrentId.IsNotNullOrWhiteSpace())
                 await SendThankYouAsync(torrentId);
 
             return await base.Download(link);
@@ -417,17 +416,19 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string ExtractTorrentIdFromLink(Uri link)
         {
+            if (link.Query.IsNullOrWhiteSpace())
+                return null;
+
             try
             {
-                var query = System.Web.HttpUtility.ParseQueryString(link.Query);
-                var tid = query.Get("tid");
-
-                if (!string.IsNullOrEmpty(tid))
-                    return tid;
+                var torrentId = HttpUtility.ParseQueryString(link.Query).Get("tid");
+                if (torrentId.IsNotNullOrWhiteSpace())
+                    return torrentId;
             }
             catch (Exception ex)
             {
-                logger.Debug($"Could not extract torrent ID from link: {ex.Message}");
+                logger.Debug(ex, "Could not extract torrent ID from link");
+
             }
 
             return null;
@@ -443,7 +444,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var thankUrl = SiteLink + "ajax/torrents.php";
                 var securityToken = await GetSecurityTokenAsync();
 
-                if (string.IsNullOrEmpty(securityToken))
+                if (securityToken.IsNullOrWhiteSpace())
                 {
                     logger.Warn("Could not retrieve security token for thank you request");
                     return;
