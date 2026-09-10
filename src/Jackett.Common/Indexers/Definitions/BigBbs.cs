@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers.Definitions
                     { "loginbox_membername", _configData.Username.Value },
                     { "loginbox_password", _configData.Password.Value },
                     { "loginbox_remember", "1" },
-                    { "securitytoken", securityToken }
+                     { "securitytoken", securityToken }
                 };
 
                 var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
@@ -241,6 +241,7 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
+            query.Cache = false;
             var cats = MapTorznabCapsToTrackers(query);
 
             var queryParams = cats
@@ -312,7 +313,11 @@ namespace Jackett.Common.Indexers.Definitions
 
                         var imdbId = ParseUtil.GetImdbId(imdbLink?.GetAttribute("href")) ?? 0;
 
-                        var dateStr = row.QuerySelector("td.torrent_name")?.TextContent ?? "";
+                        var dateElem = row.QuerySelector("td.torrent_name");
+                        var dateStr = "";
+
+                        if (string.IsNullOrWhiteSpace(dateStr))
+                            dateStr = dateElem?.TextContent ?? "";
 
                         dateStr = NormalizeDateString(dateStr);
 
@@ -366,10 +371,82 @@ namespace Jackett.Common.Indexers.Definitions
             if (dateStr.IsNullOrWhiteSpace())
                 return dateStr;
 
-            dateStr = dateStr.Replace("Wstawione", "Uploaded");
-            dateStr = dateStr.Replace("Dzisiaj o", "Today at");
-            dateStr = dateStr.Replace("Wczoraj o", "Yesterday at");
-            dateStr = dateStr.Replace("przez", "by");
+            dateStr = Regex.Replace(dateStr, @"Wstawione", "Uploaded", RegexOptions.IgnoreCase);
+            dateStr = Regex.Replace(dateStr, @"przez", "by", RegexOptions.IgnoreCase);
+
+            var todayMatch = Regex.Match(dateStr, @"Uploaded (Today|Dzisiaj)\s+(?:at|o)\s+(\d{2}:\d{2}:\d{2})", RegexOptions.IgnoreCase);
+            if (todayMatch.Success)
+            {
+                var time = todayMatch.Groups[2].Value;
+                return $"Uploaded {DateTime.Now:dd-MM-yyyy} {time}";
+            }
+
+            var yesterdayMatch = Regex.Match(dateStr, @"Uploaded (Yesterday|Wczoraj)\s+(?:at|o)\s+(\d{2}:\d{2}:\d{2})", RegexOptions.IgnoreCase);
+            if (yesterdayMatch.Success)
+            {
+                var time = yesterdayMatch.Groups[2].Value;
+                return $"Uploaded {DateTime.Now.AddDays(-1):dd-MM-yyyy} {time}";
+            }
+
+            var momentAgoMatch = Regex.Match(dateStr, @"Uploaded (a moment ago|minutę temu)", RegexOptions.IgnoreCase);
+            if (momentAgoMatch.Success)
+            {
+                var now = DateTime.Now;
+                return $"Uploaded {now:dd-MM-yyyy} {now:HH:mm:ss}";
+            }
+
+            var hoursAgoMatch = Regex.Match(dateStr, @"Uploaded (Godzinę temu|One hour ago)", RegexOptions.IgnoreCase);
+            if (hoursAgoMatch.Success)
+            {
+                var now = DateTime.Now;
+                var hoursAgo = now.AddHours(-1);
+                return $"Uploaded {hoursAgo:dd-MM-yyyy} {hoursAgo:HH:mm:ss}";
+            }
+
+            var minutesAgoMatch = Regex.Match(dateStr, @"Uploaded (\d+)\s+(?:minut\(?y?\)?|minutes)\s+(?:temu|ago)", RegexOptions.IgnoreCase);
+            if (minutesAgoMatch.Success)
+            {
+                var minutes = int.Parse(minutesAgoMatch.Groups[1].Value);
+                var minutesAgo = DateTime.Now.AddMinutes(-minutes);
+                return $"Uploaded {minutesAgo:dd-MM-yyyy} {minutesAgo:HH:mm:ss}";
+            }
+
+            var days = new Dictionary<string, int>
+            {
+                { "Poniedziałek", 1 },
+                { "Wtorek", 2 },
+                { "Środa", 3 },
+                { "Czwartek", 4 },
+                { "Piątek", 5 },
+                { "Sobota", 6 },
+                { "Niedziela", 0 },
+                { "Monday", 1 },
+                { "Tuesday", 2 },
+                { "Wednesday", 3 },
+                { "Thursday", 4 },
+                { "Friday", 5 },
+                { "Saturday", 6 },
+                { "Sunday", 0 }
+            };
+
+            var weekdayMatch = Regex.Match(dateStr, @"Uploaded (\w+)\s+(?:o|at)\s+(\d{2}:\d{2}:\d{2})", RegexOptions.IgnoreCase);
+            if (weekdayMatch.Success)
+            {
+                var weekdayName = weekdayMatch.Groups[1].Value;
+                var time = weekdayMatch.Groups[2].Value;
+
+                foreach (var day in days)
+                {
+                    if (string.Equals(day.Key, weekdayName, StringComparison.OrdinalIgnoreCase))
+                    {
+                        var daysToSubtract = ((int)DateTime.Now.DayOfWeek - day.Value + 7) % 7;
+                        if (daysToSubtract == 0)
+                            daysToSubtract = 7;
+                        var date = DateTime.Now.AddDays(-daysToSubtract);
+                        return $"Uploaded {date:dd-MM-yyyy} {time}";
+                    }
+                }
+            }
 
             return dateStr;
         }
@@ -379,26 +456,13 @@ namespace Jackett.Common.Indexers.Definitions
             if (dateStr.IsNullOrWhiteSpace())
                 return DateTime.Now;
 
-            var todayMatch = Regex.Match(dateStr, @"Uploaded Today at (\d{2}:\d{2}:\d{2})");
-            if (todayMatch.Success)
-            {
-                var time = todayMatch.Groups[1].Value;
-                return DateTime.ParseExact($"{DateTime.Now:yyyy-MM-dd} {time}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-
-            var yesterdayMatch = Regex.Match(dateStr, @"Uploaded Yesterday at (\d{2}:\d{2}:\d{2})");
-            if (yesterdayMatch.Success)
-            {
-                var time = yesterdayMatch.Groups[1].Value;
-                return DateTime.ParseExact($"{DateTime.Now.AddDays(-1):yyyy-MM-dd} {time}", "yyyy-MM-dd HH:mm:ss", CultureInfo.InvariantCulture);
-            }
-
-            var dateMatch = Regex.Match(dateStr, @"Uploaded (\d{1,2}-\d{1,2}-\d{4} \d{2}:\d{2}:\d{2})");
+            var dateMatch = Regex.Match(dateStr, @"Uploaded (\d{1,2}-\d{1,2}-\d{4}) (\d{2}:\d{2}:\d{2})");
 
             if (dateMatch.Success)
             {
-                var dateTimeStr = dateMatch.Groups[1].Value;
-                return DateTime.ParseExact(dateTimeStr, "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
+                var date = dateMatch.Groups[1].Value;
+                var time = dateMatch.Groups[2].Value;
+                return DateTime.ParseExact($"{date} {time}", "dd-MM-yyyy HH:mm:ss", CultureInfo.InvariantCulture);
             }
 
             return DateTime.Now;
