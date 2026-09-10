@@ -241,7 +241,6 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
-            query.Cache = false;
             var cats = MapTorznabCapsToTrackers(query);
 
             var queryParams = cats
