@@ -313,10 +313,7 @@ namespace Jackett.Common.Indexers.Definitions
                         var imdbId = ParseUtil.GetImdbId(imdbLink?.GetAttribute("href")) ?? 0;
 
                         var dateElem = row.QuerySelector("td.torrent_name");
-                        var dateStr = "";
-
-                        if (string.IsNullOrWhiteSpace(dateStr))
-                            dateStr = dateElem?.TextContent ?? "";
+                        var dateStr = dateElem?.TextContent ?? "";
 
                         dateStr = NormalizeDateString(dateStr);
 
