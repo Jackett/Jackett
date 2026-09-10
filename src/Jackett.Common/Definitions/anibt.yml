@@ -80,9 +80,6 @@ search:
     download:
       selector: enclosure
       attribute: url
-      optional: true
-    magnet:
-      selector: magneturi
     date:
       # Sat, 18 Jul 2026 07:33:19 +0800
       selector: pubDate
