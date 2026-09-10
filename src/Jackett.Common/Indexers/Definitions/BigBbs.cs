@@ -319,8 +319,9 @@ namespace Jackett.Common.Indexers.Definitions
                         var imdbId = ParseUtil.GetImdbId(imdbLink?.GetAttribute("href")) ?? 0;
 
                         var dateStr = row.QuerySelector("td.torrent_name")?.TextContent ?? "";
-                        // Normalize Polish date strings to English for consistent parsing
+
                         dateStr = NormalizeDateString(dateStr);
+
                         var publishDate = ParsePublishDate(dateStr);
 
                         var isFreeleech = row.QuerySelector("img[src$=\"/torrent_free.png\"]") != null;
@@ -433,8 +434,6 @@ namespace Jackett.Common.Indexers.Definitions
         {
             try
             {
-                // Try to extract torrent ID from download link
-                // Format: ?p=torrents&pid=10&action=download&tid=XXXXX
                 var query = System.Web.HttpUtility.ParseQueryString(link.Query);
                 var tid = query.Get("tid");
 
@@ -504,13 +503,15 @@ namespace Jackett.Common.Indexers.Definitions
                 var scripts = dom.QuerySelectorAll("script");
                 foreach (var script in scripts)
                 {
-                    if (script.TextContent.Contains("stKey:"))
+                    if (!script.TextContent.Contains("stKey:"))
                     {
-                        var match = Regex.Match(script.TextContent, "stKey: \"(.+?)\",");
-                        if (match.Success)
-                        {
-                            return match.Groups[1].Value;
-                        }
+                        continue;
+                    }
+
+                    var match = Regex.Match(script.TextContent, "stKey: \"(.+?)\",");
+                    if (match.Success)
+                    {
+                        return match.Groups[1].Value;
                     }
                 }
             }
