@@ -191,7 +191,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var loginPage = await RequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(loginPage.ContentString);
+                using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
 
                 var scripts = dom.QuerySelectorAll("script");
 
@@ -240,7 +240,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var cats = MapTorznabCapsToTrackers(query);
-
+            query.Cache = false;
             var queryParams = cats
                               .Select(cat => new KeyValuePair<string, string>("cid[]", cat))
                               .ToList();
@@ -251,15 +251,15 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (query.GetQueryString().IsNotNullOrWhiteSpace())
             {
-                var keywords = Regex.Replace(query.GetQueryString(), "[^a-zA-Z0-9]+", "%25");
-                queryParams.Add(new KeyValuePair<string, string>("keywords", keywords));
+                var keywords = Regex.Replace(query.GetQueryString(), "[^a-zA-Z0-9]+", "%25").Trim();
+                queryParams.Add("keywords", keywords);
             }
 
-            queryParams.Add(new KeyValuePair<string, string>("search_type", "name"));
-            queryParams.Add(new KeyValuePair<string, string>("sortOptions[sortBy]", sort));
-            queryParams.Add(new KeyValuePair<string, string>("sortOptions[sortOrder]", type));
+            queryParams.Add("search_type", "name");
+            queryParams.Add("sortOptions[sortBy]", sort);
+            queryParams.Add("sortOptions[sortOrder]", type);
 
-            var searchUrl = SearchUrl + "&" + string.Join("&", queryParams.Select(x => $"{x.Key}={x.Value}"));
+            var searchUrl = SearchUrl + "&" + queryParams.GetQueryString();
             var response = await RequestWithCookiesAsync(searchUrl);
 
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
@@ -530,7 +530,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 var loginPage = await RequestWithCookiesAsync(LoginUrl);
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(loginPage.ContentString);
+                using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
 
                 var scripts = dom.QuerySelectorAll("script");
                 foreach (var script in scripts)
