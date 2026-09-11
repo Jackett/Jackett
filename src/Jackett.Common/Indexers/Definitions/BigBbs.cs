@@ -240,7 +240,6 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var releases = new List<ReleaseInfo>();
             var cats = MapTorznabCapsToTrackers(query);
-            query.Cache = false;
             var queryParams = cats
                               .Select(cat => new KeyValuePair<string, string>("cid[]", cat))
                               .ToList();
