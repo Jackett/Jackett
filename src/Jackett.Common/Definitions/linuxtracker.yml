@@ -51,6 +51,7 @@ caps:
     - {id: 2022, cat: PC/ISO, desc: "Blag"}
     - {id: 79, cat: PC/ISO, desc: "BlankOn"}
     - {id: 2182, cat: PC/ISO, desc: "Bluestar Linux"}
+    - {id: 2309, cat: PC/ISO, desc: "Blunux"}
     - {id: 2023, cat: PC/ISO, desc: "Bodhi"}
     - {id: 2205, cat: PC/ISO, desc: "BunsenLabs"}
     - {id: 2026, cat: PC/ISO, desc: "Cae"}
@@ -96,6 +97,7 @@ caps:
     - {id: 2278, cat: PC/ISO, desc: "EndeavourOS"}
     - {id: 164, cat: PC/ISO, desc: "Endian"}
     - {id: 2179, cat: PC/ISO, desc: "Endless OS"}
+    - {id: 2310, cat: PC/ISO, desc: "EnigmarsOS"}
     - {id: 2223, cat: PC/ISO, desc: "Enso OS"}
     - {id: 2043, cat: PC/ISO, desc: "Exe GNU/Linux"}
     - {id: 2045, cat: PC/ISO, desc: "Extix"}
