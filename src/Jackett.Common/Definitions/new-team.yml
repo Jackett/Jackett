@@ -431,7 +431,7 @@ login:
     - selector: table.error
   test:
     path: index.php
-    selector: a[href^="login.php?logout=1"]
+    selector: a[href^="/login.php?logout=1"]
 
 search:
   paths:
