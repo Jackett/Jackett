@@ -187,13 +187,13 @@ search:
         - name: append
           args: " ago"
     size:
-      selector: td:nth-child(5)
+      selector: td:nth-child(4)
     grabs:
-      selector: td:nth-child(6)
+      selector: td:nth-child(5)
     seeders:
-      selector: td:nth-child(7)
+      selector: td:nth-child(6)
     leechers:
-      selector: td:nth-child(8)
+      selector: td:nth-child(7)
     downloadvolumefactor:
       case:
         "div.torrent_info .tl_free": 0
