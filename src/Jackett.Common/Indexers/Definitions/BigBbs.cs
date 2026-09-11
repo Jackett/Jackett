@@ -221,11 +221,9 @@ namespace Jackett.Common.Indexers.Definitions
                 if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
                     throw new Exception("Invalid username or password");
 
-
                 var searchResults = await PerformQuery(new TorznabQuery());
                 if (!searchResults.Any())
                     throw new Exception("Found 0 results in the tracker");
-
 
                 IsConfigured = true;
                 SaveConfig();
@@ -290,7 +288,6 @@ namespace Jackett.Common.Indexers.Definitions
                         var seedersLink = row.QuerySelector("a[rel=\"torrent_seeders\"]");
                         var leechersLink = row.QuerySelector("a[rel=\"torrent_leechers\"]");
                         var imdbLink = row.QuerySelector("a[href*=\"imdb.com/title/tt\"]");
-                        var magnetLink = row.QuerySelector("a[href^=\"magnet:?xt=\"]");
 
                         if (titleLink == null || downloadLink == null)
                             continue;
@@ -339,9 +336,6 @@ namespace Jackett.Common.Indexers.Definitions
                             MinimumRatio = 1.0,
                             MinimumSeedTime = 172800
                         };
-
-                        if (magnetLink is not null && magnetLink.GetAttribute("href").IsNullOrWhiteSpace())
-                            release.MagnetUri = new Uri(magnetLink.GetAttribute("href"));
 
                         releases.Add(release);
                     }
