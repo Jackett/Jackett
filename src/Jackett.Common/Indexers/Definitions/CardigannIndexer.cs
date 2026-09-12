@@ -852,13 +852,20 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected string GetRedirectDomainHint(string requestUrl, string redirectUrl)
         {
-            if (redirectUrl.IsNullOrWhiteSpace() || !requestUrl.StartsWith(SiteLink) || redirectUrl.StartsWith(SiteLink))
+            if (redirectUrl.IsNullOrWhiteSpace() || !requestUrl.StartsWith(SiteLink))
+            {
+                return null;
+            }
+            
+            var redirectUri = new Uri(redirectUrl);
+            var siteUri = new Uri(SiteLink);
+
+            if (string.Equals(siteUri.Host, redirectUri.Host, StringComparison.OrdinalIgnoreCase))
             {
                 return null;
             }
 
-            var uri = new Uri(redirectUrl);
-            return uri.Scheme + "://" + uri.Host + "/";
+            return redirectUri.Scheme + "://" + redirectUri.Host + "/";
         }
 
         protected string GetRedirectDomainHint(WebResult result) => GetRedirectDomainHint(result.Request.Url, result.RedirectingTo);
