@@ -856,7 +856,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 return null;
             }
-            
+
             var redirectUri = new Uri(redirectUrl);
             var siteUri = new Uri(SiteLink);
 
