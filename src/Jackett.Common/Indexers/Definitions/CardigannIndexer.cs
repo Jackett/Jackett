@@ -860,12 +860,12 @@ namespace Jackett.Common.Indexers.Definitions
             var redirectUri = new Uri(redirectUrl);
             var siteUri = new Uri(SiteLink);
 
-            if (string.Equals(siteUri.Host, redirectUri.Host, StringComparison.OrdinalIgnoreCase))
+            if (!string.Equals(redirectUri.Host, siteUri.Host, StringComparison.Ordinal))
             {
-                return null;
+                return redirectUri.Scheme + "://" + redirectUri.Authority + "/";
             }
 
-            return redirectUri.Scheme + "://" + redirectUri.Host + "/";
+            return null;
         }
 
         protected string GetRedirectDomainHint(WebResult result) => GetRedirectDomainHint(result.Request.Url, result.RedirectingTo);
