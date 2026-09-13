@@ -33,7 +33,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new Clé API (API Key) by accessing your <a href=\"https://hdf.world/\" target=\"_blank\">HD-Forever</a> account (You username link at the Top left of main page), clicking the <i>Paramètres (Settings)</i> link, and clicking on the <b>Sécurité (Security)</b> tab."
+    default: "Find or Generate a new Clé API (API Key) by accessing your <a href=\"https://hdf.world/\" target=\"_blank\">HD-Forever</a> account (Your username link at the Top left of main page), clicking the <i>Paramètres (Settings)</i> link, and clicking on the <b>Sécurité (Security)</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
