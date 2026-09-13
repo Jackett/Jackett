@@ -111,11 +111,15 @@ search:
     selector: "table.min-w-full > tbody > tr:has(a[href*=\"/download/\"]){{ if .Config.freeleech }}:has(span.text-green-300:contains(\"Free Leech\")){{ else }}{{ end }}"
 
   fields:
-    categorydesc:
-      selector: td:nth-of-type(1) img
-      attribute: alt
+    category:
+      selector: a[href*="/t/?category"]
+      attribute: href
+      filters:
+        - name: querystring
+          args: "category[0]"
     title:
       selector: a[href*="/td/"]
+      attribute: title
     details:
       selector: a[href*="/td/"]
       attribute: href
@@ -152,4 +156,4 @@ search:
     minimumseedtime:
       # 7 day (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# WordPress 6.9.4
+# WordPress 7.1
