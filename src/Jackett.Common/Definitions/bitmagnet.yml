@@ -72,9 +72,11 @@ search:
     size:
       selector: size
     seeders:
-      text: 1
+      selector: "[name=seeders]"
+      attribute: value
     leechers:
-      text: 1
+      selector: "[name=leechers]"
+      attribute: value
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
