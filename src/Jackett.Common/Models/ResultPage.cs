@@ -5,6 +5,8 @@ using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading;
 using System.Xml.Linq;
+using Jackett.Common.Helpers;
+using Newtonsoft.Json;
 
 namespace Jackett.Common.Models
 {
@@ -52,7 +54,7 @@ namespace Jackett.Common.Models
             return new XElement(_TorznabNs + "attr", new XAttribute("name", name), new XAttribute("value", value));
         }
 
-        public string ToXml(Uri selfAtom)
+        private XDocument GetXDocument(Uri selfAtom)
         {
             // IMPORTANT: We can't use Uri.ToString(), because it generates URLs without URL encode (links with unicode
             // characters are broken). We must use Uri.AbsoluteUri instead that handles encoding correctly
@@ -127,7 +129,19 @@ namespace Jackett.Common.Models
                 )
             );
 
+            return xdoc;
+        }
+
+        public string ToXml(Uri selfAtom)
+        {
+            var xdoc = GetXDocument(selfAtom);
             return xdoc.Declaration + Environment.NewLine + xdoc;
+        }
+
+        public string ToJson(Uri selfAtom, JsonSerializerSettings serializerSettings = null)
+        {
+            var jsonObject = XmlToJsonConverter.XmlToJson(GetXDocument(selfAtom).Root);
+            return JsonConvert.SerializeObject(jsonObject, serializerSettings);
         }
     }
 }
