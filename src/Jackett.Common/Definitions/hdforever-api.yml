@@ -1,0 +1,210 @@
+---
+id: hdforever-api
+name: HD-Forever-API
+description: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES"
+language: fr-FR
+type: private
+encoding: UTF-8
+# API has 60 requests per minute limit
+requestDelay: 1
+links:
+  - https://hdf.world/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Film"}
+    - {id: 2, cat: Movies, desc: "Film d'animation"}
+    - {id: 3, cat: Movies, desc: "Spectacle"}
+    - {id: 4, cat: Movies, desc: "Concert"}
+    - {id: 5, cat: TV, desc: "Série"}
+    - {id: 6, cat: TV/Anime, desc: "Série d'animation"}
+    - {id: 7, cat: Movies, desc: "Documentaire"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+  allowtvsearchimdb: true
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Find or Generate a new Clé API (API Key) by accessing your <a href=\"https://hdf.world/\" target=\"_blank\">HD-Forever</a> account (You username link at the Top left of main page), clicking the <i>Paramètres (Settings)</i> link, and clicking on the <b>Sécurité (Security)</b> tab."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: usetoken
+    type: checkbox
+    label: Always try to use the FreeLeech Token
+    default: false
+  - name: info_token
+    type: info
+    label: About the Freeleech token
+    default: If you <b>do not</b> have any <i>Freeleech tokens</i> then do not tick this box.</br>Attempting a token download when you have no tokens will generate an <b>error</b>.
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: api.php
+  method: get
+  inputs:
+    endpoint: self
+
+search:
+  # https://hdf.world/api.php?apikey=YOUR-API-KEY&endpoint=browse&group_results=0&searchstr=&page=1&limit=50&order_by=time&order_way=desc
+  paths:
+    - path: api.php
+      response:
+        type: json
+  # API docs at https://hdf.world/user.php?action=notify&tab=api
+  inputs:
+    endpoint: browse
+    search_type: advanced
+    # 0 disable grouping, 1 use grouping (default)
+    group_results: 0
+    # we are searching filenames as it simplifies/bypasses group names et.al.
+    filelist: "{{ .Keywords }}"
+    filter_cat: "{{ join .Categories \",\" }}"
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.type }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    season: "{{ .Query.Season }}"
+    # 0 normal, 1 freeleech, 2 -75%, 3 any reduction
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    page: 1
+    limit: 50
+
+  headers:
+    X-Api-Key: ["{{ .Config.apikey }}"]
+
+  rows:
+    selector: response.results
+
+  fields:
+    category:
+      selector: categoryId
+    title_phase1:
+      selector: fileName
+    title_vostfr:
+      selector: fileName
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?:\\.TRUEFRENCH|\\.FRENCH|\\.ENGLISH|\\.VOSTFR|\\.VF2|\\.VFF|\\.VFQ|\\.VOQ|\\.VFI|\\.VOF))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    _groupid:
+      selector: groupId
+    _torrentid:
+      selector: torrentId
+    details:
+      selector: detailsUrl
+    download_regular:
+      selector: downloadUrl
+    _canUseToken:
+      selector: canUseToken
+      case:
+        True: .True
+        False: .False
+    download_usetoken:
+      selector: downloadUrl
+      filters:
+        - name: append
+          args: "&usetoken=1"
+    download:
+      text: "{{ if and .Config.usetoken .Result._canUseToken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
+    imdbid:
+      selector: imdbId
+    tmdbid:
+      selector: tmdbId
+    date:
+      # "2026-09-13 01:06:57"
+      selector: time
+      filters:
+        - name: append
+          args: " +02:00" # CEST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    files:
+      selector: fileCount
+    size:
+      selector: size
+    grabs:
+      selector: snatches
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    _validation:
+      selector: isStaffValidated
+      case:
+        True: Validated
+        False: NotValidated
+    description:
+      selector: tags
+      filters:
+        - name: prepend
+          args: "{{ .Result._validation }} | "
+    downloadvolumefactor:
+      selector: leechType
+      case:
+        "0": 0
+        "Freeleech": 0
+        "-75%": 0.75
+        "-50%": 0.50
+        "-25%": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+# global MR is 0.6 but torrents must be seeded for 3 days regardless of ratio
+#    minimumratio:
+#      text: 0.6
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# Gazelle JSON API
