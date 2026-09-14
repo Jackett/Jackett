@@ -126,7 +126,7 @@ login:
 
 search:
   paths:
-    # https://f1gp.xyz/index.php?page=torrents&search=&category=0&active=0
+    # https://sportz247.bar/index.php?page=torrents&search=&category=0&active=0
     - path: index.php
   inputs:
     page: torrents
@@ -203,4 +203,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-#  xbtitFM v4.2.13
+#  xbtitFM v4.3.00
