@@ -20,8 +20,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string Name => "RedeTorrent";
 
-        public override string SiteLink { get; protected set; } = "https://redetorrent.com/";
-
+        public override string SiteLink { get; protected set; } = "https://redetorrents.com/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://redetorrent.com/",
+        };
         public RedeTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService, wc, l, ps, cs)
         {
