@@ -19,7 +19,11 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string Name => "ApacheTorrent";
 
-        public override string SiteLink { get; protected set; } = "https://apachetorrent.com/";
+        public override string SiteLink { get; protected set; } = "https://apachetorrents.com/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://apachetorrent.com/",
+        };
 
         public ApacheTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
                              ICacheService cs) : base(configService, wc, l, ps, cs)
