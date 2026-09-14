@@ -20,7 +20,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string Name => "RedeTorrent";
 
-        public override string SiteLink { get; protected set; } = "https://redetorrents.com/";
+        public override string SiteLink { get; protected set; } = "https://redestorrents.com/";
         public override string[] LegacySiteLinks => new[]
         {
             "https://redetorrent.com/",
