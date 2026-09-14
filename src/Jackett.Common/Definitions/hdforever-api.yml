@@ -1,12 +1,16 @@
 ---
 id: hdforever-api
-name: HD-Forever-API
-description: "HD-Forever (HD-F) is a FRENCH Private Torrent Tracker for HD MOVIES"
+name: HD-Forever API
+description: "HD-Forever (HD-F) is a private French tracker for movies, TV series, animation, documentaries, concerts and shows"
 language: fr-FR
 type: private
 encoding: UTF-8
-# API has 60 requests per minute limit
-requestDelay: 1
+followredirect: true
+testlinktorrent: false
+
+# Ten seconds also respects the account-wide limit of 60 API calls per 10 minutes.
+requestDelay: 10
+
 links:
   - https://hdf.world/
 
@@ -22,37 +26,37 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid, tvdbid]
-    movie-search: [q, imdbid, tmdbid]
+    tv-search: [q, season, imdbid, tmdbid, year]
+    movie-search: [q, imdbid, tmdbid, year]
   allowtvsearchimdb: true
 
 settings:
   - name: apikey
-    type: text
-    label: APIKey
+    type: password
+    label: API key
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new Clé API (API Key) by accessing your <a href=\"https://hdf.world/\" target=\"_blank\">HD-Forever</a> account (Your username link at the Top left of main page), clicking the <i>Paramètres (Settings)</i> link, and clicking on the <b>Sécurité (Security)</b> tab."
+    default: "Generate or view your API key in HD-Forever under Integrations &gt; API. Keep it private."
   - name: freeleech
     type: checkbox
-    label: Search freeleech only
+    label: Search Freeleech torrents only
     default: false
   - name: usetoken
     type: checkbox
-    label: Always try to use the FreeLeech Token
+    label: Use a Freeleech token when available
     default: false
   - name: info_token
     type: info
-    label: About the Freeleech token
-    default: If you <b>do not</b> have any <i>Freeleech tokens</i> then do not tick this box.</br>Attempting a token download when you have no tokens will generate an <b>error</b>.
+    label: About Freeleech tokens
+    default: "When enabled, Jackett uses a Freeleech token whenever the API reports that one can be used. Otherwise, it keeps the regular download link."
   - name: multilang
     type: checkbox
-    label: Replace MULTi by another language in release name
+    label: Replace MULTi in release names
     default: false
   - name: multilanguage
     type: select
-    label: Replace MULTi by this language
+    label: Replace MULTi with
     default: FRENCH
     options:
       FRENCH: FRENCH
@@ -67,48 +71,52 @@ settings:
     default: false
   - name: sort
     type: select
-    label: Sort requested from site
+    label: Sort requested from HD-Forever
     default: time
     options:
       time: created
       seeders: seeders
       size: size
-  - name: type
+  - name: order
     type: select
-    label: Order requested from site
+    label: Sort direction
     default: desc
     options:
-      desc: desc
-      asc: asc
+      desc: descending
+      asc: ascending
 
 login:
-  # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: api.php
   method: get
   inputs:
     endpoint: self
+  headers:
+    X-Api-Key: ["{{ .Config.apikey }}"]
 
 search:
-  # https://hdf.world/api.php?apikey=YOUR-API-KEY&endpoint=browse&group_results=0&searchstr=&page=1&limit=50&order_by=time&order_way=desc
   paths:
     - path: api.php
       response:
         type: json
-  # API docs at https://hdf.world/user.php?action=notify&tab=api
+
   inputs:
     endpoint: browse
-    search_type: advanced
-    # 0 disable grouping, 1 use grouping (default)
+
+    # An empty value is omitted by Cardigann. An RSS/catalogue request therefore
+    # lets browse select its unfiltered catalogue mode instead of sending an
+    # invalid empty simple search.
+    search_type: "{{ if .Query.IsRssSearch }}{{ else }}simple{{ end }}"
+
+    # Jackett's .Keywords already contains q, year and its normalized TV episode
+    # expression. External IDs take priority so SearchEngine can recognize them
+    # as exact simple-search identifiers. Text searches retain the complete
+    # title/AKA -> relaxed year -> file-list/path fallback pipeline.
+    searchstr: "{{ if or (.Query.IMDBID) (.Query.TMDBID) }}{{ or (.Query.IMDBID) (.Query.TMDBID) }}{{ else }}{{ .Keywords }}{{ end }}"
+
     group_results: 0
-    # we are searching filenames as it simplifies/bypasses group names et.al.
-    filelist: "{{ .Keywords }}"
-    filter_cat: "{{ join .Categories \",\" }}"
+    filter_cat: '{{ join .Categories "," }}'
     order_by: "{{ .Config.sort }}"
-    order_way: "{{ .Config.type }}"
-    tmdbid: "{{ .Query.TMDBID }}"
-    imdbid: "{{ .Query.IMDBID }}"
-    season: "{{ .Query.Season }}"
-    # 0 normal, 1 freeleech, 2 -75%, 3 any reduction
+    order_way: "{{ .Config.order }}"
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     page: 1
     limit: 50
@@ -118,58 +126,62 @@ search:
 
   rows:
     selector: response.results
+    missingAttributeEqualsNoResults: true
 
   fields:
     category:
       selector: categoryId
-    title_phase1:
+
+    # fileName remains the Torznab release title. It is deliberately independent
+    # from the search field used above.
+    title_original:
       selector: fileName
     title_vostfr:
       selector: fileName
       filters:
         - name: re_replace
           args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
-    title_phase2:
-      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
-    title_multilang:
-      text: "{{ .Result.title_phase2 }}"
+    title_language:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_original }}{{ end }}"
+    title_multi:
+      text: "{{ .Result.title_language }}"
       filters:
         - name: re_replace
           args: ["(?i)\\b(MULTI(?:\\.TRUEFRENCH|\\.FRENCH|\\.ENGLISH|\\.VOSTFR|\\.VF2|\\.VFF|\\.VFQ|\\.VOQ|\\.VFI|\\.VOF))\\b", "{{ .Config.multilanguage }}"]
     title:
-      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+      text: "{{ if .Config.multilang }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_language }}{{ end }}"
+
     _groupid:
       selector: groupId
     _torrentid:
       selector: torrentId
     details:
       selector: detailsUrl
+
     download_regular:
       selector: downloadUrl
+    download_token:
+      selector: downloadUrl
+      filters:
+        - name: append
+          args: "&usetoken=1"
     _canUseToken:
       selector: canUseToken
       case:
         True: .True
         False: .False
-    download_usetoken:
-      selector: downloadUrl
-      filters:
-        - name: append
-          args: "&usetoken=1"
     download:
-      text: "{{ if and .Config.usetoken .Result._canUseToken }}{{ .Result.download_usetoken }}{{ else }}{{ .Result.download_regular }}{{ end }}"
+      text: "{{ if and (.Config.usetoken) (.Result._canUseToken) }}{{ .Result.download_token }}{{ else }}{{ .Result.download_regular }}{{ end }}"
+
     imdbid:
       selector: imdbId
     tmdbid:
       selector: tmdbId
     date:
-      # "2026-09-13 01:06:57"
       selector: time
       filters:
-        - name: append
-          args: " +02:00" # CEST
         - name: dateparse
-          args: "yyyy-MM-dd HH:mm:ss zzz"
+          args: "yyyy-MM-dd HH:mm:ss"
     files:
       selector: fileCount
     size:
@@ -180,31 +192,26 @@ search:
       selector: seeders
     leechers:
       selector: leechers
+
     _validation:
       selector: isStaffValidated
       case:
-        True: Validated
-        False: NotValidated
+        True: Staff validated
+        False: Not staff validated
     description:
-      selector: tags
-      filters:
-        - name: prepend
-          args: "{{ .Result._validation }} | "
+      text: "{{ .Result._validation }}"
+
     downloadvolumefactor:
       selector: leechType
       case:
-        "0": 0
-        "Freeleech": 0
+        Freeleech: 0
         "-75%": 0.75
         "-50%": 0.50
-        "-25%": 0.25 # for this site this is the count ratio, which is 25% of the total torrent size. (I.E. it's 75% free)
+        "-25%": 0.25
         "*": 1
     uploadvolumefactor:
       text: 1
-# global MR is 0.6 but torrents must be seeded for 3 days regardless of ratio
-#    minimumratio:
-#      text: 0.6
     minimumseedtime:
-      # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
+
 # Gazelle JSON API
