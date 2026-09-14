@@ -1,7 +1,7 @@
 ---
 id: hdforever-api
-name: HD-Forever API
-description: "HD-Forever (HD-F) is a private French tracker for movies, TV series, animation, documentaries, concerts and shows"
+name: HD-Forever (API)
+description: "HD-Forever (HD-F) is a French private tracker dedicated to movies, TV shows, animation, documentaries, concerts, and live shows."
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -49,7 +49,7 @@ settings:
   - name: info_token
     type: info
     label: About Freeleech tokens
-    default: "When enabled, Jackett uses a Freeleech token whenever the API reports that one can be used. Otherwise, it keeps the regular download link."
+    default: "When enabled, a Freeleech token is used whenever the API reports that one can be used. Otherwise, the regular download link is kept."
   - name: multilang
     type: checkbox
     label: Replace MULTi in release names
@@ -94,6 +94,10 @@ login:
     X-Api-Key: ["{{ .Config.apikey }}"]
 
 search:
+  # HD-F has no single episodes, so an episode search looks for its season.
+  keywordsfilters:
+    - name: re_replace
+      args: ["(?i)\\b(S\\d{2,})(?:E\\d{2,})+\\b", "$1"]
   paths:
     - path: api.php
       response:
@@ -102,15 +106,9 @@ search:
   inputs:
     endpoint: browse
 
-    # An empty value is omitted by Cardigann. An RSS/catalogue request therefore
-    # lets browse select its unfiltered catalogue mode instead of sending an
-    # invalid empty simple search.
-    search_type: "{{ if .Query.IsRssSearch }}{{ else }}simple{{ end }}"
-
-    # Jackett's .Keywords already contains q, year and its normalized TV episode
-    # expression. External IDs take priority so SearchEngine can recognize them
-    # as exact simple-search identifiers. Text searches retain the complete
-    # title/AKA -> relaxed year -> file-list/path fallback pipeline.
+    # External identifiers take priority. Otherwise, normalized Cardigann
+    # keywords are sent to the API simple-search field. Episode expressions
+    # have already been reduced to their season by the filter above.
     searchstr: "{{ if or (.Query.IMDBID) (.Query.TMDBID) }}{{ or (.Query.IMDBID) (.Query.TMDBID) }}{{ else }}{{ .Keywords }}{{ end }}"
 
     group_results: 0
@@ -147,7 +145,7 @@ search:
       text: "{{ .Result.title_language }}"
       filters:
         - name: re_replace
-          args: ["(?i)\\b(MULTI(?:\\.TRUEFRENCH|\\.FRENCH|\\.ENGLISH|\\.VOSTFR|\\.VF2|\\.VFF|\\.VFQ|\\.VOQ|\\.VFI|\\.VOF))\\b", "{{ .Config.multilanguage }}"]
+          args: ["(?i)\\bMULTI(?:\\.(?:TRUEFRENCH|FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF))?\\b", "{{ .Config.multilanguage }}"]
     title:
       text: "{{ if .Config.multilang }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_language }}{{ end }}"
 
@@ -168,8 +166,8 @@ search:
     _canUseToken:
       selector: canUseToken
       case:
-        True: .True
-        False: .False
+        "True": "{{ .True }}"
+        "False": "{{ .False }}"
     download:
       text: "{{ if and (.Config.usetoken) (.Result._canUseToken) }}{{ .Result.download_token }}{{ else }}{{ .Result.download_regular }}{{ end }}"
 
@@ -196,8 +194,8 @@ search:
     _validation:
       selector: isStaffValidated
       case:
-        True: Staff validated
-        False: Not staff validated
+        "True": Staff validated
+        "False": Not staff validated
     description:
       text: "{{ .Result._validation }}"
 
@@ -205,9 +203,9 @@ search:
       selector: leechType
       case:
         Freeleech: 0
-        "-75%": 0.75
+        "-75%": 0.25
         "-50%": 0.50
-        "-25%": 0.25
+        "-25%": 0.75
         "*": 1
     uploadvolumefactor:
       text: 1
