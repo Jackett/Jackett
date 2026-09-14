@@ -35,7 +35,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override IParseIndexerResponse GetParser() => new HDRTorrentParser(webclient);
 
-        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?s=");
+        public override IIndexerRequestGenerator GetRequestGenerator() => new SimpleRequestGenerator(SiteLink, searchQueryParamsKey: "index.php?busca=");
     }
 
     public class HDRTorrentParser : PublicBrazilianParser
@@ -105,11 +105,11 @@ namespace Jackett.Common.Indexers.Definitions
             var releases = new List<ReleaseInfo>();
             var parser = new HtmlParser();
             var dom = parser.ParseDocument(indexerResponse.Content);
-            var rows = dom.QuerySelectorAll("div.capa-img");
+            var rows = dom.QuerySelectorAll("div.col");
 
             foreach (var row in rows)
             {
-                var h2Anchor = row.QuerySelector("h2 a");
+                var h2Anchor = row.QuerySelector("a.media-card-link");
                 if (h2Anchor == null)
                     continue;
 
