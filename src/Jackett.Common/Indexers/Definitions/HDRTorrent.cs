@@ -21,7 +21,12 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string Name => "HDRTorrent";
 
-        public override string SiteLink { get; protected set; } = "https://hdrtorrent.com/";
+        public override string SiteLink { get; protected set; } = "https://hdrtorrents.net/";
+
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://hdrtorrent.com/",
+        };
 
         public HDRTorrent(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService, wc, l, ps, cs)
