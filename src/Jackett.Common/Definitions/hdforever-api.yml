@@ -1,0 +1,217 @@
+---
+id: hdforever-api
+name: HD-Forever API
+description: "HD-Forever (HD-F) is a private French tracker for movies, TV series, animation, documentaries, concerts and shows"
+language: fr-FR
+type: private
+encoding: UTF-8
+followredirect: true
+testlinktorrent: false
+
+# Ten seconds also respects the account-wide limit of 60 API calls per 10 minutes.
+requestDelay: 10
+
+links:
+  - https://hdf.world/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: Movies, desc: "Film"}
+    - {id: 2, cat: Movies, desc: "Film d'animation"}
+    - {id: 3, cat: Movies, desc: "Spectacle"}
+    - {id: 4, cat: Movies, desc: "Concert"}
+    - {id: 5, cat: TV, desc: "Série"}
+    - {id: 6, cat: TV/Anime, desc: "Série d'animation"}
+    - {id: 7, cat: Movies, desc: "Documentaire"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, imdbid, tmdbid, year]
+    movie-search: [q, imdbid, tmdbid, year]
+  allowtvsearchimdb: true
+
+settings:
+  - name: apikey
+    type: password
+    label: API key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Generate or view your API key in HD-Forever under Integrations &gt; API. Keep it private."
+  - name: freeleech
+    type: checkbox
+    label: Search Freeleech torrents only
+    default: false
+  - name: usetoken
+    type: checkbox
+    label: Use a Freeleech token when available
+    default: false
+  - name: info_token
+    type: info
+    label: About Freeleech tokens
+    default: "When enabled, Jackett uses a Freeleech token whenever the API reports that one can be used. Otherwise, it keeps the regular download link."
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi in release names
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi with
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from HD-Forever
+    default: time
+    options:
+      time: created
+      seeders: seeders
+      size: size
+  - name: order
+    type: select
+    label: Sort direction
+    default: desc
+    options:
+      desc: descending
+      asc: ascending
+
+login:
+  path: api.php
+  method: get
+  inputs:
+    endpoint: self
+  headers:
+    X-Api-Key: ["{{ .Config.apikey }}"]
+
+search:
+  paths:
+    - path: api.php
+      response:
+        type: json
+
+  inputs:
+    endpoint: browse
+
+    # An empty value is omitted by Cardigann. An RSS/catalogue request therefore
+    # lets browse select its unfiltered catalogue mode instead of sending an
+    # invalid empty simple search.
+    search_type: "{{ if .Query.IsRssSearch }}{{ else }}simple{{ end }}"
+
+    # Jackett's .Keywords already contains q, year and its normalized TV episode
+    # expression. External IDs take priority so SearchEngine can recognize them
+    # as exact simple-search identifiers. Text searches retain the complete
+    # title/AKA -> relaxed year -> file-list/path fallback pipeline.
+    searchstr: "{{ if or (.Query.IMDBID) (.Query.TMDBID) }}{{ or (.Query.IMDBID) (.Query.TMDBID) }}{{ else }}{{ .Keywords }}{{ end }}"
+
+    group_results: 0
+    filter_cat: '{{ join .Categories "," }}'
+    order_by: "{{ .Config.sort }}"
+    order_way: "{{ .Config.order }}"
+    freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+    page: 1
+    limit: 50
+
+  headers:
+    X-Api-Key: ["{{ .Config.apikey }}"]
+
+  rows:
+    selector: response.results
+    missingAttributeEqualsNoResults: true
+
+  fields:
+    category:
+      selector: categoryId
+
+    # fileName remains the Torznab release title. It is deliberately independent
+    # from the search field used above.
+    title_original:
+      selector: fileName
+    title_vostfr:
+      selector: fileName
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_language:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_original }}{{ end }}"
+    title_multi:
+      text: "{{ .Result.title_language }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?:\\.TRUEFRENCH|\\.FRENCH|\\.ENGLISH|\\.VOSTFR|\\.VF2|\\.VFF|\\.VFQ|\\.VOQ|\\.VFI|\\.VOF))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multi }}{{ else }}{{ .Result.title_language }}{{ end }}"
+
+    _groupid:
+      selector: groupId
+    _torrentid:
+      selector: torrentId
+    details:
+      selector: detailsUrl
+
+    download_regular:
+      selector: downloadUrl
+    download_token:
+      selector: downloadUrl
+      filters:
+        - name: append
+          args: "&usetoken=1"
+    _canUseToken:
+      selector: canUseToken
+      case:
+        True: .True
+        False: .False
+    download:
+      text: "{{ if and (.Config.usetoken) (.Result._canUseToken) }}{{ .Result.download_token }}{{ else }}{{ .Result.download_regular }}{{ end }}"
+
+    imdbid:
+      selector: imdbId
+    tmdbid:
+      selector: tmdbId
+    date:
+      selector: time
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss"
+    files:
+      selector: fileCount
+    size:
+      selector: size
+    grabs:
+      selector: snatches
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+
+    _validation:
+      selector: isStaffValidated
+      case:
+        True: Staff validated
+        False: Not staff validated
+    description:
+      text: "{{ .Result._validation }}"
+
+    downloadvolumefactor:
+      selector: leechType
+      case:
+        Freeleech: 0
+        "-75%": 0.75
+        "-50%": 0.50
+        "-25%": 0.25
+        "*": 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      text: 259200
+
+# Gazelle JSON API

@@ -496,6 +496,8 @@ namespace Jackett.Updater
                 "Definitions/hdclub.yml",
                 "Definitions/hdcztorrent.yml",
                 "Definitions/hddisk.yml",
+                "Definitions/hdforever.yml", // replaced by hdforever-api
+                "Definitions/hdforever2fa.yml", // replaced by hdforever-api
                 "Definitions/hdfun.yml",
                 "Definitions/hdhouse.yml",
                 "Definitions/hdmayi.yml",
