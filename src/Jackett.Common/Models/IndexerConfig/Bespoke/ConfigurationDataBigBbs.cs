@@ -33,10 +33,8 @@ namespace Jackett.Common.Models.IndexerConfig.Bespoke
 
             ProfileInfo = new DisplayInfoConfigurationItem(
                 "Layout",
-                "<ul><li>Only the English Classic profile is supported.</li>" +
-                "<li>Make sure to set the <b>Torrent Listing (Lista torrentów)</b> option in your profile to <b>Classic (Klasyczny)</b></li>" +
-                "<li>And set the <b>Language (Dil)</b> to <b>English</b></li>" +
-                "<li>Using the <i>Modern</i> theme will prevent results, and using <i>Polski</i> will prevent upload dates.</li></ul>");
+                "<ul><li>Make sure to set the <b>Torrent Listing (Lista torrentów)</b> option in your profile to <b>Classic (Klasyczny)</b></li>" +
+                "<li>Using the <i>Modern</i> theme will prevent results.</li></ul>");
         }
     }
 }
