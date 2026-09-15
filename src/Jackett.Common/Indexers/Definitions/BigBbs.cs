@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
@@ -30,9 +31,6 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
 
-        private string LoginUrl => SiteLink + "?p=home&pid=1";
-        private string SearchUrl => SiteLink + "?p=torrents&pid=10";
-
         private ConfigurationDataBigBbs _configData => (ConfigurationDataBigBbs)configData;
 
         public BigBbs(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps,
@@ -44,6 +42,7 @@ namespace Jackett.Common.Indexers.Definitions
                    cacheService: cs,
                    configData: new ConfigurationDataBigBbs())
         {
+            var test = 123; // BREAKPOINT
         }
 
         private TorznabCapabilities SetCapabilities()
@@ -189,38 +188,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             try
             {
-                var loginPage = await RequestWithCookiesAsync(LoginUrl);
-                var parser = new HtmlParser();
-                using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
-
-                var scripts = dom.QuerySelectorAll("script");
-
-                var securityToken =
-                    (from script in scripts
-                     where script.TextContent.Contains("stKey:")
-                     select Regex.Match(script.TextContent, "stKey: \"(.+?)\",")
-                     into match
-                     where match.Success
-                     select match.Groups[1].Value).FirstOrDefault();
-
-                if (securityToken.IsNullOrWhiteSpace())
-                    throw new Exception("Could not find security token");
-
-                var loginFormUrl = SiteLink + "ajax/login.php";
-                var loginData = new Dictionary<string, string>
-                {
-                    { "action", "login" },
-                    { "loginbox_membername", _configData.Username.Value },
-                    { "loginbox_password", _configData.Password.Value },
-                    { "loginbox_remember", "1" },
-                    { "securitytoken", securityToken }
-                };
-
-                var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
-
-                if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
-                    throw new Exception("Invalid username or password");
-
+                await LoginAsync();
                 var searchResults = await PerformQuery(new TorznabQuery());
                 if (!searchResults.Any())
                     throw new Exception("Found 0 results in the tracker");
@@ -236,39 +204,88 @@ namespace Jackett.Common.Indexers.Definitions
             }
         }
 
+        private async Task LoginAsync()
+        {
+            var loginPage = await RequestWithCookiesAsync(GetLoginUrl());
+            var parser = new HtmlParser();
+            using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
+
+            var scripts = dom.QuerySelectorAll("script");
+
+            var securityToken =
+                (from script in scripts
+                 where script.TextContent.Contains("stKey:")
+                 select Regex.Match(script.TextContent, "stKey: \"(.+?)\",")
+                 into match
+                 where match.Success
+                 select match.Groups[1].Value).FirstOrDefault();
+
+            if (securityToken.IsNullOrWhiteSpace())
+                throw new Exception("Could not find security token");
+
+            var loginFormUrl = SiteLink + "ajax/login.php";
+            var loginData = new Dictionary<string, string>
+            {
+                { "action", "login" },
+                { "loginbox_membername", _configData.Username.Value },
+                { "loginbox_password", _configData.Password.Value },
+                { "loginbox_remember", "1" },
+                { "securitytoken", securityToken }
+            };
+
+            var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
+
+            if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
+                throw new Exception("Invalid username or password");
+        }
+
+        private string GetLoginUrl()
+        {
+            var queryCollection = new NameValueCollection { { "p", "home" }, { "pid", "1" } };
+            return $"{SiteLink.TrimEnd('/')}/?{queryCollection.GetQueryString()}";
+        }
+
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
             var cats = MapTorznabCapsToTrackers(query);
-            var queryParams = cats
-                              .Select(cat => new KeyValuePair<string, string>("cid[]", cat))
-                              .ToList();
 
             var sort = _configData.Sort.Value;
             var type = _configData.Type.Value;
             var freeleech = _configData.Freeleech.Value;
 
+            var queryCollection = new NameValueCollection
+            {
+                { "p", "torrents" },
+                { "pid", "10" },
+            };
+
             if (query.GetQueryString().IsNotNullOrWhiteSpace())
             {
                 var keywords = Regex.Replace(query.GetQueryString(), "[^a-zA-Z0-9]+", "%25").Trim();
-                queryParams.Add("keywords", keywords);
+                queryCollection.Set("keywords", keywords);
             }
 
-            queryParams.Add("search_type", "name");
-            queryParams.Add("sortOptions[sortBy]", sort);
-            queryParams.Add("sortOptions[sortOrder]", type);
+            queryCollection.Set("search_type", "name");
+            queryCollection.Set("sortOptions[sortBy]", sort);
+            queryCollection.Set("sortOptions[sortOrder]", type);
+            cats.ForEach(c => queryCollection.Set("[cid]", c));
 
-            var searchUrl = SearchUrl + "&" + queryParams.GetQueryString();
+            var searchUrl = $"{SiteLink.TrimEnd('/')}/?{queryCollection.GetQueryString()}";
+
             var response = await RequestWithCookiesAsync(searchUrl);
 
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
-                throw new Exception("The user is not logged in. It is possible that the cookie has expired or you made a mistake when copying it. Please check the settings.");
+            {
+                await LoginAsync();
+                return Enumerable.Empty<ReleaseInfo>();
+            }
 
             try
             {
                 var parser = new HtmlParser();
-                var dom = parser.ParseDocument(response.ContentString);
 
+                using var dom = await parser.ParseDocumentAsync(response.ContentString);
                 var selector = freeleech
                     ? "table#torrents_table_classic > tbody > tr:has(a[href*=\"?p=torrents&pid=10&action=download&tid=\"]):has(img[src$=\"/torrent_free.png\"])"
                     : "table#torrents_table_classic > tbody > tr:has(a[href*=\"?p=torrents&pid=10&action=download&tid=\"])";
@@ -527,7 +544,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             try
             {
-                var loginPage = await RequestWithCookiesAsync(LoginUrl);
+                var loginPage = await RequestWithCookiesAsync(GetLoginUrl());
                 var parser = new HtmlParser();
                 using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
 
