@@ -42,7 +42,6 @@ namespace Jackett.Common.Indexers.Definitions
                    cacheService: cs,
                    configData: new ConfigurationDataBigBbs())
         {
-            var test = 123; // BREAKPOINT
         }
 
         private TorznabCapabilities SetCapabilities()
