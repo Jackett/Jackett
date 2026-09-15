@@ -47,6 +47,7 @@ caps:
     - {id: 157, cat: Movies/HD, desc: "Klassiker HD"}
     # Doku
     - {id: 221, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 235, cat: TV/Documentary, desc: "Doku Serie"}
     # Music
     - {id: 126, cat: Audio, desc: "Music Mp3/Flac"}
     - {id: 48, cat: Audio, desc: "Music Album"}
