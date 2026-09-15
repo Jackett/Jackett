@@ -14,13 +14,11 @@ legacylinks:
 caps:
   categorymappings:
     # movies
-    - {id: 1, cat: Movies/SD, desc: "Movies XviD"}
-    - {id: 7, cat: TV/Documentary, desc: "Movies Documentaries"}
+    - {id: 7, cat: TV/Documentary, desc: "Movies Documentary"}
     - {id: 11, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 14, cat: TV, desc: "TV Shows"}
     - {id: 15, cat: TV, desc: "TV Boxset"}
     - {id: 16, cat: Movies/HD, desc: "Movies x264"}
-    - {id: 17, cat: Movies/HD, desc: "Movies MPEG2"}
     - {id: 18, cat: Movies/BluRay, desc: "Movies BR/HD DVD"}
     - {id: 24, cat: TV/SD, desc: "TV BG"}
     - {id: 34, cat: Movies, desc: "Movies BG"}
@@ -30,10 +28,11 @@ caps:
     - {id: 58, cat: Movies/HD, desc: "Movies x265"}
     - {id: 59, cat: Movies/SD, desc: "Movies VHS"}
     - {id: 60, cat: Movies/UHD, desc: "Movies 4K"}
+    - {id: 67, cat: Movies/SD, desc: "Movies SD"}
     # music
     - {id: 2, cat: Audio/MP3, desc: "Music Song"}
     - {id: 3, cat: Audio/Video, desc: "Music DVD"}
-    - {id: 19, cat: Audio/Video, desc: "Music Video"}
+    - {id: 19, cat: Audio/Video, desc: "Music Videos"}
     - {id: 28, cat: Audio, desc: "Music Album"}
     - {id: 29, cat: Audio, desc: "Music Discography"}
     # games
