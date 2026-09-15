@@ -13,254 +13,293 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 5, cat: Books, desc: "Shipbuilding & Shiprepairing"}
-    - {id: 314, cat: Books, desc: "Shipbuilding & Shiprepairing-Ship supply (chemicals, paints, oils)"}
-    - {id: 313, cat: Books, desc: "Shipbuilding & Shiprepairing-Shipbuilding materials"}
-    - {id: 312, cat: Books, desc: "Shipbuilding & Shiprepairing-Shipbuilding Management"}
-    - {id: 311, cat: Books, desc: "Shipbuilding & Shiprepairing-Mathematical Modeling"}
     - {id: 310, cat: Books, desc: "Shipbuilding & Shiprepairing-Hydrodynamics"}
+    - {id: 311, cat: Books, desc: "Shipbuilding & Shiprepairing-Mathematical Modeling"}
     - {id: 309, cat: Books, desc: "Shipbuilding & Shiprepairing-Naval Architecture & Marine Engineering"}
+    - {id: 314, cat: Books, desc: "Shipbuilding & Shiprepairing-Ship supply (chemicals, paints, oils)"}
+    - {id: 312, cat: Books, desc: "Shipbuilding & Shiprepairing-Shipbuilding Management"}
     - {id: 308, cat: Books, desc: "Shipbuilding & Shiprepairing-Shipbuilding Standard @ Register"}
-    - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
+    - {id: 313, cat: Books, desc: "Shipbuilding & Shiprepairing-Shipbuilding materials"}
     - {id: 195, cat: Books, desc: "Shipbuilding & Shiprepairing-Turnary"}
+    - {id: 196, cat: Books, desc: "Shipbuilding & Shiprepairing-Welding"}
+    - {id: 453, cat: Books, desc: "Shipbuilding & Shiprepairing-Журнал «Судостроение»"}
     - {id: 21, cat: Books, desc: "Deckofficer's Library"}
-    - {id: 425, cat: Books, desc: "Deckofficer's Library-ECDIS"}
-    - {id: 283, cat: Books, desc: "Deckofficer's Library-Radar at sea"}
-    - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}
-    - {id: 115, cat: Books, desc: "Deckofficer's Library-Keeping the ship documentation"}
     - {id: 32, cat: Books, desc: "Deckofficer's Library-Cargo operations"}
-    - {id: 34, cat: Books, desc: "Deckofficer's Library-Navigation"}
-    - {id: 35, cat: Books, desc: "Deckofficer's Library-Ship handling"}
-    - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
+    - {id: 425, cat: Books, desc: "Deckofficer's Library-ECDIS"}
+    - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
     - {id: 95, cat: Books, desc: "Deckofficer's Library-Hydrometeorology"}
-    - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
+    - {id: 115, cat: Books, desc: "Deckofficer's Library-Keeping the ship documentation"}
     - {id: 110, cat: Books, desc: "Deckofficer's Library-Nautical Astronomy"}
     - {id: 94, cat: Books, desc: "Deckofficer's Library-Nautical charts, tables, sailing directions"}
-    - {id: 116, cat: Books, desc: "Deckofficer's Library-Global Maritime Distress and Safety System (GMDSS)"}
+    - {id: 34, cat: Books, desc: "Deckofficer's Library-Navigation"}
     - {id: 192, cat: Books, desc: "Deckofficer's Library-Navigation in the ice"}
+    - {id: 283, cat: Books, desc: "Deckofficer's Library-Radar at sea"}
+    - {id: 100, cat: Books, desc: "Deckofficer's Library-Ship Theory"}
+    - {id: 35, cat: Books, desc: "Deckofficer's Library-Ship handling"}
+    - {id: 36, cat: Books, desc: "Deckofficer's Library-Technical equipment of navigation"}
+    - {id: 114, cat: Books, desc: "Deckofficer's Library-Watch keeping"}
     - {id: 102, cat: Books, desc: "Marine Engineer's Library"}
-    - {id: 316, cat: Books, desc: "Marine Engineer's Library-Marine Fuels & Lubricants"}
-    - {id: 28, cat: Books, desc: Marine Engineer's Library-Ship's systems and mechanisms"}
     - {id: 22, cat: Books, desc: Marine Engineer's Library-Daihatsu"}
+    - {id: 108, cat: Books, desc: Marine Engineer's Library-Hydraulics"}
+    - {id: 173, cat: Books, desc: Marine Engineer's Library-MAK & Caterpillar"}
+    - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
+    - {id: 316, cat: Books, desc: "Marine Engineer's Library-Marine Fuels & Lubricants"}
+    - {id: 134, cat: Books, desc: Marine Engineer's Library-Marine Pumps"}
+    - {id: 175, cat: Books, desc: Marine Engineer's Library-Marine boilers"}
+    - {id: 176, cat: Books, desc: Marine Engineer's Library-Marine refrigeration plants"}
     - {id: 164, cat: Books, desc: Marine Engineer's Library-Operation of ship's power plants"}
     - {id: 199, cat: Books, desc: Marine Engineer's Library-Ship Propulsion"}
-    - {id: 176, cat: Books, desc: Marine Engineer's Library-Marine refrigeration plants"}
-    - {id: 175, cat: Books, desc: Marine Engineer's Library-Marine boilers"}
-    - {id: 173, cat: Books, desc: Marine Engineer's Library-MAK & Caterpillar"}
     - {id: 166, cat: Books, desc: Marine Engineer's Library-Ship's steam and gas turbines"}
-    - {id: 134, cat: Books, desc: Marine Engineer's Library-Marine Pumps"}
-    - {id: 108, cat: Books, desc: Marine Engineer's Library-Hydraulics"}
-    - {id: 16, cat: Books, desc: Marine Engineer's Library-MAN B&W"}
+    - {id: 28, cat: Books, desc: Marine Engineer's Library-Ship's systems and mechanisms"}
     - {id: 17, cat: Books, desc: Marine Engineer's Library-Wärtsilä & Sulzer"}
     - {id: 101, cat: Books, desc: "Electrical Technical Officer's Library"}
-    - {id: 29, cat: Books, desc: "Electrical Technical Officer's Library-Marine Electronics"}
-    - {id: 103, cat: Books, desc: "Electrical Technical Officer's Library-Ship's automatics"}
-    - {id: 104, cat: Books, desc: "Electrical Technical Officer's Library-Electrical machines"}
-    - {id: 210, cat: Books, desc: "Electrical Technical Officer's Library-Programmable Logic Controllers (PLC)"}
-    - {id: 172, cat: Books, desc: "Electrical Technical Officer's Library-Incinerators"}
     - {id: 167, cat: Books, desc: "Electrical Technical Officer's Library-Cranes"}
     - {id: 107, cat: Books, desc: "Electrical Technical Officer's Library-ETO Handbooks"}
+    - {id: 104, cat: Books, desc: "Electrical Technical Officer's Library-Electrical machines"}
+    - {id: 172, cat: Books, desc: "Electrical Technical Officer's Library-Incinerators"}
+    - {id: 29, cat: Books, desc: "Electrical Technical Officer's Library-Marine Electronics"}
+    - {id: 210, cat: Books, desc: "Electrical Technical Officer's Library-Programmable Logic Controllers (PLC)"}
+    - {id: 103, cat: Books, desc: "Electrical Technical Officer's Library-Ship's automatics"}
     - {id: 105, cat: Books, desc: "Electrical Technical Officer's Library-Sources of electricity"}
     - {id: 37, cat: Books, desc: "Organization and management of maritime transport"}
     - {id: 420, cat: Books, desc: "Organization and management of maritime transport-Annual reports"}
     - {id: 6, cat: PC, desc: "Maritime Software"}
-    - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
-    - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
-    - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
     - {id: 20, cat: PC, desc: "Maritime Software-Calculation soft"}
-    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
     - {id: 376, cat: PC, desc: "Maritime Software-Games"}
+    - {id: 13, cat: PC, desc: "Maritime Software-Marine Tests"}
+    - {id: 14, cat: PC, desc: "Maritime Software-Maritime Simulators"}
+    - {id: 211, cat: PC, desc: "Maritime Software-Navigation soft & Charts"}
+    - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
     - {id: 179, cat: PC, desc: "Maritime Software-Programming and SDK software"}
     - {id: 317, cat: PC, desc: "Maritime Software-Shareware (demo, trial)"}
-    - {id: 188, cat: PC, desc: "Maritime Software-Other soft"}
+    - {id: 19, cat: PC, desc: "Maritime Software-Training software"}
     - {id: 226, cat: Books, desc: "Mobile Apps for Seafarers"}
     - {id: 380, cat: PC, desc: "Mobile Apps for Seafarers-Apps for Deck Officers"}
     - {id: 381, cat: PC, desc: "Mobile Apps for Seafarers-Apps for Marine Engineers"}
     - {id: 383, cat: PC, desc: "Mobile Apps for Seafarers-Exam Apps &amp;Test Answers"}
     - {id: 384, cat: PC, desc: "Mobile Apps for Seafarers-Foreign languages learning"}
+    - {id: 463, cat: PC, desc: "Mobile Apps for Seafarers-Maritime games & simulators"}
     - {id: 382, cat: PC, desc: "Mobile Apps for Seafarers-Other mobile Apps"}
     - {id: 8, cat: Movies, desc: "Video for Seamen"}
+    - {id: 377, cat: Movies, desc: "Video for Seamen-Documentary video"}
+    - {id: 396, cat: Movies, desc: "Video for Seamen-Maritime History videos"}
     - {id: 400, cat: Movies, desc: "Video for Seamen-Maritime Law & Regulations videos"}
+    - {id: 397, cat: Movies, desc: "Video for Seamen-Maritime Safety videos"}
     - {id: 399, cat: Movies, desc: "Video for Seamen-Maritime Shipping & Cargo Operations videos"}
     - {id: 398, cat: Movies, desc: "Video for Seamen-Offshore Industry videos"}
-    - {id: 397, cat: Movies, desc: "Video for Seamen-Maritime Safety videos"}
-    - {id: 396, cat: Movies, desc: "Video for Seamen-Maritime History videos"}
-    - {id: 395, cat: Movies, desc: "Video for Seamen-Shipbuilding & Shiprepairing videos"}
+    - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
     - {id: 394, cat: Movies, desc: "Video for Seamen-Ship Modeling & RC Boat videos"}
-    - {id: 237, cat: Movies, desc: "Video for Seamen-Yachting, sailing videos"}
-    - {id: 377, cat: Movies, desc: "Video for Seamen-Documentary video"}
+    - {id: 395, cat: Movies, desc: "Video for Seamen-Shipbuilding & Shiprepairing videos"}
     - {id: 234, cat: Movies, desc: "Video for Seamen-Video for Deck Officers"}
     - {id: 233, cat: Movies, desc: "Video for Seamen-Video for Marine Engineers"}
-    - {id: 235, cat: Movies, desc: "Video for Seamen-Other videos"}
+    - {id: 237, cat: Movies, desc: "Video for Seamen-Yachting, sailing videos"}
     - {id: 42, cat: Books, desc: "Safety of Navigation"}
-    - {id: 307, cat: Books, desc: "Safety of Navigation-Life Safety at Sea"}
-    - {id: 306, cat: Books, desc: "Safety of Navigation-Casualties and Incidents"}
-    - {id: 305, cat: Books, desc: "Safety of Navigation-Safety Digest, Lessons from Marine Accident Reports"}
-    - {id: 304, cat: Books, desc: "Safety of Navigation-Fire fighting at sea"}
     - {id: 303, cat: Books, desc: "Safety of Navigation-Anti-Piracy Security"}
-    - {id: 302, cat: Books, desc: "Safety of Navigation-Emergency and life-saving equipment"}
+    - {id: 306, cat: Books, desc: "Safety of Navigation-Casualties and Incidents"}
     - {id: 301, cat: Books, desc: "Safety of Navigation-Cybersecurity"}
+    - {id: 302, cat: Books, desc: "Safety of Navigation-Emergency and life-saving equipment"}
+    - {id: 304, cat: Books, desc: "Safety of Navigation-Fire fighting at sea"}
+    - {id: 307, cat: Books, desc: "Safety of Navigation-Life Safety at Sea"}
+    - {id: 305, cat: Books, desc: "Safety of Navigation-Safety Digest, Lessons from Marine Accident Reports"}
     - {id: 10, cat: Books, desc: "English for seamen"}
-    - {id: 419, cat: Books, desc: "English for seamen-Marine multilingual dictionaries"}
-    - {id: 270, cat: Books, desc: "English for seamen-EN↔RU dictionaries & phrasebooks"}
+    - {id: 271, cat: Books, desc: "English for seamen-Business English and Correspondence"}
     - {id: 417, cat: Books, desc: "English for seamen-Dictionaries & phrasebooks (other langs"}
-    - {id: 265, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries EN↔EN"}
-    - {id: 416, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries RU↔RU"}
-    - {id: 418, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries…"}
-    - {id: 387, cat: Books, desc: "English for seamen-English for Radio Operators"}
+    - {id: 270, cat: Books, desc: "English for seamen-EN↔RU dictionaries & phrasebooks"}
     - {id: 266, cat: Books, desc: "English for seamen-English for Deck Officers"}
-    - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
     - {id: 268, cat: Books, desc: "English for seamen-English for ETO's"}
+    - {id: 267, cat: Books, desc: "English for seamen-English for Marine Engineers"}
+    - {id: 387, cat: Books, desc: "English for seamen-English for Radio Operators"}
     - {id: 269, cat: Books, desc: "English for seamen-English for Shipbuilders"}
     - {id: 388, cat: Books, desc: "English for seamen-English for Yachtsmen"}
-    - {id: 271, cat: Books, desc: "English for seamen-Business English and Correspondence"}
+    - {id: 418, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries…"}
+    - {id: 265, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries EN↔EN"}
+    - {id: 416, cat: Books, desc: "English for seamen-Marine monolingual dictionaries and glossaries RU↔RU"}
+    - {id: 419, cat: Books, desc: "English for seamen-Marine multilingual dictionaries"}
     - {id: 205, cat: Books, desc: "General english"}
     - {id: 39, cat: Books, desc: "Purpose-built ships"}
-    - {id: 250, cat: Books, desc: "Purpose-built ships-LNG \ LPG - CNG"}
-    - {id: 51, cat: Books, desc: "Purpose-built ships-Oil & Chemical Tankers"}
     - {id: 52, cat: Books, desc: "Purpose-built ships-Dry cargo vessels"}
-    - {id: 284, cat: Books, desc: "Purpose-built ships-Nuclear powered ships"}
-    - {id: 54, cat: Books, desc: "Purpose-built ships-Passenger ships"}
-    - {id: 385, cat: Books, desc: "Purpose-built ships-Towing vessels"}
-    - {id: 248, cat: Books, desc: "Purpose-built ships-Fishing vessels"}
-    - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
     - {id: 349, cat: Books, desc: "Purpose-built ships-Dynamic positioning vessels"}
+    - {id: 248, cat: Books, desc: "Purpose-built ships-Fishing vessels"}
+    - {id: 250, cat: Books, desc: "Purpose-built ships-LNG \ LPG - CNG"}
+    - {id: 423, cat: Books, desc: "Purpose-built ships- Maritime & Naval aviation"}
+    - {id: 284, cat: Books, desc: "Purpose-built ships-Nuclear powered ships"}
+    - {id: 239, cat: Books, desc: "Purpose-built ships-Offshore"}
+    - {id: 51, cat: Books, desc: "Purpose-built ships-Oil & Chemical Tankers"}
+    - {id: 54, cat: Books, desc: "Purpose-built ships-Passenger ships"}
     - {id: 386, cat: Books, desc: "Purpose-built ships-Submarine vehicles"}
+    - {id: 385, cat: Books, desc: "Purpose-built ships-Towing vessels"}
     - {id: 212, cat: Books, desc: "Ship's documentation"}
     - {id: 190, cat: Books, desc: "Catalogs"}
     - {id: 191, cat: Books, desc: "Maritime Law"}
     - {id: 240, cat: Books, desc: "Maritime Law-IMO Resolutions"}
     - {id: 329, cat: Books, desc: "Maritime Law-Lloyd's, ABS, BV, DNV-GL, TÜV, NKK, RMRS and other approvals"}
     - {id: 113, cat: Books, desc: "Medicine"}
-    - {id: 391, cat: Books, desc: "Sailing First Aid"}
     - {id: 390, cat: Books, desc: "Sailing Infectious Diseases and Viruses"}
+    - {id: 391, cat: Books, desc: "Sailing First Aid"}
     - {id: 392, cat: Books, desc: "Sailing English for Medical Professionals"}
     - {id: 393, cat: Books, desc: "Sailing Mental health & Stress"}
     - {id: 299, cat: Books, desc: "Sailing Kitchen"}
     - {id: 11, cat: Books, desc: "Section for cadets"}
-    - {id: 403, cat: Books, desc: "Section for cadets-Textbooks and Guides"}
-    - {id: 406, cat: Books, desc: "Section for cadets-Reference Materials"}
-    - {id: 408, cat: Books, desc: "Section for cadets-Practical Training, RB and Reports"}
-    - {id: 402, cat: Books, desc: "Section for cadets-Methodical Materials"}
-    - {id: 404, cat: Books, desc: "Section for cadets-Term Papers"}
+    - {id: 405, cat: Books, desc: "Section for cadets-Charts and Atlases"}
+    - {id: 410, cat: Books, desc: "Section for cadets-Cheat Sheets"}
+    - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
+    - {id: 413, cat: Books, desc: "Section for cadets-For the Little Ones"}
     - {id: 407, cat: Books, desc: "Section for cadets-Laboratory Works"}
     - {id: 401, cat: Books, desc: "Section for cadets-Lectures and Notes"}
-    - {id: 410, cat: Books, desc: "Section for cadets-Cheat Sheets"}
-    - {id: 405, cat: Books, desc: "Section for cadets-Charts and Atlases"}
-    - {id: 285, cat: Books, desc: "Section for cadets-Encyclopedias and atlases"}
+    - {id: 402, cat: Books, desc: "Section for cadets-Methodical Materials"}
+    - {id: 408, cat: Books, desc: "Section for cadets-Practical Training, RB and Reports"}
+    - {id: 406, cat: Books, desc: "Section for cadets-Reference Materials"}
+    - {id: 404, cat: Books, desc: "Section for cadets-Term Papers"}
+    - {id: 403, cat: Books, desc: "Section for cadets-Textbooks and Guides"}
     - {id: 409, cat: Books, desc: "Section for cadets-Young Skipper"}
-    - {id: 413, cat: Books, desc: "Section for cadets-For the Little Ones"}
     - {id: 330, cat: Books, desc: "Examinations"}
-    - {id: 12, cat: Books, desc: "Examinations-Answers to tests"}
-    - {id: 333, cat: Books, desc: "Examinations-IMU CET (Indian Maritime University Common Entrance Test)"}
-    - {id: 334, cat: Books, desc: "Examinations-NCV (Near Coastal Voyages)"}
     - {id: 336, cat: Books, desc: "Examinations-ASM (Master)"}
-    - {id: 337, cat: Books, desc: "Examinations-TME (Trainee Marine Engineer)"}
-    - {id: 338, cat: Books, desc: "Examinations-MEO (Maritime Engineering Officer)"}
+    - {id: 12, cat: Books, desc: "Examinations-Answers to tests"}
     - {id: 341, cat: Books, desc: "Examinations-Chief Mates (Phase I) & Orals"}
+    - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
+    - {id: 333, cat: Books, desc: "Examinations-IMU CET (Indian Maritime University Common Entrance Test)"}
+    - {id: 338, cat: Books, desc: "Examinations-MEO (Maritime Engineering Officer)"}
+    - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
+    - {id: 334, cat: Books, desc: "Examinations-NCV (Near Coastal Voyages)"}
     - {id: 343, cat: Books, desc: "Examinations-ROR - Colregs"}
     - {id: 335, cat: Books, desc: "Examinations-Second Mates"}
-    - {id: 342, cat: Books, desc: "Examinations-Chief Mates (Phase II)"}
+    - {id: 337, cat: Books, desc: "Examinations-TME (Trainee Marine Engineer)"}
     - {id: 340, cat: Books, desc: "Examinations-Text books"}
-    - {id: 339, cat: Books, desc: "Examinations-Miscellaneous"}
     - {id: 99, cat: Audio, desc: "Audio"}
-    - {id: 287, cat: Audio/Audiobook, desc: "Audio-Non-Fiction"}
     - {id: 373, cat: Audio/Audiobook, desc: "Audio-Fiction"}
+    - {id: 287, cat: Audio/Audiobook, desc: "Audio-Non-Fiction"}
     - {id: 288, cat: Audio, desc: "Audio-♬ Music"}
     - {id: 111, cat: Books, desc: "Yachting, sailing, boating"}
-    - {id: 389, cat: Books, desc: "Yachting, sailing, boating-Sailboat terminology"}
-    - {id: 345, cat: Books, desc: "Yachting, sailing, boating-Solar boats"}
-    - {id: 318, cat: Books, desc: "Yachting, sailing, boating-Sailing life"}
-    - {id: 300, cat: Books, desc: "Yachting, sailing, boating-RYA"}
     - {id: 298, cat: Books, desc: "Yachting, sailing, boating-Cruising Guides"}
-    - {id: 297, cat: Books, desc: "Yachting, sailing, boating-Weather Sailing"}
     - {id: 296, cat: Books, desc: "Yachting, sailing, boating-How to Buy a Boat?"}
     - {id: 258, cat: Books, desc: "Yachting, sailing, boating-Inflatable boats, boats, kayaks"}
     - {id: 257, cat: Books, desc: "Yachting, sailing, boating-Motor Boat & Yachting magazines"}
-    - {id: 253, cat: Books, desc: "Yachting, sailing, boating-Seamanship practice"}
-    - {id: 254, cat: Books, desc: "Yachting, sailing, boating-Repair and Restoration"}
-    - {id: 255, cat: Books, desc: "Yachting, sailing, boating-Sailing Alone"}
-    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, sails, knots"}
+    - {id: 300, cat: Books, desc: "Yachting, sailing, boating-RYA"}
     - {id: 252, cat: Books, desc: "Yachting, sailing, boating-Projects, design, construction"}
+    - {id: 254, cat: Books, desc: "Yachting, sailing, boating-Repair and Restoration"}
+    - {id: 256, cat: Books, desc: "Yachting, sailing, boating-Rigging, sails, knots"}
+    - {id: 389, cat: Books, desc: "Yachting, sailing, boating-Sailboat terminology"}
+    - {id: 255, cat: Books, desc: "Yachting, sailing, boating-Sailing Alone"}
+    - {id: 318, cat: Books, desc: "Yachting, sailing, boating-Sailing life"}
+    - {id: 253, cat: Books, desc: "Yachting, sailing, boating-Seamanship practice"}
+    - {id: 345, cat: Books, desc: "Yachting, sailing, boating-Solar boats"}
+    - {id: 297, cat: Books, desc: "Yachting, sailing, boating-Weather Sailing"}
     - {id: 251, cat: Books, desc: "Diving"}
     - {id: 177, cat: Books, desc: "Shipmodeling"}
+    - {id: 291, cat: Books, desc: "Shipmodeling-Drawings and models of ships (CAD, 3D)"}
+    - {id: 292, cat: Books, desc: "Shipmodeling-Marine Modelling Magazines"}
     - {id: 352, cat: Books, desc: "Shipmodeling-Paper models"}
     - {id: 293, cat: Books, desc: "Shipmodeling-Radio controlled models"}
-    - {id: 292, cat: Books, desc: "Shipmodeling-Marine Modelling Magazines"}
-    - {id: 291, cat: Books, desc: "Shipmodeling-Drawings and models of ships (CAD, 3D)"}
     - {id: 346, cat: Books, desc: "Shipmodeling-Raster drawings (JPG, PDF, TIFF)"}
     - {id: 290, cat: Books, desc: "Shipmodeling-Reference Material"}
     - {id: 289, cat: Books, desc: "Shipmodeling-Ships in Bottles"}
     - {id: 197, cat: Books, desc: "Marine bulletins"}
+    - {id: 455, cat: Books, desc: "Marine bulletins-CHIRP"}
+    - {id: 442, cat: Books, desc: "Marine bulletins-Korabel.ru"}
+    - {id: 456, cat: Books, desc: "Marine bulletins-Monthly Safety Scenario"}
+    - {id: 444, cat: Books, desc: "Marine bulletins-Sea and Job"}
+    - {id: 451, cat: Books, desc: "Marine bulletins-She of Change"}
+    - {id: 447, cat: Books, desc: "Marine bulletins-Shipping Today & Yesterday"}
+    - {id: 445, cat: Books, desc: "Marine bulletins-Ships Monthly"}
+    - {id: 448, cat: Books, desc: "Marine bulletins-Significant Ships"}
+    - {id: 449, cat: Books, desc: "Marine bulletins-Tanker Operator"}
+    - {id: 457, cat: Books, desc: "Marine bulletins-The Navigator"}
+    - {id: 458, cat: Books, desc: "Marine bulletins-TransNav"}
+    - {id: 446, cat: Books, desc: "Marine bulletins-Вестник морского совета"}
+    - {id: 462, cat: Books, desc: "Marine bulletins-Морская наука и техника"}
+    - {id: 443, cat: Books, desc: "Marine bulletins-Морские интеллектуальные технологии"}
+    - {id: 454, cat: Books, desc: "Marine bulletins-Подводные исследования и робототехника"}
+    - {id: 272, cat: Books, desc: "Naval magazines"}
+    - {id: 441, cat: Books, desc: "Naval magazines-International Naval Journal"}
+    - {id: 430, cat: Books, desc: "Naval magazines-LOS!"}
+    - {id: 452, cat: Books, desc: "Naval magazines-Morze Statki i Okrety"}
+    - {id: 439, cat: Books, desc: "Naval magazines-Naval History"}
+    - {id: 460, cat: Books, desc: "Naval magazines-Navires et Histoire"}
+    - {id: 427, cat: Books, desc: "Naval magazines-Okrety"}
+    - {id: 436, cat: Books, desc: "Naval magazines-Schiff Classic"}
+    - {id: 435, cat: Books, desc: "Naval magazines-Sea Classics"}
+    - {id: 461, cat: Books, desc: "Naval magazines-Seaforth World Naval Review"}
+    - {id: 426, cat: Books, desc: "Naval magazines-Warship"}
+    - {id: 431, cat: Books, desc: "Naval magazines-Warship International"}
+    - {id: 428, cat: Books, desc: "Naval magazines-Warship Profile"}
+    - {id: 429, cat: Books, desc: "Naval magazines-Warships International Fleet Review"}
+    - {id: 437, cat: Books, desc: "Naval magazines-World of Warships Magazine"}
+    - {id: 433, cat: Books, desc: "Naval magazines-Арсенал коллекция"}
+    - {id: 450, cat: Books, desc: "Naval magazines-Гангут"}
+    - {id: 432, cat: Books, desc: "Naval magazines-Морская кампания"}
+    - {id: 440, cat: Books, desc: "Naval magazines-Морской вестник"}
+    - {id: 434, cat: Books, desc: "Naval magazines-Морской сборник"}
+    - {id: 459, cat: Books, desc: "Naval magazines-Строим флот сильной страны"}
+    - {id: 438, cat: Books, desc: "Naval magazines-Тайфун"}
     - {id: 219, cat: Books, desc: "Marine History"}
-    - {id: 347, cat: Books, desc: "Marine History-Sea Life"}
-    - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
-    - {id: 259, cat: Books, desc: "Marine History-Shipbuilding history"}
-    - {id: 273, cat: Books, desc: "Marine History-History of Seafaring"}
     - {id: 275, cat: Books, desc: "Marine History-Accidents and disasters at sea"}
+    - {id: 281, cat: Books, desc: "Marine History-History of Merchant Marine"}
+    - {id: 273, cat: Books, desc: "Marine History-History of Seafaring"}
     - {id: 264, cat: Books, desc: "Marine History-Marine cartography"}
     - {id: 274, cat: Books, desc: "Marine History-Pirates"}
+    - {id: 347, cat: Books, desc: "Marine History-Sea Life"}
+    - {id: 259, cat: Books, desc: "Marine History-Shipbuilding history"}
     - {id: 282, cat: Books, desc: "Fleets history"}
-    - {id: 370, cat: Books, desc: "Fleets history-Maritime museums of the world"}
     - {id: 357, cat: Books, desc: "Fleets history-China"}
-    - {id: 354, cat: Books, desc: "Fleets history-USA"}
-    - {id: 356, cat: Books, desc: "Fleets history-Russia | USSR"}
+    - {id: 360, cat: Books, desc: "Fleets history-France"}
+    - {id: 359, cat: Books, desc: "Fleets history-Germany"}
     - {id: 358, cat: Books, desc: "Fleets history-India"}
     - {id: 355, cat: Books, desc: "Fleets history-Japan"}
-    - {id: 364, cat: Books, desc: "Fleets history-The United Kingdom"}
-    - {id: 359, cat: Books, desc: "Fleets history-Germany"}
-    - {id: 360, cat: Books, desc: "Fleets history-France"}
+    - {id: 370, cat: Books, desc: "Fleets history-Maritime museums of the world"}
     - {id: 368, cat: Books, desc: "Fleets history-Netherlands"}
+    - {id: 356, cat: Books, desc: "Fleets history-Russia | USSR"}
     - {id: 369, cat: Books, desc: "Fleets history-Spain"}
+    - {id: 364, cat: Books, desc: "Fleets history-The United Kingdom"}
+    - {id: 354, cat: Books, desc: "Fleets history-USA"}
     - {id: 277, cat: Books, desc: "Wars at Sea"}
+    - {id: 363, cat: Books, desc: "Wars at Sea-Russo-Japanese War"}
     - {id: 276, cat: Books, desc: "Wars at Sea-War at sea (World War I)"}
     - {id: 261, cat: Books, desc: "Wars at Sea-War at sea (World War II)"}
-    - {id: 363, cat: Books, desc: "Wars at Sea-Russo-Japanese War"}
     - {id: 362, cat: Books, desc: "History of Naval Shipbuilding"}
-    - {id: 279, cat: Books, desc: "History of Naval Shipbuilding-Marine vessels"}
-    - {id: 280, cat: Books, desc: "History of Naval Shipbuilding-Historic ships"}
-    - {id: 278, cat: Books, desc: "History of Naval Shipbuilding-Warships"}
-    - {id: 351, cat: Books, desc: "History of Naval Shipbuilding-Battleships"}
-    - {id: 353, cat: Books, desc: "History of Naval Shipbuilding-Cruisers"}
     - {id: 365, cat: Books, desc: "History of Naval Shipbuilding-Aircraft carriers"}
+    - {id: 351, cat: Books, desc: "History of Naval Shipbuilding-Battleships"}
+    - {id: 372, cat: Books, desc: "History of Naval Shipbuilding-Coastal defense ships"}
+    - {id: 371, cat: Books, desc: "History of Naval Shipbuilding-Combat boats"}
+    - {id: 353, cat: Books, desc: "History of Naval Shipbuilding-Cruisers"}
     - {id: 366, cat: Books, desc: "History of Naval Shipbuilding-Destroyers"}
     - {id: 367, cat: Books, desc: "History of Naval Shipbuilding-Frigates"}
-    - {id: 371, cat: Books, desc: "History of Naval Shipbuilding-Combat boats"}
-    - {id: 372, cat: Books, desc: "History of Naval Shipbuilding-Coastal defense ships"}
-    - {id: 262, cat: Books, desc: "History of Naval Shipbuilding-The history of sailing ships"}
+    - {id: 280, cat: Books, desc: "History of Naval Shipbuilding-Historic ships"}
     - {id: 323, cat: Books, desc: "History of Naval Shipbuilding-History of Submarines"}
+    - {id: 279, cat: Books, desc: "History of Naval Shipbuilding-Marine vessels"}
+    - {id: 262, cat: Books, desc: "History of Naval Shipbuilding-The history of sailing ships"}
+    - {id: 278, cat: Books, desc: "History of Naval Shipbuilding-Warships"}
     - {id: 198, cat: Books, desc: "Navy"}
     - {id: 260, cat: Books, desc: "Navy-Naval shipbuilding (1950 - 20??)"}
-    - {id: 272, cat: Books, desc: "Navy-Naval magazines"}
     - {id: 294, cat: Books, desc: "Environmental protection"}
     - {id: 242, cat: Books, desc: "Foreign language books"}
     - {id: 344, cat: Books, desc: "Foreign language books-Yachting"}
     - {id: 218, cat: Books, desc: "Maritime Fiction"}
     - {id: 350, cat: Other, desc: "Art"}
     - {id: 243, cat: Books, desc: "Rarity"}
-    - {id: 244, cat: Books, desc: "Rarity-1900 - 1950"}
-    - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
-    - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
-    - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
     - {id: 414, cat: Books, desc: "Rarity-1500 - 1600"}
+    - {id: 247, cat: Books, desc: "Rarity-1600 - 1700"}
+    - {id: 246, cat: Books, desc: "Rarity-1700 - 1800"}
+    - {id: 245, cat: Books, desc: "Rarity-1800 - 1900"}
+    - {id: 244, cat: Books, desc: "Rarity-1900 - 1950"}
     - {id: 415, cat: Books, desc: "Rarity-before 1500"}
     - {id: 324, cat: Other, desc: "Posters, placards, signs"}
     - {id: 220, cat: Books, desc: "Fishing & Spearfishing"}
     - {id: 319, cat: Books, desc: "Fishing tackle and knots"}
     - {id: 412, cat: Books, desc: "Marine Fauna"}
     - {id: 7, cat: Books, desc: "Technical Books (Not maritime)"}
+    - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 328, cat: Books, desc: "Technical Books (Not maritime)-Hydraulics"}
     - {id: 327, cat: Books, desc: "Technical Books (Not maritime)-Mechanics"}
-    - {id: 326, cat: Books, desc: "Technical Books (Not maritime)-Electricity"}
     - {id: 187, cat: Books, desc: "Others (not maritime)"}
     - {id: 411, cat: Books, desc: "Others (not maritime)-Video"}
     - {id: 38, cat: Books, desc: "Uncategorized"}
     - {id: 162, cat: Books, desc: "Archive"}
-    - {id: 321, cat: Books, desc: "Archive-Outdated software"}
-    - {id: 379, cat: Books, desc: "Archive-Video materials (Archive)"}
     - {id: 378, cat: Books, desc: "Archive-Audio materials (Archive) "}
-    - {id: 322, cat: Books, desc: "Archive-No seeds"}
 #    - {id: 325, cat: Other, desc: "Corrupt torrents (hash errors)"} # we filter these out in the rows selector
+    - {id: 322, cat: Books, desc: "Archive-No seeds"}
+    - {id: 321, cat: Books, desc: "Archive-Outdated software"}
     - {id: 295, cat: Books, desc: "Archive-Unregistered"}
+    - {id: 379, cat: Books, desc: "Archive-Video materials (Archive)"}
 
   modes:
     search: [q]
