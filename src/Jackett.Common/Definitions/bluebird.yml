@@ -5,6 +5,8 @@ description: "BlueBird is a RUSSIAN Private Torrent Tracker for HD MOVIES"
 language: ru-RU
 type: private
 encoding: windows-1251
+certificates:
+  - 9a8e78a5ca90ab1fa74240caafe2bf04a9eb3c72 # expired 30th April 2023
 links:
   - https://bluebird-hd.org/
 
