@@ -18,17 +18,15 @@ caps:
     - {id: 11, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 14, cat: TV, desc: "TV Shows"}
     - {id: 15, cat: TV, desc: "TV Boxset"}
-    - {id: 16, cat: Movies/HD, desc: "Movies x264"}
-    - {id: 18, cat: Movies/BluRay, desc: "Movies BR/HD DVD"}
     - {id: 24, cat: TV/SD, desc: "TV BG"}
     - {id: 34, cat: Movies, desc: "Movies BG"}
     - {id: 35, cat: Movies, desc: "Movies GSM"}
     - {id: 38, cat: TV/Anime, desc: "Cartoons"}
-    - {id: 55, cat: Movies/3D, desc: "Movies 3D"}
-    - {id: 58, cat: Movies/HD, desc: "Movies x265"}
     - {id: 59, cat: Movies/SD, desc: "Movies VHS"}
     - {id: 60, cat: Movies/UHD, desc: "Movies 4K"}
     - {id: 67, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 68, cat: Movies/HD, desc: "Movies HD"}
+    - {id: 69, cat: Movies, desc: "Movies Pack"}
     # music
     - {id: 2, cat: Audio/MP3, desc: "Music Song"}
     - {id: 3, cat: Audio/Video, desc: "Music DVD"}
