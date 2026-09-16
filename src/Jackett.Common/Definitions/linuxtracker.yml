@@ -325,93 +325,52 @@ caps:
   modes:
     search: [q]
 
-settings:
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 3
-    options:
-      3: created
-      5: seeders
-      4: size
-      2: title
-  - name: type
-    type: select
-    label: Order requested from site
-    default: 2
-    options:
-      2: desc
-      1: asc
+settings: []
 
 search:
   paths:
-    # https://linuxtracker.org/index.php?page=torrents&search=&category=0&active=0
-    - path: index.php
-    - path: index.php
-      inputs:
-        pages: 2
+    - path: torrents/
   inputs:
-    $raw: "category={{ if .Categories }}{{ range .Categories }}{{.}};{{end}}{{ else }}0{{ end }}&"
-    search: "{{ .Keywords }}"
-    page: torrents
-    active: 1
-    order: "{{ .Config.sort }}"
-    by: "{{ .Config.type }}"
+    q: "{{ .Keywords }}"
 
   rows:
-    selector: table.lista[width="100%"] > tbody > tr:has(a[href^="index.php?page=torrent-details&id="][title])
+    selector: table.torrent-table > tbody > tr
 
   fields:
-    category_id:
-      selector: a[href^="index.php?page=torrents&category="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: category
-    category:
-      text: "{{ .Result.category_id }}"
+    category_desc:
+      selector: span.category-badge
+    categorydesc:
+      selector: span.category-badge
     title:
-      selector: a[href^="index.php?page=torrent-details&id="][title]
+      selector: a.torrent-name
     details:
-      selector: a[href^="index.php?page=torrent-details&id="][title]
+      selector: a.torrent-name
       attribute: href
     infohash:
-      selector: a[href^="index.php?page=torrent-details&id="][title]
+      selector: a.torrent-name
       attribute: href
       filters:
-        - name: querystring
-          args: id
-    poster:
-      selector: img[src*="/images/categories/"]
-      attribute: src
+        - name: regexp
+          args: /torrents/(\w+)/
     date:
-      selector: td:nth-child(2) > table > tbody > tr > td
-      remove: strong
+      selector: td:nth-child(3)
       filters:
         - name: append
           args: " -07:00" # PDT
         - name: dateparse
-          args: "dd/MM/yyyy zzz"
+          args: "MMM d, yyyy zzz"
     size:
-      selector: td:nth-child(2) > table > tbody > tr:nth-child(2) > td
-      remove: strong
+      selector: td:nth-child(4)
     seeders:
-      selector: td:nth-child(2) > table > tbody > tr:nth-child(3) > td
-      remove: strong
+      selector: td.seeds
     leechers:
-      selector: td:nth-child(2) > table > tbody > tr:nth-child(4) > td
-      remove: strong
+      selector: td.leeches
     grabs:
-      selector: td:nth-child(2) > table > tbody > tr:nth-child(5) > td
-      remove: strong
+      selector: td:last-child
     description:
-      selector: td:nth-child(2)
-      remove: table
-      filters:
-        - name: prepend
-          args: "category={{ .Result.category_id }}; "
+      text: "{{ .Result.category_desc }}"
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# xbtit 2.3.0
+# v0.2.0.dev1
