@@ -37,6 +37,7 @@ caps:
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
     - {id: Linux, cat: PC, desc: Software Linux}
+    - {id: "Live Action [English-translated]", cat: TV/Anime, desc: "Live Action [English-translated]"}
     - {id: "Live Action [Non-English]", cat: TV/Anime, desc: "Live Action [Non-English]"}
     - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
     - {id: "Manga [English-translated]", cat: Books/Comics, desc: "Manga [English-translated]"}
