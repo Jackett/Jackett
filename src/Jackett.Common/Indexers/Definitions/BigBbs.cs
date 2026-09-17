@@ -205,17 +205,13 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task LoginAsync()
         {
-            var loginPage = await RequestWithCookiesAsync(GetLoginUrl());
-            var parser = new HtmlParser();
-            using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
-
-
-            var securityToken = dom.QuerySelectorAll("script")
-                                   .Where(s => s.TextContent.Contains("stKey:"))
-                                   .Select(s => Regex.Match(s.TextContent, "stKey: \"(.+?)\","))
-                                   .Where(m => m.Success)
-                                   .Select(m => m.Groups[1].Value)
-                                   .FirstOrDefault();
+            var securityToken = await GetSecurityTokenAsync();
+            // var securityToken = dom.QuerySelectorAll("script")
+            //                        .Where(s => s.TextContent.Contains("stKey:"))
+            //                        .Select(s => Regex.Match(s.TextContent, "stKey: \"(.+?)\","))
+            //                        .Where(m => m.Success)
+            //                        .Select(m => m.Groups[1].Value)
+            //                        .FirstOrDefault();
 
             if (securityToken.IsNullOrWhiteSpace())
                 throw new Exception("Could not find security token");
@@ -544,16 +540,14 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
 
-                var scripts = dom.QuerySelectorAll("script");
-                foreach (var script in scripts)
-                {
-                    if (!script.TextContent.Contains("stKey:"))
-                        continue;
+                var securityToken = dom.QuerySelectorAll("script")
+                                       .Where(s => s.TextContent.Contains("stKey:"))
+                                       .Select(s => Regex.Match(s.TextContent, "stKey: \"(.+?)\","))
+                                       .Where(m => m.Success)
+                                       .Select(m => m.Groups[1].Value)
+                                       .FirstOrDefault();
 
-                    var match = Regex.Match(script.TextContent, "stKey: \"(.+?)\",");
-                    if (match.Success)
-                        return match.Groups[1].Value;
-                }
+                return securityToken;
             }
             catch (Exception ex)
             {
