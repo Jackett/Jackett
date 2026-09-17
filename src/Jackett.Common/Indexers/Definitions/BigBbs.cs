@@ -261,7 +261,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (query.GetQueryString().IsNotNullOrWhiteSpace())
             {
-                var keywords = Regex.Replace(query.GetQueryString(), "[^a-zA-Z0-9]+", "%25").Trim();
+                var keywords = Regex.Replace(query.GetQueryString().Trim(), "[^a-zA-Z0-9]+", "%25");
                 queryCollection.Set("keywords", keywords);
             }
 
@@ -277,9 +277,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
             {
                 await LoginAsync();
-                return Enumerable.Empty<ReleaseInfo>();
-            }
-
+                response = await RequestWithCookiesAsync(searchUrl);            }
             try
             {
                 var parser = new HtmlParser();
