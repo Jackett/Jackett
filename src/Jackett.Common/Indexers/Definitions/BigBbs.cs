@@ -209,15 +209,13 @@ namespace Jackett.Common.Indexers.Definitions
             var parser = new HtmlParser();
             using var dom = await parser.ParseDocumentAsync(loginPage.ContentString);
 
-            var scripts = dom.QuerySelectorAll("script");
 
-            var securityToken =
-                (from script in scripts
-                 where script.TextContent.Contains("stKey:")
-                 select Regex.Match(script.TextContent, "stKey: \"(.+?)\",")
-                 into match
-                 where match.Success
-                 select match.Groups[1].Value).FirstOrDefault();
+            var securityToken = dom.QuerySelectorAll("script")
+                                   .Where(s => s.TextContent.Contains("stKey:"))
+                                   .Select(s => Regex.Match(s.TextContent, "stKey: \"(.+?)\","))
+                                   .Where(m => m.Success)
+                                   .Select(m => m.Groups[1].Value)
+                                   .FirstOrDefault();
 
             if (securityToken.IsNullOrWhiteSpace())
                 throw new Exception("Could not find security token");
@@ -234,7 +232,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
 
-            if (response.ContentString.Contains("error") || response.ContentString.Contains("-ERROR-"))
+            if (!response.ContentString.Contains("p=logout"))
                 throw new Exception("Invalid username or password");
         }
 
@@ -279,6 +277,7 @@ namespace Jackett.Common.Indexers.Definitions
                 await LoginAsync();
                 response = await RequestWithCookiesAsync(searchUrl);
             }
+
             try
             {
                 var parser = new HtmlParser();
@@ -496,7 +495,6 @@ namespace Jackett.Common.Indexers.Definitions
             catch (Exception ex)
             {
                 logger.Debug(ex, "Could not extract torrent ID from link");
-
             }
 
             return null;
