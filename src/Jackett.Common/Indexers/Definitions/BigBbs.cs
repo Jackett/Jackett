@@ -206,12 +206,6 @@ namespace Jackett.Common.Indexers.Definitions
         private async Task LoginAsync()
         {
             var securityToken = await GetSecurityTokenAsync();
-            // var securityToken = dom.QuerySelectorAll("script")
-            //                        .Where(s => s.TextContent.Contains("stKey:"))
-            //                        .Select(s => Regex.Match(s.TextContent, "stKey: \"(.+?)\","))
-            //                        .Where(m => m.Success)
-            //                        .Select(m => m.Groups[1].Value)
-            //                        .FirstOrDefault();
 
             if (securityToken.IsNullOrWhiteSpace())
                 throw new Exception("Could not find security token");
