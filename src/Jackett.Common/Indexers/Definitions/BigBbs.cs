@@ -277,7 +277,8 @@ namespace Jackett.Common.Indexers.Definitions
             if (response.IsRedirect && response.RedirectingTo.Contains("login"))
             {
                 await LoginAsync();
-                response = await RequestWithCookiesAsync(searchUrl);            }
+                response = await RequestWithCookiesAsync(searchUrl);
+            }
             try
             {
                 var parser = new HtmlParser();
