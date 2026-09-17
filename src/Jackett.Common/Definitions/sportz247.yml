@@ -76,6 +76,7 @@ caps:
     - {id: 64, cat: TV/Sport, desc: "IROC"}
     - {id: 67, cat: TV/Sport, desc: "Sports TV Shows"}
     - {id: 68, cat: TV/Sport, desc: "AFL"}
+    - {id: 69, cat: TV/Sport, desc: "NFL"}
 
   modes:
     search: [q]
