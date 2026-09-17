@@ -179,7 +179,7 @@ Prior versions of Jackett are no longer supported.
  * XXXClub
  * xxxtor
  * YTS.ag
- * Zamunda RIP
+ * Zamunda LIFE
 </details>
 
 <details> <summary> <b> Supported Semi-Private Trackers </b> </summary>
