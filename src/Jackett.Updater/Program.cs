@@ -390,6 +390,7 @@ namespace Jackett.Updater
                 "Definitions/devils-playground.yml",
                 "Definitions/devilsplayground.yml",
                 "Definitions/digbt.yml",
+                "Definitions/diginette-api.yml",
                 "Definitions/digitalcore.yml", // switch to *-API
                 "Definitions/divteam.yml",
                 "Definitions/documentarytorrents.yml",
