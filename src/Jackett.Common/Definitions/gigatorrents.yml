@@ -113,7 +113,7 @@ search:
     by: "{{ .Config.type }}"
 
   rows:
-    selector: table#torrenttable > tbody > tr:has()
+    selector: table#torrenttable > tbody > tr
   error:
     - selector: div.content:contains("Meg van vonva a letöltési jogod")
 
