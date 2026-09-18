@@ -6,7 +6,7 @@ language: en-US
 type: public
 encoding: UTF-8
 requestDelay: 2
-# current domain finder https://魔法猫咪.lol/ or https://哆啦a猫.com/
+# current domain finder https://魔法猫咪.lol/  or  https://哆啦a猫.com/
 links:
   - https://magnetcatcat.com/
   - https://clmclm.com/
