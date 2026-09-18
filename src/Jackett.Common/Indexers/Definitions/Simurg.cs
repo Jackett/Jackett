@@ -72,6 +72,10 @@ namespace Jackett.Common.Indexers.Definitions
                 case "CBZ":
                     release.Category = new List<int> { TorznabCatType.BooksComics.ID };
                     break;
+                case "MP3":
+                case "M4B":
+                    release.Category = new List<int> { TorznabCatType.AudioAudiobook.ID };
+                    break;
                 default:
                     break;
             }
