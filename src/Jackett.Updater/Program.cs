@@ -401,6 +401,7 @@ namespace Jackett.Updater
                 "Definitions/dreamteam.yml",
                 "Definitions/dreamtracker.yml",
                 "Definitions/dxdhd.yml",
+                "Definitions/ebooks-shares.yml",
                 "Definitions/ebookparadijs.yml",
                 "Definitions/efectodoppler.yml",
                 "Definitions/eggmeon.yml",
