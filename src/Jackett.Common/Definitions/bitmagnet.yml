@@ -74,9 +74,13 @@ search:
     seeders:
       selector: "[name=seeders]"
       attribute: value
+      optional: true
+      default: 1
     leechers:
       selector: "[name=leechers]"
       attribute: value
+      optional: true
+      default: 1
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
