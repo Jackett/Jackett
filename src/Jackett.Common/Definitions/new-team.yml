@@ -11,18 +11,44 @@ links:
 caps:
   categorymappings:
     # Кинематограф, театр, видео
+    - {id: 124, cat: Movies, desc: "|- Кинофильмы"}
+    - {id: 1104, cat: Movies, desc: "|-- Фильмы довоенные и созданные во время войны"}
+    - {id: 900, cat: Movies, desc: "|-- Советское кино"}
+    - {id: 1143, cat: Movies, desc: "|-- Детское советское кино"}
+    - {id: 1181, cat: Movies, desc: "|-- Советское кино (HD и DVD Video)"}
+    - {id: 162, cat: Movies, desc: "|-- Российское кино"}
+    - {id: 1144, cat: Movies, desc: "|-- Детское российское кино"}
+    - {id: 164, cat: Movies, desc: "|-- Российское кино (HD и DVD Video)"}
+    - {id: 1177, cat: Movies, desc: "|-- Телеспектакль"}
+    - {id: 192, cat: Movies/Foreign, desc: "|-- Зарубежное кино до 2000 года"}
+    - {id: 125, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2000 - 2020 года"}
+    - {id: 1142, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2020 - 2026 года"}
+    - {id: 126, cat: Movies/Foreign, desc: "|-- Зарубежное кино (HD и DVD Video)"}
+    - {id: 338, cat: Movies/Foreign, desc: "|-- Классика зарубежного кино"}
+    - {id: 337, cat: Movies/Foreign, desc: "|-- Азиатские фильмы"}
+    - {id: 917, cat: Movies, desc: "|-- Арт-хаус и авторское кино"}
+    - {id: 207, cat: Movies, desc: "|-- Сборники"}
+    - {id: 826, cat: Audio/Other, desc: "|-- Звуковые дорожки и переводы"}
+    - {id: 891, cat: Movies/3D, desc: "|-- Кинофильмы 3D"}
+    - {id: 254, cat: TV/Documentary, desc: "|-- Великая Отечественная война"}
+    - {id: 252, cat: TV/Documentary, desc: "|-- Тайны века / Спецслужбы / Теории Заговоров"}
+    - {id: 889, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (3D)"}
+    - {id: 135, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (DVD, HD Video)"}
+    - {id: 255, cat: TV/Documentary, desc: "|-- Развлекательные телепередачи и шоу, приколы и юмор"}
+    - {id: 253, cat: TV/Documentary, desc: "|-- Планета Земля / Космос / Вселенная"}
+    - {id: 999, cat: TV/Documentary, desc: "|-- Флора и фауна"}
+    - {id: 478, cat: TV/Documentary, desc: "|-- Научно-популярные фильмы"}
+    - {id: 1058, cat: TV/Documentary, desc: "|-- История:  Города и Страны / Архитектура / Музеи мира"}
+    - {id: 136, cat: TV/Documentary, desc: "|-- История: Биографии / Кумиры / Личности / События"}
+    - {id: 256, cat: TV/Documentary, desc: "|-- Вера и религия / Диагностика кармы"}
     - {id: 241, cat: Movies, desc: "|- Релизы от Scarabey"}
-    - {id: 1170, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2019 - 2023"}
-    - {id: 1137, cat: Movies, desc: "|-- ТРЕБУЕТСЯ СИД."}
-    - {id: 1116, cat: Movies, desc: "|-- Группа 'Сиды' - хранение раздач"}
-    - {id: 1040, cat: Movies, desc: "|-- Зарубежные и российские фильмы до 1990 года"}
-    - {id: 1041, cat: Movies, desc: "|-- Зарубежные и российские фильмы 1991-2000"}
-    - {id: 1042, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2001-2009"}
-    - {id: 1039, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2010-2013"}
-    - {id: 1088, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2014-2015"}
-    - {id: 1112, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2016-2018"}
-    - {id: 1110, cat: Movies, desc: "|-- Зарубежные и российские фильмы в MKV (AVC / BDRip 720p /..."}
     - {id: 1111, cat: Movies/Other, desc: "|-- Аниме"}
+    - {id: 1112, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2016-2018"}
+    - {id: 1088, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2014-2015"}
+    - {id: 1039, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2010-2013"}
+    - {id: 1042, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2001-2009"}
+    - {id: 1041, cat: Movies, desc: "|-- Зарубежные и российские фильмы 1991-2000"}
+    - {id: 1040, cat: Movies, desc: "|-- Зарубежные и российские фильмы до 1990 года"}
     - {id: 1051, cat: Movies/Foreign, desc: "|-- Азиатские фильмы"}
     - {id: 1035, cat: TV, desc: "|-- Сериалы"}
     - {id: 1096, cat: TV, desc: "|--- Сериал '24 часа'"}
@@ -33,43 +59,9 @@ caps:
     - {id: 1090, cat: TV, desc: "|--- Сериал 'Спартак'"}
     - {id: 1093, cat: TV, desc: "|--- Сериал 'Ходячие мертвецы'"}
     - {id: 1095, cat: TV, desc: "|--- Сериал 'Шерлок'"}
-    - {id: 124, cat: Movies, desc: "|- Кинофильмы"}
-    - {id: 191, cat: Movies/Foreign, desc: "|-- Зарубежное кино до 1990 года"}
-    - {id: 192, cat: Movies/Foreign, desc: "|-- Зарубежное кино 1990 - 1999"}
-    - {id: 160, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2000 - 2009"}
-    - {id: 125, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2010 - 2019"}
-    - {id: 1142, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2020 - 2024"}
-    - {id: 1182, cat: Movies/Foreign, desc: "|-- Зарубежное кино 2025 (Новинки)"}
-    - {id: 126, cat: Movies/Foreign, desc: "|-- Зарубежное кино (HD и DVD Video)"}
-    - {id: 162, cat: Movies, desc: "|-- Российское кино"}
-    - {id: 164, cat: Movies, desc: "|--- Российское кино (HD и DVD Video)"}
-    - {id: 1144, cat: Movies, desc: "|--- Детское российское кино"}
-    - {id: 900, cat: Movies, desc: "|-- Советское кино"}
-    - {id: 1181, cat: Movies, desc: "|--- Советское кино (HD и DVD Video)"}
-    - {id: 1143, cat: Movies, desc: "|--- Детское советское кино"}
-    - {id: 1104, cat: Movies, desc: "|--- Фильмы довоенные и созданные во время войны"}
-    - {id: 1177, cat: Movies, desc: "|--- Телеспектакль"}
-    - {id: 891, cat: Movies/3D, desc: "|-- Кинофильмы 3D"}
-    - {id: 338, cat: Movies/Foreign, desc: "|-- Классика зарубежного кино"}
-    - {id: 337, cat: Movies/Foreign, desc: "|-- Азиатские фильмы"}
-    - {id: 917, cat: Movies, desc: "|-- Арт-хаус и авторское кино"}
-    - {id: 207, cat: Movies, desc: "|-- Сборники"}
+    - {id: 1110, cat: Movies, desc: "|-- Зарубежные и российские фильмы в MKV (AVC / BDRip 720p /..."}
+    - {id: 1170, cat: Movies, desc: "|-- Зарубежные и российские фильмы 2019 - 2023"}
     - {id: 203, cat: Movies/Other, desc: "|-- Трейлеры и дополнительные материалы"}
-    - {id: 826, cat: Audio/Other, desc: "|-- Звуковые дорожки и переводы"}
-    - {id: 827, cat: Audio/Other, desc: "|--- Авторский перевод"}
-    - {id: 828, cat: Audio/Other, desc: "|--- Закадровый перевод"}
-    - {id: 134, cat: TV/Documentary, desc: "|- Документальные фильмы и телепередачи"}
-    - {id: 999, cat: TV/Documentary, desc: "|-- Флора и фауна"}
-    - {id: 254, cat: TV/Documentary, desc: "|-- Великая Отечественная война"}
-    - {id: 478, cat: TV/Documentary, desc: "|-- Научно-популярные фильмы"}
-    - {id: 1058, cat: TV/Documentary, desc: "|-- История:  Города и Страны / Архитектура / Музеи мира"}
-    - {id: 136, cat: TV/Documentary, desc: "|-- История: Биографии / Кумиры / Личности / События"}
-    - {id: 253, cat: TV/Documentary, desc: "|-- Планета Земля / Космос / Вселенная"}
-    - {id: 256, cat: TV/Documentary, desc: "|-- Вера и религия / Диагностика кармы"}
-    - {id: 252, cat: TV/Documentary, desc: "|-- Тайны века / Спецслужбы / Теории Заговоров"}
-    - {id: 255, cat: TV/Documentary, desc: "|-- Развлекательные телепередачи и шоу, приколы и юмор"}
-    - {id: 135, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (DVD, HD Video)"}
-    - {id: 889, cat: TV/Documentary, desc: "|-- Документальные фильмы и телепередачи (3D)"}
     # Сериалы
     - {id: 845, cat: TV, desc: "|- Отечественные cериалы"}
     - {id: 850, cat: TV, desc: "|-- Обсуждение сериалов"}
@@ -184,8 +176,9 @@ caps:
     - {id: 795, cat: Audio, desc: "|- Сборники песен для детей (lossy и lossless)"}
     - {id: 798, cat: Audio, desc: "|- Мюзикл (lossy и lossless)"}
     - {id: 800, cat: Audio/MP3, desc: "|- Неофициальные и внежанровые сборники (lossy)"}
-    - {id: 186, cat: Audio/Video, desc: "|- Музыкальное видео (DVD и HD Video)"}
-    - {id: 185, cat: Audio/Video, desc: "|- Музыкальное видео"}
+    - {id: 1191, cat: Audio/Video, desc: "|- Некондиционное музыкальное видео (Видео, DVD видео,..."}
+    - {id: 186, cat: Audio/Video, desc: "|- Музыкальное DVD видео"}
+    - {id: 185, cat: Audio/Video, desc: "|- Музыкальное SD видео"}
     - {id: 1160, cat: Audio/Foreign, desc: "|- Зарубежная поп-музыка"}
     - {id: 1159, cat: Audio, desc: "|- Советская эстрада, ретро, романсы"}
     - {id: 1158, cat: Audio, desc: "|- Отечественная поп-музыка"}
@@ -240,6 +233,7 @@ caps:
     - {id: 811, cat: Audio/MP3, desc: "|- Modern Classical, Electroacoustic (lossy)"}
     - {id: 812, cat: Audio/Lossless, desc: "|- Traditional Electronic, Ambient (lossless)"}
     - {id: 813, cat: Audio/MP3, desc: "|- Traditional Electronic, Ambient (lossy)"}
+    - {id: 1192, cat: Audio/MP3, desc: "|- Synthwave, Spacesynth, Dreamwave, Retrowave, Outrun..."}
     - {id: 815, cat: Audio/Lossless, desc: "|- EBM, Dark Electro, Aggrotech (lossless)"}
     - {id: 816, cat: Audio/MP3, desc: "|- EBM, Dark Electro, Aggrotech (lossy)"}
     - {id: 817, cat: Audio/Lossless, desc: "|- Industrial, Noise (lossless)"}
@@ -334,14 +328,12 @@ caps:
     - {id: 688, cat: Audio/Lossless, desc: "|- Отечественный блюз (lossless)"}
     - {id: 689, cat: Audio/MP3, desc: "|- Отечественный блюз (lossy)"}
     # Программное обеспечение
-    - {id: 68, cat: PC, desc: "|- Программы под Windows"}
     - {id: 91, cat: PC, desc: "|-- Системы для бизнеса"}
     - {id: 95, cat: PC, desc: "|-- Программы для работы со звуком"}
     - {id: 94, cat: PC, desc: "|-- Редакторы видео"}
     - {id: 87, cat: PC, desc: "|-- 3D моделирование, рендеринг и плагины для них"}
     - {id: 98, cat: PC, desc: "|-- Системы навигации и карты"}
     # Книги и журналы
-    - {id: 340, cat: Books, desc: "|- Предложения по улучшению раздела 'Книги и журналы..."}
     - {id: 341, cat: Books, desc: "|- Художественная литература"}
     - {id: 351, cat: Books, desc: "|-- Русская литература (Классика)"}
     - {id: 405, cat: Books, desc: "|-- Русская литература (Современная проза)"}
@@ -355,7 +347,6 @@ caps:
     - {id: 358, cat: Books/Foreign, desc: "|-- Художественная литература на иностранных языках"}
     - {id: 365, cat: Books, desc: "|- Учебная литература для детского сада и начальной шко..."}
     - {id: 359, cat: Books, desc: "|- Художественная литературара для средних и старших классов"}
-    - {id: 343, cat: Books, desc: "|- Гуманитарные науки, история, философия"}
     - {id: 378, cat: Books, desc: "|-- Исторические науки. Издания 1992-по н.в."}
     - {id: 377, cat: Books, desc: "|-- История России"}
     - {id: 376, cat: Books, desc: "|-- Эпоха СССР"}
@@ -364,7 +355,6 @@ caps:
     - {id: 368, cat: Books, desc: "|-- Психотерапия, психодиагностика, консультирование и психокоррекция"}
     - {id: 367, cat: Books, desc: "|-- Эзотерика, саморазвитие и самосовершенствование"}
     - {id: 382, cat: Books, desc: "|- Электроника / радио"}
-    - {id: 345, cat: Books, desc: "|- Компьютерная литература"}
     - {id: 394, cat: Books, desc: "|-- Веб-дизайн и программирование"}
     - {id: 393, cat: Books, desc: "|-- Программирование"}
     - {id: 898, cat: Books, desc: "|-- СУБД"}
@@ -372,8 +362,6 @@ caps:
     - {id: 391, cat: Books, desc: "|-- Сети / VoIP"}
     - {id: 389, cat: Books, desc: "|-- Компьютерные журналы и приложения к ним"}
     - {id: 396, cat: Books/Other, desc: "|- Прочее"}
-    - {id: 349, cat: Books/Mags, desc: "|- Журналы и газеты (общий раздел)"}
-    - {id: 350, cat: Books/Other, desc: "|- Разное"}
     - {id: 342, cat: Books, desc: "|-- Учебная литература - для детей, родителей и учителей"}
     - {id: 370, cat: Books, desc: "|-- Экономика, бизнес, менеджмент, маркетинг"}
     - {id: 398, cat: Books, desc: "|-- Прочие хобби"}
@@ -384,6 +372,7 @@ caps:
     - {id: 242, cat: Other, desc: "|- Другое"}
     # Скрытые разделы
     - {id: 1184, cat: Other, desc: "|- Для оформления релизов AVP Studio"}
+    - {id: 1116, cat: Other, desc: "|- Группа "Сиды" - хранение раздач"}
     # undocumented
     - {id: 556, cat: Audio, desc: "Архив раздач (общий музыкальный)"}
 
