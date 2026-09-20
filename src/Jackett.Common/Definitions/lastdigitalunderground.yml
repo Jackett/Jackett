@@ -22,10 +22,12 @@ caps:
     - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
-    - {id: 58, cat: Movies/Foreign, desc: "Films: GER [No ENG subs]"}
-    - {id: 63, cat: Movies/Foreign, desc: "Films: POL [No ENG subs]"}
     - {id: 57, cat: Movies/Foreign, desc: "Films: Desi [No ENG subs]"}
+    - {id: 58, cat: Movies/Foreign, desc: "Films: GER [No ENG subs]"}
     - {id: 59, cat: Movies/Foreign, desc: "Films: FRE [No ENG subs]"}
+    - {id: 63, cat: Movies/Foreign, desc: "Films: POL [No ENG subs]"}
+    - {id: 64, cat: Movies/Foreign, desc: "Films: ITA [No ENG subs]"}
+    - {id: 66, cat: Movies/Foreign, desc: "Films: ARA [No ENG subs]"}
     - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dubs/Cams/Vid Issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
@@ -41,6 +43,7 @@ caps:
     - {id: 46, cat: Other, desc: "Collections [Various Media]"}
     - {id: 20, cat: TV/Other, desc: "Culture: Stand-up"}
     - {id: 7, cat: Books/EBook, desc: "Culture: Ebooks"}
+    - {id: 65, cat: Books/EBook, desc: "Culture: Islamic Studies"}
     - {id: 3, cat: Audio, desc: "Culture: Music"}
     - {id: 16, cat: Audio/Video, desc: "Culture: Music Videos"}
     - {id: 34, cat: Audio/Audiobook, desc: "Culture: Audio Books"}
@@ -48,25 +51,33 @@ caps:
     - {id: 37, cat: TV/Other, desc: "Culture: Firearms and Freedom"}
     - {id: 47, cat: PC/0day, desc: "Software: PC"}
     - {id: 48, cat: PC/Mac, desc: "Software: Mac"}
-    - {id: 36, cat: Console, desc: "Software: Console/ROMS"}
     - {id: 49, cat: PC, desc: "Software: Linux/Unix"}
+    - {id: 36, cat: Console, desc: "Software: Console/ROMS"}
+    - {id: 73, cat: Other, desc: "AI: MODELS [MIXED]"}
+    - {id: 74, cat: Other, desc: "3D Prints and CAD"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
     - {id: 43, cat: Other, desc: "Internal Testing"}
     - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
-    - {id: 45, cat: XXX, desc: "Mature: NSFW [No ENG Subs]"}
     - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
-    - {id: 52, cat: XXX, desc: "Mature: NSFW LGBTQ [UnListed]"}
+    - {id: 45, cat: XXX, desc: "Mature: NSFW [No ENG Subs]"}
+    - {id: 70, cat: XXX, desc: "Mature: Lesbian"}
+    - {id: 72, cat: XXX, desc: "Mature: Gay"}
+    - {id: 52, cat: XXX, desc: "Mature: Tranny"}
     - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW (MegaPacks)"}
+    - {id: 71, cat: XXX, desc: "Mature: BDSM/Kink"}
     - {id: 10, cat: XXX, desc: "Mature: Hentai"}
     - {id: 62, cat: XXX, desc: "Mature: NSFW Fansite"}
     - {id: 61, cat: XXX, desc: "Mature: NSFW Parody"}
-    - {id: 60, cat: XXX, desc: "Mature: NSFW PMV"}
+    - {id: 60, cat: XXX, desc: "Mature: PMV"}
+    - {id: 67, cat: XXX, desc: "Mature: Scheiße"}
+    - {id: 68, cat: XXX, desc: "Mature: Golden Showers"}
+    - {id: 69, cat: XXX, desc: "Mature: Rainbow Showers"}
     - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
-    - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
-    - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
     - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
     - {id: 53, cat: XXX/Other, desc: "Mature: Ebooks"}
     - {id: 51, cat: XXX/Other, desc: "Mature: Software & Games"}
+    - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [TMDB Listed]"}
+    - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
 
   modes:
     search: [q]
