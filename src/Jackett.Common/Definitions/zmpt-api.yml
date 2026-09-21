@@ -87,6 +87,7 @@ search:
     $raw: "{{ range .Categories }}&filter[category][in][]={{.}}{{end}}"
     "filter[title]": "{{ .Keywords }}"
     sorts: "{{ .Config.sort }}"
+    per_page: 100
 
   keywordsfilters:
     # the site stores dotted release names but the title filter matches on words
@@ -145,4 +146,4 @@ search:
       # H&R 3 days (as seconds = 3 x 24 x 60 x 60)
       # normal 1 day (as seconds = 24 x 60 x 60)
       text: 259200
-# NexusPHP v1.9.9 2025-10-02
+# JSON API NexusPHP v1.9.9 2025-10-02
