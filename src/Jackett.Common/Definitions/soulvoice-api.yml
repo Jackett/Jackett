@@ -65,6 +65,9 @@ login:
   inputs:
     per_page: 1
   error:
+    - selector: :root:contains("login.php?returnto")
+      message:
+        text: "The API token was not accepted by {{ .Config.sitelink }}."
     - selector: :root:contains("Unauthenticated")
       message:
         text: "The API token was not accepted by {{ .Config.sitelink }}."
@@ -82,6 +85,7 @@ search:
     $raw: "{{ range .Categories }}&filter[category][in][]={{.}}{{end}}"
     "filter[title]": "{{ .Keywords }}"
     sorts: "{{ .Config.sort }}"
+    per_page: 100
 
   keywordsfilters:
     # the site stores dotted release names but the title filter matches on words
@@ -138,4 +142,4 @@ search:
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-# JSON api NexusPHP v1.10.2 2026-09-19
+# JSON API NexusPHP v1.10.2 2026-09-19
