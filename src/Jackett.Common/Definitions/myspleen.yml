@@ -20,10 +20,17 @@ caps:
     - {id: 29, cat: TV, desc: "Nick"}
     - {id: 20, cat: Other, desc: "Other"}
     - {id: 32, cat: TV, desc: "Star Wars"}
+    - {id: 33, cat: TV, desc: "Fan Edits"}
+    - {id: 34, cat: TV, desc: "G4techTV"}
+    - {id: 35, cat: Movies, desc: "Movies"}
+    - {id: 36, cat: TV, desc: "Rage"}
+    - {id: 37, cat: TV, desc: "Star Trek"}
+    - {id: 38, cat: TV, desc: "WOC"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
 
 settings:
   - name: cookie
