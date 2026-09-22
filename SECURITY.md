@@ -10,4 +10,4 @@
 
 ## Reporting a Vulnerability
 
-You can report a private security advisory by navigating to https://github.com/Jackett/Jackett/security/advisories
+You can report a private security advisory by navigating to https://github.com/Jackett/Jackett/security/advisories?state=Triage
