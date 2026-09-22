@@ -49,9 +49,10 @@ fi
 
 # Check if Jackett's owner is root
 JACKETT_USER="$(stat -c "%U" ./jackett)"
+JACKETT_GROUP="$(stat -c "%G" ./jackett)"
 if [ "${JACKETT_USER}" == "root" ] || [ "${JACKETT_USER}" == "UNKNOWN" ] ; then
     echo "${BOLDRED}ERROR${NC}: The owner of Jackett directory is '${JACKETT_USER}'."
-    echo "Please, change the owner with the command 'chown <user>:<user> -R \"${JACKETT_DIR}\"'"
+    echo "Please, change the owner with the command 'chown <user>:<group> -R \"${JACKETT_DIR}\"'"
     echo "The user <user> will be used to run Jackett."
     exit 1
 fi
@@ -71,7 +72,7 @@ Restart=always
 RestartSec=5
 Type=simple
 User=${JACKETT_USER}
-Group=${JACKETT_USER}
+Group=${JACKETT_GROUP}
 WorkingDirectory=${JACKETT_DIR}
 Environment="DOTNET_EnableDiagnostics=0"
 ExecStart=/bin/sh "${JACKETT_DIR}/jackett_launcher.sh"
