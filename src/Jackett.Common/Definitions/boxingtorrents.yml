@@ -33,45 +33,25 @@ caps:
     tv-search: [q, season, ep]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
     default: false
-#  - name: sort
-#    type: select
-#    label: Sort requested from site
-#    default: added
-#    options:
-#      added: created
-#      seeders: seeders
-#      size: size
-#      name: title
-#  - name: type
-#    type: select
-#    label: Order requested from site
-#    default: DESC
-#    options:
-#      DESC: desc
-#      ASC: asc
   - name: info_download
     type: info
     label: "Download Restrictions"
     default: "You must have uploaded at least 10GB before you are able to access all torrent sizes. Until then, you are restricted to torrents no larger than 2.5GB."
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Google reCAPTCHA
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: td.embedded:contains("Login failed!")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: browse.php
     selector: a[href="logout.php"]
@@ -83,8 +63,6 @@ download:
 
 search:
   paths:
-    # https://tc-boxing.com/browse.php?c16=1&c8=1&c14=1&incldead=1
-    # https://tc-boxing.com/browse.php?search=tyson&cat=0&incldead=1
     # https://tc-boxing.com/browse.php?search=medina&cat=0&incldead=1&screen=1&champ=1&free=1
     - path: browse.php
   inputs:
@@ -94,9 +72,6 @@ search:
     # 1 freeleech only, null all
     free: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     search: "{{ .Keywords }}"
-# dropped sorting as this prevents the dateheaders from results!
-#    sort: "{{ .Config.sort }}"
-#    d: "{{ .Config.type }}"
 
   rows:
     selector: table.torrenttable > tbody > tr:has(a[href^="details.php?id="])
