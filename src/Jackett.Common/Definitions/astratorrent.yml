@@ -1,0 +1,155 @@
+---
+id: astratorrent
+name: AstraTorrent
+description: "AstraTorrent is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: fr-FR
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://astratorrent.la/
+
+caps:
+  categorymappings:
+    # from https://astratorrent.la/api/torznab.php?t=caps&apikey=YOUR-API-KEY
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 1000, cat: PC/Games, desc: "PC/Games"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/Ebook"}
+    - {id: 4000, cat: PC, desc: "PC"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+  allowrawsearch: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Your API key is also your Passkey, which you can find by accessing your <a href=\"https://astratorrent.la/v2/compte.php\" target=\"_blank\">AstraTorrent</a> account settings page."
+    
+  - name: multilang
+    type: checkbox
+    label: Replace MULTi by another language in release name
+    default: false
+  - name: multilanguage
+    type: select
+    label: Replace MULTi by this language
+    default: FRENCH
+    options:
+      FRENCH: FRENCH
+      MULTi.FRENCH: MULTi.FRENCH
+      ENGLISH: ENGLISH
+      MULTi.ENGLISH: MULTi.ENGLISH
+      VOSTFR: VOSTFR
+      MULTi.VOSTFR: MULTi.VOSTFR
+  - name: vostfr
+    type: checkbox
+    label: Replace VOSTFR and SUBFRENCH with ENGLISH
+    default: false
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: api/torznab.php
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: search
+    limit: 1
+
+search:
+  paths:
+    - path: api/torznab.php
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ .Query.Type }}"
+    # .Keywords already carries the SxxEyy episode string for tv searches
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title_phase1:
+      selector: title
+    title_vostfr:
+      text: "{{ .Result.title_phase1 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(vostfr|subfrench)\\b", "ENGLISH"]
+    title_phase2:
+      text: "{{ if .Config.vostfr }}{{ .Result.title_vostfr }}{{ else }}{{ .Result.title_phase1 }}{{ end }}"
+    title_multilang:
+      text: "{{ .Result.title_phase2 }}"
+      filters:
+        - name: re_replace
+          args: ["(?i)\\b(MULTI(?!.*(?:FRENCH|ENGLISH|VOSTFR|VF2|VFF|VFQ|VOQ|VFI|VOF)))\\b", "{{ .Config.multilanguage }}"]
+    title:
+      text: "{{ if .Config.multilang }}{{ .Result.title_multilang }}{{ else }}{{ .Result.title_phase2 }}{{ end }}"
+    _id:
+      selector: guid
+      filters:
+        - name: querystring
+          args: id
+    details:
+      text: "{{ .Config.sitelink }}v2/details.php?id={{ .Result._id }}"
+    download:
+      selector: enclosure
+      attribute: url
+    imdbid:
+      selector: "[name=imdbid]"
+      attribute: value
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+    date:
+      # Tue, 22 Sep 2026 02:56:32 +0200
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
+# torznab xml
