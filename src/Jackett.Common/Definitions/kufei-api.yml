@@ -146,7 +146,4 @@ search:
       selector: promotion_info.up_multiplier
     minimumratio:
       text: 1.0
-    description:
-      selector: td:nth-child(2)
-      remove: a, b, font, img, span
 # JSON API NexusPHP v1.10.3 2026-06-28
