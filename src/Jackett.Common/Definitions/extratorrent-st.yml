@@ -31,6 +31,7 @@ caps:
     - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
     - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
     - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
+    - {id: Episodes SD, cat: TV/SD, desc: Episodes SD}
     - {id: Episodes HD, cat: TV/HD, desc: Episodes HD}
     - {id: Episodes 4K UHD, cat: TV/UHD, desc: Episodes 4K UHD}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
@@ -40,6 +41,7 @@ caps:
     - {id: "Live Action [English-translated]", cat: TV/Anime, desc: "Live Action [English-translated]"}
     - {id: "Live Action [Non-English]", cat: TV/Anime, desc: "Live Action [Non-English]"}
     - {id: Lossless, cat: Audio/Lossless, desc: Music Lossless}
+    - {id: Lowres Movies, cat: Movies/SD, desc: Lowres Movies}
     - {id: "Manga [English-translated]", cat: Books/Comics, desc: "Manga [English-translated]"}
     - {id: "Manga [Raw]", cat: Books/Comics, desc: "Manga [Raw]"}
     - {id: MP3, cat: Audio/MP3, desc: Music MP3}
