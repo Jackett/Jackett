@@ -1,0 +1,152 @@
+---
+id: ptskit-api
+name: PTSKIT (API)
+description: "PTSKIT is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: zh-CN
+type: private
+encoding: UTF-8
+requestDelay: 2
+links:
+  - https://www.ptskit.org/
+
+caps:
+  categorymappings:
+    - {id: 401, cat: TV/Other, desc: "短剧(Playlet)"}
+    - {id: 402, cat: TV, desc: "动态漫(Animation)"}
+    - {id: 404, cat: Movies, desc: "电影(Movies)"}
+    - {id: 405, cat: TV, desc: "电视剧(TV Series)"}
+    - {id: 409, cat: TV, desc: "综艺(TV Shows)"}
+    - {id: 408, cat: Audio/Video, desc: "音乐(Music Video)"}
+    - {id: 403, cat: TV, desc: "游戏(TV)"}
+    - {id: 407, cat: TV/Anime, desc: "动漫/漫画(Anime/Manga)"}
+    - {id: 406, cat: Other, desc: "其他(Other)"}
+    - {id: 411, cat: XXX, desc: "日韩(Japanese/Korean)"}
+    - {id: 410, cat: XXX, desc: "国产(Chinese)"}
+    - {id: 412, cat: XXX, desc: "欧美(European/American)"}
+    - {id: 413, cat: XXX, desc: "里番(HiAnime)"}
+    - {id: 414, cat: XXX, desc: "漫画(Hentai)"}
+    - {id: 415, cat: XXX/Other, desc: "游戏(Games)"}
+    - {id: 416, cat: XXX/Other, desc: "其他(Other)"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Token
+  - name: info_apikey
+    type: info
+    label: About your API Token
+    default: "Find/Generate an API token from your <a href=\"https://www.ptskit.org/usercp.php\" target=\"_blank\">PTSKIT</a> account control panel."
+  - name: passkey
+    type: text
+    label: Passkey
+  - name: info_passkey
+    type: info
+    label: About your Passkey
+    default: "Find the Passkey from your account control panel."
+  - name: freeleech
+    type: checkbox
+    label: Filter freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: "-id"
+    options:
+      "-id": created
+      "-seeders": seeders
+      "-size": size
+      "-times_completed": grabs
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Account retention rules:<ol><li>Veteran User and above will be retained forever</li><li>Elite User and above will not have their account deleted after parking (in the control panel)</li><li> Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be deleted if they do not log in for 150 consecutive days</li><li>Users who have no traffic (i.e. upload/download data are both 0) will be deleted if they do not log in for 100 consecutive days.</li></ol>"
+
+login:
+  path: api/v1/torrents
+  method: get
+  inputs:
+    per_page: 1
+  error:
+    - selector: :root:contains("login.php?returnto")
+      message:
+        text: "The API token was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("Unauthenticated")
+      message:
+        text: "The API token was not accepted by {{ .Config.sitelink }}."
+
+search:
+  paths:
+    - path: api/v1/torrents
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    $raw: "{{ range .Categories }}&filter[category][in][]={{.}}{{end}}"
+    "filter[title]": "{{ .Keywords }}"
+    sorts: "{{ .Config.sort }}"
+    per_page: 100
+
+  keywordsfilters:
+    # the site stores dotted release names but the title filter matches on words
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: "data.data{{ if .Config.freeleech }}:not(promotion_info.down_multiplier:contains(1)):not(promotion_info.down_multiplier:contains(.)){{ else }}{{ end }}"
+
+  fields:
+    category:
+      selector: category
+    _id:
+      selector: id
+    title:
+      selector: name
+    details:
+      text: "{{ .Config.sitelink }}details.php?id={{ .Result._id }}&hit=1"
+    download:
+      text: "{{ .Config.sitelink }}download.php?id={{ .Result._id }}&passkey={{ .Config.passkey }}"
+    infohash:
+      selector: hash
+    poster:
+      selector: cover
+    description:
+      selector: small_descr
+    size:
+      selector: size
+    files:
+      selector: numfiles
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      # 2026-09-19 16:50
+      selector: added
+      filters:
+        - name: append
+          args: " +08:00" # CST
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm zzz"
+    downloadvolumefactor:
+      # promotion_info is the EFFECTIVE promotion and accounts for site-wide freeleech events.
+      # sp_state is only the stored per-torrent promotion, so it reads 1 on a torrent the site has made free.
+      selector: promotion_info.down_multiplier
+    uploadvolumefactor:
+      selector: promotion_info.up_multiplier
+    minimumratio:
+      text: 1.0
+    minimumseedtime:
+      # 1 day (as seconds = 24 x 60 x 60)
+      text: 86400
+# JSON API NexusPHP v1.10.2 2026-04-11
