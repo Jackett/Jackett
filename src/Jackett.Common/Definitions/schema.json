@@ -377,7 +377,7 @@
             "properties": {
                 "method": {
                     "title": "Method",
-                    "description": "post: send inputs as an HTTP POST. get: same, using HTTP GET. form: fetch path, extract the HTML form (handles CSRF tokens and captchas), then POST it. cookie: use the configured cookie. oneurl: request path with inputs.oneurl appended.",
+                    "description": "post: send inputs as an HTTP POST. get: same, using HTTP GET. form: fetch path, extract the HTML form (handles CSRF tokens and captchas), then POST it. cookie: use the configured cookie. oneurl: legacy, added for the removed beyond-hd-oneurl indexer; no definition uses it.",
                     "type": "string",
                     "enum": ["form", "post", "cookie", "get", "oneurl"]
                 },
