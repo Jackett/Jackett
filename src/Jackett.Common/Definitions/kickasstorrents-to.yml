@@ -141,6 +141,9 @@ search:
     - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/All/{{ end }}"
     - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/All/?page=2{{ end }}"
 
+  headers:
+    Accept: ["*/*"]
+
   rows:
     selector: table.data > tbody > tr:has(a[href^="magnet:?xt="])
 
