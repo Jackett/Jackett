@@ -995,6 +995,10 @@ Detailed instructions available at [Jackett's Wiki - Alpine Linux](https://githu
 
 Detailed instructions available at [Jackett's Wiki - OpenWrt](https://github.com/Jackett/Jackett/wiki/Installation-on-OpenWrt)
 
+#### Easypanel
+
+[Easypanel](https://easypanel.io) is a self-hosted Docker deployment platform, and Jackett has a one-click deployment template there: https://easypanel.io/templates/jackett
+
 ---
 
 ## Uninstallation
