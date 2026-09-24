@@ -96,6 +96,9 @@ search:
     - name: re_replace
       args: ["[\\s]+", "."]
 
+  headers:
+    Accept: ["*/*"]
+
   rows:
     selector: tr[class^="tl"]:has(a[href^="magnet:?xt="])
     filters:
