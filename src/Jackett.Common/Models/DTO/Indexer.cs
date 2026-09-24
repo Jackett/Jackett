@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.Serialization;
+using Jackett.Common.Extensions;
 using Jackett.Common.Indexers;
 
 namespace Jackett.Common.Models.DTO
@@ -41,6 +42,9 @@ namespace Jackett.Common.Models.DTO
         public bool potatoenabled { get; private set; }
 
         [DataMember]
+        public IndexerState state => last_error.IsNotNullOrWhiteSpace() ? IndexerState.Error : IndexerState.Success;
+
+        [DataMember]
         public IEnumerable<Capability> caps { get; private set; }
 
         public Indexer(IIndexer indexer)
@@ -66,5 +70,13 @@ namespace Jackett.Common.Models.DTO
                     Name = c.Name
                 });
         }
+    }
+
+    [DataContract]
+    public enum IndexerState
+    {
+        Unknown,
+        Error,
+        Success
     }
 }
