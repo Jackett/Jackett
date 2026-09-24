@@ -17,6 +17,33 @@ namespace Jackett.Test.Common.Indexers
         private readonly TestCacheService _cacheService = new TestCacheService();
 
         [Test]
+        public async Task TestGroupedFeedPreservesExplicitCategoriesAsync()
+        {
+            var webClient = new TestWebClient();
+            webClient.RegisterRequestCallback("https://simurg.world/ajax.php?action=browse&order_by=time&order_way=desc", "Simurg/grouped-categories.json");
+            var indexer = new Simurg(null, webClient, _logger, null, new TestCacheService());
+
+            var result = await indexer.ResultsForQuery(new TorznabQuery { QueryType = "search" }, false);
+            var releases = result.Releases.ToList();
+            releases.Should().HaveCount(7);
+
+            // Identical PDF formats must remain in their actual content categories.
+            releases.Single(r => r.Guid.ToString().EndsWith("=101")).Category.Should().BeEquivalentTo(new[] { 7020, 100003 });
+            releases.Single(r => r.Guid.ToString().EndsWith("=102")).Category.Should().BeEquivalentTo(new[] { 7030, 100007 });
+            releases.Single(r => r.Guid.ToString().EndsWith("=103")).Category.Should().BeEquivalentTo(new[] { 7010, 100008 });
+            releases.Single(r => r.Guid.ToString().EndsWith("=104")).Category.Should().BeEquivalentTo(new[] { 3030, 100004 });
+
+            // Group-level metadata is useful when a nested torrent has no category.
+            releases.Single(r => r.Guid.ToString().EndsWith("=105")).Category.Should().BeEquivalentTo(new[] { 7030, 100007 });
+
+            // Preserve compatibility with the older responses that omit categories.
+            releases.Single(r => r.Guid.ToString().EndsWith("=106")).Category.Should().BeEquivalentTo(new[] { 7030 });
+            releases.Single(r => r.Guid.ToString().EndsWith("=107")).Category.Should().BeEquivalentTo(new[] { 7020 });
+            releases.Single(r => r.Guid.ToString().EndsWith("=102")).DownloadVolumeFactor.Should().Be(0);
+            releases.Single(r => r.Guid.ToString().EndsWith("=103")).UploadVolumeFactor.Should().Be(0);
+        }
+
+        [Test]
         public async Task TestRecentFeedAsync()
         {
             _webClient.RegisterRequestCallback("https://simurg.world/ajax.php?action=browse&order_by=time&order_way=desc", "Simurg/recent-feed.json");

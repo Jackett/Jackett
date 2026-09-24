@@ -59,7 +59,19 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected override bool ReleaseInfoPostParse(ReleaseInfo release, JObject torrent, JObject result)
         {
-            // the response does not contain category for group releases so we try to detect using the format
+            // Content categories are authoritative: a PDF can be a book, comic, or magazine.
+            // Older grouped responses omit them, so retain the format fallback below.
+            var category = (string)torrent["category"] ?? (string)result["category"];
+            if (!string.IsNullOrWhiteSpace(category))
+            {
+                var mappedCategories = MapTrackerCatDescToNewznab(category);
+                if (mappedCategories.Count > 0)
+                {
+                    release.Category = mappedCategories;
+                    return true;
+                }
+            }
+
             switch ((string)torrent["format"])
             {
                 case "PDF":
