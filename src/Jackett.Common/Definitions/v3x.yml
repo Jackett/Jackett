@@ -59,6 +59,10 @@ settings:
     type: checkbox
     label: Replace VOSTFR and SUBFRENCH with ENGLISH
     default: false
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
 
 login:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
@@ -80,6 +84,7 @@ search:
     tmdbid: "{{ .Query.TMDBID }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
     limit: 100
 
   rows:
