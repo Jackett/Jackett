@@ -7,86 +7,94 @@ type: private
 encoding: UTF-8
 requestDelay: 2
 links:
-  - https://cliente.amigos-share.club/
+  - https://amigos-share.club/
 legacylinks:
   - http://amigos-share.club/
-  - https://amigos-share.club/
+  - https://cliente.amigos-share.club/
 
 caps:
   categorymappings:
-    - {id: 75, cat: XXX, desc: "Adultos: Hentai"}
-    - {id: 107, cat: XXX, desc: "Adultos: Gay"}
-    - {id: 108, cat: XXX, desc: "Adultos: Transex/Female"}
-    - {id: 74, cat: XXX, desc: "Adultos: XXX"}
-    - {id: 146, cat: XXX, desc: "Adultos: OnlyFans"}
-    - {id: 69, cat: TV/Anime, desc: "Anime: Anime"}
-    - {id: 116, cat: TV/Anime, desc: "Anime: Filmes"}
-    - {id: 118, cat: TV/Anime, desc: "Anime: Séries"}
-    - {id: 21, cat: PC/0day, desc: "Aplicativos: Windows"}
-    - {id: 28, cat: PC/Mobile-iOS, desc: "Aplicativos: iPod"}
-    - {id: 27, cat: PC/Mobile-iOS, desc: "Aplicativos: iPad"}
-    - {id: 26, cat: PC/Mobile-iOS, desc: "Aplicativos: iPhone"}
-    - {id: 25, cat: PC, desc: "Aplicativos: Linux"}
-    - {id: 23, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
-    - {id: 22, cat: PC/Mac, desc: "Aplicativos: Mac"}
-    - {id: 73, cat: Other, desc: "Cursos: Video Aula"}
-    - {id: 72, cat: Other, desc: "Cursos: Apostila"}
-    - {id: 71, cat: Other, desc: "Cursos: Cursos"}
-    - {id: 67, cat: Books/EBook, desc: "Ebook: Livros"}
-    - {id: 112, cat: Books/Comics, desc: "Ebook: HQs"}
-    - {id: 147, cat: Books/Comics, desc: "Ebook: Mangas"}
-    - {id: 121, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
-    - {id: 68, cat: Books/Mags, desc: "Ebook: Revistas"}
-    - {id: 119, cat: Movies, desc: "Filmes:"}
-    - {id: 70, cat: XXX, desc: "Fotos: Revistas, Livros e Fotos"}
-    - {id: 51, cat: Console/PS3, desc: "Jogos: Ps3"}
-    - {id: 54, cat: Console/XBox 360, desc: "Jogos: Xbox360"}
-    - {id: 109, cat: Console, desc: "Jogos: Emulação"}
-    - {id: 110, cat: Console, desc: "Jogos: Nintendo Switch"}
-    - {id: 52, cat: Console, desc: "Jogos: Dreamcast"}
-    - {id: 50, cat: Console, desc: "Jogos: Ps2"}
-    - {id: 49, cat: Console, desc: "Jogos: Ps1"}
-    - {id: 48, cat: PC/Mac, desc: "Jogos: Mac"}
-    - {id: 55, cat: Console/Wii, desc: "Jogos: Wii"}
-    - {id: 82, cat: Console/PSP, desc: "Jogos: PSP"}
-    - {id: 47, cat: PC/Games, desc: "Jogos: Pc"}
-    - {id: 61, cat: Console, desc: "Jogos: Emuladores e Roms"}
-    - {id: 58, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
-    - {id: 57, cat: Console, desc: "Jogos: Android"}
-    - {id: 56, cat: Console/XBox, desc: "Jogos: Xbox"}
-    - {id: 78, cat: Console/XBox One, desc: "Jogos: Xbox One"}
-    - {id: 79, cat: Console/PS4, desc: "Jogos: Ps4"}
-    - {id: 129, cat: Other, desc: "Outros: Fonts"}
-    - {id: 128, cat: Other, desc: "Outros: Scripts"}
-    - {id: 127, cat: Other, desc: "Outros: Add-ons"}
-    - {id: 130, cat: Other, desc: "Outros: MOD"}
-    - {id: 125, cat: Other, desc: "Outros: Pack de Imagens"}
-    - {id: 124, cat: Other, desc: "Outros: Vetores"}
-    - {id: 122, cat: Other, desc: "Outros: Plug-ins"}
-    - {id: 126, cat: Other, desc: "Outros: Extensões"}
-    - {id: 120, cat: TV, desc: "Series:"}
-    - {id: 64, cat: TV, desc: "Tv: Fechada"}
-    - {id: 62, cat: TV/Sport, desc: "Tv: Esportes"}
-    - {id: 63, cat: TV, desc: "Tv: Aberta"}
+    - {id: 2, cat: XXX, desc: "Adultos"}
+    - {id: 23, cat: XXX, desc: "Adultos: Gay"}
+    - {id: 48, cat: XXX, desc: "Adultos: Hentai"}
+    - {id: 18, cat: XXX, desc: "Adultos: OnlyFans"}
+    - {id: 21, cat: XXX, desc: "Adultos: Transex/Female"}
+    - {id: 42, cat: XXX, desc: "Adultos: XXX"}
+    - {id: 11, cat: TV/Anime, desc: "Anime"}
+    - {id: 60, cat: TV/Anime, desc: "Anime: Anime"}
+    - {id: 59, cat: TV/Anime, desc: "Anime: Filmes"}
+    - {id: 61, cat: TV/Anime, desc: "Anime: Séries"}
+    - {id: 6, cat: PC, desc: "Aplicativos"}
+    - {id: 26, cat: PC/Mobile-Android, desc: "Aplicativos: Android"}
+    - {id: 29, cat: PC/Mobile-iOS, desc: "Aplicativos: iPad"}
+    - {id: 28, cat: PC/Mobile-iOS, desc: "Aplicativos: iPhone"}
+    - {id: 30, cat: PC/Mobile-iOS, desc: "Aplicativos: iPod"}
+    - {id: 27, cat: PC, desc: "Aplicativos: Linux"}
+    - {id: 25, cat: PC/Mac, desc: "Aplicativos: Mac"}
+    - {id: 24, cat: PC/0day, desc: "Aplicativos: Windows"}
+    - {id: 8, cat: Other, desc: "Cursos"}
+    - {id: 54, cat: Other, desc: "Cursos: Apostila"}
+    - {id: 44, cat: Other, desc: "Cursos: Cursos"}
+    - {id: 47, cat: Other, desc: "Cursos: Video Aula"}
+    - {id: 5, cat: Books, desc: "Ebook"}
+    - {id: 56, cat: Audio/Audiobook, desc: "Ebook: Audio-book"}
+    - {id: 20, cat: Books/Comics, desc: "Ebook: HQs"}
+    - {id: 58, cat: Books/EBook, desc: "Ebook: Livros"}
+    - {id: 57, cat: Books/Comics, desc: "Ebook: Mangas"}
+    - {id: 62, cat: Books/Mags, desc: "Ebook: Revistas"}
+    - {id: 4, cat: Movies, desc: "Filmes"}
+    - {id: 10, cat: XXX, desc: "Fotos"}
+    - {id: 55, cat: XXX, desc: "Fotos: Revistas, Livros e Fotos"}
+    - {id: 7, cat: Console, desc: "Jogos"}
+    - {id: 49, cat: Console, desc: "Jogos: Android"}
+    - {id: 40, cat: Console, desc: "Jogos: Dreamcast"}
+    - {id: 31, cat: Console, desc: "Jogos: Emulação"}
+    - {id: 35, cat: Console, desc: "Jogos: Emuladores e Roms"}
+    - {id: 36, cat: PC/Mac, desc: "Jogos: Mac"}
+    - {id: 46, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
+    - {id: 32, cat: Console, desc: "Jogos: Nintendo Switch"}
+    - {id: 34, cat: PC/Games, desc: "Jogos: PC"}
+    - {id: 37, cat: Console, desc: "Jogos: PS1"}
+    - {id: 38, cat: Console, desc: "Jogos: PS2"}
+    - {id: 39, cat: Console/PS3, desc: "Jogos: PS3"}
+    - {id: 33, cat: Console/PS4, desc: "Jogos: PS4"}
+    - {id: 50, cat: Console/PSP, desc: "Jogos: PSP"}
+    - {id: 45, cat: Console/Wii, desc: "Jogos: Wii"}
+    - {id: 41, cat: Console/XBox 360, desc: "Jogos: X360"}
+    - {id: 43, cat: Console/XBox, desc: "Jogos: Xbox"}
+    - {id: 53, cat: Console/XBox One, desc: "Jogos: Xbox One"}
+    - {id: 1, cat: Other, desc: "Outros"}
+    - {id: 14, cat: Other, desc: "Outros: Add-ons"}
+    - {id: 19, cat: Other, desc: "Outros: Extensões"}
+    - {id: 16, cat: Other, desc: "Outros: Fonts"}
+    - {id: 17, cat: Other, desc: "Outros: MOD"}
+    - {id: 13, cat: Other, desc: "Outros: Pack de Imagens"}
+    - {id: 15, cat: Other, desc: "Outros: Plug-ins"}
+    - {id: 12, cat: Other, desc: "Outros: Scripts"}
+    - {id: 22, cat: Other, desc: "Outros: Vetores"}
+    - {id: 3, cat: TV, desc: "Series"}
+    - {id: 9, cat: TV, desc: "Tv"}
+    - {id: 51, cat: TV, desc: "Tv: Aberta"}
+    - {id: 52, cat: TV/Sport, desc: "Tv: Esportes"}
+    - {id: 63, cat: TV, desc: "Tv: Fechada"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     book-search: [q]
   allowrawsearch: true
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: info_results
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: info_login
     type: info
-    label: "Search results"
-    default: "Set <b>Visualização:</b> to <b>Lista</b> in your <b>Minha Conta > Configurações</b>.<br />Using <b>Capas</b> is not supported and will return 0 results."
+    label: About the Cookie
+    default: "The site's login is protected by a CSRF token that cannot be supplied from a definition, so a browser cookie is required.<br />Tick <b>Lembrar-me</b> when logging in so the cookie includes <b>remember_web_…</b> and lasts longer."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -94,10 +102,11 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: id
+    default: released_at
     options:
-      id: created
+      released_at: created
       seeders: seeders
+      times_completed: grabs
       size: size
       name: title
   - name: type
@@ -113,94 +122,99 @@ settings:
     default: "Inactive accounts, that is, without access for 90 days (3 months), will be automatically deleted by the system; with no possibility of reactivation."
 
 login:
-  path: account-login.php
-  method: post
+  # the site is Laravel + Inertia: POST /login needs an X-XSRF-TOKEN header copied from a cookie, which Cardigann cannot do
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    autologout: yes
-    returnto: /
-  error:
-    - selector: div.alert-primary
+    cookie: "{{ .Config.cookie }}"
   test:
-    path: index.php
-    selector: a[href="account-logout.php"]
+    path: torrents
+    selector: script[data-page="app"]:contains('"user":{"id":')
 
 search:
   paths:
-    # http://amigos-share.club/torrents-search.php?search=&sort=id&order=desc&page=1
-    - path: torrents-search.php
-    # site displays just 20 results, no profile options found to change this, so we attempt to fetch 5 pages
-    - path: torrents-search.php
-      inputs:
-        page: 1
-    - path: torrents-search.php
-      inputs:
-        page: 2
-    - path: torrents-search.php
-      inputs:
-        page: 3
-    - path: torrents-search.php
-      inputs:
-        page: 4
+    # https://amigos-share.club/torrents?q=&sort=released_at&direction=desc&per_page=96
+    - path: torrents
   inputs:
-    # note: site does not support multi cat search.
-    # replace spaces with wildcard (percent symbol) as site's default search is exact string.
-    search: "{{ re_replace .Keywords \"[\\s]+\" \"%\" }}"
-    # 0 no, 1 yes, 2 any
-    free: "{{ if .Config.freeleech }}1{{ else }}2{{ end }}"
+    # site search matches all words and also accepts imdb ids (tt1234567)
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
+    # note: site supports a single category only, and a parent includes its children
+    freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
     sort: "{{ .Config.sort }}"
-    order: "{{ .Config.type }}"
-  # torrents-search.php does not support imdbid search or return imdb links.
+    direction: "{{ .Config.type }}"
+    # max allowed
+    per_page: 96
   keywordsfilters:
     - name: re_replace
       args: ["(\\s+:\\s+)", " "] # replace " : " with " " since site does not support colon in search and it is commonly used in titles to separate title from year or season/episode info
-    # drop the year from searches since site titles do not include year
+    # drop the year from searches since the site returns no results when it is included
     - name: re_replace
       args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
 
-  rows:
-    selector: div#fancy-list-group ul.list-group li.list-group-item
+  # the page is rendered client side by Inertia: results are only available as JSON in <script data-page="app">.
+  # requesting the JSON directly needs the X-Inertia-Version asset hash, which changes on every site deploy,
+  # and Cardigann does not run preprocessingfilters on json responses, so turn each torrent object into a div instead.
+  preprocessingfilters:
+    - name: regexp
+      args: "\"torrents\":\\{\"current_page\":\\d+,\"data\":\\[(.*?)\\],\"first_page_url\""
+    # each torrent object ends right before the next {"id": or the end (nested badge objects are never followed by {"id":)
+    - name: re_replace
+      args: ["(\\{\"id\":\\d+,.*?\\})(?=,\\{\"id\":\\d+,|$)", "<div class=\"torrent\">$1</div>"]
 
+  rows:
+    selector: div.torrent
+
+  # each row's text is the raw JSON object of a torrent.
+  # strings are extracted as a JSON literal and decoded with jsonjoinarray to resolve \uXXXX and \/ escapes.
   fields:
-    category_default:
-      # tv and movie just have an image :-b
-      selector: div.list-group-item-addon img
-      attribute: src
-      optional: true
-      case:
-        "[src$=\"/filmes2.fw.png\"]": 119
-        "[src$=\"/seriados.fw.png\"]": 120
+    _id:
+      filters:
+        - name: regexp
+          args: "\"id\":(\\d+)"
     category:
-      # while the rest have a href with a cat number \o/
-      selector: a[href*="cat="]
-      attribute: href
-      optional: true
-      default: "{{ .Result.category_default }}"
       filters:
-        - name: querystring
-          args: cat
-    _quality:
-      selector: p.list-group-item-text span.badge-pill:contains("1080p"), p.list-group-item-text span.badge-pill:contains("720p"), p.list-group-item-text span.badge-pill:contains("4k")
-      optional: true
+        - name: regexp
+          args: "\"categoryId\":(\\d+)"
+    _name:
       filters:
-        - name: replace
-          args: ["4k", "2160p"]
+        - name: regexp
+          args: "\"name\":(\"(?:[^\"\\\\]|\\\\.)*\")"
+        - name: prepend
+          args: "{\"v\":["
+        - name: append
+          args: "]}"
+        - name: jsonjoinarray
+          args: ["$.v", ""]
     _year:
-      selector: p.list-group-item-text span.badge-pill[style$="#246AB6;"]
       optional: true
-    _type:
-      selector: p.list-group-item-text span.badge-pill:contains("Rip"), p.list-group-item-text span.badge-pill:contains("WEB-"), p.list-group-item-text span.badge-pill:contains("TV"), p.list-group-item-text span.badge-pill:contains("Blu-Ray"), p.list-group-item-text span.badge-pill:contains("BD50"), p.list-group-item-text span.badge-pill:contains("MUX"), p.list-group-item-text span.badge-pill:contains("DVD"), p.list-group-item-text span.badge-pill:contains("320"), p.list-group-item-text span.badge-pill:contains("CAM"), p.list-group-item-text span.badge-pill:contains("rip")
+      filters:
+        - name: regexp
+          args: "\"year\":(\\d{4})"
+    _badges:
+      # listing badges as {"label":"4K","kind":"resolution"}, in site order: resolution, hdr, source, audio, codec, language...
+      # keep the labels of the kinds useful for the title, e.g. 2160p Dolby Vision HDR H.265
       optional: true
-    _language_variant:
-      # Example: "Dual-Audio", "Dublado", "Nacional", "Legendado"
-      selector: p.list-group-item-text span.badge-pill[style$="#b6249d;"]
+      filters:
+        - name: regexp
+          args: "\"badges\":\\[(.*?)\\]"
+        - name: re_replace
+          args: ["\\{\"label\":\"(?:[^\"\\\\]|\\\\.)*\",\"kind\":\"(?!(?:resolution|source|hdr|codec)\")[^\"]*\"\\},?", ""]
+        - name: re_replace
+          args: ["\\{\"label\":\"((?:[^\"\\\\]|\\\\.)*)\",\"kind\":\"[^\"]*\"\\},?", "$1 "]
+        - name: re_replace
+          args: ["\\b4K\\b", "2160p"]
+        - name: trim
+    _audio:
+      # Dual Áudio, Dublado, Nacional or Legendado. labels are not decoded (Dual \u00c1udio), so match on the prefix
       optional: true
-    _release_group:
-      selector: p.list-group-item-text font[color="#ff8400"] span.badge-pill
-      optional: true
+      filters:
+        - name: regexp
+          args: "\\{\"label\":\"((?:[^\"\\\\]|\\\\.)*)\",\"kind\":\"audio\"\\}"
+        - name: re_replace
+          args: ["^Dual.*$", "Dual-Audio Brazilian Original"]
+        - name: re_replace
+          args: ["^Dublado$", "Dublado Brazilian"]
     title:
-      selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
+      text: "{{ .Result._name }}"
       filters:
         # strip out the non-english title [to the left of the brackets] and drop the brackets enclosing the english title
         - name: re_replace
@@ -208,66 +222,72 @@ search:
         # add the year to the title
         - name: append
           args: "{{ if .Result._year }} {{ .Result._year }}{{ else }}{{ end }}"
+        # move the year before the season/episode: "Title - S02E05 2024" to "Title 2024 S02E05"
         - name: re_replace
-          args: ["^(.*?)\\s+-\\s+(S\\d{1,2}(?:E\\d{1,3}(?:E\\d{1,3})*)?)\\s+((?:19|20)\\d{2})(.*)$", "$1 $3 $2$4"]
-        # add the quality to the title
+          args: ["^(.*?)\\s+-\\s+(S\\d{1,2}(?:E\\d{1,4}(?:E\\d{1,4})*)?)\\s+((?:19|20)\\d{2})(.*)$", "$1 $3 $2$4"]
         - name: append
-          args: "{{ if .Result._quality }} {{ .Result._quality }}{{ else }}{{ end }}"
-        # add the type to the title
+          args: "{{ if .Result._badges }} {{ .Result._badges }}{{ else }}{{ end }}"
         - name: append
-          args: "{{ if .Result._type }} {{ .Result._type }}{{ else }}{{ end }}"
-        # add language variant to the title
-        - name: append
-          args: '{{ if eq .Result._language_variant "Dublado" }} Dublado Brazilian{{ else }}{{ end }}'
-        - name: append
-          args: '{{ if eq .Result._language_variant "Nacional" }} Nacional{{ else }}{{ end }}'
-        - name: append
-          args: '{{ if eq .Result._language_variant "Legendado" }} Legendado{{ else }}{{ end }}'
-        - name: append
-          args: '{{ if eq .Result._language_variant "Dual-Audio" }} Dual-Audio Brazilian Original{{ else }}{{ end }}'
-        - name: append
-          args: "{{ if .Result._release_group }} {{ .Result._release_group }}{{ else }}{{ end }}"
+          args: "{{ if .Result._audio }} {{ .Result._audio }}{{ else }}{{ end }}"
     details:
-      selector: a[href*="torrents-details.php?id="], a[href*="details-misc.php?id="]
-      attribute: href
+      text: "/torrents/{{ .Result._id }}"
     download:
-      selector: a[href*="download.php?id="]
-      attribute: href
+      text: "/torrents/{{ .Result._id }}/download"
     poster:
-      selector: img.img-thumbnail
-      attribute: src
+      optional: true
+      filters:
+        - name: regexp
+          args: "\"cover\":\"([^\"]+)\""
+        - name: replace
+          args: ["\\/", "/"]
     date:
-      selector: p:contains("Lançado:")
-      # auto adjusted by site account profile
+      # yyyy-MM-dd only
       optional: true
       default: now
       filters:
         - name: regexp
-          args: "Lançado: (.+?)$"
-        - name: re_replace
-          args: [" (\\d:)", " 0$1"]
+          args: "\"releasedAt\":\"([^\"]+)\""
         - name: dateparse
-          args: "dd/MM/yy HH:mm:ss"
+          args: "yyyy-MM-dd"
     size:
-      selector: p.list-group-item-text span.badge-pill[style$="#7C10AF;"]
+      filters:
+        - name: regexp
+          args: "\"size\":(\\d+)"
     seeders:
-      selector: div.list-group-item-controls a:nth-child(1)
+      filters:
+        - name: regexp
+          args: "\"seeders\":(\\d+)"
     leechers:
-      selector: div.list-group-item-controls a:nth-child(2)
+      filters:
+        - name: regexp
+          args: "\"leechers\":(\\d+)"
     grabs:
-      selector: div.list-group-item-controls a:nth-child(3)
+      filters:
+        - name: regexp
+          args: "\"timesCompleted\":(\\d+)"
     genre:
-      selector: p.list-group-item-text span.badge-pill[style$="#1c38c2;"]
+      optional: true
+      filters:
+        - name: jsonjoinarray
+          args: ["$.genres", ", "]
     description:
       text: "{{ .Result.genre }}"
     downloadvolumefactor:
-      case:
-        "p.list-group-item-text span.badge-success:contains(\"FREE\")": 0
-        "*": 1
+      filters:
+        - name: regexp
+          args: "\"freeleech\":(true|false)"
+        - name: replace
+          args: ["true", "0"]
+        - name: replace
+          args: ["false", "1"]
     uploadvolumefactor:
-      case:
-        "p.list-group-item-text span.badge-pill:contains(\"2X UP\")": 2
-        "*": 1
+      filters:
+        - name: regexp
+          args: "\"doubleUpload\":(true|false)"
+        - name: replace
+          args: ["true", "2"]
+        - name: replace
+          args: ["false", "1"]
     minimumratio:
       text: 1.0
 # engine n/a
