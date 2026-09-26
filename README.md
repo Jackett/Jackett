@@ -621,6 +621,7 @@ Prior versions of Jackett are no longer supported.
  * The Place (TP)
  * The Show (TSBZ)
  * The Vault (TVBZ)
+ * The Word Music
  * The-New-Fun
  * TheLeachZone (TLZ)
  * Thor HUB
