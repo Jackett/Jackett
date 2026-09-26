@@ -146,7 +146,7 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["(\\s+:\\s+)", " "] # replace " : " with " " since site does not support colon in search and it is commonly used in titles to separate title from year or season/episode info
-    # drop the year from searches since site titles do not include year
+    # drop the year from searches since the site returns no results when it is included
     - name: re_replace
       args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
 
@@ -156,7 +156,7 @@ search:
   preprocessingfilters:
     - name: regexp
       args: "\"torrents\":\\{\"current_page\":\\d+,\"data\":\\[(.*?)\\],\"first_page_url\""
-    # torrent objects are flat (only string arrays inside), so each ends right before the next {"id": or the end
+    # each torrent object ends right before the next {"id": or the end (nested badge objects are never followed by {"id":)
     - name: re_replace
       args: ["(\\{\"id\":\\d+,.*?\\})(?=,\\{\"id\":\\d+,|$)", "<div class=\"torrent\">$1</div>"]
 
@@ -189,14 +189,30 @@ search:
       filters:
         - name: regexp
           args: "\"year\":(\\d{4})"
-    _tags:
-      # [quality, container, video codec, audio codec, language] e.g. WEB-DL MKV H265 - HDR E-AC-3 Inglês
+    _badges:
+      # listing badges as {"label":"4K","kind":"resolution"}, in site order: resolution, hdr, source, audio, codec, language...
+      # keep the labels of the kinds useful for the title, e.g. 2160p Dolby Vision HDR H.265
       optional: true
       filters:
-        - name: jsonjoinarray
-          args: ["$.tags", " "]
-        - name: replace
-          args: [" - ", " "]
+        - name: regexp
+          args: "\"badges\":\\[(.*?)\\]"
+        - name: re_replace
+          args: ["\\{\"label\":\"(?:[^\"\\\\]|\\\\.)*\",\"kind\":\"(?!(?:resolution|source|hdr|codec)\")[^\"]*\"\\},?", ""]
+        - name: re_replace
+          args: ["\\{\"label\":\"((?:[^\"\\\\]|\\\\.)*)\",\"kind\":\"[^\"]*\"\\},?", "$1 "]
+        - name: re_replace
+          args: ["\\b4K\\b", "2160p"]
+        - name: trim
+    _audio:
+      # Dual Áudio, Dublado, Nacional or Legendado. labels are not decoded (Dual \u00c1udio), so match on the prefix
+      optional: true
+      filters:
+        - name: regexp
+          args: "\\{\"label\":\"((?:[^\"\\\\]|\\\\.)*)\",\"kind\":\"audio\"\\}"
+        - name: re_replace
+          args: ["^Dual.*$", "Dual-Audio Brazilian Original"]
+        - name: re_replace
+          args: ["^Dublado$", "Dublado Brazilian"]
     title:
       text: "{{ .Result._name }}"
       filters:
@@ -210,7 +226,9 @@ search:
         - name: re_replace
           args: ["^(.*?)\\s+-\\s+(S\\d{1,2}(?:E\\d{1,4}(?:E\\d{1,4})*)?)\\s+((?:19|20)\\d{2})(.*)$", "$1 $3 $2$4"]
         - name: append
-          args: "{{ if .Result._tags }} {{ .Result._tags }}{{ else }}{{ end }}"
+          args: "{{ if .Result._badges }} {{ .Result._badges }}{{ else }}{{ end }}"
+        - name: append
+          args: "{{ if .Result._audio }} {{ .Result._audio }}{{ else }}{{ end }}"
     details:
       text: "/torrents/{{ .Result._id }}"
     download:
