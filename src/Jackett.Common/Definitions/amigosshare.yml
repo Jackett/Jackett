@@ -94,7 +94,7 @@ settings:
   - name: info_login
     type: info
     label: About the Cookie
-    default: "The site's login is protected by a CSRF token that cannot be supplied from a definition, so a browser cookie is required.<br />Tick <b>Lembrar-me</b> when logging in so the cookie includes <b>remember_web_…</b> and lasts longer."
+    default: "Remeber to tick <b>Lembrar-me</b> when logging in so the cookie will lasts longer."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -127,13 +127,14 @@ login:
   inputs:
     cookie: "{{ .Config.cookie }}"
   test:
-    path: torrents
+    path: dashboard
     selector: script[data-page="app"]:contains('"user":{"id":')
 
 search:
   paths:
     # https://amigos-share.club/torrents?q=&sort=released_at&direction=desc&per_page=96
     - path: torrents
+
   inputs:
     # site search matches all words and also accepts imdb ids (tt1234567)
     q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
@@ -143,6 +144,7 @@ search:
     direction: "{{ .Config.type }}"
     # max allowed
     per_page: 96
+
   keywordsfilters:
     - name: re_replace
       args: ["(\\s+:\\s+)", " "] # replace " : " with " " since site does not support colon in search and it is commonly used in titles to separate title from year or season/episode info
@@ -234,21 +236,20 @@ search:
     download:
       text: "/torrents/{{ .Result._id }}/download"
     poster:
-      optional: true
       filters:
         - name: regexp
           args: "\"cover\":\"([^\"]+)\""
         - name: replace
           args: ["\\/", "/"]
     date:
-      # yyyy-MM-dd only
-      optional: true
-      default: now
+      # 2026-09-26
       filters:
         - name: regexp
           args: "\"releasedAt\":\"([^\"]+)\""
+        - name: append
+          args: " +00:01" # CET
         - name: dateparse
-          args: "yyyy-MM-dd"
+          args: "yyyy-MM-dd zzz"
     size:
       filters:
         - name: regexp
@@ -266,7 +267,6 @@ search:
         - name: regexp
           args: "\"timesCompleted\":(\\d+)"
     genre:
-      optional: true
       filters:
         - name: jsonjoinarray
           args: ["$.genres", ", "]
