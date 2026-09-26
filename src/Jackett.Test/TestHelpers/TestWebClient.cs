@@ -36,6 +36,11 @@ namespace Jackett.Test.TestHelpers
             _requestCallbacks.Add(requestUrl, webResult);
         }
 
+        public void RegisterRequestCallback(string requestUrl, WebResult result)
+        {
+            _requestCallbacks.Add(requestUrl, result);
+        }
+
         public override Task<WebResult> GetResultAsync(WebRequest request)
         {
             if (_requestCallbacks.ContainsKey(request.Url))
