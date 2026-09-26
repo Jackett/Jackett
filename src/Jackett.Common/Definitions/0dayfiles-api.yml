@@ -43,6 +43,9 @@ caps:
     - {id: 49, cat: Other, desc: "Educational"}
     - {id: 51, cat: PC/Mac, desc: "Mac"}
     - {id: 1, cat: PC/0day, desc: "Software"}
+    - {id: 54, cat: XXX, desc: "XXX/0Day"}
+    - {id: 55, cat: XXX/x264, desc: "XXX/Movies"}
+    - {id: 56, cat: XXX/Pack, desc: "XXX/Packs"}
 
   modes:
     search: [q]
