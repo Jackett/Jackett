@@ -115,51 +115,29 @@ search:
       filters:
         - name: querystring
           args: cat
-    title_default:
-      # can be abbreviated
-      selector: a[href^="javascript:torrent"] b
     title:
-      # usually full length
-      selector: a[href^="javascript:torrent"]
+      selector: a[href^="details.php?id="]
       attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
-    _id:
-      selector: a[href^="javascript:torrent"]
-      attribute: href
-      filters:
-        - name: regexp
-          args: (\d+)
     details:
-      text: "details.php?id={{ .Result._id }}"
-    poster:
-      selector: a[onmouseover]
-      attribute: onmouseover
-      filters:
-        - name: regexp
-          args: "src=(.*?) "
-        - name: prepend
-          args: "https:"
+      selector: a[href^="details.php?id="]
+      attribute: href
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
     genre:
-      selector: font[color="#C0C0C0"]
-      filters:
-        - name: replace
-          args: ["\xA0", ""]
+      selector: tr
+      attribute: data-tt-desc
     description:
       text: "{{ .Result.genre }}"
-    imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
+    date_date:
+      selector: span.tt-added-date
+    date_time:
+      selector: span.tt-added-time
     date:
-      selector: td:nth-last-child(5)
+      text: "{{ .Result.date_date }} {{ .Result.date_time }}"
       filters:
         - name: append
           args: " +01:00" # CET
-        - name: replace
-          args: ["\xA0", " "]
         - name: dateparse
           args: "yyyy-MM-dd HH:mm:ss zzz"
     size:
@@ -172,11 +150,11 @@ search:
       selector: td:last-child
     downloadvolumefactor:
       case:
-        img[src="pic/ingyen.gif"]: 0
+        span.tt-row-flag:contains("FREE"): 0
         "*": 1
     uploadvolumefactor:
       case:
-        "font:contains(\"[x2]\")": 2
+        span.tt-row-flag:contains("x2"): 2
         "*": 1
     minimumratio:
       text: 1.0
