@@ -1,27 +1,26 @@
 ---
-id: ultrahd-api
-name: UltraHD (API)
-description: "UltraHD is a CHINESE Private Torrent Tracker for UHD MOVIES / TV / GENERAL"
+id: nicept-api
+name: NicePT (API)
+description: "NicePT is a CHINESE Private Torrent Tracker for 3X"
 language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  - https://ultrahd.net/
+  - https://www.nicept.net/
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies"}
-    - {id: 402, cat: TV, desc: "TV Series"}
-    - {id: 403, cat: TV, desc: "TV Shows"}
-    - {id: 404, cat: TV/Documentary, desc: "Documentaries"}
-    - {id: 405, cat: TV/Anime, desc: "Animations"}
-    - {id: 416, cat: Audio/Video, desc: "Music Video"}
-    - {id: 417, cat: Other, desc: "Other"}
+    - {id: 500, cat: XXX, desc: "日本有码"}
+    - {id: 401, cat: XXX, desc: "日本无码"}
+    - {id: 402, cat: XXX, desc: "欧美"}
+    - {id: 501, cat: XXX, desc: "其他（限制级）"}
+    - {id: 403, cat: XXX/Other, desc: "动漫（限制级）"}
+    - {id: 503, cat: XXX, desc: "真人秀，自拍（限制级）"}
+    - {id: 404, cat: XXX/ImageSet, desc: "写真、套图"}
+    - {id: 504, cat: XXX, desc: "SM调教（限制级）"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
 
 settings:
   - name: apikey
@@ -30,7 +29,7 @@ settings:
   - name: info_apikey
     type: info
     label: About your API Token
-    default: "Find/Generate an API token from your <a href=\"https://ultrahd.net/usercp.php\" target=\"_blank\">UltraHD</a> account control panel."
+    default: "Find/Generate an API token from your <a href=\"https://www.nicept.net/usercp.php\" target=\"_blank\">NicePT</a> account control panel."
   - name: passkey
     type: text
     label: Passkey
@@ -54,7 +53,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Inactive accounts (i.e. not logged in for a long time) are automatically deleted."
+    default: "Account retention rules:<ol><li>Veteran Users users and above will be retained forever</li><li>Elite Users and above will not have their account deleted after parking (in the Control Panel)</li><li>Users with a parked account will be deleted if they do not log in for 400 consecutive days</li><li>Users with a non-parked account will be banned if they do not log in for 40 consecutive days</li><li>Users with no traffic (ie, upload/download data are both 0) will be banned if they do not log in for 7 consecutive days.</li></ol>"
 
 login:
   path: api/v1/torrents
@@ -133,18 +132,9 @@ search:
       selector: promotion_info.down_multiplier
     uploadvolumefactor:
       selector: promotion_info.up_multiplier
-    minimumseedtime:
-      # H&R 14 days (as seconds = 14 x 24 x 60 x 60)
-      # Normal 7 days (as seconds = 7 x 24 x 60 x 60)
-      selector: hr
-      case:
-        1: 1209600
-        0: 604800
     minimumratio:
-      # H&R 3.0
-      # Normal 2.0
-      selector: hr
-      case:
-        1: 3.0
-        0: 2.0
+      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # JSON API NexusPHP v1.9.11 2025-11-02
