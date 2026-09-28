@@ -196,6 +196,7 @@ caps:
     - {id: 197, cat: Books, desc: "Marine bulletins"}
     - {id: 455, cat: Books, desc: "Marine bulletins-CHIRP"}
     - {id: 442, cat: Books, desc: "Marine bulletins-Korabel.ru"}
+    - {id: 467, cat: Books, desc: "Marine bulletins-MARS"}
     - {id: 456, cat: Books, desc: "Marine bulletins-Monthly Safety Scenario"}
     - {id: 444, cat: Books, desc: "Marine bulletins-Sea and Job"}
     - {id: 451, cat: Books, desc: "Marine bulletins-She of Change"}
