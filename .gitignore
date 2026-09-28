@@ -201,3 +201,7 @@ launchSettings.json
 
 # JetBrains Rider
 /src/.run
+
+# Claude Code
+.claude/
+CLAUDE.local.md
