@@ -24,7 +24,10 @@ namespace Jackett.Common.Utils
             var matches = _CookieRegex.Match(cookieHeader);
             while (matches.Success)
             {
-                if (matches.Groups.Count > 2)
+                // PHP deletes cookies with "name=deleted; Max-Age=0", we don't parse the expiry so drop them here
+                if (matches.Groups.Count > 2 && matches.Groups[2].Value == "deleted")
+                    cookieDictionary.Remove(matches.Groups[1].Value);
+                else if (matches.Groups.Count > 2)
                     cookieDictionary[matches.Groups[1].Value] = matches.Groups[2].Value;
                 matches = matches.NextMatch();
             }

@@ -41,6 +41,19 @@ namespace Jackett.Test.Common.Utils
         }
 
         [Test]
+        public void CookieHeaderToDictionaryDeleted()
+        {
+            // a later "deleted" value removes the cookie (PHP setcookie deletion)
+            var cookieHeader = "sid=abc; cid=xyz; sid=deleted; flashes=test";
+            var expectedCookieDictionary = new Dictionary<string, string>
+            {
+                {"cid", "xyz"},
+                {"flashes", "test"}
+            };
+            CollectionAssert.AreEqual(expectedCookieDictionary, CookieUtil.CookieHeaderToDictionary(cookieHeader));
+        }
+
+        [Test]
         public void CookieHeaderToDictionaryMalformed()
         {
             // malformed cookies
