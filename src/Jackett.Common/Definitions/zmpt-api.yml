@@ -141,9 +141,15 @@ search:
     minimumratio:
       # H&R 1.0
       # normal 0.4
-      text: 1.0
+      selector: hr
+      case:
+        1: 1.0
+        0: 0.4
     minimumseedtime:
       # H&R 3 days (as seconds = 3 x 24 x 60 x 60)
       # normal 1 day (as seconds = 24 x 60 x 60)
-      text: 259200
+      selector: hr
+      case:
+        1: 259200
+        0: 86400
 # JSON API NexusPHP v1.9.9 2025-10-02
