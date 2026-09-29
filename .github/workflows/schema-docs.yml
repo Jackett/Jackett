@@ -4,6 +4,7 @@ on:
   push:
     paths:
       - src/Jackett.Common/Definitions/schema.json
+  workflow_dispatch:
 
 jobs:
   schema-docs:
@@ -18,7 +19,7 @@ jobs:
         uses: actions/setup-node@v7
 
       - name: Install dependencies
-        run: npm install @adobe/jsonschema2md
+        run: npm install -g @adobe/jsonschema2md
 
       - name: Run script
         run: |
