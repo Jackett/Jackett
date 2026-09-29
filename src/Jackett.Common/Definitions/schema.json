@@ -1,6 +1,7 @@
 {
     "$schema": "https://json-schema.org/draft/2019-09/schema",
     "$ref": "#/definitions/SchemaRoot",
+    "type": "object",
     "title": "Cardigann indexer definition",
     "description": "Schema for Jackett Cardigann YAML indexer definitions. See the Definition-format page on the Jackett wiki for examples.",
     "definitions": {
@@ -148,7 +149,7 @@
             "additionalProperties": false,
             "properties": {
                 "categories": {
-                    "title": "Categories",
+                    "title": "Categories (Caps)",
                     "description": "Simple mapping of tracker category ID to Newznab category. Use either this or categorymappings.",
                     "type": "object",
                     "additionalProperties": false,
@@ -243,7 +244,7 @@
             "additionalProperties": false,
             "properties": {
                 "search": {
-                    "title": "Search",
+                    "title": "Search (Modes)",
                     "description": "Parameters for basic search. q is the minimum and is required.",
                     "type": "array",
                     "uniqueItems": true,
@@ -320,7 +321,7 @@
                 },
                 "type":{
                     "title": "Type",
-                    "description": "Input type. password masks the input. The info_* types show a predefined info box (category 8000, cookie, FlareSolverr, user agent) and need no label.",
+                    "description": "Input type. password masks the input. The info_* types show a predefined info box (category_8000, cookie, FlareSolverr, useragent) and need no label.",
                     "type": "string",
                     "enum": ["info", "text", "password", "checkbox", "select", "multi-select", "info_category_8000", "info_cookie", "info_flaresolverr", "info_useragent"]
                 },
@@ -411,7 +412,7 @@
                     "$ref": "#/definitions/CaptchaBlock"
                 },
                 "inputs": {
-                    "title": "Inputs",
+                    "title": "Inputs (Login)",
                     "description": "Login parameters, e.g. username: \"{{ .Config.username }}\". Fixed values are allowed.",
                     "type": "object",
                     "additionalProperties": false,
@@ -454,7 +455,7 @@
                     }
                 },
                 "error": {
-                    "title": "Error",
+                    "title": "Error (Login)",
                     "description": "Selectors checked on the login response. If one matches, the login failed and the matched text is shown as the error.",
                     "type": "array",
                     "items": {
@@ -467,13 +468,13 @@
                     "$ref": "#/definitions/PageTestBlock"
                 },
                 "headers": {
-                    "title": "Headers",
+                    "title": "Headers (Login)",
                     "description": "Extra HTTP headers sent with login requests. If omitted, search headers are used.",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
                         "^[A-Za-z0-9-]*$": {
-                            "title": "Headers value",
+                            "title": "Headers value (Login)",
                             "type": "array",
                             "items": {
                                 "title": "Headers value item",
@@ -597,7 +598,7 @@
                     ]
                 },
                 "case": {
-                    "title": "Case",
+                    "title": "Case (SelectorBlock)",
                     "description": "Selector: value pairs. The value of the first matching selector is used. \"*\" matches anything. Common for downloadvolumefactor and uploadvolumefactor.",
                     "type": "object",
                     "additionalProperties": false,
@@ -625,7 +626,7 @@
                     ]
                 },
                 "filters": {
-                    "title": "Filters",
+                    "title": "Filters (SelectorBlock)",
                     "description": "Filters applied to the extracted value, in order.",
                     "type": "array",
                     "items": {
@@ -689,7 +690,7 @@
                     "type": "boolean"
                 },
                 "inputs": {
-                    "title": "Inputs",
+                    "title": "Inputs (Search)",
                     "description": "HTTP arguments used by all paths. $raw is appended to the argument list without escaping (only variables are escaped).",
                     "type": "object",
                     "additionalProperties": false,
@@ -705,13 +706,13 @@
                     }
                 },
                 "headers": {
-                    "title": "Headers",
+                    "title": "Headers (Search)",
                     "description": "Extra HTTP headers sent with search requests.",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
                         "^[A-Za-z0-9-]*$": {
-                            "title": "Headers value",
+                            "title": "Headers value (Search)",
                             "type": "array",
                             "items": {
                                 "title": "Headers value item",
@@ -729,7 +730,7 @@
                     }
                 },
                 "error": {
-                    "title": "Error",
+                    "title": "Error (Search)",
                     "description": "Selectors checked on the search response. Same syntax as the login error block.",
                     "type": "array",
                     "items": {
@@ -796,7 +797,7 @@
                     "type": "boolean"
                 },
                 "categories": {
-                    "title": "Categories",
+                    "title": "Categories (SearchPathBlock)",
                     "description": "Only use this path if the search includes at least one of these tracker categories. A leading \"!\" inverts the match.",
                     "type": "array",
                     "items": {
@@ -809,7 +810,7 @@
                     }
                 },
                 "inputs": {
-                    "title": "Inputs",
+                    "title": "Inputs (SearchPathBlock)",
                     "description": "Extra HTTP arguments for this path only.",
                     "type": "object",
                     "additionalProperties": false,
@@ -907,7 +908,7 @@
                     "type": "boolean"
                 },
                 "case": {
-                    "title": "Case",
+                    "title": "Case (RowsBlock)",
                     "description": "Selector: value pairs. The value of the first matching selector is used.",
                     "type": "object",
                     "additionalProperties": false,
@@ -938,7 +939,7 @@
                     ]
                 },
                 "filters": {
-                    "title": "Filters",
+                    "title": "Filters (RowsBlock)",
                     "description": "Row filters, e.g. andmatch or strdump.",
                     "type": "array",
                     "items": {
@@ -1043,13 +1044,13 @@
                     "$ref": "#/definitions/InfoHashBlock"
                 },
                 "headers": {
-                    "title": "Headers",
+                    "title": "Headers (DownloadBlock)",
                     "description": "Extra HTTP headers sent with download requests.",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
                         "^[A-Za-z0-9-]*$": {
-                            "title": "Headers value",
+                            "title": "Headers value (DownloadBlock)",
                             "type": "array",
                             "items": {
                                 "title": "Headers value item",
@@ -1082,7 +1083,7 @@
                     "type": "string"
                 },
                 "inputs": {
-                    "title": "Inputs",
+                    "title": "Inputs (BeforeBlock)",
                     "description": "HTTP arguments sent with the request, e.g. id: \"{{ .DownloadUri.Query.id }}\".",
                     "type": "object",
                     "additionalProperties": false,
@@ -1162,7 +1163,7 @@
                     "type": "boolean"
                 },
                 "filters": {
-                    "title": "Filters",
+                    "title": "Filters (SelectorField)",
                     "description": "Filters applied to the extracted value, in order.",
                     "type": "array",
                     "items": {
@@ -1188,7 +1189,7 @@
                     "description": "Filter arguments. For andmatch, an optional maximum title length to compare, for sites that truncate names.",
                     "oneOf": [
                         {
-                            "title": "Arguments as array",
+                            "title": "Arguments as array (RowFilterBlock)",
                             "type": "array",
                             "items": {
                                 "title": "Arguments as array item",
@@ -1225,7 +1226,7 @@
                     "description": "Filter arguments: a single value or a list, depending on the filter.",
                     "oneOf": [
                         {
-                            "title": "Arguments as array",
+                            "title": "Arguments as array (FilterBlock)",
                             "type": "array",
                             "items": {
                                 "title": "Arguments as array item",
