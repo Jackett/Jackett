@@ -25,20 +25,19 @@ caps:
     - {id: Anime, cat: TV/Anime, desc: Anime}
     - {id: Asian, cat: Movies, desc: Asian}
     - {id: Audio books, cat: Audio/Audiobook, desc: Books Audiobook}
-    - {id: "Audio [Lossy]", cat: Audio/MP3, desc: Audio [Lossy]}
-    - {id: "Audio [Lossless]", cat: Audio/Lossless, desc: Audio [Lossless]}
-    - {id: Blu-ray Discs, cat: Movies/bluRay, desc: Blu-ray Discs}
+    - {id: "Audio [Lossy]", cat: Audio/MP3, desc: "Audio [Lossy]"}
+    - {id: "Audio [Lossless]", cat: Audio/Lossless, desc: "Audio [Lossless]"}
+    - {id: Blu-ray Discs, cat: Movies/BluRay, desc: Blu-ray Discs}
     - {id: Bollywood, cat: Movies, desc: Bollywood}
     - {id: Comics, cat: Books/Comics, desc: Books Comics}
     - {id: DVD, cat: Movies/DVD, desc: Movies DVD}
     - {id: Documentary, cat: TV/Documentary, desc: Documentary}
     - {id: Dubbed Movies, cat: Movies/Foreign, desc: Movies Dubbed}
     - {id: Ebooks, cat: Books/EBook, desc: Books Ebook}
-    - {id: English-translated, cat: TV/Anime, desc: Anime  English-translated}
+    - {id: English-translated, cat: TV/Anime, desc: Anime English-translated}
     - {id: Episodes SD, cat: TV/SD, desc: Episodes SD}
     - {id: Episodes HD, cat: TV/HD, desc: Episodes HD}
     - {id: Episodes 4K UHD, cat: TV/UHD, desc: Episodes 4K UHD}
-    - {id: Non-Fiction, cat: Books/EBook, desc: Non-Fiction}
     - {id: Games, cat: XXX/Other, desc: Adult Games}
     - {id: Hentai, cat: XXX/Other, desc: Adult Hentai}
     - {id: Highres Movies, cat: Movies/HD, desc: Movies HD}
@@ -59,6 +58,7 @@ caps:
     - {id: Music, cat: Audio, desc: Music}
     - {id: Music videos, cat: Audio/Video, desc: Music Videos}
     - {id: NDS, cat: Console/NDS, desc: Games NDS}
+    - {id: Non-Fiction, cat: Books/EBook, desc: Non-Fiction}
     - {id: Other Applications, cat: PC, desc: Other Applications}
     - {id: Other Games, cat: Console/Other, desc: Games Other}
     - {id: Other Movies, cat: Movies/Other, desc: Movies Other}
