@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Security.Cryptography;
@@ -39,6 +40,8 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Type => "public";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
+
+        private const string TorrentLinkEncryptionKey = "fee631d2cffda38a78b96ee6d2dfb43a";
 
         private static Dictionary<string, long> EstimatedSizeByCategory => new Dictionary<string, long>
         {
@@ -167,7 +170,7 @@ namespace Jackett.Common.Indexers.Definitions
             // <li class="wolf-card-file">
             //   <a class="wolf-card-format" href="/serie/episodio/86a2xh"><strong>Episodio 1x10 -</strong><span>HDTV</span></a>
             //   <span class="wolf-card-size">614,84 MB</span>
-            //   <button class="protected-download" data-content-id="716379" data-tabla="series">
+            //   <button class="protected-download" data-content-code="pkghcn" data-tabla="series">
             // movies only have the quality: <strong>4K</strong>
             return card.QuerySelectorAll("li.wolf-card-file").Select(file =>
             {
@@ -182,7 +185,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Size = file.QuerySelector(".wolf-card-size")?.TextContent,
                     PublishDate = publishDate,
                     Image = image,
-                    ContentId = button?.GetAttribute("data-content-id"),
+                    ContentCode = button?.GetAttribute("data-content-code"),
                     Tabla = button?.GetAttribute("data-tabla")
                 };
             }).ToList();
@@ -198,7 +201,7 @@ namespace Jackett.Common.Indexers.Definitions
             //   <a href="/serie/episodio/8fmmgy">1x01 -</a>
             //   <span class="wolf-episode-date">30/12/2016</span>
             //   <span class="wolf-episode-format">HDTV<span class="wolf-episode-size">731,27 MB</span></span>
-            //   <button class="protected-download" data-content-id="715964" data-tabla="series">
+            //   <button class="protected-download" data-content-code="pje4r3" data-tabla="series">
             return dom.QuerySelectorAll("div.wolf-episode").Select(episode =>
             {
                 var link = episode.QuerySelector("a");
@@ -213,7 +216,7 @@ namespace Jackett.Common.Indexers.Definitions
                     Size = episode.QuerySelector(".wolf-episode-size")?.TextContent,
                     PublishDate = ParseDate(episode.QuerySelector(".wolf-episode-date")?.TextContent, "dd/MM/yyyy"),
                     Image = image,
-                    ContentId = button?.GetAttribute("data-content-id"),
+                    ContentCode = button?.GetAttribute("data-content-code"),
                     Tabla = button?.GetAttribute("data-tabla")
                 };
             }).ToList();
@@ -226,7 +229,7 @@ namespace Jackett.Common.Indexers.Definitions
             var generate = await DownloadApiRequestAsync(new
             {
                 action = "generate",
-                content_id = int.Parse(parameters["id"]),
+                code = parameters["code"],
                 tabla = parameters["tabla"]
             });
             var challenge = generate.Value<string>("challenge");
@@ -240,7 +243,36 @@ namespace Jackett.Common.Indexers.Definitions
 
             // download_url is protocol relative, eg: //wolfmax4k.com/torrents/peliculas/xxx.torrent
             var torrentUrl = new Uri(new Uri(SiteLink), validate.Value<string>("download_url"));
-            var result = await RequestWithCookiesAndRetryAsync(torrentUrl.AbsoluteUri, referer: SiteLink);
+            if (!validate.Value<bool>("external"))
+            {
+                var torrent = await RequestWithCookiesAndRetryAsync(torrentUrl.AbsoluteUri, referer: SiteLink);
+                return torrent.ContentBytes;
+            }
+
+            // external links go through the link protector, eg: https://enlacito.com/s.php?i=xxx
+            var enlacitoUrl = torrentUrl.AbsoluteUri;
+            var enlacitoPage = await RequestWithCookiesAndRetryAsync(enlacitoUrl, referer: SiteLink);
+
+            var enlacitoHtmlParser = new HtmlParser();
+            var enlacitoDoc = await enlacitoHtmlParser.ParseDocumentAsync(enlacitoPage.ContentString);
+            var enlacitoFormUrl = enlacitoDoc.QuerySelector("form").GetAttribute("action");
+            var enlacitoFormLinkser = enlacitoDoc.QuerySelector("input[name=\"linkser\"]").GetAttribute("value");
+            var enlacitoFormFlow = enlacitoDoc.QuerySelector("input[name=\"flow\"]").GetAttribute("value");
+
+            var body = new Dictionary<string, string>
+            {
+                { "linkser", enlacitoFormLinkser },
+                { "flow", enlacitoFormFlow }
+            };
+            var enlacito2Page = await RequestWithCookiesAndRetryAsync(enlacitoFormUrl, data: body, method: RequestType.POST);
+            var regex = new Regex("var link_out = \"(.*)\"");
+            var v = regex.Match(enlacito2Page.ContentString);
+
+            var linkOut = v.Groups[1].ToString();
+            var slink = Encoding.UTF8.GetString(Convert.FromBase64String(linkOut));
+            var ulink = await OpenSSLDecryptAsync(slink, TorrentLinkEncryptionKey);
+
+            var result = await RequestWithCookiesAndRetryAsync(ulink);
             return result.ContentBytes;
         }
 
@@ -274,6 +306,92 @@ namespace Jackett.Common.Indexers.Definitions
                 if (hash[0] == 0 && hash[1] < 0x10)
                     return nonce;
             }
+        }
+
+        // Thanks to https://stackoverflow.com/a/5454692/2078070 !!!
+        private async Task<string> OpenSSLDecryptAsync(string encrypted, string passphrase)
+        {
+            // base 64 decode
+            var encryptedBytesWithSalt = Convert.FromBase64String(encrypted);
+
+            // extract salt (first 8 bytes of encrypted)
+            var salt = new byte[8];
+            var encryptedBytes = new byte[encryptedBytesWithSalt.Length - salt.Length - 8];
+            Buffer.BlockCopy(encryptedBytesWithSalt, 8, salt, 0, salt.Length);
+            Buffer.BlockCopy(encryptedBytesWithSalt, salt.Length + 8, encryptedBytes, 0, encryptedBytes.Length);
+
+            // get key and iv
+            DeriveKeyAndIV(passphrase, salt, out var key, out var iv);
+
+            return await DecryptStringFromBytesAesAsync(encryptedBytes, key, iv);
+        }
+
+        private void DeriveKeyAndIV(string passphrase, byte[] salt, out byte[] key, out byte[] iv)
+        {
+            // generate key and iv
+            var concatenatedHashes = new List<byte>(48);
+
+            var password = Encoding.UTF8.GetBytes(passphrase);
+            var currentHash = Array.Empty<byte>();
+            var md5 = MD5.Create();
+            var enoughBytesForKey = false;
+
+            // See http://www.openssl.org/docs/crypto/EVP_BytesToKey.html#KEY_DERIVATION_ALGORITHM
+            while (!enoughBytesForKey)
+            {
+                var preHashLength = currentHash.Length + password.Length + salt.Length;
+                var preHash = new byte[preHashLength];
+
+                Buffer.BlockCopy(currentHash, 0, preHash, 0, currentHash.Length);
+                Buffer.BlockCopy(password, 0, preHash, currentHash.Length, password.Length);
+                Buffer.BlockCopy(salt, 0, preHash, currentHash.Length + password.Length, salt.Length);
+
+                currentHash = md5.ComputeHash(preHash);
+                concatenatedHashes.AddRange(currentHash);
+
+                if (concatenatedHashes.Count >= 48)
+                {
+                    enoughBytesForKey = true;
+                }
+            }
+
+            key = new byte[32];
+            iv = new byte[16];
+            concatenatedHashes.CopyTo(0, key, 0, 32);
+            concatenatedHashes.CopyTo(32, iv, 0, 16);
+
+            md5.Clear();
+            md5 = null;
+        }
+
+        private static async Task<string> DecryptStringFromBytesAesAsync(byte[] cipherText, byte[] key, byte[] iv)
+        {
+            if (cipherText == null || cipherText.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(cipherText));
+            }
+
+            if (key == null || key.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (iv == null || iv.Length <= 0)
+            {
+                throw new ArgumentNullException(nameof(iv));
+            }
+
+            using var aesAlg = Aes.Create();
+            aesAlg.Key = key;
+            aesAlg.IV = iv;
+
+            var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
+
+            using var msDecrypt = new MemoryStream(cipherText);
+            using var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read);
+            using var srDecrypt = new StreamReader(csDecrypt);
+
+            return await srDecrypt.ReadToEndAsync();
         }
 
         private static TorznabQuery SanitizeTorznabQuery(TorznabQuery query)
@@ -322,7 +440,7 @@ namespace Jackett.Common.Indexers.Definitions
             var image = item.Image;
 
             if (torrentName.IsNullOrWhiteSpace() || guid.IsNullOrWhiteSpace() || quality.IsNullOrWhiteSpace() ||
-                item.ContentId.IsNullOrWhiteSpace())
+                item.ContentCode.IsNullOrWhiteSpace())
             {
                 // Some torrents has no quality.
                 // Ignored it because they are torrents that are not well categorized
@@ -333,7 +451,7 @@ namespace Jackett.Common.Indexers.Definitions
             quality = ParseQuality(quality);
             var details = new Uri(new Uri(SiteLink), guid);
             // the torrent url is resolved by the download api of the site, see Download()
-            var link = new Uri(new Uri(SiteLink), $"api/descargas?tabla={item.Tabla}&id={item.ContentId}");
+            var link = new Uri(new Uri(SiteLink), $"api/descargas?tabla={item.Tabla}&code={item.ContentCode}");
             var title = ParseTitle(torrentName, item.EpisodeText, quality);
             var episodes = GetEpisodesFromTitle(title);
             var wolfmaxCategory = ParseCategory(torrentName, guid, quality);
@@ -526,7 +644,7 @@ namespace Jackett.Common.Indexers.Definitions
         public string Size { get; set; }
         public DateTime? PublishDate { get; set; }
         public string Image { get; set; }
-        public string ContentId { get; set; }
+        public string ContentCode { get; set; }
         public string Tabla { get; set; }
     }
 }
