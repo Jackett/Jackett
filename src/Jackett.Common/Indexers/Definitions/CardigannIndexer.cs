@@ -870,6 +870,24 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected string GetRedirectDomainHint(WebResult result) => GetRedirectDomainHint(result.Request.Url, result.RedirectingTo);
 
+        private async Task Relogin(WebResult response)
+        {
+            logger.Info("CardigannIndexer({0}): Relogin required", Id);
+
+            var loginResult = await DoLogin(response.Cookies);
+
+            if (!loginResult)
+            {
+                throw new Exception("Relogin failed");
+            }
+
+            await TestLogin();
+
+            // the new cookies may not be saved by UpdateCookieHeader if the next responses don't set cookies
+            if (IsConfigured)
+                SaveConfig();
+        }
+
         protected async Task<bool> TestLogin()
         {
             var Login = Definition.Login;
@@ -1595,16 +1613,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                     if (loginNeeded)
                     {
-                        logger.Info("CardigannIndexer({0}): Relogin required", Id);
-
-                        var loginResult = await DoLogin(response.Cookies);
-
-                        if (!loginResult)
-                        {
-                            throw new Exception("Relogin failed");
-                        }
-
-                        await TestLogin();
+                        await Relogin(response);
 
                         response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
 
@@ -1785,16 +1794,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                             if (loginNeeded)
                             {
-                                logger.Info("CardigannIndexer({0}): Relogin required", Id);
-
-                                var loginResult = await DoLogin(response.Cookies);
-
-                                if (!loginResult)
-                                {
-                                    throw new Exception("Relogin failed");
-                                }
-
-                                await TestLogin();
+                                await Relogin(response);
 
                                 response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
 
