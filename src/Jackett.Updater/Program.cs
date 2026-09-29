@@ -361,6 +361,7 @@ namespace Jackett.Updater
                 "Definitions/cinefilhd.yml",
                 "Definitions/classix.yml",
                 "Definitions/cloudtorrents.yml",
+                "Definitions/concen.yml",
                 "Definitions/cooltorrent.yml",
                 "Definitions/cpabien.yml",
                 "Definitions/cpasbienclone.yml",
