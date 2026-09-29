@@ -84,7 +84,7 @@ Depending on logic complexity, there are two common ways new trackers are implem
 1. simple [definitions](http://github.com/Jackett/Jackett/tree/master/src/Jackett.Common/Definitions) (.yml / YAML)
 2. advanced (native) [indexers](http://github.com/Jackett/Jackett/tree/master/src/Jackett.Common/Indexers) (.cs / C#)
 
-Read more about the [simple definition format](https://github.com/Jackett/Jackett/wiki/Definition-format).
+Read more about the [simple definition format](https://github.com/Jackett/Jackett/wiki/Definition-format) and [schema](https://github.com/Jackett/Jackett/blob/master/docs/README.md).
 
 # Contributing Code
 
