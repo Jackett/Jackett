@@ -304,7 +304,6 @@ Prior versions of Jackett are no longer supported.
  * Bitded
  * bitGAMER
  * BitHUmen
- * Bitpalace
  * BitPorn
  * BitTorrentFiles
  * BiTTuRK
