@@ -270,6 +270,7 @@ Prior versions of Jackett are no longer supported.
  * AGSVPT (Arctic Global Seed Vault)
  * Aidoru!Online
  * Aither
+ * AlaBala
  * alingPT
  * AlphaRatio (AR)
  * AmigosShareClub (ASC)
