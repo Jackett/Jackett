@@ -6,9 +6,9 @@ Cardigann#/definitions/RowsBlock
 
 Selects the result rows. Each row is then parsed with the fields block.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## RowsBlock Type
 
@@ -33,7 +33,7 @@ Selects the result rows. Each row is then parsed with the fields block.
 
 ## after
 
-Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (e.g. collapsed rows).
+Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (for example, collapsed rows).
 
 `after`
 
@@ -127,7 +127,7 @@ Do not fail if the selector does not match.
 
 ## multiple
 
-JSON/XML only. Each row holds several torrents (e.g. one title with several releases).
+JSON/XML only. Each row holds several torrents (for example, one title with several releases).
 
 `multiple`
 
@@ -223,7 +223,7 @@ one (and only one) of
 
 ## filters
 
-Row filters, e.g. andmatch or strdump.
+Row filters, for example, andmatch or strdump.
 
 `filters`
 

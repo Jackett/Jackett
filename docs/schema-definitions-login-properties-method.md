@@ -6,9 +6,9 @@ Cardigann#/definitions/Login/properties/method
 
 post: send inputs as an HTTP POST. get: same, using HTTP GET. form: fetch path, extract the HTML form (handles CSRF tokens and captchas), then POST it. cookie: use the configured cookie. oneurl: legacy, added for the removed beyond-hd-oneurl indexer; no definition uses it.
 
-| Abstract            | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## method Type
 

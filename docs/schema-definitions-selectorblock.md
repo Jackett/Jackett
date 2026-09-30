@@ -6,9 +6,9 @@ Cardigann#/definitions/SelectorBlock
 
 Extracts a value from a response using a CSS selector (HTML) or path (JSON/XML), then applies case, remove and filters.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## SelectorBlock Type
 
@@ -51,7 +51,7 @@ CSS selector for HTML, or path for JSON/XML. :has(), :not() and :contains() are 
 
 ## attribute
 
-Take the value of this attribute (e.g. href) instead of the element text.
+Take the value of this attribute (for example, href) instead of the element text.
 
 `attribute`
 
@@ -87,7 +87,7 @@ Do not fail if the selector does not match. Use with default.
 
 ## default
 
-Value used when an optional selector does not match. Templates are allowed, e.g. "{{ .Result.title_default }}".
+Value used when an optional selector does not match. Templates are allowed, for example, "{{ .Result.title_default }}".
 
 `default`
 
@@ -147,7 +147,7 @@ Selector for elements to remove before reading the text. Removed elements are go
 
 ## text
 
-Fixed value, or a template. Used instead of selector, e.g. for minimumratio and minimumseedtime.
+Fixed value, or a template. Used instead of selector, such as for minimumratio and minimumseedtime.
 
 `text`
 
