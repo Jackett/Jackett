@@ -4,6 +4,7 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -15,12 +16,11 @@ using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
 using WebClient = Jackett.Common.Utils.Clients.WebClient;
-using System.Security.Cryptography;
-using Newtonsoft.Json;
 
 namespace Jackett.Common.Indexers.Definitions
 {
@@ -145,7 +145,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             // we remove parts from the original query
             query = ParseQuery(query);
-            
+
             var releases = string.IsNullOrEmpty(query.SearchTerm) ?
                 await PerformQueryNewestAsync(query) :
                 await PerformQuerySearchAsync(query, matchWords);
@@ -155,7 +155,34 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override async Task<byte[]> Download(Uri link)
         {
-            return await base.Download(link);
+            var downloadLink = "";
+            var cleanLink = link.ToString().TrimEnd('/');
+
+            var lastSlash = cleanLink.LastIndexOf('/');
+            if (lastSlash > 0)
+            {
+                var contentIdStr = cleanLink.Substring(lastSlash + 1);
+                var aux = cleanLink.Substring(0, lastSlash);
+                
+                var secondLastSlash = aux.LastIndexOf('/');
+                if (secondLastSlash > 0)
+                {
+                    var tabla = aux.Substring(secondLastSlash + 1);                    
+                    var rawHref = aux.Substring(0, secondLastSlash);
+                    if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out var contentId))
+                    {
+                        // Protected downloads challenge solver
+                        var protectedUrl = await GetProtectedDownloadUrlAsync(contentId, tabla);
+                        if (!string.IsNullOrEmpty(protectedUrl))
+                            downloadLink = protectedUrl;
+                        else
+                            downloadLink = rawHref.StartsWith("//") ? "https:" + rawHref : rawHref;
+
+                    }
+                }
+            }
+
+            return await base.Download(new Uri(downloadLink));
         }
 
         private async Task<List<ReleaseInfo>> PerformQueryNewestAsync(TorznabQuery query)
@@ -226,10 +253,8 @@ namespace Jackett.Common.Indexers.Definitions
                             switch (cat)
                             {
                                 case "pelicula":
-                                case "pelicula4k":
                                 case "serie":
-                                case "seriehd":
-                                case "musica":
+                                case "documental":
                                     await ParseReleaseAsync(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
                                     parsedDetailsLink.Add(rowDetailsLink);
                                     break;
@@ -256,7 +281,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             // Found release result
             var releases = new List<ReleaseInfo>();
-            
+
             // Search params
             var searchTerm = query.SearchTerm;
             var url = SiteLink + SearchUrl;
@@ -272,7 +297,7 @@ namespace Jackett.Common.Indexers.Definitions
                 while (!endOfSearch && (processedResults < totalResults || totalResults == -1))
                 {
                     // Perform the search query using POST
-                    var formData = new Dictionary<string,string>
+                    var formData = new Dictionary<string, string>
                     {
                         { "valor", searchTerm},
                         { "Buscar", "Buscar"},
@@ -284,7 +309,8 @@ namespace Jackett.Common.Indexers.Definitions
                     if (result.Status != HttpStatusCode.OK)
                         throw new ExceptionWithConfigData(result.ContentString, configData);
 
-                    try {
+                    try
+                    {
                         var searchResultParser = new HtmlParser();
                         using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
@@ -306,10 +332,10 @@ namespace Jackett.Common.Indexers.Definitions
                             {
                                 var leadBTagElements = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p.lead > b");
 
-                                if (leadBTagElements.Length < 2 || ! int.TryParse(leadBTagElements[1].TextContent, out totalResults) || totalResults <= 0)
+                                if (leadBTagElements.Length < 2 || !int.TryParse(leadBTagElements[1].TextContent, out totalResults) || totalResults <= 0)
                                     endOfSearch = true;
                             }
-                            
+
                             if (!endOfSearch)
                             {
                                 var validRows = rows.Skip(2).ToList();
@@ -327,16 +353,16 @@ namespace Jackett.Common.Indexers.Definitions
                                             var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), anchor.GetAttribute("href"));
                                             var title = anchor.TextContent;
                                             var cat = GetCategoryFromURL(link);
-                                            var quality = row.QuerySelector("p > span > span").TextContent.Trim('(', ')').Replace('-','.');
+                                            var quality = row.QuerySelector("p > span > span").TextContent.Trim('(', ')').Replace('-', '.');
 
                                             await ParseReleaseAsync(releases, link, title, cat, quality, query, matchWords);
                                         }
-                                    }  
+                                    }
                                 }
                                 // Stop pagination if all items are processed or no more rows are returned
                                 if (processedResults >= totalResults || validRows.Count == 0)
                                 {
-                                        endOfSearch = true;
+                                    endOfSearch = true;
                                 }
                                 else
                                 {
@@ -348,7 +374,7 @@ namespace Jackett.Common.Indexers.Definitions
                     catch (Exception ex)
                     {
                         OnParseError(result.ContentString, ex);
-                    }                
+                    }
                 }
             }
 
@@ -419,31 +445,19 @@ namespace Jackett.Common.Indexers.Definitions
             var info = doc.QuerySelectorAll("div.descargar > div.card > div.card-body")[0];
 
             var downloadBtn = info.QuerySelector("a.protected-download") ?? info.QuerySelector("div.text-center a");
-    
+
             if (downloadBtn != null)
             {
                 var contentIdStr = downloadBtn.GetAttribute("data-content-id");
                 var tabla = downloadBtn.GetAttribute("data-tabla");
 
-                if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out int contentId))
-                {
-                    // Protected downloads challenge solver
-                    var protectedUrl = await GetProtectedDownloadUrlAsync(contentId, tabla);
-                    if (!string.IsNullOrEmpty(protectedUrl))
-                        downloadLink = protectedUrl;
-                    
-                }
-                else
-                {
-                    var rawHref = downloadBtn.GetAttribute("href");
-                    if (!string.IsNullOrEmpty(rawHref))
-                        downloadLink = rawHref.StartsWith("//") ? "https:" + rawHref : rawHref;
-                        
-                }
+                if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out var contentId))
+                        downloadLink = link + '/' + tabla + '/' + contentIdStr;
+                
             }
 
             var moreinfo = info.QuerySelectorAll("div.text-center > div.d-inline-block");
-            
+
             // guess size
             if (moreinfo.Length == 2)
             {
@@ -454,7 +468,7 @@ namespace Jackett.Common.Indexers.Definitions
                 size = GuessSize(quality, category);
             }
 
-            var release = GenerateRelease(cleanReleaseTitle+year+'.'+quality+tags+lang, link, downloadLink, category, DateTime.Now, size);
+            var release = GenerateRelease(cleanReleaseTitle + year + '.' + quality + tags + lang, link, downloadLink, category, DateTime.Now, size);
 
             releases.Add(release);
         }
@@ -491,7 +505,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var downloadLink = "";
                 var downloadBtn = row.QuerySelector("td > a.protected-download");
-    
+
                 if (downloadBtn != null)
                 {
                     var contentIdStr = downloadBtn.GetAttribute("data-content-id");
@@ -499,20 +513,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var contentId = -1;
 
                     if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out contentId))
-                    {
-                        // Protected downloads challenge solver
-                        var protectedUrl = await GetProtectedDownloadUrlAsync(contentId, tabla);
-                        if (!string.IsNullOrEmpty(protectedUrl))
-                            downloadLink = protectedUrl;
-                        
-                    }
-                    else
-                    {
-                        var rawHref = downloadBtn.GetAttribute("href");
-                        if (!string.IsNullOrEmpty(rawHref))
-                            downloadLink = rawHref.StartsWith("//") ? "https:" + rawHref : rawHref;
-                            
-                    }
+                        downloadLink = link + '/' + tabla + '/' + contentIdStr;
                 }
 
                 // if the original query was in scene format, we filter the results to match episode
@@ -520,17 +521,17 @@ namespace Jackett.Common.Indexers.Definitions
                 if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                     continue;
 
-                var release = new ReleaseInfo{};
+                var release = new ReleaseInfo { };
 
                 if (episodeTitle.IsNullOrWhiteSpace())
                 {
-                    release = GenerateRelease(cleanReleaseTitle+'.'+season+episodeNumber+'.'+quality+tags+lang, link, downloadLink, category, episodePublishDate, size);                   
+                    release = GenerateRelease(cleanReleaseTitle + '.' + season + episodeNumber + '.' + quality + tags + lang, link, downloadLink, category, episodePublishDate, size);
                 }
                 else
                 {
-                    release = GenerateRelease(cleanReleaseTitle+'.'+season+episodeNumber+'.'+episodeTitle+'.'+quality+tags+lang, link, downloadLink, category, episodePublishDate, size);
+                    release = GenerateRelease(cleanReleaseTitle + '.' + season + episodeNumber + '.' + episodeTitle + '.' + quality + tags + lang, link, downloadLink, category, episodePublishDate, size);
                 }
-                
+
                 releases.Add(release);
             }
         }
@@ -547,7 +548,7 @@ namespace Jackett.Common.Indexers.Definitions
             if (match.Success)
             {
                 int seasonNumber = int.Parse(match.Groups[2].Value);
-                result = $"S{seasonNumber:D2}"; 
+                result = $"S{seasonNumber:D2}";
 
             }
             else if (Regex.Match(title, miniseriePattern).Success)
@@ -559,7 +560,7 @@ namespace Jackett.Common.Indexers.Definitions
             return result;
         }
 
-        private static string ParseSeriesEpisodeNumber (string episodeTitle)
+        private static string ParseSeriesEpisodeNumber(string episodeTitle)
         {
             var result = "";
 
@@ -572,20 +573,20 @@ namespace Jackett.Common.Indexers.Definitions
                 if (match.Groups[2].Success)
                 {
                     int epEnd = int.Parse(match.Groups[2].Value);
-                    result = $"E{epStart:D2}-E{epEnd:D2}"; 
-                
+                    result = $"E{epStart:D2}-E{epEnd:D2}";
+
                 }
                 else
                 {
                     result = $"E{epStart:D2}";
-                
+
                 }
-            }          
+            }
 
             return result;
         }
 
-        private static string ParseSeriesEpisodeTitle (string episodeTitle)
+        private static string ParseSeriesEpisodeTitle(string episodeTitle)
         {
             var result = "";
 
@@ -598,7 +599,7 @@ namespace Jackett.Common.Indexers.Definitions
                 if (endIndex < episodeTitle.Length)
                 {
                     string remain = episodeTitle.Substring(endIndex).Trim();
-                    
+
                     if (remain.StartsWith("-"))
                     {
                         string rawTitle = remain.Substring(1).Trim();
@@ -731,26 +732,26 @@ namespace Jackett.Common.Indexers.Definitions
             var match = Regex.Match(title, seasonPattern);
             if (match.Success)
                 result = match.Groups[1].Value.Trim();
-            
-            
+
+
             match = Regex.Match(title, miniseriePattern);
             if (result == "" && match.Success)
                 result = match.Groups[1].Value.Trim();
-            
+
 
             if (result == "")
                 result = title;
 
             var index = result.IndexOfAny(new char[] { '(', '[' });
             result = index >= 0 ? result.Substring(0, index) : result;
-            
+
             result = Regex.Replace(result.Trim(), @"[\s:\-\._]+", ".");
             result = result.Trim('.');
 
             return result;
         }
 
-        private static long GuessSize (string quality, string category)
+        private static long GuessSize(string quality, string category)
         {
             var size = 0L;
             var qualityL = quality?.ToLowerInvariant() ?? string.Empty;
@@ -808,13 +809,13 @@ namespace Jackett.Common.Indexers.Definitions
                         case "tc":
                             size = 734003200L;   // 700 MB
                             break;
-                        
+
                         default:
                             size = 524288000L;   // 500 MB
                             break;
                     }
                     break;
-                
+
                 case "documental":
                 case "serie":
                     switch (qualityL)
@@ -868,7 +869,7 @@ namespace Jackett.Common.Indexers.Definitions
                         case "tc":
                             size = 314572800L;   // 300 MB
                             break;
-                        
+
                         default:
                             size = 524288000L;   // 500 MB
                             break;
@@ -883,7 +884,7 @@ namespace Jackett.Common.Indexers.Definitions
         {
             var tags = "";
             var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
-            
+
             foreach (Match m in queryMatches)
             {
                 var tag = m.Groups[1].Value.Trim().ToUpper();
@@ -910,8 +911,8 @@ namespace Jackett.Common.Indexers.Definitions
                 { "content_id", contentId.ToString() },
                 { "tabla", contentType }
             };
-            var generateJson = JsonConvert.SerializeObject(generateData);            
-            
+            var generateJson = JsonConvert.SerializeObject(generateData);
+
             var genResponse = await RequestWithCookiesAsync(apiUrl, method: RequestType.POST, rawbody: generateJson);
             if (genResponse.Status != HttpStatusCode.OK)
                 return null;
