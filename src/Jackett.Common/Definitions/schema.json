@@ -414,7 +414,7 @@
                 },
                 "inputs": {
                     "title": "Inputs (Login)",
-                    "description": "Login parameters, e.g. username: \"{{ .Config.username }}\". Fixed values are allowed.",
+                    "description": "Login parameters, for example, username: \"{{ .Config.username }}\". Fixed values are allowed.",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
@@ -435,7 +435,7 @@
                 },
                 "selectorinputs": {
                     "title": "Selector inputs",
-                    "description": "Form login only. Input values taken from the login page with selectors, e.g. a CSRF token hidden in JavaScript.",
+                    "description": "Form login only. Input values taken from the login page with selectors, for example, a CSRF token hidden in JavaScript.",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
@@ -576,7 +576,7 @@
                 },
                 "attribute": {
                     "title": "Attribute",
-                    "description": "Take the value of this attribute (e.g. href) instead of the element text.",
+                    "description": "Take the value of this attribute (for example, href) instead of the element text.",
                     "type": "string"
                 },
                 "optional": {
@@ -586,7 +586,7 @@
                 },
                 "default": {
                     "title": "Default",
-                    "description": "Value used when an optional selector does not match. Templates are allowed, e.g. \"{{ .Result.title_default }}\".",
+                    "description": "Value used when an optional selector does not match. Templates are allowed, for example, \"{{ .Result.title_default }}\".",
                     "oneOf": [
                         {
                             "title": "Default as string",
@@ -620,7 +620,7 @@
                 },
                 "text": {
                     "title": "Text",
-                    "description": "Fixed value, or a template. Used instead of selector, e.g. for minimumratio and minimumseedtime.",
+                    "description": "Fixed value, or a template. Used instead of selector, such as for minimumratio and minimumseedtime.",
                     "oneOf": [
                         {"title": "Text as string", "type": "string"},
                         {"title": "Text as number", "type": "number"}
@@ -679,7 +679,7 @@
                 },
                 "paths": {
                     "title": "Paths",
-                    "description": "Search requests. Usually one. Some trackers need separate pages for e.g. porn or scene releases.",
+                    "description": "Search requests. Usually one. Some trackers need separate pages, for example, for porn or scene releases.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/SearchPathBlock"
@@ -875,7 +875,7 @@
             "properties": {
                 "after": {
                     "title": "After",
-                    "description": "Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (e.g. collapsed rows).",
+                    "description": "Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (for example, collapsed rows).",
                     "type": "integer"
                 },
                 "dateheaders": {
@@ -900,7 +900,7 @@
                 },
                 "multiple": {
                     "title": "Multiple",
-                    "description": "JSON/XML only. Each row holds several torrents (e.g. one title with several releases).",
+                    "description": "JSON/XML only. Each row holds several torrents (for example, one title with several releases).",
                     "type": "boolean"
                 },
                 "missingAttributeEqualsNoResults": {
@@ -941,7 +941,7 @@
                 },
                 "filters": {
                     "title": "Filters (RowsBlock)",
-                    "description": "Row filters, e.g. andmatch or strdump.",
+                    "description": "Row filters, for example, andmatch or strdump.",
                     "type": "array",
                     "items": {
                         "$ref": "#/definitions/RowFilterBlock"
@@ -1064,7 +1064,7 @@
             "title": "DownloadBlock"
         },
         "BeforeBlock": {
-            "description": "HTTP request sent before the download (e.g. a 'thank you' page).",
+            "description": "HTTP request sent before the download (for example, a 'thank you' page).",
             "type": "object",
             "additionalProperties": false,
             "properties": {
@@ -1085,7 +1085,7 @@
                 },
                 "inputs": {
                     "title": "Inputs (BeforeBlock)",
-                    "description": "HTTP arguments sent with the request, e.g. id: \"{{ .DownloadUri.Query.id }}\".",
+                    "description": "HTTP arguments sent with the request, for example, id: \"{{ .DownloadUri.Query.id }}\".",
                     "type": "object",
                     "additionalProperties": false,
                     "patternProperties": {
@@ -1155,7 +1155,7 @@
                 },
                 "attribute": {
                     "title": "Attribute",
-                    "description": "Take the value of this attribute (e.g. href) instead of the element text.",
+                    "description": "Take the value of this attribute (for example, href) instead of the element text.",
                     "type": "string"
                 },
                 "usebeforeresponse": {
