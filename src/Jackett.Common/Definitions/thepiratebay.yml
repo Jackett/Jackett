@@ -7,12 +7,9 @@ type: public
 encoding: UTF-8
 links:
   - https://thepiratebay.org/
-  - https://thepiratebay.unblockninja.com/
   - https://thepiratebay.ninjaproxy1.com/
   - https://tpb.proxyninja.org/
-  - https://thepiratebay.proxyninja.net/
   - https://thepiratebay.torrentbay.st/
-  - https://tpb.skynetcloud.site/
   - https://piratehaven.xyz/
   - https://mirrorbay.top/
   - https://thepiratebay0.org/
@@ -25,13 +22,9 @@ links:
   - https://piratebay.live/
   - https://piratebay.party/
   - https://thepiratebay.party/
-  - https://thepiratebaye.org/
   - https://thepiratebay.cloud/
-  - https://tpb-proxy.xyz/
   - https://tpb.re/
-  - https://tpirbay.site/
   - https://tpirbay.top/
-  - https://tpirbay.xyz/
 legacylinks:
   - https://pirate-proxy.page/
   - https://5mins.shop/
@@ -66,6 +59,13 @@ legacylinks:
   - https://piratebay.army/
   - https://tpb-visit.me/
   - https://pirate-proxy.ong/
+  - https://thepiratebay.proxyninja.net/
+  - https://thepiratebay.unblockninja.com/
+  - https://tpb-proxy.xyz/
+  - https://thepiratebaye.org/
+  - https://tpb.skynetcloud.site/
+  - https://tpirbay.site/
+  - https://tpirbay.xyz/
 
 caps:
   categorymappings:
