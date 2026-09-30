@@ -86,6 +86,7 @@ caps:
     - {id: Movies, cat: Movies, desc: Movies}
     - {id: Movies3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
     - {id: MoviesBollywood, cat: Movies, desc: "Movies Bollywood"}
+    - {id: MoviesBlu-rayDiscs, cat: Movies, desc: "Movies Blu-ray Discs"}
     - {id: MoviesAnimation, cat: Movies, desc: "Movies Animation"}
     - {id: MoviesAsian, cat: Movies, desc: "Movies Asian"}
     - {id: MoviesDVD, cat: Movies/DVD, desc: "Movies DVD"}
