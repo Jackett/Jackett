@@ -1,0 +1,105 @@
+---
+id: periodical
+name: Periodical
+description: "Periodical (PER) is a Private Torrent Tracker for MAGAZINES"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://periodical.me/
+
+caps:
+  categorymappings:
+    # from https://periodical.me/api/torznab?t=caps
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7010, cat: Books/Mags, desc: "Books/Mags"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/EBook"}
+    - {id: 7030, cat: Books/Comics, desc: "Books/Comics"}
+    - {id: 7040, cat: Books/Other, desc: "Books/Other"}
+
+  modes:
+    search: [q]
+    book-search: [q, title, author]
+
+settings:
+  - name: passkey
+    type: text
+    label: PassKey
+  - name: info_key
+    type: info
+    label: About your PassKey
+    default: "You can find the API PassKey by accessing your <a href=\"https://periodical.me/\" target=\"_blank\">Periodical</a> account profile."
+
+login:
+  path: api/torznab
+  method: get
+  inputs:
+    t: search
+    apikey: "{{ .Config.passkey }}"
+    limit: 1
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
+
+search:
+  paths:
+    - path: api/torznab
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.passkey }}"
+    t: "{{ if .Keywords }}book{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    title: "{{ .Query.Title }}"
+    author: "{{ .Query.Author }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: comments
+      filters:
+        - name: htmldecode
+    download:
+      selector: enclosure
+      attribute: url
+    date:
+      # e.g. Fri, 25 Sep 2026 18:47:33 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    files:
+      selector: "[name=files]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumseedtime:
+      # usually 3 days (as seconds = 3 x 24 x 60 x 60)
+      selector: "[name=minimumseedtime]"
+      attribute: value
+# torznab xml
