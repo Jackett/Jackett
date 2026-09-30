@@ -7,10 +7,8 @@ type: public
 encoding: UTF-8
 links:
   - https://www.limetorrents.fun/
-  - https://limetorrents.unblockninja.com/
   - https://limetorrents.ninjaproxy1.com/
   - https://limetorrents.proxyninja.org/
-  - https://limetorrents.proxyninja.net/
   - https://limetorrents.torrentbay.st/
   - https://limetorrents.torrentsbay.org/
 legacylinks:
@@ -19,6 +17,8 @@ legacylinks:
   - https://limetorrents.abcproxy.org/
   - https://limetorrents.unblockit.download/
   - https://www.limetorrents.lol/
+  - https://limetorrents.unblockninja.com/
+  - https://limetorrents.proxyninja.net/
 
 caps:
   categorymappings:
