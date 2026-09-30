@@ -57,11 +57,14 @@ search:
       attribute: src
     date:
       text: now
-    size:
+    size_get:
+      # some titles do not have a size defined
       selector: a.overlay
       filters:
         - name: regexp
           args: "^\\[(\\d+(?:\\.\\d+)?\\s?[KMGT]B)\\]"
+    size:
+      text: "{{ if .Result.size_get }}{{ .Result.size_get }}{{ else }}5GB{{ end }}"
     seeders:
       text: 1
     leechers:

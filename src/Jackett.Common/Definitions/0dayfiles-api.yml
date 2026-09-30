@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    # Movies
     - {id: 9, cat: Movies/SD, desc: "Movies/480p"}
     - {id: 10, cat: Movies/UHD, desc: "Movies/4K"}
     - {id: 11, cat: Movies/BluRay, desc: "Movies/Bluray"}
@@ -20,6 +21,8 @@ caps:
     - {id: 18, cat: Movies/HD, desc: "Movies/x264"}
     - {id: 19, cat: Movies/HD, desc: "Movies/x265"}
     - {id: 20, cat: Movies/SD, desc: "Movies/XviD"}
+    - {id: 58, cat: Movies/WEB-DL, desc: "Movies/WEB"}
+    # TV
     - {id: 21, cat: TV/SD, desc: "TV/480p"}
     - {id: 22, cat: TV/UHD, desc: "TV/4K"}
     - {id: 23, cat: TV/HD, desc: "TV/Bluray"}
@@ -30,12 +33,16 @@ caps:
     - {id: 30, cat: TV/HD, desc: "TV/x264"}
     - {id: 31, cat: TV/HD, desc: "TV/x265"}
     - {id: 32, cat: TV/SD, desc: "TV/XviD"}
+    - {id: 59, cat: TV/WEB-DL, desc: "TV/WEB"}
+    # Games
     - {id: 33, cat: Console, desc: "Nintendo"}
     - {id: 34, cat: PC/Games, desc: "PC/Games"}
+    # Music
     - {id: 38, cat: Audio, desc: "Music/Audio"}
     - {id: 39, cat: Audio/Lossless, desc: "Music/Flac"}
     - {id: 41, cat: Audio, desc: "Music/Packs"}
     - {id: 42, cat: Audio/Video, desc: "Music/Video"}
+    # Misc
     - {id: 43, cat: TV/Anime, desc: "Anime"}
     - {id: 44, cat: Audio/Audiobook, desc: "Audio Books"}
     - {id: 46, cat: Books, desc: "Books"}
@@ -43,6 +50,7 @@ caps:
     - {id: 49, cat: Other, desc: "Educational"}
     - {id: 51, cat: PC/Mac, desc: "Mac"}
     - {id: 1, cat: PC/0day, desc: "Software"}
+    # XXX
     - {id: 54, cat: XXX, desc: "XXX/0Day"}
     - {id: 55, cat: XXX/x264, desc: "XXX/Movies"}
     - {id: 56, cat: XXX/Pack, desc: "XXX/Packs"}

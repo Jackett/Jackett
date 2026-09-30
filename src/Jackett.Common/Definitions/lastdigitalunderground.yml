@@ -13,14 +13,14 @@ legacylinks:
 caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Films: General"}
-    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
     - {id: 21, cat: Movies/3D, desc: "Films: 3D"}
+    - {id: 33, cat: Movies/Other, desc: "Films: [TMDB UnListed]"}
     - {id: 25, cat: Movies/Other, desc: "Films: Musical"}
     - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
     - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
-    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
+    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
     - {id: 57, cat: Movies/Foreign, desc: "Films: Desi [No ENG subs]"}
     - {id: 58, cat: Movies/Foreign, desc: "Films: GER [No ENG subs]"}
@@ -28,6 +28,7 @@ caps:
     - {id: 63, cat: Movies/Foreign, desc: "Films: POL [No ENG subs]"}
     - {id: 64, cat: Movies/Foreign, desc: "Films: ITA [No ENG subs]"}
     - {id: 66, cat: Movies/Foreign, desc: "Films: ARA [No ENG subs]"}
+    - {id: 82, cat: Movies/Foreign, desc: "Films: POR [No ENG subs]"}
     - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dubs/Cams/Vid Issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
@@ -52,23 +53,30 @@ caps:
     - {id: 47, cat: PC/0day, desc: "Software: PC"}
     - {id: 48, cat: PC/Mac, desc: "Software: Mac"}
     - {id: 49, cat: PC, desc: "Software: Linux/Unix"}
+    - {id: 83, cat: PC/Games, desc: "Software: Games"}
     - {id: 36, cat: Console, desc: "Software: Console/ROMS"}
     - {id: 73, cat: Other, desc: "AI: MODELS [MIXED]"}
     - {id: 74, cat: Other, desc: "3D Prints and CAD"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
     - {id: 43, cat: Other, desc: "Internal Testing"}
-    - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
     - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
+    - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
     - {id: 45, cat: XXX, desc: "Mature: NSFW [No ENG Subs]"}
     - {id: 70, cat: XXX, desc: "Mature: Lesbian"}
-    - {id: 72, cat: XXX, desc: "Mature: Gay"}
     - {id: 52, cat: XXX, desc: "Mature: Tranny"}
+    - {id: 72, cat: XXX, desc: "Mature: Gay"}
     - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW (MegaPacks)"}
     - {id: 71, cat: XXX, desc: "Mature: BDSM/Kink"}
-    - {id: 10, cat: XXX, desc: "Mature: Hentai"}
+    - {id: 10, cat: XXX, desc: "Mature: Hentai/Animated [Unlist]"}
     - {id: 62, cat: XXX, desc: "Mature: NSFW Fansite"}
+    - {id: 81, cat: XXX, desc: "Mature:  AI/KI"}
     - {id: 61, cat: XXX, desc: "Mature: NSFW Parody"}
+    - {id: 77, cat: XXX, desc: "Mature: Solo"}
+    - {id: 79, cat: XXX, desc: "Mature: Preggers"}
+    - {id: 80, cat: XXX, desc: "Mature: VR"}
+    - {id: 75, cat: XXX, desc: "Mature: Pics"}
     - {id: 60, cat: XXX, desc: "Mature: PMV"}
+    - {id: 76, cat: XXX, desc: "Mature: BBW"}
     - {id: 67, cat: XXX, desc: "Mature: Scheiße"}
     - {id: 68, cat: XXX, desc: "Mature: Golden Showers"}
     - {id: 69, cat: XXX, desc: "Mature: Rainbow Showers"}

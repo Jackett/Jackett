@@ -45,7 +45,7 @@ search:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}.{{ end }}"
 
   rows:
-    selector: table > tbody > tr:has(td)
+    selector: table > tbody > tr:has(td):not(:contains("We couldn't find anything for"))
     filters:
       - name: andmatch
 

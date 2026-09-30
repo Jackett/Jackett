@@ -53,7 +53,7 @@ search:
     page: 1
 
   rows:
-    selector: table.tl-table > tbody > tr
+    selector: table.tl-table > tbody > tr:not(:has(div.tl-empty-state))
 
   fields:
     category:

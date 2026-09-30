@@ -78,7 +78,7 @@ search:
       selector: p
       filters:
         - name: regexp
-          args: "Size：(\\d+\\.?\\d+ [K|M|G]B)"
+          args: "Size：(\\d+\\.?\\d* [K|M|G]B)"
     seeders:
       text: 1
     leechers:

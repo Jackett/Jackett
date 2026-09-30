@@ -85,6 +85,7 @@ Prior versions of Jackett are no longer supported.
  * ACG.RIP
  * Anibt
  * AniLibria
+ * Anime Tosho
  * AniRena
  * AniSource
  * ApacheTorrent
@@ -186,7 +187,6 @@ Prior versions of Jackett are no longer supported.
 
  * AniDUB
  * Anime by Belka (Аниме от Белки)
- * Anime Tosho
  * AnimeLayer
  * Best-Torrents [PAY2DL]
  * BitMagnet (Local DHT) [[site](https://github.com/bitmagnet-io/bitmagnet)]
@@ -270,6 +270,7 @@ Prior versions of Jackett are no longer supported.
  * AGSVPT (Arctic Global Seed Vault)
  * Aidoru!Online
  * Aither
+ * AlaBala
  * alingPT
  * AlphaRatio (AR)
  * AmigosShareClub (ASC)
@@ -304,7 +305,6 @@ Prior versions of Jackett are no longer supported.
  * Bitded
  * bitGAMER
  * BitHUmen
- * Bitpalace
  * BitPorn
  * BitTorrentFiles
  * BiTTuRK
@@ -338,7 +338,6 @@ Prior versions of Jackett are no longer supported.
  * CinemaZ (EuTorrents)
  * ClearJAV
  * Coastal-Music-Crew (C-M-C)
- * ConCen (Conspiracy Central) [![(invite needed)][inviteneeded]](#)
  * Concertos
  * CrabPT (蟹黄堡)
  * CrazySpirits
@@ -521,7 +520,9 @@ Prior versions of Jackett are no longer supported.
  * Peeratiko
  * PeerGarden
  * Peers.FM
+ * Periodical [![(invite needed)][inviteneeded]](#)
  * Phoenix Project
+ * PhoenixPT (凤凰PT)
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
@@ -614,6 +615,7 @@ Prior versions of Jackett are no longer supported.
  * The Falling Angels (TFA)
  * The Geeks
  * The Kitchen (TK)
+ * The New Heaven [![(invite needed)][inviteneeded]](#)
  * The New Retro
  * The Occult (TO)
  * The Old School (TOS)

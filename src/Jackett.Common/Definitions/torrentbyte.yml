@@ -36,7 +36,7 @@ search:
     q: "{{ .Keywords }}"
 
   rows:
-    selector: table > tbody > tr
+    selector: table > tbody > tr:not(:contains("No matching torrent records found."))
 
   fields:
     category:

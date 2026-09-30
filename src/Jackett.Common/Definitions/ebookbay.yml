@@ -113,7 +113,7 @@ search:
       default: Other
       filters:
         - name: re_replace
-          args: ["(?i)\\bEbooks?\\b", ""]
+          args: ["(?i)\\bE-?books?\\b", ""]
         - name: regexp
           args: "E book under:\\s+(.+?)\\s?\\\xA0"
     title:

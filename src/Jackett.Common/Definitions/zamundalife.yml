@@ -18,6 +18,7 @@ caps:
     "Игри/конзоли": Console
     "Игри/Xbox": Console/XBox
     "Филми": Movies
+    "Филми/DVD-R": Movies/DVD
     "Филми/HD": Movies/HD
     "Филми/SD": Movies/SD
     "Филми/Русия": Movies
@@ -31,6 +32,7 @@ caps:
     "Клипове": Audio/Video
     "Клипове/Концерти": Audio/Video
     "Музика/DTS": Audio
+    "Музика/Hi-Res/Vinyl": Audio
     "Програми": PC
     "Игри/PC ISO": PC/Games
     "Игри/PC Rip": PC/Games
@@ -41,6 +43,7 @@ caps:
     "Програми/други": PC
     "Mobile/GSM": PC/Mobile-Other
     "Андроид/Игри": PC/Mobile-Android
+    "Андроид/Приложения": PC/Mobile-Android
     "Сериали": TV
     "Сериали/HD": TV/HD
     "Сериали/Русия": TV
@@ -55,6 +58,7 @@ caps:
     "Книги/Комикси": Books/Comics
     "Други": Other
     "Видео/HD": Other
+    "Склад": Other
 
   modes:
     search: [q]

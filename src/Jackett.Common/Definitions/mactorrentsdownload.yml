@@ -44,7 +44,7 @@ search:
     s: "{{ .Keywords }}"
 
   rows:
-    selector: article[id^="post-"]
+    selector: article[id^="post-"][class*="type-post"]
     filters:
       - name: andmatch
 

@@ -1,0 +1,37 @@
+name: Schema Documentation
+
+on:
+  push:
+    paths:
+      - src/Jackett.Common/Definitions/schema.json
+  workflow_dispatch:
+
+jobs:
+  schema-docs:
+    name: Schema Documentation
+    runs-on: ubuntu-latest
+    if: github.repository == 'Jackett/Jackett'
+    steps:
+      - name: Check out repo content
+        uses: actions/checkout@v7
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v7
+
+      - name: Install dependencies
+        run: npm install -g @adobe/jsonschema2md@8.0.11
+
+      - name: Run script
+        run: |
+          jsonschema2md -d "src/Jackett.Common/Definitions" -o "docs" -f yaml -x -
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v8
+        with:
+          add-paths: |
+            docs/*.md
+          commit-message: 'update schema docs'
+          title: 'docs(schema): update schema docs'
+          delete-branch: true
+          labels: |
+            Documentation
