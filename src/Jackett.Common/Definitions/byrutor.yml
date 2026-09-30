@@ -356,7 +356,7 @@ search:
 
   rows:
     # results without sizes are just pre-release announcements
-    selector: a.search_res:has(div.search_res_sub span:nth-child(2):contains(" "))
+    selector: a.search_res:has(div.search_res_meta span.search_chip:nth-child(2))
 
   fields:
     category:
@@ -367,7 +367,7 @@ search:
         - name: regexp
           args: (\d+)
     title:
-      selector: a.search_res
+      selector: h3.search_res_title
       filters:
         - name: append
           args: " [{{ .Result.year }}]"
@@ -381,7 +381,7 @@ search:
       selector: img
       attribute: src
     size_rus:
-      selector: div.search_res_sub span:nth-child(2):contains("Б")
+      selector: div.search_res_meta span.search_chip:nth-child(2):contains("Б")
       optional: true
       default: "0 B"
       filters:
@@ -394,7 +394,7 @@ search:
         - name: replace
           args: ["КБ", "KB"]
     size:
-      selector: div.search_res_sub span:nth-child(2):contains("B")
+      selector: div.search_res_meta span.search_chip:nth-child(2):contains("B")
       optional: true
       default: "{{ .Result.size_rus }}"
     date:

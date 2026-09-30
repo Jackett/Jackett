@@ -40,7 +40,7 @@ caps:
     - {id: 26, cat: TV/Sport, desc: "Tennis"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
-    - {id: 29, cat: TV/Sport, desc: "Indy 500"}
+    - {id: 29, cat: TV/Sport, desc: "NTT IndyCar Series"}
     - {id: 30, cat: TV/Sport, desc: "Football/Soccer"}
     - {id: 33, cat: TV/Sport, desc: "WRC/Rally"}
     - {id: 34, cat: TV/Sport, desc: "BTCC"}
@@ -77,6 +77,7 @@ caps:
     - {id: 67, cat: TV/Sport, desc: "Sports TV Shows"}
     - {id: 68, cat: TV/Sport, desc: "AFL"}
     - {id: 69, cat: TV/Sport, desc: "NFL"}
+    - {id: 70, cat: TV/Sport, desc: "FIM EWC"}
 
   modes:
     search: [q]

@@ -1,0 +1,15 @@
+# Defaults Schema
+
+```txt
+Cardigann#/definitions/SettingsField/properties/defaults
+```
+
+Default selected option keys for a multi-select.
+
+| Abstract            | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
+| :------------------ | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
+| Can be instantiated | No         | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json\*](../out/schema.json "open original schema") |
+
+## defaults Type
+
+`string[]` ([Option key](schema-definitions-settingsfield-properties-defaults-option-key.md))

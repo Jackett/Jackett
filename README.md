@@ -519,6 +519,7 @@ Prior versions of Jackett are no longer supported.
  * Peeratiko
  * PeerGarden
  * Peers.FM
+ * Periodical [![(invite needed)][inviteneeded]](#)
  * Phoenix Project
  * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)

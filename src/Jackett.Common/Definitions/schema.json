@@ -1,5 +1,6 @@
 {
     "$schema": "https://json-schema.org/draft/2019-09/schema",
+    "$id": "Cardigann",
     "$ref": "#/definitions/SchemaRoot",
     "type": "object",
     "title": "Cardigann indexer definition",
