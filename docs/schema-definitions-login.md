@@ -6,9 +6,9 @@ Cardigann#/definitions/Login
 
 How Jackett logs in to the tracker. Omit for sites that need no login.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## Login Type
 
@@ -154,7 +154,7 @@ Captcha handling for form logins. Google ReCaptcha and simplecaptcha are detecte
 
 ## inputs
 
-Login parameters, e.g. username: "{{ .Config.username }}". Fixed values are allowed.
+Login parameters, for example, username: "{{ .Config.username }}". Fixed values are allowed.
 
 `inputs`
 
@@ -190,7 +190,7 @@ Form login only. If true, the keys in inputs are treated as CSS selectors. Only 
 
 ## selectorinputs
 
-Form login only. Input values taken from the login page with selectors, e.g. a CSRF token hidden in JavaScript.
+Form login only. Input values taken from the login page with selectors, for example, a CSRF token hidden in JavaScript.
 
 `selectorinputs`
 

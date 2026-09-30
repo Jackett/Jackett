@@ -6,9 +6,9 @@ Cardigann#/definitions/SelectorField
 
 Selector applied to the download page to get the download URL, hash or title.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## SelectorField Type
 
@@ -43,7 +43,7 @@ Selector for the value.
 
 ## attribute
 
-Take the value of this attribute (e.g. href) instead of the element text.
+Take the value of this attribute (for example, href) instead of the element text.
 
 `attribute`
 

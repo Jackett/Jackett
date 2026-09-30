@@ -8,7 +8,7 @@
 
 ### Objects
 
-* [BeforeBlock](./schema-definitions-beforeblock.md "HTTP request sent before the download (e") – `Cardigann#/definitions/BeforeBlock`
+* [BeforeBlock](./schema-definitions-beforeblock.md "HTTP request sent before the download (for example, a 'thank you' page)") – `Cardigann#/definitions/BeforeBlock`
 
 * [Caps](./schema-definitions-caps.md "Capabilities of the indexer: category mappings and supported Torznab search modes") – `Cardigann#/definitions/Caps`
 
@@ -40,9 +40,9 @@
 
 * [InfoHashBlock](./schema-definitions-infohashblock.md "Builds a magnet URI from an infohash and title") – `Cardigann#/definitions/InfoHashBlock`
 
-* [Inputs (BeforeBlock)](./schema-definitions-beforeblock-properties-inputs-beforeblock.md "HTTP arguments sent with the request, e") – `Cardigann#/definitions/BeforeBlock/properties/inputs`
+* [Inputs (BeforeBlock)](./schema-definitions-beforeblock-properties-inputs-beforeblock.md "HTTP arguments sent with the request, for example, id: \"{{ ") – `Cardigann#/definitions/BeforeBlock/properties/inputs`
 
-* [Inputs (Login)](./schema-definitions-login-properties-inputs-login.md "Login parameters, e") – `Cardigann#/definitions/Login/properties/inputs`
+* [Inputs (Login)](./schema-definitions-login-properties-inputs-login.md "Login parameters, for example, username: \"{{ ") – `Cardigann#/definitions/Login/properties/inputs`
 
 * [Inputs (Search)](./schema-definitions-search-properties-inputs-search.md "HTTP arguments used by all paths") – `Cardigann#/definitions/Search/properties/inputs`
 
@@ -98,7 +98,7 @@
 
 * [Error (Search)](./schema-definitions-search-properties-error-search.md "Selectors checked on the search response") – `Cardigann#/definitions/Search/properties/error`
 
-* [Filters (RowsBlock)](./schema-definitions-rowsblock-properties-filters-rowsblock.md "Row filters, e") – `Cardigann#/definitions/RowsBlock/properties/filters`
+* [Filters (RowsBlock)](./schema-definitions-rowsblock-properties-filters-rowsblock.md "Row filters, for example, andmatch or strdump") – `Cardigann#/definitions/RowsBlock/properties/filters`
 
 * [Filters (SelectorBlock)](./schema-definitions-selectorblock-properties-filters-selectorblock.md "Filters applied to the extracted value, in order") – `Cardigann#/definitions/SelectorBlock/properties/filters`
 

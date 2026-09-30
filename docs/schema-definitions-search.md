@@ -6,9 +6,9 @@ Cardigann#/definitions/Search
 
 How to build search requests and parse torrent results from the response.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## Search Type
 
@@ -55,7 +55,7 @@ Single search path. Shorthand for paths with one entry.
 
 ## paths
 
-Search requests. Usually one. Some trackers need separate pages for e.g. porn or scene releases.
+Search requests. Usually one. Some trackers need separate pages, for example, for porn or scene releases.
 
 `paths`
 

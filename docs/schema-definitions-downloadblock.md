@@ -6,9 +6,9 @@ Cardigann#/definitions/DownloadBlock
 
 Needed only when the download link cannot be taken directly from the search results, the download must be a POST, or another page must be requested first.
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## DownloadBlock Type
 
@@ -44,7 +44,7 @@ HTTP method for the download: get or post. Default: get.
 
 ## before
 
-HTTP request sent before the download (e.g. a 'thank you' page).
+HTTP request sent before the download (for example, a 'thank you' page).
 
 `before`
 

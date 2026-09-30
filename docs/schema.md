@@ -6,9 +6,9 @@ Cardigann
 
 Schema for Jackett Cardigann YAML indexer definitions. See the Definition-format page on the Jackett wiki for examples.
 
-| Abstract               | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                               |
-| :--------------------- | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------- |
-| Cannot be instantiated | Yes        | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json](../out/schema.json "open original schema") |
+| Abstract               | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                          |
+| :--------------------- | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :---------------------------------------------------------------------------------- |
+| Cannot be instantiated | Yes        | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## Cardigann indexer definition Type
 
@@ -1345,7 +1345,7 @@ Captcha handling for form logins. Google ReCaptcha and simplecaptcha are detecte
 
 ### inputs
 
-Login parameters, e.g. username: "{{ .Config.username }}". Fixed values are allowed.
+Login parameters, for example, username: "{{ .Config.username }}". Fixed values are allowed.
 
 `inputs`
 
@@ -1381,7 +1381,7 @@ Form login only. If true, the keys in inputs are treated as CSS selectors. Only 
 
 ### selectorinputs
 
-Form login only. Input values taken from the login page with selectors, e.g. a CSRF token hidden in JavaScript.
+Form login only. Input values taken from the login page with selectors, for example, a CSRF token hidden in JavaScript.
 
 `selectorinputs`
 
@@ -1706,7 +1706,7 @@ CSS selector for HTML, or path for JSON/XML. :has(), :not() and :contains() are 
 
 ### attribute
 
-Take the value of this attribute (e.g. href) instead of the element text.
+Take the value of this attribute (for example, href) instead of the element text.
 
 `attribute`
 
@@ -1742,7 +1742,7 @@ Do not fail if the selector does not match. Use with default.
 
 ### default
 
-Value used when an optional selector does not match. Templates are allowed, e.g. "{{ .Result.title_default }}".
+Value used when an optional selector does not match. Templates are allowed, for example, "{{ .Result.title_default }}".
 
 `default`
 
@@ -1802,7 +1802,7 @@ Selector for elements to remove before reading the text. Removed elements are go
 
 ### text
 
-Fixed value, or a template. Used instead of selector, e.g. for minimumratio and minimumseedtime.
+Fixed value, or a template. Used instead of selector, such as for minimumratio and minimumseedtime.
 
 `text`
 
@@ -1883,7 +1883,7 @@ Single search path. Shorthand for paths with one entry.
 
 ### paths
 
-Search requests. Usually one. Some trackers need separate pages for e.g. porn or scene releases.
+Search requests. Usually one. Some trackers need separate pages, for example, for porn or scene releases.
 
 `paths`
 
@@ -2295,7 +2295,7 @@ Reference this group by using
 
 ### after
 
-Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (e.g. collapsed rows).
+Row merging. Merge this many following elements into each row, for sites that use several elements per torrent (for example, collapsed rows).
 
 `after`
 
@@ -2389,7 +2389,7 @@ Do not fail if the selector does not match.
 
 ### multiple
 
-JSON/XML only. Each row holds several torrents (e.g. one title with several releases).
+JSON/XML only. Each row holds several torrents (for example, one title with several releases).
 
 `multiple`
 
@@ -2485,7 +2485,7 @@ one (and only one) of
 
 ### filters
 
-Row filters, e.g. andmatch or strdump.
+Row filters, for example, andmatch or strdump.
 
 `filters`
 
@@ -2662,7 +2662,7 @@ HTTP method for the download: get or post. Default: get.
 
 ### before
 
-HTTP request sent before the download (e.g. a 'thank you' page).
+HTTP request sent before the download (for example, a 'thank you' page).
 
 `before`
 
@@ -2810,7 +2810,7 @@ HTTP method: get or post.
 
 ### inputs
 
-HTTP arguments sent with the request, e.g. id: "{{ .DownloadUri.Query.id }}".
+HTTP arguments sent with the request, for example, id: "{{ .DownloadUri.Query.id }}".
 
 `inputs`
 
@@ -2947,7 +2947,7 @@ Selector for the value.
 
 ### attribute
 
-Take the value of this attribute (e.g. href) instead of the element text.
+Take the value of this attribute (for example, href) instead of the element text.
 
 `attribute`
 

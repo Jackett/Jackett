@@ -4,11 +4,11 @@
 Cardigann#/definitions/BeforeBlock
 ```
 
-HTTP request sent before the download (e.g. a 'thank you' page).
+HTTP request sent before the download (for example, a 'thank you' page).
 
-| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                 |
-| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :--------------------------------------------------------- |
-| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../out/schema.json "open original schema") |
+| Abstract            | Extensible | Status         | Identifiable | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :----------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | No           | Forbidden         | Forbidden             | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
 
 ## BeforeBlock Type
 
@@ -86,7 +86,7 @@ HTTP method: get or post.
 
 ## inputs
 
-HTTP arguments sent with the request, e.g. id: "{{ .DownloadUri.Query.id }}".
+HTTP arguments sent with the request, for example, id: "{{ .DownloadUri.Query.id }}".
 
 `inputs`
 
