@@ -2,6 +2,7 @@ name: Schema Documentation
 
 on:
   push:
+    branches: [ master ]
     paths:
       - src/Jackett.Common/Definitions/schema.json
   workflow_dispatch:
