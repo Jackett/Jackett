@@ -98,7 +98,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                    TvSearchParam.Q, TvSearchParam.Season
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
@@ -192,69 +192,34 @@ namespace Jackett.Common.Indexers.Definitions
                 var searchResultParser = new HtmlParser();
                 using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
-                var rows = doc.QuerySelector("div.seccion#ultimos_torrents > div.card > div.card-body > div");
+                var rows = doc.QuerySelectorAll("div.seccion#ultimos_torrents a.text-primary");
 
                 var parsedDetailsLink = new List<string>();
-                string rowTitle = null;
-                string rowDetailsLink = null;
-                string rowPublishDate = null;
-                string rowQuality = null;
 
-                foreach (var row in rows.Children)
+                foreach (var row in rows)
                 {
-                    if (row.TagName.Equals("DIV"))
+                    var rowTitle = row.TextContent.Trim();
+                    var rowDetailsLink = string.Format("{0}{1}", SiteLink, row.GetAttribute("href"));
+                    var rowPublishDate = "";
+                    var rowQuality = "";
+
+                    if (DateTime.TryParse(row.PreviousElementSibling.TextContent.Trim(), out var publishDate))
                     {
-                        //div class="h5 text-dark">PELÍCULAS:</div>
-                        continue;
+                        rowPublishDate = publishDate.ToString();
                     }
 
-                    //<span class="text-muted">2022-01-12</span>
-                    //<a href='pelicula/24797/Halloween-Kills' class="text-primary">Halloween Kills</a>
-                    //<span class="text-muted">(MicroHD-1080p)</span>
-
-                    if (row.TagName.Equals("A"))
+                    if (Regex.IsMatch(row.NextElementSibling.TextContent.Trim(), "([()])"))
                     {
-                        rowTitle = row.TextContent;
-                        rowDetailsLink = SiteLink + row.GetAttribute("href");
+                        rowQuality = row.NextElementSibling.TextContent.Trim('(', ')').Replace('-', '.');
                     }
 
-                    if (row.TagName.Equals("SPAN"))
+                    // we add parsed items to rowDetailsLink to avoid duplicates in the newest torrents list results
+                    if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
                     {
-                        if (DateTime.TryParse(row.TextContent, out var publishDate))
-                        {
-                            rowPublishDate = publishDate.ToString();
-                        }
+                        var cat = GetCategoryFromURL(rowDetailsLink);
 
-                        //quality
-                        if (Regex.IsMatch(row.TextContent, "([()])"))
-                        {
-                            rowQuality = row.TextContent;
-                        }
-                    }
-
-                    if (row.TagName.Equals("BR"))
-                    {
-                        // we add parsed items to rowDetailsLink to avoid duplicates in the newest torrents list results
-                        if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
-                        {
-                            var cat = GetCategoryFromURL(rowDetailsLink);
-
-                            switch (cat)
-                            {
-                                case "pelicula":
-                                case "serie":
-                                case "documental":
-                                    await ParseReleaseAsync(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
-                                    parsedDetailsLink.Add(rowDetailsLink);
-                                    break;
-                            }
-
-                            // clean the current row
-                            rowTitle = null;
-                            rowDetailsLink = null;
-                            rowPublishDate = null;
-                            rowQuality = null;
-                        }
+                        await ParseReleaseAsync(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
+                        parsedDetailsLink.Add(rowDetailsLink);
                     }
                 }
             }
@@ -342,7 +307,7 @@ namespace Jackett.Common.Indexers.Definitions
                                             var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), anchor.GetAttribute("href"));
                                             var title = anchor.TextContent;
                                             var cat = GetCategoryFromURL(link);
-                                            var quality = row.QuerySelector("p > span > span").TextContent.Trim('(', ')').Replace('-', '.');
+                                            var quality = row.QuerySelector("p > span > span")?.TextContent?.Trim('(', ')')?.Replace('-', '.') ?? "";
 
                                             await ParseReleaseAsync(releases, link, title, cat, quality, query, matchWords);
                                         }
@@ -366,6 +331,10 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                 }
             }
+            else if (searchTerm.Length == 0)
+            {
+                releases = await PerformQueryNewestAsync(query);
+            }
 
             return releases;
         }
@@ -381,9 +350,9 @@ namespace Jackett.Common.Indexers.Definitions
             //var publishDate = TryToParseDate(publishStr, DateTime.Now);
 
             // return results only for requested categories
-            if (query.Categories.Any() || query.Categories.Contains(MapTrackerCatToNewznab(category).First()))
+            if (!query.HasSpecifiedCategories || query.Categories.Contains(MapTrackerCatToNewznab(category).First()))
             {
-                if (matchWords && CheckTitleMatchWords(query.SearchTerm, title))
+                if ((matchWords && CheckTitleMatchWords(query.SearchTerm, title)) || !matchWords)
                 {
                     switch (category)
                     {
