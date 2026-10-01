@@ -10,7 +10,6 @@ using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
-using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
@@ -39,31 +38,21 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string[] LegacySiteLinks => new[]
         {
-            "https://todotorrents.org/",
-            "https://tomadivx.net/",
-            "https://seriesblanco.one/",
-            "https://dontorrent.ch/", // parking page with JavaScript redirect
-            "https://dontorrent.haus/",
-            "https://dontorrent.news/",
-            "https://dontorrent.institute/",
-            "https://dontorrent.jetzt/",
-            "https://dontorrent.loan/",
-            "https://dontorrent.graphics/",
-            "https://dontorrent.international/",
-            "https://dontorrent.irish/",
-            "https://dontorrent.lighting/",
             "https://dontorrent.istanbul/",
             "https://dontorrent.onl/",
             "https://dontorrent.kids/",
             "https://dontorrent.kiwi/",
             "https://dontorrent.live/",
             "https://dontorrent.phd/",
-            "https://dontorrent.gripe/", // no longer compatible, switched to JS download
-            "https://dontorrent.promo/", // no longer compatible, switched to JS download
-            "https://dontorrent.gift/", // no longer compatible, switched to JS download
-            "https://dontorrent.cfd/", // no longer compatible, switched to JS download
-            "https://verdetorrent.com/", // redirects to https://privtr.ee/@DonTorrent
-            "https://naranjatorrent.com/", // redirects to https://privtr.ee/@DonTorrent
+            "https://dontorrent.gripe/",
+            "https://dontorrent.promo/",
+            "https://dontorrent.gift/",
+            "https://dontorrent.cfd/",
+            "https://verdetorrent.com/",
+            "https://naranjatorrent.com/",
+            "https://todotorrents.org/",
+            "https://tomadivx.net/",
+            "https://seriesblanco.one/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
