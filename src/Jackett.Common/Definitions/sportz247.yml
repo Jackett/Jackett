@@ -23,20 +23,20 @@ caps:
     - {id: 3, cat: TV/Sport, desc: "F1 Free Practice"}
     - {id: 5, cat: TV/Sport, desc: "F1 Pre Races"}
     - {id: 6, cat: TV/Sport, desc: "F1 Warm Up"}
-    - {id: 4, cat: TV/Sport, desc: "F1 Documentary"}
+    - {id: 4, cat: TV/Documentary, desc: "F1 Documentary"}
     - {id: 7, cat: TV/Sport, desc: "F1 Oldies"}
     - {id: 8, cat: TV/Sport, desc: "F1 Press Conferences"}
     - {id: 9, cat: TV/Sport, desc: "F1 Post Races"}
     - {id: 14, cat: TV/Sport, desc: "F1 Academy"}
-    - {id: 15, cat: TV/Sport, desc: "F1 Movies"}
-    - {id: 16, cat: TV/Sport, desc: "F1 Series"}
+    - {id: 15, cat: Movies, desc: "F1 Movies"}
+    - {id: 16, cat: TV, desc: "F1 Series"}
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
     - {id: 21, cat: TV/Sport, desc: "UFC"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 23, cat: TV/Sport, desc: "Boxing"}
-    - {id: 24, cat: Other, desc: "Magazines - Books"}
+    - {id: 24, cat: Books/Mags, desc: "Magazines - Books"}
     - {id: 26, cat: TV/Sport, desc: "Tennis"}
     - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
     - {id: 28, cat: TV/Sport, desc: "NBA"}
@@ -74,14 +74,17 @@ caps:
     - {id: 25, cat: TV/Sport, desc: "NASCAR Cup Series"}
     - {id: 66, cat: TV/Sport, desc: "NASCAR O'Reilly Auto Parts"}
     - {id: 64, cat: TV/Sport, desc: "IROC"}
-    - {id: 67, cat: TV/Sport, desc: "Sports TV Shows"}
+    - {id: 67, cat: TV, desc: "Sports TV Shows"}
     - {id: 68, cat: TV/Sport, desc: "AFL"}
     - {id: 69, cat: TV/Sport, desc: "NFL"}
     - {id: 70, cat: TV/Sport, desc: "FIM EWC"}
+    - {id: 71, cat: TV/Sport, desc: "AFLW"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
 
 settings:
   - name: username
@@ -165,32 +168,28 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: a[href^="index.php?page=torrent-details&id="]
-      attribute: onmouseover
+      selector: a.lightbox
+      attribute: href
+    size:
+      selector: "p:contains(\"Size:\")"
       filters:
         - name: regexp
-          args: src=(.+?) width
-        - name: replace
-          args: ["torrentimg/nocover.jpg", ""]
-    size:
-      selector: td:nth-last-child(4)
+          args: "Size:\\s+(.+)"
     date:
       # auto adjusted by site account profile
-      selector: td:nth-last-child(9)
+      selector: "p:contains(\"AddDate:\")"
       filters:
+        - name: regexp
+          args: "AddDate:\\s+(.+)"
         - name: dateparse
-          args: "dd/MM/yyyy"
+          args: "HH:mm:ss dd/MM/yyyy"
     seeders:
-      selector: td:nth-last-child(8)
-      optional: true
-      default: 0
+      selector: a[href^="index.php?page=peers&id="]:nth-child(1)
     leechers:
-      optional: true
-      selector: td:nth-last-child(7)
-      default: 0
+      selector: a[href^="index.php?page=peers&id="]:nth-child(2)
     grabs:
+      selector: a[href^="index.php?page=torrent_history&id="]
       optional: true
-      selector: td:nth-last-child(6)
       default: 0
     downloadvolumefactor:
       case:
