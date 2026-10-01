@@ -65,6 +65,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationData())
         {
             configData.AddDynamic("flaresolverr", new DisplayInfoConfigurationItem("FlareSolverr", "This site may use Cloudflare DDoS Protection, therefore Jackett requires <a href=\"https://github.com/Jackett/Jackett#configuring-flaresolverr\" target=\"_blank\">FlareSolverr</a> to access it."));
+            webclient.requestDelay = 0.5;
             webclient.EmulateBrowser = false;
         }
 
@@ -124,11 +125,11 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var dom = parser.ParseDocument(result.ContentString);
 
-                // the hidden episodes of each card are requested in parallel
-                var cards = dom.QuerySelectorAll("article.wolf-card");
-                var items = await Task.WhenAll(cards.Select(card => ParseCardAsync(card, NeedsAllEpisodes(card, query))));
+                var items = new List<Wolfmax4KItem>();
+                foreach (var card in dom.QuerySelectorAll("article.wolf-card"))
+                    items.AddRange(await ParseCardAsync(card, NeedsAllEpisodes(card, query)));
 
-                return items.SelectMany(x => x).Select(item => ExtractReleaseInfo(item, query)).ToList()
+                return items.Select(item => ExtractReleaseInfo(item, query)).ToList()
                             .Where(x => x != null);
             }
             catch (Exception ex)
