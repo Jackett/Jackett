@@ -71,7 +71,7 @@ namespace Jackett.Common.Indexers.Definitions
                     BookSearchParam.Q
                 }
             };
-
+            // from https://speedapp.io/internal
             caps.Categories.AddCategoryMapping(38, TorznabCatType.Movies, "Movie Packs");
             caps.Categories.AddCategoryMapping(10, TorznabCatType.MoviesSD, "Movies: SD");
             caps.Categories.AddCategoryMapping(35, TorznabCatType.MoviesSD, "Movies: SD Ro");
@@ -102,6 +102,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(6, TorznabCatType.BooksEBook, "E-books");
             caps.Categories.AddCategoryMapping(5, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(64, TorznabCatType.AudioVideo, "Music Video");
+            caps.Categories.AddCategoryMapping(68, TorznabCatType.AudioLossless, "Music Lossless");
             caps.Categories.AddCategoryMapping(18, TorznabCatType.Other, "Images");
             caps.Categories.AddCategoryMapping(22, TorznabCatType.TVSport, "TV Sports");
             caps.Categories.AddCategoryMapping(58, TorznabCatType.TVSport, "TV Sports Ro");
@@ -109,6 +110,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(63, TorznabCatType.TVDocumentary, "TV Documentary Ro");
             caps.Categories.AddCategoryMapping(65, TorznabCatType.Other, "Tutorial");
             caps.Categories.AddCategoryMapping(67, TorznabCatType.OtherMisc, "Miscellaneous");
+            // from https://speedapp.io/adult
             caps.Categories.AddCategoryMapping(15, TorznabCatType.XXX, "XXX Movies");
             caps.Categories.AddCategoryMapping(47, TorznabCatType.XXX, "XXX DVD");
             caps.Categories.AddCategoryMapping(48, TorznabCatType.XXX, "XXX HD");
