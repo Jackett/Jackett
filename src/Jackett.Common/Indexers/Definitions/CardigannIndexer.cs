@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -1187,6 +1188,12 @@ namespace Jackett.Common.Indexers.Definitions
                         break;
                     case "toupper":
                         Data = Data.ToUpper();
+                        break;
+                    case "base64decode":
+                        Data = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Data));
+                        break;
+                    case "base64encode":
+                        Data = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(Data));
                         break;
                     case "urldecode":
                         Data = WebUtilityHelpers.UrlDecode(Data, Encoding);
