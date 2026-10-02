@@ -6,6 +6,8 @@ language: fr-FR
 type: private
 encoding: UTF-8
 requestDelay: 5
+certificates:
+  - 9c50f0efa4005ca9192941a438d208c23a4a4b0e # CN=www.crazyspirits.com
 links:
   - https://crazyspirits.com/
 legacylinks:
