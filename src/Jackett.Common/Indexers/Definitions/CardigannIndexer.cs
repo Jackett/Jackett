@@ -1192,6 +1192,9 @@ namespace Jackett.Common.Indexers.Definitions
                     case "base64decode":
                         Data = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Data));
                         break;
+                    case "base64encode":
+                        Data = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(Data));
+                        break;
                     case "urldecode":
                         Data = WebUtilityHelpers.UrlDecode(Data, Encoding);
                         break;
