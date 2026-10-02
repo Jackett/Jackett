@@ -55,6 +55,9 @@ search:
     result_from: 1
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: div.short_game_search
 
