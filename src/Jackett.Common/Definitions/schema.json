@@ -1220,7 +1220,7 @@
                     "title": "Name",
                     "description": "Filter name.",
                     "type": "string",
-                    "enum": ["querystring", "timeparse", "dateparse", "regexp", "re_replace", "split", "replace", "trim", "prepend", "append", "tolower", "toupper", "base64decode", "urldecode", "urlencode", "htmldecode", "htmlencode", "timeago", "reltime", "fuzzytime", "validfilename", "diacritics", "jsonjoinarray", "hexdump", "strdump", "validate"]
+                    "enum": ["querystring", "timeparse", "dateparse", "regexp", "re_replace", "split", "replace", "trim", "prepend", "append", "tolower", "toupper", "base64decode", "base64encode", "urldecode", "urlencode", "htmldecode", "htmlencode", "timeago", "reltime", "fuzzytime", "validfilename", "diacritics", "jsonjoinarray", "hexdump", "strdump", "validate"]
                 },
                 "args": {
                     "title": "Arguments",
