@@ -311,28 +311,34 @@ function displayConfiguredIndexersList(indexers) {
     $('#indexers').fadeIn();
 }
 
-function displayUnconfiguredIndexersList() {
+function removeRow(indexersTable, btn) {
+    const table = indexersTable.find("table").DataTable();
+    const row = table.row($(btn).parents('tr'));
+    row.remove().draw();
+}
+
+function displayUnconfiguredIndexersList(indexerId = '') {
+    const filteredUnconfiguredIndexers = unconfiguredIndexers.filter(item => item.id !== indexerId)
     var UnconfiguredIndexersDialog = $($("#select-indexer").html());
 
     var indexersTemplate = Handlebars.compile($("#unconfigured-indexer-table").html());
     var indexersTable = $(indexersTemplate({
-        indexers: unconfiguredIndexers,
+        indexers: filteredUnconfiguredIndexers,
         total_unconfigured_indexers: unconfiguredIndexers.length
     }));
     indexersTable.find('.indexer-setup').each(function (i, btn) {
         var indexer = unconfiguredIndexers[i];
         $(btn).click(function () {
-            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function () {
-                displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description);
+            $('#select-indexer-modal').modal('hide').one('hidden.bs.modal', function () {
+                displayIndexerSetup(indexer.id, indexer.name, indexer.caps, indexer.site_link, indexer.alternativesitelinks, indexer.description, true, () => removeRow(indexersTable, btn));
             });
         });
     });
     indexersTable.find('.indexer-add').each(function (i, btn) {
         $(btn).click(function () {
-            $('#select-indexer-modal').modal('hide').on('hidden.bs.modal', function (e) {
-                var indexerId = $(btn).attr("data-id");
-                addIndexer(indexerId, true);
-            });
+            var indexerId = $(btn).attr("data-id");
+            addIndexer(indexerId, true);
+            removeRow(indexersTable, btn);
         });
     });
     indexersTable.find("table").DataTable({
@@ -742,14 +748,14 @@ function prepareTestButtons(element) {
     });
 }
 
-function displayIndexerSetup(id, name, caps, link, alternativesitelinks, description) {
+function displayIndexerSetup(id, name, caps, link, alternativesitelinks, description, isFromAddModalIndexer = false, removeRow = () => {}) {
     api.getIndexerConfig(id, function (data) {
         if (data.result !== undefined && data.result == "error") {
             doNotify("Error: " + data.error, "danger", "glyphicon glyphicon-alert");
             return;
         }
 
-        populateSetupForm(id, name, data, caps, link, alternativesitelinks, description);
+        populateSetupForm(id, name, data, caps, link, alternativesitelinks, description, isFromAddModalIndexer, removeRow);
     }).fail(function () {
         doNotify("Request to Jackett server failed", "danger", "glyphicon glyphicon-alert");
     });
@@ -864,7 +870,7 @@ function getConfigModalJson(configForm) {
     return configJson;
 }
 
-function populateSetupForm(indexerId, name, config, caps, link, alternativesitelinks, description) {
+function populateSetupForm(indexerId, name, config, caps, link, alternativesitelinks, description, isFromAddModalIndexer = false, removeRow = () => {}) {
     var configForm = newConfigModal(name, config, caps, link, alternativesitelinks, description);
     var $goButton = configForm.find(".setup-indexer-go");
     $goButton.click(function () {
@@ -876,7 +882,12 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
 
         api.updateIndexerConfig(indexerId, data, function (data) {
             if (data == undefined) {
-                configForm.modal("hide");
+                configForm.modal("hide").off('hidden.bs.modal').on('hidden.bs.modal', () => {
+                    if(isFromAddModalIndexer) {
+                        displayUnconfiguredIndexersList(indexerId);
+                        removeRow();
+                    }
+                });
                 reloadIndexers();
                 doNotify("Successfully configured " + name, "success", "glyphicon glyphicon-ok");
             } else if (data.result == "error") {
@@ -894,6 +905,9 @@ function populateSetupForm(indexerId, name, config, caps, link, alternativesitel
     });
 
     configForm.on('hidden.bs.modal', function (e) {
+        if(isFromAddModalIndexer) {
+            displayUnconfiguredIndexersList();
+        }
         $('#indexers div.dataTables_filter input').focusWithoutScrolling();
     });
     configForm.modal("show");
