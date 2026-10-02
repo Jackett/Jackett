@@ -3114,6 +3114,8 @@ Filter name.
 | `"append"`        |             |
 | `"tolower"`       |             |
 | `"toupper"`       |             |
+| `"base64decode"`  |             |
+| `"base64encode"`  |             |
 | `"urldecode"`     |             |
 | `"urlencode"`     |             |
 | `"htmldecode"`    |             |
