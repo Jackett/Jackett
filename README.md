@@ -302,6 +302,7 @@ Prior versions of Jackett are no longer supported.
  * BigCore
  * Bit-Bázis
  * BIT-HDTV
+ * BitAgent
  * Bitded
  * bitGAMER
  * BitHUmen
