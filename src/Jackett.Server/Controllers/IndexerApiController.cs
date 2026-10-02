@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Jackett.Common.Indexers;
 using Jackett.Common.Models;
+using Jackett.Common.Models.DTO;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
 using Microsoft.AspNetCore.Mvc;
@@ -105,19 +106,36 @@ namespace Jackett.Server.Controllers
             }
             catch
             {
-                var baseIndexer = CurrentIndexer as BaseIndexer;
-                if (null != baseIndexer)
+                if (CurrentIndexer is BaseIndexer baseIndexer)
+                {
                     baseIndexer.ResetBaseConfig();
+                }
+
                 throw;
             }
         }
 
         [HttpGet]
         [Route("")]
-        public IEnumerable<Common.Models.DTO.Indexer> Indexers([FromQuery(Name = "configured")] bool configured)
+        public IEnumerable<Common.Models.DTO.Indexer> Indexers([FromQuery(Name = "configured")] bool configured, [FromQuery(Name = "state")] FilterIndexerState filterState)
         {
             var dto = IndexerService.GetAllIndexers().Select(i => new Common.Models.DTO.Indexer(i));
-            dto = configured ? dto.Where(i => i.configured) : dto;
+
+            if (configured)
+            {
+                dto = dto.Where(i => i.configured);
+            }
+
+            switch (filterState)
+            {
+                case FilterIndexerState.Success:
+                    dto = dto.Where(i => i.state == IndexerState.Success);
+                    break;
+                case FilterIndexerState.Error:
+                    dto = dto.Where(i => i.state == IndexerState.Error);
+                    break;
+            }
+
             return dto;
         }
 
@@ -176,5 +194,12 @@ namespace Jackett.Server.Controllers
             }
         }
 
+    }
+
+    public enum FilterIndexerState
+    {
+        All,
+        Error,
+        Success
     }
 }
