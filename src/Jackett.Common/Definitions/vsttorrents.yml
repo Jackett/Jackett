@@ -22,8 +22,11 @@ settings: []
 
 download:
   selectors:
-    - selector: div.wp-block-file a
+    - selector: a.wp-block-button__link
       attribute: href
+      filters:
+        - name: querystring
+          args: file
 
 search:
   paths:
