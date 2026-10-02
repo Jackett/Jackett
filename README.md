@@ -600,6 +600,7 @@ Prior versions of Jackett are no longer supported.
  * SportsCult
  * Sportz247
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
+ * Stellarwinds
  * Superbits (SBS)
  * Swarmazon
  * TangPT (躺平)
