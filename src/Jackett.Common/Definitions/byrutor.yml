@@ -363,14 +363,13 @@ search:
       text: 1
     year:
       selector: div.search_res_sub span
-      filters:
-        - name: regexp
-          args: (\d+)
+    _ver:
+      selector: div.search_res_sub span:nth-child(2)
     title:
-      selector: h3.search_res_title
+      selector: div.search_res_title
       filters:
         - name: append
-          args: " [{{ .Result.year }}]"
+          args: " [{{ .Result.year }}] {{ .Result._ver }}"
     details:
       selector: a.search_res
       attribute: href
