@@ -46,7 +46,7 @@ search:
       response:
         type: xml
   inputs:
-    t: "{{ .Query.Type }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     imdbid: "{{ .Query.IMDBIDShort }}"

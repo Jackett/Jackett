@@ -58,7 +58,7 @@ search:
     Authorization: ["Bearer {{ .Config.apikey }}"]
 
   inputs:
-    t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.TMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
+    t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep .Query.IMDBID }}tvsearch{{ else }}{{ end }}{{ if or .Query.IMDBID .Query.TMDBID .Query.Season .Query.Ep }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
