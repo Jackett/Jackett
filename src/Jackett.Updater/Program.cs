@@ -803,6 +803,7 @@ namespace Jackett.Updater
                 "Definitions/theleachzone.yml", // switch to *-API #11185
                 "Definitions/themoviecave.yml",
                 "Definitions/thepiratedship.yml",
+                "Definitions/theparadiese.yml",
                 "Definitions/therebels-api.yml",
                 "Definitions/theresurrection.yml",
                 "Definitions/thesceneplace.yml",
