@@ -1,6 +1,6 @@
 ---
-id: dirtybytes
-name: DirtyBytes
+id: dirtybytes-api
+name: DirtyBytes (API)
 description: "DirtyBytes is a Private Torrent Tracker for 3X"
 language: en-US
 type: private
