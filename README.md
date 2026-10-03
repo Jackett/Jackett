@@ -359,6 +359,7 @@ Prior versions of Jackett are no longer supported.
  * DICMusic [![(invite needed)][inviteneeded]](#)
  * DigitalCore (DC)
  * DimeADozen (EzTorrent)
+ * DirtyBytes
  * DiscFan [![(invite needed)][inviteneeded]](#)
  * DocsPedia
  * DreadVault
