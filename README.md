@@ -155,7 +155,6 @@ Prior versions of Jackett are no longer supported.
  * TheRARBG
  * Tokyo Tosho
  * Torrent Downloads
- * Torrent Oyun indir
  * Torrent[CORE]
  * torrent.by
  * torrent-pirat
