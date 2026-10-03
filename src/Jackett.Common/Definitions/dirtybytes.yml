@@ -6,7 +6,7 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
-  -  https://dirtybytes.net/
+  - https://dirtybytes.net/
 
 caps:
   categorymappings:
@@ -40,7 +40,6 @@ caps:
   modes:
     search: [q]
 
-settings:
 settings:
   - name: apikey
     type: text
@@ -99,7 +98,7 @@ search:
     searchText: "{{ .Keywords }}"
     section: all
     sort: "{{ .Config.sort }}"
-    order:  "{{ .Config.type }}"
+    order: "{{ .Config.type }}"
     freeleech: "{{ if .Config.freeleech }}true{{ else }}{{ end }}"
     dead: true
 
