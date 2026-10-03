@@ -2,7 +2,7 @@
 id: dirtybytes
 name: DirtyBytes
 description: "DirtyBytes is a Private Torrent Tracker for 3X"
-language: zh-CN
+language: en-US
 type: private
 encoding: UTF-8
 links:
