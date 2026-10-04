@@ -10,20 +10,19 @@ description: "World-torrent is a FRENCH Public site for MOVIES / TV / GENERAL"
 language: fr-FR
 type: public
 encoding: UTF-8
-# to fetch current domain use https://www.rantop.xyz/
+# to fetch current domain use https://www.torrent-site.my/
 links:
-  - https://darkfox.proxy-site2.cc/
-  - https://vidlox.proxy-site2.cc/
-  - https://worldivx.proxy-site2.cc/
-  - https://wikibox.proxy-site2.cc/
-  - https://sharkibox.proxy-site2.cc/
-  - https://workino.proxy-site2.cc/
-  - https://oxtorrent.proxy-site2.cc/
-  - https://torrent911.proxy-site2.cc/
+  - https://ww1-darkfox.officiel.pw/
+  - https://ww1-vidlox.officiel.pw/
+  - https://ww1-worldivx.officiel.pw/
+  - https://ww1-wikibox.officiel.pw/
+  - https://ww1-sharkibox.officiel.pw/
+  - https://ww1-workino.officiel.pw/
+  - https://ww1-oxtorrent.officiel.pw/
+  - https://ww1-torrent911.officiel.pw/
 legacylinks:
   # latest domains list
-  - https://www.rantop.xyz/
-  - https://www.torrent-site.cc/
+  - https://www.torrent-site.my/
   - https://www.torrent-p2p.my/
   # domain lists no longer working
   - https://www.protege-torrent.com/
@@ -37,6 +36,8 @@ legacylinks:
   - https://www.rantop.org/
   - https://www.site-torrent.cc/
   - https://www.torrent-p2p.cc/
+  - https://www.rantop.xyz/
+  - https://www.torrent-site.cc/
   # actual legacylinks
   # Darkfox
   - https://www.darkflix.cc/
@@ -44,72 +45,88 @@ legacylinks:
   - https://darkfox.my/
   - https://darkfox.ws/
   - https://ww1.fit/darkfox/
+  - https://ww1-darkfox.officiel.cc/
   - https://www.darkfox2.cc/
   - https://www.darkfox3.cc/
   - https://www.darkfox4.cc/
   - https://www.darkfox6.cc/
   - https://darkfox.proxy-site.cc/
+  - https://darkfox.proxy-site2.cc/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
   - https://vidlox.my/
   - https://vidlox.ws/
   - https://ww1.fit/vidlox/
+  - https://ww1-vidlox.officiel.cc/
   - https://www.vidlox2.cc/
   - https://www.vidlox3.cc/
   - https://www.vidlox4.cc/
   - https://www.vidlox6.cc/
   - https://www.vidlox7.cc/
   - https://vidlox.proxy-site.cc/
+  - https://vidlox.proxy-site2.cc/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
   - https://wikibox.my/
   - https://wikibox.ws/
   - https://ww1.fit/wikibox/
+  - https://ww1-wikibox.officiel.cc/
   - https://www.wikibox1.cc/
   - https://www.wikibox2.cc/
   - https://www.wikibox3.cc/
   - https://www.wikibox4.cc/
   - https://wikibox.proxy-site.cc/
+  - https://wikibox.proxy-site2.cc/
   # Sharkibox
   - https://sharkibox.pw/
   - https://sharkibox.ws/
   - https://ww1.fit/sharkibox/
+  - https://ww1-sharkibox.officiel.cc/
   - https://www.sharkibox1.cc/
   - https://www.sharkibox.cc/
   - https://sharkibox.proxy-site.cc/
+  - https://sharkibox.proxy-site2.cc/
   # Worldivx
   - https://worldivx.pw/
   - https://worldivx.ws/
   - https://ww1.fit/worldivx/
+  - https://ww1-worldivx.officiel.cc/
   - https://www.worldivx1.cc/
   - https://www.worldivx.cc/
   - https://worldivx.proxy-site.cc/
+  - https://worldivx.proxy-site2.cc/
   # Workino
   - https://workino.pw/
   - https://workino.ws/
   - https://ww1.fit/workino/
+  - https://ww1-workino.officiel.cc/
   - https://www.workino.cc/
   - https://workino.proxy-site.cc/
+  - https://workino.proxy-site2.cc/
   # Oxtorrent
   - https://oxtorrent5.ws/
   - https://oxtorrent.win/
   - https://oxtorrent.lat/
   - https://oxtorrent.ml/
   - https://ww1.fit/oxtorrent/
+  - https://ww1-oxtorrent.officiel.cc/
   - https://www.oxtorrent2.ws/
   - https://www.oxtorrent3.ws/
   - https://www.oxtorrent5.ws/
   - https://www.oxtorrent2.my/
   - https://oxtorrent.proxy-site.cc/
+  - https://oxtorrent.proxy-site2.cc/
   # Torrent911
   - https://torrent911.win/
   - https://torrent911.lat/
   - https://ww1.fit/torrent911/
+  - https://ww1-torrent911.officiel.cc/
   - https://www.torrent911.wiki/
   - https://www.torrent911.store/
   - https://torrent911.proxy-site.cc/
+  - https://torrent911.proxy-site2.cc/
 
 caps:
   categorymappings:
