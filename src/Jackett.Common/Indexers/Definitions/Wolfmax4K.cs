@@ -611,17 +611,25 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string ParseSeasonAndEpisode(string episodeText)
         {
-            // Episodio 1x10 - / 2x01 al 06. / 4x07
-            var match = Regex.Match(episodeText ?? "", @"(\d+)x(\d+)(\s*al\s*(\d+))?", RegexOptions.IgnoreCase);
+            var text = (episodeText ?? "").Trim();
+            var match = text switch
+            {
+                // Episodio 2x01 al 06. / Episodio 4x01 al 4x08.
+                _ when Regex.Match(text, @"(\d+)x(\d+) al (?:\d+x)?(\d+)", RegexOptions.IgnoreCase) is { Success: true } range => range,
+                // Episodio 3x07 - 3x08. / Episodio 1x05 - 06 - 07 - 08.
+                _ when Regex.Match(text, @"(\d+)x(\d+)(?: - (?:\d+x)?(\d+))+\.?$", RegexOptions.IgnoreCase) is { Success: true } list => list,
+                // Episodio 1x10 - / Episodio 5x24 - Ahora o nunca.
+                _ => Regex.Match(text, @"(\d+)x(\d+)", RegexOptions.IgnoreCase)
+            };
             if (!match.Success)
             {
                 return "";
             }
 
             var result = "S" + match.Groups[1].Value.PadLeft(2, '0') + "E" + match.Groups[2].Value.PadLeft(2, '0');
-            if (match.Groups[4].Success)
+            if (match.Groups[3].Success)
             {
-                result += "-E" + match.Groups[4].Value.PadLeft(2, '0');
+                result += "-E" + match.Groups[3].Value.PadLeft(2, '0');
             }
 
             return result;
