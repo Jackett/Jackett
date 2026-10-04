@@ -4,16 +4,18 @@ using System.Diagnostics.CodeAnalysis;
 using System.Globalization;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using AngleSharp.Html.Parser;
 using Jackett.Common.Extensions;
-using Jackett.Common.Helpers;
 using Jackett.Common.Models;
 using Jackett.Common.Models.IndexerConfig;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+using Jackett.Common.Utils.Clients;
+using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using NLog;
 using static Jackett.Common.Models.IndexerConfig.ConfigurationData;
@@ -29,37 +31,30 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "DonTorrent";
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
-        public override string SiteLink { get; protected set; } = "https://todotorrents.org/";
+        public override string SiteLink { get; protected set; } = "https://dontorrent.moi/";
+        /*
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://todotorrents.org/",
-            "https://tomadivx.net/",
-            "https://seriesblanco.one/",
+            "https://dontorrent.moi/",
         };
+        */
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.ch/", // parking page with JavaScript redirect
-            "https://dontorrent.haus/",
-            "https://dontorrent.news/",
-            "https://dontorrent.institute/",
-            "https://dontorrent.jetzt/",
-            "https://dontorrent.loan/",
-            "https://dontorrent.graphics/",
-            "https://dontorrent.international/",
-            "https://dontorrent.irish/",
-            "https://dontorrent.lighting/",
             "https://dontorrent.istanbul/",
             "https://dontorrent.onl/",
             "https://dontorrent.kids/",
             "https://dontorrent.kiwi/",
             "https://dontorrent.live/",
             "https://dontorrent.phd/",
-            "https://dontorrent.gripe/", // no longer compatible, switched to JS download
-            "https://dontorrent.promo/", // no longer compatible, switched to JS download
-            "https://dontorrent.gift/", // no longer compatible, switched to JS download
-            "https://dontorrent.cfd/", // no longer compatible, switched to JS download
-            "https://verdetorrent.com/", // redirects to https://privtr.ee/@DonTorrent
-            "https://naranjatorrent.com/", // redirects to https://privtr.ee/@DonTorrent
+            "https://dontorrent.gripe/",
+            "https://dontorrent.promo/",
+            "https://dontorrent.gift/",
+            "https://dontorrent.cfd/",
+            "https://verdetorrent.com/",
+            "https://naranjatorrent.com/",
+            "https://todotorrents.org/",
+            "https://tomadivx.net/",
+            "https://seriesblanco.one/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -69,13 +64,8 @@ namespace Jackett.Common.Indexers.Definitions
         private static class DonTorrentCatType
         {
             public static string Pelicula => "pelicula";
-            public static string Pelicula4K => "pelicula4k";
             public static string Serie => "serie";
-            public static string SerieHD => "seriehd";
             public static string Documental => "documental";
-            public static string Musica => "musica";
-            public static string Variado => "variado";
-            public static string Juego => "juego";
         }
 
         private const string NewTorrentsUrl = "ultimos";
@@ -85,10 +75,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 { "/pelicula/", DonTorrentCatType.Pelicula },
                 { "/serie/", DonTorrentCatType.Serie },
-                { "/documental", DonTorrentCatType.Documental },
-                { "/musica/", DonTorrentCatType.Musica },
-                { "/variado/", DonTorrentCatType.Variado },
-                { "/juego/", DonTorrentCatType.Juego } //games, it can be pc or console
+                { "/documental/", DonTorrentCatType.Documental },
             };
 
         public DonTorrent(IIndexerConfigurationService configService, WebClient w, Logger l, IProtectionService ps,
@@ -113,23 +100,20 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
+                    TvSearchParam.Q, TvSearchParam.Season
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
                     MovieSearchParam.Q
                 },
-                MusicSearchParams = new List<MusicSearchParam>
-                {
-                    MusicSearchParam.Q,
-                }
+
+                // Raw search shows better results
+                SupportsRawSearch = true
             };
 
-            caps.Categories.AddCategoryMapping(DonTorrentCatType.Pelicula, TorznabCatType.Movies, "Pelicula");
-            caps.Categories.AddCategoryMapping(DonTorrentCatType.Pelicula4K, TorznabCatType.MoviesUHD, "Peliculas 4K");
-            caps.Categories.AddCategoryMapping(DonTorrentCatType.Serie, TorznabCatType.TVSD, "Serie");
-            caps.Categories.AddCategoryMapping(DonTorrentCatType.SerieHD, TorznabCatType.TVHD, "Serie HD");
-            caps.Categories.AddCategoryMapping(DonTorrentCatType.Musica, TorznabCatType.Audio, "Música");
+            caps.Categories.AddCategoryMapping(DonTorrentCatType.Pelicula, TorznabCatType.Movies, "Movies");
+            caps.Categories.AddCategoryMapping(DonTorrentCatType.Serie, TorznabCatType.TV, "TV");
+            caps.Categories.AddCategoryMapping(DonTorrentCatType.Documental, TorznabCatType.TVDocumentary, "TV/Documentary");
 
             return caps;
         }
@@ -154,41 +138,45 @@ namespace Jackett.Common.Indexers.Definitions
             query = ParseQuery(query);
 
             var releases = string.IsNullOrEmpty(query.SearchTerm) ?
-                await PerformQueryNewest(query) :
-                await PerformQuerySearch(query, matchWords);
+                await PerformQueryNewestAsync(query) :
+                await PerformQuerySearchAsync(query, matchWords);
 
             return releases;
         }
 
         public override async Task<byte[]> Download(Uri link)
         {
-            var downloadUrl = link.ToString();
-            if (downloadUrl.Contains("cdn.pizza") || downloadUrl.Contains("blazing.network") || downloadUrl.Contains("tor.cat") || downloadUrl.Contains("cdndelta.com") || downloadUrl.Contains("cdnbeta.in") || downloadUrl.Contains("/torrents/series/"))
+            var downloadLink = "";
+            var cleanLink = link.ToString().TrimEnd('/');
+
+            var lastSlash = cleanLink.LastIndexOf('/');
+            if (lastSlash > 0)
             {
-                return await base.Download(link);
+                var contentIdStr = cleanLink.Substring(lastSlash + 1);
+                var aux = cleanLink.Substring(0, lastSlash);
+                var secondLastSlash = aux.LastIndexOf('/');
+                if (secondLastSlash > 0)
+                {
+                    var tabla = aux.Substring(secondLastSlash + 1);
+                    var rawHref = aux.Substring(0, secondLastSlash);
+
+                    if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out var contentId))
+                    {
+                        // Protected downloads challenge solver
+                        var protectedUrl = await GetProtectedDownloadUrlAsync(contentId, tabla);
+                        if (!string.IsNullOrEmpty(protectedUrl))
+                            downloadLink = protectedUrl;
+                        else
+                            downloadLink = rawHref.StartsWith("//") ? "https:" + rawHref : rawHref;
+
+                    }
+                }
             }
 
-            var parser = new HtmlParser();
-
-            // Eg https://dontorrent.li/pelicula/24797/Halloween-Kills
-            var result = await RequestWithCookiesAsync(downloadUrl);
-            if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-            using var dom = await parser.ParseDocumentAsync(result.ContentString);
-
-            //var info = dom.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
-            //var title = info.QuerySelector("h2.descargarTitulo").TextContent;
-
-            var dlStr = dom.QuerySelector("div.text-center > p > a");
-
-            //dl site starts with "//cdn.pizza" and they accept https so use it
-            downloadUrl = dlStr != null ? string.Format("https:{0}", dlStr.GetAttribute("href")) : "";
-
-            var content = await base.Download(new Uri(downloadUrl));
-            return content;
+            return await base.Download(new Uri(downloadLink));
         }
 
-        private async Task<List<ReleaseInfo>> PerformQueryNewest(TorznabQuery query)
+        private async Task<List<ReleaseInfo>> PerformQueryNewestAsync(TorznabQuery query)
         {
             var releases = new List<ReleaseInfo>();
 
@@ -206,140 +194,154 @@ namespace Jackett.Common.Indexers.Definitions
                 var searchResultParser = new HtmlParser();
                 using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
-                var rows = doc.QuerySelector("div.seccion#ultimos_torrents > div.card > div.card-body > div");
+                var rows = doc.QuerySelectorAll("div.seccion#ultimos_torrents a.text-primary");
 
                 var parsedDetailsLink = new List<string>();
-                string rowTitle = null;
-                string rowDetailsLink = null;
-                string rowPublishDate = null;
-                string rowQuality = null;
 
-                foreach (var row in rows.Children)
+                foreach (var row in rows)
                 {
-                    if (row.TagName.Equals("DIV"))
+                    var rowTitle = row.TextContent.Trim();
+                    var rowDetailsLink = string.Format("{0}{1}", SiteLink, row.GetAttribute("href"));
+                    var rowPublishDate = "";
+                    var rowQuality = "";
+
+                    if (DateTime.TryParse(row.PreviousElementSibling.TextContent.Trim(), out var publishDate))
                     {
-                        //div class="h5 text-dark">PELÍCULAS:</div>
-                        continue;
+                        rowPublishDate = publishDate.ToString();
                     }
 
-                    //<span class="text-muted">2022-01-12</span>
-                    //<a href='pelicula/24797/Halloween-Kills' class="text-primary">Halloween Kills</a>
-                    //<span class="text-muted">(MicroHD-1080p)</span>
-
-                    if (row.TagName.Equals("A"))
+                    if (Regex.IsMatch(row.NextElementSibling.TextContent.Trim(), "([()])"))
                     {
-                        rowTitle = row.TextContent;
-                        rowDetailsLink = SiteLink + row.GetAttribute("href");
+                        rowQuality = row.NextElementSibling.TextContent.Trim('(', ')').Replace('-', '.');
                     }
 
-                    if (row.TagName.Equals("SPAN"))
+                    // we add parsed items to rowDetailsLink to avoid duplicates in the newest torrents list results
+                    if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
                     {
-                        if (DateTime.TryParse(row.TextContent, out var publishDate))
+                        var cat = GetCategoryFromURL(rowDetailsLink);
+
+                        await ParseReleaseAsync(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
+                        parsedDetailsLink.Add(rowDetailsLink);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OnParseError(result.ContentString, ex);
+            }
+
+            return releases;
+        }
+
+        private async Task<List<ReleaseInfo>> PerformQuerySearchAsync(TorznabQuery query, bool matchWords)
+        {
+            // Found release result
+            var releases = new List<ReleaseInfo>();
+
+            // Search params
+            var searchTerm = query.SearchTerm;
+            var url = SiteLink + SearchUrl;
+
+            // Search results
+            int page = 1;
+            int totalResults = -1;
+            int processedResults = 0;
+            bool endOfSearch = false;
+
+            if (searchTerm.Length >= 2)
+            {
+                while (!endOfSearch && (processedResults < totalResults || totalResults == -1))
+                {
+                    // Perform the search query using POST
+                    var formData = new Dictionary<string, string>
+                    {
+                        { "valor", searchTerm},
+                        { "Buscar", "Buscar"},
+                        { "p", page.ToString() }
+                    };
+
+                    var result = await RequestWithCookiesAsync(url: SiteLink + "buscar", method: RequestType.POST, referer: SiteLink, data: formData);
+
+                    if (result.Status != HttpStatusCode.OK)
+                        throw new ExceptionWithConfigData(result.ContentString, configData);
+
+                    try
+                    {
+                        var searchResultParser = new HtmlParser();
+                        using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
+
+                        var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
+
+                        if (rows.Length == 0)
                         {
-                            rowPublishDate = publishDate.ToString();
+                            endOfSearch = true;
+
                         }
-
-                        //quality
-                        if (Regex.IsMatch(row.TextContent, "([()])"))
+                        else if (page == 1 && rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
                         {
-                            rowQuality = row.TextContent;
+                            endOfSearch = true;
+
                         }
-                    }
-
-                    if (row.TagName.Equals("BR"))
-                    {
-                        // we add parsed items to rowDetailsLink to avoid duplicates in the newest torrents list results
-                        if (!parsedDetailsLink.Contains(rowDetailsLink) && rowTitle != null)
+                        else
                         {
-                            var cat = GetCategory(rowTitle, rowDetailsLink);
-
-                            switch (cat)
+                            if (page == 1)
                             {
-                                case "pelicula":
-                                case "pelicula4k":
-                                case "serie":
-                                case "seriehd":
-                                case "musica":
-                                    await ParseRelease(releases, rowDetailsLink, rowTitle, cat, rowQuality, query, false);
-                                    parsedDetailsLink.Add(rowDetailsLink);
-                                    break;
+                                var leadBTagElements = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p.lead > b");
+
+                                if (leadBTagElements.Length < 2 || !int.TryParse(leadBTagElements[1].TextContent, out totalResults) || totalResults <= 0)
+                                    endOfSearch = true;
                             }
 
-                            // clean the current row
-                            rowTitle = null;
-                            rowDetailsLink = null;
-                            rowPublishDate = null;
-                            rowQuality = null;
+                            if (!endOfSearch)
+                            {
+                                var validRows = rows.Skip(2).ToList();
+                                if (validRows.Count > 0)
+                                {
+                                    foreach (var row in validRows)
+                                    {
+                                        processedResults++;
+
+                                        //href=/pelicula/6981/Saga-Spiderman
+                                        var anchor = row.QuerySelector("p > span > a");
+
+                                        if (anchor != null)
+                                        {
+                                            var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), anchor.GetAttribute("href"));
+                                            var title = anchor.TextContent;
+                                            var cat = GetCategoryFromURL(link);
+                                            var quality = row.QuerySelector("p > span > span")?.TextContent?.Trim('(', ')')?.Replace('-', '.') ?? "";
+
+                                            await ParseReleaseAsync(releases, link, title, cat, quality, query, matchWords);
+                                        }
+                                    }
+                                }
+                                // Stop pagination if all items are processed or no more rows are returned
+                                if (processedResults >= totalResults || validRows.Count == 0)
+                                {
+                                    endOfSearch = true;
+                                }
+                                else
+                                {
+                                    page++;
+                                }
+                            }
                         }
                     }
+                    catch (Exception ex)
+                    {
+                        OnParseError(result.ContentString, ex);
+                    }
                 }
             }
-            catch (Exception ex)
+            else if (searchTerm.Length == 0)
             {
-                OnParseError(result.ContentString, ex);
+                releases = await PerformQueryNewestAsync(query);
             }
 
             return releases;
         }
 
-        private async Task<List<ReleaseInfo>> PerformQuerySearch(TorznabQuery query, bool matchWords)
-        {
-            var releases = new List<ReleaseInfo>();
-            var searchTerm = query.SearchTerm;
-            var url = SiteLink + SearchUrl + searchTerm;
-            var result = await RequestWithCookiesAsync(url, referer: url);
-            if (result.Status != HttpStatusCode.OK)
-                throw new ExceptionWithConfigData(result.ContentString, configData);
-
-            try
-            {
-                var searchResultParser = new HtmlParser();
-                using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
-
-                var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
-
-                if (rows.First().TextContent.Contains("Introduce alguna palabra para buscar con al menos 2 letras."))
-                {
-                    return releases; //no enough search terms
-                }
-
-                foreach (var row in rows.Skip(2))
-                {
-                    //href=/pelicula/6981/Saga-Spiderman
-                    var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), row.QuerySelector("p > span > a").GetAttribute("href"));
-                    var title = row.QuerySelector("p > span > a").TextContent;
-                    var cat = GetCategory(title, link);
-                    var quality = "";
-
-                    switch (GetCategoryFromURL(link))
-                    {
-                        case "pelicula":
-                        case "serie":
-                            quality = Regex.Replace(row.QuerySelector("p > span > span").TextContent, "([()])", "");
-                            break;
-                    }
-
-                    switch (cat)
-                    {
-                        case "pelicula":
-                        case "pelicula4k":
-                        case "serie":
-                        case "seriehd":
-                        case "musica":
-                            await ParseRelease(releases, link, title, cat, quality, query, matchWords);
-                            break;
-                    }
-                }
-            }
-            catch (Exception ex)
-            {
-                OnParseError(result.ContentString, ex);
-            }
-
-            return releases;
-        }
-
-        private async Task ParseRelease(ICollection<ReleaseInfo> releases, string link, string title, string category, string quality, TorznabQuery query, bool matchWords)
+        private async Task ParseReleaseAsync(ICollection<ReleaseInfo> releases, string link, string title, string category, string quality, TorznabQuery query, bool matchWords)
         {
             // Remove trailing dot if there's one.
             title = title.Trim();
@@ -350,60 +352,93 @@ namespace Jackett.Common.Indexers.Definitions
             //var publishDate = TryToParseDate(publishStr, DateTime.Now);
 
             // return results only for requested categories
-            if (query.Categories.Any() && !query.Categories.Contains(MapTrackerCatToNewznab(category).First()))
-                return;
-
-            // match the words in the query with the titles
-            if (matchWords && !CheckTitleMatchWords(query.SearchTerm, title))
-                return;
-
-            switch (category)
+            if (!query.HasSpecifiedCategories || query.Categories.Contains(MapTrackerCatToNewznab(category).First()))
             {
-                case "pelicula":
-                case "pelicula4k":
-                    await ParseMovieRelease(releases, link, query, title, quality);
-                    break;
-                case "serie":
-                case "seriehd":
-                    await ParseSeriesRelease(releases, link, query, title, quality);
-                    break;
-                case "musica":
-                    await ParseMusicRelease(releases, link, query, title);
-                    break;
+                if ((matchWords && CheckTitleMatchWords(query.SearchTerm, title)) || !matchWords)
+                {
+                    switch (category)
+                    {
+                        case "pelicula":
+                            await ParseMovieReleaseAsync(releases, link, query, title, quality, category);
+                            break;
+                        case "documental":
+                        case "serie":
+                            await ParseSeriesReleaseAsync(releases, link, query, title, quality, category);
+                            break;
+                    }
+                }
             }
         }
 
-        private async Task ParseMusicRelease(ICollection<ReleaseInfo> releases, string link, TorznabQuery query, string title)
+        private async Task ParseMovieReleaseAsync(ICollection<ReleaseInfo> releases, string link, TorznabQuery query, string title, string quality, string category)
         {
+            var cleanReleaseTitle = CleanReleaseTitle(title);
+            var tags = ProcessTags(title);
+            var lang = ".SPANISH";
+            var downloadLink = link;
+            var size = 0L;
+
             var result = await RequestWithCookiesAsync(link);
+
             if (result.Status != HttpStatusCode.OK)
+            {
                 throw new ExceptionWithConfigData(result.ContentString, configData);
+            }
 
             var searchResultParser = new HtmlParser();
             using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
-            var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
+            var year = doc.QuerySelector("div.d-inline-block.ml-2 > p.m-1 > a")?.TextContent.Trim();
 
-            //var _title = data.QuerySelector("h2.descargarTitulo").TextContent;
+            // add the year
+            if (year.IsNotNullOrWhiteSpace() && Regex.IsMatch(year!, @"^((?:19|20)\d{2})$"))
+            {
+                year = '.' + year;
 
-            //var data2 = data.QuerySelectorAll("div.d-inline-block > p");
+            }
+            else
+            {
+                year = "";
 
-            //var yearStr = data2[0].TextContent;
+            }
 
-            var data3 = data.QuerySelectorAll("div.text-center > div.d-inline-block");
+            var info = doc.QuerySelectorAll("div.descargar > div.card > div.card-body")[0];
 
-            var publishStr = data3[0].TextContent; //"Fecha: {0}" -- needs trimming
-            var sizeStr = data3[1].TextContent; //"Tamaño: {0}" -- needs trimming, contains number of episodes available
+            var downloadBtn = info.QuerySelector("a.protected-download") ?? info.QuerySelector("div.text-center a");
 
-            var publishDate = TryToParseDate(publishStr, DateTime.Now);
-            var size = ParseUtil.GetBytes(sizeStr);
+            if (downloadBtn != null)
+            {
+                var contentIdStr = downloadBtn.GetAttribute("data-content-id");
+                var tabla = downloadBtn.GetAttribute("data-tabla");
 
-            var release = GenerateRelease(title, link, link, GetCategory(title, link), publishDate, size);
+                if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out var contentId))
+                    downloadLink = link + '/' + tabla + '/' + contentIdStr;
+            }
+
+            var moreinfo = info.QuerySelectorAll("div.text-center > div.d-inline-block");
+
+            // guess size
+            if (moreinfo.Length == 2)
+            {
+                size = ParseUtil.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
+            }
+            else
+            {
+                size = GuessSize(quality, category);
+            }
+
+            var release = GenerateRelease(cleanReleaseTitle + year + '.' + quality + tags + lang, link, downloadLink, category, DateTime.Now, size);
+
             releases.Add(release);
         }
 
-        private async Task ParseSeriesRelease(ICollection<ReleaseInfo> releases, string link, TorznabQuery query, string title, string quality)
+        private async Task ParseSeriesReleaseAsync(ICollection<ReleaseInfo> releases, string link, TorznabQuery query, string title, string quality, string category)
         {
+            var cleanReleaseTitle = CleanReleaseTitle(title);
+            var tags = ProcessTags(title);
+            var lang = ".SPANISH";
+            var season = ParseSeriesSeason(title);
+
             var result = await RequestWithCookiesAsync(link);
             if (result.Status != HttpStatusCode.OK)
                 throw new ExceptionWithConfigData(result.ContentString, configData);
@@ -411,149 +446,133 @@ namespace Jackett.Common.Indexers.Definitions
             var searchResultParser = new HtmlParser();
             using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
-            var data = doc.QuerySelector("div.descargar > div.card > div.card-body");
+            var data = doc.QuerySelectorAll("div.descargar > div.card > div.card-body > div.d-inline-block > table.table > tbody > tr");
 
-            //var _title = data.QuerySelector("h2.descargarTitulo").TextContent;
-
-            //var data2 = data.QuerySelectorAll("div.d-inline-block > p");
-
-            //var quality = data2[0].TextContent; //"Formato: {0}" -- needs trimming
-            //var episodes = data2[1].TextContent; //"Episodios: {0}" -- needs trimming, contains number of episodes available
-
-            var data3 = data.QuerySelectorAll("div.d-inline-block > table.table > tbody > tr");
-
-            foreach (var row in data3)
+            foreach (var row in data)
             {
-                var episodeData = row.QuerySelectorAll("td");
+                var info = row.QuerySelectorAll("td")[0].TextContent.Trim();
+                var episodeNumber = ParseSeriesEpisodeNumber(info);
+                var episodeTitle = ParseSeriesEpisodeTitle(info);
+                var episodePublishDate = DateTime.TryParseExact(
+                    row.QuerySelectorAll("td")[2].TextContent.Trim(),
+                    "yyyy-MM-dd",
+                    CultureInfo.InvariantCulture,
+                    DateTimeStyles.None,
+                    out var parsedDate) ? parsedDate : DateTime.Now;
+                var size = GuessSize(quality, category);
+                size *= GetEpisodeCountFromTitle(episodeNumber);
 
-                var episodeTitle = episodeData[0].TextContent; //it may contain two episodes divided by '&', eg '1x01 & 1x02'
-                var downloadLink = "https:" + episodeData[1].QuerySelector("a").GetAttribute("href"); // URL like "//cdn.pizza/"
-                var episodePublishStr = episodeData[2].TextContent;
-                var episodePublish = TryToParseDate(episodePublishStr, DateTime.Now);
+                var downloadLink = "";
+                var downloadBtn = row.QuerySelector("td > a.protected-download");
 
-                // Convert the title to Scene format
-                episodeTitle = ParseSeriesTitle(title, episodeTitle, query);
+                if (downloadBtn != null)
+                {
+                    var contentIdStr = downloadBtn.GetAttribute("data-content-id");
+                    var tabla = downloadBtn.GetAttribute("data-tabla");
+                    var contentId = -1;
+
+                    if (!string.IsNullOrEmpty(contentIdStr) && !string.IsNullOrEmpty(tabla) && int.TryParse(contentIdStr, out contentId))
+                        downloadLink = link + '/' + tabla + '/' + contentIdStr;
+                }
 
                 // if the original query was in scene format, we filter the results to match episode
                 // query.Episode != null means scene title
                 if (query.Episode != null && !episodeTitle.Contains(query.GetEpisodeSearchString()))
                     continue;
 
-                // guess size
-                var size = 512.Megabytes();
-                if (episodeTitle.ToLower().Contains("720p"))
-                    size = 1.Gigabytes();
-                if (episodeTitle.ToLower().Contains("1080p"))
-                    size = 4.Gigabytes();
+                var release = new ReleaseInfo { };
 
-                size *= GetEpisodeCountFromTitle(episodeTitle);
+                if (episodeTitle.IsNullOrWhiteSpace())
+                {
+                    release = GenerateRelease(cleanReleaseTitle + '.' + season + episodeNumber + '.' + quality + tags + lang, link, downloadLink, category, episodePublishDate, size);
+                }
+                else
+                {
+                    release = GenerateRelease(cleanReleaseTitle + '.' + season + episodeNumber + '.' + episodeTitle + '.' + quality + tags + lang, link, downloadLink, category, episodePublishDate, size);
+                }
 
-                var release = GenerateRelease(episodeTitle, link, downloadLink, GetCategory(title, link), episodePublish, size);
                 releases.Add(release);
             }
         }
 
-        private async Task ParseMovieRelease(ICollection<ReleaseInfo> releases, string link, TorznabQuery query, string title, string quality)
+        private static string ParseSeriesSeason(string title)
         {
-            title = title.Trim();
+            var result = "";
 
-            var result = await RequestWithCookiesAsync(link);
-            if (result.Status != HttpStatusCode.OK)
+            var seasonPattern = @"^(.*?)\s*-\s*(\d+)[ªº]?\s+Temporada";
+            var miniseriePattern = @"^(.*?)\s*-\s*Miniserie";
+
+            var match = Regex.Match(title, seasonPattern);
+
+            if (match.Success)
             {
-                throw new ExceptionWithConfigData(result.ContentString, configData);
+                int seasonNumber = int.Parse(match.Groups[2].Value);
+                result = $"S{seasonNumber:D2}";
+
+            }
+            else if (Regex.Match(title, miniseriePattern).Success)
+            {
+                result = "S01";
+
             }
 
-            var searchResultParser = new HtmlParser();
-            using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
+            return result;
+        }
 
-            // parse tags in title, we need to put the year after the real title (before the tags)
-            // Harry Potter And The Deathly Hallows: Part 1 [subs. Integrados]
-            var tags = "";
-            var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
-            foreach (Match m in queryMatches)
+        private static string ParseSeriesEpisodeNumber(string episodeTitle)
+        {
+            var result = "";
+
+            var pattern = @"\d+x(\d+)(?:\s*(?:-|al)\s*(?:\d+x)?(\d+))?";
+            var match = Regex.Match(episodeTitle, pattern);
+            if (match.Success)
             {
-                var tag = m.Groups[1].Value.Trim().ToUpper();
+                int epStart = int.Parse(match.Groups[1].Value);
 
-                if (tag.Equals("4K")) // Fix 4K quality. Eg Harry Potter Y La Orden Del Fénix [4k]
+                if (match.Groups[2].Success)
                 {
-                    quality = "(UHD 4K 2160p)";
+                    int epEnd = int.Parse(match.Groups[2].Value);
+                    result = $"E{epStart:D2}-E{epEnd:D2}";
+
                 }
-                else if (tag.Equals("FULLBLURAY")) // Fix 4K quality. Eg Harry Potter Y El Cáliz De Fuego (fullbluray)
+                else
                 {
-                    quality = "(COMPLETE BLURAY)";
+                    result = $"E{epStart:D2}";
+
                 }
-                else // Add the tag to the title
+            }
+
+            return result;
+        }
+
+        private static string ParseSeriesEpisodeTitle(string episodeTitle)
+        {
+            var result = "";
+
+            string pattern = @"\d+x(\d+)(?:\s*(?:-|al)\s*(?:\d+x)?(\d+))?";
+            var match = Regex.Match(episodeTitle, pattern);
+
+            if (match.Success)
+            {
+                int endIndex = match.Index + match.Length;
+                if (endIndex < episodeTitle.Length)
                 {
-                    tags += " " + tag;
+                    string remain = episodeTitle.Substring(endIndex).Trim();
+
+                    if (remain.StartsWith("-"))
+                    {
+                        string rawTitle = remain.Substring(1).Trim();
+
+                        var titleName = rawTitle.TrimEnd('…', '.', ' ');
+
+                        if (!string.IsNullOrEmpty(titleName))
+                            result = titleName.Replace(" ", ".");
+
+                    }
                 }
-
-                title = title.Replace(m.Groups[0].Value, "");
-            }
-            title = title.Trim();
-
-            // clean quality
-            if (quality != null)
-            {
-                var queryMatch = Regex.Match(quality, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
-                if (queryMatch.Success)
-                    quality = queryMatch.Groups[1].Value;
-                quality = quality.Trim().Replace("-", " ");
-                quality = Regex.Replace(quality, "HDRip", "BDRip", RegexOptions.IgnoreCase); // fix for Radarr
             }
 
-            var releaseYear = doc.QuerySelector("div.d-inline-block.ml-2 > p:contains('Año') > a")?.TextContent.Trim();
-
-            // add the year
-            if (releaseYear.IsNotNullOrWhiteSpace() && Regex.IsMatch(releaseYear!, @"^((?:19|20)\d{2})$"))
-            {
-                title += $" {releaseYear}";
-            }
-            else if (query.Year is > 0)
-            {
-                title += $" {query.Year}";
-            }
-
-            // add the tags
-            title += tags;
-
-            // add spanish
-            title += " SPANISH";
-
-            // add quality
-            if (quality != null)
-            {
-                title += " " + quality;
-            }
-
-            var info = doc.QuerySelectorAll("div.descargar > div.card > div.card-body").First();
-            var moreinfo = info.QuerySelectorAll("div.text-center > div.d-inline-block");
-
-            // guess size
-            long size;
-            if (moreinfo.Length == 2)
-            {
-                size = ParseUtil.GetBytes(moreinfo[1].QuerySelector("p").TextContent);
-            }
-            else if (title.ToLower().Contains("4k"))
-            {
-                size = 50.Gigabytes();
-            }
-            else if (title.ToLower().Contains("1080p"))
-            {
-                size = 4.Gigabytes();
-            }
-            else if (title.ToLower().Contains("720p"))
-            {
-                size = 1.Gigabytes();
-            }
-            else
-            {
-                size = 512.Megabytes();
-            }
-
-            var release = GenerateRelease(title, link, link, GetCategory(title, link), DateTime.Now, size);
-
-            releases.Add(release);
+            return result;
         }
 
         private ReleaseInfo GenerateRelease(string title, string link, string downloadLink, string cat,
@@ -629,89 +648,6 @@ namespace Jackett.Common.Indexers.Definitions
             return query;
         }
 
-        private static string ParseSeriesTitle(string title, string episodeTitle, TorznabQuery query)
-        {
-            // parse title
-            // title = The Mandalorian - 1ª Temporada
-            // title = The Mandalorian - 1ª Temporada [720p]
-            // title = Grace and Frankie - 5ª Temporada [720p]: 5x08 al 5x13.
-            var newTitle = title.Split(new[] { " - " }, StringSplitOptions.RemoveEmptyEntries)[0].Trim();
-            // newTitle = The Mandalorian
-
-            // parse episode title
-            var newEpisodeTitle = episodeTitle.Trim();
-            // episodeTitle = 5x08 al 5x13.
-            // episodeTitle = 2x01 - 2x02 - 2x03.
-            var matches = Regex.Matches(newEpisodeTitle, "([0-9]+)x([0-9]+)", RegexOptions.IgnoreCase);
-            if (matches.Count > 1)
-            {
-                newEpisodeTitle = "";
-                foreach (Match m in matches)
-                    if (newEpisodeTitle.Equals(""))
-                        newEpisodeTitle += "S" + m.Groups[1].Value.PadLeft(2, '0')
-                                               + "E" + m.Groups[2].Value.PadLeft(2, '0');
-                    else
-                        newEpisodeTitle += "-E" + m.Groups[2].Value.PadLeft(2, '0');
-                // newEpisodeTitle = S05E08-E13
-                // newEpisodeTitle = S02E01-E02-E03
-            }
-            else
-            {
-                // episodeTitle = 1x04 - 05.
-                var m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)[^0-9]+([0-9]+)[.]?$", RegexOptions.IgnoreCase);
-                if (m.Success)
-                    newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0')
-                                          + "E" + m.Groups[2].Value.PadLeft(2, '0') + "-"
-                                          + "E" + m.Groups[3].Value.PadLeft(2, '0');
-                // newEpisodeTitle = S01E04-E05
-                else
-                {
-                    // episodeTitle = 1x02
-                    // episodeTitle = 1x02 -
-                    // episodeTitle = 1x08 -​ CONTRASEÑA: WWW.​PCTNEW ORG bebe
-                    m = Regex.Match(newEpisodeTitle, "^([0-9]+)x([0-9]+)(.*)$", RegexOptions.IgnoreCase);
-                    if (m.Success)
-                    {
-                        newEpisodeTitle = "S" + m.Groups[1].Value.PadLeft(2, '0')
-                                              + "E" + m.Groups[2].Value.PadLeft(2, '0');
-                        // newEpisodeTitle = S01E02
-                        if (!m.Groups[3].Value.Equals(""))
-                            newEpisodeTitle += " " + m.Groups[3].Value.Replace(" -", "").Trim();
-                        // newEpisodeTitle = S01E08 CONTRASEÑA: WWW.​PCTNEW ORG bebe
-                    }
-                }
-            }
-
-            // if the original query was in scene format, we have to put the year back
-            // query.Episode != null means scene title
-            var year = query.Episode != null && query.Year != null ? " " + query.Year : "";
-            newTitle += year + " " + newEpisodeTitle;
-
-            newTitle += " SPANISH";
-
-            // multilanguage
-            if (title.ToLower().Contains("ES-EN"))
-                newTitle += " ENGLISH";
-
-            //quality
-            if (title.ToLower().Contains("720p"))
-                newTitle += " 720p";
-            else if (title.ToLower().Contains("1080p"))
-                newTitle += " 1080p";
-            else
-                newTitle += " SDTV";
-
-            if (title.ToLower().Contains("HDTV"))
-                newTitle += " HDTV";
-
-            if (title.ToLower().Contains("x265"))
-                newTitle += " x265";
-            else
-                newTitle += " x264";
-
-            // return The Mandalorian S01E04 SPANISH 720p HDTV x264
-            return newTitle;
-        }
 
         public static int GetEpisodeCountFromTitle(string title)
         {
@@ -737,34 +673,6 @@ namespace Jackett.Common.Indexers.Definitions
             return count;
         }
 
-
-        public static string GetCategory(string title, string url)
-        {
-            var cat = GetCategoryFromURL(url);
-            switch (cat)
-            {
-                case "pelicula":
-                case "pelicula4k":
-                    if (title.Contains("4K"))
-                    {
-                        cat = DonTorrentCatType.Pelicula4K;
-                    }
-                    break;
-
-                case "serie":
-                case "seriehd":
-                    if (title.Contains("720p") || title.Contains("1080p"))
-                    {
-                        cat = DonTorrentCatType.SerieHD;
-                    }
-
-                    break;
-                default:
-                    break;
-            }
-            return cat;
-        }
-
         public static string GetCategoryFromURL(string url)
         {
             return CategoriesMap
@@ -773,17 +681,268 @@ namespace Jackett.Common.Indexers.Definitions
                 .FirstOrDefault();
         }
 
-        private static DateTime TryToParseDate(string dateToParse, DateTime dateDefault)
+
+        private static string CleanReleaseTitle(string title)
         {
-            try
+            var result = "";
+            var seasonPattern = @"^(.*?)\s*-\s*(\d+)[ªº]?\s+Temporada";
+            var miniseriePattern = @"^(.*?)\s*-\s*Miniserie";
+
+            var match = Regex.Match(title, seasonPattern);
+            if (match.Success)
+                result = match.Groups[1].Value.Trim();
+
+
+            match = Regex.Match(title, miniseriePattern);
+            if (result == "" && match.Success)
+                result = match.Groups[1].Value.Trim();
+
+
+            if (result == "")
+                result = title;
+
+            var index = result.IndexOfAny(new char[] { '(', '[' });
+            result = index >= 0 ? result.Substring(0, index) : result;
+
+            result = Regex.Replace(result.Trim(), @"[\s:\-\._]+", ".");
+            result = result.Trim('.');
+
+            return result;
+        }
+
+        private static long GuessSize(string quality, string category)
+        {
+            var size = 0L;
+            var qualityL = quality?.ToLowerInvariant() ?? string.Empty;
+
+            switch (category?.ToLowerInvariant())
             {
-                return DateTime.ParseExact(dateToParse, "yyyy-MM-dd", CultureInfo.InvariantCulture);
+                case "pelicula":
+                    switch (qualityL)
+                    {
+                        case "fullbluray":
+                            size = 48318382080L; // 45 GB
+                            break;
+
+                        case "4k":
+                            size = 21474836480L; // 20 GB
+                            break;
+
+                        case "bdremux":
+                        case "bdremux.1080p":
+                            size = 21474836480L; // 20 GB
+                            break;
+
+                        case "bluray":
+                        case "bluray.1080p":
+                            size = 9663676416L;  // 9 GB
+                            break;
+
+                        case "microhd":
+                        case "microhd.1080p":
+                            size = 4831838208L;  // 4.5 GB
+                            break;
+
+                        case "bluray.720p":
+                            size = 4294967296L;  // 4 GB
+                            break;
+
+                        case "microhd.720p":
+                        case "hdrip":
+                            size = 2147483648L;  // 2 GB
+                            break;
+
+                        case "dvdrip":
+                        case "hdtv":
+                            size = 1503238554L;  // 1.4 GB
+                            break;
+
+                        case "screener":
+                        case "scr":
+                            size = 1073741824L;  // 1 GB
+                            break;
+
+                        case "cam":
+                        case "telesync":
+                        case "ts":
+                        case "tc":
+                            size = 734003200L;   // 700 MB
+                            break;
+
+                        default:
+                            size = 524288000L;   // 500 MB
+                            break;
+                    }
+                    break;
+
+                case "documental":
+                case "serie":
+                    switch (qualityL)
+                    {
+                        case "fullbluray":
+                            size = 10737418240L; // 10 GB
+                            break;
+
+                        case "4k":
+                            size = 10737418240L; // 10 GB
+                            break;
+
+                        case "bdremux":
+                        case "bdremux.1080p":
+                            size = 8589934592L;  // 8 GB
+                            break;
+
+                        case "bluray":
+                        case "bluray.1080p":
+                            size = 3221225472L;  // 3 GB
+                            break;
+
+                        case "microhd":
+                        case "microhd.1080p":
+                            size = 1610612736L;  // 1.5 GB
+                            break;
+
+                        case "bluray.720p":
+                            size = 2147483648L;  // 2 GB
+                            break;
+
+                        case "microhd.720p":
+                        case "hdtv.720p":
+                        case "hdrip":
+                            size = 1073741824L;  // 1 GB
+                            break;
+
+                        case "dvdrip":
+                        case "hdtv":
+                            size = 536870912L;   // 500 MB
+                            break;
+
+                        case "screener":
+                        case "scr":
+                            size = 419430400L;   // 400 MB
+                            break;
+
+                        case "cam":
+                        case "telesync":
+                        case "ts":
+                        case "tc":
+                            size = 314572800L;   // 300 MB
+                            break;
+
+                        default:
+                            size = 524288000L;   // 500 MB
+                            break;
+                    }
+                    break;
             }
-            catch
+
+            return size;
+        }
+
+        private static string ProcessTags(string title)
+        {
+            var tags = "";
+            var queryMatches = Regex.Matches(title, @"[\[\(]([^\]\)]+)[\]\)]", RegexOptions.IgnoreCase);
+
+            foreach (Match m in queryMatches)
             {
-                // ignored
+                var tag = m.Groups[1].Value.Trim().ToUpper();
+
+                if (tag.ToLower().Equals("v. extendida"))
+                    tags += ".Directors.Cut";
+                else if (tag.ToLower().Equals("subs. integrados"))
+                    tags = ".HC";
+                else
+                    tags += "." + tag;
             }
-            return dateDefault;
+
+            return tags;
+        }
+
+        private async Task<string> GetProtectedDownloadUrlAsync(int contentId, string contentType)
+        {
+            var apiUrl = SiteLink.TrimEnd('/') + "/api_validate_pow.php";
+            var headers = new Dictionary<string, string> { { "Content-Type", "application/json; charset=utf-8" } };
+
+            var generateData = new Dictionary<string, string>
+            {
+                { "action", "generate" },
+                { "content_id", contentId.ToString() },
+                { "tabla", contentType }
+            };
+            var generateJson = JsonConvert.SerializeObject(generateData);
+
+            var genResponse = await RequestWithCookiesAsync(apiUrl, method: RequestType.POST, rawbody: generateJson);
+            if (genResponse.Status != HttpStatusCode.OK)
+                return null;
+
+            var genResult = JsonConvert.DeserializeObject<Newtonsoft.Json.Linq.JObject>(genResponse.ContentString);
+            if (genResult?["success"]?.Value<bool>() != true)
+                return null;
+
+            string challenge = genResult["challenge"]?.ToString();
+            if (string.IsNullOrEmpty(challenge))
+                return null;
+
+            long nonce = ComputeProofOfWork(challenge, difficulty: 3);
+
+            var validateData = new Dictionary<string, string>
+            {
+                { "action", "validate" },
+                { "challenge", challenge },
+                { "nonce", nonce.ToString() }
+            };
+
+            generateJson = JsonConvert.SerializeObject(validateData);
+            var valResponse = await RequestWithCookiesAsync(apiUrl, method: RequestType.POST, rawbody: generateJson);
+            if (valResponse.Status != HttpStatusCode.OK)
+                return null;
+
+            var valResult = JsonConvert.DeserializeObject<JObject>(valResponse.ContentString);
+            if (valResult?["success"]?.Value<bool>() != true)
+                return null;
+
+            var relativeUrl = valResult["download_url"]?.ToString();
+            if (string.IsNullOrEmpty(relativeUrl))
+                return null;
+
+            relativeUrl = relativeUrl.Replace("\\/", "/");
+            if (relativeUrl.StartsWith("//"))
+            {
+                relativeUrl = "https:" + relativeUrl;
+            }
+
+            return relativeUrl;
+        }
+
+        private long ComputeProofOfWork(string challenge, int difficulty = 3)
+        {
+            long nonce = 0;
+            string target = new string('0', difficulty);
+
+            using (var sha256 = SHA256.Create())
+            {
+                while (true)
+                {
+                    string text = challenge + nonce;
+                    byte[] bytes = Encoding.UTF8.GetBytes(text);
+                    byte[] hashBytes = sha256.ComputeHash(bytes);
+
+                    StringBuilder sb = new StringBuilder();
+                    foreach (byte b in hashBytes)
+                    {
+                        sb.Append(b.ToString("x2"));
+                    }
+                    string hashHex = sb.ToString();
+
+                    if (hashHex.StartsWith(target))
+                    {
+                        return nonce;
+                    }
+
+                    nonce++;
+                }
+            }
         }
     }
 }
