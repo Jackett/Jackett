@@ -167,7 +167,6 @@ Prior versions of Jackett are no longer supported.
  * Torrents.csv
  * Torrentsome (토렌트썸)
  * Torrenttip (토렌트팁)
- * U2P
  * U3C3
  * Uindex
  * UzTracker

@@ -910,6 +910,7 @@ namespace Jackett.Updater
                 "Definitions/unleashthecartoons.yml",
                 "Definitions/uploads.yml",
                 "Definitions/utorrents.yml", // same as SzeneFZ now
+                "Definitions/u2p.yml",
                 "Definitions/vanila.yml",
                 "Definitions/vhstapes.yml",
                 "Definitions/videoteka.yml",
