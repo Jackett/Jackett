@@ -12,14 +12,14 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.rantop.xyz/
 links:
-  - https://darkfox.proxy-site.cc/
-  - https://vidlox.proxy-site.cc/
-  - https://worldivx.proxy-site.cc/
-  - https://wikibox.proxy-site.cc/
-  - https://sharkibox.proxy-site.cc/
-  - https://workino.proxy-site.cc/
-  - https://oxtorrent.proxy-site.cc/
-  - https://torrent911.proxy-site.cc/
+  - https://darkfox.proxy-site2.cc/
+  - https://vidlox.proxy-site2.cc/
+  - https://worldivx.proxy-site2.cc/
+  - https://wikibox.proxy-site2.cc/
+  - https://sharkibox.proxy-site2.cc/
+  - https://workino.proxy-site2.cc/
+  - https://oxtorrent.proxy-site2.cc/
+  - https://torrent911.proxy-site2.cc/
 legacylinks:
   # latest domains list
   - https://www.rantop.xyz/
@@ -42,58 +42,74 @@ legacylinks:
   - https://www.darkflix.cc/
   - https://darkfox5.cc/
   - https://darkfox.my/
+  - https://darkfox.ws/
   - https://ww1.fit/darkfox/
   - https://www.darkfox2.cc/
   - https://www.darkfox3.cc/
   - https://www.darkfox4.cc/
   - https://www.darkfox6.cc/
+  - https://darkfox.proxy-site.cc/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
   - https://vidlox.my/
+  - https://vidlox.ws/
   - https://ww1.fit/vidlox/
   - https://www.vidlox2.cc/
   - https://www.vidlox3.cc/
   - https://www.vidlox4.cc/
   - https://www.vidlox6.cc/
   - https://www.vidlox7.cc/
+  - https://vidlox.proxy-site.cc/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
   - https://wikibox.my/
+  - https://wikibox.ws/
   - https://ww1.fit/wikibox/
   - https://www.wikibox1.cc/
   - https://www.wikibox2.cc/
   - https://www.wikibox3.cc/
   - https://www.wikibox4.cc/
+  - https://wikibox.proxy-site.cc/
   # Sharkibox
   - https://sharkibox.pw/
+  - https://sharkibox.ws/
   - https://ww1.fit/sharkibox/
   - https://www.sharkibox1.cc/
   - https://www.sharkibox.cc/
+  - https://sharkibox.proxy-site.cc/
   # Worldivx
   - https://worldivx.pw/
+  - https://worldivx.ws/
   - https://ww1.fit/worldivx/
   - https://www.worldivx1.cc/
   - https://www.worldivx.cc/
+  - https://worldivx.proxy-site.cc/
   # Workino
   - https://workino.pw/
+  - https://workino.ws/
   - https://ww1.fit/workino/
   - https://www.workino.cc/
+  - https://workino.proxy-site.cc/
   # Oxtorrent
   - https://oxtorrent5.ws/
   - https://oxtorrent.win/
   - https://oxtorrent.lat/
+  - https://oxtorrent.ml/
   - https://ww1.fit/oxtorrent/
   - https://www.oxtorrent2.ws/
   - https://www.oxtorrent3.ws/
   - https://www.oxtorrent5.ws/
   - https://www.oxtorrent2.my/
+  - https://oxtorrent.proxy-site.cc/
   # Torrent911
   - https://torrent911.win/
+  - https://torrent911.lat/
   - https://ww1.fit/torrent911/
   - https://www.torrent911.wiki/
   - https://www.torrent911.store/
+  - https://torrent911.proxy-site.cc/
 
 caps:
   categorymappings:
