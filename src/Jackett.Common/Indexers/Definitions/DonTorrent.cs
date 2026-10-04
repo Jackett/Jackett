@@ -40,6 +40,7 @@ namespace Jackett.Common.Indexers.Definitions
         */
         public override string[] LegacySiteLinks => new[]
         {
+            "https://dontorrent.gift/",
             "https://dontorrent.istanbul/",
             "https://dontorrent.onl/",
             "https://dontorrent.kids/",
@@ -47,14 +48,28 @@ namespace Jackett.Common.Indexers.Definitions
             "https://dontorrent.live/",
             "https://dontorrent.phd/",
             "https://dontorrent.gripe/",
+            "https://dontorrent.sarl/",
+            "https://dontorrent.club/",
+            "https://dontorrent.prof/",
+            "https://dontorrent.info/",
             "https://dontorrent.promo/",
-            "https://dontorrent.gift/",
+            "https://dontorrent.photos/",
             "https://dontorrent.cfd/",
             "https://verdetorrent.com/",
             "https://naranjatorrent.com/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
+            "https://dontorrent.pink/",
+            "https://dontorrent.reisen/",
+            "https://dontorrent.racing/",
+            "https://dontorrent.rocks/",
+            "https://dontorrent.science/",
+            "https://dontorrent.support/",
+            "https://dontorrent.review/",
+            "https://dontorrent.management/",
+            "https://dontorrent.soccer/",
+            "https://dontorrent.supply/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
