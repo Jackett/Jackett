@@ -301,7 +301,7 @@ Prior versions of Jackett are no longer supported.
  * BigCore
  * Bit-Bázis
  * BIT-HDTV
- * BitAgent
+ * BitAgent [![(invite needed)][inviteneeded]](#)
  * Bitded
  * bitGAMER
  * BitHUmen
