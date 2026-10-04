@@ -233,13 +233,30 @@ namespace Jackett.Common.Indexers.Definitions
                 tabla = parameters["tabla"]
             });
             var challenge = generate.Value<string>("challenge");
+            var pow = generate["pow"];
+            if (pow?.Value<int>("version") != 2)
+                throw new Exception($"Error, the proof of work version {pow?.Value<string>("version")} of the site is not supported.");
 
-            var validate = await DownloadApiRequestAsync(new
+            var nonces = ComputeProofOfWork(challenge, pow.Value<int>("rounds"), pow.Value<int>("difficulty"));
+
+            await Task.Delay(pow.Value<int>("min_duration_ms"));
+
+            JObject validate = null;
+            for (var attempt = 0; attempt < 3; attempt++)
             {
-                action = "validate",
-                challenge,
-                nonce = ComputeProofOfWork(challenge)
-            });
+                validate = await DownloadApiRequestAsync(new
+                {
+                    action = "validate",
+                    challenge,
+                    nonces
+                });
+                if (validate.Value<string>("status") != "pow_pending")
+                    break;
+
+                await Task.Delay(validate.Value<int>("retry_after_ms"));
+            }
+            if (validate.Value<string>("status") == "pow_pending")
+                throw new Exception("Error, the site did not accept the proof of work, try again later.");
 
             // download_url is protocol relative, eg: //wolfmax4k.com/torrents/peliculas/xxx.torrent
             var torrentUrl = new Uri(new Uri(SiteLink), validate.Value<string>("download_url"));
@@ -285,7 +302,7 @@ namespace Jackett.Common.Indexers.Definitions
                 rawbody: JsonConvert.SerializeObject(body));
 
             var json = JObject.Parse(result.ContentString);
-            if (json.Value<bool>("success"))
+            if (json.Value<bool>("success") || json.Value<string>("status") == "pow_pending")
                 return json;
 
             throw new Exception(json.Value<string>("status") switch
@@ -296,16 +313,26 @@ namespace Jackett.Common.Indexers.Definitions
             });
         }
 
-        private static int ComputeProofOfWork(string challenge)
+        private static List<int> ComputeProofOfWork(string challenge, int rounds, int difficulty)
         {
-            // same as the site javascript: the sha256 of challenge + nonce must start with "000" in hex
+            // same as the site javascript: for each round the sha256 of challenge:round:nonce must start with "difficulty" zeros in hex
+            var prefix = new string('0', difficulty);
+            var nonces = new List<int>();
             using var sha256 = SHA256.Create();
-            for (var nonce = 0; ; nonce++)
+            for (var round = 0; round < rounds; round++)
             {
-                var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes(challenge + nonce));
-                if (hash[0] == 0 && hash[1] < 0x10)
-                    return nonce;
+                for (var nonce = 0; ; nonce++)
+                {
+                    var hash = sha256.ComputeHash(Encoding.UTF8.GetBytes($"{challenge}:{round}:{nonce}"));
+                    if (BitConverter.ToString(hash).Replace("-", "").StartsWith(prefix))
+                    {
+                        nonces.Add(nonce);
+                        break;
+                    }
+                }
             }
+
+            return nonces;
         }
 
         // Thanks to https://stackoverflow.com/a/5454692/2078070 !!!
@@ -584,17 +611,25 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string ParseSeasonAndEpisode(string episodeText)
         {
-            // Episodio 1x10 - / 2x01 al 06. / 4x07
-            var match = Regex.Match(episodeText ?? "", @"(\d+)x(\d+)(\s*al\s*(\d+))?", RegexOptions.IgnoreCase);
+            var text = (episodeText ?? "").Trim();
+            var match = text switch
+            {
+                // Episodio 2x01 al 06. / Episodio 4x01 al 4x08.
+                _ when Regex.Match(text, @"(\d+)x(\d+) al (?:\d+x)?(\d+)", RegexOptions.IgnoreCase) is { Success: true } range => range,
+                // Episodio 3x07 - 3x08. / Episodio 1x05 - 06 - 07 - 08.
+                _ when Regex.Match(text, @"(\d+)x(\d+)(?: - (?:\d+x)?(\d+))+\.?$", RegexOptions.IgnoreCase) is { Success: true } list => list,
+                // Episodio 1x10 - / Episodio 5x24 - Ahora o nunca.
+                _ => Regex.Match(text, @"(\d+)x(\d+)", RegexOptions.IgnoreCase)
+            };
             if (!match.Success)
             {
                 return "";
             }
 
             var result = "S" + match.Groups[1].Value.PadLeft(2, '0') + "E" + match.Groups[2].Value.PadLeft(2, '0');
-            if (match.Groups[4].Success)
+            if (match.Groups[3].Success)
             {
-                result += "-E" + match.Groups[4].Value.PadLeft(2, '0');
+                result += "-E" + match.Groups[3].Value.PadLeft(2, '0');
             }
 
             return result;
