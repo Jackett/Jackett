@@ -168,29 +168,25 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: a.lightbox
-      attribute: href
-    size:
-      selector: "p:contains(\"Size:\")"
+      selector: a[href^="index.php?page=torrent-details&id="]
+      attribute: onmouseover
       filters:
         - name: regexp
-          args: "Size:\\s+(.+)"
+          args: src=([^\s]+)
+    size:
+      selector: td:nth-child(10)
     date:
       # auto adjusted by site account profile
-      selector: "p:contains(\"AddDate:\")"
+      selector: td:nth-child(5)
       filters:
-        - name: regexp
-          args: "AddDate:\\s+(.+)"
         - name: dateparse
-          args: "HH:mm:ss dd/MM/yyyy"
+          args: "dd/MM/yyyy"
     seeders:
-      selector: a[href^="index.php?page=peers&id="]:nth-child(1)
+      selector: td:nth-child(6)
     leechers:
-      selector: a[href^="index.php?page=peers&id="]:nth-child(2)
+      selector: td:nth-child(7)
     grabs:
-      selector: a[href^="index.php?page=torrent_history&id="]
-      optional: true
-      default: 0
+      selector: td:nth-child(8)
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
