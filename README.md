@@ -376,7 +376,6 @@ Prior versions of Jackett are no longer supported.
  * FANO.IN [![(invite needed)][inviteneeded]](#)
  * Fappaizuri
  * Femdomcult
- * FileIplay
  * FileList (FL)
  * FinElite (FE) [![(invite needed)][inviteneeded]](#)
  * Flood (FLD)
