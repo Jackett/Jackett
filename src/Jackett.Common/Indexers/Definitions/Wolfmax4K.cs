@@ -34,7 +34,11 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "Wolfmax 4k";
         public override string Description => "Wolfmax 4k is a SPANISH Public site for MOVIES / TV";
 
-        public override string SiteLink { get; protected set; } = "https://wolfmax4k.com/";
+        public override string SiteLink { get; protected set; } = "https://wolftorrent.com/";
+        public override string[] LegacySiteLinks => new[]
+        {
+            "https://wolfmax4k.com/",
+        };
 
         public override string Language => "es-ES";
         public override string Type => "public";
