@@ -12,12 +12,27 @@ links:
 
 caps:
   categorymappings:
-    - {id: 2000, cat: Movies, desc: "Films"}
-    - {id: 5000, cat: TV, desc: "Séries"}
-    - {id: 3000, cat: Audio, desc: "Audio"}
-    - {id: 7000, cat: Books, desc: "Ebooks"}
-    - {id: 4000, cat: PC, desc: "Applications"}
     - {id: 1000, cat: Console, desc: "Jeux vidéo"}
+    - {id: 2000, cat: Movies, desc: "Films"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3010, cat: Audio/MP3, desc: "Musique MP3"}
+    - {id: 3020, cat: Audio/Video, desc: "Concerts & clips"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Livres audio"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Musique sans perte"}
+    - {id: 3050, cat: Audio/Other, desc: "Podcasts, karaoké, samples"}
+    - {id: 4000, cat: PC, desc: "Applications"}
+    - {id: 4030, cat: PC/Mac, desc: "Applications macOS"}
+    - {id: 4050, cat: PC/Games, desc: "Jeux PC"}
+    - {id: 4070, cat: PC/Mobile-Android, desc: "Applications mobiles"}
+    - {id: 5000, cat: TV, desc: "Séries"}
+    - {id: 5070, cat: TV/Anime, desc: "Séries d'animation"}
+    - {id: 5080, cat: TV/Documentary, desc: "Séries documentaires"}
+    - {id: 7000, cat: Books, desc: "Ebooks"}
+    - {id: 7010, cat: Books/Mags, desc: "Presse"}
+    - {id: 7020, cat: Books/EBook, desc: "Livres"}
+    - {id: 7030, cat: Books/Comics, desc: "BD, comics & mangas"}
+    - {id: 7040, cat: Books/Technical, desc: "Revues & manuels techniques"}
+    - {id: 7050, cat: Books/Other, desc: "Partitions & JDR"}
     - {id: 8000, cat: Other, desc: "Divers"}
 
   modes:
@@ -91,8 +106,13 @@ search:
     selector: results
 
   fields:
-    category:
+    category_main:
       selector: category
+    category_sub:
+      selector: subcategory
+      optional: true
+    category:
+      text: "{{ if .Result.category_sub }}{{ .Result.category_sub }}{{ else }}{{ .Result.category_main }}{{ end }}"
     title_phase1:
       selector: title
     title_vostfr:
@@ -139,4 +159,4 @@ search:
       selector: uploadvolumefactor
     minimumratio:
       text: 0.8
-# json v0.18
+# json v1.03
