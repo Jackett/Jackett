@@ -12,14 +12,14 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.torrent-site.my/
 links:
-  - https://ww1-darkfox.officiel.pw/
-  - https://ww1-vidlox.officiel.pw/
-  - https://ww1-worldivx.officiel.pw/
-  - https://ww1-wikibox.officiel.pw/
+  - https://ww1.darkfox.run/
+  - https://ww1.vidlox.run/
+  - https://ww1.worldivx.run/
+  - https://ww1.wikibox.run/
   - https://ww1-sharkibox.officiel.pw/
-  - https://ww1-workino.officiel.pw/
-  - https://ww1-oxtorrent.officiel.pw/
-  - https://ww1-torrent911.officiel.pw/
+  - https://ww1.workino.run/
+  - https://ww1.oxtorrent.run/
+  - https://ww1.torrent911.run/
 legacylinks:
   # latest domains list
   - https://www.torrent-site.my/
@@ -52,6 +52,7 @@ legacylinks:
   - https://www.darkfox6.cc/
   - https://darkfox.proxy-site.cc/
   - https://darkfox.proxy-site2.cc/
+  - https://ww1-darkfox.officiel.pw/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
@@ -66,6 +67,7 @@ legacylinks:
   - https://www.vidlox7.cc/
   - https://vidlox.proxy-site.cc/
   - https://vidlox.proxy-site2.cc/
+  - https://ww1-vidlox.officiel.pw/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
@@ -79,6 +81,7 @@ legacylinks:
   - https://www.wikibox4.cc/
   - https://wikibox.proxy-site.cc/
   - https://wikibox.proxy-site2.cc/
+  - https://ww1-wikibox.officiel.pw/
   # Sharkibox
   - https://sharkibox.pw/
   - https://sharkibox.ws/
@@ -97,6 +100,7 @@ legacylinks:
   - https://www.worldivx.cc/
   - https://worldivx.proxy-site.cc/
   - https://worldivx.proxy-site2.cc/
+  - https://ww1-worldivx.officiel.pw/
   # Workino
   - https://workino.pw/
   - https://workino.ws/
@@ -105,6 +109,7 @@ legacylinks:
   - https://www.workino.cc/
   - https://workino.proxy-site.cc/
   - https://workino.proxy-site2.cc/
+  - https://ww1-workino.officiel.pw/
   # Oxtorrent
   - https://oxtorrent5.ws/
   - https://oxtorrent.win/
@@ -118,6 +123,7 @@ legacylinks:
   - https://www.oxtorrent2.my/
   - https://oxtorrent.proxy-site.cc/
   - https://oxtorrent.proxy-site2.cc/
+  - https://ww1-oxtorrent.officiel.pw/
   # Torrent911
   - https://torrent911.win/
   - https://torrent911.lat/
@@ -127,6 +133,7 @@ legacylinks:
   - https://www.torrent911.store/
   - https://torrent911.proxy-site.cc/
   - https://torrent911.proxy-site2.cc/
+  - https://ww1-torrent911.officiel.pw/
 
 caps:
   categorymappings:
