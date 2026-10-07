@@ -143,4 +143,4 @@ search:
       selector: promotion_info.down_multiplier
     uploadvolumefactor:
       selector: promotion_info.up_multiplier
-# JSON API NexusPHP v1.9.11 2025-11-02
+# JSON API NexusPHP v1.10.2 2026-04-11
