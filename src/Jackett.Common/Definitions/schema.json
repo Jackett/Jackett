@@ -1037,7 +1037,10 @@
                 "selectors": {
                     "title": "Selectors",
                     "description": "If set, the search result download URL is fetched and parsed as HTML, and the first selector gives the actual download URL. Later selectors are fallbacks.",
-                    "type": "array"
+                    "type": "array",
+                    "items": {
+                        "$ref": "#/definitions/SelectorBlock"
+                    }
                 },
                 "infohash": {
                     "title": "Infohash",
