@@ -6,10 +6,10 @@ language: lt-LT
 type: private
 encoding: UTF-8
 links:
-  - https://torrent.lt/
+  - https://torrent.ai/
 legacylinks:
   - http://www.torrent.ai/
-  - https://torrent.ai/
+  - https://torrent.lt/
 
 caps:
   categorymappings:
