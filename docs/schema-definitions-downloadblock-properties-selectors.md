@@ -12,4 +12,4 @@ If set, the search result download URL is fetched and parsed as HTML, and the fi
 
 ## selectors Type
 
-`array` ([Selectors](schema-definitions-downloadblock-properties-selectors.md))
+`object[]` ([SelectorBlock](schema-definitions-selectorblock.md))
