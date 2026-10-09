@@ -12,6 +12,8 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
+    - {id: 7, cat: Movies/Other, desc: "Anime Movies"}
+    - {id: 8, cat: TV/Anime, desc: "Anime TV"}
     - {id: 3, cat: Books, desc: "Books"}
     - {id: 4, cat: Audio, desc: "Audio"}
     - {id: 5, cat: PC/Games, desc: "Games"}
