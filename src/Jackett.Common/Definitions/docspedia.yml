@@ -114,11 +114,11 @@ search:
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a[href^="browse.php?cats[]="]
       attribute: href
       filters:
         - name: querystring
-          args: cat
+          args: cats[]
     title:
       selector: a[href^="details.php?id="]
     details:
