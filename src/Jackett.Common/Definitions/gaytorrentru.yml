@@ -16,6 +16,11 @@ settings:
     label: Cookie
   - name: info_cookie
     type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -134,6 +139,8 @@ search:
 
   headers:
     Referer: ["{{ .Config.sitelink }}search.php?view=legacy"]
+    User-Agent: ["{{ .Config.useragent }}"]
+
 
   rows:
     selector: table#browsetable > tbody > tr.browse_row
