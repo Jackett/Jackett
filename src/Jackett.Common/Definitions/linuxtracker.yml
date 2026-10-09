@@ -303,6 +303,7 @@ caps:
     - {id: 2173, cat: PC/ISO, desc: "Uruk GNU/Linux"}
     - {id: 2, cat: PC/ISO, desc: "VailuxOS"}
     - {id: 579, cat: PC/ISO, desc: "Vector"}
+    - {id: 3, cat: PC/ISO, desc: "Vector"}
     - {id: 2282, cat: PC/ISO, desc: "Virage"}
     - {id: 2151, cat: PC/ISO, desc: "Void Linux"}
     - {id: 2152, cat: PC/ISO, desc: "Volumio"}
