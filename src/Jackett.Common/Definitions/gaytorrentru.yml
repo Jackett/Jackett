@@ -141,7 +141,6 @@ search:
     Referer: ["{{ .Config.sitelink }}search.php?view=legacy"]
     User-Agent: ["{{ .Config.useragent }}"]
 
-
   rows:
     selector: table#browsetable > tbody > tr.browse_row
 
