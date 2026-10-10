@@ -105,6 +105,7 @@ caps:
     - {id: MusicMP3, cat: Audio/MP3, desc: "Music MP3"}
     - {id: MusicMusicvideos, cat: Audio/Video, desc: "Music videos"}
     - {id: MusicOthermusic, cat: Audio/Other, desc: "Music Other"}
+    - {id: MusicRadioShows, cat: Audio/Other, desc: "Music Radio Shows"}
     - {id: Musicvideos, cat: Audio/Video, desc: "Music videos"}
     - {id: NDS, cat: Console/NDS, desc: NDS}
     - {id: Other, cat: Other, desc: Other}
