@@ -185,7 +185,7 @@ search:
   paths:
     # present first page of movies tv and music results if there are no search parms supplied (20 hits per page)
     - path: "{{ if and (.Keywords) (eq .Config.disablesort .False) }}sort-{{ else }}{{ end }}{{ if .Keywords }}search/{{ .Keywords }}{{ else }}cat/Movies{{ end }}{{ if and (.Keywords) (eq .Config.disablesort .False) }}/{{ .Config.sort }}/{{ .Config.type }}{{ else }}{{ end }}/1/"
-    - path: "{{ if and (.Keywords) (eq .Config.disablesort .False) }}sort-{{ else }}{{ end }}{{ if .Keywords }}search/{{ .Keywords }}{{ else }}cat/TV{{ end }}{{ if and (.Keywords) (eq .Config.disablesort .False)) }}/{{ .Config.sort }}/{{ .Config.type }}{{ else }}{{ end }}/{{ if .Keywords }}2{{ else }}1{{ end }}/"
+    - path: "{{ if and (.Keywords) (eq .Config.disablesort .False) }}sort-{{ else }}{{ end }}{{ if .Keywords }}search/{{ .Keywords }}{{ else }}cat/TV{{ end }}{{ if and (.Keywords) (eq .Config.disablesort .False) }}/{{ .Config.sort }}/{{ .Config.type }}{{ else }}{{ end }}/{{ if .Keywords }}2{{ else }}1{{ end }}/"
     - path: "{{ if and (.Keywords) (eq .Config.disablesort .False) }}sort-{{ else }}{{ end }}{{ if .Keywords }}search/{{ .Keywords }}{{ else }}cat/Music{{ end }}{{ if and (.Keywords) (eq .Config.disablesort .False) }}/{{ .Config.sort }}/{{ .Config.type }}{{ else }}{{ end }}/{{ if .Keywords }}3{{ else }}1{{ end }}/"
     - path: "{{ if and (.Keywords) (eq .Config.disablesort .False) }}sort-{{ else }}{{ end }}{{ if .Keywords }}search/{{ .Keywords }}{{ else }}cat/Other{{ end }}{{ if and (.Keywords) (eq .Config.disablesort .False) }}/{{ .Config.sort }}/{{ .Config.type }}{{ else }}{{ end }}/{{ if .Keywords }}4{{ else }}1{{ end }}/"
 
