@@ -129,6 +129,7 @@ caps:
     - {id: 219, cat: TV, desc: "TV-Bengali Tv"}
     - {id: 220, cat: TV, desc: "TV-Shemaroo Umang"}
     - {id: 221, cat: TV, desc: "TV-JioTv"}
+    - {id: 222, cat: Movies, desc: "Hybrid"}
 
   modes:
     search: [q]
