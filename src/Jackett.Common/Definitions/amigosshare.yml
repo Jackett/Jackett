@@ -58,6 +58,7 @@ caps:
     - {id: 38, cat: Console, desc: "Jogos: PS2"}
     - {id: 39, cat: Console/PS3, desc: "Jogos: PS3"}
     - {id: 33, cat: Console/PS4, desc: "Jogos: PS4"}
+    - {id: 64, cat: Console, desc: "Jogos: PS5"}
     - {id: 50, cat: Console/PSP, desc: "Jogos: PSP"}
     - {id: 45, cat: Console/Wii, desc: "Jogos: Wii"}
     - {id: 41, cat: Console/XBox 360, desc: "Jogos: X360"}
