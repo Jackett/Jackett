@@ -1080,7 +1080,8 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(1890, TorznabCatType.Audio, "|- Metal (Hi-Res)");
             caps.Categories.AddCategoryMapping(1396, TorznabCatType.Audio, "|- Alternative, Punk, Independent (Hi-Res)");
             caps.Categories.AddCategoryMapping(2302, TorznabCatType.Audio, "|- Jazz, Bop, Cool, Fusion, Avant-Garde Jazz (Hi-Res)");
-            caps.Categories.AddCategoryMapping(2303, TorznabCatType.Audio, "|- Vocal Jazz, Funk, Soul, R&amp;B, Jazz-Pop (Hi-Res)");
+            caps.Categories.AddCategoryMapping(2346, TorznabCatType.Audio, "|- Bop (Hi-Res)");
+            caps.Categories.AddCategoryMapping(2303, TorznabCatType.Audio, "|- Vocal Jazz, Funk, Soul, R&B, Jazz-Pop (Hi-Res)");
             caps.Categories.AddCategoryMapping(2345, TorznabCatType.Audio, "|- Blues (Hi-Res)");
             caps.Categories.AddCategoryMapping(1893, TorznabCatType.Audio, "|- Электронная музыка (Hi-Res)");
             caps.Categories.AddCategoryMapping(1397, TorznabCatType.Audio, "|- Саундтреки (Hi-Res)");
