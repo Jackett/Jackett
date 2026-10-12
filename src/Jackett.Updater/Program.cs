@@ -777,6 +777,7 @@ namespace Jackett.Updater
                 "Definitions/spidertk.yml",
                 "Definitions/sporthd.yml",
                 "Definitions/sportscraze.yml",
+                "Definitions/sportz247.yml", // renamed to racing4us
                 "Definitions/sugoimusic.yml",
                 "Definitions/sukebei-pantsu.yml",
                 "Definitions/sunnypt.yml",

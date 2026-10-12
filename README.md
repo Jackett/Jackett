@@ -558,6 +558,7 @@ Prior versions of Jackett are no longer supported.
  * Qingwa (青蛙)
  * R3V WTF! [![(invite needed)][inviteneeded]](#)
  * Racing4Everyone (R4E)
+ * Racing4us
  * RacingForMe (RFM)
  * RailgunPT
  * Rastastugan
@@ -598,7 +599,6 @@ Prior versions of Jackett are no longer supported.
  * Spirit of Revolution [![(invite needed)][inviteneeded]](#)
  * SportsCora
  * SportsCult
- * Sportz247
  * SpringSunday (SSD) [![(invite needed)][inviteneeded]](#)
  * Stellarwinds
  * Superbits (SBS)

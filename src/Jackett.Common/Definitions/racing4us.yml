@@ -1,18 +1,20 @@
 ---
-id: sportz247
+id: racing4us
 replaces:
   - tsdb
   - f1gp
-name: Sportz247
-description: "Sportz247 is a Private Torrent Tracker for SPORTS"
+  - sportz247
+name: Racing4us
+description: "Racing4us is a Private Torrent Tracker for SPORTS"
 language: en-US
 type: private
 encoding: UTF-8
 links:
-  - https://sportz247.bar/
+  - https://racing4us.site/
 legacylinks:
   - https://f1gp.site/
   - https://f1gp.xyz/
+  - https://sportz247.bar/
 
 caps:
   categorymappings:
