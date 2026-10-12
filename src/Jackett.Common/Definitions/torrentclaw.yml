@@ -93,6 +93,8 @@ search:
       # Sun, 08 Mar 2026 17:51:00 GMT
       selector: pubDate
       filters:
+        - name: replace
+          args: ["GMT", +00:00]
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
