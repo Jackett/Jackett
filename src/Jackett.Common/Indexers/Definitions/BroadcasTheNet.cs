@@ -142,7 +142,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parameters = new BroadcastheNetSearchQuery();
 
-            if (query.IsImdbQuery)
+            if (query.IsImdbQuery && query.TvdbID > 0)
             {
                 parameters.Imdb = query.ImdbID;
             }
