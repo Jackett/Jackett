@@ -466,6 +466,7 @@ namespace Jackett.Updater
                 "Definitions/gainbound.yml",
                 "Definitions/galeriens.yml",
                 "Definitions/gamera.yml",
+                "Definitions/gamestorrents.yml",
                 "Definitions/gay-torrentsorg.yml",
                 "Definitions/gdf76.yml",
                 "Definitions/generationfree.yml", // switch to unit3d api #12982

@@ -109,7 +109,6 @@ Prior versions of Jackett are no longer supported.
  * EZTV
  * FileMood
  * Free JAV Torrent
- * GamesTorrents
  * HDRTorrent
  * Internet Archive (archive.org)
  * kickasstorrents.to
