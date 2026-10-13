@@ -142,14 +142,13 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parameters = new BroadcastheNetSearchQuery();
 
-            if (query.IsImdbQuery && query.TvdbID > 0)
+            if (query.IsTvdbQuery && query.TvdbID.HasValue)
+            {
+                parameters.Tvdb = query.TvdbID.Value.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (query.IsImdbQuery)
             {
                 parameters.Imdb = query.ImdbID;
-            }
-
-            if (query.IsTvdbQuery)
-            {
-                parameters.Tvdb = query.TvdbID.ToString();
             }
 
             if (searchTerm.IsNotNullOrWhiteSpace())
@@ -188,7 +187,7 @@ namespace Jackett.Common.Indexers.Definitions
                 parameters.Category = "Episode";
                 pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
             }
-            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && (query.TvdbID > 0 || query.ImdbID.IsNotNullOrWhiteSpace()))
+            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && (query.TvdbID is > 0 || query.ImdbID.IsNotNullOrWhiteSpace()))
             {
                 // Disable ID-based searches for episodes with absolute episode number
                 return new IndexerPageableRequestChain();
