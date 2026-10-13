@@ -53,7 +53,7 @@ settings:
   - name: sort
     type: select
     label: Sort requested from site
-    default: created_at
+    default: added
     options:
       added: created
       seeders: seeders
