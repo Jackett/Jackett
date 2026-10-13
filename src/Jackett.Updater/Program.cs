@@ -259,6 +259,7 @@ namespace Jackett.Updater
                 "Definitions/adbt.yml",
                 "Definitions/afun.yml",
                 "Definitions/aither.yml", // switch to *-API #8682
+                "Definitions/alabala.yml", // switch to *-API
                 "Definitions/alein.yml",
                 "Definitions/alexfilm.yml",
                 "Definitions/alleenretail.yml",
