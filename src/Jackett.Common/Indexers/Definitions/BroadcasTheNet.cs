@@ -62,8 +62,9 @@ namespace Jackett.Common.Indexers.Definitions
                 LimitsMax = 1000,
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.TvdbId
-                }
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId
+                },
+                TvSearchImdbAvailable = true
             };
 
             caps.Categories.AddCategoryMapping("SD", TorznabCatType.TVSD, "SD");
@@ -141,9 +142,13 @@ namespace Jackett.Common.Indexers.Definitions
 
             var parameters = new BroadcastheNetSearchQuery();
 
-            if (query.IsTvdbQuery)
+            if (query.IsTvdbQuery && query.TvdbID.HasValue)
             {
-                parameters.Tvdb = query.TvdbID.ToString();
+                parameters.Tvdb = query.TvdbID.Value.ToString(CultureInfo.InvariantCulture);
+            }
+            else if (query.IsImdbQuery)
+            {
+                parameters.Imdb = query.ImdbID;
             }
 
             if (searchTerm.IsNotNullOrWhiteSpace())
@@ -182,7 +187,7 @@ namespace Jackett.Common.Indexers.Definitions
                 parameters.Category = "Episode";
                 pageableRequests.Add(GetPagedRequests(parameters, btnResults, btnOffset));
             }
-            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && query.TvdbID > 0)
+            else if (searchTerm.IsNotNullOrWhiteSpace() && int.TryParse(searchTerm, out _) && (query.TvdbID is > 0 || query.ImdbID.IsNotNullOrWhiteSpace()))
             {
                 // Disable ID-based searches for episodes with absolute episode number
                 return new IndexerPageableRequestChain();
@@ -379,6 +384,9 @@ namespace Jackett.Common.Indexers.Definitions
 
         [JsonProperty("search", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Search { get; set; }
+
+        [JsonProperty("imdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
+        public string Imdb { get; set; }
 
         [JsonProperty("tvdb", DefaultValueHandling = DefaultValueHandling.Ignore)]
         public string Tvdb { get; set; }
