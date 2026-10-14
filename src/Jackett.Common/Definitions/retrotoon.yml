@@ -37,6 +37,10 @@ settings:
     type: info
     label: About your API Key
     default: "You can find your API Key by accessing the <a href=\"https://www.retrotoon.world/prowlarr.php\" target=\"_blank\">RetroToon Prowlarr & Torznab integration</a> page and scrolling down to the <b>Your Passkey</b> section. (Passkey is the same as the APIkey)."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "Accounts with no login for 90 days get reminder emails and are then paused. Logging in within 180 days reactivates a paused account."
 
 login:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
