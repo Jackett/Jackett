@@ -139,6 +139,6 @@ search:
     minimumratio:
       text: 2.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # JSON API NexusPHP v1.10.2 2026-04-11
