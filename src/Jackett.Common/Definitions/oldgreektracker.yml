@@ -143,6 +143,20 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+  selectors:
+    - selector: a[href^="index.php?page=downloadcheck&id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["index.php?page=downloadcheck&id=", "download.php?id="]
+
 search:
   paths:
     # https://oldgreektracker.xyz/index.php?page=torrents&search=&category=0&active=0
@@ -163,7 +177,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista[width="100%"] > tbody > tr:has(a[href*="download.php?id="]):has(img[title="Locked"])
+    selector: table.lista[width="100%"] > tbody > tr:has(img[title="Locked"])
 
   fields:
     category:
@@ -178,7 +192,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
@@ -189,7 +203,7 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(13)
+      selector: td:nth-child(12)
     date:
       # auto adjusted by site account profile
       selector: td:nth-child(8)
