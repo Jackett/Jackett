@@ -176,8 +176,8 @@ search:
     minimumratio:
       text: 2.0
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
     description:
       selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
