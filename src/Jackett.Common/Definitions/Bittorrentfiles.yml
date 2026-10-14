@@ -84,6 +84,7 @@ caps:
     - {id: 59, cat: XXX/Pack, desc: "XXX Pack"}
     - {id: 27, cat: XXX/SD, desc: "XXX SD"}
     - {id: 76, cat: XXX, desc: "XXX Andere"}
+    - {id: 100, cat: XXX/UHD, desc: "XXX UHD"}
 
   modes:
     search: [q]
