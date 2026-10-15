@@ -16,9 +16,9 @@ caps:
     - {id: 217, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 208, cat: Movies/UHD, desc: "Movie 4 K"}
+    - {id: 196, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 124, cat: Movies, desc: "Movie Pack"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
-    - {id: 196, cat: Movies/UHD, desc: "Movie UHD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 204, cat: Movies/UHD, desc: "Movie UHD Pack"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
@@ -64,12 +64,15 @@ caps:
     - {id: 20, cat: Console/PSP, desc: "Game PSP"}
     - {id: 22, cat: Console/Wii, desc: "Game Wii"}
     - {id: 24, cat: Console/XBox, desc: "Game XBOX"}
-    # Wimmel
-    - {id: 239, cat: Console, desc: "Wimmel Game"}
+    # Releaser
+    - {id: 244, cat: Movies/BluRay, desc: "Releaser Blu.Ray"}
+    - {id: 245, cat: Movies/UHD, desc: "Releaser UHD"}
+    - {id: 239, cat: Movies/DVD, desc: "Releaser DVD"}
     # App
-    - {id: 9, cat: PC, desc: "App Linux"}
     - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
+    - {id: 9, cat: PC, desc: "App Linux"}
+    - {id: 10, cat: PC/Mac, desc: "App Mac"}
     # Sonstiges
     - {id: 51, cat: TV/Sport, desc: "Sonstiges Sport"}
     - {id: 229, cat: Books/Mags, desc: "Sonstiges Zeitungen"}
