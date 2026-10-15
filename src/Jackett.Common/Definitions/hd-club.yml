@@ -12,36 +12,24 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 11, cat: Movies/HD, desc: "H265-720/1080/2160"}
-    - {id: 31, cat: Movies/SD, desc: "Divx - Avi"}
-    - {id: 19, cat: Movies, desc: "Kreslené Filmy"}
-    - {id: 32, cat: TV/Documentary, desc: "Dokumentární  Filmy"}
-    - {id: 28, cat: TV, desc: "Seriály"}
-    - {id: 18, cat: TV/HD, desc: "Film Retro"}
+    - {id: 42, cat: TV, desc: "Serialy x265"}
+    - {id: 11, cat: Movies/HD, desc: "H265-720/1080/1440/2160"}
+    - {id: 19, cat: TV/Anime, desc: "Anime 720p - 4k"}
+    - {id: 32, cat: TV/Documentary, desc: "Dokumenty Series"}
+    - {id: 28, cat: TV, desc: "Seriály X264"}
+    - {id: 33, cat: TV/Documentary, desc: "Dokumenty"}
     - {id: 14, cat: TV/WEB-DL, desc: "TV - WEB- DL x264"}
-    - {id: 16, cat: TV/HD, desc: "MP4"}
     - {id: 15, cat: TV/WEB-DL, desc: "TV - WEB- DL x265"}
     - {id: 38, cat: XXX, desc: "XXX"}
-    - {id: 29, cat: Movies/DVD, desc: "DVD5 / DVD9"}
     - {id: 23, cat: Movies/UHD, desc: "Bluray / 4K-UHD"}
-    - {id: 26, cat: Movies/HD, desc: "HD-720/1080/2160"}
-    - {id: 34, cat: Movies/3D, desc: "3 D"}
+    - {id: 26, cat: Movies/HD, desc: "H264-720/1080/1440/2160"}
+    - {id: 18, cat: TV/HD, desc: "Film Retro"}
     - {id: 35, cat: Movies, desc: "V.I.P Extra"}
-    - {id: 39, cat: PC, desc: "APP WINDOWS"}
-    - {id: 41, cat: PC/Mobile-Other, desc: "Mobil-PDA"}
-    - {id: 25, cat: Audio/Lossless, desc: "Flac"}
-    - {id: 20, cat: Audio/MP3, desc: "Mp3"}
-    - {id: 36, cat: Audio, desc: "Retro Hudba"}
-    - {id: 22, cat: Audio/Audiobook, desc: "Audio kniha"}
-    - {id: 3, cat: Console, desc: "Games"}
-    - {id: 5, cat: TV/Anime, desc: "Anime"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
     movie-search: [q]
-    music-search: [q]
-    book-search: [q]
 
 settings:
   - name: username
