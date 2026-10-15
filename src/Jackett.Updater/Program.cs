@@ -406,6 +406,7 @@ namespace Jackett.Updater
                 "Definitions/dxdhd.yml",
                 "Definitions/ebooks-shares.yml",
                 "Definitions/ebookparadijs.yml",
+                "Definitions/echelonhd-api.yml",
                 "Definitions/efectodoppler.yml",
                 "Definitions/eggmeon.yml",
                 "Definitions/elitehd.yml",
