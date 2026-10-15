@@ -222,7 +222,6 @@ Prior versions of Jackett are no longer supported.
  * New-Team
  * NewStudio (login)
  * NoNaMe Club (NNM-Club) (login)
- * Polskie-Torrenty
  * PornoLab
  * Postman (login)
  * ProPorno

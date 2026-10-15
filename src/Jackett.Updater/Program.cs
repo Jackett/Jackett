@@ -678,6 +678,7 @@ namespace Jackett.Updater
                 "Definitions/plusteca.yml",
                 "Definitions/polishsource.yml",
                 "Definitions/polishtracker.yml",
+                "Definitions/polskie-torrenty.yml",
                 "Definitions/pornbay.yml",
                 "Definitions/pornbits.yml",
                 "Definitions/pornbytes-api.yml",
