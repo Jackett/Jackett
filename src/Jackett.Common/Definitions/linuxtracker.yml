@@ -289,7 +289,7 @@ caps:
     - {id: 2206, cat: PC/ISO, desc: "UBOS"}
     - {id: 563, cat: PC/ISO, desc: "Ubuntu"}
     - {id: 2198, cat: PC/ISO, desc: "Ubuntu Budgie"}
-    - {id: 2284, cat: PC/ISO, desc: "Ubuntu Cinnamon Rem"}
+    - {id: 2284, cat: PC/ISO, desc: "Ubuntu Cinnamon"}
     - {id: 2249, cat: PC/ISO, desc: "Ubuntu DesktopPack"}
     - {id: 2143, cat: PC/ISO, desc: "Ubuntu Gnome"}
     - {id: 2144, cat: PC/ISO, desc: "Ubuntu Kylin"}
