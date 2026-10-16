@@ -12,13 +12,13 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.torrent-site.my/
 links:
-  - https://ww1.darkfox.run/
-  - https://ww1.vidlox.run/
+  - https://ww1-darkfox.officiel.cc/
+  - https://ww1-vidlox.officiel.cc/
+  - https://ww1-wikibox.officiel.cc/
+  - https://ww1-sharkibox.officiel.cc/
   - https://ww1.worldivx.run/
-  - https://ww1.wikibox.run/
-  - https://ww1.sharkibox.run/
   - https://ww1.workino.run/
-  - https://ww1.oxtorrent.run/
+  - https://ww1-oxtorrent.officiel.cc/
   - https://ww1.torrent911.run/
 legacylinks:
   # latest domains list
@@ -45,7 +45,7 @@ legacylinks:
   - https://darkfox.my/
   - https://darkfox.ws/
   - https://ww1.fit/darkfox/
-  - https://ww1-darkfox.officiel.cc/
+  - https://darkfox.store/
   - https://www.darkfox2.cc/
   - https://www.darkfox3.cc/
   - https://www.darkfox4.cc/
@@ -53,13 +53,14 @@ legacylinks:
   - https://darkfox.proxy-site.cc/
   - https://darkfox.proxy-site2.cc/
   - https://ww1-darkfox.officiel.pw/
+  - https://ww1.darkfox.run/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
   - https://vidlox.my/
   - https://vidlox.ws/
   - https://ww1.fit/vidlox/
-  - https://ww1-vidlox.officiel.cc/
+  - https://vidlox.store/
   - https://www.vidlox2.cc/
   - https://www.vidlox3.cc/
   - https://www.vidlox4.cc/
@@ -68,13 +69,14 @@ legacylinks:
   - https://vidlox.proxy-site.cc/
   - https://vidlox.proxy-site2.cc/
   - https://ww1-vidlox.officiel.pw/
+  - https://ww1.vidlox.run/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
   - https://wikibox.my/
   - https://wikibox.ws/
   - https://ww1.fit/wikibox/
-  - https://ww1-wikibox.officiel.cc/
+  - https://wikibox.store/
   - https://www.wikibox1.cc/
   - https://www.wikibox2.cc/
   - https://www.wikibox3.cc/
@@ -82,20 +84,23 @@ legacylinks:
   - https://wikibox.proxy-site.cc/
   - https://wikibox.proxy-site2.cc/
   - https://ww1-wikibox.officiel.pw/
+  - https://ww1.wikibox.run/
   # Sharkibox
   - https://sharkibox.pw/
   - https://sharkibox.ws/
   - https://ww1.fit/sharkibox/
-  - https://ww1-sharkibox.officiel.cc/
+  - https://sharkibox.store/
   - https://www.sharkibox1.cc/
   - https://www.sharkibox.cc/
   - https://sharkibox.proxy-site.cc/
   - https://sharkibox.proxy-site2.cc/
   - https://ww1-sharkibox.officiel.pw/
+  - https://ww1.sharkibox.run/
   # Worldivx
   - https://worldivx.pw/
   - https://worldivx.ws/
   - https://ww1.fit/worldivx/
+  - https://worldivx.store/
   - https://ww1-worldivx.officiel.cc/
   - https://www.worldivx1.cc/
   - https://www.worldivx.cc/
@@ -106,6 +111,7 @@ legacylinks:
   - https://workino.pw/
   - https://workino.ws/
   - https://ww1.fit/workino/
+  - https://workino.run/
   - https://ww1-workino.officiel.cc/
   - https://www.workino.cc/
   - https://workino.proxy-site.cc/
@@ -117,7 +123,7 @@ legacylinks:
   - https://oxtorrent.lat/
   - https://oxtorrent.ml/
   - https://ww1.fit/oxtorrent/
-  - https://ww1-oxtorrent.officiel.cc/
+  - https://oxtorrent.store/
   - https://www.oxtorrent2.ws/
   - https://www.oxtorrent3.ws/
   - https://www.oxtorrent5.ws/
@@ -125,10 +131,12 @@ legacylinks:
   - https://oxtorrent.proxy-site.cc/
   - https://oxtorrent.proxy-site2.cc/
   - https://ww1-oxtorrent.officiel.pw/
+  - https://ww1.oxtorrent.run/
   # Torrent911
   - https://torrent911.win/
   - https://torrent911.lat/
   - https://ww1.fit/torrent911/
+  - https://torrent911.run/
   - https://ww1-torrent911.officiel.cc/
   - https://www.torrent911.wiki/
   - https://www.torrent911.store/
