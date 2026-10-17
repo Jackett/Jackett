@@ -174,20 +174,20 @@ search:
       filters:
         - name: regexp
           args: src=([^\s]+)
-    size:
-      text: 2GB
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(4)
+      selector: td:nth-child(5)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(5)
-    leechers:
       selector: td:nth-child(6)
-    grabs:
+    leechers:
       selector: td:nth-child(7)
+    grabs:
+      selector: td:nth-child(8)
+    size:
+      selector: td:nth-child(9)
     downloadvolumefactor:
       case:
         img[src="images/freeleech.gif"]: 0
