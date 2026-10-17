@@ -12,6 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: 192, cat: Other, desc: "Temporary forum"}
     # Кинофильмы # Movies
     - {id: 3, cat: Movies/Foreign, desc: "Зарубежные кинофильмы"}
     - {id: 13, cat: Movies/Foreign, desc: " |- Новинки 2026"}
