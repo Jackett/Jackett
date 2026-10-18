@@ -81,6 +81,7 @@ caps:
     - {id: 69, cat: TV/Sport, desc: "NFL"}
     - {id: 70, cat: TV/Sport, desc: "FIM EWC"}
     - {id: 71, cat: TV/Sport, desc: "AFLW"}
+    - {id: 72, cat: TV/Sport, desc: "FIA TCR World Tour"}
 
   modes:
     search: [q]
