@@ -79,6 +79,7 @@ caps:
     - {id: TV, cat: TV, desc: TV}
     - {id: UltraHD, cat: Movies/UHD, desc: Movies UHD}
     - {id: Video, cat: XXX, desc: Adult / Porn}
+    - {id: Wallpapers, cat: Other, desc: Wallpapers}
     - {id: Wii, cat: Console/Wii, desc: Games Wii}
     - {id: Windows, cat: PC, desc: Software Windows}
     - {id: Xbox360, cat: Console/XBox 360, desc: Games Xbox360}
