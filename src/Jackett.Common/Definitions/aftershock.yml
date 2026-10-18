@@ -6,9 +6,10 @@ language: hu-HU
 type: private
 encoding: iso-8859-1
 links:
-  - https://aftershock-tracker.net/
+  - https://aftershock.hu/
 legacylinks:
   - https://aftershock-tracker.eu/
+  - https://aftershock-tracker.net/
 
 caps:
   categorymappings:
@@ -58,12 +59,16 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -90,15 +95,10 @@ settings:
     default: "You will be immediately banned if you have not logged in for more than 6 weeks."
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: td.text:contains("Hiba")
-      message:
-        selector: td.text
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href*="/logout.php"]
@@ -118,6 +118,9 @@ search:
     selector: table tbody#torrent_background tr:has(a.index):has(span.icon_check_alt)
     filters:
       - name: andmatch
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   fields:
     category:
