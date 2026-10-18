@@ -30,6 +30,8 @@ namespace Jackett.Common.Utils.Clients
         protected string ClientType;
         protected int ClientTimeout = 100; // default timeout is 100 s
         public bool EmulateBrowser = true;
+        public string FlareSolverrUrl => serverConfig.FlareSolverrUrl;
+        public int FlareSolverrMaxTimeout => serverConfig.FlareSolverrMaxTimeout;
 
         protected static Dictionary<string, ICollection<string>> trustedCertificates = new Dictionary<string, ICollection<string>>();
         protected static string webProxyUrl;
