@@ -75,7 +75,7 @@ caps:
     - {id: 10, cat: PC/Mac, desc: "App Mac"}
     # Sonstiges
     - {id: 51, cat: TV/Sport, desc: "Sonstiges Sport"}
-    - {id: 229, cat: Books/Mags, desc: "Sonstiges Zeitungen"}
+    - {id: 229, cat: Books/Mags, desc: "Sonstiges E-Paper"}
     - {id: 63, cat: Audio/Audiobook, desc: "Sonstiges A-Book"}
     - {id: 96, cat: Books/EBook, desc: "Sonstiges E-Book"}
     - {id: 69, cat: Books, desc: "Sonstiges Tutorial"}
