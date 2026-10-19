@@ -32,34 +32,29 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Description => "DonTorrent is a SPANISH Public tracker for MOVIES / TV / GENERAL";
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
         public override string SiteLink { get; protected set; } = "https://dontorrent.channel/";
-        /*
+
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.meme/",
+            "https://dontorrent.moi/",
         };
-        */
+
         public override string[] LegacySiteLinks => new[]
         {
+            "https://dontorrent.istanbul/",
+            "https://dontorrent.onl/",
+            "https://dontorrent.kids/",
+            "https://dontorrent.kiwi/",
+            "https://dontorrent.live/",
+            "https://dontorrent.phd/",
+            "https://dontorrent.gripe/",
             "https://dontorrent.promo/",
-            "https://dontorrent.photos/",
+            "https://dontorrent.gift/",
             "https://dontorrent.cfd/",
             "https://verdetorrent.com/",
             "https://naranjatorrent.com/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
-            "https://dontorrent.pink/",
-            "https://dontorrent.reisen/",
-            "https://dontorrent.racing/",
-            "https://dontorrent.rocks/",
-            "https://dontorrent.science/",
-            "https://dontorrent.support/",
-            "https://dontorrent.review/",
-            "https://dontorrent.management/",
-            "https://dontorrent.soccer/",
-            "https://dontorrent.supply/",
-            "https://dontorrent.moi/",
-            "https://dontorrent.meme/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
@@ -105,7 +100,7 @@ namespace Jackett.Common.Indexers.Definitions
             {
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
@@ -275,7 +270,7 @@ namespace Jackett.Common.Indexers.Definitions
                         var searchResultParser = new HtmlParser();
                         using var doc = await searchResultParser.ParseDocumentAsync(result.ContentString);
 
-                        var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > p");
+                        var rows = doc.QuerySelectorAll("div.seccion#buscador > div.card > div.card-body > ul > li");
 
                         if (rows.Length == 0)
                         {
@@ -307,14 +302,14 @@ namespace Jackett.Common.Indexers.Definitions
                                         processedResults++;
 
                                         //href=/pelicula/6981/Saga-Spiderman
-                                        var anchor = row.QuerySelector("p > span > a");
+                                        var anchor = row.QuerySelector("li > span > a");
 
                                         if (anchor != null)
                                         {
                                             var link = string.Format("{0}{1}", SiteLink.TrimEnd('/'), anchor.GetAttribute("href"));
                                             var title = anchor.TextContent;
                                             var cat = GetCategoryFromURL(link);
-                                            var quality = row.QuerySelector("p > span > span")?.TextContent?.Trim('(', ')')?.Replace('-', '.') ?? "";
+                                            var quality = row.QuerySelector("li > span > span")?.TextContent?.Trim('(', ')')?.Replace('-', '.') ?? "";
 
                                             await ParseReleaseAsync(releases, link, title, cat, quality, query, matchWords);
                                         }
