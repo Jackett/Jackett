@@ -88,7 +88,6 @@ Prior versions of Jackett are no longer supported.
  * Anime Tosho
  * AniRena
  * AniSource
- * ApacheTorrent
  * AudioBook Bay (ABB)
  * Bangumi Moe
  * BigFANGroup
