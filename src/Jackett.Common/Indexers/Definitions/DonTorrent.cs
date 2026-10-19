@@ -33,28 +33,34 @@ namespace Jackett.Common.Indexers.Definitions
         // in the event the redirect is inactive https://t.me/s/dontorrent should have the latest working domain
         public override string SiteLink { get; protected set; } = "https://dontorrent.channel/";
 
+        /*
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://dontorrent.moi/",
+            "https://dontorrent.meme/",
         };
-
+        */
         public override string[] LegacySiteLinks => new[]
         {
-            "https://dontorrent.istanbul/",
-            "https://dontorrent.onl/",
-            "https://dontorrent.kids/",
-            "https://dontorrent.kiwi/",
-            "https://dontorrent.live/",
-            "https://dontorrent.phd/",
-            "https://dontorrent.gripe/",
             "https://dontorrent.promo/",
-            "https://dontorrent.gift/",
+            "https://dontorrent.photos/",
             "https://dontorrent.cfd/",
             "https://verdetorrent.com/",
             "https://naranjatorrent.com/",
             "https://todotorrents.org/",
             "https://tomadivx.net/",
             "https://seriesblanco.one/",
+            "https://dontorrent.pink/",
+            "https://dontorrent.reisen/",
+            "https://dontorrent.racing/",
+            "https://dontorrent.rocks/",
+            "https://dontorrent.science/",
+            "https://dontorrent.support/",
+            "https://dontorrent.review/",
+            "https://dontorrent.management/",
+            "https://dontorrent.soccer/",
+            "https://dontorrent.supply/",
+            "https://dontorrent.moi/",
+            "https://dontorrent.meme/",
         };
         public override string Language => "es-ES";
         public override string Type => "public";
