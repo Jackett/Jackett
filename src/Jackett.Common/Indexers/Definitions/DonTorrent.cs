@@ -300,7 +300,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                             if (!endOfSearch)
                             {
-                                var validRows = rows.Skip(2).ToList();
+                                var validRows = rows.ToList();
                                 if (validRows.Count > 0)
                                 {
                                     foreach (var row in validRows)
