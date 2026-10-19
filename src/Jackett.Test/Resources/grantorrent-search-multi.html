@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang=es>
+<head>
+<meta charset=utf-8 />
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Busqueda: dory - GranTorrent - Descargar peliculas y series torrent</title>
+</head>
+<body data-rsssl=1 class="antialiased font-['Roboto'] bg-neutral-800 grantorrent">
+<div class="flex flex-col h-screen justify-between">
+<section class=mt-22>
+<div class="max-w-76r mx-auto px-4 flex flex-col xl:flex-row bg-neutral-900 py-10">
+<div class="w-full flex flex-col items-start sm:mb-6 h-max px-2 sm:px-6">
+<div class="grid grid-cols-1 sm:grid-cols-12 gap-x-5 lg:gap-x-5 gap-y-5">
+
+<!-- Card 1: Buscando a Dory (movie, no quality in overlay) -->
+<div x-data="{ showDetail: true }">
+<div class="relative my-5 md:my-4">
+<a href="https://grantorrent.foo/buscando-a-dory/" x-on:mouseover="showDetail = false" x-on:mouseleave="showDetail = true">
+<div x-show=showDetail x-transition class="absolute top-0 h-8 w-full z-10 mx-auto">
+<div class="bg-opacity-85 text-neutral-100 rounded-t-xl text-xs font-medium px-2 py-2 text-center">
+</div>
+</div>
+<div class="media-card rounded-xl shadow-md transition ease-in-out duration-200 hover:opacity-85">
+<img class="w-full rounded-xl" src="https://grantorrent.foo/wp-content/uploads/2024/03/Buscando-a-Dory-(poster).jpg" alt="Buscando a Dory" />
+</div>
+<div x-show=showDetail x-transition class="absolute bottom-8 h-14 w-full bg-opacity-85 rounded-b-xl">
+<p class="text-sm font-medium mt-3 hover:text-white truncate leading-4 text-neutral-100 text-center px-2">
+Buscando a Dory </p>
+<p class="text-xs font-medium mt-1 hover:text-white leading-4 text-grantorrent-400 text-center px-2">
+15/03/2024 </p>
+</div>
+</a>
+<div class="flex gap-x-3 mt-3">
+<p class="text-grantorrent-400 text-sm font-light truncate"></p>
+</div>
+</div>
+</div>
+
+<!-- Card 2: Operación Dragón (movie, 1080p in overlay) -->
+<div x-data="{ showDetail: true }">
+<div class="relative my-5 md:my-4">
+<a href="https://grantorrent.foo/operacion-dragon/" x-on:mouseover="showDetail = false" x-on:mouseleave="showDetail = true">
+<div x-show=showDetail x-transition class="absolute top-0 h-8 w-full z-10 mx-auto">
+<div class="bg-opacity-85 text-neutral-100 rounded-t-xl text-xs font-medium px-2 py-2 text-center">
+<span>1080p</span>
+</div>
+</div>
+<div class="media-card rounded-xl shadow-md transition ease-in-out duration-200 hover:opacity-85">
+<img class="w-full rounded-xl" src="https://grantorrent.foo/wp-content/uploads/2024/02/Operacion-Dragon95-(poster).jpg" alt="Operación Dragón" />
+</div>
+<div x-show=showDetail x-transition class="absolute bottom-8 h-14 w-full bg-opacity-85 rounded-b-xl">
+<p class="text-sm font-medium mt-3 hover:text-white truncate leading-4 text-neutral-100 text-center px-2">
+Operación Dragón </p>
+<p class="text-xs font-medium mt-1 hover:text-white leading-4 text-grantorrent-400 text-center px-2">
+28/02/2024 </p>
+</div>
+</a>
+<div class="flex gap-x-3 mt-3">
+<p class="text-grantorrent-400 text-sm font-light truncate"></p>
+</div>
+</div>
+</div>
+
+</div>
+</div>
+</div>
+</section>
+</div>
+</body>
+</html>

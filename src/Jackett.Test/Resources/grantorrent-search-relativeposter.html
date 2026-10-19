@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang=es>
+<head>
+<meta charset=utf-8 />
+<meta name=viewport content="width=device-width, initial-scale=1">
+<title>Busqueda: poster - GranTorrent - Descargar peliculas y series torrent</title>
+</head>
+<body data-rsssl=1 class="antialiased font-['Roboto'] bg-neutral-800 grantorrent">
+<div class="flex flex-col h-screen justify-between">
+<div class="w-full flex flex-col items-start sm:mb-6 h-max px-6">
+<div class="w-full border-b-2 border-grantorrent-500 pb-5 mb-5">
+<p class="text-3xl text-neutral-100">Busqueda: poster</p>
+</div>
+<div class="movie-list grid grid-cols-2 md:grid-cols-4 lg:grid-cols-5 gap-x-4 sm:gap-x-4 auto-cols-auto w-full">
+<!-- c1: absolute poster (control) -->
+<div x-data="{ showDetail: true }">
+<div class="relative my-5 md:my-4">
+<a href="https://grantorrent.foo/pelicula-absoluta/" x-on:mouseover="showDetail = false" x-on:mouseleave="showDetail = true">
+<div x-show=showDetail x-transition class="absolute top-0 h-8 w-full z-10 mx-auto">
+<div class="bg-opacity-85 text-neutral-100 rounded-t-xl text-xs font-medium px-2 py-2 text-center">
+<span>1080p</span>
+</div>
+</div>
+<div class="media-card rounded-xl shadow-md transition ease-in-out duration-200 hover:opacity-85">
+<img class="w-full rounded-xl" src="https://grantorrent.foo/wp-content/uploads/2024/01/Pelicula-Absoluta-(poster).jpg" alt="Pelicula Absoluta"/>
+</div>
+<div x-show=showDetail x-transition class="absolute bottom-8 h-14 w-full bg-opacity-85 rounded-b-xl">
+<p class="text-sm font-medium mt-3 hover:text-white truncate leading-4 text-neutral-100 text-center px-2">
+Pelicula Absoluta</p>
+<p class="text-xs font-medium mt-1 hover:text-white leading-4 text-grantorrent-400 text-center px-2">
+01/01/2024</p>
+</div>
+</a>
+<div class="flex gap-x-3 mt-3">
+<p class="text-grantorrent-400 text-sm font-light truncate">
+</p>
+</div>
+</div>
+</div>
+<!-- c2: RELATIVE poster src (no scheme/host) => must not throw; resolved against the site link -->
+<div x-data="{ showDetail: true }">
+<div class="relative my-5 md:my-4">
+<a href="https://grantorrent.foo/pelicula-relativa/" x-on:mouseover="showDetail = false" x-on:mouseleave="showDetail = true">
+<div x-show=showDetail x-transition class="absolute top-0 h-8 w-full z-10 mx-auto">
+</div>
+<div class="media-card rounded-xl shadow-md transition ease-in-out duration-200 hover:opacity-85">
+<img class="w-full rounded-xl" src="wp-content/uploads/2024/02/Pelicula-Relativa-(poster).jpg" alt="Pelicula Relativa"/>
+</div>
+<div x-show=showDetail x-transition class="absolute bottom-8 h-14 w-full bg-opacity-85 rounded-b-xl">
+<p class="text-sm font-medium mt-3 hover:text-white truncate leading-4 text-neutral-100 text-center px-2">
+Pelicula Relativa</p>
+<p class="text-xs font-medium mt-1 hover:text-white leading-4 text-grantorrent-400 text-center px-2">
+02/02/2024</p>
+</div>
+</a>
+<div class="flex gap-x-3 mt-3">
+<p class="text-grantorrent-400 text-sm font-light truncate">
+</p>
+</div>
+</div>
+</div>
+<!-- c3: absolute poster (control) -->
+<div x-data="{ showDetail: true }">
+<div class="relative my-5 md:my-4">
+<a href="https://grantorrent.foo/pelicula-control/" x-on:mouseover="showDetail = false" x-on:mouseleave="showDetail = true">
+<div x-show=showDetail x-transition class="absolute top-0 h-8 w-full z-10 mx-auto">
+</div>
+<div class="media-card rounded-xl shadow-md transition ease-in-out duration-200 hover:opacity-85">
+<img class="w-full rounded-xl" src="https://grantorrent.foo/wp-content/uploads/2024/03/Pelicula-Control-(poster).jpg" alt="Pelicula Control"/>
+</div>
+<div x-show=showDetail x-transition class="absolute bottom-8 h-14 w-full bg-opacity-85 rounded-b-xl">
+<p class="text-sm font-medium mt-3 hover:text-white truncate leading-4 text-neutral-100 text-center px-2">
+Pelicula Control</p>
+<p class="text-xs font-medium mt-1 hover:text-white leading-4 text-grantorrent-400 text-center px-2">
+03/03/2024</p>
+</div>
+</a>
+<div class="flex gap-x-3 mt-3">
+<p class="text-grantorrent-400 text-sm font-light truncate">
+</p>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+</body>
+</html>
