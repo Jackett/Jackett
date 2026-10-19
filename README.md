@@ -139,7 +139,6 @@ Prior versions of Jackett are no longer supported.
  * PornRips
  * PornXLab
  * Postman
- * RedeTorrent
  * RinTorNeT
  * RuTor
  * RuTracker.RU
