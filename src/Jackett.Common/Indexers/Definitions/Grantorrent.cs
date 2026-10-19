@@ -357,8 +357,26 @@ namespace Jackett.Common.Indexers.Definitions
 
         /// <summary>
         /// Card information extracted from the search page (before fetching the detail page).
+        /// It is a plain class (not a C# 9 record) because Jackett.Common also targets
+        /// netstandard2.0, which does not provide System.Runtime.CompilerServices.IsExternalInit.
         /// </summary>
-        private sealed record CardInfo(string Title, Uri Details, DateTime? PublishDate, string Poster, string OverlayQuality);
+        private sealed class CardInfo
+        {
+            public CardInfo(string title, Uri details, DateTime? publishDate, string poster, string overlayQuality)
+            {
+                Title = title;
+                Details = details;
+                PublishDate = publishDate;
+                Poster = poster;
+                OverlayQuality = overlayQuality;
+            }
+
+            public string Title { get; }
+            public Uri Details { get; }
+            public DateTime? PublishDate { get; }
+            public string Poster { get; }
+            public string OverlayQuality { get; }
+        }
 
         /// <summary>
         /// Parses the option index from the Link query string (?opt=N). Defaults to 0 when
@@ -369,8 +387,10 @@ namespace Jackett.Common.Indexers.Definitions
             var query = link.Query.TrimStart('?');
             foreach (var pair in query.Split('&'))
             {
-                var parts = pair.Split('=', 2);
-                if (parts.Length == 2 && parts[0] == "opt" && int.TryParse(parts[1], out var index))
+                // Split('=', 2) is not available on netstandard2.0, so split on the first '=' manually.
+                var eqIndex = pair.IndexOf('=');
+                if (eqIndex > 0 && pair.Substring(0, eqIndex) == "opt"
+                    && int.TryParse(pair.Substring(eqIndex + 1), out var index))
                     return index;
             }
             return 0;
@@ -565,18 +585,25 @@ namespace Jackett.Common.Indexers.Definitions
             if (shortener.Host != "super-enlace.com")
                 return null;
 
-            var iParam = shortener.Query.TrimStart('?')
-                                        .Split('&')
-                                        .Select(p => p.Split('=', 2))
-                                        .FirstOrDefault(p => p.Length == 2 && p[0] == "i");
-            if (iParam == null)
+            // Split('=', 2) is not available on netstandard2.0, so split on the first '=' manually.
+            string iParamValue = null;
+            foreach (var pair in shortener.Query.TrimStart('?').Split('&'))
+            {
+                var eqIndex = pair.IndexOf('=');
+                if (eqIndex > 0 && pair.Substring(0, eqIndex) == "i")
+                {
+                    iParamValue = pair.Substring(eqIndex + 1);
+                    break;
+                }
+            }
+            if (iParamValue == null)
                 return null;
 
             // 5 layers of base64 followed by ROT13 (A1 fact #20). Any failure returns
             // null so a broken fallback never masks the primary error.
             try
             {
-                var current = iParam[1];
+                var current = iParamValue;
                 for (var layer = 0; layer < 5; layer++)
                     current = Encoding.UTF8.GetString(Convert.FromBase64String(current));
 
@@ -643,7 +670,7 @@ namespace Jackett.Common.Indexers.Definitions
             // TV/movie heuristic: SxxEyy / "Cap." / "Temporada" in the title.
             var isTvShow = Regex.IsMatch(title, @"S\d{1,2}E\d{1,3}")
                            || Regex.IsMatch(title, @"Cap\.?\s*\d+", RegexOptions.IgnoreCase)
-                           || title.Contains("Temporada", StringComparison.OrdinalIgnoreCase);
+                           || title.IndexOf("Temporada", StringComparison.OrdinalIgnoreCase) >= 0;
 
             var q = (quality ?? "").ToLowerInvariant();
             var tier =
