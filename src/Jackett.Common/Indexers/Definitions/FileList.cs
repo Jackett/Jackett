@@ -87,12 +87,18 @@ namespace Jackett.Common.Indexers.Definitions
             };
 
             caps.Categories.AddCategoryMapping(24, TorznabCatType.TVAnime, "Anime");
-            caps.Categories.AddCategoryMapping(11, TorznabCatType.Audio, "Music");
+            caps.Categories.AddCategoryMapping(8, TorznabCatType.PC, "Apps");
             caps.Categories.AddCategoryMapping(29, TorznabCatType.Books, "Books");
-            caps.Categories.AddCategoryMapping(30, TorznabCatType.Other, "Courses");
             caps.Categories.AddCategoryMapping(15, TorznabCatType.TV, "Cartoons");
-            caps.Categories.AddCategoryMapping(18, TorznabCatType.Other, "Various");
+            caps.Categories.AddCategoryMapping(30, TorznabCatType.Other, "Courses");
             caps.Categories.AddCategoryMapping(16, TorznabCatType.Books, "Docs");
+            caps.Categories.AddCategoryMapping(5, TorznabCatType.AudioLossless, "FLAC");
+            caps.Categories.AddCategoryMapping(10, TorznabCatType.Console, "Games Console");
+            caps.Categories.AddCategoryMapping(9, TorznabCatType.PCGames, "Games PC");
+            caps.Categories.AddCategoryMapping(32, TorznabCatType.XXXOther, "Games XXX");
+            caps.Categories.AddCategoryMapping(31, TorznabCatType.TVForeign, "K-Drama");
+            caps.Categories.AddCategoryMapping(17, TorznabCatType.PC, "Linux");
+            caps.Categories.AddCategoryMapping(22, TorznabCatType.PCMobileOther, "Mobile");
             caps.Categories.AddCategoryMapping(25, TorznabCatType.Movies3D, "Movies 3D");
             caps.Categories.AddCategoryMapping(6, TorznabCatType.MoviesUHD, "Movies 4K");
             caps.Categories.AddCategoryMapping(26, TorznabCatType.MoviesBluRay, "Movies 4K Blu-Ray");
@@ -102,19 +108,14 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(4, TorznabCatType.MoviesHD, "Movies HD");
             caps.Categories.AddCategoryMapping(19, TorznabCatType.MoviesForeign, "Movies HD-RO");
             caps.Categories.AddCategoryMapping(1, TorznabCatType.MoviesSD, "Movies SD");
-            caps.Categories.AddCategoryMapping(5, TorznabCatType.AudioLossless, "FLAC");
-            caps.Categories.AddCategoryMapping(10, TorznabCatType.Console, "Games Console");
-            caps.Categories.AddCategoryMapping(9, TorznabCatType.PCGames, "Games PC");
-            caps.Categories.AddCategoryMapping(31, TorznabCatType.TVForeign, "K-Drama");
-            caps.Categories.AddCategoryMapping(17, TorznabCatType.PC, "Linux");
-            caps.Categories.AddCategoryMapping(22, TorznabCatType.PCMobileOther, "Mobile");
-            caps.Categories.AddCategoryMapping(8, TorznabCatType.PC, "Apps");
+            caps.Categories.AddCategoryMapping(11, TorznabCatType.Audio, "Music");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.MoviesForeign, "RO Dubbed");
             caps.Categories.AddCategoryMapping(28, TorznabCatType.TVForeign, "RO Dubbed");
+            caps.Categories.AddCategoryMapping(13, TorznabCatType.TVSport, "Sport");
             caps.Categories.AddCategoryMapping(27, TorznabCatType.TVUHD, "TV-Series 4K");
             caps.Categories.AddCategoryMapping(21, TorznabCatType.TVHD, "TV-Series HD");
             caps.Categories.AddCategoryMapping(23, TorznabCatType.TVSD, "TV-Series SD");
-            caps.Categories.AddCategoryMapping(13, TorznabCatType.TVSport, "Sport");
+            caps.Categories.AddCategoryMapping(18, TorznabCatType.Other, "Various");
             caps.Categories.AddCategoryMapping(12, TorznabCatType.AudioVideo, "Videoclips");
             caps.Categories.AddCategoryMapping(7, TorznabCatType.XXX, "XXX");
 
