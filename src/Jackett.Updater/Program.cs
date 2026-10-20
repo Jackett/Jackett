@@ -250,6 +250,7 @@ namespace Jackett.Updater
                 "Definitions/3evils.yml",
                 "Definitions/3wmg.yml",
                 "Definitions/420files.yml",
+                "Definitions/52movie.yml",
                 "Definitions/7torrents.yml",
                 "Definitions/abnormal.yml", // switch to *-API #16657
                 "Definitions/academictorrents.yml",
