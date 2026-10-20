@@ -12,10 +12,10 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.torrent-site.my/
 links:
-  - https://ww1-darkfox.officiel.cc/
-  - https://ww1-vidlox.officiel.cc/
-  - https://ww1-wikibox.officiel.cc/
-  - https://ww1-sharkibox.officiel.cc/
+  - https://ww2-darkfox.officiel.cc/
+  - https://ww2-vidlox.officiel.cc/
+  - https://ww2-wikibox.officiel.cc/
+  - https://ww2-sharkibox.officiel.cc/
   - https://ww2-worldivx.officiel.cc/
   - https://ww2-workino.officiel.cc/
   - https://ww1-oxtorrent.officiel.cc/
@@ -54,6 +54,7 @@ legacylinks:
   - https://darkfox.proxy-site2.cc/
   - https://ww1-darkfox.officiel.pw/
   - https://ww1.darkfox.run/
+  - https://ww1-darkfox.officiel.cc/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
@@ -70,6 +71,7 @@ legacylinks:
   - https://vidlox.proxy-site2.cc/
   - https://ww1-vidlox.officiel.pw/
   - https://ww1.vidlox.run/
+  - https://ww1-vidlox.officiel.cc/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
@@ -85,6 +87,7 @@ legacylinks:
   - https://wikibox.proxy-site2.cc/
   - https://ww1-wikibox.officiel.pw/
   - https://ww1.wikibox.run/
+  - https://ww1-wikibox.officiel.cc/
   # Sharkibox
   - https://sharkibox.pw/
   - https://sharkibox.ws/
@@ -96,6 +99,7 @@ legacylinks:
   - https://sharkibox.proxy-site2.cc/
   - https://ww1-sharkibox.officiel.pw/
   - https://ww1.sharkibox.run/
+  - https://ww1-sharkibox.officiel.cc/
   # Worldivx
   - https://worldivx.pw/
   - https://worldivx.ws/
