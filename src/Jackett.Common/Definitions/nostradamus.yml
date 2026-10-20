@@ -18,14 +18,15 @@ caps:
     - {id: 2040, cat: Audio/Video, desc: "Films/Spectacle"}
     - {id: 2060, cat: Audio/Video, desc: "Films/Concert"}
     - {id: 2510, cat: Movies/Other, desc: "Films/Court-métrage"}
+    - {id: 2520, cat: Movies/Other, desc: "Films/Théâtre"}
     - {id: 5000, cat: TV, desc: "Séries TV"}
     - {id: 5040, cat: TV, desc: "Séries TV/Série TV"}
     - {id: 5070, cat: TV/Anime, desc: "Séries TV/Animation Série"}
     - {id: 5080, cat: TV, desc: "Séries TV/Emission TV"}
     - {id: 5090, cat: Audio/Video, desc: "Vidéo"}
-    - {id: 5060, cat: TV/Sport, desc: "Vidéo/Sport"}
     - {id: 5091, cat: Audio/Video, desc: "Vidéo/Vidéo-clips"}
     - {id: 5092, cat: Audio/Video, desc: "Vidéo/Autre"}
+    - {id: 5060, cat: TV/Sport, desc: "Vidéo/Sport"}
     - {id: 7000, cat: Books, desc: "eBook"}
     - {id: 7010, cat: Audio/Audiobook, desc: "eBook/Audio"}
     - {id: 7030, cat: Books/Comics, desc: "eBook/BDs"}
