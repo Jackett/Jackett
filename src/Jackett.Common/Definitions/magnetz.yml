@@ -1,9 +1,9 @@
 ---
 id: magnetz
 name: Magnetz
-description: "Magnetz is a Public torrent meta-search engine"
+description: "Magnetz is a Semi-Private torrent meta-search engine"
 language: en-US
-type: public
+type: semi-private
 encoding: UTF-8
 links:
   - https://magnetz.eu/
@@ -34,8 +34,12 @@ caps:
     book-search: [q]
 
 settings:
-  - name: info_flaresolverr
-    type: info_flaresolverr
+  - name: email
+    type: text
+    label: Email
+  - name: password
+    type: password
+    label: Password
   - name: sort
     type: select
     label: Sort requested from site
@@ -45,12 +49,22 @@ settings:
       seeders: seeders
       size: size
 
-download:
-  selectors:
-    - selector: a[href^="magnet:?xt="]
-      attribute: href
+login:
+  path: login
+  method: form
+  form: form
+  inputs:
+    email: "{{ .Config.email }}"
+    password: "{{ .Config.password }}"
+    remember: on
+  error:
+    - selector: span.form-input-error
+  test:
+    path: /
+    selector: form[action$="/logout"]
 
 search:
+  # https://magnetz.eu/search?query=masterplan&sort=date
   paths:
     - path: search
   inputs:
@@ -69,7 +83,7 @@ search:
       selector: a
       attribute: href
     download:
-      selector: a
+      selector: a[href^="magnet:?xt="]
       attribute: href
     date:
       text: now
