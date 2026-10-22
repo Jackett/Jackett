@@ -930,6 +930,7 @@ namespace Jackett.Updater
                 "Definitions/wdt.yml",
                 "Definitions/witchhunter.yml",
                 "Definitions/woot.yml",
+                "Definitions/world-of-tomorrow.yml", // switch to *-API #16903
                 "Definitions/worldofp2p.yml",
                 "Definitions/worldwidetorrents.yml",
                 "Definitions/wukong.yml",

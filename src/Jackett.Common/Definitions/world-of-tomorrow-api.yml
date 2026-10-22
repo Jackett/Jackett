@@ -1,0 +1,168 @@
+---
+id: world-of-tomorrow-api
+replaces:
+  - world-of-tomorrow
+name: World-of-Tomorrow (API)
+description: "World-of-Tomorrow is a GERMAN Private tracker for MOVIES / TV / GENERAL"
+language: de-DE
+type: private
+encoding: UTF-8
+links:
+  - https://w-o-t.pro/
+legacylinks:
+  - https://world-of-tomorrow.eu/
+  - https://wotreworked.xyz/
+
+caps:
+  categorymappings:
+    # from https://w-o-t.pro/api/torznab?apikey=YOUR-API-KEY&t=caps
+    # Filme
+    - {id: 1049, cat: Movies/HD, desc: "1080p"}
+    - {id: 1090, cat: Movies/3D, desc: "3D"}
+    - {id: 1048, cat: Movies/HD, desc: "720p"}
+    - {id: 1087, cat: TV/Anime, desc: "Anime"}
+    - {id: 1047, cat: Movies/BluRay, desc: "BluRay"}
+    - {id: 1011, cat: Movies/DVD, desc: "DVD"}
+    - {id: 1060, cat: Movies/HD, desc: "HDTV"}
+    - {id: 1066, cat: Movies, desc: "Movies"}
+    - {id: 1091, cat: Movies, desc: "Packs"}
+    - {id: 1062, cat: Movies/SD, desc: "SD"}
+    - {id: 1089, cat: Movies/UHD, desc: "UHD"}
+    - {id: 1108, cat: Movies, desc: "WOTT"}
+    # Audio
+    - {id: 1036, cat: Audio/Audiobook, desc: "Hörbücher"}
+    - {id: 1069, cat: Audio, desc: "Musik"}
+    - {id: 1072, cat: Audio, desc: "Musik-Packs"}
+    - {id: 1093, cat: Audio/Video, desc: "Musik-Videos"}
+    - {id: 1070, cat: Audio/Lossless, desc: "Musik/Flac"}
+    - {id: 1014, cat: Audio/MP3, desc: "Musik/MP3"}
+    - {id: 1071, cat: Audio, desc: "Soundtracks"}
+    - {id: 1110, cat: Audio, desc: "WOTT"}
+    # Apps
+    - {id: 1107, cat: PC/Mac, desc: "MAC"}
+    - {id: 1018, cat: PC, desc: "Sonstige"}
+    - {id: 1028, cat: PC/0day, desc: "Windows"}
+    # Spiele
+    - {id: 1005, cat: Console, desc: "Konsolen"}
+    - {id: 1092, cat: Console, desc: "Wimmelbild"}
+    - {id: 1004, cat: PC/Games, desc: "Windows"}
+    # Serien
+    - {id: 1079, cat: TV/HD, desc: "1080p"}
+    - {id: 1095, cat: TV/UHD, desc: "2160p"}
+    - {id: 1078, cat: TV/HD, desc: "720p"}
+    - {id: 1105, cat: TV/Anime, desc: "Anime"}
+    - {id: 1100, cat: TV/HD, desc: "Packs HD"}
+    - {id: 1016, cat: TV/SD, desc: "Packs-SD"}
+    - {id: 1077, cat: TV/SD, desc: "SD"}
+    - {id: 1109, cat: TV, desc: "WOTT"}
+    # Sonstiges
+    - {id: 1088, cat: XXX, desc: "XXX"}
+    - {id: 1106, cat: XXX/ImageSet, desc: "XXX Bilder"}
+    - {id: 1102, cat: XXX/Other, desc: "XXX HENTAI"}
+    - {id: 1064, cat: TV/Documentary, desc: "Dokus"}
+    - {id: 1019, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 1111, cat: Books/EBook, desc: "English Section"}
+    - {id: 1101, cat: TV, desc: "Kids"}
+    - {id: 1086, cat: Other/Misc, desc: "Misc"}
+    - {id: 1096, cat: Other, desc: "Sonstiges"}
+    # Sport
+    - {id: 1075, cat: TV/Sport, desc: "Formel 1"}
+    - {id: 1074, cat: TV/Sport, desc: "Fussball"}
+    - {id: 1073, cat: TV/Sport, desc: "Sport"}
+    - {id: 1023, cat: TV/Sport, desc: "Wrestling"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API Key
+    default: "You can find your API Key by accessing your <a href=\"https://w-o-t.pro/my.php\" target=\"_blank\">World-of-Tomorrow profile</a> and scrolling down to <b>Apps & Automationen</b>."
+  - name: info_activity
+    type: info
+    label: Account Inactivity
+    default: "All accounts up to platinum users that are inactive for more than 8 weeks will be deleted!"
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: torznab/api
+  method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: caps
+
+search:
+  paths:
+    - path: torznab/api
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  rows:
+    selector: rss > channel > item
+
+  fields:
+    category:
+      selector: "[name=category]"
+      attribute: value
+    title:
+      selector: title
+    details:
+      selector: comments
+    download:
+      selector: enclosure
+      attribute: url
+    date:
+      # Mon, 05 Oct 2026 04:55:57 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    imdbid:
+      selector: "[name=imdb]"
+      attribute: value
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+# torznab xml
