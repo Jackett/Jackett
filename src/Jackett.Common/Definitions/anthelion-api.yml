@@ -8,7 +8,7 @@ description: "Anthelion (ANT) is a Private Torrent Tracker for MOVIES"
 language: en-US
 type: private
 encoding: UTF-8
-# Status: https://ant.trackerstatus.info/
+# Status: https://status.anthelion.me/
 links:
   - https://anthelion.me/
 
