@@ -140,8 +140,8 @@ settings:
 search:
   paths:
     # 50 rows per page, however the All page only returns 49 actual results as the 50th is a duplicate of the 49th 8-/
-    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/All/{{ end }}"
-    - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/All/?page=2{{ end }}"
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/all/{{ end }}"
+    - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/all/?page=2{{ end }}"
 
   headers:
     Accept: ["*/*"]
