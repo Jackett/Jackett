@@ -34,7 +34,7 @@ namespace Jackett.Common.Indexers.Definitions
         };
         public override string Name => "NebulanceAPI";
         public override string Description => "Nebulance is a Private site. At Nebulance we will change the way you think about TV. Using API.";
-        // Status: https://nbl.trackerstatus.info/
+        // Status: https://status.nebulance.io/
         public override string SiteLink { get; protected set; } = "https://nebulance.io/";
         public override string Language => "en-US";
         public override string Type => "private";
