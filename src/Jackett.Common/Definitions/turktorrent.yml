@@ -31,10 +31,13 @@ caps:
     - {id: 56, cat: Other, desc: "Diğer Her Şey"}
     - {id: 65, cat: Books/EBook, desc: "E-Kitap"}
     - {id: 35, cat: TV, desc: "Netflix"}
+    - {id: 35, cat: Movies, desc: "Netflix"}
     - {id: 41, cat: TV, desc: "Netflix Animasyon"}
-    - {id: 39, cat: TV, desc: "Netflix Film"}
+    - {id: 41, cat: Movies, desc: "Netflix Animasyon"}
+    - {id: 39, cat: Movies, desc: "Netflix Film"}
     - {id: 38, cat: TV, desc: "Netflix Dizi"}
     - {id: 40, cat: TV, desc: "Netflix Belgesel"}
+    - {id: 40, cat: Movies, desc: "Netflix Belgesel"}
     - {id: 104, cat: TV, desc: "Netflix Reality/Yarışma"}
     - {id: 47, cat: PC, desc: "Programlar"}
     - {id: 48, cat: PC, desc: "Programlar Windows"}
@@ -42,18 +45,31 @@ caps:
     - {id: 49, cat: PC, desc: "Programlar MaC"}
     - {id: 50, cat: PC, desc: "Programlar Mobile"}
     - {id: 83, cat: TV, desc: "Dijital Platform"}
+    - {id: 83, cat: Movies, desc: "Dijital Platform"}
     - {id: 86, cat: TV, desc: "Dijital Platform AMAZON"}
+    - {id: 86, cat: Movies, desc: "Dijital Platform AMAZON"}
     - {id: 102, cat: TV, desc: "Dijital Platform ATVP"}
+    - {id: 102, cat: Movies, desc: "Dijital Platform ATVP"}
     - {id: 85, cat: TV, desc: "Dijital Platform BEiN/TOD"}
+    - {id: 85, cat: Movies, desc: "Dijital Platform BEiN/TOD"}
     - {id: 84, cat: TV, desc: "Dijital Platform BluTV"}
+    - {id: 84, cat: Movies, desc: "Dijital Platform BluTV"}
     - {id: 98, cat: TV, desc: "Dijital Platform DSNP"}
+    - {id: 98, cat: Movies, desc: "Dijital Platform DSNP"}
     - {id: 77, cat: TV, desc: "Dijital Platform EXXEN"}
+    - {id: 77, cat: Movies, desc: "Dijital Platform EXXEN"}
     - {id: 87, cat: TV, desc: "Dijital Platform GAIN"}
+    - {id: 87, cat: Movies, desc: "Dijital Platform GAIN"}
     - {id: 105, cat: TV, desc: "Dijital Platform Max"}
+    - {id: 105, cat: Movies, desc: "Dijital Platform Max"}
     - {id: 101, cat: TV, desc: "Dijital Platform MUBi"}
+    - {id: 101, cat: Movies, desc: "Dijital Platform MUBi"}
     - {id: 103, cat: TV, desc: "Dijital Platform TABii"}
+    - {id: 103, cat: Movies, desc: "Dijital Platform TABii"}
     - {id: 88, cat: TV, desc: "Dijital Platform TV+"}
+    - {id: 88, cat: Movies, desc: "Dijital Platform TV+"}
     - {id: 89, cat: TV, desc: "Dijital Platform Diger"}
+    - {id: 89, cat: Movies, desc: "Dijital Platform Diger"}
     - {id: 31, cat: TV, desc: "Dizi"}
     - {id: 32, cat: TV, desc: "Dizi Yerli"}
     - {id: 33, cat: TV, desc: "Dizi Yabancı / TR Dublaj"}
