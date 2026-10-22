@@ -148,7 +148,7 @@ search:
       selector: torrentdata
       filters:
         - name: regexp
-          args: "target=\"_new\">(.+?)<\\/a>"
+          args: "torrentdetails\\.php\\?torrentid=.+?>(.+?)<\\/a>"
     details:
       selector: torrentdata
       filters:
@@ -165,22 +165,22 @@ search:
       selector: torrentdata
       filters:
         - name: regexp
-          args: "TorrentList3\">(.+?)<\\/li>"
+          args: "Torrent-List-Size\">(.+?)<\\/li>"
     seeders:
       selector: torrentdata
       filters:
         - name: regexp
-          args: "TorrentList6\">(.+?)<\\/li>"
+          args: "orrent-List-Seeds\">(.+?)<\\/li>"
     leechers:
       selector: torrentdata
       filters:
         - name: regexp
-          args: "TorrentList7\">(.+?)<\\/li>"
+          args: "Torrent-List-Peers\">(.+?)<\\/li>"
     date:
       selector: torrentdata
       filters:
         - name: regexp
-          args: "TorrentList8\">(.+?)<\\/li>"
+          args: "Torrent-List-Date\">(.+?)<\\/li>"
         - name: append
           args: " +02:00" # EET
         - name: dateparse
