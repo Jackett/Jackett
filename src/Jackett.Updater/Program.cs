@@ -697,6 +697,7 @@ namespace Jackett.Updater
                 "Definitions/pt99.yml",
                 "Definitions/ptcdy.yml",
                 "Definitions/ptchina.yml",
+                "Definitions/ptlao.yml",
                 "Definitions/ptlsp.yml",
                 "Definitions/ptmsg.yml",
                 "Definitions/ptorrent.yml", // renamed to pornxlab
