@@ -25,7 +25,7 @@ caps:
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 215, cat: TV/UHD, desc: "Serien UHD"}
-    - {id: 59, cat: TV, desc: "Serien Pack"}
+    - {id: 59, cat: TV, desc: "Serien HD->Pack"}
     - {id: 203, cat: TV/UHD, desc: "Serien UHD Pack"}
     - {id: 56, cat: TV/SD, desc: "Serien DVD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
@@ -46,6 +46,7 @@ caps:
     # Klassiker
     - {id: 157, cat: Movies/HD, desc: "Klassiker HD"}
     # Music
+    - {id: 253, cat: Audio, desc: "Music KI/Mp3"}
     - {id: 126, cat: Audio, desc: "Music Mp3/Flac"}
     - {id: 48, cat: Audio, desc: "Music Album"}
     - {id: 49, cat: Audio, desc: "Music Charts"}
