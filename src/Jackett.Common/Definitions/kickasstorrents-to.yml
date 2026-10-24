@@ -50,6 +50,7 @@ caps:
     - {id: AppsAndroid, cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: AppsLinux, cat: PC, desc: "Apps Linux"}
     - {id: AppsMac, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: AppsOtherApplications, cat: PC, desc: "Apps Other Applications"}
     - {id: AppsWindows, cat: PC/0day, desc: "Apps Windows"}
     - {id: Audiobooks, cat: Audio/Audiobook, desc: "Audio books"}
     - {id: Bollywood, cat: Movies, desc: "Movies Bollywood"}
