@@ -158,7 +158,6 @@ search:
     leechers:
       selector: li.Torrent-List-Peers, li.TorrentList7
     date:
-      selector: 
       selector: li.Torrent-List-Date, li.TorrentList8
       filters:
         - name: append
