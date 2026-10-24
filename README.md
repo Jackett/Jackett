@@ -567,6 +567,7 @@ Prior versions of Jackett are no longer supported.
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
  * SAMARITANO
+ * SAPIbr (Toca Share)
  * SBPT
  * SceneHD [![(invite needed)][inviteneeded]](#)
  * SceneRush [![(invite needed)][inviteneeded]](#)
@@ -624,7 +625,6 @@ Prior versions of Jackett are no longer supported.
  * TJUPT (北洋园PT)
  * TLFBits [![(invite needed)][inviteneeded]](#)
  * TmGHuB (TH) [![(invite needed)][inviteneeded]](#)
- * Toca Share
  * Tormac
  * Tornado
  * Torrent Heaven (Dutch)

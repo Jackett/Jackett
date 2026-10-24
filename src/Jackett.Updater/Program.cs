@@ -826,6 +826,7 @@ namespace Jackett.Updater
                 "Definitions/tjangto.yml",
                 "Definitions/tntfork.yml",
                 "Definitions/tntvillage.yml",
+                "Definitions/tocashare.yml", // renamed to sapibr
                 "Definitions/tokyopt.yml",
                 "Definitions/toonsforme.yml",
                 "Definitions/topnow.yml",

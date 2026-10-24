@@ -1,14 +1,17 @@
 ---
-id: tocashare
-name: Toca Share (API)
-description: "Toca Share is a PORTUGUESE Private Torrent Tracker for EBOOKS / AUDIOBOOKS / COURSES"
+id: sapibr
+replaces:
+  - tocashare
+name: SAPIbr (API)
+description: "SAPIbr (Toca Share) is a PORTUGUESE Private Torrent Tracker for EBOOKS / AUDIOBOOKS / COURSES"
 language: pt-PT
 type: private
 encoding: UTF-8
 links:
-  - https://tocashare.biz/ # due to expired 31 Mar 2025, new domain tba
+  - https://sapibr.com/
 legacylinks:
-  - https://tocashare.com/ # expired 2nd Jan 2025
+  - https://tocashare.com/
+  - https://tocashare.biz/
 
 caps:
   categorymappings:
@@ -35,7 +38,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Find or Generate a new API Token by accessing your <a href=\"https://tocashare.biz/\" target=\"_blank\">Toca Share</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
+    default: "Find or Generate a new API Token by accessing your <a href=\"https://sapibr.com/\" target=\"_blank\">SAPIbr</a> account <i>My Settings</i> page and clicking on the <b>API Key</b> tab."
   - name: freeleech
     type: checkbox
     label: Search freeleech only
