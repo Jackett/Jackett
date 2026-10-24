@@ -98,28 +98,18 @@ login:
 search:
   paths:
     - path: GT_torrents/GT_ajax_search.php
-      response:
-        type: xml
       inputs:
         page: 0
     - path: GT_torrents/GT_ajax_search.php
-      response:
-        type: xml
       inputs:
         page: 1
     - path: GT_torrents/GT_ajax_search.php
-      response:
-        type: xml
       inputs:
         page: 2
     - path: GT_torrents/GT_ajax_search.php
-      response:
-        type: xml
       inputs:
         page: 3
     - path: GT_torrents/GT_ajax_search.php
-      response:
-        type: xml
       inputs:
         page: 4
   inputs:
@@ -140,20 +130,20 @@ search:
 
   fields:
     category:
-      selector: torrentdata
+      selector: a[href^="torrentslist.php?type="]
+      attribute: href
       filters:
-        - name: regexp
-          args: "torrentslist\\.php\\?type=(.+?)\""
+        - name: querystring
+          args: type
     title:
-      selector: torrentdata
+      selector: a[href^="torrentdetails.php?torrentid="]
       filters:
-        - name: regexp
-          args: "torrentdetails\\.php\\?torrentid=.+?>(.+?)<\\/a>"
+        - name: re_replace
+          args: ["^\\[F?FL\\]\\s*", ""]
     details:
-      selector: torrentdata
+      selector: a[href^="torrentdetails.php?torrentid="]
+      attribute: href
       filters:
-        - name: regexp
-          args: "(torrentdetails\\.php\\?torrentid=.+?)\""
         - name: prepend
           args: "/"
     download:
@@ -162,33 +152,24 @@ search:
         - name: append
           args: "&do=download"
     size:
-      selector: torrentdata
-      filters:
-        - name: regexp
-          args: "Torrent-List-Size\">(.+?)<\\/li>"
+      selector: li.Torrent-List-Size, li.TorrentList3
     seeders:
-      selector: torrentdata
-      filters:
-        - name: regexp
-          args: "orrent-List-Seeds\">(.+?)<\\/li>"
+      selector: li.Torrent-List-Seeds, li.TorrentList6
     leechers:
-      selector: torrentdata
-      filters:
-        - name: regexp
-          args: "Torrent-List-Peers\">(.+?)<\\/li>"
+      selector: li.Torrent-List-Peers, li.TorrentList7
     date:
-      selector: torrentdata
+      selector: 
+      selector: li.Torrent-List-Date, li.TorrentList8
       filters:
-        - name: regexp
-          args: "Torrent-List-Date\">(.+?)<\\/li>"
         - name: append
           args: " +02:00" # EET
         - name: dateparse
           args: "HH:mm dd-MMM-yyyy zzz"
     downloadvolumefactor:
       case:
+        "torrentdata:contains(\"[FL]\")": 0
         "torrentdata:contains(\"[FFL]\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
-# Morbid Suite vB4 XML
+# Torrent Search v1.31 (SCS)
