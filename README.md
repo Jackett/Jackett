@@ -304,7 +304,6 @@ Prior versions of Jackett are no longer supported.
  * BitTorrentFiles
  * BiTTuRK
  * BJ-Share (BJ) [![(invite needed)][inviteneeded]](#)
- * BlueBird
  * BlueTorrents
  * BlurayTracker
  * Blutopia (BLU)
