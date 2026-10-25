@@ -543,7 +543,6 @@ Prior versions of Jackett are no longer supported.
  * PTSKIT
  * PTTey [![(invite needed)][inviteneeded]](#)
  * PTtime
- * PTYING (樱花)
  * PTzone
  * Punk's Horror Tracker
  * PuntoTorrent [![(invite needed)][inviteneeded]](#)
