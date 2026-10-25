@@ -6,6 +6,8 @@ language: zh-CN
 type: private
 encoding: UTF-8
 links:
+  - https://www.uhddolby.com/
+legacylinks:
   - https://www.hddolby.com/
 
 caps:
