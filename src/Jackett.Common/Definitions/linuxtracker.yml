@@ -25,6 +25,7 @@ caps:
     - {id: 2289, cat: PC/ISO, desc: "APODIO"}
     - {id: 39, cat: PC/ISO, desc: "Arch Linux"}
     - {id: 2009, cat: PC/ISO, desc: "Archbang"}
+    - {id: 6, cat: PC/ISO, desc: "ArchEZ"}
     - {id: 2212, cat: PC/ISO, desc: "ArchLabs"}
     - {id: 2183, cat: PC/ISO, desc: "Archman"}
     - {id: 2196, cat: PC/ISO, desc: "ArcoLinux"}
@@ -81,6 +82,7 @@ caps:
     - {id: 2287, cat: PC/ISO, desc: "Doge Linux"}
     - {id: 2308, cat: PC/ISO, desc: "Dr.Parted Live"}
     - {id: 144, cat: PC/ISO, desc: "DragonFly BSD"}
+    - {id: 5, cat: PC/ISO, desc: "DragonOS"}
     - {id: 2215, cat: PC/ISO, desc: "Dragora GNU/Linux"}
     - {id: 2307, cat: PC/ISO, desc: "Drauger OS"}
     - {id: 2285, cat: PC/ISO, desc: "DRBL Live"}
@@ -190,6 +192,7 @@ caps:
     - {id: 401, cat: PC/ISO, desc: "OpenBSD"}
     - {id: 2089, cat: PC/ISO, desc: "Openelec"}
     - {id: 2090, cat: PC/ISO, desc: "OpenIndiana"}
+    - {id: 7, cat: PC/ISO, desc: "Openmamba GNU/Linux"}
     - {id: 2091, cat: PC/ISO, desc: "OpenMandriva Lx"}
     - {id: 2092, cat: PC/ISO, desc: "Openmediavault"}
     - {id: 2093, cat: PC/ISO, desc: "Opensuse"}
