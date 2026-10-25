@@ -135,6 +135,7 @@ function loadJackettSettings() {
 
         $("#jackett-flaresolverrurl").val(data.flaresolverrurl);
         $("#jackett-flaresolverr-maxtimeout").val(data.flaresolverr_maxtimeout);
+        $("#jackett-flaresolverr-concurrency").val(data.flaresolverr_max_concurrency || data.flaresolverrmaxconcurrency || 10);
         $("#jackett-omdbkey").val(data.omdbkey);
         $("#jackett-omdburl").val(data.omdburl);
         var password = data.password;
@@ -1640,6 +1641,7 @@ function bindUIButtons() {
         var jackett_cache_max_results_per_indexer = $("#jackett-cache-max-results-per-indexer").val();
         var jackett_flaresolverr_url = $("#jackett-flaresolverrurl").val();
         var jackett_flaresolverr_maxtimeout = $("#jackett-flaresolverr-maxtimeout").val();
+        var jackett_flaresolverr_concurrency = parseInt($("#jackett-flaresolverr-concurrency").val()) || 10;
         var jackett_omdb_key = $("#jackett-omdbkey").val();
         var jackett_omdb_url = $("#jackett-omdburl").val();
 
@@ -1666,6 +1668,8 @@ function bindUIButtons() {
             cache_max_results_per_indexer: jackett_cache_max_results_per_indexer,
             flaresolverrurl: jackett_flaresolverr_url,
             flaresolverr_maxtimeout: jackett_flaresolverr_maxtimeout,
+            flaresolverr_max_concurrency: jackett_flaresolverr_concurrency,
+            flaresolverrmaxconcurrency: jackett_flaresolverr_concurrency,
             omdbkey: jackett_omdb_key,
             omdburl: jackett_omdb_url,
             proxy_type: jackett_proxy_type,
@@ -1674,6 +1678,18 @@ function bindUIButtons() {
             proxy_username: jackett_proxy_username,
             proxy_password: jackett_proxy_password
         };
+
+        if (jackett_flaresolverr_url) {
+            try {
+                var byparrConfigUrl = jackett_flaresolverr_url.replace(/\/v1\/?$/, '').replace(/\/$/, '') + '/config';
+                $.ajax({
+                    url: byparrConfigUrl,
+                    type: 'POST',
+                    contentType: 'application/json',
+                    data: JSON.stringify({ maxConcurrency: jackett_flaresolverr_concurrency })
+                });
+            } catch (e) {}
+        }
         api.updateServerConfig(jsonObject, function (data) {
             doNotify("Redirecting you to complete configuration update..", "success", "glyphicon glyphicon-ok");
             window.setTimeout(function () {

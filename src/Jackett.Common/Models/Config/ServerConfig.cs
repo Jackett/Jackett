@@ -22,6 +22,7 @@ namespace Jackett.Common.Models.Config
             CacheTtl = 2100; // 35 minutes is a reasonable value for all of them and to avoid race conditions
             CacheMaxResultsPerIndexer = 1000;
             FlareSolverrMaxTimeout = 55000;
+            FlareSolverrMaxConcurrency = 5;
             RuntimeSettings = runtimeSettings;
         }
 
@@ -49,6 +50,7 @@ namespace Jackett.Common.Models.Config
         public long CacheMaxResultsPerIndexer { get; set; }
         public string FlareSolverrUrl { get; set; }
         public int FlareSolverrMaxTimeout { get; set; }
+        public int FlareSolverrMaxConcurrency { get; set; } = 5;
         public string OmdbApiKey { get; set; }
         public string OmdbApiUrl { get; set; }
 

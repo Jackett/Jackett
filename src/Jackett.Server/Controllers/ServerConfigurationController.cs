@@ -139,7 +139,8 @@ namespace Jackett.Server.Controllers
             configService.SaveConfig(serverConfig);
 
             if (config.flaresolverrurl != serverConfig.FlareSolverrUrl ||
-                config.flaresolverr_maxtimeout != serverConfig.FlareSolverrMaxTimeout)
+                config.flaresolverr_maxtimeout != serverConfig.FlareSolverrMaxTimeout ||
+                config.flaresolverr_max_concurrency != serverConfig.FlareSolverrMaxConcurrency)
             {
                 if (string.IsNullOrWhiteSpace(config.flaresolverrurl))
                     config.flaresolverrurl = "";
@@ -151,8 +152,12 @@ namespace Jackett.Server.Controllers
                 if (config.flaresolverr_maxtimeout < 5000)
                     throw new Exception("FlareSolverr Max Timeout must be greater than 5000 ms.");
 
+                if (config.flaresolverr_max_concurrency < 1)
+                    config.flaresolverr_max_concurrency = 1;
+
                 serverConfig.FlareSolverrUrl = config.flaresolverrurl;
                 serverConfig.FlareSolverrMaxTimeout = config.flaresolverr_maxtimeout;
+                serverConfig.FlareSolverrMaxConcurrency = config.flaresolverr_max_concurrency;
                 configService.SaveConfig(serverConfig);
                 webHostRestartNeeded = true;
             }

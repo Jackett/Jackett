@@ -45,6 +45,8 @@ namespace Jackett.Common.Models.DTO
         [DataMember]
         public int flaresolverr_maxtimeout { get; set; }
         [DataMember]
+        public int flaresolverr_max_concurrency { get; set; }
+        [DataMember]
         public string omdbkey { get; set; }
         [DataMember]
         public string omdburl { get; set; }
@@ -89,6 +91,7 @@ namespace Jackett.Common.Models.DTO
             cache_max_results_per_indexer = config.CacheMaxResultsPerIndexer;
             flaresolverrurl = config.FlareSolverrUrl;
             flaresolverr_maxtimeout = config.FlareSolverrMaxTimeout;
+            flaresolverr_max_concurrency = config.FlareSolverrMaxConcurrency;
             omdbkey = config.OmdbApiKey;
             omdburl = config.OmdbApiUrl;
             app_version = version;
