@@ -41,6 +41,9 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.1tamilmv.ac/",
+            "https://www.1tamilmv.eu/",
+            "https://www.1tamilmv.pizza/",
+            "https://www.1tamilmv.wtf/",
             "https://www.1tamilmv.unblockninja.com/",
         };
 
@@ -340,7 +343,7 @@ namespace Jackett.Common.Indexers.Definitions
 
         private async Task<List<string>> SearchTopicsAsync(string workingDomain, string searchTerm, int limit)
         {
-            var searchUrl = $"{workingDomain}index.php?/search/&q={WebUtility.UrlEncode(searchTerm)}&type=forums_topic";
+            var searchUrl = $"{workingDomain}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic";
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: workingDomain);
             if (response.Status != HttpStatusCode.OK)
             {
