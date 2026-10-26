@@ -34,14 +34,14 @@ namespace Jackett.Common.Indexers.Definitions
 
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://www.1tamilmv.fi/"
+            "https://www.1tamilmv.style/",
+            "https://www.1tamilmv.fi/",
         };
 
         public override string[] LegacySiteLinks => new[]
         {
-            "https://www.1tamilmv.fi/",
             "https://www.1tamilmv.ac/",
-            "https://www.1tamilmv.unblockninja.com/"
+            "https://www.1tamilmv.unblockninja.com/",
         };
 
         public override string Language => "ta-IN";
