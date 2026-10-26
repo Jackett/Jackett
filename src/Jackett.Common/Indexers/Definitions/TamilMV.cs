@@ -35,7 +35,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.1tamilmv.fi/"
-        
         };
 
         public override string[] LegacySiteLinks => new[]
