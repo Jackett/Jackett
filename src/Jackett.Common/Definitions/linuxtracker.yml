@@ -11,7 +11,6 @@ links:
 
 caps:
   categorymappings:
-    - {id: 0, cat: Other, desc: "Other"}
     - {id: 2002, cat: PC/ISO, desc: "4MLinux"}
     - {id: 13, cat: PC/ISO, desc: "Absolute"}
     - {id: 2311, cat: PC/ISO, desc: "AlmaLinux"}
@@ -19,6 +18,7 @@ caps:
     - {id: 2004, cat: PC/ISO, desc: "ALT Linux"}
     - {id: 2292, cat: PC/ISO, desc: "Anarchy Linux"}
     - {id: 2005, cat: PC/ISO, desc: "Android x86"}
+    - {id: 8, cat: PC/ISO, desc: "AnduinOS"}
     - {id: 2006, cat: PC/ISO, desc: "Antergos"}
     - {id: 2263, cat: PC/ISO, desc: "Antivirus Live CD"}
     - {id: 2007, cat: PC/ISO, desc: "AntiX"}
@@ -104,6 +104,7 @@ caps:
     - {id: 2223, cat: PC/ISO, desc: "Enso OS"}
     - {id: 2043, cat: PC/ISO, desc: "Exe GNU/Linux"}
     - {id: 2045, cat: PC/ISO, desc: "Extix"}
+    - {id: 9, cat: PC/ISO, desc: "Ezarcher"}
     - {id: 2220, cat: PC/ISO, desc: "Fatdog64 Linux"}
     - {id: 178, cat: PC/ISO, desc: "Fedora"}
     - {id: 2194, cat: PC/ISO, desc: "Feren OS"}
@@ -164,6 +165,7 @@ caps:
     - {id: 2068, cat: PC/ISO, desc: "LXLE"}
     - {id: 2296, cat: PC/ISO, desc: "Mabox Linux"}
     - {id: 1228, cat: PC/ISO, desc: "Mageia"}
+    - {id: 10, cat: PC/ISO, desc: "MagOS Linux"}
     - {id: 2071, cat: PC/ISO, desc: "MakuluLinux"}
     - {id: 2073, cat: PC/ISO, desc: "Manjaro"}
     - {id: 343, cat: PC/ISO, desc: "MidnightBSD"}
@@ -327,7 +329,7 @@ caps:
     - {id: 1233, cat: PC/ISO, desc: "Zorin"}
     - {id: 4, cat: PC/ISO, desc: "Other distros"}
     # undocumented categories
-    - {id: 531, cat: PC/ISO, desc: "no category"}
+    - {id: 531, cat: PC/ISO, desc: "Uncategorized"}
 
   modes:
     search: [q]
