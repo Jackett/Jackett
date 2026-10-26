@@ -129,9 +129,6 @@ search:
     leechers:
       selector: "[name=peers]"
       attribute: value
-#<tag name="freeleech" description="Download does not count (freeleech or neutral leech)"/>
-#<tag name="neutralleech" description="Neither download nor upload count"/>
-#<tag name="doubleupload" description="Upload counts double"/>
     downloadvolumefactor:
       selector: "[name=downloadvolumefactor]"
       attribute: value
