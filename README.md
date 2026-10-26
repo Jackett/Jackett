@@ -526,6 +526,7 @@ Prior versions of Jackett are no longer supported.
  * Podzemlje
  * Polish Torrent (PTT)
  * PolishTracker [![(invite needed)][inviteneeded]](#)
+ * Pornorip
  * Portugas
  * Pretome
  * PrivateHD (PHD)
