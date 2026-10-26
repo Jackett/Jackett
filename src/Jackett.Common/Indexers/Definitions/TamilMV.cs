@@ -30,32 +30,18 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Id => "tamilmv";
         public override string Name => "1TamilMV";
         public override string Description => "1TamilMV is a Public Indian torrent tracker for Tamil, Telugu, Hindi, Malayalam, and Kannada releases.";
-        public override string SiteLink { get; protected set; } = "https://www.1tamilmv.solar/";
+        public override string SiteLink { get; protected set; } = "https://www.1tamilmv.style/";
 
         public override string[] AlternativeSiteLinks => new[]
         {
-            "https://www.1tamilmv.solar/",
-            "https://www.1tamilmv.fi/",
-            "https://www.1tamilmv.pm/",
-            "https://www.1tamilmv.vin/",
-            "https://www.1tamilmv.yt/",
-            "https://www.1tamilmv.lat/",
-            "https://www.1tamilmv.wf/",
-            "https://www.1tamilmv.gold/",
-            "https://www.1tamilmv.cz/",
-            "https://www.1tamilmv.unblockninja.com/"
+            "https://www.1tamilmv.fi/"
+        
         };
 
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.1tamilmv.fi/",
-            "https://www.1tamilmv.pm/",
-            "https://www.1tamilmv.vin/",
-            "https://www.1tamilmv.yt/",
-            "https://www.1tamilmv.lat/",
-            "https://www.1tamilmv.wf/",
-            "https://www.1tamilmv.gold/",
-            "https://www.1tamilmv.cz/",
+            "https://www.1tamilmv.ac/",
             "https://www.1tamilmv.unblockninja.com/"
         };
 
@@ -78,6 +64,7 @@ namespace Jackett.Common.Indexers.Definitions
         private static string _cachedWorkingDomain;
         private static DateTime _domainCacheExpiresAt = DateTime.MinValue;
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
+        private const int MaxTopics = 20;
 
         public TamilMV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -95,16 +82,6 @@ namespace Jackett.Common.Indexers.Definitions
 
             var filterSamples = new BoolConfigurationItem("Filter out trailers, samples, and promo releases") { Value = true };
             configData.AddDynamic("filterSamples", filterSamples);
-
-            var maxTopics = new SingleSelectConfigurationItem("Topics to scrape per query", new Dictionary<string, string>
-            {
-                { "10", "10 topics" },
-                { "15", "15 topics (default)" },
-                { "25", "25 topics" },
-                { "40", "40 topics" }
-            })
-            { Value = "15" };
-            configData.AddDynamic("maxTopics", maxTopics);
         }
 
         private static TorznabCapabilities SetCapabilities()
@@ -222,8 +199,6 @@ namespace Jackett.Common.Indexers.Definitions
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
             var workingDomain = await ResolveWorkingDomainAsync();
-            var maxTopicsVal = ((SingleSelectConfigurationItem)configData.GetDynamic("maxTopics"))?.Value;
-            var maxTopics = int.TryParse(maxTopicsVal, out var mt) && mt > 0 ? mt : 15;
             var stripPrefix = ((BoolConfigurationItem)configData.GetDynamic("stripPrefix"))?.Value ?? true;
             var filterSamples = ((BoolConfigurationItem)configData.GetDynamic("filterSamples"))?.Value ?? true;
 
@@ -232,11 +207,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                topicUrls = await ExtractHomepageTopicsAsync(workingDomain, maxTopics);
+                topicUrls = await ExtractHomepageTopicsAsync(workingDomain, MaxTopics);
             }
             else
             {
-                topicUrls = await SearchTopicsAsync(workingDomain, searchTerm, maxTopics);
+                topicUrls = await SearchTopicsAsync(workingDomain, searchTerm, MaxTopics);
             }
 
             var releases = new List<ReleaseInfo>();
