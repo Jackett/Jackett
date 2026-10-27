@@ -228,7 +228,14 @@ namespace Jackett.Common.Indexers.Definitions
 
                     Uri releaseThumbnailUri = null;
                     if (thumbnailNode != null)
-                        releaseThumbnailUri = new Uri(thumbnailNode.GetAttribute("title"));
+                    {
+                        var posterRegEx = new Regex(@",'(.+?)'", RegexOptions.Compiled);
+                        var posterMatch = posterRegEx.Match(thumbnailNode.GetAttribute("onclick"));
+                        if (posterMatch.Success)
+                        {
+                            releaseThumbnailUri = new Uri(posterMatch.Groups[1].Value);
+                        }
+                    }
 
                     ICollection<int> releaseNewznabCategory = null;
                     var categoriesSplit = categoryNode.ClassName.Split(' ');
