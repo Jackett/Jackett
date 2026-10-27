@@ -153,6 +153,9 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\b(\\d{4})\\.(\\d{2})\\.(\\d{2})\\b", "$3.$2.$1"]
+    # site search does not match "Title (2023)" releases when the year is in the query
+    - name: re_replace
+      args: ["\\s+(19|20)\\d{2}$", ""]
 
   rows:
     selector: "table#torrents_tables_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
