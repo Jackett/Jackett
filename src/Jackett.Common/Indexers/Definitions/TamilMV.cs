@@ -213,7 +213,7 @@ namespace Jackett.Common.Indexers.Definitions
             }
             else
             {
-                topicUrls = await SearchTopicsAsync(workingDomain, searchTerm, MaxTopics);
+                topicUrls = await SearchTopicsAsync(workingDomain, searchTerm);
             }
 
             var releases = new List<ReleaseInfo>();
@@ -239,9 +239,9 @@ namespace Jackett.Common.Indexers.Definitions
                     using var doc = parser.ParseDocument(topicResponse.ContentString);
                     var topicReleases = ExtractTopicReleases(doc, topicUrl, workingDomain, stripPrefix, filterSamples);
 
+                    _topicCache[topicUrl] = (DateTime.UtcNow.AddDays(1), topicReleases);
                     if (topicReleases.Count > 0)
                     {
-                        _topicCache[topicUrl] = (DateTime.UtcNow.AddDays(1), topicReleases);
                         releases.AddRange(topicReleases);
                     }
                 }
@@ -341,32 +341,58 @@ namespace Jackett.Common.Indexers.Definitions
             return topicUrls.Take(limit).ToList();
         }
 
-        private async Task<List<string>> SearchTopicsAsync(string workingDomain, string searchTerm, int limit)
+        private async Task<List<string>> SearchTopicsAsync(string workingDomain, string searchTerm, int maxPages = 15)
         {
-            var searchUrl = $"{workingDomain}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic";
-            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: workingDomain);
-            if (response.Status != HttpStatusCode.OK)
-            {
-                logger.Warn($"Failed to search 1TamilMV: HTTP {response.Status}");
-                return new List<string>();
-            }
-
-            var parser = new HtmlParser();
-            using var doc = parser.ParseDocument(response.ContentString);
-
             var topicUrls = new List<string>();
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            var parser = new HtmlParser();
 
-            var resultItems = doc.QuerySelectorAll(".ipsStreamItem_title a[href], .ipsStreamItem a[href*='/forums/topic/'], [data-role='searchResults'] a[href*='/forums/topic/']");
-            foreach (var a in resultItems)
+            for (var page = 1; page <= maxPages; page++)
             {
-                var href = a.GetAttribute("href");
-                var clean = NormalizeTopicUrl(href, workingDomain);
-                if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
+                var pageParam = page > 1 ? $"&page={page}" : string.Empty;
+                var searchUrl = $"{workingDomain}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic{pageParam}";
+                var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: workingDomain);
+                if (response.Status != HttpStatusCode.OK)
                 {
-                    topicUrls.Add(clean);
-                    if (topicUrls.Count >= limit)
-                        break;
+                    if (page == 1)
+                    {
+                        logger.Warn($"Failed to search 1TamilMV: HTTP {response.Status}");
+                    }
+                    break;
+                }
+
+                using var doc = parser.ParseDocument(response.ContentString);
+                var resultItems = doc.QuerySelectorAll(".ipsStreamItem_title a[href], .ipsStreamItem a[href*='/forums/topic/'], [data-role='searchResults'] a[href*='/forums/topic/']");
+                if (resultItems.Length == 0)
+                {
+                    break;
+                }
+
+                var addedThisPage = 0;
+                foreach (var a in resultItems)
+                {
+                    var href = a.GetAttribute("href");
+                    var clean = NormalizeTopicUrl(href, workingDomain);
+                    if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
+                    {
+                        topicUrls.Add(clean);
+                        addedThisPage++;
+                    }
+                }
+
+                if (addedThisPage == 0)
+                {
+                    break;
+                }
+
+                var nextItem = doc.QuerySelector(".ipsPagination_next");
+                var hasNextPage = nextItem != null
+                    ? !nextItem.ClassList.Contains("ipsPagination_inactive") && nextItem.QuerySelector("a") != null
+                    : doc.QuerySelector("a[rel='next']") != null;
+
+                if (!hasNextPage)
+                {
+                    break;
                 }
             }
 
