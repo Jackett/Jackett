@@ -70,5 +70,58 @@ namespace Jackett.Test.Common.Indexers
             cats.Should().Contain(TorznabCatType.Audio.ID);
             cats.Should().Contain(TorznabCatType.AudioLossless.ID);
         }
+
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/92-post-share-here/", true)]
+        [TestCase("https://www.1tamilmv.style/forums/forum/92-post-share-here/", true)]
+        [TestCase("/forums/forum/92-post-share-here/", true)]
+        [TestCase("/forum/92-post-share-here/", true)]
+        [TestCase("/16-video-songs/", true)]
+        [TestCase("/15-mp3-songs/", true)]
+        [TestCase("/18-cinema-news-reviews-general-videos/", true)]
+        [TestCase("/102-watch-tamil-movies-online/", true)]
+        [TestCase("104-watch-malayalam-movies-online/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/95-watch-telugu-movies-online/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/75-watch-kannada-movies-online/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/52-video-songs/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/62-mp3-songs/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/89-request-section/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/92/", true)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/topic/12345-some-topic/", false)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/11-web-hd-itunes-hd-bluray/", false)]
+        [TestCase("https://www.1tamilmv.style/index.php?/forums/forum/12-tamil-movies/", false)]
+        public void TestIsExcludedForumUrl(string url, bool expected)
+        {
+            var result = TamilMV.IsExcludedForum(null, url);
+            result.Should().Be(expected);
+        }
+
+        [Test]
+        public void TestIsExcludedForumBreadcrumbs()
+        {
+            var parser = new AngleSharp.Html.Parser.HtmlParser();
+            var docExcluded = parser.ParseDocument(@"
+                <html>
+                    <nav class='ipsBreadcrumb ipsBreadcrumb_top'>
+                        <ul data-role='breadcrumbList'>
+                            <li><a href='https://www.1tamilmv.style/'>Home</a></li>
+                            <li><a href='https://www.1tamilmv.style/index.php?/forums/forum/92-post-share-here/'>Post & Share Here</a></li>
+                            <li>Some User Torrent Title</li>
+                        </ul>
+                    </nav>
+                </html>");
+            TamilMV.IsExcludedForum(docExcluded, "https://www.1tamilmv.style/index.php?/forums/topic/99999-shared-release/").Should().BeTrue();
+
+            var docAllowed = parser.ParseDocument(@"
+                <html>
+                    <nav class='ipsBreadcrumb ipsBreadcrumb_top'>
+                        <ul data-role='breadcrumbList'>
+                            <li><a href='https://www.1tamilmv.style/'>Home</a></li>
+                            <li><a href='https://www.1tamilmv.style/index.php?/forums/forum/12-tamil-hd-movies/'>Tamil HD Movies</a></li>
+                            <li>Official HD Release</li>
+                        </ul>
+                    </nav>
+                </html>");
+            TamilMV.IsExcludedForum(docAllowed, "https://www.1tamilmv.style/index.php?/forums/topic/99999-official-release/").Should().BeFalse();
+        }
     }
 }

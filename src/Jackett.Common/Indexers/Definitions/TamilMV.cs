@@ -62,11 +62,14 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex UhdRegex = new Regex(@"(?i)\b(?:2160p|4k|uhd)\b", RegexOptions.Compiled);
         private static readonly Regex HdRegex = new Regex(@"(?i)\b(?:1080p|fhd|720p|hd)\b", RegexOptions.Compiled);
         private static readonly Regex SdRegex = new Regex(@"(?i)\b(?:480p|sd)\b", RegexOptions.Compiled);
+        private static readonly Regex ExcludedForumRegex = new Regex(
+            @"video[- ]songs?|mp3[- ]songs?|cinema[- ]news|general[- ]videos|watch[- ].*?[- ]online|post[- &]*share[- ]here|request[- ]section|members[- ]lounge|/forums?/forum/(?:15|16|18|28|30|32|40|41|43|51|52|54|62|63|65|73|74|75|76|89|92|93|95|102|103|104)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
         private static string _cachedWorkingDomain;
         private static DateTime _domainCacheExpiresAt = DateTime.MinValue;
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
-        private const int MaxTopics = 20;
+        private const int MaxTopics = 25;
         private const int MaxSearchPages = 5;
 
         public TamilMV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
@@ -78,7 +81,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationData())
         {
             // Avoid Cloudflare too many requests limiter / site thrashing
-            webclient.requestDelay = 2.1;
+            // webclient.requestDelay = 2.1;
 
             var gatewayUrl = new StringConfigurationItem("Permanent Gateway URL") { Value = "https://www.1tamilmv.fi/" };
             configData.AddDynamic("gatewayUrl", gatewayUrl);
@@ -225,6 +228,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var topicUrl in topicUrls)
             {
+                if (IsExcludedForum(null, topicUrl))
+                {
+                    continue;
+                }
+
                 if (_topicCache.TryGetValue(topicUrl, out var cached) && DateTime.UtcNow < cached.expiresAt)
                 {
                     releases.AddRange(cached.releases);
@@ -284,7 +292,6 @@ namespace Jackett.Common.Indexers.Definitions
             var parser = new HtmlParser();
             using var doc = parser.ParseDocument(response.ContentString);
 
-            var topicUrls = new List<string>();
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
 
             var bangerContainers = doc.QuerySelectorAll(".banger-container");
@@ -306,28 +313,15 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            foreach (var u in topReleases)
-            {
-                if (seen.Add(u))
-                    topicUrls.Add(u);
-            }
-
-            foreach (var u in recentlyAdded)
-            {
-                if (seen.Add(u))
-                    topicUrls.Add(u);
-            }
+            var topicUrls = topReleases.Where(seen.Add).ToList();
+            topicUrls.AddRange(recentlyAdded.Where(seen.Add));
 
             if (topicUrls.Count == 0)
             {
                 var fallbackElements = doc.QuerySelectorAll(".banger-container, .ipsType_break, .ipsContained, .cTopicList, .ipsDataList");
                 foreach (var el in fallbackElements)
                 {
-                    foreach (var u in ExtractTopicLinksFromElement(el, workingDomain))
-                    {
-                        if (seen.Add(u))
-                            topicUrls.Add(u);
-                    }
+                    topicUrls.AddRange(ExtractTopicLinksFromElement(el, workingDomain).Where(seen.Add));
                 }
 
                 if (topicUrls.Count == 0)
@@ -375,6 +369,18 @@ namespace Jackett.Common.Indexers.Definitions
                 var addedThisPage = 0;
                 foreach (var a in resultItems)
                 {
+                    var container = a.Closest(".ipsStreamItem, [data-role='activityItem']");
+                    if (container != null)
+                    {
+                        var hasExcludedForum = container.QuerySelectorAll("a[href]")
+                            .Any(link => ExcludedForumRegex.IsMatch(link.GetAttribute("href") ?? string.Empty) ||
+                                         ExcludedForumRegex.IsMatch(link.TextContent ?? string.Empty));
+                        if (hasExcludedForum)
+                        {
+                            continue;
+                        }
+                    }
+
                     var href = a.GetAttribute("href");
                     var clean = NormalizeTopicUrl(href, workingDomain);
                     if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
@@ -423,6 +429,9 @@ namespace Jackett.Common.Indexers.Definitions
             if (string.IsNullOrWhiteSpace(href))
                 return string.Empty;
 
+            if (ExcludedForumRegex.IsMatch(href))
+                return string.Empty;
+
             var m = TopicRegex.Match(href);
             if (!m.Success || !int.TryParse(m.Groups[1].Value, out var topicId) || topicId < 1000)
                 return string.Empty;
@@ -458,6 +467,12 @@ namespace Jackett.Common.Indexers.Definitions
             bool filterSamples)
         {
             var results = new List<ReleaseInfo>();
+
+            if (IsExcludedForum(doc, topicUrl))
+            {
+                logger.Debug($"1TamilMV skipping topic in excluded forum: {topicUrl}");
+                return results;
+            }
 
             var magnetLinks = doc.QuerySelectorAll("a[href^='magnet:?']")
                 .Select(a => a.GetAttribute("href")?.Trim())
@@ -645,6 +660,35 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             return cats;
+        }
+
+        public static bool IsExcludedForum(IHtmlDocument doc, string topicUrl = null)
+        {
+            if (!string.IsNullOrEmpty(topicUrl) && ExcludedForumRegex.IsMatch(topicUrl))
+            {
+                return true;
+            }
+
+            if (doc != null)
+            {
+                var breadcrumbLinks = doc.QuerySelectorAll(".ipsBreadcrumb a[href], [data-role='breadcrumbList'] a[href], .ipsType_breadcrumb a[href]");
+                foreach (var a in breadcrumbLinks)
+                {
+                    var href = a.GetAttribute("href") ?? string.Empty;
+                    if (ExcludedForumRegex.IsMatch(href))
+                    {
+                        return true;
+                    }
+
+                    var text = a.TextContent ?? string.Empty;
+                    if (ExcludedForumRegex.IsMatch(text))
+                    {
+                        return true;
+                    }
+                }
+            }
+
+            return false;
         }
     }
 }
