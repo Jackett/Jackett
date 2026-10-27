@@ -220,9 +220,10 @@ namespace Jackett.Common.Indexers.Definitions
                 { "securitytoken", securityToken }
             };
 
-            var response = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
+            _ = await RequestWithCookiesAsync(loginFormUrl, method: RequestType.POST, data: loginData);
+            var homePage = await RequestWithCookiesAsync(GetLoginUrl());
 
-            if (!response.ContentString.Contains("p=logout"))
+            if (!homePage.ContentString.Contains("p=logout"))
                 throw new Exception("Invalid username or password");
         }
 
