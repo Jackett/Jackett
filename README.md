@@ -208,7 +208,7 @@ Prior versions of Jackett are no longer supported.
  * Kinozal
  * LostFilm.tv
  * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
- * Magnetz
+ * Magnetz [PAY2DL]
  * Marine Tracker
  * Mazepa
  * Metal Tracker
