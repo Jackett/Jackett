@@ -240,6 +240,7 @@ Prior versions of Jackett are no longer supported.
  * TR4KER
  * TrahT
  * TribalMixes
+ * UATorrent
  * Union Fansub
  * UniOtaku
  * Ztracker
