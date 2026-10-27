@@ -104,7 +104,9 @@ search:
   paths:
     - path: tracker
   inputs:
-    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    # selecting site's multi-categories gives no results
+#    $raw: "{{ if .Categories }}{{ range .Categories }}f[]={{.}}&{{end}}{{ else }}f[]=-1{{ end }}"
+    "f[]": "-1"
     prev_allw: 1
     prev_a: 0
     prev_dla: 0
