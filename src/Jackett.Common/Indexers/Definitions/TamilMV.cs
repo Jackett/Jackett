@@ -69,8 +69,8 @@ namespace Jackett.Common.Indexers.Definitions
         private static string _cachedWorkingDomain;
         private static DateTime _domainCacheExpiresAt = DateTime.MinValue;
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
-        private const int MaxTopics = 25;
-        private const int MaxSearchPages = 5;
+        private const int MaxTopics = 20;
+        private const int MaxSearchPages = 3;
 
         public TamilMV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -81,7 +81,7 @@ namespace Jackett.Common.Indexers.Definitions
                    configData: new ConfigurationData())
         {
             // Avoid Cloudflare too many requests limiter / site thrashing
-            // webclient.requestDelay = 2.1;
+            webclient.requestDelay = 1.1;
 
             var gatewayUrl = new StringConfigurationItem("Permanent Gateway URL") { Value = "https://www.1tamilmv.fi/" };
             configData.AddDynamic("gatewayUrl", gatewayUrl);
