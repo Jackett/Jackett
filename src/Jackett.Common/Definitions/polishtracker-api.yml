@@ -55,26 +55,25 @@ settings:
       POLISH: POLISH
       MULTi.POLISH: MULTi.POLISH
 
-# login:
-#   path: "https://api-test.pte.nu/api/v1/torrents"
-#   method: get
-#   inputs:
-#     tpage: 1
-#   error:
-#     - selector: ":root:contains(\"ACCESS_DENIED\")"
-#       message:
-#         text: "The API key was not accepted by {{ .Config.sitelink }}."
+login:
+  path: "https://api.pte.nu/api/v3/users/me"
+  method: get
+  error:
+    - selector: ':root:not(:contains("\"details\""))'
+      message:
+        text: "API key validation failed. Check your API key, account permissions and API availability."
 
 search:
   paths:
-    # docs: https://cdn.pte.nu/docs/index.html
-    - path: "https://api-test.pte.nu/api/v1/torrents"
+    # docs: https://pte.nu/user/api
+    - path: "https://api.pte.nu/api/v3/torrents"
       response:
         type: json
 
   inputs:
     search: "{{ .Keywords }}"
-    tpage: 1
+    # Request only the first cursor page; v3 rejects numbered pagination.
+    page_size: 100
     imdb_id: "{{ .Query.IMDBIDShort }}"
     # search in nfo text also - broken
     # nfo: false
@@ -112,7 +111,7 @@ search:
     details:
       text: "{{ .Config.sitelink }}torrents/{{ .Result._id }}"
     download:
-      text: "/download/{{ .Result._id }}"
+      text: "https://api.pte.nu/api/v3/torrents/{{ .Result._id }}/download"
     imdbid:
       selector: imdb_id
     genre:
