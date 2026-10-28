@@ -1,0 +1,159 @@
+---
+id: sagmire
+name: Sagmire
+description: "Sagmire is a Private Torrent Tracker for XXX"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://sagmire.org/
+
+caps:
+  categorymappings:
+    - {id: 10, cat: XXX, desc: "Torrents"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: APIKey
+  - name: info_apikey
+    type: info
+    label: About your API key
+    default: "Find or Generate a new API Key by accessing the <a href=\"https://sagmire.org/account/apikey/\" target=\"_blank\">Sagmire Account API Key</a> page."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: created_at
+    options:
+      created_at: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  path: api/torrents
+  method: get
+  error:
+    - selector: a[href*="/login"]
+      message:
+        text: "The API key was not accepted by {{ .Config.sitelink }}."
+    - selector: :root:contains("Account is Banned")
+
+search:
+  paths:
+    - path: api/torrents/filter
+      response:
+        type: json
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  inputs:
+    $raw: "{{ range .Categories }}&categories[]={{.}}{{end}}"
+    name: "{{ .Keywords }}"
+    "free[]": "{{ if .Config.freeleech }}100{{ else }}{{ end }}"
+    sortField: "{{ .Config.sort }}"
+    sortDirection: "{{ .Config.type }}"
+    perPage: 100
+
+  keywordsfilters:
+    - name: re_replace
+      args: ["\\.", " "]
+
+  rows:
+    selector: data
+    attribute: attributes
+
+  fields:
+    category:
+      selector: category_id
+    title_optional:
+      selector: name
+    title_filename:
+      selector: "files[0].name"
+      optional: true
+    files:
+      selector: num_file
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+    details:
+      selector: details_link
+    download:
+      selector: download_link
+    infohash:
+      selector: info_hash
+    poster:
+      selector: meta.poster
+      filters:
+        - name: replace
+          args: ["https://placehold.co/90x135", ""]
+    genre:
+      selector: meta.genres
+      filters:
+        - name: re_replace
+          args: ["(?i)(Science Fiction)", "Science_Fiction"]
+        - name: re_replace
+          args: ["(?i)(TV Movie)", "TV_Movie"]
+        - name: replace
+          args: [" & ", "_&_"]
+    description:
+      text: "{{ .Result.genre }}"
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    date:
+      selector: created_at
+      filters:
+        - name: append
+          args: " +00:00"
+        - name: dateparse
+          args: "MM/dd/yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    _featured:
+      selector: featured
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    downloadvolumefactor_freeleech:
+      selector: freeleech
+      case:
+        0%: 1
+        25%: 0.75
+        50%: 0.5
+        75%: 0.25
+        100%: 0
+        "*": 0
+    downloadvolumefactor:
+      text: "{{ if .Result._featured }}0{{ else }}{{ .Result.downloadvolumefactor_freeleech }}{{ end }}"
+    uploadvolumefactor_double_upload:
+      selector: double_upload
+      case:
+        False: 1
+        True: 2
+    uploadvolumefactor:
+      text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
+    minimumseedtime:
+      text: 172800
+# json Traxary v0.1.49 (based on UNIT3D 9.2.0)
