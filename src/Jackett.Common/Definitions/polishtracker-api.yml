@@ -55,6 +55,14 @@ settings:
       POLISH: POLISH
       MULTi.POLISH: MULTi.POLISH
 
+login:
+  path: "https://api.pte.nu/api/v3/users/me"
+  method: get
+  error:
+    - selector: ':root:not(:contains("\"details\""))'
+      message:
+        text: "API key validation failed. Check your API key, account permissions and API availability."
+
 search:
   paths:
     # docs: https://pte.nu/user/api
