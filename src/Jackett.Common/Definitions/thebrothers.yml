@@ -31,8 +31,9 @@ caps:
     - {id: 56, cat: TV/SD, desc: "Serien DVD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     # TV
-    - {id: 223, cat: TV, desc: "TV Serie"}
     - {id: 226, cat: Movies, desc: "TV Film"}
+    - {id: 256, cat: TV/Documentary, desc: "TV Doku"}
+    - {id: 223, cat: TV, desc: "TV Serie"}
     - {id: 228, cat: Books/Comics, desc: "TV Comic"}
     # Anime
     - {id: 212, cat: TV/Anime, desc: "Anime Serie HD"}
