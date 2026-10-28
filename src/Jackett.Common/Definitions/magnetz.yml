@@ -76,7 +76,7 @@ search:
 
   fields:
     category:
-      selector: span.meta-chip--type
+      selector: span.result-card__type
     title:
       selector: a
     details:
@@ -86,18 +86,24 @@ search:
       selector: a[href^="magnet:?xt="]
       attribute: href
     date:
-      text: now
+      # 2026-10-28T16:31:01+00:00
+      selector: time.result-card__added
+      attribute: datetime
+      filters:
+        - name: dateparse
+          args: "yyyy-MM-ddTHH:mm:sszzz"
     size:
-      selector: span.meta-chip--size
-    seeders:
-      selector: span.meta-chip--seeders
-    leechers:
-      selector: span.meta-chip--leechers
+      selector: span.result-card__size
     description:
-      selector: span.meta-chip--unverified, span.meta-chip--verified
       case:
-        span.meta-chip--unverified: Unverified
-        span.meta-chip--verified: Verified
+        span.result-card__verified: Verified
+        "*": Unverified
+    seeders:
+      selector: span.result-card__seed
+      remove: span
+    leechers:
+      selector: span.result-card__leech
+      remove: span
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
