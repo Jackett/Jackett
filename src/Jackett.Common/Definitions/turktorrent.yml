@@ -153,6 +153,12 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\b(\\d{4})\\.(\\d{2})\\.(\\d{2})\\b", "$3.$2.$1"]
+    # the site matches the keywords as one contiguous phrase and url-decodes them twice, so %25 ends up as a % wildcard:
+    # "Title 2023" also finds "Title (2023)", and a trailing s also finds "Title's" (the *arrs strip apostrophes)
+    - name: re_replace
+      args: ["(\\w)s\\b", "$1%25"]
+    - name: re_replace
+      args: ["\\s+", "%25"]
 
   rows:
     selector: "table#torrents_tables_classic > tbody > tr:has(td.torrent_name){{ if .Config.freeleech }}:has(img[src$=\"/freedownload.gif\"]){{ else }}{{ end }}"
