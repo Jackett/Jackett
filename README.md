@@ -568,6 +568,7 @@ Prior versions of Jackett are no longer supported.
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
+ * Sagmire
  * SAMARITANO
  * SAPIbr (Toca Share)
  * SBPT
