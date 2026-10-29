@@ -35,7 +35,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string[] AlternativeSiteLinks => new[]
         {
             "https://www.1tamilmv.style/",
-            "https://www.1tamilmv.fi/",
         };
 
         public override string[] LegacySiteLinks => new[]
@@ -66,9 +65,8 @@ namespace Jackett.Common.Indexers.Definitions
             @"video[- ]songs?|mp3[- ]songs?|cinema[- ]news|general[- ]videos|watch[- ].*?[- ]online|post[- &]*share[- ]here|request[- ]section|members[- ]lounge|/forums?/forum/(?:15|16|18|28|30|32|40|41|43|51|52|54|62|63|65|73|74|75|76|89|92|93|95|102|103|104)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
 
-        private static string _cachedWorkingDomain;
-        private static DateTime _domainCacheExpiresAt = DateTime.MinValue;
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
+        private const int MaxReleases = 100;
         private const int MaxTopics = 20;
         private const int MaxSearchPages = 3;
 
@@ -82,9 +80,6 @@ namespace Jackett.Common.Indexers.Definitions
         {
             // Avoid Cloudflare too many requests limiter / site thrashing
             webclient.requestDelay = 1.1;
-
-            var gatewayUrl = new StringConfigurationItem("Permanent Gateway URL") { Value = "https://www.1tamilmv.fi/" };
-            configData.AddDynamic("gatewayUrl", gatewayUrl);
 
             var stripPrefix = new BoolConfigurationItem("Strip website prefix from torrent titles") { Value = true };
             configData.AddDynamic("stripPrefix", stripPrefix);
@@ -148,66 +143,8 @@ namespace Jackett.Common.Indexers.Definitions
             return await Download(uncleanLink, RequestType.GET, referer: SiteLink);
         }
 
-        private async Task<string> ResolveWorkingDomainAsync(bool forceRefresh = false)
-        {
-            var configuredLink = SiteLink;
-            if (!string.IsNullOrWhiteSpace(configuredLink) &&
-                configuredLink.IndexOf("1tamilmv.fi", StringComparison.OrdinalIgnoreCase) < 0 &&
-                !forceRefresh)
-            {
-                return configuredLink.TrimEnd('/') + "/";
-            }
-
-            if (!forceRefresh && _cachedWorkingDomain != null && DateTime.UtcNow < _domainCacheExpiresAt)
-            {
-                return _cachedWorkingDomain;
-            }
-
-            var gatewayUrl = ((StringConfigurationItem)configData.GetDynamic("gatewayUrl"))?.Value;
-            if (string.IsNullOrWhiteSpace(gatewayUrl))
-            {
-                gatewayUrl = "https://www.1tamilmv.fi/";
-            }
-
-            try
-            {
-                var response = await RequestWithCookiesAsync(gatewayUrl);
-                if (response.Request?.Url != null)
-                {
-                    var effectiveUri = new Uri(response.Request.Url);
-                    if (effectiveUri.Host.IndexOf("1tamilmv.fi", StringComparison.OrdinalIgnoreCase) < 0)
-                    {
-                        var domain = $"{effectiveUri.Scheme}://{effectiveUri.Authority}/";
-                        _cachedWorkingDomain = domain;
-                        _domainCacheExpiresAt = DateTime.UtcNow.AddMinutes(30);
-                        SiteLink = domain;
-                        logger.Info($"1TamilMV gateway redirected to active working domain: {domain}");
-                        return domain;
-                    }
-                }
-
-                if (response.IsRedirect && !string.IsNullOrWhiteSpace(response.RedirectingTo))
-                {
-                    var redirectUri = new Uri(response.RedirectingTo);
-                    var domain = $"{redirectUri.Scheme}://{redirectUri.Authority}/";
-                    _cachedWorkingDomain = domain;
-                    _domainCacheExpiresAt = DateTime.UtcNow.AddMinutes(30);
-                    SiteLink = domain;
-                    logger.Info($"1TamilMV gateway redirected to active working domain: {domain}");
-                    return domain;
-                }
-            }
-            catch (Exception ex)
-            {
-                logger.Warn($"Failed to resolve gateway domain from {gatewayUrl}: {ex.Message}. Falling back to {configuredLink}");
-            }
-
-            return configuredLink.TrimEnd('/') + "/";
-        }
-
         protected override async Task<IEnumerable<ReleaseInfo>> PerformQuery(TorznabQuery query)
         {
-            var workingDomain = await ResolveWorkingDomainAsync();
             var stripPrefix = ((BoolConfigurationItem)configData.GetDynamic("stripPrefix"))?.Value ?? true;
             var filterSamples = ((BoolConfigurationItem)configData.GetDynamic("filterSamples"))?.Value ?? true;
 
@@ -216,11 +153,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (string.IsNullOrWhiteSpace(searchTerm))
             {
-                topicUrls = await ExtractHomepageTopicsAsync(workingDomain, MaxTopics);
+                topicUrls = await ExtractHomepageTopicsAsync(SiteLink, MaxTopics);
             }
             else
             {
-                topicUrls = await SearchTopicsAsync(workingDomain, searchTerm);
+                topicUrls = await SearchTopicsAsync(SiteLink, searchTerm);
             }
 
             var releases = new List<ReleaseInfo>();
@@ -228,6 +165,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             foreach (var topicUrl in topicUrls)
             {
+                if (releases.Count >= MaxReleases)
+                {
+                    break;
+                }
+
                 if (IsExcludedForum(null, topicUrl))
                 {
                     continue;
@@ -235,13 +177,17 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (_topicCache.TryGetValue(topicUrl, out var cached) && DateTime.UtcNow < cached.expiresAt)
                 {
-                    releases.AddRange(cached.releases);
+                    var matchingCached = searchTerm.IsNotNullOrWhiteSpace()
+                        ? cached.releases.Where(r => query.MatchQueryStringAND(r.Title))
+                        : cached.releases;
+
+                    releases.AddRange(matchingCached);
                     continue;
                 }
 
                 try
                 {
-                    var topicResponse = await RequestWithCookiesAndRetryAsync(topicUrl, referer: workingDomain);
+                    var topicResponse = await RequestWithCookiesAndRetryAsync(topicUrl, referer: SiteLink);
                     if (topicResponse.Status != HttpStatusCode.OK)
                     {
                         logger.Warn($"Failed to fetch 1TamilMV topic {topicUrl}: HTTP {topicResponse.Status}");
@@ -249,13 +195,15 @@ namespace Jackett.Common.Indexers.Definitions
                     }
 
                     using var doc = parser.ParseDocument(topicResponse.ContentString);
-                    var topicReleases = ExtractTopicReleases(doc, topicUrl, workingDomain, stripPrefix, filterSamples);
+                    var topicReleases = ExtractTopicReleases(doc, topicUrl, SiteLink, stripPrefix, filterSamples);
 
                     _topicCache[topicUrl] = (DateTime.UtcNow.AddDays(1), topicReleases);
-                    if (topicReleases.Count > 0)
-                    {
-                        releases.AddRange(topicReleases);
-                    }
+
+                    var matchingReleases = searchTerm.IsNotNullOrWhiteSpace()
+                        ? topicReleases.Where(r => query.MatchQueryStringAND(r.Title))
+                        : topicReleases;
+
+                    releases.AddRange(matchingReleases);
                 }
                 catch (Exception ex)
                 {
@@ -273,20 +221,15 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            if (searchTerm.IsNotNullOrWhiteSpace())
-            {
-                releases = releases.Where(r => query.MatchQueryStringAND(r.Title)).ToList();
-            }
-
-            return releases;
+            return releases.OrderByDescending(r => r.PublishDate).Take(MaxReleases).ToList();
         }
 
-        private async Task<List<string>> ExtractHomepageTopicsAsync(string workingDomain, int limit)
+        private async Task<List<string>> ExtractHomepageTopicsAsync(string siteLink, int limit)
         {
-            var response = await RequestWithCookiesAndRetryAsync(workingDomain);
+            var response = await RequestWithCookiesAndRetryAsync(siteLink);
             if (response.Status != HttpStatusCode.OK)
             {
-                throw new Exception($"Failed to fetch 1TamilMV homepage ({workingDomain}): HTTP {response.Status}");
+                throw new Exception($"Failed to fetch 1TamilMV homepage ({siteLink}): HTTP {response.Status}");
             }
 
             var parser = new HtmlParser();
@@ -301,7 +244,7 @@ namespace Jackett.Common.Indexers.Definitions
             foreach (var container in bangerContainers)
             {
                 var headerText = container.QuerySelector(".banger-header")?.TextContent?.ToUpperInvariant() ?? string.Empty;
-                var links = ExtractTopicLinksFromElement(container, workingDomain);
+                var links = ExtractTopicLinksFromElement(container, siteLink);
 
                 if (headerText.Contains("TOP RELEASES"))
                 {
@@ -321,7 +264,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var fallbackElements = doc.QuerySelectorAll(".banger-container, .ipsType_break, .ipsContained, .cTopicList, .ipsDataList");
                 foreach (var el in fallbackElements)
                 {
-                    topicUrls.AddRange(ExtractTopicLinksFromElement(el, workingDomain).Where(seen.Add));
+                    topicUrls.AddRange(ExtractTopicLinksFromElement(el, siteLink).Where(seen.Add));
                 }
 
                 if (topicUrls.Count == 0)
@@ -329,7 +272,7 @@ namespace Jackett.Common.Indexers.Definitions
                     foreach (var a in doc.QuerySelectorAll("a[href]"))
                     {
                         var href = a.GetAttribute("href");
-                        var clean = NormalizeTopicUrl(href, workingDomain);
+                        var clean = NormalizeTopicUrl(href, siteLink);
                         if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
                             topicUrls.Add(clean);
                     }
@@ -339,7 +282,7 @@ namespace Jackett.Common.Indexers.Definitions
             return topicUrls.Take(limit).ToList();
         }
 
-        private async Task<List<string>> SearchTopicsAsync(string workingDomain, string searchTerm, int maxPages = MaxSearchPages)
+        private async Task<List<string>> SearchTopicsAsync(string siteLink, string searchTerm, int maxPages = MaxSearchPages)
         {
             var topicUrls = new List<string>();
             var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
@@ -348,8 +291,8 @@ namespace Jackett.Common.Indexers.Definitions
             for (var page = 1; page <= maxPages; page++)
             {
                 var pageParam = page > 1 ? $"&page={page}" : string.Empty;
-                var searchUrl = $"{workingDomain}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic{pageParam}";
-                var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: workingDomain);
+                var searchUrl = $"{siteLink}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic{pageParam}";
+                var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: siteLink);
                 if (response.Status != HttpStatusCode.OK)
                 {
                     if (page == 1)
@@ -382,7 +325,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
 
                     var href = a.GetAttribute("href");
-                    var clean = NormalizeTopicUrl(href, workingDomain);
+                    var clean = NormalizeTopicUrl(href, siteLink);
                     if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
                     {
                         topicUrls.Add(clean);
@@ -409,13 +352,13 @@ namespace Jackett.Common.Indexers.Definitions
             return topicUrls;
         }
 
-        private static List<string> ExtractTopicLinksFromElement(IElement element, string workingDomain)
+        private static List<string> ExtractTopicLinksFromElement(IElement element, string siteLink)
         {
             var list = new List<string>();
             foreach (var a in element.QuerySelectorAll("a[href]"))
             {
                 var href = a.GetAttribute("href");
-                var clean = NormalizeTopicUrl(href, workingDomain);
+                var clean = NormalizeTopicUrl(href, siteLink);
                 if (!string.IsNullOrEmpty(clean) && !list.Contains(clean))
                 {
                     list.Add(clean);
@@ -424,7 +367,7 @@ namespace Jackett.Common.Indexers.Definitions
             return list;
         }
 
-        private static string NormalizeTopicUrl(string href, string workingDomain)
+        private static string NormalizeTopicUrl(string href, string siteLink)
         {
             if (string.IsNullOrWhiteSpace(href))
                 return string.Empty;
@@ -448,12 +391,12 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (url.StartsWith("/"))
             {
-                return workingDomain.TrimEnd('/') + url;
+                return siteLink.TrimEnd('/') + url;
             }
 
             if (!url.StartsWith("http", StringComparison.OrdinalIgnoreCase))
             {
-                return new Uri(new Uri(workingDomain), url).ToString();
+                return new Uri(new Uri(siteLink), url).ToString();
             }
 
             return url;
@@ -462,7 +405,7 @@ namespace Jackett.Common.Indexers.Definitions
         private List<ReleaseInfo> ExtractTopicReleases(
             IHtmlDocument doc,
             string topicUrl,
-            string workingDomain,
+            string siteLink,
             bool stripPrefix,
             bool filterSamples)
         {
@@ -525,11 +468,11 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (href.StartsWith("/"))
                 {
-                    href = workingDomain.TrimEnd('/') + href;
+                    href = siteLink.TrimEnd('/') + href;
                 }
                 else if (!href.StartsWith("http", StringComparison.OrdinalIgnoreCase))
                 {
-                    href = new Uri(new Uri(workingDomain), href).ToString();
+                    href = new Uri(new Uri(siteLink), href).ToString();
                 }
 
                 var cleanTitle = CleanTitle(rawTitle, stripPrefix);
