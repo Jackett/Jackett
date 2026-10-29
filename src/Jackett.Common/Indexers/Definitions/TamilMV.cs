@@ -211,7 +211,7 @@ namespace Jackett.Common.Indexers.Definitions
                     var topicResponse = await RequestWithCookiesAndRetryAsync(topicUrl, referer: SiteLink);
                     if (topicResponse.IsRedirect)
                     {
-                        topicResponse = await FollowIfRedirect(topicResponse, referrer: SiteLink, maxRedirects: 2);
+                        topicResponse = await FollowIfRedirect(topicResponse, referrer: SiteLink, maxRedirects: 1);
                     }
                     if (topicResponse.Status != HttpStatusCode.OK)
                     {
@@ -254,7 +254,7 @@ namespace Jackett.Common.Indexers.Definitions
             var response = await RequestWithCookiesAndRetryAsync(siteLink);
             if (response.IsRedirect)
             {
-                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 2);
+                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 1);
             }
             if (response.Status != HttpStatusCode.OK)
             {
@@ -317,7 +317,7 @@ namespace Jackett.Common.Indexers.Definitions
             var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: siteLink);
             if (response.IsRedirect)
             {
-                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 2);
+                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 1);
             }
             if (response.Status != HttpStatusCode.OK)
             {
