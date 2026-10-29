@@ -54,7 +54,30 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly Regex BtihRegex = new Regex(@"urn:btih:([a-zA-Z0-9]+)", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SizeRegex = new Regex(@"(?:^|[^\w.])(\d+(?:\.\d+)?)\s*(GB|MB|KB)(?![a-zA-Z])", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex SitePrefixRegex = new Regex(@"^(?:www\.)?(?:1?tamilmv|tamilblasters|tamilrockers)\.[a-z0-9]+\s*-\s*", RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex SkipRegex = new Regex(@"(?i)\b(?:trailer|sample|teaser|promo|audio\s*launch|song\s*promo|video\s*song)\b", RegexOptions.Compiled);
+        public static readonly Regex ExcludedTitles = new Regex(
+            @"\b(?:official\s+)?(?:theatrical\s+)?trailers?\b(?!\s*park\b)" +
+            @"|\bteasers?\b" +
+            @"|\bsamples?\b" +
+            @"|\bvideo\s+songs?\b" +
+            @"|\blyric(?:al)?\s+videos?\b" +
+            @"|\bmusic\s+videos?\b" +
+            @"|\b(?:full\s+)?albums?\b" +
+            @"|\b(?:audio|music)\s+(?:launch|release|jukebox)\b" +
+            @"|\b(?:audio|music|single)\s+(?:tracks?|singles?)\b" +
+            @"|\b\d+(?:st|nd|rd|th)\s+single\b" +
+            @"|\b(?:motion\s+picture\s+)?soundtracks?\b" +
+            @"|\b(?:original\s+)?background\s+scores?\b" +
+            @"|\boriginal\s+(?:motion\s+picture\s+)?score\b" +
+            @"|\b(?:first\s+look|glimpse|promos?|sneak\s+peek)\b" +
+            @"|\b(?:launch|launched)\s+videos?\b" +
+            @"|\b(?:success\s+meet|press\s+meet|pre[- ]?release\s+event)\b" +
+            @"|\b(?:making|behind[- ]the[- ]scenes|BTS)\s+videos?\b" +
+            @"|\b(?:exclusive\s+|public\s+|press\s+|cast\s+|special\s+)?interview\s+with\b" +
+            @"|\b(?:exclusive|press\s+meet|cast)\s+interviews?\b" +
+            @"|\b(?:movie|public|theatre|theater|audience|trailer|teaser)\s+(?:review|reviews|reaction|reactions)\b" +
+            @"|\b(?:full|awards?|award)\s+show\b" +
+            @"|\b(?:speech|speeches)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex TvRegex = new Regex(@"(?i)\b(?:s\d+|ep\s*\(?\d+|season\s*\d+|series|episode)\b", RegexOptions.Compiled);
         private static readonly Regex AudioRegex = new Regex(@"(?i)\b(?:ost|soundtrack|flac|mp3\s*songs?|audio\s*songs?)\b", RegexOptions.Compiled);
         private static readonly Regex UhdRegex = new Regex(@"(?i)\b(?:2160p|4k|uhd)\b", RegexOptions.Compiled);
@@ -67,7 +90,6 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
         private const int MaxReleases = 100;
         private const int MaxTopics = 20;
-        private const int MaxSearchPages = 2;
 
         public TamilMV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
@@ -187,12 +209,10 @@ namespace Jackett.Common.Indexers.Definitions
                 try
                 {
                     var topicResponse = await RequestWithCookiesAndRetryAsync(topicUrl, referer: SiteLink);
-
                     if (topicResponse.IsRedirect)
                     {
-                        topicResponse = await FollowIfRedirect(topicResponse, referrer: SiteLink, maxRedirects: 1);
+                        topicResponse = await FollowIfRedirect(topicResponse, referrer: SiteLink, maxRedirects: 2);
                     }
-
                     if (topicResponse.Status != HttpStatusCode.OK)
                     {
                         logger.Warn($"Failed to fetch 1TamilMV topic {topicUrl}: HTTP {topicResponse.Status}");
@@ -229,9 +249,13 @@ namespace Jackett.Common.Indexers.Definitions
             return releases.OrderByDescending(r => r.PublishDate).Take(MaxReleases).ToList();
         }
 
-        private async Task<List<string>> ExtractHomepageTopicsAsync(string siteLink, int limit)
+        private async Task<List<string>> ExtractHomepageTopicsAsync(string siteLink, int limit = MaxTopics)
         {
             var response = await RequestWithCookiesAndRetryAsync(siteLink);
+            if (response.IsRedirect)
+            {
+                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 2);
+            }
             if (response.Status != HttpStatusCode.OK)
             {
                 throw new Exception($"Failed to fetch 1TamilMV homepage ({siteLink}): HTTP {response.Status}");
@@ -287,74 +311,21 @@ namespace Jackett.Common.Indexers.Definitions
             return topicUrls.Take(limit).ToList();
         }
 
-        private async Task<List<string>> SearchTopicsAsync(string siteLink, string searchTerm, int maxPages = MaxSearchPages)
+        private async Task<List<string>> SearchTopicsAsync(string siteLink, string searchTerm)
         {
-            var topicUrls = new List<string>();
-            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
-            var parser = new HtmlParser();
-
-            for (var page = 1; page <= maxPages; page++)
+            var searchUrl = $"{siteLink.TrimEnd('/')}/search/api/search.php?q={Uri.EscapeDataString(searchTerm)}&page=1&per_page=100&sort=newest";
+            var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: siteLink);
+            if (response.IsRedirect)
             {
-                var pageParam = page > 1 ? $"&page={page}" : string.Empty;
-                var searchUrl = $"{siteLink}index.php?/search/&q={Uri.EscapeDataString(searchTerm)}&type=forums_topic{pageParam}";
-                var response = await RequestWithCookiesAndRetryAsync(searchUrl, referer: siteLink);
-                if (response.Status != HttpStatusCode.OK)
-                {
-                    if (page == 1)
-                    {
-                        logger.Warn($"Failed to search 1TamilMV: HTTP {response.Status}");
-                    }
-                    break;
-                }
-
-                using var doc = parser.ParseDocument(response.ContentString);
-                var resultItems = doc.QuerySelectorAll(".ipsStreamItem_title a[href], .ipsStreamItem a[href*='/forums/topic/'], [data-role='searchResults'] a[href*='/forums/topic/']");
-                if (resultItems.Length == 0)
-                {
-                    break;
-                }
-
-                var addedThisPage = 0;
-                foreach (var a in resultItems)
-                {
-                    var container = a.Closest(".ipsStreamItem, [data-role='activityItem']");
-                    if (container != null)
-                    {
-                        var hasExcludedForum = container.QuerySelectorAll("a[href]")
-                            .Any(link => ExcludedForumRegex.IsMatch(link.GetAttribute("href") ?? string.Empty) ||
-                                         ExcludedForumRegex.IsMatch(link.TextContent ?? string.Empty));
-                        if (hasExcludedForum)
-                        {
-                            continue;
-                        }
-                    }
-
-                    var href = a.GetAttribute("href");
-                    var clean = NormalizeTopicUrl(href, siteLink);
-                    if (!string.IsNullOrEmpty(clean) && seen.Add(clean))
-                    {
-                        topicUrls.Add(clean);
-                        addedThisPage++;
-                    }
-                }
-
-                if (addedThisPage == 0)
-                {
-                    break;
-                }
-
-                var nextItem = doc.QuerySelector(".ipsPagination_next");
-                var hasNextPage = nextItem != null
-                    ? !nextItem.ClassList.Contains("ipsPagination_inactive") && nextItem.QuerySelector("a") != null
-                    : doc.QuerySelector("a[rel='next']") != null;
-
-                if (!hasNextPage)
-                {
-                    break;
-                }
+                response = await FollowIfRedirect(response, referrer: siteLink, maxRedirects: 2);
+            }
+            if (response.Status != HttpStatusCode.OK)
+            {
+                logger.Warn($"Failed to search 1TamilMV API: HTTP {response.Status}");
+                return new List<string>();
             }
 
-            return topicUrls;
+            return ParseSearchApiResponse(response.ContentString, siteLink);
         }
 
         private static List<string> ExtractTopicLinksFromElement(IElement element, string siteLink)
@@ -372,7 +343,70 @@ namespace Jackett.Common.Indexers.Definitions
             return list;
         }
 
-        private static string NormalizeTopicUrl(string href, string siteLink)
+        public static List<string> ParseSearchApiResponse(string jsonString, string siteLink)
+        {
+            var topicUrls = new List<string>();
+            if (string.IsNullOrWhiteSpace(jsonString))
+            {
+                return topicUrls;
+            }
+
+            var json = JObject.Parse(jsonString);
+            var results = json["results"] as JArray;
+            if (results == null || results.Count == 0)
+            {
+                return topicUrls;
+            }
+
+            var seen = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+            foreach (var item in results)
+            {
+                // Only scrape if starter_role is not null
+                var starterRole = item["starter_role"];
+                if (starterRole == null || starterRole.Type == JTokenType.Null || string.IsNullOrWhiteSpace(starterRole.ToString()))
+                {
+                    continue;
+                }
+
+                var tid = item["tid"]?.Value<long>();
+                if (tid == null || tid <= 0)
+                {
+                    continue;
+                }
+
+                var rawTitle = item["title"]?.Value<string>() ?? string.Empty;
+                if (ExcludedTitles.IsMatch(rawTitle))
+                {
+                    continue;
+                }
+                var topicUrl = $"{siteLink.TrimEnd('/')}/index.php?/forums/topic/{tid}-{Slugify(rawTitle)}/";
+                var cleanUrl = NormalizeTopicUrl(topicUrl, siteLink);
+                if (!string.IsNullOrEmpty(cleanUrl) && seen.Add(cleanUrl))
+                {
+                    topicUrls.Add(cleanUrl);
+                }
+            }
+
+            return topicUrls;
+        }
+
+        public static string Slugify(string title)
+        {
+            if (string.IsNullOrWhiteSpace(title))
+            {
+                return "t";
+            }
+
+            var decoded = WebUtility.HtmlDecode(title);
+            // Invision Community strips non-alphanumeric punctuation completely (e.g. DD+5.1 -> dd51, 1.4GB -> 14gb)
+            var slug = Regex.Replace(decoded, @"[^\w\s-]", "", RegexOptions.None);
+            // Replace spaces, underscores, and consecutive hyphens with a single hyphen
+            slug = Regex.Replace(slug, @"[\s_-]+", "-").Trim('-').ToLowerInvariant();
+
+            return string.IsNullOrEmpty(slug) ? "t" : slug;
+        }
+
+        public static string NormalizeTopicUrl(string href, string siteLink)
         {
             if (string.IsNullOrWhiteSpace(href))
                 return string.Empty;
@@ -465,7 +499,7 @@ namespace Jackett.Common.Indexers.Definitions
                     continue;
                 }
 
-                if (filterSamples && SkipRegex.IsMatch(rawTitle))
+                if (filterSamples && ExcludedTitles.IsMatch(rawTitle))
                 {
                     logger.Debug($"1TamilMV skipping filtered title: {rawTitle}");
                     continue;
