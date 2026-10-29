@@ -476,7 +476,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
 
                 var cleanTitle = CleanTitle(rawTitle, stripPrefix);
-                var (sizeBytes, _) = ParseSize(cleanTitle);
+                var sizeBytes = ParseSize(cleanTitle);
 
                 var magnetUrl = i < magnetLinks.Count ? magnetLinks[i] : (magnetLinks.Count > 0 ? magnetLinks[0] : string.Empty);
                 string infoHash = null;
