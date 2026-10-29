@@ -1,7 +1,9 @@
 ---
-id: thebrothers
-name: The Brothers
-description: "The Brothers is a Private GERMAN tracker for MOVIES / TV / GENERAL"
+id: goldengate
+replaces:
+  - thebrothers
+name: Golden Gate (GG)
+description: "Golden Gate (GG) is a Private GERMAN tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8

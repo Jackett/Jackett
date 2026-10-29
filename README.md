@@ -389,6 +389,7 @@ Prior versions of Jackett are no longer supported.
  * GGPT
  * GigaTorrents
  * GiroTorrent
+ * Golden Gate (GG)
  * GreatPosterWall (GPW)
  * HaiDan
  * Hǎitáng (海棠PT)
@@ -608,7 +609,6 @@ Prior versions of Jackett are no longer supported.
  * TeamFlix
  * TeamHD
  * TeamOS
- * The Brothers
  * The Crazy Ones
  * The Empire (TE)
  * The Falling Angels (TFA)

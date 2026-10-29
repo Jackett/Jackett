@@ -808,6 +808,7 @@ namespace Jackett.Updater
                 "Definitions/the-devils-lounge.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/theaudioscene.yml",
+                "Definitions/thebrothers.yml", // renamed to goldengate
                 "Definitions/thedarkcommunity-api.yml",
                 "Definitions/thehorrorcharnel.yml",
                 "Definitions/theleachzone.yml", // switch to *-API #11185
