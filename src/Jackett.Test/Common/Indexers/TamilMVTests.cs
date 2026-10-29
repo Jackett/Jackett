@@ -121,5 +121,99 @@ namespace Jackett.Test.Common.Indexers
                 </html>");
             TamilMV.IsExcludedForum(docAllowed, "https://www.1tamilmv.style/index.php?/forums/topic/99999-official-release/").Should().BeFalse();
         }
+
+        [TestCase("Leo (2023) Tamil Proper TRUE WEB-DL", "leo-2023-tamil-proper-true-web-dl")]
+        [TestCase("Jackie Chan's The Tuxedo (2002)", "jackie-chans-the-tuxedo-2002")]
+        [TestCase("Movie @ 2024 #Special!", "movie-2024-special")]
+        [TestCase("Baththa (2026) Tamil TRUE WEB-DL - [4K, 1080p & 720p - AVC / HEVC - (DD+5.1 - 640Kbps) - 17GB - 4GB - 1.4GB & 950MB] - [x264 - 700MB - 400MB & 250MB] - ESub",
+                  "baththa-2026-tamil-true-web-dl-4k-1080p-720p-avc-hevc-dd51-640kbps-17gb-4gb-14gb-950mb-x264-700mb-400mb-250mb-esub")]
+        [TestCase("", "t")]
+        public void TestSlugify(string rawTitle, string expectedSlug)
+        {
+            var slug = TamilMV.Slugify(rawTitle);
+            slug.Should().Be(expectedSlug);
+        }
+
+        [Test]
+        public void TestParseSearchApiResponse_OnlyScrapesNonNullStarterRole()
+        {
+            var json = @"{
+                ""results"": [
+                    {
+                        ""tid"": 176409,
+                        ""title"": ""Leo (2023) Official Release"",
+                        ""starter_role"": ""Moderator""
+                    },
+                    {
+                        ""tid"": 193696,
+                        ""title"": ""Leo (2023) User Post"",
+                        ""starter_role"": null
+                    },
+                    {
+                        ""tid"": 176106,
+                        ""title"": ""Leo (2023) Elite Release"",
+                        ""starter_role"": ""Elite""
+                    },
+                    {
+                        ""tid"": 189999,
+                        ""title"": ""Leo (2023) Empty Role Post"",
+                        ""starter_role"": """"
+                    },
+                    {
+                        ""tid"": 188888,
+                        ""title"": ""Leo (2023) Missing Role Post""
+                    }
+                ],
+                ""total"": 5,
+                ""page"": 1,
+                ""per_page"": 50,
+                ""page_count"": 1
+            }";
+
+            var urls = TamilMV.ParseSearchApiResponse(json, "https://www.1tamilmv.style/");
+            urls.Should().HaveCount(2);
+            urls[0].Should().Be("https://www.1tamilmv.style/index.php?/forums/topic/176409-leo-2023-official-release/");
+            urls[1].Should().Be("https://www.1tamilmv.style/index.php?/forums/topic/176106-leo-2023-elite-release/");
+        }
+
+        [Test]
+        public void TestParseSearchApiResponse_EmptyOrInvalid()
+        {
+            TamilMV.ParseSearchApiResponse("", "https://www.1tamilmv.style/").Should().BeEmpty();
+            TamilMV.ParseSearchApiResponse("   ", "https://www.1tamilmv.style/").Should().BeEmpty();
+            TamilMV.ParseSearchApiResponse(@"{""results"":[], ""total"":0}", "https://www.1tamilmv.style/").Should().BeEmpty();
+        }
+
+
+        [TestCase("The Truman Show (1998) 1080p BluRay", false)]
+        [TestCase("The Daily Show S29E50 720p", false)]
+        [TestCase("Regular Show S01 1080p", false)]
+        [TestCase("The Great Indian Kapil Show S01", false)]
+        [TestCase("The Interview (2014) 1080p BluRay", false)]
+        [TestCase("Song of the Sea (2014) 1080p", false)]
+        [TestCase("Swan Song (2021) 720p", false)]
+        [TestCase("Trailer Park Boys (2006) 720p", false)]
+        [TestCase("Show Dogs (2018) 1080p", false)]
+        [TestCase("Leo (2023) Tamil Proper TRUE WEB-DL - [4K, 1080p & 720p - AVC / HEVC]", false)]
+        [TestCase("Sundarakanda - Official Trailer | Nara Rohith", true)]
+        [TestCase("#Single Trailer | #SingleOnMay9th", true)]
+        [TestCase("Dragon Telugu Trailer", true)]
+        [TestCase("Leo Success Meet (2023) Tamil Full Show - [1080p & 720p]", true)]
+        [TestCase("Leo Success Meet (2023) Thalapathy Vijay Speech - [1080p]", true)]
+        [TestCase("Leo (2023) Tamil Full Album - [FLAC - 24Bit & 16Bit]", true)]
+        [TestCase("Dragon (2025) Original Motion Picture Soundtrack Master Quality 24bit - FLAC", true)]
+        [TestCase("Leo (2023) - Video Songs - TRUE WEB-DL - 4K SDR - HEVC", true)]
+        [TestCase("Leo - Villain Yaaru Video Song - 1080P - DD5.1", true)]
+        [TestCase("Vazhithunaiye Video Song | Dragon | Pradeep Ranganathan", true)]
+        [TestCase("Anbenum (From Leo) 3rd Single - (2023) Tamil MP3", true)]
+        [TestCase("Badass (From Leo) 2nd Single - (2023) Tamil MP3", true)]
+        [TestCase("Tu Mera Lover (From Mass Jathara) Telugu - Single Track - FLAC", true)]
+        [TestCase("Movie Teaser", true)]
+        [TestCase("Movie Sample.mkv", true)]
+        [TestCase("Movie Promo", true)]
+        public void TestExcludedTitles(string title, bool shouldExclude)
+        {
+            TamilMV.ExcludedTitles.IsMatch(title).Should().Be(shouldExclude);
+        }
     }
 }
