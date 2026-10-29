@@ -535,25 +535,31 @@ namespace Jackett.Common.Indexers.Definitions
             return title;
         }
 
-        public static (long bytes, string human) ParseSize(string title)
+        public static long ParseSize(string title)
         {
             if (string.IsNullOrWhiteSpace(title))
-                return (0, "Unknown");
+            {
+                return 0;
+            }
 
             var m = SizeRegex.Match(title);
             if (!m.Success)
-                return (0, "Unknown");
+            {
+                return 0;
+            }
 
             if (!double.TryParse(m.Groups[1].Value, NumberStyles.Float, CultureInfo.InvariantCulture, out var sizeVal))
-                return (0, "Unknown");
+            {
+                return 0;
+            }
 
             var unit = m.Groups[2].Value.ToUpperInvariant();
             return unit switch
             {
-                "GB" => ((long)(sizeVal * 1024L * 1024L * 1024L), $"{sizeVal:0.0} GB"),
-                "MB" => ((long)(sizeVal * 1024L * 1024L), $"{(long)Math.Round(sizeVal)} MB"),
-                "KB" => ((long)(sizeVal * 1024L), $"{(long)Math.Round(sizeVal)} KB"),
-                _ => (0, "Unknown")
+                "GB" => sizeVal.Gigabytes(),
+                "MB" => sizeVal.Megabytes(),
+                "KB" => (long)(sizeVal * 1024L),
+                _ => 0
             };
         }
 
