@@ -187,6 +187,12 @@ namespace Jackett.Common.Indexers.Definitions
                 try
                 {
                     var topicResponse = await RequestWithCookiesAndRetryAsync(topicUrl, referer: SiteLink);
+
+                    if (topicResponse.IsRedirect)
+                    {
+                        topicResponse = await FollowIfRedirect(topicResponse, referrer: SiteLink, maxRedirects: 1);
+                    }
+
                     if (topicResponse.Status != HttpStatusCode.OK)
                     {
                         logger.Warn($"Failed to fetch 1TamilMV topic {topicUrl}: HTTP {topicResponse.Status}");
