@@ -68,7 +68,7 @@ namespace Jackett.Common.Indexers.Definitions
         private static readonly ConcurrentDictionary<string, (DateTime expiresAt, List<ReleaseInfo> releases)> _topicCache = new();
         private const int MaxReleases = 100;
         private const int MaxTopics = 20;
-        private const int MaxSearchPages = 3;
+        private const int MaxSearchPages = 2;
 
         public TamilMV(IIndexerConfigurationService configService, WebClient wc, Logger l, IProtectionService ps, ICacheService cs)
             : base(configService: configService,
