@@ -81,8 +81,10 @@ caps:
     - {id: 2, cat: Console, desc: "Oyun"}
     - {id: 46, cat: Console, desc: "Oyun PC"}
     - {id: 16, cat: Console, desc: "Oyun Konsol"}
-    - {id: 57, cat: Other, desc: "VIP"}
-    - {id: 66, cat: Other, desc: "VIP Vip"}
+    - {id: 57, cat: TV, desc: "VIP"}
+    - {id: 57, cat: Movies, desc: "VIP"}
+    - {id: 66, cat: TV, desc: "VIP Vip"}
+    - {id: 66, cat: Movies, desc: "VIP Vip"}
     - {id: 93, cat: TV, desc: "Super Vip"}
     - {id: 93, cat: Movies, desc: "Super Vip"}
 
