@@ -82,7 +82,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: a[href="mybonus.php"]
+    selector: a[href="logout.php"]
 
 search:
   # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
