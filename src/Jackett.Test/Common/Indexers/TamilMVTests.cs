@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using FluentAssertions;
+using Jackett.Common.Helpers;
 using Jackett.Common.Indexers.Definitions;
 using Jackett.Common.Models;
 using NUnit.Framework;
@@ -24,17 +25,14 @@ namespace Jackett.Test.Common.Indexers
         [Test]
         public void TestParseSize()
         {
-            var (gbBytes, gbHuman) = TamilMV.ParseSize("Baththa (2026) Tamil HDRip - 2.9GB - HC-ESub.mkv");
-            gbBytes.Should().Be((long)(2.9 * 1024L * 1024L * 1024L));
-            gbHuman.Should().Be("2.9 GB");
+            var gbBytes = TamilMV.ParseSize("Baththa (2026) Tamil HDRip - 2.9GB - HC-ESub.mkv");
+            gbBytes.Should().Be(2.9.Gigabytes());
 
-            var (mbBytes, mbHuman) = TamilMV.ParseSize("Release - 700MB - x264.mkv");
-            mbBytes.Should().Be(700L * 1024L * 1024L);
-            mbHuman.Should().Be("700 MB");
+            var mbBytes = TamilMV.ParseSize("Release - 700MB - x264.mkv");
+            mbBytes.Should().Be(700.Megabytes());
 
-            var (kbBytes, kbHuman) = TamilMV.ParseSize("Sample - 500KB.mkv");
+            var kbBytes = TamilMV.ParseSize("Sample - 500KB.mkv");
             kbBytes.Should().Be(500L * 1024L);
-            kbHuman.Should().Be("500 KB");
         }
 
         [Test]
