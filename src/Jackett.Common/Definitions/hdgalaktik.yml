@@ -106,21 +106,17 @@ search:
     Cookie: ["torrentviewblock=1"]
 
   rows:
-    selector: div.tv-card
-    dateheaders:
-      selector: a[href*="date="]
+    selector: article.tor-card
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
       attribute: href
       filters:
         - name: querystring
-          args: date
-        - name: dateparse
-          args: "yyyy-MM-dd"
-
-  fields:
-    categorydesc:
-      selector: span.tv-card-cat
+          args: cat
     title:
-      selector: a.tv-card-title
+      selector: a.tor-card-t
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -180,20 +176,70 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a[href^="details.php?id="]
+      selector: a.tor-card-t
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
       optional: true # for users that do not have DL access
     poster:
-      selector: img.tv-avatars
+      selector: img.tor-img
       attribute: src
+    date:
+      selector: a.tor-ago
+      # 11 минут назад (11 minutes ago)
+      # 1 час, 5 минут назад (1 hour, 5 minutes ago)
+      filters:
+        - name: replace
+          args: ["назад", "ago"]
+        - name: replace
+          args: ["секунда", "seconds"]
+        - name: replace
+          args: ["секунды", "seconds"]
+        - name: replace
+          args: ["секунд", "seconds"]
+        - name: replace
+          args: ["минуты", "minutes"]
+        - name: replace
+          args: ["минута", "minutes"]
+        - name: replace
+          args: ["минут", "minutes"]
+        - name: replace
+          args: ["часа", "hours"]
+        - name: replace
+          args: ["час", "hours"]
+        - name: replace
+          args: ["часов", "hours"]
+        - name: replace
+          args: ["дня", "days"]
+        - name: replace
+          args: ["день", "days"]
+        - name: replace
+          args: ["дней", "days"]
+        - name: replace
+          args: ["недели", "weeks"]
+        - name: replace
+          args: ["неделя", "weeks"]
+        - name: replace
+          args: ["недель", "weeks"]
+        - name: replace
+          args: ["месяца", "months"]
+        - name: replace
+          args: ["месяц", "months"]
+        - name: replace
+          args: ["месяцев", "months"]
+        - name: replace
+          args: ["года", "years"]
+        - name: replace
+          args: ["год", "years"]
+        - name: replace
+          args: ["лет", "years"]
+        - name: timeago
     size_nodl:
-      selector: span.tv-dl-btn
+      selector: span.tor-dl
       optional: true
     size:
-      selector: a.tv-dl-btn
+      selector: a.tor-dl
       optional: true
       default: "{{ .Result.size_nodl }}"
     seeders:
@@ -209,5 +255,5 @@ search:
     minimumratio:
       text: 1.0
     description:
-      selector: div.tv-card-tags
+      selector: div.tor-tags
 # Tesla v.Core (8.7.18)
