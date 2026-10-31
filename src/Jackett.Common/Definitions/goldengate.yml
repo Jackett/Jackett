@@ -21,7 +21,7 @@ caps:
     - {id: 217, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 250, cat: Movies/Foreign, desc: "Movie Englisch"}
     - {id: 204, cat: Movies/UHD, desc: "Movie UHD Pack"}
-    - {id: 124, cat: Movies, desc: "Movie Pack"}
+    - {id: 124, cat: Movies, desc: "Movie HD->Pack"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
