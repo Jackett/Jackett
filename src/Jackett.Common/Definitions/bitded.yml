@@ -86,7 +86,7 @@ login:
     - selector: td.embedded:contains("Login failed!")
   test:
     path: my.php
-    selector: a[href="logout.php"]
+    selector: form[action="logout.php"]
 
 search:
   paths:
