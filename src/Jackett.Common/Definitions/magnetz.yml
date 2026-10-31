@@ -72,7 +72,7 @@ search:
     sort: "{{ .Config.sort }}"
 
   rows:
-    selector: article.result-card
+    selector: article.result-card:has(a[href^="magnet:?xt="])
 
   fields:
     category:
