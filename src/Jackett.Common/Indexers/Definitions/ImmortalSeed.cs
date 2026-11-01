@@ -217,7 +217,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var dom = parser.ParseDocument(results.ContentString);
 
-                var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"details.php?id=\"])");
+                var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"download.php?id=\"])");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();
