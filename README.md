@@ -523,7 +523,6 @@ Prior versions of Jackett are no longer supported.
  * Periodical [![(invite needed)][inviteneeded]](#)
  * Phoenix Project
  * PhoenixPT (凤凰PT)
- * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
  * PlayletPT [![(invite needed)][inviteneeded]](#)

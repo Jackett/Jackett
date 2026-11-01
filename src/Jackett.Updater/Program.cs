@@ -669,6 +669,7 @@ namespace Jackett.Updater
                 "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/peerjunkies.yml",
+                "Definitions/pignetwork.yml",
                 "Definitions/piratadigital.yml",
                 "Definitions/piratbit.yml",
                 "Definitions/piratbitl.yml",
