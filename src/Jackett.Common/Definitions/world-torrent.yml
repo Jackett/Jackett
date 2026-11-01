@@ -198,6 +198,7 @@ caps:
     - {id: Sports, cat: TV/Sport, desc: "Sports"}
     - {id: Formations, cat: Other, desc: "Formations"}
     - {id: Vidéos, cat: TV, desc: "Vidéos"}
+    - {id: Émission, cat: TV, desc: "Émission"}
 
   modes:
     search: [q]
