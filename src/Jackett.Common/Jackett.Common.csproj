@@ -10,7 +10,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="AngleSharp" Version="1.8.6" />
+    <PackageReference Include="AngleSharp" Version="1.9.0" />
     <PackageReference Include="AngleSharp.Xml" Version="1.2.0" />
     <PackageReference Include="Autofac" Version="8.0.0" />
     <PackageReference Include="BencodeNET" Version="4.0.0" />
@@ -23,7 +23,7 @@
     <PackageReference Include="MimeMapping" Version="1.0.1.50" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
     <PackageReference Include="NLog" Version="5.5.1" />
-    <PackageReference Include="Polly" Version="8.8.0" />
+    <PackageReference Include="Polly" Version="8.9.0" />
     <PackageReference Include="SharpZipLib" Version="1.4.2" />
     <PackageReference Include="System.IO.FileSystem.AccessControl" Version="5.0.0" />
     <PackageReference Include="System.ServiceProcess.ServiceController" Version="9.0.22" />
