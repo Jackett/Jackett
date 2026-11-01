@@ -688,6 +688,7 @@ Prior versions of Jackett are no longer supported.
  * Zappateers
  * Zenith [![(invite needed)][inviteneeded]](#)
  * ZmPT (织梦)
+ * ZooToons [![(invite needed)][inviteneeded]](#)
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
 </details>
 
