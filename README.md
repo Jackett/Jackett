@@ -347,6 +347,7 @@ Prior versions of Jackett are no longer supported.
  * Das Unerwartete (D-U)
  * DataScene (DS)
  * DaXiangJiao (大香蕉)
+ * Deep-Water [![(invite needed)][inviteneeded]](#)
  * Depth Studio
  * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
