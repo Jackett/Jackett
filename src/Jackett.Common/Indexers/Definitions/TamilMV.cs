@@ -78,11 +78,11 @@ namespace Jackett.Common.Indexers.Definitions
             @"|\b(?:full|awards?|award)\s+show\b" +
             @"|\b(?:speech|speeches)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
-        private static readonly Regex TvRegex = new Regex(@"(?i)\b(?:s\d+|ep\s*\(?\d+|season\s*\d+|series|episode)\b", RegexOptions.Compiled);
-        private static readonly Regex AudioRegex = new Regex(@"(?i)\b(?:ost|soundtrack|flac|mp3\s*songs?|audio\s*songs?)\b", RegexOptions.Compiled);
-        private static readonly Regex UhdRegex = new Regex(@"(?i)\b(?:2160p|4k|uhd)\b", RegexOptions.Compiled);
-        private static readonly Regex HdRegex = new Regex(@"(?i)\b(?:1080p|fhd|720p|hd)\b", RegexOptions.Compiled);
-        private static readonly Regex SdRegex = new Regex(@"(?i)\b(?:480p|sd)\b", RegexOptions.Compiled);
+        private static readonly Regex TvRegex = new Regex(@"\b(?:s\d+|ep\s*\(?\d+|season\s*\d+|series|episode)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex AudioRegex = new Regex(@"\b(?:ost|soundtrack|flac|mp3\s*songs?|audio\s*songs?)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex UhdRegex = new Regex(@"\b(?:2160p|4k|uhd)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex HdRegex = new Regex(@"\b(?:1080p|fhd|720p|hd)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex SdRegex = new Regex(@"\b(?:480p|sd)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex ExcludedForumRegex = new Regex(
             @"video[- ]songs?|mp3[- ]songs?|cinema[- ]news|general[- ]videos|watch[- ].*?[- ]online|post[- &]*share[- ]here|request[- ]section|members[- ]lounge|/forums?/forum/(?:15|16|18|28|30|32|40|41|43|51|52|54|62|63|65|73|74|75|76|89|92|93|95|102|103|104)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -604,47 +604,63 @@ namespace Jackett.Common.Indexers.Definitions
 
         public static List<int> DetermineCategories(string title)
         {
-            var isAudio = AudioRegex.IsMatch(title);
-            var isTv = TvRegex.IsMatch(title);
+            var cats = new List<int>();
+
+            if (AudioRegex.IsMatch(title))
+            {
+                cats.Add(TorznabCatType.Audio.ID);
+
+                if (title.IndexOf("flac", StringComparison.OrdinalIgnoreCase) >= 0)
+                {
+                    cats.Add(TorznabCatType.AudioLossless.ID);
+                }
+                else
+                {
+                    cats.Add(TorznabCatType.AudioMP3.ID);
+                }
+
+                return cats;
+            }
+
             var isUhd = UhdRegex.IsMatch(title);
             var isHd = HdRegex.IsMatch(title);
             var isSd = SdRegex.IsMatch(title);
 
-            var cats = new List<int>();
-
-            if (isAudio)
-            {
-                cats.Add(TorznabCatType.Audio.ID);
-                if (title.IndexOf("flac", StringComparison.OrdinalIgnoreCase) >= 0)
-                    cats.Add(TorznabCatType.AudioLossless.ID);
-                else
-                    cats.Add(TorznabCatType.AudioMP3.ID);
-                return cats;
-            }
-
-            if (isTv)
+            if (TvRegex.IsMatch(title))
             {
                 cats.Add(TorznabCatType.TV.ID);
-                if (isUhd)
-                    cats.Add(TorznabCatType.TVUHD.ID);
-                else if (isHd)
-                    cats.Add(TorznabCatType.TVHD.ID);
-                else if (isSd)
-                    cats.Add(TorznabCatType.TVSD.ID);
-
                 cats.Add(TorznabCatType.TVForeign.ID);
+
+                if (isUhd)
+                {
+                    cats.Add(TorznabCatType.TVUHD.ID);
+                }
+                else if (isHd)
+                {
+                    cats.Add(TorznabCatType.TVHD.ID);
+                }
+                else if (isSd)
+                {
+                    cats.Add(TorznabCatType.TVSD.ID);
+                }
             }
             else
             {
                 cats.Add(TorznabCatType.Movies.ID);
-                if (isUhd)
-                    cats.Add(TorznabCatType.MoviesUHD.ID);
-                else if (isHd)
-                    cats.Add(TorznabCatType.MoviesHD.ID);
-                else if (isSd)
-                    cats.Add(TorznabCatType.MoviesSD.ID);
-
                 cats.Add(TorznabCatType.MoviesForeign.ID);
+
+                if (isUhd)
+                {
+                    cats.Add(TorznabCatType.MoviesUHD.ID);
+                }
+                else if (isHd)
+                {
+                    cats.Add(TorznabCatType.MoviesHD.ID);
+                }
+                else if (isSd)
+                {
+                    cats.Add(TorznabCatType.MoviesSD.ID);
+                }
             }
 
             return cats;
