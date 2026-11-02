@@ -301,7 +301,7 @@ namespace Jackett.Updater
                 "Definitions/beyond-hd-oneurl.yml", // #12993
                 "Definitions/beyond-hd.yml", // migrated to C# API
                 "Definitions/biatch.yml",
-                "Definitions/bigbbs.yml", // needs C# re-write #16279
+                "Definitions/bigbbs.yml", // migrated to C#
                 "Definitions/bigtorrent.yml", // merged with eStone #12352
                 "Definitions/bigtower.yml",
                 "Definitions/biho.yml",
@@ -669,6 +669,7 @@ namespace Jackett.Updater
                 "Definitions/partis.yml",
                 "Definitions/passionetorrent.yml",
                 "Definitions/peerjunkies.yml",
+                "Definitions/pignetwork.yml",
                 "Definitions/piratadigital.yml",
                 "Definitions/piratbit.yml",
                 "Definitions/piratbitl.yml",
@@ -808,6 +809,7 @@ namespace Jackett.Updater
                 "Definitions/the-devils-lounge.yml",
                 "Definitions/the-madhouse.yml",
                 "Definitions/theaudioscene.yml",
+                "Definitions/thebrothers.yml", // renamed to goldengate
                 "Definitions/thedarkcommunity-api.yml",
                 "Definitions/thehorrorcharnel.yml",
                 "Definitions/theleachzone.yml", // switch to *-API #11185
@@ -946,6 +948,7 @@ namespace Jackett.Updater
                 "Definitions/xthor-api.yml",
                 "Definitions/xtremefile.yml",
                 "Definitions/xtremezone.yml", // migrated to C# XtremeZone base tracker
+                "Definitions/xtorrenty.yml",
                 "Definitions/xxxadulttorrent.yml",
                 "Definitions/xxxtorrents.yml",
                 "Definitions/ydypt.yml",

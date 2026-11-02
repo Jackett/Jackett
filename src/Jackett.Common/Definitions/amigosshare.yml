@@ -289,6 +289,7 @@ search:
           args: ["true", "2"]
         - name: replace
           args: ["false", "1"]
-    minimumratio:
-      text: 1.0
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
 # engine n/a

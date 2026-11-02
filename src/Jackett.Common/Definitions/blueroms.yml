@@ -26,6 +26,7 @@ caps:
     - {id: "/ps2", cat: Console/PS3, desc: "PlayStation 2"}
     - {id: "/ps3", cat: Console/PS3, desc: "PlayStation 3"}
     - {id: "/ps4", cat: Console/PS4, desc: "PlayStation 4"}
+    - {id: "/ps5", cat: Console/PS4, desc: "PlayStation 5"}
     - {id: "/psp", cat: Console/PSP, desc: "PlayStation Portable"}
     - {id: "/psvita", cat: Console/PS Vita, desc: "PlayStation Vita"}
     - {id: "/saturn", cat: Console/Other, desc: "Saturn"}

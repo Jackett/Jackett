@@ -118,7 +118,7 @@ search:
     # can support genre searching but you need to know the id, eg &genre2=1 for Comedy (id is 2)
 
   rows:
-    selector: tr.torrent-row
+    selector: tr.torrent-row:has(a[href^="download.php?id="])
 
   fields:
     category:

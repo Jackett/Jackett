@@ -1,7 +1,9 @@
 ---
-id: thebrothers
-name: The Brothers
-description: "The Brothers is a Private GERMAN tracker for MOVIES / TV / GENERAL"
+id: goldengate
+replaces:
+  - thebrothers
+name: Golden Gate (GG)
+description: "Golden Gate (GG) is a Private GERMAN tracker for MOVIES / TV / GENERAL"
 language: de-DE
 type: private
 encoding: UTF-8
@@ -13,14 +15,15 @@ legacylinks:
 caps:
   categorymappings:
     # Movie
-    - {id: 217, cat: Movies/BluRay, desc: "Movie BluRay"}
     - {id: 32, cat: Movies/HD, desc: "Movie HD"}
     - {id: 208, cat: Movies/UHD, desc: "Movie 4 K"}
     - {id: 196, cat: Movies/UHD, desc: "Movie UHD"}
-    - {id: 124, cat: Movies, desc: "Movie Pack"}
+    - {id: 217, cat: Movies/BluRay, desc: "Movie BluRay"}
+    - {id: 250, cat: Movies/Foreign, desc: "Movie Englisch"}
+    - {id: 204, cat: Movies/UHD, desc: "Movie UHD Pack"}
+    - {id: 124, cat: Movies, desc: "Movie HD->Pack"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
-    - {id: 204, cat: Movies/UHD, desc: "Movie UHD Pack"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
     # Serien
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
@@ -30,8 +33,9 @@ caps:
     - {id: 56, cat: TV/SD, desc: "Serien DVD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
     # TV
-    - {id: 223, cat: TV, desc: "TV Serie"}
     - {id: 226, cat: Movies, desc: "TV Film"}
+    - {id: 256, cat: TV/Documentary, desc: "TV Doku"}
+    - {id: 223, cat: TV, desc: "TV Serie"}
     - {id: 228, cat: Books/Comics, desc: "TV Comic"}
     # Anime
     - {id: 212, cat: TV/Anime, desc: "Anime Serie HD"}

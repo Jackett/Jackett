@@ -30,27 +30,18 @@ caps:
     - {id: 8, cat: TV/Sport, desc: "F1 Press Conferences"}
     - {id: 9, cat: TV/Sport, desc: "F1 Post Races"}
     - {id: 14, cat: TV/Sport, desc: "F1 Academy"}
-    - {id: 15, cat: Movies, desc: "F1 Movies"}
+    - {id: 15, cat: Movies, desc: "Sports Movies"}
     - {id: 16, cat: TV, desc: "F1 Series"}
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
-    - {id: 21, cat: TV/Sport, desc: "UFC"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
-    - {id: 23, cat: TV/Sport, desc: "Boxing"}
     - {id: 24, cat: Books/Mags, desc: "Magazines - Books"}
-    - {id: 26, cat: TV/Sport, desc: "Tennis"}
-    - {id: 27, cat: TV/Sport, desc: "World Cup 2026"}
-    - {id: 28, cat: TV/Sport, desc: "NBA"}
     - {id: 29, cat: TV/Sport, desc: "NTT IndyCar Series"}
-    - {id: 30, cat: TV/Sport, desc: "Football/Soccer"}
     - {id: 33, cat: TV/Sport, desc: "WRC/Rally"}
     - {id: 34, cat: TV/Sport, desc: "BTCC"}
     - {id: 35, cat: TV/Sport, desc: "Isle of Man TT"}
-    - {id: 36, cat: TV/Sport, desc: "Surfing"}
     - {id: 37, cat: TV/Sport, desc: "Porsche Mobil 1 Supercup"}
-    - {id: 38, cat: TV/Sport, desc: "Skateboarding"}
-    - {id: 39, cat: TV/Sport, desc: "Baseball-MLB"}
     - {id: 40, cat: TV/Sport, desc: "WEC"}
     - {id: 41, cat: TV/Sport, desc: "FIM Speedway Gp"}
     - {id: 42, cat: TV/Sport, desc: "FIM MXGP"}
@@ -59,29 +50,21 @@ caps:
     - {id: 46, cat: TV/Sport, desc: "NHRA"}
     - {id: 47, cat: TV/Sport, desc: "F1H2O"}
     - {id: 48, cat: TV/Sport, desc: "F1 Complete Packs"}
-    - {id: 49, cat: TV/Sport, desc: "GAA"}
     - {id: 51, cat: TV/Sport, desc: "IndyNXT"}
-    - {id: 52, cat: TV/Sport, desc: "Snooker/Pool"}
-    - {id: 53, cat: TV/Sport, desc: "Horse Racing"}
     - {id: 54, cat: TV/Sport, desc: "Goodwood Festival"}
     - {id: 55, cat: TV/Sport, desc: "Motorsports Special Events"}
     - {id: 56, cat: TV/Sport, desc: "FIM World Supercross"}
     - {id: 57, cat: TV/Sport, desc: "Deutsche Tourenwagen Masters"}
-    - {id: 58, cat: TV/Sport, desc: "Athletics"}
-    - {id: 59, cat: TV/Sport, desc: "Cycling"}
-    - {id: 60, cat: TV/Sport, desc: "Golf"}
     - {id: 61, cat: TV/Sport, desc: "IMSA"}
     - {id: 62, cat: TV/Sport, desc: "NASCAR Craftsman Truck Series"}
-    - {id: 65, cat: TV/Sport, desc: "Nascar ARCA Menards Series"}
+    - {id: 65, cat: TV/Sport, desc: "ARCA Menards Series"}
     - {id: 25, cat: TV/Sport, desc: "NASCAR Cup Series"}
     - {id: 66, cat: TV/Sport, desc: "NASCAR O'Reilly Auto Parts"}
     - {id: 64, cat: TV/Sport, desc: "IROC"}
     - {id: 67, cat: TV, desc: "Sports TV Shows"}
-    - {id: 68, cat: TV/Sport, desc: "AFL"}
-    - {id: 69, cat: TV/Sport, desc: "NFL"}
     - {id: 70, cat: TV/Sport, desc: "FIM EWC"}
-    - {id: 71, cat: TV/Sport, desc: "AFLW"}
     - {id: 72, cat: TV/Sport, desc: "FIA TCR World Tour"}
+    - {id: 77, cat: TV/Sport, desc: "FIA European Rally Championship"}
 
   modes:
     search: [q]

@@ -69,6 +69,7 @@ caps:
     - {id: EBooks, cat: Books/EBook, desc: Ebooks}
     - {id: English-translated, cat: TV/Anime, desc: "Anime English-translated"}
     - {id: Games, cat: Console, desc: "Games"}
+    - {id: GamesMac, cat: PC/Games, desc: "Games Mac"}
     - {id: GamesNDS, cat: Console/NDS, desc: NDS}
     - {id: GamesOtherGames, cat: PC/Games, desc: "Games Other"}
     - {id: GamesPCGames, cat: PC/Games, desc: "Games PC"}

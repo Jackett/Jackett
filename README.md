@@ -209,7 +209,7 @@ Prior versions of Jackett are no longer supported.
  * Kinozal
  * LostFilm.tv
  * Magnetico (Local DHT) [[site](https://github.com/boramalper/magnetico)]
- * Magnetz
+ * Magnetz [PAY2DL]
  * Marine Tracker
  * Mazepa
  * Metal Tracker
@@ -241,6 +241,7 @@ Prior versions of Jackett are no longer supported.
  * TR4KER
  * TrahT
  * TribalMixes
+ * UATorrent
  * Union Fansub
  * UniOtaku
  * Ztracker
@@ -293,6 +294,7 @@ Prior versions of Jackett are no longer supported.
  * Best-Core
  * BeyondHD (BHD)
  * Bibliotik [![(invite needed)][inviteneeded]](#)
+ * BigBBS
  * BigCore
  * BinaryBay
  * Bit-Bázis
@@ -346,6 +348,7 @@ Prior versions of Jackett are no longer supported.
  * Das Unerwartete (D-U)
  * DataScene (DS)
  * DaXiangJiao (大香蕉)
+ * Deep-Water [![(invite needed)][inviteneeded]](#)
  * Depth Studio
  * DesiGaane (DG) [![(invite needed)][inviteneeded]](#)
  * DesiTorrents
@@ -388,6 +391,7 @@ Prior versions of Jackett are no longer supported.
  * GGPT
  * GigaTorrents
  * GiroTorrent
+ * Golden Gate (GG)
  * GreatPosterWall (GPW)
  * HaiDan
  * Hǎitáng (海棠PT)
@@ -424,7 +428,7 @@ Prior versions of Jackett are no longer supported.
  * HHanClub
  * HHD
  * House of Devil
- * HQMusic
+ * HQMusic [![(invite needed)][inviteneeded]](#)
  * HUDBT (蝴蝶) [![(invite needed)][inviteneeded]](#)
  * HxPT (好学) [![(invite needed)][inviteneeded]](#)
  * ImmortalSeed (iS)
@@ -520,7 +524,6 @@ Prior versions of Jackett are no longer supported.
  * Periodical [![(invite needed)][inviteneeded]](#)
  * Phoenix Project
  * PhoenixPT (凤凰PT)
- * PigNetwork (猪猪网)
  * PixelCove (Ultimate Gamer)
  * PiXELHD (PxHD) [![(invite needed)][inviteneeded]](#)
  * PlayletPT [![(invite needed)][inviteneeded]](#)
@@ -563,10 +566,11 @@ Prior versions of Jackett are no longer supported.
  * RetroFlix
  * RetroMoviesClub (RMC)
  * RetroToon
- * RevoPeers [PAY2DL]
+ * RevoPeers [PAY2DL] [![(invite needed)][inviteneeded]](#)
  * RocketHD
  * Romanian Metal Torrents (RMT)
  * Rousi.pro
+ * Sagmire
  * SAMARITANO
  * SAPIbr (Toca Share)
  * SBPT
@@ -579,6 +583,7 @@ Prior versions of Jackett are no longer supported.
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)
  * SexTorrent
+ * Shadow
  * Shadowbit
  * ShaKaw [![(invite needed)][inviteneeded]](#)
  * Shareisland
@@ -606,7 +611,6 @@ Prior versions of Jackett are no longer supported.
  * TeamFlix
  * TeamHD
  * TeamOS
- * The Brothers
  * The Crazy Ones
  * The Empire (TE)
  * The Falling Angels (TFA)
@@ -677,7 +681,6 @@ Prior versions of Jackett are no longer supported.
  * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)
  * xloli (ilolicon PT)
  * XSpeeds (XS)
- * xTorrenty [![(invite needed)][inviteneeded]](#)
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
@@ -686,6 +689,7 @@ Prior versions of Jackett are no longer supported.
  * Zappateers
  * Zenith [![(invite needed)][inviteneeded]](#)
  * ZmPT (织梦)
+ * ZooToons [![(invite needed)][inviteneeded]](#)
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
 </details>
 

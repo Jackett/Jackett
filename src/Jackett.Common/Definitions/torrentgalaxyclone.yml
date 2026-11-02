@@ -5,12 +5,12 @@ description: "TorrentGalaxyClone is a Public site for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
-# https://proxygalaxy.cc/ for health status and alternate domains
 links:
-  - https://torrentgalaxy.one/
+  - https://torrentgalaxy.online/
   - https://torrentgalaxy.info/
 legacylinks:
   - https://torrentgalaxy.space/
+  - https://torrentgalaxy.one/
 
 caps:
   # dont forget to update the path categories in the search block

@@ -6,9 +6,10 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://oldgreektracker.xyz/
+  - https://greekseeders.site/
 legacylinks:
   - http://oldgreektracker.xyz/
+  - https://oldgreektracker.xyz/
 
 caps:
   categorymappings:

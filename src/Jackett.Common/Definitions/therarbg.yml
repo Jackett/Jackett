@@ -71,6 +71,8 @@ search:
 
   rows:
     selector: results
+    filters:
+      - name: andmatch
 
   fields:
     category:
