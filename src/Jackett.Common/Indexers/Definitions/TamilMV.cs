@@ -78,6 +78,12 @@ namespace Jackett.Common.Indexers.Definitions
             @"|\b(?:full|awards?|award)\s+show\b" +
             @"|\b(?:speech|speeches)\b",
             RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex QualityRegex = new Regex(
+            @"\b(?:2160p|1080p|720p|480p|4k|uhd|hdrip|web-dl|predvd|dvdrip|x264|x265|hevc|avc|aac)\b",
+            RegexOptions.Compiled | RegexOptions.IgnoreCase);
+        private static readonly Regex YearRegex = new Regex(
+            @"\b(?:19\d{2}|20\d{2})\b",
+            RegexOptions.Compiled);
         private static readonly Regex TvRegex = new Regex(@"\b(?:s\d+|ep\s*\(?\d+|season\s*\d+|series|episode)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex AudioRegex = new Regex(@"\b(?:ost|soundtrack|flac|mp3\s*songs?|audio\s*songs?)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
         private static readonly Regex UhdRegex = new Regex(@"\b(?:2160p|4k|uhd)\b", RegexOptions.Compiled | RegexOptions.IgnoreCase);
@@ -220,7 +226,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
 
                     using var doc = parser.ParseDocument(topicResponse.ContentString);
-                    var topicReleases = ExtractTopicReleases(doc, topicUrl, SiteLink, stripPrefix, filterSamples);
+                    var topicReleases = ExtractTopicReleases(doc, topicUrl, SiteLink, stripPrefix, filterSamples, logger);
 
                     _topicCache[topicUrl] = (DateTime.UtcNow.AddDays(1), topicReleases);
 
@@ -441,18 +447,19 @@ namespace Jackett.Common.Indexers.Definitions
             return url;
         }
 
-        private List<ReleaseInfo> ExtractTopicReleases(
+        public static List<ReleaseInfo> ExtractTopicReleases(
             IHtmlDocument doc,
             string topicUrl,
             string siteLink,
-            bool stripPrefix,
-            bool filterSamples)
+            bool stripPrefix = true,
+            bool filterSamples = true,
+            Logger logger = null)
         {
             var results = new List<ReleaseInfo>();
 
             if (IsExcludedForum(doc, topicUrl))
             {
-                logger.Debug($"1TamilMV skipping topic in excluded forum: {topicUrl}");
+                logger?.Debug($"1TamilMV skipping topic in excluded forum: {topicUrl}");
                 return results;
             }
 
@@ -501,7 +508,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                 if (filterSamples && ExcludedTitles.IsMatch(rawTitle))
                 {
-                    logger.Debug($"1TamilMV skipping filtered title: {rawTitle}");
+                    logger?.Debug($"1TamilMV skipping filtered title: {rawTitle}");
                     continue;
                 }
 
@@ -516,6 +523,33 @@ namespace Jackett.Common.Indexers.Definitions
 
                 var cleanTitle = CleanTitle(rawTitle, stripPrefix);
                 var sizeBytes = ParseSize(cleanTitle);
+
+                // Fallback: If size cannot be parsed from the torrent link filename (e.g. 0B),
+                // inspect the preceding heading element in the post for size and full release title
+                if (sizeBytes <= 0)
+                {
+                    var header = FindPrecedingHeader(a);
+                    if (!string.IsNullOrEmpty(header))
+                    {
+                        var headerSize = ParseSize(header);
+                        if (headerSize > 0)
+                        {
+                            sizeBytes = headerSize;
+                        }
+
+                        var cleanHeader = Regex.Replace(header, @"[\s:]+$", string.Empty).Trim();
+                        cleanHeader = CleanTitle(cleanHeader, stripPrefix);
+                        if (!string.IsNullOrEmpty(cleanHeader) && (YearRegex.IsMatch(cleanHeader) || QualityRegex.IsMatch(cleanHeader)))
+                        {
+                            var extMatch = Regex.Match(cleanTitle, @"\.(?![0-9]+$)[a-zA-Z0-9]{2,4}$");
+                            if (extMatch.Success && !cleanHeader.EndsWith(extMatch.Value, StringComparison.OrdinalIgnoreCase))
+                            {
+                                cleanHeader += extMatch.Value;
+                            }
+                            cleanTitle = cleanHeader;
+                        }
+                    }
+                }
 
                 var magnetUrl = i < magnetLinks.Count ? magnetLinks[i] : (magnetLinks.Count > 0 ? magnetLinks[0] : string.Empty);
                 string infoHash = null;
@@ -551,6 +585,48 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             return results;
+        }
+
+        public static string FindPrecedingHeader(IElement torrentElement)
+        {
+            if (torrentElement == null)
+            {
+                return null;
+            }
+
+            var current = (INode)torrentElement;
+            while (current != null)
+            {
+                var prev = current.PreviousSibling;
+                while (prev != null)
+                {
+                    var text = prev.TextContent?.Trim();
+                    if (!string.IsNullOrEmpty(text) &&
+                        !text.EndsWith(".torrent", StringComparison.OrdinalIgnoreCase) &&
+                        !text.Contains("MAGNET") &&
+                        !text.Contains("DIRECT LINK") &&
+                        text.Length > 15)
+                    {
+                        if (SizeRegex.IsMatch(text) || QualityRegex.IsMatch(text))
+                        {
+                            return text;
+                        }
+                    }
+
+                    prev = prev.PreviousSibling;
+                }
+
+                current = current.ParentElement;
+                if (current == null ||
+                    current.NodeName.Equals("BODY", StringComparison.OrdinalIgnoreCase) ||
+                    current.NodeName.Equals("HTML", StringComparison.OrdinalIgnoreCase) ||
+                    (current is IElement elem && (elem.ClassList.Contains("cPost_contentWrap") || elem.GetAttribute("data-role") == "commentContent")))
+                {
+                    break;
+                }
+            }
+
+            return null;
         }
 
         public static string CleanTitle(string rawTitle, bool stripPrefix = true)

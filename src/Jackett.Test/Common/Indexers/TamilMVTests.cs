@@ -215,5 +215,92 @@ namespace Jackett.Test.Common.Indexers
         {
             TamilMV.ExcludedTitles.IsMatch(title).Should().Be(shouldExclude);
         }
+
+        [Test]
+        public void TestExtractTopicReleases_FallbackToHeaderWhenSizeMissing()
+        {
+            var parser = new AngleSharp.Html.Parser.HtmlParser();
+            var html = @"
+                <div data-role=""commentContent"">
+                    <p style=""text-align: center;"">
+                        <strong><span style=""color:#000000"">Trouble (2024) WEB-DL - 1080p - AVC - UNTOUCHED - Original Audios (DD+5.1 - 640Kbps) [Tamil + Telugu + Hindi + Eng] - 3.2GB - ESub :</span></strong>
+                        <br>
+                        <strong>
+                            <a data-fileext=""torrent"" href=""https://www.1tamilmv.style/applications/core/interface/file/attachment.php?id=124303"">
+                                <span style=""color:#0000ff;"">www.1TamilMV.tf - Trouble (2024) WEB-DL - 1080p - AVC - (DD+5.1 - 640Kbps) [Tam + Tel + Hin + Eng].mkv.torrent</span>
+                            </a>
+                        </strong>
+                        <br>
+                        <a href=""magnet:?xt=urn:btih:abcdef1234567890abcdef1234567890abcdef12"">MAGNET</a>
+                    </p>
+                </div>";
+
+            using (var doc = parser.ParseDocument(html))
+            {
+                var releases = TamilMV.ExtractTopicReleases(doc, "https://www.1tamilmv.style/index.php?/forums/topic/182865-trouble/", "https://www.1tamilmv.style/");
+
+                releases.Should().HaveCount(1);
+                var release = releases[0];
+                release.Size.Should().Be(3.2.Gigabytes());
+                release.Title.Should().Be("Trouble (2024) WEB-DL - 1080p - AVC - UNTOUCHED - Original Audios (DD+5.1 - 640Kbps) [Tamil + Telugu + Hindi + Eng] - 3.2GB - ESub.mkv");
+                release.Category.Should().Contain(TorznabCatType.MoviesHD.ID);
+            }
+        }
+
+        [Test]
+        public void TestExtractTopicReleases_StandardAnchorWithSizePreserved()
+        {
+            var parser = new AngleSharp.Html.Parser.HtmlParser();
+            var html = @"
+                <div data-role=""commentContent"">
+                    <p style=""text-align: center;"">
+                        <strong><span>Resident Evil (2026) HQ HDRip - 1080p - x264 - [Tamil + Telugu + Hindi + Eng] - (DD+5.1 - 640Kbps) - 3GB - ESub :</span></strong>
+                        <br>
+                        <strong>
+                            <a data-fileext=""torrent"" href=""https://www.1tamilmv.style/applications/core/interface/file/attachment.php?id=160760"">
+                                <span>www.1TamilMV.style - Resident Evil (2026) HQ HDRip - 1080p - x264 - [Tamil + Telugu + Hindi + Eng] - (DD+5.1 - 640Kbps) - 3GB - ESub.mkv.torrent</span>
+                            </a>
+                        </strong>
+                    </p>
+                </div>";
+
+            using (var doc = parser.ParseDocument(html))
+            {
+                var releases = TamilMV.ExtractTopicReleases(doc, "https://www.1tamilmv.style/index.php?/forums/topic/200720-resident-evil/", "https://www.1tamilmv.style/");
+
+                releases.Should().HaveCount(1);
+                var release = releases[0];
+                release.Size.Should().Be(3.0.Gigabytes());
+                release.Title.Should().Be("Resident Evil (2026) HQ HDRip - 1080p - x264 - [Tamil + Telugu + Hindi + Eng] - (DD+5.1 - 640Kbps) - 3GB - ESub.mkv");
+            }
+        }
+
+        [Test]
+        public void TestExtractTopicReleases_FallbackPreservesAnyExtension()
+        {
+            var parser = new AngleSharp.Html.Parser.HtmlParser();
+            var html = @"
+                <div data-role=""commentContent"">
+                    <p style=""text-align: center;"">
+                        <strong><span>Trouble (2024) WEB-DL - 720p - x264 - (AAC 2.0) - 850MB :</span></strong>
+                        <br>
+                        <strong>
+                            <a data-fileext=""torrent"" href=""https://www.1tamilmv.style/applications/core/interface/file/attachment.php?id=124304"">
+                                <span>www.1TamilMV.tf - Trouble (2024) WEB-DL - 720p - x264 - (AAC 2.0).mp4.torrent</span>
+                            </a>
+                        </strong>
+                    </p>
+                </div>";
+
+            using (var doc = parser.ParseDocument(html))
+            {
+                var releases = TamilMV.ExtractTopicReleases(doc, "https://www.1tamilmv.style/index.php?/forums/topic/182865-trouble/", "https://www.1tamilmv.style/");
+
+                releases.Should().HaveCount(1);
+                var release = releases[0];
+                release.Size.Should().Be(850.Megabytes());
+                release.Title.Should().Be("Trouble (2024) WEB-DL - 720p - x264 - (AAC 2.0) - 850MB.mp4");
+            }
+        }
     }
 }
