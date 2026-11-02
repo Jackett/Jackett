@@ -680,7 +680,6 @@ Prior versions of Jackett are no longer supported.
  * Xingyung (星陨阁) [![(invite needed)][inviteneeded]](#)
  * xloli (ilolicon PT)
  * XSpeeds (XS)
- * xTorrenty [![(invite needed)][inviteneeded]](#)
  * XtremeBytes (TorrentSurf)
  * XWT-Classics
  * XWTorrents (XWT)
