@@ -246,7 +246,7 @@ namespace Jackett.Common.Indexers.Definitions
                 }
             }
 
-            return releases.OrderByDescending(r => r.PublishDate).Take(MaxReleases).ToList();
+            return releases.OrderByDescending(r => r.PublishDate).ToList();
         }
 
         private async Task<List<string>> ExtractHomepageTopicsAsync(string siteLink, int limit = MaxTopics)
