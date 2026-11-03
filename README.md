@@ -559,6 +559,7 @@ Prior versions of Jackett are no longer supported.
  * RacingForMe (RFM)
  * RailgunPT
  * Rastastugan
+ * Red Angel
  * Red Star Torrent (RST) [![(invite needed)][inviteneeded]](#)
  * Redacted (PassTheHeadphones)
  * ReelFlix (HD4Free,LegacyHD)

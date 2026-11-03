@@ -1,0 +1,124 @@
+---
+id: redangel
+name: Red Angel
+description: "Red Angel is a HUNGARIAN Private Tracker for MOVIES / TV / GENERAL"
+language: hu-HU
+type: private
+encoding: UTF-8
+links:
+  - https://red-angel.net/
+
+caps:
+  categorymappings:
+    - {id: Film, cat: Movies, desc: "Filmg"}
+    - {id: Sorozat, cat: TV, desc: "Sorozat"}
+    - {id: Játék, cat: Console, desc: "Játék"}
+    - {id: Zene, cat: Audio, desc: "Zene"}
+    - {id: Program, cat: PC, desc: "Program"}
+    - {id: eBook, cat: Books, desc: "eBook"}
+    - {id: XXX, cat: XXX, desc: "XXX"}
+    - {id: Egyéb, cat: Other, desc: "Egyéb"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    book-search: [q]
+    music-search: [q]
+
+settings:
+  - name: username
+    type: text
+    label: Username
+  - name: password
+    type: password
+    label: Password
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: newest
+    options:
+      name_asc: title asc
+      name_desc: title desc
+      newest: newest
+      oldest: oldest
+      size_asc: size asc
+      size_desc: size desc
+      seeders_asc: seeders asc
+      seeders: seeders desc
+
+login:
+  path: login.php
+  method: form
+  form: form
+  inputs:
+    username: "{{ .Config.username }}"
+    password: "{{ .Config.password }}"
+  error:
+    - selector: div.error:contains("Hibás felhasználónév vagy jelszó!")
+  test:
+    path: index.php
+    selector: form[action="logout.php"]
+
+search:
+  paths:
+    # https://red-angel.net/torrents.php?search=&category=&sort=newest&promotion=free
+    - path: torrents.php
+  inputs:
+    # only supports single category searches e.g. category=Film
+    search: "{{ .Keywords }}"
+    # (nothing) all, free freeleech, discount discounted dl, upload boosted ul, bonus boosted seed bonus
+    promotion: "{{ if .Config.freeleech }}free{{ else }}{{ end }}"
+    sort: "{{ .Config.sort }}"
+
+  rows:
+    selector: div.ra-desktop-table > table > tbody > tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: span.ra-type-label
+    title:
+      selector: a[href^="torrent.php?id="]
+    details:
+      selector: a[href^="torrent.php?id="]
+      attribute: href
+    download:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    poster:
+      selector: a.ra-torrent-title
+      attribute: data-ra-cover
+    size:
+      selector: td:nth-last-child(5)
+    seeders:
+      selector: td.seed
+    leechers:
+      selector: td.leech
+    description:
+      case:
+        span.ra-approval-approved: Verified
+        "*": Unverified
+    downloadvolumefactor:
+      text: 1
+      # there has not been any free so have not found free tag
+#      case:
+#        span.free?: 0
+#        "*": 1
+    uploadvolumefactor:
+      text: 1
+    date:
+      selector: td:nth-last-child(1)
+      remove: span
+      filters:
+        - name: append
+          args: " +01:00" # CET
+        - name: dateparse
+          args: "yyyy-MM-dd HH:mm:ss zzz"
+    minimumseedtime:
+      # 1 days (as seconds = 1 x 24 x 60 x 60)
+      text: 86400
+# engine n/a
