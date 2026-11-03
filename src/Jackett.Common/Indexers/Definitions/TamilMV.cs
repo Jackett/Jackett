@@ -30,12 +30,7 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "1TamilMV";
         public override string Description => "1TamilMV is a Public Indian torrent tracker for Tamil, Telugu, Hindi, Malayalam, and Kannada releases.";
         public override string SiteLink { get; protected set; } = "https://www.1tamilmv.style/";
-
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://www.1tamilmv.style/",
-        };
-
+        // use https://www.1tamilmv.fi to find the current URL
         public override string[] LegacySiteLinks => new[]
         {
             "https://www.1tamilmv.ac/",
