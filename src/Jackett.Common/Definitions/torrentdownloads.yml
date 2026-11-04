@@ -71,7 +71,8 @@ search:
     - path: search/
       followredirect: true
   inputs:
-    $raw: "{{ range .Categories }}s_cat={{.}}&{{end}}"
+    # does not support multiple category searching, so defaulting to any.
+    s_cat: 0
     search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
 
   keywordsfilters:
