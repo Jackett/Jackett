@@ -10,19 +10,20 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1, cat: TV, desc: "Live Concert"}
+    - {id: 1, cat: Movies, desc: "Live Concert"}
     - {id: 2, cat: Audio/Video, desc: "Music Video"}
-    - {id: 4, cat: TV, desc: "Music Documentary"}
-    - {id: 11, cat: TV, desc: "Music TV Series"}
+    - {id: 4, cat: Movies, desc: "Music Documentary"}
     - {id: 5, cat: Audio/Lossless, desc: "Pure Audio"}
-    - {id: 7, cat: TV, desc: "Opera"}
-    - {id: 8, cat: TV, desc: "Musical"}
+    - {id: 7, cat: Movies, desc: "Opera"}
+    - {id: 8, cat: Movies, desc: "Musical"}
     - {id: 9, cat: Audio, desc: "Podcast"}
     - {id: 10, cat: TV, desc: "Educational"}
+    - {id: 11, cat: TV, desc: "Music TV Series"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
 
 settings:
@@ -60,7 +61,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Your membership requires that you stay active at Blutopia. To not get disabled, you are required to login to the site at least once every 30 days or be actively seeding at least 1 torrent."
+    default: "Your membership requires that you stay active at <a href=\"https://concertos.live/\" target=\"_blank\">Concertos</a>. To not get disabled, you are required to login to the site at least once every 30 days or be actively seeding at least 1 torrent."
 
 login:
   path: api/torrents
