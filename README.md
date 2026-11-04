@@ -638,7 +638,7 @@ Prior versions of Jackett are no longer supported.
  * Torrent Trader [![(invite needed)][inviteneeded]](#)
  * Torrent-Syndikat [![(invite needed)][inviteneeded]](#)
  * TOrrent-tuRK (TORK)
- * Torrent.LT
+ * Torrent.ai (ex-Torrent.LT)
  * TorrentBD
  * TorrentBytes (TBy) [![(invite needed)][inviteneeded]](#)
  * TorrentCCF (TCCF)
