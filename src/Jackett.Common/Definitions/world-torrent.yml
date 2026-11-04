@@ -12,7 +12,7 @@ type: public
 encoding: UTF-8
 # to fetch current domain use https://www.torrent-site.my/
 links:
-  - https://ww4-darkfox.officiel.cc/
+  - https://www.darkfox.ws/
   - https://ww4-vidlox.officiel.cc/
   - https://ww4-wikibox.officiel.cc/
   - https://ww4-sharkibox.officiel.cc/
@@ -58,6 +58,7 @@ legacylinks:
   - https://ww1-darkfox.officiel.cc/
   - https://ww2-darkfox.officiel.cc/
   - https://ww3-darkfox.officiel.cc/
+  - https://ww4-darkfox.officiel.cc/
   # Vidlox
   - https://vidlox.pw/
   - https://vidlox5.cc/
