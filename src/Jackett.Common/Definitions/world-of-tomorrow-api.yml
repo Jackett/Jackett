@@ -114,7 +114,7 @@ search:
 
   inputs:
     apikey: "{{ .Config.apikey }}"
-    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    t: "{{ if or (eq .Query.Type \"movie\") (eq .Query.Type \"tvsearch\") (eq .Query.Type \"book\") }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     season: "{{ .Query.Season }}"
