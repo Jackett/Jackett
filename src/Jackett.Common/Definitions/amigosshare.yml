@@ -53,6 +53,7 @@ caps:
     - {id: 36, cat: PC/Mac, desc: "Jogos: Mac"}
     - {id: 46, cat: Console/NDS, desc: "Jogos: Nintendo DS"}
     - {id: 32, cat: Console, desc: "Jogos: Nintendo Switch"}
+    - {id: 65, cat: Console, desc: "Jogos: Nintendo Switch2"}
     - {id: 34, cat: PC/Games, desc: "Jogos: PC"}
     - {id: 37, cat: Console, desc: "Jogos: PS1"}
     - {id: 38, cat: Console, desc: "Jogos: PS2"}
