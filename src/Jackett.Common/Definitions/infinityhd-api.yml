@@ -1,7 +1,7 @@
 ---
 id: infinityhd-api
 name: InfinityHD (API)
-description: "InfinityHD is a Private Torrent Tracker for MOVIES / TV / ANIME"
+description: "InfinityHD is a Private Torrent Tracker for MOVIES / TV / ANIME / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
@@ -14,6 +14,7 @@ caps:
     - {id: 2, cat: TV, desc: "TV"}
     - {id: 3, cat: TV/Anime, desc: "Anime"}
     - {id: 4, cat: Movies/Other, desc: "Anime Movie"}
+    - {id: 5, cat: Audio, desc: "Music"}
 
   modes:
     search: [q]

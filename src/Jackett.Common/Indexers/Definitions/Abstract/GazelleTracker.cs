@@ -264,8 +264,11 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
             {
                 // reason for failure should be explained.
                 var jsonError = JObject.Parse(response.ContentString);
-                var errorReason = (string)jsonError["error"];
-                throw new Exception(errorReason);
+
+                if (jsonError.TryGetValue("error", out var errorReason) && errorReason.Value<string>().IsNotNullOrWhiteSpace())
+                {
+                    throw new Exception($"Unexpected response from indexer request: \"{errorReason.Value<string>()}\"");
+                }
             }
 
             if ((int)response.Status >= 400)
@@ -485,11 +488,16 @@ namespace Jackett.Common.Indexers.Definitions.Abstract
                 flags.Add(subbing);
             }
 
-            if (torrent["remastered"] != null && (bool)torrent["remastered"])
+            if (torrent.GetValue("remastered")?.Value<bool>() == true)
             {
-                var remasterYear = (string)torrent["remasterYear"];
-                var remasterTitle = WebUtility.HtmlDecode((string)torrent["remasterTitle"]);
-                flags.Add(remasterYear + (!string.IsNullOrEmpty(remasterTitle) ? " " + remasterTitle : ""));
+                var remasterYear = torrent.GetValue("remasterYear")?.Value<string>();
+                var remasterTitle = WebUtility.HtmlDecode(torrent.GetValue("remasterTitle")?.Value<string>());
+                var remastered = $"{(remasterYear != "0" ? remasterYear : "")} {remasterTitle}".Trim();
+
+                if (remastered.IsNotNullOrWhiteSpace())
+                {
+                    flags.Add(remastered);
+                }
             }
 
             if (flags.Count > 0)

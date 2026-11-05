@@ -6,9 +6,10 @@ language: el-GR
 type: private
 encoding: UTF-8
 links:
-  - https://oldgreektracker.xyz/
+  - https://greekseeders.site/
 legacylinks:
   - http://oldgreektracker.xyz/
+  - https://oldgreektracker.xyz/
 
 caps:
   categorymappings:
@@ -143,6 +144,20 @@ login:
     path: index.php
     selector: a[href="logout.php"]
 
+download:
+  before:
+    path: thanks.php
+    method: post
+    inputs:
+      infohash: "{{ .DownloadUri.Query.id }}"
+      thanks: 1
+  selectors:
+    - selector: a[href^="index.php?page=downloadcheck&id="]
+      attribute: href
+      filters:
+        - name: replace
+          args: ["index.php?page=downloadcheck&id=", "download.php?id="]
+
 search:
   paths:
     # https://oldgreektracker.xyz/index.php?page=torrents&search=&category=0&active=0
@@ -151,7 +166,7 @@ search:
     page: torrents
     search: "{{ .Keywords }}"
     category: "{{ range .Categories }}{{.}};{{end}}"
-    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze
+    # 0 filename, 1 file&descr, 2 descr, 3 uploaders, 18 genre, 4 imdb, 5 gold, 6 silver, 7 bronze, 8-17 upload multiplier 1x to 10x
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     # 0 all, 1 active only, 2 dead only
     active: 0
@@ -163,7 +178,7 @@ search:
       args: ["\\.", " "]
 
   rows:
-    selector: table.lista > tbody > tr:has(img[src="images/fls_locked.png"])
+    selector: table.lista[width="100%"] > tbody > tr:has(img[title="Locked"])
 
   fields:
     category:
@@ -178,7 +193,7 @@ search:
       selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a[href^="index.php?page=torrent-details&id="]
       attribute: href
     poster:
       selector: a[href^="index.php?page=torrent-details&id="]
@@ -189,24 +204,24 @@ search:
         - name: replace
           args: ["torrentimg/nocover.jpg", ""]
     size:
-      selector: td:nth-child(11)
+      selector: td:nth-child(12)
     date:
       # auto adjusted by site account profile
-      selector: td:nth-child(7)
+      selector: td:nth-child(8)
       filters:
         - name: dateparse
           args: "dd/MM/yyyy"
     seeders:
-      selector: td:nth-child(8)
+      selector: td:nth-child(9)
       optional: true
       default: 0
     leechers:
       optional: true
-      selector: td:nth-child(9)
+      selector: td:nth-child(10)
       default: 0
     grabs:
       optional: true
-      selector: td:nth-child(10)
+      selector: td:nth-child(11)
       default: 0
     downloadvolumefactor:
       case:

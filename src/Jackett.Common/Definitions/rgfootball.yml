@@ -6,7 +6,9 @@ language: ru-RU
 type: semi-private
 encoding: UTF-8
 links:
-  - http://rgfootball.net/ # the site does not support https
+  - https://rgfootball.net/
+legacylinks:
+  - http://rgfootball.net/
 
 caps:
   categorymappings:
@@ -534,7 +536,7 @@ settings:
 login:
   path: login.php
   method: form
-  form: form[action$="/login.php"]
+  form: form[action="./login.php"]
   inputs:
     login_username: "{{ .Config.username }}"
     login_password: "{{ .Config.password }}"

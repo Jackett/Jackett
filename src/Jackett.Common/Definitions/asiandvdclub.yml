@@ -32,12 +32,11 @@ caps:
     music-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -68,20 +67,10 @@ settings:
     default: "No special action required for red ribbons and permanent sponsors and above regardless of time, for others after 1 year of zero activity on tracker and/or website account will be closed."
 
 login:
-  path: /
-  method: form
-  form: form[action$="/login"]
+  # using cookie method because site's login page currently is prefixed bay a mission statement page which does not clear until after 2 minutes!
+  method: cookie
   inputs:
-    apple: evil
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    rememberme: yes
-  selectorinputs:
-    csrf_token:
-      selector: input[name="csrf_token"]
-      attribute: value
-  error:
-    - selector: div[style*="color:#b40000;"]:contains("Error:")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href="/logout"]

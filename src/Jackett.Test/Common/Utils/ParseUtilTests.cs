@@ -39,14 +39,14 @@ namespace Jackett.Test.Common.Utils
             description.Value.Should().Contain("Know Your Role and Shut Your Mouth!");
         }
 
-        [TestCase("1023.4 KB", 1047961)]
-        [TestCase("1023.4 MB", 1073112704)]
-        [TestCase("1,023.4 MB", 1073112704)]
-        [TestCase("1.023,4 MB", 1073112704)]
-        [TestCase("1 023,4 MB", 1073112704)]
-        [TestCase("1.023.4 MB", 1073112704)]
-        [TestCase("1023.4 GB", 1098867408896)]
-        [TestCase("1023.4 TB", 1125240226709504)]
+        [TestCase("1023.4 KB", 1047961L)]
+        [TestCase("1023.4 MB", 1073112678L)]
+        [TestCase("1,023.4 MB", 1073112678L)]
+        [TestCase("1.023,4 MB", 1073112678L)]
+        [TestCase("1 023,4 MB", 1073112678L)]
+        [TestCase("1.023.4 MB", 1073112678L)]
+        [TestCase("1023.4 GB", 1098867382681L)]
+        [TestCase("1023.4 TB", 1125240199865958L)]
         public void should_parse_size(string stringSize, long size)
         {
             ParseUtil.GetBytes(stringSize).Should().Be(size);

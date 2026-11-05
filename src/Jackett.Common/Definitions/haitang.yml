@@ -20,7 +20,8 @@ caps:
     - {id: 4101, cat: Audio, desc: "小品 Sketch", default: true}
     - {id: 4104, cat: Audio, desc: "二人转 Duets", default: true}
     - {id: 4105, cat: TV, desc: "小剧种 Puppet shows", default: true}
-    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobooks", default: false}
+    - {id: 4103, cat: Audio/Audiobook, desc: "广播剧 Audiobook", default: false}
+    - {id: 4108, cat: Books/EBook, desc: "电子书 Ebook", default: false}
 
   modes:
     search: [q]
@@ -64,8 +65,13 @@ settings:
     default: "Account retention rules:<ol><li>Users with Veteran User (Wen Chou) and above will be retained forever</li><li>Elite User (Wu Sheng) and above will not be deleted after parking (in the control panel)</li><li>Users with a parked account who do not log in for 365 consecutive days will be deleted</li><li>Users with a non-parked account who have not logged in for 180 consecutive days be deleted</li><li>Users who have no traffic (i.e. upload/download The data is all 0) will be deleted If they do not log in for 90 consecutive days.</li></ol>"
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form[action="takelogin.php"]
+  captcha:
+    type: image
+    selector: img[alt="CAPTCHA"]
+    input: imagestring
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
@@ -84,7 +90,7 @@ search:
     - path: torrents.php
       categories: [1, 4091, 4097, 4098, 4099, 4101, 4104, 4105]
     - path: live.php
-      categories: [4103]
+      categories: [4103, 4108]
   inputs:
     $raw: "{{ range .Categories }}cat{{.}}=1&{{end}}"
     search: "{{ .Keywords }}"
@@ -125,7 +131,7 @@ search:
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-last-child(7) > span[title]
       attribute: title
       optional: true
       filters:
@@ -135,7 +141,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-last-child(7):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -145,13 +151,13 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-last-child(6)
     seeders:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-last-child(5)
     leechers:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-last-child(4)
     grabs:
-      selector: td:nth-child(8)
+      selector: td.rowfollow:nth-last-child(3)
     downloadvolumefactor:
       case:
         img.pro_free: 0
@@ -166,12 +172,10 @@ search:
         img.pro_free2up: 2
         img.pro_2up: 2
         "*": 1
-    minimumratio:
-      text: 1
     minimumseedtime:
-      # 1 day (as seconds = 24 x 60 x 60)
-      text: 86400
+      # 10 day (as seconds = 10 x 24 x 60 x 60)
+      text: 864000
     description:
-      selector: td:nth-child(2)
+      selector: td.rowfollow:nth-child(2)
       remove: a, b, font, img, span
 # NexusPHP v1.1 2021-10-15

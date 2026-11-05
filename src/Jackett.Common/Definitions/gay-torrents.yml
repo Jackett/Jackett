@@ -20,22 +20,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: 0
-    options:
-      0: created
-      1: title
-      4: size
-      5: seeders
-  - name: order
-    type: select
-    label: Order requested from site
-    default: 0
-    options:
-      0: desc
-      1: asc
   - name: whisparrv2
     type: checkbox
     label: Strip release date from queries (for Whisparr v2 compatibility)
@@ -77,6 +61,7 @@ caps:
     - {id: nonporn, cat: Other, desc: "NonPorn"}
     - {id: nonporn/Anime, cat: TV/Anime, desc: "Anime"}
     - {id: nonporn/Applications, cat: PC, desc: "Applications"}
+    - {id: nonporn/Asian-BL, cat: TV, desc: "Asian-BL"}
     - {id: nonporn/Comedy, cat: Movies, desc: "Comedy"}
     - {id: nonporn/Comics, cat: Books/Comics, desc: "Comics"}
     - {id: nonporn/Coming-Out, cat: Movies, desc: "Coming-Out"}
@@ -92,8 +77,8 @@ caps:
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid]
+    movie-search: [q, imdbid]
     book-search: [q]
 
 login:
@@ -112,38 +97,36 @@ login:
 
 search:
   paths:
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+    - path: GT_torrents/GT_ajax_search.php
+      inputs:
+        page: 0
+    - path: GT_torrents/GT_ajax_search.php
       inputs:
         page: 1
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+    - path: GT_torrents/GT_ajax_search.php
       inputs:
         page: 2
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+    - path: GT_torrents/GT_ajax_search.php
       inputs:
         page: 3
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
+    - path: GT_torrents/GT_ajax_search.php
       inputs:
         page: 4
-    - path: "{{ if .Keywords }}search.php{{ else }}torrentslist.php{{ end }}"
-      inputs:
-        page: 5
   inputs:
-    $raw: "{{ range .Categories }}type={{.}}&{{end}}"
-    textsearch: "{{ .Keywords }}"
-    sort: "{{ .Config.sort }}"
-    order: "{{ .Config.order }}"
-    freeleech: "{{ if .Config.freeleech }}1{{ else }}0{{ end }}"
+    # category search is not supported, only tag search which is AND not OR
+    filename: "{{ .Keywords }}"
+    description: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ end }}"
+    where: "{{ if .Config.freeleech }}freeleech{{ else }}{{ end }}"
   keywordsfilters:
     - name: re_replace
       args: ["(\\d{2}\\.\\d{2}\\.\\d{2})", "{{ if .Config.whisparrv2 }}{{ else }}$1{{ end }}"] # strip release date from query for whisparr v2 compatibility
     - name: re_replace
-      args: ["(\\w+)", "+$1"] # prepend + to each word
-
-  headers:
-    Referer: ["{{ .Config.sitelink }}"]
+      args: ["(\\w{4,})", "+$1"] # prepend + to each word with 4+ characters
+    - name: re_replace
+      args: ["\\+with\\b\\s?", " "] # 'with' is treated as a stop word and breaks the search when AND searched
 
   rows:
-    selector: ul.TorrentList, ul.Torrent-List
+    selector: torrent
 
   fields:
     category:
@@ -155,25 +138,27 @@ search:
     title:
       selector: a[href^="torrentdetails.php?torrentid="]
       filters:
-        - name: replace
-          args: ["[FFL] ", ""] # remove freeleech flag from title
-    download:
-      selector: a[href^="torrentdetails.php?torrentid="]
-      attribute: href
-      filters:
-        - name: append
-          args: "&do=download"
+        - name: re_replace
+          args: ["^\\[F?FL\\]\\s*", ""]
     details:
       selector: a[href^="torrentdetails.php?torrentid="]
       attribute: href
+      filters:
+        - name: prepend
+          args: "/"
+    download:
+      text: "{{ .Result.details }}"
+      filters:
+        - name: append
+          args: "&do=download"
     size:
-      selector: .TorrentList3, .Torrent-List-Size
+      selector: li.Torrent-List-Size, li.TorrentList3
     seeders:
-      selector: .TorrentList6, .Torrent-List-Seeds
+      selector: li.Torrent-List-Seeds, li.TorrentList6
     leechers:
-      selector: .TorrentList7, .Torrent-List-Peers
+      selector: li.Torrent-List-Peers, li.TorrentList7
     date:
-      selector: .TorrentList8, .Torrent-List-Date
+      selector: li.Torrent-List-Date, li.TorrentList8
       filters:
         - name: append
           args: " +02:00" # EET
@@ -181,8 +166,9 @@ search:
           args: "HH:mm dd-MMM-yyyy zzz"
     downloadvolumefactor:
       case:
-        "a:contains(\"[FFL]\")": 0
+        "torrentdata:contains(\"[FL]\")": 0
+        "torrentdata:contains(\"[FFL]\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
-# Morbid Suite vB4
+# Torrent Search v1.31 (SCS)

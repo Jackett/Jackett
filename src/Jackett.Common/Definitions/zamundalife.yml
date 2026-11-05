@@ -1,0 +1,113 @@
+---
+id: zamundalife
+replaces:
+  - zamundarip
+name: Zamunda LIFE
+description: "Zamunda LIFE is a BULGARIAN Public Torrent Archive for MOVIES / TV / GENERAL"
+language: bg-BG
+type: public
+encoding: UTF-8
+links:
+  - https://zamunda.life/
+legacylinks:
+  - https://zamunda.rip/
+
+caps:
+  categories:
+    "Игри": Console
+    "Игри/конзоли": Console
+    "Игри/Xbox": Console/XBox
+    "Филми": Movies
+    "Филми/DVD-R": Movies/DVD
+    "Филми/HD": Movies/HD
+    "Филми/SD": Movies/SD
+    "Филми/Русия": Movies
+    "Филми/БГ": Movies
+    "Филми/Документални": Movies/Other
+    "Blu-ray": Movies/BluRay
+    "Филми/3D": Movies/3D
+    "Музика": Audio
+    "Музика/Lossless": Audio/Lossless
+    "Музика/DVD-R": Audio/Video
+    "Клипове": Audio/Video
+    "Клипове/Концерти": Audio/Video
+    "Музика/DTS": Audio
+    "Музика/Hi-Res/Vinyl": Audio
+    "Програми": PC
+    "Игри/PC ISO": PC/Games
+    "Игри/PC Rip": PC/Games
+    "Игри/Linux": PC/Games
+    "Игри/Mac": PC/Mac
+    "Програми/PC ISO": PC/ISO
+    "Програми/Mac": PC/ISO
+    "Програми/други": PC
+    "Mobile/GSM": PC/Mobile-Other
+    "Андроид/Игри": PC/Mobile-Android
+    "Андроид/Приложения": PC/Mobile-Android
+    "Сериали": TV
+    "Сериали/HD": TV/HD
+    "Сериали/Русия": TV
+    "Спорт": TV/Sport
+    "Спорт/HD": TV/Sport
+    "Спорт/TV": TV/Sport
+    "Анимации": TV/Anime
+    "Анимации/Аниме": TV/Anime
+    "XXX": XXX
+    "Хентай": XXX/Other
+    "Книги": Books
+    "Книги/Комикси": Books/Comics
+    "Други": Other
+    "Видео/HD": Other
+    "Склад": Other
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings: []
+
+search:
+  paths:
+    # https://zamunda.life/api/torrents?q=&limit=50
+    - path: api/torrents
+      response:
+        type: json
+
+  inputs:
+    q: "{{ .Keywords }}"
+    limit: 50
+
+  keywordsfilters:
+    - name: replace
+      args: [".", " "]
+
+  rows:
+    selector: $
+
+  fields:
+    category:
+      selector: category
+    title:
+      selector: title
+    details:
+      text: "{{ .Config.sitelink }}"
+    magnet:
+      selector: link
+    date:
+      text: now
+    size:
+      selector: size
+    seeders:
+      text: 1
+    leechers:
+      text: 1
+    downloadvolumefactor:
+      text: 0
+    uploadvolumefactor:
+      text: 1
+    description:
+      selector: description
+# json engine n/a

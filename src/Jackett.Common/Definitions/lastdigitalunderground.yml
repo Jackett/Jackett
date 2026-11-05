@@ -19,9 +19,16 @@ caps:
     - {id: 18, cat: Movies/Other, desc: "Films: Silent"}
     - {id: 24, cat: Movies/Other, desc: "Films: Holiday"}
     - {id: 19, cat: Movies/Other, desc: "Films: Shorts"}
-    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 17, cat: TV/Documentary, desc: "Films: Documentary"}
+    - {id: 42, cat: Movies/Other, desc: "Films: Shorts [TMDB UnListed]"}
     - {id: 12, cat: Movies/Other, desc: "Films: FanEdits/Restorations"}
+    - {id: 57, cat: Movies/Foreign, desc: "Films: Desi [No ENG subs]"}
+    - {id: 58, cat: Movies/Foreign, desc: "Films: GER [No ENG subs]"}
+    - {id: 59, cat: Movies/Foreign, desc: "Films: FRE [No ENG subs]"}
+    - {id: 63, cat: Movies/Foreign, desc: "Films: POL [No ENG subs]"}
+    - {id: 64, cat: Movies/Foreign, desc: "Films: ITA [No ENG subs]"}
+    - {id: 66, cat: Movies/Foreign, desc: "Films: ARA [No ENG subs]"}
+    - {id: 82, cat: Movies/Foreign, desc: "Films: POR [No ENG subs]"}
     - {id: 27, cat: Movies/Foreign, desc: "Films SP1: Dubs/Cams/Vid Issues"}
     - {id: 22, cat: Movies/Foreign, desc: "Films SP2: No English"}
     - {id: 28, cat: Movies/Other, desc: "Films SP3: Other"}
@@ -37,29 +44,48 @@ caps:
     - {id: 46, cat: Other, desc: "Collections [Various Media]"}
     - {id: 20, cat: TV/Other, desc: "Culture: Stand-up"}
     - {id: 7, cat: Books/EBook, desc: "Culture: Ebooks"}
+    - {id: 65, cat: Books/EBook, desc: "Culture: Islamic Studies"}
     - {id: 3, cat: Audio, desc: "Culture: Music"}
     - {id: 16, cat: Audio/Video, desc: "Culture: Music Videos"}
     - {id: 34, cat: Audio/Audiobook, desc: "Culture: Audio Books"}
     - {id: 35, cat: TV/Sport, desc: "Culture: Sports"}
     - {id: 37, cat: TV/Other, desc: "Culture: Firearms and Freedom"}
-    - {id: 36, cat: TV/Other, desc: "Culture: Roms"}
-    - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
-    - {id: 45, cat: XXX, desc: "Mature: NSFW No ENG Subs"}
-    - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
-    - {id: 52, cat: XXX, desc: "Mature: NSFW LGBTQ [UnListed]"}
-    - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW MegaPacks"}
-    - {id: 10, cat: XXX, desc: "Mature: Hentai"}
-    - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
-    - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [Listed]"}
-    - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
-    - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
     - {id: 47, cat: PC/0day, desc: "Software: PC"}
     - {id: 48, cat: PC/Mac, desc: "Software: Mac"}
     - {id: 49, cat: PC, desc: "Software: Linux/Unix"}
-    - {id: 50, cat: Console, desc: "Software: Console/ROMS"}
-    - {id: 51, cat: XXX/Other, desc: "Software: Adult Games Mature"}
-    - {id: 43, cat: Other, desc: "Internal Testing"}
+    - {id: 83, cat: PC/Games, desc: "Software: Games"}
+    - {id: 36, cat: Console, desc: "Software: Console/ROMS"}
+    - {id: 73, cat: Other, desc: "AI: MODELS [MIXED]"}
+    - {id: 74, cat: Other, desc: "3D Prints and CAD"}
     - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
+    - {id: 43, cat: Other, desc: "Internal Testing"}
+    - {id: 30, cat: XXX, desc: "Mature: NSFW [UnListed]"}
+    - {id: 6, cat: XXX, desc: "Mature: NSFW [TMDB Listed]"}
+    - {id: 45, cat: XXX, desc: "Mature: NSFW [No ENG Subs]"}
+    - {id: 70, cat: XXX, desc: "Mature: Lesbian"}
+    - {id: 52, cat: XXX, desc: "Mature: Tranny"}
+    - {id: 72, cat: XXX, desc: "Mature: Gay"}
+    - {id: 15, cat: XXX/Pack, desc: "Mature: NSFW (MegaPacks)"}
+    - {id: 71, cat: XXX, desc: "Mature: BDSM/Kink"}
+    - {id: 10, cat: XXX, desc: "Mature: Hentai/Animated [Unlist]"}
+    - {id: 62, cat: XXX, desc: "Mature: NSFW Fansite"}
+    - {id: 81, cat: XXX, desc: "Mature:  AI/KI"}
+    - {id: 61, cat: XXX, desc: "Mature: NSFW Parody"}
+    - {id: 77, cat: XXX, desc: "Mature: Solo"}
+    - {id: 79, cat: XXX, desc: "Mature: Preggers"}
+    - {id: 80, cat: XXX, desc: "Mature: VR"}
+    - {id: 75, cat: XXX, desc: "Mature: Pics"}
+    - {id: 60, cat: XXX, desc: "Mature: PMV"}
+    - {id: 76, cat: XXX, desc: "Mature: BBW"}
+    - {id: 67, cat: XXX, desc: "Mature: Scheiße"}
+    - {id: 68, cat: XXX, desc: "Mature: Golden Showers"}
+    - {id: 69, cat: XXX, desc: "Mature: Rainbow Showers"}
+    - {id: 14, cat: XXX/Other, desc: "Mature: Creators Corner"}
+    - {id: 44, cat: XXX/Other, desc: "Mature: Audio"}
+    - {id: 53, cat: XXX/Other, desc: "Mature: Ebooks"}
+    - {id: 51, cat: XXX/Other, desc: "Mature: Software & Games"}
+    - {id: 39, cat: XXX/Other, desc: "Mature: NSFL [TMDB Listed]"}
+    - {id: 11, cat: XXX/Other, desc: "Mature: NSFL [Unlisted]"}
 
   modes:
     search: [q]
@@ -212,13 +238,28 @@ search:
         False: "{{ .False }}"
         True: "{{ .True }}"
     downloadvolumefactor_freeleech:
-      # api returns 0%, 25%, 50%, 75%, 100%
       selector: freeleech
       case:
         0%: 1 # not free
+        5%: 0.95
+        10%: 0.9
+        15%: 0.85
+        20%: 0.8
         25%: 0.75
+        30%: 0.7
+        35%: 0.65
+        40%: 0.6
+        45%: 0.55
         50%: 0.5
+        55%: 0.45
+        60%: 0.4
+        65%: 0.35
+        70%: 0.3
         75%: 0.25
+        80%: 0.2
+        85%: 0.15
+        90%: 0.1
+        95%: 0.05
         100%: 0 # freeleech
         "*": 0 # catch errors
     downloadvolumefactor:
@@ -237,4 +278,4 @@ search:
     minimumseedtime:
       # 7 days (as seconds = 7 x 24 x 60 x 60)
       text: 604800
-# json UNIT3D 9.2.0
+# json UNIT3D 9.2.0 (custom)

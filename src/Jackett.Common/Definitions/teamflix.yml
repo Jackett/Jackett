@@ -92,7 +92,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "Inactivity of an account for a period of 60 consecutive days will automatically deactivate your account."
+    default: "Inactivity of an account for a period of 30 consecutive days will automatically deactivate your account."
 
 login:
   path: api/torrents

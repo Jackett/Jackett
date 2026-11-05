@@ -7,6 +7,7 @@ type: private
 encoding: UTF-8
 # status: http://about.empornium.ph/
 links:
+  - https://emparadise.rs/
   - https://www.empornium.sx/ # site forces www.
 legacylinks:
   - https://www.empornium.me/

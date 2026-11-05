@@ -7,13 +7,9 @@ type: public
 encoding: UTF-8
 links:
   - https://thepiratebay.org/
-  - https://thepiratebay.unblockninja.com/
   - https://thepiratebay.ninjaproxy1.com/
   - https://tpb.proxyninja.org/
-  - https://thepiratebay.proxyninja.net/
   - https://thepiratebay.torrentbay.st/
-  - https://tpb.skynetcloud.site/
-  - https://piratehaven.xyz/
   - https://mirrorbay.top/
   - https://thepiratebay0.org/
   - https://thepiratebay10.xyz/
@@ -25,13 +21,8 @@ links:
   - https://piratebay.live/
   - https://piratebay.party/
   - https://thepiratebay.party/
-  - https://thepiratebaye.org/
   - https://thepiratebay.cloud/
-  - https://tpb-proxy.xyz/
   - https://tpb.re/
-  - https://tpirbay.site/
-  - https://tpirbay.top/
-  - https://tpirbay.xyz/
 legacylinks:
   - https://pirate-proxy.page/
   - https://5mins.shop/
@@ -66,6 +57,15 @@ legacylinks:
   - https://piratebay.army/
   - https://tpb-visit.me/
   - https://pirate-proxy.ong/
+  - https://thepiratebay.proxyninja.net/
+  - https://thepiratebay.unblockninja.com/
+  - https://tpb-proxy.xyz/
+  - https://thepiratebaye.org/
+  - https://tpb.skynetcloud.site/
+  - https://tpirbay.site/
+  - https://tpirbay.xyz/
+  - https://tpirbay.top/
+  - https://piratehaven.xyz/
 
 caps:
   categorymappings:
@@ -142,6 +142,22 @@ settings:
     label: API URL
     type: text
     default: apibay.org
+  - name: top100
+    type: select
+    label: Top100
+    default: recent
+    options:
+      recent: All
+      100: Audio
+      200: Movies/TV
+      300: Apps
+      400: Games
+      500: XXX
+      600: Books
+  - name: info_top100
+    type: info
+    label: About the top100 selection
+    default: "TPB indexer uses <b>top100_recent</b> for its <i>TEST</i> and <i>keyword-less</i> searches. However TPB will often only include Movies and TV in its top100_recent list which makes setting up Lidarr for Audio or other similar *Arr apps problematic. By changing the top100 selector you will make the indexer use a more focused top100 for the category group your *Arr app uses."
   - name: uploader
     type: text
     label: Filter by Uploader
@@ -152,7 +168,7 @@ settings:
 
 search:
   paths:
-    - path: "https://{{ .Config.apiurl }}/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_recent.json{{ end }}"
+    - path: "https://{{ .Config.apiurl }}/{{ if .Keywords }}q.php?q={{ .Keywords }}&cat={{ join .Categories \",\" }}{{ else }}precompiled/data_top100_{{ .Config.top100 }}.json{{ end }}"
       response:
         type: json
 

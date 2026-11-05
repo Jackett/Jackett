@@ -18,6 +18,7 @@ caps:
     - {id: 4, cat: TV/Foreign, desc: "Foreign TV"}
     - {id: 5, cat: Movies/Other, desc: "Opera & Musical"}
     - {id: 6, cat: Movies/Foreign, desc: "Asian Film"}
+    - {id: 8, cat: PC, desc: "Ripping Apps"}
 
   modes:
     search: [q]

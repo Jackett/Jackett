@@ -101,15 +101,11 @@ search:
     # does not support imdbid search
 
   rows:
-    selector: td > table > tbody > tr:has(a[href^="download.php/"])
+    selector: div > div > table > tbody > tr:has(a[href^="download.php/"])
 
   fields:
-    category:
-      selector: a[href^="browse.php?cat="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
+    categorydesc:
+      selector: span.at-cat
     title:
       selector: a[href^="details.php?id="]
       filters:
@@ -126,34 +122,36 @@ search:
       attribute: onmouseover
       filters:
         - name: regexp
-          args: "src=(.+?) width"
+          args: "src=\\\\\"(.+?)\\\\\" width"
     files:
-      selector: td:nth-last-child(8)
-    date:
-      selector: td:nth-last-child(6)
+      selector: span.at-t-meta
       filters:
+        - name: regexp
+          args: "· (\\d+) fișiere"
+    date:
+      selector: span.at-t-meta
+      # 07 Aug 2026
+      filters:
+        - name: regexp
+          args: "· (.+?) · de"
         - name: append
           args: " +00:00" # auto adjusted by site account profile
         - name: dateparse
-          args: "dd-MM-yyyyHH:mm:ss zzz"
+          args: "dd MMM yyyy zzz"
     size:
-      selector: td:nth-last-child(5)
-    grabs:
       selector: td:nth-last-child(4)
+    grabs:
+      selector: td:nth-last-child(1)
     seeders:
       selector: td:nth-last-child(3)
     leechers:
       selector: td:nth-last-child(2)
     downloadvolumefactor:
       case:
-        img[alt="Free"]: 0
+        span.at-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
-    genre:
-      selector: a[href^="download.php/"]
-    description:
-      text: "{{ .Result.genre }}"
     minimumratio:
       text: 1.0
     minimumseedtime:

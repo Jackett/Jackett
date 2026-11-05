@@ -17,9 +17,8 @@ caps:
     - {id: 12, cat: PC/0day, desc: "Apps"}
     - {id: 13, cat: Books, desc: "Books"}
     - {id: 14, cat: TV/Sport, desc: "Sports"}
-    - {id: 15, cat: TV/Documentary, desc: "Documentaries"}
-    - {id: 16, cat: TV, desc: "Shows"}
-    - {id: 17, cat: TV/Anime, desc: "Anime"}
+    - {id: 20, cat: Movies/Foreign, desc: "Movies (No Greek Subs)"}
+    - {id: 21, cat: TV/Foreign, desc: "Series (No Greek Subs)"}
 
   modes:
     search: [q]

@@ -55,12 +55,16 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: useragent
+    type: text
+    label: User-Agent
+  - name: info_useragent
+    type: info_useragent
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
@@ -78,19 +82,10 @@ settings:
     default: "Electro-Torrent has a limit on downloads. If downloads <b>fail</b> then you have exceeded your limit. Try again after a few hours."
 
 login:
-  path: logowanie
-  method: form
-  form: form[action="takelogin.php"]
-  captcha:
-    type: image
-    selector: img[src^="/img.php?size=3"]
-    input: vImageCodP
+  # using cookie method because login page has embedded Cloudflare turnstile
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    returnto: ""
-  error:
-    - selector: div#center-side:contains("Logowanie nie")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: /
     selector: a[href$="/logout.php"]
@@ -106,6 +101,9 @@ search:
     cat: 0
     typ: torrent
     search: "{{ .Keywords }}"
+
+  headers:
+    User-Agent: ["{{ .Config.useragent }}"]
 
   rows:
     selector: table.test5 > tbody > tr > td > div[id]:has(a[href*="/download/"])

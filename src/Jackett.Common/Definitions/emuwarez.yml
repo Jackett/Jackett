@@ -6,9 +6,10 @@ language: es-ES
 type: private
 encoding: UTF-8
 links:
-  - https://emuwarez.com/
+  - https://emu-warez.com/
 legacylinks:
   - https://emuwarez.it/
+  - https://emuwarez.com/
 
 caps:
   categorymappings:

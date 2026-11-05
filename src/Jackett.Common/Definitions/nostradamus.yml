@@ -1,7 +1,7 @@
 ---
 id: nostradamus
 name: Nostradamus
-description: "Nostradamus is a FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "Nostradamus is a ratioless FRENCH Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: fr-FR
 type: private
 encoding: UTF-8
@@ -17,14 +17,16 @@ caps:
     - {id: 2030, cat: TV/Documentary, desc: "Films/Documentaire"}
     - {id: 2040, cat: Audio/Video, desc: "Films/Spectacle"}
     - {id: 2060, cat: Audio/Video, desc: "Films/Concert"}
+    - {id: 2510, cat: Movies/Other, desc: "Films/Court-métrage"}
+    - {id: 2520, cat: Movies/Other, desc: "Films/Théâtre"}
     - {id: 5000, cat: TV, desc: "Séries TV"}
     - {id: 5040, cat: TV, desc: "Séries TV/Série TV"}
     - {id: 5070, cat: TV/Anime, desc: "Séries TV/Animation Série"}
     - {id: 5080, cat: TV, desc: "Séries TV/Emission TV"}
     - {id: 5090, cat: Audio/Video, desc: "Vidéo"}
-    - {id: 5060, cat: TV/Sport, desc: "Vidéo/Sport"}
     - {id: 5091, cat: Audio/Video, desc: "Vidéo/Vidéo-clips"}
     - {id: 5092, cat: Audio/Video, desc: "Vidéo/Autre"}
+    - {id: 5060, cat: TV/Sport, desc: "Vidéo/Sport"}
     - {id: 7000, cat: Books, desc: "eBook"}
     - {id: 7010, cat: Audio/Audiobook, desc: "eBook/Audio"}
     - {id: 7030, cat: Books/Comics, desc: "eBook/BDs"}
@@ -47,6 +49,7 @@ caps:
     - {id: 1080, cat: Console/PS4, desc: "Jeu vidéo/Sony"}
     - {id: 1061, cat: Console/Other, desc: "Jeu vidéo/Tablette"}
     - {id: 1090, cat: PC/Games, desc: "Jeu vidéo/Windows"}
+    - {id: 8000, cat: Other, desc: "eBook/Littérature & Audio/Autre & Séries TV/Documentaire"}
 
   modes:
     search: [q]
@@ -170,14 +173,9 @@ search:
       selector: "[name=grabs]"
       attribute: value
     downloadvolumefactor:
-      selector: "[name=downloadvolumefactor]"
-      attribute: value
+      text: 0
     uploadvolumefactor:
-      selector: "[name=uploadvolumefactor]"
-      attribute: value
-# global MR is 0.5 but torrents must be seeded for 3 days regardless of ratio
-#    minimumratio:
-#      text: 0.5
+      text: 1
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200

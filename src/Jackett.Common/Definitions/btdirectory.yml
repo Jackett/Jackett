@@ -9,15 +9,16 @@ encoding: UTF-8
 links:
   - https://btmulu.live/
   - https://www.btmulu.cyou/
-  - https://www.btmulu.quest/
   - https://www.btmulu.cfd/
   - https://www.btmulu.help/
+  - https://www.btmulu.beauty/
 legacylinks:
   - https://www.btmulu.asia/
   - https://www.btmulu.digital/
   - https://www.btmulu.pw/
   - https://www.btmulu.one/
   - https://btmulu.work/
+  - https://www.btmulu.quest/
 
 caps:
   categorymappings:
@@ -38,14 +39,14 @@ settings:
 
 search:
   paths:
-    # https://www.btmulu.digital/search-create.html
-    # https://btmulu.work/search.html?name=the+boys+s04e08
-    - path: "{{ if .Keywords }}search.html{{ else }}search-create.html{{ end }}"
+    # https://www.btmulu.beauty/en/hash-new.html
+    # https://btmulu.beauty/en/search.html?name=the+boys+s04e08
+    - path: "en/{{ if .Keywords }}search.html{{ else }}hash-new.html{{ end }}"
   inputs:
     name: "{{ re_replace .Keywords \"[\\s]+\" \"+\" }}"
 
   rows:
-    selector: article.item:has(a[href^="/hash/"])
+    selector: article.item:has(a[href^="/en/hash/"])
     filters:
       - name: andmatch
 
@@ -56,10 +57,10 @@ search:
       selector: h4
       remove: span
     details:
-      selector: a[href^="/hash/"]
+      selector: a[href^="/en/hash/"]
       attribute: href
     infohash:
-      selector: a[href^="/hash/"]
+      selector: a[href^="/en/hash/"]
       attribute: href
       filters:
         - name: regexp
@@ -78,7 +79,7 @@ search:
       selector: p
       filters:
         - name: regexp
-          args: "Size：(\\d+\\.?\\d+ [K|M|G]B)"
+          args: "Size：(\\d+\\.?\\d* [K|M|G]B)"
     seeders:
       text: 1
     leechers:

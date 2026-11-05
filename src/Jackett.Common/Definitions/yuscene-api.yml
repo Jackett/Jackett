@@ -62,9 +62,7 @@ settings:
   - name: info_activity
     type: info
     label: Account Inactivity
-    default: "You must log in once every 30 days or seed at least 1 torrent to not get disabled."
-  - name: info_flaresolverr
-    type: info_flaresolverr
+    default: "You must log in once every 90 days or seed at least 1 torrent to not get disabled. Disabled accounts become eligible for pruning 275 days after being disabled."
 
 login:
   path: api/torrents
@@ -198,4 +196,4 @@ search:
     minimumseedtime:
       # 5 days (as seconds = 5 x 24 x 60 x 60)
       text: 432000
-# json UNIT3D 9.1.7
+# json UNIT3D 9.2.0

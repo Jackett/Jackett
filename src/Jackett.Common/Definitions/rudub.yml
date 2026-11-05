@@ -10,10 +10,8 @@ encoding: windows-1251
 followredirect: true
 
 links:
-  - https://r2.rudub.world/
+  - https://r4.rudub.world/
 legacylinks:
-  - http://dec12.rudub.bet/
-  - https://dec12.rudub.bet/
   - http://dec13.rudub.bet/
   - https://dec13.rudub.bet/
   - http://dec14.rudub.bet/
@@ -42,6 +40,7 @@ legacylinks:
   - https://dec25.rudub.bet/
   - http://dec26.rudub.bet/
   - https://dec26.rudub.bet/
+  - https://r2.rudub.world/
 
 caps:
   categorymappings:

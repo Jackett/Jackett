@@ -15,53 +15,67 @@ legacylinks:
 caps:
   categorymappings:
     - {id: Adult, cat: XXX, desc: Adult}
+    - {id: AdultPornAnimationHentai, cat: XXX, desc: "Adult Porn Animation/Hentai"}
+    - {id: AdultPornGames, cat: XXX, desc: "Adult Porn Games"}
     - {id: AdultPornHDVideo, cat: XXX, desc: "Adult Porn HD Video"}
     - {id: AdultPornPictures, cat: XXX, desc: "Adult Porn Pictures"}
     - {id: AdultPornVideo, cat: XXX, desc: "Adult Porn Video"}
     - {id: Anime, cat: TV/Anime, desc: Anime}
-    - {id: AnimeEnglishtranslated, cat: TV/Anime, desc: "Anime English translated"}
     - {id: AnimeAnimeOther, cat: TV/Anime, desc: "Anime Other"}
+    - {id: AnimeEnglishtranslated, cat: TV/Anime, desc: "Anime English translated"}
+    - {id: AnimeHentai, cat: XXX, desc: "Anime Hentai"}
     - {id: Applications, cat: PC/0day, desc: Applications}
     - {id: ApplicationsAndroid, cat: PC/Mobile-Android, desc: "Applications Android"}
     - {id: ApplicationsWindows, cat: PC/0day, desc: "Applications Windows"}
-    - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
+    - {id: AudioBooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: AudioLossless, cat: Audio/Lossless, desc: "Audio Lossless"}
     - {id: AudioMusic, cat: Audio/MP3, desc: "Audio Music"}
     - {id: BooksAcademic, cat: Books, desc: "Books Academic"}
+    - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Books Audiobooks"}
     - {id: BooksComics, cat: Books/Comics, desc: "Books Comics"}
     - {id: BooksEbooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: BooksEducational, cat: Books, desc: "Books Educational"}
-    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: BooksFiction, cat: Books, desc: "Books Fiction"}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: BooksNonfiction, cat: Books, desc: "Books Nonfiction"}
     - {id: BooksTextbooks, cat: Books, desc: "Books Textbooks"}
     - {id: Ebooks, cat: Books/EBook, desc: "Books Ebooks"}
     - {id: Games, cat: Console, desc: Games}
+    - {id: GamesPC, cat: PC/Games, desc: "Games PC"}
     - {id: GamesWindows, cat: PC/Games, desc: "Games Windows"}
     - {id: Movies, cat: Movies, desc: Movies}
     - {id: MoviesAction, cat: Movies, desc: Movies Action}
+    - {id: MoviesBollywood, cat: Movies, desc: "Movies Bollywood"}
+    - {id: MoviesComedy, cat: Movies, desc: "Movies Comedy"}
     - {id: MoviesConcerts, cat: Movies, desc: "Movies Concerts"}
     - {id: MoviesCrime, cat: Movies, desc: "Movies Crime"}
     - {id: MoviesDocumentary, cat: TV/Documentary, desc: "Movies Documentary"}
     - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed Movies"}
     - {id: MoviesHighresMovies, cat: Movies, desc: "Movies Highres Movies"}
+    - {id: MoviesHorror, cat: Movies, desc: "Movies Horror"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Musicvideos"}
     - {id: MoviesThriller, cat: Movies, desc: "Movies Thriller"}
     - {id: Music, cat: Audio, desc: Music}
-    - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
-    - {id: MusicMp, cat: Audio/MP3, desc: "Music Mp3"}
+    - {id: MusicBollywood, cat: Audio, desc: "Music Bollywood"}
+    - {id: MusicCompilationVariousArtistsVA, cat: Audio, desc: "Music Compilation / Various Artists (VA)"}
     - {id: MusicFLAC, cat: Audio/Lossless, desc: "Music FLAC"}
+    - {id: MusicHardrock, cat: Audio, desc: "Music Hardrock"}
+    - {id: MusicHipHop, cat: Audio, desc: "Music Hip Hop"}
     - {id: MusicLossless, cat: Audio/Lossless, desc: "Music Lossless"}
+    - {id: MusicMp, cat: Audio/MP3, desc: "Music Mp3"}
     - {id: MusicRB, cat: Audio, desc: "Music R&B"}
+    - {id: MusicRap, cat: Audio, desc: "Music Rap"}
     - {id: MusicTranceHouseDance, cat: Audio, desc: "Music Trance House Dance"}
     - {id: Other, cat: Other, desc: Other}
-    - {id: OtherEbooks, cat: Books/EBook, desc: "Other Ebooks"}
     - {id: OtherComics, cat: Other, desc: "Other Comics"}
+    - {id: OtherEbooks, cat: Books/EBook, desc: "Other Ebooks"}
     - {id: OtherTutorials, cat: Other, desc: "Other Tutorials"}
     - {id: OtherUnsorted, cat: Other, desc: "Other Unsorted"}
+    - {id: OtherXXX, cat: XXX, desc: "Other XXX"}
     - {id: PicturesPicturesOther, cat: Other/Misc, desc: "Pictures Other"}
     - {id: PicturesWallpapers, cat: Other/Misc, desc: "Pictures Wallpapers"}
+    - {id: Series, cat: TV, desc: "Series"}
     - {id: Software, cat: PC/0day, desc: "Software"}
     - {id: TV, cat: TV, desc: TV}
     - {id: TVBBC, cat: TV, desc: "TV BBC"}
@@ -73,9 +87,10 @@ caps:
     - {id: VideoMovies, cat: Movies, desc: "Video Movies"}
     - {id: VideoMusic, cat: Audio/Video, desc: "Video Music"}
     - {id: XXX, cat: XXX, desc: XXX}
-    - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
     - {id: XXXHDVideo, cat: XXX, desc: "XXX HD Video"}
+    - {id: XXXHentai, cat: XXX, desc: "XXX Hentai"}
     - {id: XXXPictures, cat: XXX, desc: "XXX Pictures"}
+    - {id: XXXVideo, cat: XXX, desc: "XXX Video"}
 
   modes:
     search: [q]

@@ -1,0 +1,15 @@
+# Text as number Schema
+
+```txt
+Cardigann#/definitions/RowsBlock/properties/text/oneOf/1
+```
+
+
+
+| Abstract            | Extensible | Status         | Identifiable            | Custom Properties | Additional Properties | Access Restrictions | Defined In                                                                            |
+| :------------------ | :--------- | :------------- | :---------------------- | :---------------- | :-------------------- | :------------------ | :------------------------------------------------------------------------------------ |
+| Can be instantiated | No         | Unknown status | Unknown identifiability | Forbidden         | Allowed               | none                | [schema.json\*](../src/Jackett.Common/Definitions/schema.json "open original schema") |
+
+## 1 Type
+
+`number` ([Text as number](schema-definitions-rowsblock-properties-text-oneof-text-as-number.md))

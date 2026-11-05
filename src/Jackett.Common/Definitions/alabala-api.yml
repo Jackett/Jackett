@@ -1,0 +1,141 @@
+---
+id: alabala-api
+replaces:
+  - alabala
+name: AlaBala (API)
+description: "AlaBala is a BULGARIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: bg-BG
+type: private
+encoding: UTF-8
+links:
+  - https://alabala.net/
+
+caps:
+  categorymappings:
+    - {id: 9, cat: TV/Anime, desc: "Anime"}
+    - {id: 26, cat: PC, desc: "Apps"}
+    - {id: 27, cat: TV/Documentary, desc: "Documentaries"}
+    - {id: 28, cat: Books, desc: "Ebooks"}
+    - {id: 2, cat: PC/Games, desc: "Games/PC ISO"}
+    - {id: 12, cat: Console/PS3, desc: "Games/PS"}
+    - {id: 24, cat: Movies, desc: "Movies BG Audio"}
+    - {id: 25, cat: Movies, desc: "Movies Boxset"}
+    - {id: 14, cat: Movies/UHD, desc: "Movies/4k"}
+    - {id: 10, cat: Movies/BluRay, desc: "Movies/Bluray"}
+    - {id: 11, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 15, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 16, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 23, cat: Audio/Lossless, desc: "Music HD"}
+    - {id: 4, cat: Audio/MP3, desc: "Music MP3"}
+    - {id: 17, cat: TV/UHD, desc: "TV 4k"}
+    - {id: 18, cat: TV/HD, desc: "TV HD"}
+    - {id: 19, cat: TV/SD, desc: "TV SD"}
+    - {id: 20, cat: TV/UHD, desc: "TVBoxset 4k"}
+    - {id: 21, cat: TV/HD, desc: "TVBoxset HD"}
+    - {id: 22, cat: TV/SD, desc: "TVBoxset SD"}
+    - {id: 6, cat: XXX, desc: "XXX"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+    movie-search: [q]
+    music-search: [q]
+    book-search: [q]
+
+settings:
+  - name: apikey
+    type: text
+    label: API Token
+  - name: info_apikey
+    type: info
+    label: About your API Key
+    default: "Generate a new API key from the <a href=\"https://alabala.net/apikey.php\" target=\"_blank\">AlaBala API Key</a> page."
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+      name: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: api.php
+  method: get
+  inputs:
+    action: user
+
+search:
+  paths:
+    - path: api.php
+      response:
+        type: json
+  inputs:
+    action: torrents
+    q: "{{ .Keywords }}"
+    cat: "{{ range .Categories }}{{.}},{{end}}"
+    sort: "{{ .Config.sort }}"
+    dir: "{{ .Config.type }}"
+    per_page: 100
+
+  headers:
+    Authorization: ["Bearer {{ .Config.apikey }}"]
+
+  rows:
+    selector: data
+
+  fields:
+    category:
+      selector: category.id
+    _bg:
+      selector: bg_audio
+      case:
+        False: "{{ .False }}"
+        True: "{{ .True }}"
+    title:
+      selector: name
+      filters:
+        - name: append
+          args: "{{ if .Result._bg }} (BG audio){{ else }}{{ end }}"
+    details:
+      selector: details_url
+    download:
+      selector: download_url
+    infohash:
+      selector: info_hash
+    poster:
+      selector: poster
+    date:
+      selector: added
+    files:
+      selector: files
+    size:
+      selector: size
+    seeders:
+      selector: seeders
+    leechers:
+      selector: leechers
+    grabs:
+      selector: times_completed
+    downloadvolumefactor:
+      selector: freeleech
+      case:
+        True: 0
+        False: 1
+    uploadvolumefactor:
+      text: 1
+    minimumseedtime:
+      # 3 days (as seconds = 3 x 24 x 60 x 60)
+      text: 259200
+    description:
+      selector: name_bg
+# json api

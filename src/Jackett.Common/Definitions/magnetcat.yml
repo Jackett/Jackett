@@ -5,32 +5,32 @@ description: "Magnet Cat is a Public Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: public
 encoding: UTF-8
+requestDelay: 2
 # current domain finder https://魔法猫咪.lol/ or https://哆啦a猫.com/
 links:
   - https://magnetcatcat.com/
   - https://clmclm.com/
-  - https://www.8800564.xyz/
-  - https://www.8800565.xyz/
-  - https://www.8800566.xyz/
-  - https://www.8800567.xyz/
+  - https://w91bn6ho.8800591.xyz/
+  - https://bc8s64gh.8800592.xyz/
+  - https://jg3ry47f.8800593.xyz/
+  - https://x1zle850.8800594.xyz/
 legacylinks:
-  - https://www.clm472.sbs/
-  - https://www.8800546.xyz/
-  - https://www.8800547.xyz/
-  - https://www.8800548.xyz/
-  - https://www.8800549.xyz/
-  - https://www.8800550.xyz/
-  - https://www.8800551.xyz/
-  - https://www.8800552.xyz/
-  - https://www.8800554.xyz/
-  - https://www.8800556.xyz/
-  - https://www.8800557.xyz/
-  - https://www.8800558.xyz/
-  - https://www.8800559.xyz/
-  - https://www.8800560.xyz/
-  - https://www.8800561.xyz/
-  - https://www.8800562.xyz/
-  - https://www.8800563.xyz/
+  - https://3sl5b0ng.8800591.xyz/
+  - https://cye6aq6m.8800592.xyz/
+  - https://ma0bp96w.8800593.xyz/
+  - https://xox9yrai.8800594.xyz/
+  - https://vwtwhc36.8800591.xyz/
+  - https://77ck7tqg.8800592.xyz/
+  - https://rhieawo0.8800593.xyz/
+  - https://oxf6o74c.8800594.xyz/
+  - https://72b0ds2z.8800591.xyz/
+  - https://s5za45r4.8800592.xyz/
+  - https://3i8apol7.8800593.xyz/
+  - https://5upzl5b4.8800594.xyz/
+  - https://ig21sl1k.8800591.xyz/
+  - https://oktwseic.8800592.xyz/
+  - https://kfqa4hej.8800593.xyz/
+  - https://ozjldl21.8800594.xyz/
 
 caps:
   categorymappings:
@@ -56,14 +56,14 @@ settings:
     label: Category
     default: 0
     options:
-      0: All categories
-      1: Movies and TV shows
-      2: Music
-      3: Images
-      4: Documents and books
-      5: Compressed files
-      6: Installer packages
-      7: Other
+      0: 全部(All categories)
+      1: 影视(Movies and TV shows)
+      2: 音乐(Music)
+      3: 图像(Images)
+      4: 文档书籍(Documents)
+      5: 压缩文件(Archives)
+      6: 安装包(Apps)
+      7: 其他(Other)
   - name: sort
     type: select
     label: Sort requested from site
@@ -80,34 +80,42 @@ search:
     - selector: :root:contains("Internal Server Error")
 
   rows:
-    selector: div.ssbox
+    selector: article.zsky-result-row
 
   fields:
     categorydesc:
-      selector: div.title > h3 > span
+      selector: a[href^="/hash/"] span
       filters:
-        - name: re_replace
-          args: ["([\\[\\]]+)", ""]
+        - name: replace
+          args: ["【", ""]
+        - name: replace
+          args: ["】", ""]
     title:
       selector: a[href^="/hash/"]
+      remove: span
     details:
       selector: a[href^="/hash/"]
       attribute: href
     infohash:
-      selector: a[href^="magnet:?xt="]
+      selector: a[href^="/hash/"]
       attribute: href
       filters:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: div.sbar > span:contains("Date added:") > b, div.sbar > span:contains("添加时间:") > b
+      selector: div.zsky-result-meta span:nth-child(1)
       filters:
+        - name: re_replace
+          args: ["添加时间：", ""]
         - name: append
           args: " +08:00" # CST
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
-      selector: div.sbar > span:contains("Size:") > b, div.sbar > span:contains("大小:") > b
+      selector: div.zsky-result-meta span:nth-child(2)
+      filters:
+        - name: re_replace
+          args: ["大小：", ""]
     seeders:
       text: 1
     leechers:

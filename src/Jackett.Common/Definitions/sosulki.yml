@@ -6,11 +6,13 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://sosulki.hlom.ru/
+  - https://sosulki.bosk.cc/
 legacylinks:
   - http://sosulki.net/
   - http://sosulki.com/ # site forces https
   - https://sosulki.com/
+  - https://sosulki.hlom.ru/
+
 caps:
   categorymappings:
     - {id: 12, cat: XXX, desc: "Порно категории"}

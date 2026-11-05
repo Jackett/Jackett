@@ -52,6 +52,9 @@ search:
     sortby: date
     resorder: desc
 
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
+
   rows:
     selector: div.mov
 

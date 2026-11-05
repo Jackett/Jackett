@@ -28,6 +28,8 @@ caps:
     - {id: 63, cat: Audio, desc: "Zene/Eng"}
     - {id: 64, cat: Books, desc: "Könyv"}
     - {id: 65, cat: PC/Mobile-Other, desc: "Mobil"}
+    - {id: 68, cat: Movies/BluRay, desc: "BD25-50/Hun"}
+    - {id: 69, cat: Movies/BluRay, desc: "BD25-50/Eng"}
     - {id: 66, cat: XXX/x264, desc: "XXX/Video"}
     - {id: 67, cat: XXX/ImageSet, desc: "XXX/Kép"}
 

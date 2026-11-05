@@ -118,30 +118,27 @@ search:
       filters:
         - name: querystring
           args: cat
-    title_default:
-      selector: a[href^="details.php?id="]
     title:
-      selector: a[title][href^="details.php?id="]
-      attribute: title
-      optional: true
-      default: "{{ .Result.title_default }}"
+      selector: a[href^="details.php?id="]
     details:
       selector: a[href^="details.php?id="]
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
+    poster:
+      selector: span.torrent-card-cover-source
+      attribute: data-cover
     imdbid:
-      # site currently only has a badge and rating, the id is not present. just in case a future update.
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
+      selector: span[data-imdbid]
+      attribute: data-imdbid
     doubanid:
       # site currently only has a badge and rating, the id is not present. just in case a future update.
       selector: a[href*="movie.douban.com/subject/"]
       attribute: href
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td.rowfollow:nth-child(4) > span[title]
+      selector: td.rowfollow:nth-child(5) > span[title]
       attribute: title
       optional: true
       filters:
@@ -151,7 +148,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td.rowfollow:nth-child(4):not(:has(span))
+      selector: td.rowfollow:nth-child(5):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -161,19 +158,19 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td.rowfollow:nth-child(5)
+      selector: td.rowfollow:nth-child(6)
       optional: true
       default: 512MB
     seeders:
-      selector: td.rowfollow:nth-child(6)
-      optional: true
-      default: 0
-    leechers:
       selector: td.rowfollow:nth-child(7)
       optional: true
       default: 0
-    grabs:
+    leechers:
       selector: td.rowfollow:nth-child(8)
+      optional: true
+      default: 0
+    grabs:
+      selector: td.rowfollow:nth-child(9)
       optional: true
       default: 0
     downloadvolumefactor:
@@ -204,4 +201,4 @@ search:
     minimumseedtime:
       # 1 day (as seconds = 24 x 60 x 60)
       text: 86400
-# NexusPHP v1.8.15 2024-12-23
+# NexusPHP v1.10.2 2026-04-11

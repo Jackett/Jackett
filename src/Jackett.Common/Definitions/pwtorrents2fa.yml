@@ -1,0 +1,149 @@
+---
+id: pwtorrents2fa
+name: PWTorrents2FA
+description: "PWTorrents (PWT) is a Private Torrent Tracker for PROFESSIONAL WRESTLING. This indexer uses cookie login for 2FA."
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://pwtorrents.net/
+legacylinks:
+  - http://pwtorrents.net/
+
+caps:
+  categorymappings:
+    - {id: 26, cat: TV/Sport, desc: "AEW Dark"}
+    - {id: 21, cat: TV/Sport, desc: "AEW Dynamite"}
+    - {id: 20, cat: TV/Sport, desc: "AEW PPV"}
+    - {id: 23, cat: TV/Sport, desc: "AEW Rampage"}
+    - {id: 28, cat: TV/Sport, desc: "AEW Collision"}
+    - {id: 1, cat: TV/Sport, desc: "Boxing"}
+    - {id: 2, cat: TV/Sport, desc: "Documentaries"}
+    - {id: 3, cat: TV/Sport, desc: "DVD"}
+    - {id: 4, cat: TV/Sport, desc: "ECW"}
+    - {id: 13, cat: TV/Sport, desc: "Impact PPV"}
+    - {id: 14, cat: TV/Sport, desc: "Impact Weekly"}
+    - {id: 6, cat: TV/Sport, desc: "Indy's"}
+    - {id: 7, cat: TV/Sport, desc: "Matches"}
+    - {id: 8, cat: TV/Sport, desc: "Misc."}
+    - {id: 9, cat: TV/Sport, desc: "MMA"}
+    - {id: 11, cat: TV/Sport, desc: "Puro"}
+    - {id: 10, cat: TV/Sport, desc: "PWT Packs"}
+    - {id: 12, cat: TV/Sport, desc: "Ring Of Honor"}
+    - {id: 15, cat: TV/Sport, desc: "WCW"}
+    - {id: 18, cat: TV/Sport, desc: "WWE Network"}
+    - {id: 16, cat: TV/Sport, desc: "WWE PPV"}
+    - {id: 24, cat: TV/Sport, desc: "WWE RAW"}
+    - {id: 25, cat: TV/Sport, desc: "WWE Smackdown"}
+    - {id: 17, cat: TV/Sport, desc: "WWE Weekly"}
+    - {id: 27, cat: TV/Sport, desc: "WWE NXT"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+  - name: seedbox
+    type: checkbox
+    label: "Use SeedBox Download Link"
+    default: false
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: 4
+    options:
+      4: created
+      7: seeders
+      5: size
+      1: title
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+
+login:
+  # using cookie method because login page can present second page for 2FA when enabled
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: my.php
+    selector: a[href="logout.php"]
+
+search:
+  paths:
+    # https://pwtorrents.net/browse.php?c18=1&c16=1&c17=1&incldead=0
+    - path: browse.php
+  inputs:
+    $raw: "{{ range .Categories }}c{{.}}=1&{{end}}"
+    # 0 active, 1 incldead, 2 onlydead, 3 freeleech
+    incldead: "{{ if .Config.freeleech }}3{{ else }}1{{ end }}"
+    search: "{{ .Keywords }}"
+    sort: "{{ .Config.sort }}"
+    type: "{{ .Config.type }}"
+
+  rows:
+    selector: table[border="1"][cellspacing="0"][cellpadding="5"] tr:has(a[href^="download.php?id="])
+
+  fields:
+    category:
+      selector: a[href^="browse.php?cat="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: cat
+    title:
+      selector: a[href^="details.php?id="]
+      optional: true
+      default: No Title
+    details:
+      selector: a[href^="details.php?id="]
+      attribute: href
+    download_1:
+      selector: a[href^="download.php?id="]
+      attribute: href
+    download_2:
+      selector: a[href^="seeddownload.php?id="]
+      attribute: href
+    download:
+      text: "{{ if .Config.seedbox }}{{ .Result.download_2 }}{{ else }}{{ .Result.download_1 }}{{ end }}"
+    date:
+      selector: td:nth-child(4)
+      filters:
+        - name: append
+          args: " +00:00" # GMT
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:ss zzz"
+    size:
+      selector: td:nth-child(5)
+    grabs:
+      selector: td:nth-child(6)
+    seeders:
+      selector: td:nth-child(9)
+    leechers:
+      selector: td:nth-child(10)
+    downloadvolumefactor:
+      case:
+        img[src="pic/freeleech.png"]: 0
+        "*": 1
+    uploadvolumefactor:
+      case:
+        img[src="gold.png"]: 2
+        img[src="silver.png"]: 1.5
+        img[src="bronze.png"]: 1.25
+        "*": 1
+    minimumratio:
+      text: 0.7
+# engine n/a

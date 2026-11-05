@@ -136,6 +136,7 @@ namespace Jackett.Common.Indexers.Definitions
             caps.Categories.AddCategoryMapping(7, TorznabCatType.TVSport, "Sports Tv");
             caps.Categories.AddCategoryMapping(44, TorznabCatType.TVSport, "Sports Fitness-Instructional");
             caps.Categories.AddCategoryMapping(58, TorznabCatType.TVSport, "Olympics");
+            caps.Categories.AddCategoryMapping(67, TorznabCatType.TVSport, "World Cup");
             caps.Categories.AddCategoryMapping(47, TorznabCatType.TVSD, "TV - 480p");
             caps.Categories.AddCategoryMapping(64, TorznabCatType.TVUHD, "TV - 4K");
             caps.Categories.AddCategoryMapping(8, TorznabCatType.TVHD, "TV - High Definition");
@@ -216,7 +217,7 @@ namespace Jackett.Common.Indexers.Definitions
                 var parser = new HtmlParser();
                 using var dom = parser.ParseDocument(results.ContentString);
 
-                var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"details.php?id=\"])");
+                var rows = dom.QuerySelectorAll("#sortabletable tr:has(a[href*=\"download.php?id=\"])");
                 foreach (var row in rows)
                 {
                     var release = new ReleaseInfo();

@@ -22,6 +22,8 @@ caps:
 settings:
   - name: info_category_8000
     type: info_category_8000
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   infohash:

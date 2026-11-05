@@ -97,9 +97,8 @@ search:
   keywordsfilters:
     - name: re_replace
       args: ["\\.", " "]
-    - name: re_replace # S2024 to 2024 and S2024E97 to 2024 97
-      args: ["\\b(?:S(\\d{2,4}))(?:E(\\d{2,4}))?\\b", "$1 $2"]
-    - name: trim
+    - name: re_replace
+      args: ["\\bS(\\d{2,4})\\b", "$1"]
 
   rows:
     selector: data

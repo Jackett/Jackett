@@ -34,7 +34,9 @@ caps:
     search: [q]
     tv-search: [q, season, ep]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 search:
   paths:

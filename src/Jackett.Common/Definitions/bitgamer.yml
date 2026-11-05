@@ -54,6 +54,7 @@ caps:
 
   modes:
     search: [q]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
   allowrawsearch: true
@@ -113,7 +114,7 @@ search:
     type: "{{ .Config.type }}"
 
   rows:
-    selector: .outer > form > table > tbody > tr:has(a[href^="download.php"])
+    selector: table[cellpadding="5"] > tbody > tr:has(a[href^="download.php"])
 
   fields:
     category:

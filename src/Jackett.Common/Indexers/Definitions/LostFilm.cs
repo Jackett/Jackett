@@ -153,7 +153,6 @@ namespace Jackett.Common.Indexers.Definitions
             base.LoadValuesFromJson(jsonConfig, useProtectionService);
 
             webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "34287FB53A58EC6AE590E7DD7E03C70C0263CADC"); // for *.tw  expired 01/Apr/21
-            webclient?.AddTrustedCertificate(new Uri(SiteLink).Host, "5198DB6D2792F18928BC7959FBC11592F5EEAED6"); // for *.uno  expired 22/Feb/25
         }
 
         public override async Task<ConfigurationData> GetConfigurationForSetup()

@@ -46,7 +46,7 @@ search:
       response:
         type: xml
   inputs:
-    t: "{{ .Query.Type }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
@@ -72,9 +72,15 @@ search:
     size:
       selector: size
     seeders:
-      text: 1
+      selector: "[name=seeders]"
+      attribute: value
+      optional: true
+      default: 1
     leechers:
-      text: 1
+      selector: "[name=leechers]"
+      attribute: value
+      optional: true
+      default: 1
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:

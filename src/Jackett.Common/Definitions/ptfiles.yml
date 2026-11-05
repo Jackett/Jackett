@@ -5,6 +5,8 @@ description: "PTFiles (PTF) is a Private Torrent Tracker for MOVIES / TV / GENER
 language: en-US
 type: private
 encoding: windows-1252
+certificates:
+  - 18e07892474429b99f7f9a20768792d31234433e # Expired 27th May 2026
 links:
   - https://ptfiles.net/
 

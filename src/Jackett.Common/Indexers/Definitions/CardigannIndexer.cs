@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -852,16 +853,41 @@ namespace Jackett.Common.Indexers.Definitions
 
         protected string GetRedirectDomainHint(string requestUrl, string redirectUrl)
         {
-            if (redirectUrl.IsNullOrWhiteSpace() || !requestUrl.StartsWith(SiteLink) || redirectUrl.StartsWith(SiteLink))
+            if (redirectUrl.IsNullOrWhiteSpace() || !requestUrl.StartsWith(SiteLink))
             {
                 return null;
             }
 
-            var uri = new Uri(redirectUrl);
-            return uri.Scheme + "://" + uri.Host + "/";
+            var redirectUri = new Uri(redirectUrl);
+            var siteUri = new Uri(SiteLink);
+
+            if (!string.Equals(redirectUri.Host, siteUri.Host, StringComparison.Ordinal))
+            {
+                return redirectUri.Scheme + "://" + redirectUri.Authority + "/";
+            }
+
+            return null;
         }
 
         protected string GetRedirectDomainHint(WebResult result) => GetRedirectDomainHint(result.Request.Url, result.RedirectingTo);
+
+        private async Task Relogin(WebResult response)
+        {
+            logger.Info("CardigannIndexer({0}): Relogin required", Id);
+
+            var loginResult = await DoLogin(response.Cookies);
+
+            if (!loginResult)
+            {
+                throw new Exception("Relogin failed");
+            }
+
+            await TestLogin();
+
+            // the new cookies may not be saved by UpdateCookieHeader if the next responses don't set cookies
+            if (IsConfigured)
+                SaveConfig();
+        }
 
         protected async Task<bool> TestLogin()
         {
@@ -1162,6 +1188,12 @@ namespace Jackett.Common.Indexers.Definitions
                         break;
                     case "toupper":
                         Data = Data.ToUpper();
+                        break;
+                    case "base64decode":
+                        Data = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(Data));
+                        break;
+                    case "base64encode":
+                        Data = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(Data));
                         break;
                     case "urldecode":
                         Data = WebUtilityHelpers.UrlDecode(Data, Encoding);
@@ -1478,6 +1510,8 @@ namespace Jackett.Common.Indexers.Definitions
             variables[".Query.Keywords"] = string.Join(" ", KeywordTokens);
             variables[".Keywords"] = applyFilters((string)variables[".Query.Keywords"], Search.Keywordsfilters, variables);
 
+            var searchUrls = new List<string>();
+
             // TODO: prepare queries first and then send them parallel
             var SearchPaths = Search.Paths;
             foreach (var SearchPath in SearchPaths)
@@ -1552,11 +1586,19 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                 }
 
-                if (method == RequestType.GET)
+                if (method == RequestType.GET && queryCollection.Count > 0)
                 {
-                    if (queryCollection.Count > 0)
-                        searchUrl += "?" + queryCollection.GetQueryString(Encoding);
+                    searchUrl += "?" + queryCollection.GetQueryString(Encoding);
                 }
+
+                if (method == RequestType.GET && searchUrls.Contains(searchUrl))
+                {
+                    logger.Debug("Skipping duplicated request for {0}: {1}", Definition.Name, searchUrl);
+
+                    continue;
+                }
+
+                searchUrls.Add(searchUrl);
                 var searchUrlUri = new Uri(searchUrl);
 
                 // send HTTP request
@@ -1578,16 +1620,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                     if (loginNeeded)
                     {
-                        logger.Info("CardigannIndexer({0}): Relogin required", Id);
-
-                        var loginResult = await DoLogin(response.Cookies);
-
-                        if (!loginResult)
-                        {
-                            throw new Exception("Relogin failed");
-                        }
-
-                        await TestLogin();
+                        await Relogin(response);
 
                         response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
 
@@ -1768,16 +1801,7 @@ namespace Jackett.Common.Indexers.Definitions
 
                             if (loginNeeded)
                             {
-                                logger.Info("CardigannIndexer({0}): Relogin required", Id);
-
-                                var loginResult = await DoLogin(response.Cookies);
-
-                                if (!loginResult)
-                                {
-                                    throw new Exception("Relogin failed");
-                                }
-
-                                await TestLogin();
+                                await Relogin(response);
 
                                 response = await RequestWithCookiesAsync(searchUrl, method: method, data: queryCollection, headers: headers);
 
@@ -1944,7 +1968,7 @@ namespace Jackett.Common.Indexers.Definitions
             return releases;
         }
 
-        protected async Task<WebResult> handleRequest(requestBlock request, Dictionary<string, object> variables = null, string referer = null)
+        protected async Task<WebResult> HandleRequestAsync(requestBlock request, Dictionary<string, object> variables = null, string referer = null, Dictionary<string, string> headers = null)
         {
             var requestLinkStr = resolvePath(applyGoTemplateText(request.Path, variables)).ToString();
 
@@ -1980,7 +2004,7 @@ namespace Jackett.Common.Indexers.Definitions
 
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() requestLinkStr= {requestLinkStr}");
 
-            var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs);
+            var response = await RequestWithCookiesAndRetryAsync(requestLinkStr, null, method, referer, pairs, headers);
 
             logger.Debug($"CardigannIndexer ({Id}): handleRequest() remote server returned {response.Status.ToString()}" + (response.IsRedirect ? " => " + response.RedirectingTo : ""));
 
@@ -2079,7 +2103,7 @@ namespace Jackett.Common.Indexers.Definitions
                         beforeBlock.Path = MatchSelector(response, beforeBlock.Pathselector, variables);
                     }
 
-                    response = await handleRequest(beforeBlock, variables, link.ToString());
+                    response = await HandleRequestAsync(beforeBlock, variables, link.ToString(), headers);
                 }
 
                 if (Download.Method == "post")

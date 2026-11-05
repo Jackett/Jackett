@@ -80,11 +80,12 @@ search:
     _format:
       selector: img[width="60"]
       attribute: title
+      optional: true
     title:
       selector: a[href^="details.php?id="]
       filters:
         - name: append
-          args: " {{ .Result._format }}"
+          args: "{{ if .Result._format }} {{ .Result._format }}{{ else }}{{ end }}"
     details:
       selector: a[href^="details.php?id="]
       attribute: href

@@ -82,7 +82,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: a[href="mybonus.php"]
+    selector: a[href="logout.php"]
 
 search:
   # https://www.trackerpmr.com/browse.php?cat[]=0&shw_incl_cats=0&incldead=0&search=the+fix&tag=#results
@@ -91,7 +91,7 @@ search:
   inputs:
     # 0 default, 1 active, 2 dead, 3 gold, 4 sticky, lots of others
     incldead: "{{ if .Config.freeleech }}3{{ else }}0{{ end }}"
-    search: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+    search: "{{ .Keywords }}"
     sort: "{{ .Config.sort }}"
     type: "{{ .Config.type }}"
 
@@ -102,19 +102,11 @@ search:
       args: ["(?i)\\bE0*(\\d+)\\b", "сери $1"]
     - name: re_replace # S01E02 to сезон 1 сери 2
       args: ["(?i)\\bS0*(\\d+)E0*(\\d+)\\b", "сезон $1 сери $2"]
-    - name: re_replace # replace special characters with "%" (wildcard)
-      args: ["[^a-zA-Z0-9]+", "%"]
+  headers:
+    Cookie: ["torrentviewblock=1"]
 
   rows:
-    selector: div.tr-torrent-card-compact:not(:has(div.tr-sticky-highlight))
-    dateheaders:
-      selector: a[href*="date="]
-      attribute: href
-      filters:
-        - name: querystring
-          args: date
-        - name: dateparse
-          args: "yyyy-MM-dd"
+    selector: article.tor-card
 
   fields:
     category:
@@ -124,8 +116,7 @@ search:
         - name: querystring
           args: cat
     title:
-      selector: a.tr-title-link-compact
-      attribute: title
+      selector: a.tor-card-t
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -185,32 +176,84 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.tr-title-link-compact
+      selector: a.tor-card-t
       attribute: href
     download:
       selector: a[href^="download.php?id="]
       attribute: href
       optional: true # for users that do not have DL access
     poster:
-      selector: img.tr-main-poster-compact
+      selector: img.tor-img
       attribute: src
+    date:
+      selector: a.tor-ago
+      # 11 минут назад (11 minutes ago)
+      # 1 час, 5 минут назад (1 hour, 5 minutes ago)
+      filters:
+        - name: replace
+          args: ["назад", "ago"]
+        - name: replace
+          args: ["секунда", "seconds"]
+        - name: replace
+          args: ["секунды", "seconds"]
+        - name: replace
+          args: ["секунд", "seconds"]
+        - name: replace
+          args: ["минуты", "minutes"]
+        - name: replace
+          args: ["минута", "minutes"]
+        - name: replace
+          args: ["минут", "minutes"]
+        - name: replace
+          args: ["часа", "hours"]
+        - name: replace
+          args: ["час", "hours"]
+        - name: replace
+          args: ["часов", "hours"]
+        - name: replace
+          args: ["дня", "days"]
+        - name: replace
+          args: ["день", "days"]
+        - name: replace
+          args: ["дней", "days"]
+        - name: replace
+          args: ["недели", "weeks"]
+        - name: replace
+          args: ["неделя", "weeks"]
+        - name: replace
+          args: ["недель", "weeks"]
+        - name: replace
+          args: ["месяца", "months"]
+        - name: replace
+          args: ["месяц", "months"]
+        - name: replace
+          args: ["месяцев", "months"]
+        - name: replace
+          args: ["года", "years"]
+        - name: replace
+          args: ["год", "years"]
+        - name: replace
+          args: ["лет", "years"]
+        - name: timeago
+    size_nodl:
+      selector: span.tor-dl
+      optional: true
     size:
-      selector: div.tr-stat-block-compact:nth-child(3)
+      selector: a.tor-dl
+      optional: true
+      default: "{{ .Result.size_nodl }}"
     seeders:
-      selector: div.tr-stat-block-compact:nth-child(4)
+      selector: span.up
     leechers:
-      selector: div.tr-stat-block-compact:nth-child(5)
-    grabs:
-      selector: div.tr-meta-info-compact span:has(i.fa-download)
+      selector: span.down
     downloadvolumefactor:
       case:
-        span.tr-badge-free: 0
+        span.tv-badge-free: 0
         "*": 1
     uploadvolumefactor:
       text: 1
     minimumratio:
       text: 1.0
     description:
-      selector: a.tr-tag-item-compact
-      attribute: title
-# engine n/a
+      selector: div.tor-tags
+# Tesla v.Core (8.7.18)

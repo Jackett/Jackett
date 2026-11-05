@@ -1,0 +1,132 @@
+---
+id: pornorip
+name: Pornorip
+description: "Pornorip is a Private Torrent Tracker for 3X DVD"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://www.pornorip.si/
+
+caps:
+  categorymappings:
+    - {id: 1, cat: XXX/DVD, desc: "DVD-Rip"}
+
+  modes:
+    search: [q]
+
+settings:
+  - name: cookie
+    type: text
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
+  - name: sort
+    type: select
+    label: Sort requested from site
+    default: added
+    options:
+      added: created
+      seeders: seeders
+      size: size
+  - name: type
+    type: select
+    label: Order requested from site
+    default: desc
+    options:
+      desc: desc
+      asc: asc
+  - name: info
+    type: info
+    label: Layout
+    default: "<ul><li>Only the <b>Modern</b> profile is supported.</li><li>Make sure to set the <b>Torrent Listing</b> option in your Preferences profile to <b>Modern</b></li><li>Using the <i>Classic</i> theme will prevent results</li></ul>"
+
+login:
+  # using cookie method because otherwise the search always forces a relogin that fails %-/
+  method: cookie
+  inputs:
+    cookie: "{{ .Config.cookie }}"
+  test:
+    path: ?p=home&pid=1
+    selector: a#logout
+
+search:
+  paths:
+    - path: /
+  inputs:
+    p: torrents
+    pid: 32
+    keywords: "{{ .Keywords }}"
+    # name, description, both, uploader
+    search_type: name
+    "sortOptions[sortBy]": "{{ .Config.sort }}"
+    "sortOptions[sortOrder]": "{{ .Config.type }}"
+  error:
+    - selector: div.error:not(:contains("There are no results found."))
+
+  rows:
+    selector: div.torrent-box[id^="torrent_"]
+
+  fields:
+    category:
+      text: 1
+    title:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+    details:
+      selector: a[href*="?p=torrents&pid=10&action=details&tid="]
+      attribute: href
+    download:
+      selector: a[href*="?p=torrents&pid=10&action=download&tid="]
+      attribute: href
+    magnet:
+      selector: a[href^="magnet:?xt="]
+      attribute: href
+      optional: true
+    poster:
+      selector: img[src*="data/torrents/torrent_images/s/"]
+      attribute: src
+    genre:
+      selector: span.torrentGenresCustom
+      filters:
+        - name: replace
+          args: ["Genre:", ""]
+    description:
+      text: "{{ .Result.genre }}"
+    size:
+      selector: a[rel="torrent_size"]
+    grabs:
+      selector: a[rel="times_completed"]
+    seeders:
+      selector: a[rel="torrent_seeders"]
+    leechers:
+      selector: a[rel="torrent_leechers"]
+    date_day:
+      selector: div.torrentOwner:contains("day")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: fuzzytime
+    date_year:
+      selector: div.torrentOwner:contains("-")
+      # auto adjusted by site account profile
+      optional: true
+      filters:
+        - name: regexp
+          args: "Uploaded (.+?) by"
+        - name: dateparse
+          args: "dd-MM-yyyy HH:mm"
+    date_unix:
+      selector: div.torrentOwner abbr
+      optional: true
+      attribute: data-time
+    date:
+      text: "{{ if or .Result.date_day .Result.date_year .Result.date_unix }}{{ or .Result.date_day .Result.date_year .Result.date_unix }}{{ else }}now{{ end }}"
+    downloadvolumefactor:
+      text: 1
+    uploadvolumefactor:
+      text: 1
+    minimumratio:
+      text: 0.5
+# TSUE 2.2

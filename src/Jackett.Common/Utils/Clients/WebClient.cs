@@ -282,13 +282,15 @@ namespace Jackett.Common.Utils.Clients
 
                 if (match.Success)
                 {
-                    return new Uri(response.RequestMessage.RequestUri, new Uri(match.Groups[2].Value, UriKind.RelativeOrAbsolute));
+                    return new Uri(response.RequestMessage.RequestUri, match.Groups[2].Value);
                 }
 
                 return null;
             }
 
-            return new Uri(response.RequestMessage.RequestUri, newUri);
+            // .NET 9 Uri(Uri, Uri) mangles an absolute uri with non-ASCII chars (Location: .../Linux-4×01.torrent)
+            // TODO: fixed in .NET 10, return new Uri(response.RequestMessage.RequestUri, newUri) after the upgrade
+            return newUri.IsAbsoluteUri ? newUri : new Uri(response.RequestMessage.RequestUri, newUri);
         }
     }
 }

@@ -41,6 +41,51 @@ namespace Jackett.Test.Common.Utils
         }
 
         [Test]
+        public void CookieHeaderToDictionaryDeleted()
+        {
+            // a later expired value removes the cookie
+            var cookieHeader = "sid=abc; cid=xyz; sid=" + CookieUtil.ExpiredCookieValue + "; flashes=test";
+            var expectedCookieDictionary = new Dictionary<string, string>
+            {
+                {"cid", "xyz"},
+                {"flashes", "test"}
+            };
+            CollectionAssert.AreEqual(expectedCookieDictionary, CookieUtil.CookieHeaderToDictionary(cookieHeader));
+        }
+
+        [Test]
+        public void SetCookieToCookiePair()
+        {
+            var expired = "sid=" + CookieUtil.ExpiredCookieValue + ";";
+            // PHP deletion
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=deleted; expires=Thu, 01-Jan-1970 00:00:01 GMT; Max-Age=0; path=/; secure; httponly"));
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; Max-Age=0"));
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; Expires=Wed, 21 Oct 2015 07:28:00 GMT"));
+            // empty value, it would be ignored by CookieHeaderToDictionary without the placeholder
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=; Max-Age=0"));
+            // Max-Age has precedence over Expires
+            Assert.AreEqual("sid=abc;", CookieUtil.SetCookieToCookiePair("sid=abc; Expires=Wed, 21 Oct 2015 07:28:00 GMT; Max-Age=3600"));
+            Assert.AreEqual("sid=abc;", CookieUtil.SetCookieToCookiePair("sid=abc; Max-Age=3600; Expires=Wed, 21 Oct 2015 07:28:00 GMT"));
+            // "deleted" is a regular value if the cookie is not expired
+            Assert.AreEqual("sid=deleted;", CookieUtil.SetCookieToCookiePair("sid=deleted; path=/"));
+            Assert.AreEqual("sid=abc;", CookieUtil.SetCookieToCookiePair("sid=abc; expires=Fri, 01-Jan-2100 00:00:00 GMT; path=/"));
+            Assert.AreEqual("sid=abc;", CookieUtil.SetCookieToCookiePair("sid=abc"));
+            // Expires formats not supported by DateTime.TryParse
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Thu Jan  1 00:00:01 1970"));
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Thu, 01 Jan 1970 00:00:00 UTC"));
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Thu, 01-Jan-1970 00:00:01 GMT+0000"));
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Thursday, 01-Jan-70 00:00:01 GMT"));
+            // wrong weekday
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Mon, 01 Jan 1970 00:00:01 GMT"));
+            // the last Expires wins
+            Assert.AreEqual(expired, CookieUtil.SetCookieToCookiePair("sid=abc; expires=Fri, 01-Jan-2100 00:00:00 GMT; expires=Thu, 01-Jan-1970 00:00:01 GMT"));
+            // Max-Age bigger than int
+            Assert.AreEqual("sid=abc;", CookieUtil.SetCookieToCookiePair("sid=abc; Max-Age=99999999999; expires=Thu, 01-Jan-1970 00:00:01 GMT"));
+            // cookie without name
+            Assert.AreEqual("foo;", CookieUtil.SetCookieToCookiePair("foo; Max-Age=0"));
+        }
+
+        [Test]
         public void CookieHeaderToDictionaryMalformed()
         {
             // malformed cookies

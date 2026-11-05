@@ -9,10 +9,8 @@ requestDelay: 2
 links:
   - https://kickass.torrentbay.st/
   - https://kickass.torrentsbay.org/
-  - https://kickasstorrents.unblockninja.com/
   - https://kickasstorrents.ninjaproxy1.com/
   - https://kickasstorrents.proxyninja.org/
-  - https://kickasstorrents.proxyninja.net/
 legacylinks:
   - https://kat.root.yt/
   - https://kickasstorrents.abcproxy.org/
@@ -20,6 +18,8 @@ legacylinks:
   - https://kickasstorrent.cr/ # blocks Jackett UA, 'new' page broken
   - https://katcr.to/ # blocks Jackett UA
   - https://www.kickasstorrents.do/ # blocks Jackett UA
+  - https://kickasstorrents.unblockninja.com/
+  - https://kickasstorrents.proxyninja.net/
 
 caps:
   categorymappings:
@@ -50,6 +50,7 @@ caps:
     - {id: AppsAndroid, cat: PC/Mobile-Android, desc: "Apps Android"}
     - {id: AppsLinux, cat: PC, desc: "Apps Linux"}
     - {id: AppsMac, cat: PC/Mac, desc: "Apps Mac"}
+    - {id: AppsOtherApplications, cat: PC, desc: "Apps Other Applications"}
     - {id: AppsWindows, cat: PC/0day, desc: "Apps Windows"}
     - {id: Audiobooks, cat: Audio/Audiobook, desc: "Audio books"}
     - {id: Bollywood, cat: Movies, desc: "Movies Bollywood"}
@@ -57,8 +58,10 @@ caps:
     - {id: BooksAudiobooks, cat: Audio/Audiobook, desc: "Audio books"}
     - {id: BooksComics, cat: Books/Comics, desc: Comics}
     - {id: BooksEbooks, cat: Books/EBook, desc: Ebooks}
+    - {id: BooksMagazines, cat: Books/Mags, desc: "Books Magazines"}
     - {id: "BooksManga[English-translated]", cat: Books/Comics, desc: "Books Manga English-translated"}
     - {id: "BooksManga[Raw]", cat: Books/Comics, desc: "Books Manga Raw"}
+    - {id: BooksNon-Fiction, cat: Books/EBook, desc: "Books Non-Fiction"}
     - {id: Comics, cat: Books/Comics, desc: Comics}
     - {id: DVD, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: Documentary, cat: Movies/Other, desc: "Movies Documentary"}
@@ -66,12 +69,14 @@ caps:
     - {id: EBooks, cat: Books/EBook, desc: Ebooks}
     - {id: English-translated, cat: TV/Anime, desc: "Anime English-translated"}
     - {id: Games, cat: Console, desc: "Games"}
+    - {id: GamesMac, cat: PC/Games, desc: "Games Mac"}
     - {id: GamesNDS, cat: Console/NDS, desc: NDS}
     - {id: GamesOtherGames, cat: PC/Games, desc: "Games Other"}
     - {id: GamesPCGames, cat: PC/Games, desc: "Games PC"}
     - {id: GamesPS3, cat: Console/PS3, desc: PS3}
     - {id: GamesPS4, cat: Console/PS4, desc: PS4}
     - {id: GamesPSP, cat: Console/PSP, desc: PSP}
+    - {id: GamesSwitch, cat: Console/Other, desc: Switch}
     - {id: GamesWii, cat: Console/Wii, desc: Wii}
     - {id: GamesXbox360, cat: Console/XBox 360, desc: Xbox360}
     - {id: HighresMovies, cat: Movies/HD, desc: "Movies Highres"}
@@ -84,9 +89,13 @@ caps:
     - {id: Movies, cat: Movies, desc: Movies}
     - {id: Movies3DMovies, cat: Movies/3D, desc: "Movies 3D Movies"}
     - {id: MoviesBollywood, cat: Movies, desc: "Movies Bollywood"}
+    - {id: MoviesBlu-rayDiscs, cat: Movies, desc: "Movies Blu-ray Discs"}
+    - {id: MoviesAnimation, cat: Movies, desc: "Movies Animation"}
+    - {id: MoviesAsian, cat: Movies, desc: "Movies Asian"}
     - {id: MoviesDVD, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: MoviesDocumentary, cat: Movies/Other, desc: "Movies Documentary"}
     - {id: MoviesDubbedMovies, cat: Movies, desc: "Movies Dubbed"}
+    - {id: MoviesLowresMovies, cat: Movies/SD, desc: "Movies Lowres"}
     - {id: MoviesHighresMovies, cat: Movies/HD, desc: "Movies Highres"}
     - {id: MoviesMP4, cat: Movies/HD, desc: "Movies MP4"}
     - {id: MoviesMusicvideos, cat: Audio/Video, desc: "Movies Music videos"}
@@ -94,10 +103,12 @@ caps:
     - {id: MoviesOtherMovies, cat: Movies/Other, desc: "Movies Other"}
     - {id: MoviesUltraHD, cat: Movies/UHD, desc: "Movies UltraHD"}
     - {id: Music, cat: Audio, desc: Music}
+    - {id: MusicAAC, cat: Audio, desc: "Music AAC"}
     - {id: MusicLossless, cat: Audio/Lossless, desc: "Music Lossless"}
     - {id: MusicMP3, cat: Audio/MP3, desc: "Music MP3"}
     - {id: MusicMusicvideos, cat: Audio/Video, desc: "Music videos"}
     - {id: MusicOthermusic, cat: Audio/Other, desc: "Music Other"}
+    - {id: MusicRadioShows, cat: Audio/Other, desc: "Music Radio Shows"}
     - {id: Musicvideos, cat: Audio/Video, desc: "Music videos"}
     - {id: NDS, cat: Console/NDS, desc: NDS}
     - {id: Other, cat: Other, desc: Other}
@@ -132,8 +143,11 @@ settings:
 search:
   paths:
     # 50 rows per page, however the All page only returns 49 actual results as the 50th is a duplicate of the 49th 8-/
-    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/All/{{ end }}"
-    - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/All/?page=2{{ end }}"
+    - path: "{{ if .Keywords }}search/?q={{ .Keywords }}{{ else }}17/all/{{ end }}"
+    - path: "{{ if .Keywords }}search/?page=2&q={{ .Keywords }}{{ else }}17/all/?page=2{{ end }}"
+
+  headers:
+    Accept: ["*/*"]
 
   rows:
     selector: table.data > tbody > tr:has(a[href^="magnet:?xt="])

@@ -5,13 +5,10 @@ description: "LimeTorrents is a Public general torrent index with mostly verifie
 language: en-US
 type: public
 encoding: UTF-8
-# changes to this indexer should also be made to limetorrentsclone
 links:
   - https://www.limetorrents.fun/
-  - https://limetorrents.unblockninja.com/
   - https://limetorrents.ninjaproxy1.com/
   - https://limetorrents.proxyninja.org/
-  - https://limetorrents.proxyninja.net/
   - https://limetorrents.torrentbay.st/
   - https://limetorrents.torrentsbay.org/
 legacylinks:
@@ -20,6 +17,8 @@ legacylinks:
   - https://limetorrents.abcproxy.org/
   - https://limetorrents.unblockit.download/
   - https://www.limetorrents.lol/
+  - https://limetorrents.unblockninja.com/
+  - https://limetorrents.proxyninja.net/
 
 caps:
   categorymappings:
@@ -40,19 +39,19 @@ caps:
     book-search: [q]
 
 settings:
-  - name: downloadlink
+  - name: primarydownloadlink
     type: select
-    label: Download link
+    label: Primary Download link
     default: "magnet:"
     options:
-      "http://itorrents.org/": iTorrents.org
+      "//itorrents.": iTorrents
       "magnet:": magnet
-  - name: downloadlink2
+  - name: fallbackdownloadlink
     type: select
-    label: Download link (fallback)
-    default: "http://itorrents.org/"
+    label: Fallback Download link
+    default: "//itorrents."
     options:
-      "http://itorrents.org/": iTorrents.org
+      "//itorrents.": iTorrents
       "magnet:": magnet
   - name: info_download
     type: info
@@ -74,10 +73,16 @@ settings:
 download:
   # the .torrent url is on the on the details page
   selectors:
-    - selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink }}"]
+    - selector: a.csprite_dltorrent[href*="{{ .Config.primarydownloadlink }}"]
       attribute: href
-    - selector: a.csprite_dltorrent[href^="{{ .Config.downloadlink2 }}"]
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
+    - selector: a.csprite_dltorrent[href*="{{ .Config.fallbackdownloadlink }}"]
       attribute: href
+      filters:
+        - name: replace
+          args: ["http://itorrents.org/", "https://itorrents.net/"]
 
 search:
   paths:

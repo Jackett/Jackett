@@ -126,8 +126,8 @@ namespace Jackett.Common.Indexers.Definitions
             // Sport
             caps.Categories.AddCategoryMapping("cat[]=52", TorznabCatType.TVSport, "Sport");
             caps.Categories.AddCategoryMapping("cat[]=52&tags=1080p", TorznabCatType.TVSport, "Sport/1080p");
-            caps.Categories.AddCategoryMapping("cat[]=52&tags=720p", TorznabCatType.TVHD, "Sport/720p");
-            caps.Categories.AddCategoryMapping("cat[]=52&tags=2160p", TorznabCatType.TVUHD, "Sport/2160p");
+            caps.Categories.AddCategoryMapping("cat[]=52&tags=720p", TorznabCatType.TVSport, "Sport/720p");
+            caps.Categories.AddCategoryMapping("cat[]=52&tags=2160p", TorznabCatType.TVSport, "Sport/2160p");
 
             // TV
             caps.Categories.AddCategoryMapping("cat[]=7", TorznabCatType.TV, "TV");

@@ -286,20 +286,30 @@ namespace Jackett.Common.Indexers.Definitions
                     var release = new ReleaseInfo();
 
                     if (row.QuerySelector("img[alt^=\"Free Torrent\"], img[alt^=\"Sitewide Free Torrent\"]") != null)
+                    {
                         release.DownloadVolumeFactor = 0;
+                    }
                     else if (row.QuerySelector("img[alt^=\"Silver Torrent\"]") != null)
+                    {
                         release.DownloadVolumeFactor = 0.5;
+                    }
                     else
+                    {
                         release.DownloadVolumeFactor = 1;
+                    }
+
                     if (((BoolConfigurationItem)configData.GetDynamic("freeleech")).Value &&
                         release.DownloadVolumeFactor != 0)
+                    {
                         continue;
+                    }
+
                     release.UploadVolumeFactor = row.QuerySelector("img[alt^=\"x2 Torrent\"]") != null ? 2 : 1;
 
                     var qDetails = row.QuerySelector("div > a[href*=\"details.php?id=\"]");
                     var qTitle = qDetails; // #7975
 
-                    release.Title = qTitle.TextContent;
+                    release.Title = CleanTitle(qTitle?.TextContent.Trim());
 
                     release.Guid = new Uri(row.QuerySelector("td:nth-of-type(3) a").GetAttribute("href"));
                     release.Link = release.Guid;
@@ -309,7 +319,9 @@ namespace Jackett.Common.Indexers.Definitions
                     // requests can be 'Pre Release Time: 25-04-2021 15:00 Uploaded: 3 Weeks, 2 Days, 23 Hours, 53 Minutes, 39 Seconds after Pre'
                     var dateMatch = _dateMatchRegex.Match(row.QuerySelector("td:nth-of-type(2) > div:last-child").TextContent.Trim());
                     if (dateMatch.Success)
+                    {
                         release.PublishDate = DateTime.ParseExact(dateMatch.Value, "dd-MM-yyyy HH:mm", CultureInfo.InvariantCulture);
+                    }
 
                     release.Seeders = ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(7)").TextContent);
                     release.Peers = release.Seeders + ParseUtil.CoerceInt(row.QuerySelector("td:nth-of-type(8)").TextContent.Trim());
@@ -317,7 +329,9 @@ namespace Jackett.Common.Indexers.Definitions
 
                     var qPoster = row.QuerySelector("td:nth-of-type(2) .tooltip-content img");
                     if (qPoster != null)
+                    {
                         release.Poster = new Uri(qPoster.GetAttribute("src"));
+                    }
 
                     var categoryLink = row.QuerySelector("td:nth-of-type(1) a").GetAttribute("href");
                     var cat = ParseUtil.GetArgumentFromQueryString(categoryLink, "category");
@@ -340,9 +354,23 @@ namespace Jackett.Common.Indexers.Definitions
             }
 
             if (!CookieHeader.Trim().Equals(prevCook.Trim()))
+            {
                 SaveConfig();
+            }
 
             return releases;
+        }
+
+        private static string CleanTitle(string title)
+        {
+            if (title.IsNullOrWhiteSpace())
+            {
+                return null;
+            }
+
+            title = Regex.Replace(title, @"\[R\]$", string.Empty, RegexOptions.Compiled | RegexOptions.IgnoreCase);
+
+            return title.Trim();
         }
     }
 }

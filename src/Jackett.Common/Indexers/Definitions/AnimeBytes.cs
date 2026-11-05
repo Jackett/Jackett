@@ -119,8 +119,8 @@ namespace Jackett.Common.Indexers.Definitions
         {
             LoadValuesFromJson(configJson);
 
-            if (ConfigData.Passkey.Value.Length != 32 && ConfigData.Passkey.Value.Length != 48)
-                throw new Exception("invalid passkey configured: expected length: 32 or 48, got " + ConfigData.Passkey.Value.Length);
+            if (ConfigData.Passkey.Value.Length is not 32 and not 48 and not 56)
+                throw new Exception("invalid passkey configured: expected length: 32, 48, or 56, got " + ConfigData.Passkey.Value.Length);
 
             var results = await PerformQuery(new TorznabQuery());
             if (!results.Any())
@@ -259,6 +259,11 @@ namespace Jackett.Common.Indexers.Definitions
 
             if (!response.ContentString.StartsWith("{")) // not JSON => error
             {
+                if (response.Status is HttpStatusCode.Unauthorized or HttpStatusCode.NotFound)
+                {
+                    throw new ExceptionWithConfigData("Invalid response, please check if your credentials are valid.", ConfigData);
+                }
+
                 throw new ExceptionWithConfigData("Unexpected response (not JSON)", ConfigData);
             }
 

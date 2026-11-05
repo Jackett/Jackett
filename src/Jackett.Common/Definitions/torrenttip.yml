@@ -9,23 +9,23 @@ followredirect: true
 requestDelay: 2
 # to fetch current domain use https://tzip.top/
 links:
-  - https://torrenttip223.top/
+  - https://torrenttip251.top/
 legacylinks:
-  - https://torrenttip208.top/
-  - https://torrenttip209.top/
-  - https://torrenttip210.top/
-  - https://torrenttip211.top/
-  - https://torrenttip212.top/
-  - https://torrenttip213.top/
-  - https://torrenttip214.top/
-  - https://torrenttip215.top/
-  - https://torrenttip216.top/
-  - https://torrenttip217.top/
-  - https://torrenttip218.top/
-  - https://torrenttip219.top/
-  - https://torrenttip220.top/
-  - https://torrenttip221.top/
-  - https://torrenttip222.top/
+  - https://torrenttip236.top/
+  - https://torrenttip237.top/
+  - https://torrenttip238.top/
+  - https://torrenttip239.top/
+  - https://torrenttip240.top/
+  - https://torrenttip241.top/
+  - https://torrenttip242.top/
+  - https://torrenttip243.top/
+  - https://torrenttip244.top/
+  - https://torrenttip245.top/
+  - https://torrenttip246.top/
+  - https://torrenttip247.top/
+  - https://torrenttip248.top/
+  - https://torrenttip249.top/
+  - https://torrenttip250.top/
 
 caps:
   categorymappings:
@@ -88,12 +88,9 @@ search:
     q: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
     sort: time
 
-  headers:
-    # site blocks all Linux User-Agents, so use a slightly altered Windows Jackett UA here (e.g. Safari/537.36 > Safari/537.35)
-    User-Agent: ["Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/87.0.4280.88 Safari/537.35"]
-
   rows:
-    selector: ul.page-list > li:has(a[href$=".html"][title])
+    # rows with [  ] are entries whose details page states: File is no longer available as it expired or has been deleted.
+    selector: ul.page-list > li:has(a[href$=".html"][title]):not(:contains("[  ]"))
     filters:
       - name: andmatch
 

@@ -1,0 +1,182 @@
+{
+    "status": "success",
+    "response": {
+        "currentPage": 1,
+        "pages": 1,
+        "results": [
+            {
+                "groupId": "101",
+                "groupName": "Synthetic category fixture 101",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 101,
+                        "format": "PDF",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false,
+                        "category": "E-Books"
+                    }
+                ]
+            },
+            {
+                "groupId": "102",
+                "groupName": "Synthetic category fixture 102",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 102,
+                        "format": "PDF",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": true,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false,
+                        "category": "Comics"
+                    }
+                ]
+            },
+            {
+                "groupId": "103",
+                "groupName": "Synthetic category fixture 103",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 103,
+                        "format": "PDF",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": true,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false,
+                        "category": "Magazines"
+                    }
+                ]
+            },
+            {
+                "groupId": "104",
+                "groupName": "Synthetic category fixture 104",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 104,
+                        "format": "M4B",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false,
+                        "category": "Audiobooks"
+                    }
+                ]
+            },
+            {
+                "groupId": "105",
+                "groupName": "Synthetic category fixture 105",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 105,
+                        "format": "PDF",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false
+                    }
+                ],
+                "category": "Comics"
+            },
+            {
+                "groupId": "106",
+                "groupName": "Synthetic category fixture 106",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 106,
+                        "format": "CBZ",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false
+                    }
+                ]
+            },
+            {
+                "groupId": "107",
+                "groupName": "Synthetic category fixture 107",
+                "groupTime": "2026-09-01 12:00:00",
+                "groupYear": 2026,
+                "artist": "Fixture Author",
+                "tags": [],
+                "torrents": [
+                    {
+                        "torrentId": 107,
+                        "format": "PDF",
+                        "time": "2026-09-01 12:00:00",
+                        "size": 123456,
+                        "fileCount": 1,
+                        "snatches": 0,
+                        "seeders": 1,
+                        "leechers": 0,
+                        "isFreeleech": false,
+                        "isNeutralLeech": false,
+                        "isPersonalFreeleech": false,
+                        "canUseToken": false
+                    }
+                ]
+            }
+        ]
+    }
+}

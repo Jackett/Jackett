@@ -19,7 +19,9 @@ trigger:
   paths:
     exclude:
       - .github
+      - docs
       - README.md
+      - SECURITY.md
       - CONTRIBUTING.md
 
 pr:
@@ -30,7 +32,9 @@ pr:
   paths:
     exclude:
       - .github
+      - docs
       - README.md
+      - SECURITY.md
       - CONTRIBUTING.md
 
 stages:

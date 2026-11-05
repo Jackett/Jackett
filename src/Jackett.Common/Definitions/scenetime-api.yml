@@ -5,6 +5,7 @@ description: "SceneTime is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
 encoding: UTF-8
+requestDelay: 3
 links:
   - https://www.scenetime.com/
 

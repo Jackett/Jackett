@@ -98,7 +98,7 @@ settings:
     default: This forum enforces a 15s delay between searches. If no results are returned for a search, wait for 15s and try again.
 
 login:
-  path: forum/ucp.php?mode=login
+  path: forum/ucp.php?mode=login&redirect=index.php
   method: form
   form: form#login
   inputs:

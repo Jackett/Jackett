@@ -122,8 +122,6 @@ search:
       selector: details_link
     download:
       selector: download_link
-    infohash:
-      selector: info_hash
     poster:
       selector: meta.poster
       filters:
@@ -193,4 +191,4 @@ search:
     uploadvolumefactor:
       text: "{{ if .Result._featured }}2{{ else }}{{ .Result.uploadvolumefactor_double_upload }}{{ end }}"
 # as a pay site there is no MR or MST
-# json UNIT3D 9.0.9 (custom)
+# json UNIT3D 9.2.0 (custom)

@@ -1,0 +1,141 @@
+---
+id: binarybay
+name: BinaryBay
+description: "BinaryBay is a Private Torrent Tracker for MOVIES / TV / GENERAL"
+language: en-US
+type: private
+encoding: UTF-8
+links:
+  - https://binarybay.cc/
+
+caps:
+  # from https://binarybay.cc/torznab/api?t=caps&apikey=YOUR-API-KEY
+  # only add primary cats, because subcats and custom cats are returned after primary so will not match.
+  categorymappings:
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 8000, cat: Other, desc: "Other"}
+
+  modes:
+    search: [q]
+    tv-search: [q, season, ep, imdbid, tmdbid, tvdbid]
+    movie-search: [q, imdbid, tmdbid]
+    music-search: [q, artist, album]
+    book-search: [q, author, title]
+  allowtvsearchimdb: true
+
+settings:
+  - name: apikey
+    type: text
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "You can generate/find your API Key by accessing the <a href=\"https://binarybay.cc/user.php?action=torznab\" target=\"_blank\">BinaryBay Torznab API</a> page as long as your have previously enabled 2FA."
+  - name: freeleech
+    type: checkbox
+    label: Search freeleech only
+    default: false
+
+login:
+  path: torznab/api
+  method: get
+  inputs:
+    t: caps
+    apikey: "{{ .Config.apikey }}"
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
+
+search:
+  paths:
+    - path: torznab/api
+      method: get
+      response:
+        type: xml
+
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Artist .Query.Album }}music{{ else }}{{ end }}{{ if or .Query.Author .Query.Title }}book{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep .Query.IMDBID .Query.TVDBID }}tvsearch{{ else }}{{ end }}{{ if or .Query.TVDBID .Query.IMDBID .Query.TMDBID .Query.Season .Query.Ep .Query.Author .Query.Title .Query.Artist .Query.Album }}{{ else }}search{{ end }}"
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    tvdbid: "{{ .Query.TVDBID }}"
+    artist: "{{ .Query.Artist }}"
+    album: "{{ .Query.Album }}"
+    author: "{{ .Query.Author }}"
+    title: "{{ .Query.Title }}"
+    "tag": "{{ if .Config.freeleech }}freeleech{{ else }}{{ end }}"
+    limit: 100
+
+  rows:
+    selector: channel > item
+
+  fields:
+    category:
+      selector: category
+    title:
+      selector: title
+    details:
+      selector: comments
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+    poster:
+      selector: "[name=coverurl]"
+      attribute: value
+      filters:
+        - name: urldecode
+        - name: regexp
+          args: i=(.+?)$
+    imdbid:
+      selector: "[name=imdbid]"
+      attribute: value
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+    tvdbid:
+      selector: "[name=tvdbid]"
+      attribute: value
+    date:
+      # Sat, 24 Oct 2026 07:29:31 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: size
+    files:
+      selector: "[name=files]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumseedtime:
+      selector: "[name=minimumseedtime]"
+      attribute: value
+# torznab xml

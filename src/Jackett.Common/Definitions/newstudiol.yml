@@ -20,6 +20,10 @@ caps:
     tv-search: [q, season, ep]
 
 settings:
+  - name: ip_filtering
+    type: info
+    label: "IP Filtering"
+    default: "NewStudio allows only certain IP addressess. If your connection times out it is likely due to your IP address not being accepted."
   - name: username
     type: text
     label: Username

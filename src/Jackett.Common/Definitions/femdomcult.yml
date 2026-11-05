@@ -76,9 +76,9 @@ login:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
     cinfo: "2550|1350|24|-60"
-    keeplogged: 1
-  error:
-    - selector: form#loginform > span.warning
+    iplocked: 0
+    keeploggedin: 1
+  # login errors are only sent in the "flashes" cookie and rendered by JS, so there is no error selector
   test:
     path: torrents.php
     selector: "#nav_userinfo"

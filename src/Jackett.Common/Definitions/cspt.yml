@@ -10,6 +10,7 @@ links:
 
 caps:
   categorymappings:
+    - {id: 418, cat: TV, desc: "短剧 / Short-form Drama"}
     - {id: 408, cat: Audio, desc: "HQ音乐 / HQ Audio"}
     - {id: 409, cat: Other, desc: "其他 / Misc"}
     - {id: 407, cat: TV/Sport, desc: "体育 / Sports"}

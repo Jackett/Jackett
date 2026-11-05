@@ -12,6 +12,7 @@ legacylinks:
 
 caps:
   categorymappings:
+    - {id: DC, cat: Console/Other, desc: "DC"}
     - {id: PC, cat: PC/Games, desc: "PC"}
     - {id: PS1, cat: Console/Other, desc: "Playstation 1"}
     - {id: PS2, cat: Console/Other, desc: "Playstation 2"}
@@ -21,6 +22,7 @@ caps:
     - {id: SWITCH, cat: Console/Other, desc: "Nintendo Switch"}
     - {id: PSP, cat: Console/PSP, desc: "Playstation (portable) PSP"}
     - {id: PSVITA, cat: Console/PS Vita, desc: "Playstation Vita"}
+    - {id: XBOX, cat: Console/XBox, desc: "Xbox"}
     - {id: XONE, cat: Console/XBox One, desc: "Xbox ONE"}
     - {id: X360, cat: Console/XBox 360, desc: "Xbox 360"}
     - {id: WIIU, cat: Console/WiiU, desc: "Nintendo WIIU"}
@@ -52,6 +54,9 @@ search:
     search_start: 0
     result_from: 1
     story: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
+
+  headers:
+    Referer: ["{{ .Config.sitelink }}"]
 
   rows:
     selector: div.short_game_search

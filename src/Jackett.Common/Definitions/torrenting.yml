@@ -4,41 +4,69 @@ name: Torrenting
 description: "Torrenting (TT) is a Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: en-US
 type: private
-encoding: windows-1252
+encoding: UTF-8
 links:
   - https://torrenting.com/
 
 caps:
   categorymappings:
-    - {id: 1, cat: Movies, desc: "Movies"}
-    - {id: 2, cat: XXX, desc: "XXX"}
-    - {id: 3, cat: Movies/BluRay, desc: "Movies/BluRay"}
-    - {id: 4, cat: TV/SD, desc: "TV/SD-x264"}
-    - {id: 5, cat: TV/HD, desc: "TV/HD-x264"}
-    - {id: 11, cat: Movies/HD, desc: "Movies/HD"}
-    - {id: 18, cat: TV, desc: "TV/Packs"}
-    - {id: 21, cat: Console, desc: "Games/Consoles"}
-    - {id: 26, cat: Audio/Video, desc: "Music/Videos"}
-    - {id: 27, cat: Audio, desc: "Music/Audio"}
-    - {id: 29, cat: TV/Anime, desc: "Anime/Toons"}
-    - {id: 30, cat: Books, desc: "Books"}
-    - {id: 34, cat: PC/0day, desc: "Applications"}
-    - {id: 35, cat: PC/Games, desc: "Games/PC"}
-    - {id: 38, cat: Movies/Foreign, desc: "Movies/Non-English"}
-    - {id: 40, cat: Movies/DVD, desc: "Movies/DVD-R"}
-    - {id: 47, cat: Movies, desc: "Movies/Packs"}
-    - {id: 49, cat: Movies/HD, desc: "Movies/x265"}
-    - {id: 55, cat: TV/Sport, desc: "Sports"}
+    - {id: 25, cat: Movies/SD, desc: "Movies/480p"}
+    - {id: 96, cat: Movies/UHD, desc: "Movies/4K"}
+    - {id: 11, cat: Movies/HD, desc: "Movies/Bluray"}
+    - {id: 5, cat: Movies/BluRay, desc: "Movies/Bluray-Full"}
+    - {id: 103, cat: Movies/SD, desc: "Movies/Cam"}
+    - {id: 3, cat: Movies/DVD, desc: "Movies/DVD-R"}
+    - {id: 21, cat: Movies/HD, desc: "Movies/MP4"}
+    - {id: 22, cat: Movies/Foreign, desc: "Movies/Non-English"}
+    - {id: 13, cat: Movies/Other, desc: "Movies/Packs"}
+    - {id: 44, cat: Movies/SD, desc: "Movies/SD/x264"}
+    - {id: 48, cat: Movies/HD, desc: "Movies/x265"}
+    - {id: 1, cat: Movies/SD, desc: "Movies/XviD"}
+    - {id: 24, cat: TV/SD, desc: "TV/480p"}
+    - {id: 104, cat: TV/UHD, desc: "TV/4K"}
+    - {id: 32, cat: TV/HD, desc: "TV/Bluray"}
+    - {id: 31, cat: TV/SD, desc: "TV/DVD-R"}
+    - {id: 33, cat: TV/SD, desc: "TV/DVD-Rip"}
+    - {id: 46, cat: TV/Other, desc: "TV/Mobile"}
     - {id: 82, cat: TV/Foreign, desc: "TV/Non-English"}
-    - {id: 93, cat: Audio, desc: "Music/Packs"}
-    - {id: 99, cat: TV/HD, desc: "TV/x265"}
+    - {id: 14, cat: TV/Other, desc: "TV/Packs"}
+    - {id: 26, cat: TV/SD, desc: "TV/SD/x264"}
+    - {id: 7, cat: TV/HD, desc: "TV/x264"}
+    - {id: 34, cat: TV/HD, desc: "TV/x265"}
+    - {id: 2, cat: TV/SD, desc: "TV/XviD"}
+    - {id: 10, cat: Console/Other, desc: "Nintendo"}
+    - {id: 4, cat: PC/Games, desc: "PC/Games"}
+    - {id: 18, cat: Console/PS4, desc: "PS"}
+    - {id: 8, cat: Console/PSP, desc: "PSP"}
+    - {id: 9, cat: Console/XBox, desc: "Xbox"}
+    - {id: 17, cat: Audio/MP3, desc: "Music/Audio"}
+    - {id: 27, cat: Audio/Lossless, desc: "Music/Flac"}
+    - {id: 23, cat: Audio/Foreign, desc: "Music/Non-English"}
+    - {id: 41, cat: Audio/Other, desc: "Music/Packs"}
+    - {id: 16, cat: Audio/Video, desc: "Music/Video"}
+    - {id: 29, cat: TV/Anime, desc: "Anime"}
+    - {id: 42, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 105, cat: Audio/Audiobook, desc: "Audio Books/NE"}
+    - {id: 20, cat: Books/EBook, desc: "Books"}
+    - {id: 102, cat: Books/Foreign, desc: "Books/Non-English"}
+    - {id: 30, cat: TV/Documentary, desc: "Documentary"}
+    - {id: 95, cat: Other, desc: "Educational"}
+    - {id: 47, cat: Other, desc: "Fonts"}
+    - {id: 43, cat: PC/Mac, desc: "Mac"}
+    - {id: 45, cat: Audio/Other, desc: "Podcast"}
+    - {id: 28, cat: PC/0day, desc: "Softwa/Packs"}
+    - {id: 12, cat: PC/0day, desc: "Software"}
+    - {id: 19, cat: XXX, desc: "XXX/0Day"}
+    - {id: 6, cat: XXX/Other, desc: "XXX/Movies"}
+    - {id: 15, cat: XXX/Pack, desc: "XXX/Packs"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: cookie
@@ -70,44 +98,44 @@ search:
     - path: t
   inputs:
     $raw: "{{ range .Categories }}{{.}}=&{{end}}"
-    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
-    qf: "{{ if .Query.IMDBID }}adv{{ else }}ti{{ end }}"
+    q: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }} {{ else }}{{ end }}{{ if .Query.TMDBID }}{{ .Query.TMDBID }} {{ else }}{{ end }}{{ .Keywords }}"
+    qf: "{{ if or .Query.IMDBID .Query.TMDBID }}adv{{ else }}ti{{ end }}"
     free: "{{ if .Config.freeleech }}on{{ else }}{{ end }}"
 
   rows:
-    selector: table#torrentsTable > tbody > tr:has(td.torrentNameInfo)
+    selector: table.t1 > tbody > tr
 
   fields:
-    category:
-      selector: a[href^="?"]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["?", ""]
+    # category layout may differ per user
+    categorydesc_alt:
+      selector: a[href^="?"] img
+      attribute: alt
+      optional: true
+    categorydesc:
+      selector: td.i.p
+      optional: true
+      default: "{{ .Result.categorydesc_alt }}"
     title:
-      selector: a[href^="/torrent.php?id="]
+      selector: a[href^="/t/"]
     details:
-      selector: a[href^="/torrent.php?id="]
+      selector: a[href^="/t/"]
       attribute: href
     download:
       selector: a[href^="/download.php/"]
       attribute: href
     genre:
-      selector: td.torrentNameInfo > div
+      selector: td.al div.sub
       filters:
         - name: re_replace
           args: ["(?i)(Science Fiction)", "Science_Fiction"]
         - name: validate
           args: "Action, Adventure, Animation, Biography, Comedy, Crime, Documentary, Drama, Family, Fantasy, Game-Show, History, Horror, Music, Musical, Mystery, News, Reality-TV, Romance, Science_Fiction, Sci-Fi, Short, Sitcom, Sport, Talk-Show, Thriller, War, Western"
-    description:
-      text: "{{ .Result.genre }}"
     date:
-      selector: td.torrentNameInfo > div
+      selector: td.al div.sub
       filters:
         - name: re_replace
-          args: [" by.*", ""]
-        - name: split
-          args: ["|", -1]
+          args: [".+?\\|", ""]
+        - name: timeago
     seeders:
       selector: td:nth-last-child(2)
     leechers:
@@ -121,7 +149,7 @@ search:
     uploadvolumefactor:
       text: 1
     minimumratio:
-      text: 1.1
+      text: 1
     minimumseedtime:
       # 3 days (as seconds = 3 x 24 x 60 x 60)
       text: 259200

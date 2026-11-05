@@ -34,11 +34,9 @@ namespace Jackett.Common.Indexers.Definitions
             "https://torrentday.it/",
             "https://td.findnemo.net/",
             "https://td.getcrazy.me/",
-            "https://td.venom.global/",
             "https://td.workisboring.net/",
             "https://tday.findnemo.net/",
             "https://tday.getcrazy.me/",
-            "https://tday.venom.global/",
             "https://tday.workisboring.net/"
         };
         public override string[] LegacySiteLinks => new[]
@@ -48,7 +46,9 @@ namespace Jackett.Common.Indexers.Definitions
             "https://torrentday.eu/", // redirect to https://www.torrentday.com/
             "https://td-update.com/", // redirect to https://www.torrentday.com/
             "https://www.torrentday.ru/",
-            "https://www.td.af/"
+            "https://www.td.af/",
+            "https://td.venom.global/",
+            "https://tday.venom.global/",
         };
         public override string Language => "en-US";
         public override string Type => "private";

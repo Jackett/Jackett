@@ -19,57 +19,60 @@ caps:
     - {id: 138, cat: Console/Wii, desc: "Games Nintendo Wii"}
     - {id: 124, cat: Console/PSP, desc: "Games PSP / PS 1-4"}
     - {id: 139, cat: Console/XBox, desc: "Games XBOX"}
-    - {id: 140, cat: Movies/HD, desc: "Movies HD"}
     - {id: 141, cat: Movies/SD, desc: "Movies SD"}
+    - {id: 140, cat: Movies/HD, desc: "Movies HD"}
     - {id: 125, cat: Movies/UHD, desc: "Movies Ultra HD"}
     - {id: 104, cat: Movies/Other, desc: "Movies Packs"}
-    - {id: 100, cat: Movies, desc: "Movies Horror"}
-    - {id: 142, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 143, cat: Movies/BluRay, desc: "Movies Bluray"}
+    - {id: 142, cat: Movies/DVD, desc: "Movies DVD"}
     - {id: 144, cat: Movies/DVD, desc: "Movies S-DVD"}
+    - {id: 100, cat: Movies, desc: "Movies Horror"}
     - {id: 133, cat: Movies/Foreign, desc: "Movies Englisch"}
     - {id: 101, cat: Movies/HD, desc: "TFA AVCHD's"}
     - {id: 103, cat: Movies/DVD, desc: "TFA Special DVD's"}
-    - {id: 108, cat: TV/Documentary, desc: "Dokus HD"}
     - {id: 113, cat: TV/Documentary, desc: "Dokus SD"}
-    - {id: 154, cat: TV/Documentary, desc: "Dokus Pack"}
-    - {id: 149, cat: TV/HD, desc: "Serien HD"}
+    - {id: 108, cat: TV/Documentary, desc: "Dokus HD"}
+    - {id: 171, cat: TV/Documentary, desc: "Dokus Ultra HD"}
+    - {id: 154, cat: TV/Documentary, desc: "Dokus Packs"}
     - {id: 151, cat: TV/SD, desc: "Serien SD"}
+    - {id: 149, cat: TV/HD, desc: "Serien HD"}
     - {id: 167, cat: TV/UHD, desc: "Serien Ultra HD"}
-    - {id: 150, cat: TV/Other, desc: "Serien Pack"}
+    - {id: 150, cat: TV/Other, desc: "Serien Packs"}
     - {id: 136, cat: TV/Foreign, desc: "Serien Englisch"}
-    - {id: 152, cat: TV/Sport, desc: "Sport HD"}
     - {id: 153, cat: TV/Sport, desc: "Sport SD"}
+    - {id: 152, cat: TV/Sport, desc: "Sport HD"}
     - {id: 135, cat: TV/Sport, desc: "Sport Ultra HD"}
-    - {id: 106, cat: TV/Sport, desc: "Sport Pack"}
+    - {id: 106, cat: TV/Sport, desc: "Sport Packs"}
     - {id: 147, cat: Audio/MP3, desc: "Music MP3"}
     - {id: 145, cat: Audio/Lossless, desc: "Music Flac"}
     - {id: 137, cat: Audio, desc: "Music M4A"}
     - {id: 109, cat: Audio, desc: "Music Discographie"}
-    - {id: 146, cat: Audio/Other, desc: "Music Pack"}
+    - {id: 146, cat: Audio/Other, desc: "Music Packs"}
     - {id: 148, cat: Audio/Video, desc: "Music Video"}
-    - {id: 157, cat: Movies/HD, desc: "Kids Movies HD"}
     - {id: 158, cat: Movies/SD, desc: "Kids Movies SD"}
-    - {id: 161, cat: TV/HD, desc: "Kids Serien HD"}
+    - {id: 157, cat: Movies/HD, desc: "Kids Movies HD"}
     - {id: 162, cat: TV/SD, desc: "Kids Serien SD"}
+    - {id: 161, cat: TV/HD, desc: "Kids Serien HD"}
     - {id: 112, cat: Audio/Audiobook, desc: "Kids Hörbuch"}
     - {id: 115, cat: Books/Mags, desc: "E-Books Zeitschriften"}
     - {id: 114, cat: Books/Comics, desc: "E-Books Comics"}
     - {id: 117, cat: Books/EBook, desc: "E-Books Bücher"}
     - {id: 156, cat: Books, desc: "E-Books Packs"}
     - {id: 130, cat: Books, desc: "E-Books FSK 18"}
-    - {id: 159, cat: Movies/Other, desc: "Anime Movies HD"}
     - {id: 160, cat: Movies/Other, desc: "Anime Movies SD"}
-    - {id: 168, cat: TV/Anime, desc: "Anime Serien HD"}
+    - {id: 159, cat: Movies/Other, desc: "Anime Movies HD"}
+    - {id: 173, cat: Movies/Other, desc: "Anime Movies UHD"}
+    - {id: 172, cat: Movies/Other, desc: "Anime Movies Pack"}
     - {id: 169, cat: TV/Anime, desc: "Anime Serien SD"}
+    - {id: 168, cat: TV/Anime, desc: "Anime Serien HD"}
     - {id: 170, cat: TV/Anime, desc: "Anime Serien Pack"}
     - {id: 129, cat: TV/Anime, desc: "Anime Sonstiges"}
     - {id: 118, cat: Other, desc: "Other Mobile"}
     - {id: 119, cat: Other, desc: "Other Hörbücher"}
     - {id: 123, cat: Other, desc: "Other Pics"}
-    - {id: 120, cat: XXX, desc: "XXX Movies HD"}
     - {id: 121, cat: XXX, desc: "XXX Movies SD"}
-    - {id: 165, cat: XXX, desc: "XXX Ultra HD"}
+    - {id: 120, cat: XXX, desc: "XXX Movies HD"}
+    - {id: 165, cat: XXX, desc: "XXX Movies UHD"}
     - {id: 122, cat: XXX, desc: "XXX Movies Pack"}
     - {id: 131, cat: XXX, desc: "XXX Hentai"}
     - {id: 164, cat: XXX, desc: "XXX VR Porn"}

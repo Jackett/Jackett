@@ -15,7 +15,9 @@ caps:
   modes:
     search: [q]
 
-settings: []
+settings:
+  - name: info_flaresolverr
+    type: info_flaresolverr
 
 download:
   selectors:
@@ -25,6 +27,7 @@ download:
 search:
   paths:
     - path: /
+  allowEmptyInputs: true
   inputs:
     s: "{{ .Keywords }}"
 

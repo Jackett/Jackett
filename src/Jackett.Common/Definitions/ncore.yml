@@ -160,7 +160,7 @@ search:
       selector: div.box_feltoltve2
       filters:
         - name: append
-          args: " +01:00" # CET
+          args: " +02:00" # EET
         - name: dateparse
           args: "yyyy-MM-ddHH:mm:ss zzz"
     downloadvolumefactor:

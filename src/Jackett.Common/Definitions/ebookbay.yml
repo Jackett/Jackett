@@ -95,6 +95,8 @@ search:
     - path: "page/3/"
     - path: "page/4/"
     - path: "page/5/"
+  keywordsfilters:
+    - name: tolower
   inputs:
     s: "{{ .Keywords }}"
 
@@ -111,7 +113,7 @@ search:
       default: Other
       filters:
         - name: re_replace
-          args: ["(?i)\\bEbooks?\\b", ""]
+          args: ["(?i)\\bE-?books?\\b", ""]
         - name: regexp
           args: "E book under:\\s+(.+?)\\s?\\\xA0"
     title:

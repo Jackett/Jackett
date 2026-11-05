@@ -13,7 +13,7 @@ namespace Jackett.Common.Indexers.Definitions
     {
         public override string Id => "cinemaz";
         public override string Name => "CinemaZ";
-        public override string Description => "CinemaZ (EuTorrents) is a Private Torrent Tracker for FOREIGN NON-ASIAN MOVIES";
+        public override string Description => "CinemaZ (EuTorrents) is a Private Torrent Tracker for FOREIGN NON-ASIAN MOVIES / TV";
         public override string SiteLink { get; protected set; } = "https://cinemaz.to/";
 
         public override TorznabCapabilities TorznabCaps => SetCapabilities();
@@ -37,12 +37,13 @@ namespace Jackett.Common.Indexers.Definitions
                 LimitsMax = 50,
                 TvSearchParams = new List<TvSearchParam>
                 {
-                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.Genre
+                    TvSearchParam.Q, TvSearchParam.Season, TvSearchParam.Ep, TvSearchParam.ImdbId, TvSearchParam.TvdbId, TvSearchParam.Genre
                 },
                 MovieSearchParams = new List<MovieSearchParam>
                 {
-                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.Genre
-                }
+                    MovieSearchParam.Q, MovieSearchParam.ImdbId, MovieSearchParam.TmdbId, MovieSearchParam.Genre
+                },
+                TvSearchImdbAvailable = true
             };
 
             caps.Categories.AddCategoryMapping(1, TorznabCatType.Movies);

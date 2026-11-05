@@ -73,6 +73,7 @@ namespace Jackett.Common.Models.DTO
                 {
                     return new TorznabQuery
                     {
+                        QueryType = "search",
                         ImdbID = imdbId,
                         Categories = stringQuery.Categories,
                         Season = stringQuery.Season,

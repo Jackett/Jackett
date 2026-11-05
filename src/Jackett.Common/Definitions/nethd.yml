@@ -12,7 +12,8 @@ legacylinks:
 
 caps:
   categorymappings:
-    - {id: 401, cat: Movies, desc: "Movies"}
+    - {id: 401, cat: Movies, desc: "Movie"}
+    - {id: 401, cat: TV, desc: "TV"} # TV is  sub-cat of 401
     - {id: 402, cat: Audio, desc: "Music"}
     - {id: 403, cat: PC/Games, desc: "Game"}
     - {id: 404, cat: PC, desc: "Software"}
@@ -102,15 +103,20 @@ search:
       - name: andmatch
 
   fields:
-    category:
-      selector: td.category > a
-      attribute: href
-      filters:
-        - name: querystring
-          args: cat
     title:
       selector: td.name > div > a[href*="-torrent-"][title]
       attribute: title
+    category_is_tv_show:
+      text: "{{ .Result.title }}"
+      filters:
+        - name: regexp
+          args: "\\b(S\\d+(?:E\\d+)?)\\b"
+    categorydesc:
+      selector: td.category > a
+      attribute: title
+      filters:
+        - name: replace
+          args: ["movie", "{{ if .Result.category_is_tv_show }}tv{{ else }}movie{{ end }}"]
     details:
       selector: td.name > div > a[href*="-torrent-"][title]
       attribute: href

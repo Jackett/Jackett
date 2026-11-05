@@ -68,10 +68,32 @@ namespace Jackett.Common.Services
 
         private void MigrateRenamedIndexers()
         {
-            _renamedIndexers = _indexers
-                               .Where(x => x.Value.Replaces.Any())
-                               .SelectMany(x => x.Value.Replaces.ToDictionary(y => y, _ => x.Key))
-                               .ToDictionary(x => x.Key, x => x.Value);
+            var renamedIndexers = new Dictionary<string, string>();
+            foreach (var indexer in _indexers.Values)
+            {
+                if (indexer.Replaces == null)
+                {
+                    continue;
+                }
+
+                foreach (var oldId in indexer.Replaces)
+                {
+                    if (string.IsNullOrEmpty(oldId))
+                    {
+                        continue;
+                    }
+
+                    if (renamedIndexers.TryGetValue(oldId, out var existingNewId))
+                    {
+                        _logger.Warn("Duplicate replacement mapping: {0} is replaced by both {1} and {2}. Keeping {1}.", oldId, existingNewId, indexer.Id);
+                    }
+                    else
+                    {
+                        renamedIndexers.Add(oldId, indexer.Id);
+                    }
+                }
+            }
+            _renamedIndexers = renamedIndexers;
 
             foreach (var oldId in _renamedIndexers.Keys)
             {

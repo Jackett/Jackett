@@ -151,6 +151,8 @@ search:
     options: "{{ if .Config.freeleech }}5{{ else }}0{{ end }}"
     # 0 all, 1 active, 2 dead
     active: 0
+    # 0 without separators, 1 original title
+    iwantdots: 1
     # does not support imdbid searching and does not have imdb links in results
 
   rows:

@@ -155,6 +155,9 @@ search:
     download:
       selector: a[href^="download.php?torrent="]
       attribute: href
+    poster:
+      selector: img#img-1
+      attribute: src
     size:
       selector: td.content_wrap > table > tbody > tr:nth-child(2) > td:nth-child(1) > b:nth-child(1)
     grabs:
@@ -182,4 +185,9 @@ search:
       case:
         img[src="pic/freeleech.gif"]: 0 # nothing is counted
         "*": 1
+    minimumratio:
+      text: 0.7
+    minimumseedtime:
+      # 2 days (as seconds = 2 x 24 x 60 x 60)
+      text: 172800
 # NetVision

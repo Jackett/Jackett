@@ -53,6 +53,10 @@ caps:
     book-search: [q]
 
 settings:
+  - name: info_ipv6
+    type: info
+    label: IPv6 only
+    default: This site only accepts IPv6 addresses. If you are using IPv4 you will get a DNS Lookup Error OR a Connection Failure.
   - name: username
     type: text
     label: Username
