@@ -13,12 +13,12 @@ encoding: UTF-8
 # to fetch current domain use https://www.torrent-site.my/
 links:
   - https://www.darkfox.ws/
-  - https://ww4-vidlox.officiel.cc/
+  - https://www.vidlox.ws/
   - https://www.wikibox.ws/
   - https://ww4-sharkibox.officiel.cc/
   - https://ww4-worldivx.officiel.cc/
   - https://ww4-workino.officiel.cc/
-  - https://ww4-oxtorrent.officiel.cc/
+  - https://www.oxtorrent.ws/
   - https://ww4-torrent911.officiel.cc/
 legacylinks:
   # latest domains list
@@ -79,6 +79,7 @@ legacylinks:
   - https://ww1-vidlox.officiel.cc/
   - https://ww2-vidlox.officiel.cc/
   - https://ww3-vidlox.officiel.cc/
+  - https://ww4-vidlox.officiel.cc/
   # Wikibox
   - https://wikibox3.cc/
   - https://wikibox5.cc/
@@ -163,6 +164,7 @@ legacylinks:
   - https://ww1-oxtorrent.officiel.cc/
   - https://ww2-oxtorrent.officiel.cc/
   - https://ww3-oxtorrent.officiel.cc/
+  - https://ww4-oxtorrent.officiel.cc/
   # Torrent911
   - https://torrent911.win/
   - https://torrent911.lat/
