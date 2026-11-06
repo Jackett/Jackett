@@ -20,6 +20,7 @@ caps:
     - {id: "/nds", cat: Console/NDS, desc: "Nintendo DS"}
     - {id: "/gamecube", cat: Console/Other, desc: "Nintendo GameCube"}
     - {id: "/switch", cat: Console/NDS, desc: "Nintendo Switch"}
+    - {id: "/switch2", cat: Console/NDS, desc: "Nintendo Switch2"}
     - {id: "/wii", cat: Console/Wii, desc: "Nintendo Wii"}
     - {id: "/wiiu", cat: Console/WiiU, desc: "Nintendo Wii U"}
     - {id: "/ps1", cat: Console/PS3, desc: "PlayStation"}
