@@ -58,17 +58,17 @@ settings:
       asc: asc
 
 login:
-  path: takelogin.php
-  method: post
+  path: login.php
+  method: form
+  form: form[action="/takelogin.php"]
   inputs:
     username: "{{ .Config.username }}"
     password: "{{ .Config.password }}"
-    keeplogged: 1
   error:
-    - selector: table.main:contains("Login failed")
+    - selector: p.error
   test:
     path: index.php
-    selector: a[href^="logout.php"]
+    selector: a[href^="/logout.php"]
 
 search:
   paths:
@@ -85,38 +85,38 @@ search:
     # does not return imdb links
 
   rows:
-    selector: table[class="torrentlist"] > tbody > tr:has(a[href*="details.php?id="])
+    selector: table.br-table > tbody > tr:has(a.br-download)
     filters:
       - name: andmatch
         args: 55
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a.br-catart
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: td:nth-child(2)
+      selector: a.br-title
     details:
-      selector: a[href^="details.php?id="]
+      selector: a.br-title
       attribute: href
     download:
-      selector: a[href^="download.php"]
+      selector: a.br-download
       attribute: href
     size:
-      selector: td:nth-child(7)
+      selector: td.br-size
     files:
-      selector: td:nth-child(4)
+      selector: a.br-inline
     grabs:
-      selector: td:nth-child(8)
+      selector: td.br-done
     seeders:
-      selector: td:nth-child(9)
+      selector: td.br-seed
     leechers:
-      selector: td:nth-child(10)
+      selector: td.br-leech
     date:
-      selector: td:nth-child(6)
+      selector: td.br-added
       filters:
         - name: append
           args: " +00:00" # GMT
