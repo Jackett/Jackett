@@ -96,7 +96,7 @@ search:
       selector: span.result-card__size
     description:
       case:
-        span.result-card__verified: Verified
+        a.result-card__trust--verified: Verified
         "*": Unverified
     seeders:
       selector: span.result-card__seed
