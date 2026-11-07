@@ -107,7 +107,7 @@ search:
     # does not return imdb or doubanid in results
 
   rows:
-    selector: table.torrents > tbody > tr:has(table.torrentname)
+    selector: table.torrents > tbody > tr:has(a[href^="download.php?id="])
 
   fields:
     category:
