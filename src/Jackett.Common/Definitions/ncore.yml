@@ -98,14 +98,12 @@ login:
     path: index.php
     selector: a[href*="profile.php"]
 
-download:
-  selectors:
-    - selector: a[href^="torrents.php?action=download&id="]
-      attribute: href
-
 search:
   paths:
     - path: torrents.php
+      response:
+        type: json
+
   inputs:
     mire: "{{ if .Query.IMDBID }}{{ .Query.IMDBID }}{{ else }}{{ .Keywords }}{{ end }}"
     miben: "{{ if .Query.IMDBID }}imdb{{ else }}name{{ end }}"
@@ -113,58 +111,40 @@ search:
     submit.x: 1
     submit.y: 1
     tags: "{{ .Query.Genre }}"
+    jsons: true
     $raw: "{{ range .Categories }}&kivalasztott_tipus[]={{.}}{{end}}"
 
   rows:
-    selector: .box_torrent_all .box_torrent
+    selector: results
+#    missingAttributeEqualsNoResults: true
+    count:
+      selector: total_results
 
   fields:
     category:
-      selector: .box_alap_img > a
-      attribute: href
-      filters:
-        - name: querystring
-          args: tipus
+      selector: category
     title:
-      selector: div[class^="torrent_txt"] > a
-      attribute: title
+      selector: release_name
     details:
-      selector: div[class^="torrent_txt"] > a
-      attribute: href
+      selector: details_url
     download:
-      selector: div[class^="torrent_txt"] > a
-      attribute: href
-      filters:
-        - name: replace
-          args: ["torrents.php?action=details", "ajax.php?action=torrent_drop"]
-# image is returned with invalid Content-Type header 'image'
-#    poster:
-#      selector: div.infobar > img
-#      attribute: onmouseover
-#      filters:
-#        - name: regexp
-#          args: "'(.+?)'"
+      selector: download_url
     imdbid:
-      selector: a[href*="imdb.com/title/tt"]
-      attribute: href
-      filters:
-        - name: replace
-          args: ["https://dereferer.link/?", ""]
+      selector: imdb_id
     size:
-      selector: div.box_meret2
+      selector: size
     seeders:
-      selector: div.box_s2
+      selector: seeders
     leechers:
-      selector: div.box_l2
+      selector: leechers
     date:
-      selector: div.box_feltoltve2
-      filters:
-        - name: append
-          args: " +02:00" # EET
-        - name: dateparse
-          args: "yyyy-MM-ddHH:mm:ss zzz"
+      text: now
+#      selector: TBD
     downloadvolumefactor:
-      text: 0
+      selector: freeleech
+      case:
+        true: 0
+        false: 1
     uploadvolumefactor:
       text: 1
     minimumratio:
@@ -173,18 +153,11 @@ search:
 #    minimumseedtime:
 #      # 2 days (as seconds = 2 x 24 x 60 x 60)
 #      text: 172800
-    description_imdb:
-      selector: a.infolink
-      optional: true
-    description_alt:
-      selector: div.siterank > span
-      attribute: title
-      optional: true
     description:
-      case:
-        div.torrent_ok: "Verified"
-        div.torrent_unchecked: "Unverified"
+      selector: imdb_rating
       filters:
-        - name: append
-          args: "{{ if or .Result.description_alt .Result.description_imdb }}: {{ else }}{{ end }}{{ .Result.description_alt }}{{ if and .Result.description_alt .Result.description_imdb }} {{ else }}{{ end }}{{ .Result.description_imdb }}"
-# engine n/a
+        - name: prepend
+          args: "IMDB: "
+        - name: replace
+          args: ["IMDB: 0", ""]
+# json engine n/a
