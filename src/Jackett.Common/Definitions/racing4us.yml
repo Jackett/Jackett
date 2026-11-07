@@ -35,6 +35,7 @@ caps:
     - {id: 17, cat: TV/Sport, desc: "F2 Championship"}
     - {id: 18, cat: TV/Sport, desc: "F3 Championship"}
     - {id: 19, cat: TV/Sport, desc: "FE Championship"}
+    - {id: 78, cat: TV/Sport, desc: "F4 Championship"}
     - {id: 22, cat: TV/Sport, desc: "MotoGP"}
     - {id: 24, cat: Books/Mags, desc: "Magazines - Books"}
     - {id: 29, cat: TV/Sport, desc: "NTT IndyCar Series"}
