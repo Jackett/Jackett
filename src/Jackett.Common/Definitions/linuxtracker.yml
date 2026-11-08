@@ -12,6 +12,7 @@ links:
 caps:
   categorymappings:
     - {id: 2002, cat: PC/ISO, desc: "4MLinux"}
+    - {id: 17, cat: PC/ISO, desc: "Abora OS"}
     - {id: 13, cat: PC/ISO, desc: "Absolute"}
     - {id: 2311, cat: PC/ISO, desc: "AlmaLinux"}
     - {id: 2003, cat: PC/ISO, desc: "Alpine Linux"}
@@ -22,6 +23,7 @@ caps:
     - {id: 2006, cat: PC/ISO, desc: "Antergos"}
     - {id: 2263, cat: PC/ISO, desc: "Antivirus Live CD"}
     - {id: 2007, cat: PC/ISO, desc: "AntiX"}
+    - {id: 16, cat: PC/ISO, desc: "AOSC OS"}
     - {id: 2289, cat: PC/ISO, desc: "APODIO"}
     - {id: 39, cat: PC/ISO, desc: "Arch Linux"}
     - {id: 2009, cat: PC/ISO, desc: "Archbang"}
@@ -116,6 +118,7 @@ caps:
     - {id: 2046, cat: PC/ISO, desc: "FuguIta"}
     - {id: 2290, cat: PC/ISO, desc: "FuryBSD"}
     - {id: 2256, cat: PC/ISO, desc: "G4L"}
+    - {id: 15, cat: PC/ISO, desc: "Galactic Mandate Linux"}
     - {id: 2235, cat: PC/ISO, desc: "GALPon MiniNo"}
     - {id: 2299, cat: PC/ISO, desc: "Garuda Linux"}
     - {id: 2214, cat: PC/ISO, desc: "GeckoLinux"}
@@ -129,6 +132,7 @@ caps:
     - {id: 221, cat: PC/ISO, desc: "Grml"}
     - {id: 2280, cat: PC/ISO, desc: "GroovyArcade"}
     - {id: 2228, cat: PC/ISO, desc: "Guix System"}
+    - {id: 11, cat: PC/ISO, desc: "HackerOS"}
     - {id: 2049, cat: PC/ISO, desc: "Haiku"}
     - {id: 2050, cat: PC/ISO, desc: "Handy"}
     - {id: 2276, cat: PC/ISO, desc: "Hanthana Linux"}
@@ -270,9 +274,11 @@ caps:
     - {id: 506, cat: PC/ISO, desc: "Sms"}
     - {id: 2126, cat: PC/ISO, desc: "Solus"}
     - {id: 2127, cat: PC/ISO, desc: "Solydxk"}
+    - {id: 12, cat: PC/ISO, desc: "Spaced Linux"}
     - {id: 1236, cat: PC/ISO, desc: "SparkyLinux"}
     - {id: 2297, cat: PC/ISO, desc: "SpiralLinux"}
     - {id: 2225, cat: PC/ISO, desc: "Star"}
+    - {id: 18, cat: PC/ISO, desc: "StartOS"}
     - {id: 2132, cat: PC/ISO, desc: "Steamos"}
     - {id: 2174, cat: PC/ISO, desc: "Super Grub2 Disk"}
     - {id: 2134, cat: PC/ISO, desc: "SuperX"}
