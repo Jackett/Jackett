@@ -35,7 +35,8 @@ caps:
     search: [q]
     tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
     movie-search: [q, imdbid, tmdbid]
-    music-search: [q]                                                                                                                                               book-search: [q]
+    music-search: [q]
+    book-search: [q]
   allowrawsearch: true
   allowtvsearchimdb: true
 
@@ -48,7 +49,7 @@ settings:
     label: About your API key
     default: "Magnetz needs a membership. Make your API key (it starts with <b>mgz_</b>) on the <a href=\"https://magnetz.eu/account/apps#api-key\" target=\"_blank\">Apps &amp; API</a> page. Each search or RSS sync uses one call of your daily allowance."
 
-                                                                  login:
+login:
   # returns a torznab <error code="100"> (401) for a bad key, <error code="101"> (402) without a membership
   path: api/torznab
   method: get
@@ -62,14 +63,18 @@ settings:
         attribute: description
 
 search:
-  paths:                                                                                                                                                            - path: api/torznab
-      response:                                                                                                                                                         type: xml
+  paths:
+    - path: api/torznab
+      response:
+        type: xml
 
   inputs:
     apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     # the API matches seasons and episodes itself (season packs included), so it gets the plain keywords
-    q: "{{ .Query.Keywords }}"                                                                                                                                      cat: "{{ join .Categories \",\" }}"                                                                                                                             season: "{{ .Query.Season }}"
+    q: "{{ .Query.Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
     ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBIDShort }}"
     tvdbid: "{{ .Query.TVDBID }}"
@@ -77,25 +82,36 @@ search:
     limit: 100
 
   error:
-    - selector: error                                                                                                                                                 message:
-        selector: error[description]                                                                                                                                    attribute: description
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
 
   rows:
     selector: rss > channel > item
 
   fields:
     _category:
-                                                                                                                                                        selector: "[name=category]"
-      attribute: value                                                                                                                                              _subcategory:
-      # the second category attr, when present, is the more specific one (e.g. 5040 after 5000)                                                                       selector: "[name=category]:nth-of-type(2)"
-      attribute: value                                                                                                                                                optional: true
-    category:                                                                                                                                                         text: "{{ if .Result._subcategory }}{{ .Result._subcategory }}{{ else }}{{ .Result._category }}{{ end }}"
-    title:                                                                                                                                                            selector: title
-    details:                                                                                                                                                          selector: comments
+      selector: "[name=category]"
+      attribute: value
+    _subcategory:
+      # the second category attr, when present, is the more specific one (e.g. 5040 after 5000)
+      selector: "[name=category]:nth-of-type(2)"
+      attribute: value
+      optional: true
+    category:
+      text: "{{ if .Result._subcategory }}{{ .Result._subcategory }}{{ else }}{{ .Result._category }}{{ end }}"
+    title:
+      selector: title
+    details:
+      selector: comments
     download:
-      selector: "[name=magneturl]"                                                                                                                                    attribute: value
+      selector: "[name=magneturl]"
+      attribute: value
     infohash:
-      selector: "[name=infohash]"                                                                                                                                     attribute: value                                                                                                                                              imdbid:
+      selector: "[name=infohash]"
+      attribute: value
+    imdbid:
       selector: "[name=imdb]"
       attribute: value
       optional: true
@@ -105,13 +121,15 @@ search:
       optional: true
     tmdbid:
       selector: "[name=tmdbid]"
-      attribute: value                                                                                                                                                optional: true
+      attribute: value
+      optional: true
     poster:
       selector: "[name=coverurl]"
       attribute: value
       optional: true
     date:
-      # Sat, 08 Nov 2025 03:49:12 +0000                                                                                                                               selector: pubDate
+      # Sat, 08 Nov 2025 03:49:12 +0000
+      selector: pubDate
       filters:
         - name: dateparse
           args: "ddd, dd MMM yyyy HH:mm:ss zzz"
