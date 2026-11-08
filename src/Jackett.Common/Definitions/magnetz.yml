@@ -10,102 +10,152 @@ links:
 
 caps:
   categorymappings:
-    - {id: Other, cat: Other, desc: Other}
-    - {id: Movie, cat: Movies, desc: Movie}
-    - {id: Music, cat: Audio, desc: Music}
-    - {id: TV, cat: TV, desc: TV}
-    - {id: XXX, cat: XXX, desc: XXX}
-    - {id: eBook, cat: Books, desc: eBook}
-    - {id: App, cat: PC, desc: App}
-    - {id: Game, cat: Console, desc: Game}
-    - {id: Anime, cat: TV/Anime, desc: Anime}
-    - {id: ABook, cat: Audio/Audiobook, desc: ABook}
-    - {id: Banned, cat: Other, desc: Banned}
-    - {id: Bookware, cat: Other, desc: Bookware}
-    - {id: MusicVideo, cat: Audio/Video, desc: MusicVideo}
-    - {id: Sports, cat: TV/Sport, desc: Sports}
-    - {id: Font, cat: Other, desc: Font}
+    # from https://magnetz.eu/api/torznab?t=caps&apikey=YOUR-API-KEY
+    - {id: 2000, cat: Movies, desc: "Movies"}
+    - {id: 2030, cat: Movies/SD, desc: "Movies/SD"}
+    - {id: 2040, cat: Movies/HD, desc: "Movies/HD"}
+    - {id: 2045, cat: Movies/UHD, desc: "Movies/UHD"}
+    - {id: 5000, cat: TV, desc: "TV"}
+    - {id: 5030, cat: TV/SD, desc: "TV/SD"}
+    - {id: 5040, cat: TV/HD, desc: "TV/HD"}
+    - {id: 5045, cat: TV/UHD, desc: "TV/UHD"}
+    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: 5070, cat: TV/Anime, desc: "TV/Anime"}
+    - {id: 3000, cat: Audio, desc: "Audio"}
+    - {id: 3030, cat: Audio/Audiobook, desc: "Audio/Audiobook"}
+    - {id: 3040, cat: Audio/Lossless, desc: "Audio/Lossless"}
+    - {id: 4000, cat: PC, desc: "PC"}
+    - {id: 4050, cat: PC/Games, desc: "PC/Games"}
+    - {id: 7000, cat: Books, desc: "Books"}
+    - {id: 7020, cat: Books/EBook, desc: "Books/EBook"}
+    - {id: 6000, cat: XXX, desc: "XXX"}
+    - {id: 8000, cat: Other, desc: "Other"}
 
   modes:
     search: [q]
-    tv-search: [q, season, ep]
-    movie-search: [q]
+    tv-search: [q, season, ep, imdbid, tvdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
     music-search: [q]
     book-search: [q]
+  allowrawsearch: true
+  allowtvsearchimdb: true
 
 settings:
-  - name: email
+  - name: apikey
     type: text
-    label: Email
-  - name: password
-    type: password
-    label: Password
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: date
-    options:
-      date: created
-      seeders: seeders
-      size: size
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API key
+    default: "Magnetz needs a membership. Make your API key (it starts with <b>mgz_</b>) on the <a href=\"https://magnetz.eu/account/apps#api-key\" target=\"_blank\">Apps &amp; API</a> page. Each search or RSS sync uses one call of your daily allowance."
 
 login:
-  path: login
-  method: form
-  form: form
+  # returns a torznab <error code="100"> (401) for a bad key, <error code="101"> (402) without a membership
+  path: api/torznab
+  method: get
   inputs:
-    email: "{{ .Config.email }}"
-    password: "{{ .Config.password }}"
-    remember: on
+    t: caps
+    apikey: "{{ .Config.apikey }}"
   error:
-    - selector: span.form-input-error
-  test:
-    path: /
-    selector: form[action$="/logout"]
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
 
 search:
-  # https://magnetz.eu/search?query=masterplan&sort=date
   paths:
-    - path: search
+    - path: api/torznab
+      response:
+        type: xml
+
   inputs:
-    query: "{{ if .Keywords }}{{ .Keywords }}{{ else }}{{ .Today.Year }}{{ end }}"
-    sort: "{{ .Config.sort }}"
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    # the API matches seasons and episodes itself (season packs included), so it gets the plain keywords
+    q: "{{ .Query.Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    season: "{{ .Query.Season }}"
+    ep: "{{ .Query.Ep }}"
+    imdbid: "{{ .Query.IMDBIDShort }}"
+    tvdbid: "{{ .Query.TVDBID }}"
+    tmdbid: "{{ .Query.TMDBID }}"
+    limit: 100
+
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
 
   rows:
-    selector: article.result-card:has(a[href^="magnet:?xt="])
+    selector: rss > channel > item
 
   fields:
+    _category:
+      selector: "[name=category]"
+      attribute: value
+    _subcategory:
+      # the second category attr, when present, is the more specific one (e.g. 5040 after 5000)
+      selector: "[name=category]:nth-of-type(2)"
+      attribute: value
+      optional: true
     category:
-      selector: span.result-card__type
+      text: "{{ if .Result._subcategory }}{{ .Result._subcategory }}{{ else }}{{ .Result._category }}{{ end }}"
     title:
-      selector: a
+      selector: title
     details:
-      selector: a
-      attribute: href
+      selector: comments
     download:
-      selector: a[href^="magnet:?xt="]
-      attribute: href
+      selector: "[name=magneturl]"
+      attribute: value
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
+    imdbid:
+      selector: "[name=imdb]"
+      attribute: value
+      optional: true
+    tvdbid:
+      selector: "[name=tvdbid]"
+      attribute: value
+      optional: true
+    tmdbid:
+      selector: "[name=tmdbid]"
+      attribute: value
+      optional: true
+    poster:
+      selector: "[name=coverurl]"
+      attribute: value
+      optional: true
     date:
-      # 2026-10-28T16:31:01+00:00
-      selector: time.result-card__added
-      attribute: datetime
+      # Sat, 08 Nov 2025 03:49:12 +0000
+      selector: pubDate
       filters:
         - name: dateparse
-          args: "yyyy-MM-ddTHH:mm:sszzz"
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
-      selector: span.result-card__size
-    description:
-      case:
-        a.result-card__trust--verified: Verified
-        "*": Unverified
+      selector: size
+    files:
+      selector: "[name=files]"
+      attribute: value
+      optional: true
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+      optional: true
     seeders:
-      selector: span.result-card__seed
-      remove: span
+      selector: "[name=seeders]"
+      attribute: value
     leechers:
-      selector: span.result-card__leech
-      remove: span
+      selector: "[name=leechers]"
+      attribute: value
+    description:
+      # scene, confirmed, verified or unverified
+      selector: "[name=trust]"
+      attribute: value
+      optional: true
     downloadvolumefactor:
       text: 0
     uploadvolumefactor:
       text: 1
-# engine n/a
+# torznab xml
