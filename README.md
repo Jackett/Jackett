@@ -409,6 +409,7 @@ Prior versions of Jackett are no longer supported.
  * HDArea (HDA)
  * HDBao
  * HDBits [![(invite needed)][inviteneeded]](#)
+ * HDChina (HDWing) [![(invite needed)][inviteneeded]](#)
  * HDCiTY (HDC)
  * HDClone
  * HDFans
