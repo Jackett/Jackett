@@ -35,17 +35,13 @@ settings:
 login:
   path: login.php
   method: form
-  form: form[action="takelogin.php"]
+  form: form[name="login"]
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  captcha:
-    type: image
-    selector: img#captcha_img
-    input: captcha
+    login[username]: "{{ .Config.username }}"
+    login[password]: "{{ .Config.password }}"
+    login[submit]: ""
   error:
-    - selector: table:contains("Login failed!")
-    - selector: table:contains("Login unsuccessful")
+    - selector: div.p-5:contains("Username or password incorrect.")
   test:
     path: index.php
     selector: a[href*="logout.php"]
