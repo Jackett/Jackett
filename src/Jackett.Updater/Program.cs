@@ -533,6 +533,7 @@ namespace Jackett.Updater
                 "Definitions/hqsource.yml",
                 "Definitions/huntorrent-bithorlo.yml", // merged with huntorrent
                 "Definitions/hush.yml",
+                "Definitions/hxpt.yml", // renamed to fluxtorrent
                 "Definitions/hydracker-api.yml",
                 "Definitions/hyperay.yml",
                 "Definitions/ibit.yml",
