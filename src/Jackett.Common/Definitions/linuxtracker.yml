@@ -126,6 +126,7 @@ caps:
     - {id: 206, cat: PC/ISO, desc: "Gentoo"}
     - {id: 2048, cat: PC/ISO, desc: "GhostBSD"}
     - {id: 210, cat: PC/ISO, desc: "Gnewsense"}
+    - {id: 22, cat: PC/ISO, desc: "GNUSlashLinux"}
     - {id: 216, cat: PC/ISO, desc: "GoboLinux"}
     - {id: 1212, cat: PC/ISO, desc: "GParted"}
     - {id: 220, cat: PC/ISO, desc: "Greenie Linux"}
@@ -138,15 +139,18 @@ caps:
     - {id: 2276, cat: PC/ISO, desc: "Hanthana Linux"}
     - {id: 2186, cat: PC/ISO, desc: "HardenedBSD"}
     - {id: 2200, cat: PC/ISO, desc: "Heads"}
+    - {id: 21, cat: PC/ISO, desc: "Helwan Linux"}
     - {id: 2293, cat: PC/ISO, desc: "Hiren's BootCD+PE"}
     - {id: 2166, cat: PC/ISO, desc: "Huayra Linux"}
     - {id: 2244, cat: PC/ISO, desc: "Hyperbola GNU"}
+    - {id: 20, cat: PC/ISO, desc: "Infinity Linux"}
     - {id: 252, cat: PC/ISO, desc: "IPFire"}
     - {id: 2294, cat: PC/ISO, desc: "Kaisen Linux"}
     - {id: 2051, cat: PC/ISO, desc: "Kali"}
     - {id: 2052, cat: PC/ISO, desc: "KaOS"}
     - {id: 2053, cat: PC/ISO, desc: "Karoshi"}
     - {id: 2181, cat: PC/ISO, desc: "KDE Neon"}
+    - {id: 23, cat: PC/ISO, desc: "KibaOS"}
     - {id: 277, cat: PC/ISO, desc: "Knoppix"}
     - {id: 2054, cat: PC/ISO, desc: "Kolibri"}
     - {id: 287, cat: PC/ISO, desc: "Kubuntu"}
@@ -176,11 +180,13 @@ caps:
     - {id: 2075, cat: PC/ISO, desc: "Minino"}
     - {id: 2076, cat: PC/ISO, desc: "Minix"}
     - {id: 2300, cat: PC/ISO, desc: "MocaccinoOS"}
+    - {id: 19, cat: PC/ISO, desc: "MODICIA O.S."}
     - {id: 2163, cat: PC/ISO, desc: "MOFO Linux"}
     - {id: 2241, cat: PC/ISO, desc: "MorpheusArch Linux"}
     - {id: 369, cat: PC/ISO, desc: "Musix"}
     - {id: 2177, cat: PC/ISO, desc: "MX Linux"}
     - {id: 373, cat: PC/ISO, desc: "Mythbuntu"}
+    - {id: 25, cat: PC/ISO, desc: "NagisinnraLinux"}
     - {id: 2302, cat: PC/ISO, desc: "NakeDeb"}
     - {id: 2217, cat: PC/ISO, desc: "Namib GNU/Linux"}
     - {id: 2078, cat: PC/ISO, desc: "NAS4Free"}
@@ -296,6 +302,7 @@ caps:
     - {id: 194, cat: PC/ISO, desc: "TrueNAS"}
     - {id: 2195, cat: PC/ISO, desc: "TrueOS"}
     - {id: 2271, cat: PC/ISO, desc: "Tsurugi Linux"}
+    - {id: 26, cat: PC/ISO, desc: "TTOS Linux"}
     - {id: 2140, cat: PC/ISO, desc: "TurnKey"}
     - {id: 2206, cat: PC/ISO, desc: "UBOS"}
     - {id: 563, cat: PC/ISO, desc: "Ubuntu"}
@@ -327,6 +334,7 @@ caps:
     - {id: 2251, cat: PC/ISO, desc: "XigmaNAS"}
     - {id: 2229, cat: PC/ISO, desc: "XiVa Studio"}
     - {id: 607, cat: PC/ISO, desc: "Xubuntu"}
+    - {id: 24, cat: PC/ISO, desc: "ZelixOS"}
     - {id: 612, cat: PC/ISO, desc: "Zen"}
     - {id: 2159, cat: PC/ISO, desc: "Zentyal"}
     - {id: 346, cat: PC/ISO, desc: "Zenwalk Linux"}
