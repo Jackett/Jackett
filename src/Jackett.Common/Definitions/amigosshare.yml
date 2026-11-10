@@ -249,7 +249,7 @@ search:
         - name: regexp
           args: "\"releasedAt\":\"([^\"]+)\""
         - name: append
-          args: " +00:01" # CET
+          args: " +01:00" # CET
         - name: dateparse
           args: "yyyy-MM-dd zzz"
     size:
