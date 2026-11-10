@@ -81,7 +81,7 @@ namespace Jackett.Server.Controllers
                 catch (Exception e)
                 {
                     var content = indexer.Encoding.GetString(downloadBytes);
-                    _logger.Error(content);
+                    _logger.Debug(content);
                     throw new Exception("BencodeParser failed", e);
                 }
 
