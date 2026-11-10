@@ -28,12 +28,6 @@ namespace Jackett.Common.Indexers.Definitions
         public override string Name => "M-Team - TP";
         public override string Description => "M-Team - TP (MTTP) is a CHINESE Private Torrent Tracker for MOVIES / TV / GENERAL";
         public override string SiteLink { get; protected set; } = "https://kp.m-team.cc/";
-        public override string[] AlternativeSiteLinks => new[]
-        {
-            "https://kp.m-team.cc/",
-            "https://tp.m-team.cc/",
-            "https://pt.m-team.cc/"
-        };
         public override string Language => "zh-CN";
         public override string Type => "private";
 
