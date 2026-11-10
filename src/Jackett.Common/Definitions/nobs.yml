@@ -12,11 +12,13 @@ caps:
   categorymappings:
     - {id: 1, cat: Movies, desc: "Movies"}
     - {id: 2, cat: TV, desc: "TV"}
-    - {id: 3, cat: Console, desc: "Retro Arcade"}
+    - {id: 3, cat: Console, desc: "Arcade"}
     - {id: 4, cat: Movies/Other, desc: "Anime Movies"}
     - {id: 5, cat: TV/Anime, desc: "Anime TV Shows"}
     - {id: 7, cat: Books, desc: "E-Books"}
     - {id: 8, cat: Audio/Audiobook, desc: "Audiobooks"}
+    - {id: 9, cat: Console, desc: "Consolas"}
+    - {id: 10, cat: PC/Games, desc: "PC"}
 
   modes:
     search: [q]
