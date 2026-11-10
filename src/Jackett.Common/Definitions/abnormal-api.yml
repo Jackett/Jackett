@@ -149,7 +149,7 @@ search:
       selector: created
       filters:
         - name: append
-          args: " +00:01" # CET
+          args: " +01:00" # CET
         - name: dateparse
           args: "MM/dd/yyyy HH:mm:ss zzz"
     size:
