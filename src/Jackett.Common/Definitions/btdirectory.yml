@@ -66,10 +66,15 @@ search:
         - name: regexp
           args: ([A-F|a-f|0-9]{40})
     date:
-      selector: p
+      selector: time
+      attribute: datetime
       filters:
-        - name: regexp
-          args: (\d{4}-\d{2}-\d{2} \d{2}:\d{2}:\d{2})
+        - name: replace
+          args: ["T", ""]
+        - name: replace
+          args: ["Z", "+01:00"] # CET
+        - name: dateparse
+          args: "yyyy-MM-ddHH:mm:sszzz"
     files:
       selector: p
       filters:
