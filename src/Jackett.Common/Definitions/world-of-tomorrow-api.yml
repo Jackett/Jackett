@@ -16,67 +16,62 @@ legacylinks:
 caps:
   categorymappings:
     # from https://w-o-t.pro/api/torznab?apikey=YOUR-API-KEY&t=caps
-    # Filme
     - {id: 2000, cat: Movies, desc: "Filme"}
-    - {id: 1049, cat: Movies/HD, desc: "1080p"}
-    - {id: 1090, cat: Movies/3D, desc: "3D"}
-    - {id: 1048, cat: Movies/HD, desc: "720p"}
-    - {id: 1087, cat: TV/Anime, desc: "Anime"}
-    - {id: 1047, cat: Movies/BluRay, desc: "BluRay"}
-    - {id: 1011, cat: Movies/DVD, desc: "DVD"}
-    - {id: 1060, cat: Movies/HD, desc: "HDTV"}
-    - {id: 1066, cat: Movies, desc: "Movies"}
-    - {id: 1091, cat: Movies, desc: "Packs"}
-    - {id: 1062, cat: Movies/SD, desc: "SD"}
-    - {id: 1089, cat: Movies/UHD, desc: "UHD"}
-    - {id: 1108, cat: Movies, desc: "WOTT"}
-    # Audio
+    - {id: 1049, cat: Movies/HD, desc: "Filme / 1080p"}
+    - {id: 1090, cat: Movies/3D, desc: "Filme / 3D"}
+    - {id: 1048, cat: Movies/HD, desc: "Filme / 720p"}
+    - {id: 1087, cat: TV/Anime, desc: "Filme / Anime"}
+    - {id: 1047, cat: Movies/BluRay, desc: "Filme / BluRay"}
+    - {id: 1011, cat: Movies/DVD, desc: "Filme / DVD"}
+    - {id: 1060, cat: Movies/HD, desc: "Filme / HDTV"}
+    - {id: 1066, cat: Movies, desc: "Filme / Movies"}
+    - {id: 1091, cat: Movies, desc: "Filme / Packs"}
+    - {id: 1062, cat: Movies/SD, desc: "Filme / SD"}
+    - {id: 1089, cat: Movies/UHD, desc: "Filme / UHD"}
+    - {id: 1108, cat: Movies, desc: "Filme / WOTT"}
     - {id: 3000, cat: Audio, desc: "Musik"}
-    - {id: 1036, cat: Audio/Audiobook, desc: "Hörbücher"}
-    - {id: 1069, cat: Audio, desc: "Musik"}
-    - {id: 1072, cat: Audio, desc: "Musik-Packs"}
-    - {id: 1093, cat: Audio/Video, desc: "Musik-Videos"}
-    - {id: 1070, cat: Audio/Lossless, desc: "Musik/Flac"}
-    - {id: 1014, cat: Audio/MP3, desc: "Musik/MP3"}
-    - {id: 1071, cat: Audio, desc: "Soundtracks"}
-    - {id: 1110, cat: Audio, desc: "WOTT"}
-    # Apps
+    - {id: 1036, cat: Audio/Audiobook, desc: "Audio / Hörbücher"}
+    - {id: 1069, cat: Audio, desc: "Audio / Musik"}
+    - {id: 1072, cat: Audio, desc: "Audio / Musik-Packs"}
+    - {id: 1093, cat: Audio/Video, desc: "Audio / Musik-Videos"}
+    - {id: 1070, cat: Audio/Lossless, desc: "Audio / Musik/Flac"}
+    - {id: 1014, cat: Audio/MP3, desc: "Audio / Musik/MP3"}
+    - {id: 1071, cat: Audio, desc: "Audio / Soundtracks"}
+    - {id: 1110, cat: Audio, desc: "Audio / WOTT"}
     - {id: 4000, cat: PC, desc: "PC / Spiele"}
-    - {id: 1107, cat: PC/Mac, desc: "MAC"}
-    - {id: 1018, cat: PC, desc: "Sonstige"}
-    - {id: 1028, cat: PC/0day, desc: "Windows"}
-    # Spiele
-    - {id: 1005, cat: Console, desc: "Konsolen"}
-    - {id: 1092, cat: Console, desc: "Wimmelbild"}
-    - {id: 1004, cat: PC/Games, desc: "Windows"}
-    # Serien
+    - {id: 1107, cat: PC/Mac, desc: "Apps / MAC"}
+    - {id: 1068, cat: PC, desc: "Apps / Programme"}
+    - {id: 1018, cat: PC, desc: "Apps / Sonstige"}
+    - {id: 1028, cat: PC/0day, desc: "Apps / Windows"}
+    - {id: 1083, cat: PC/Games, desc: "Spiele / Games"}
+    - {id: 1005, cat: Console, desc: "Spiele / Konsolen"}
+    - {id: 1092, cat: Console, desc: "Spiele / Wimmelbild"}
+    - {id: 1004, cat: PC/Games, desc: "Spiele / Windows"}
     - {id: 5000, cat: TV, desc: "Serien / TV"}
-    - {id: 1079, cat: TV/HD, desc: "1080p"}
-    - {id: 1095, cat: TV/UHD, desc: "2160p"}
-    - {id: 1078, cat: TV/HD, desc: "720p"}
-    - {id: 1105, cat: TV/Anime, desc: "Anime"}
-    - {id: 1100, cat: TV/HD, desc: "Packs HD"}
-    - {id: 1016, cat: TV/SD, desc: "Packs-SD"}
-    - {id: 1077, cat: TV/SD, desc: "SD"}
-    - {id: 1109, cat: TV, desc: "WOTT"}
-    # Sonstiges
+    - {id: 1079, cat: TV/HD, desc: "Serien / 1080p"}
+    - {id: 1095, cat: TV/UHD, desc: "Serien / 2160p"}
+    - {id: 1078, cat: TV/HD, desc: "Serien / 720p"}
+    - {id: 1105, cat: TV/Anime, desc: "Serien / Anime"}
+    - {id: 1100, cat: TV/HD, desc: "Serien / Packs HD"}
+    - {id: 1016, cat: TV/SD, desc: "Serien / Packs-SD"}
+    - {id: 1077, cat: TV/SD, desc: "Serien / SD"}
+    - {id: 1109, cat: TV, desc: "Serien / WOTT"}
     - {id: 6000, cat: XXX, desc: "XXX"}
-    - {id: 1088, cat: XXX, desc: "XXX"}
-    - {id: 1106, cat: XXX/ImageSet, desc: "XXX Bilder"}
-    - {id: 1102, cat: XXX/Other, desc: "XXX HENTAI"}
+    - {id: 1088, cat: XXX, desc: "Sonstiges / XXX"}
+    - {id: 1106, cat: XXX/ImageSet, desc: "Sonstiges / XXX Bilder"}
+    - {id: 1102, cat: XXX/Other, desc: "Sonstiges / XXX HENTAI"}
     - {id: 7000, cat: Books, desc: "Bücher"}
-    - {id: 1019, cat: Books/EBook, desc: "Ebooks"}
+    - {id: 1019, cat: Books/EBook, desc: "Sonstiges / Ebooks"}
     - {id: 8000, cat: Other, desc: "Andere"}
-    - {id: 1064, cat: TV/Documentary, desc: "Dokus"}
-    - {id: 1111, cat: Books/EBook, desc: "English Section"}
-    - {id: 1101, cat: TV, desc: "Kids"}
-    - {id: 1086, cat: Other/Misc, desc: "Misc"}
-    - {id: 1096, cat: Other, desc: "Sonstiges"}
-    # Sport
-    - {id: 1075, cat: TV/Sport, desc: "Formel 1"}
-    - {id: 1074, cat: TV/Sport, desc: "Fussball"}
-    - {id: 1073, cat: TV/Sport, desc: "Sport"}
-    - {id: 1023, cat: TV/Sport, desc: "Wrestling"}
+    - {id: 1064, cat: TV/Documentary, desc: "Sonstiges / Dokus"}
+    - {id: 1111, cat: Books/EBook, desc: "Sonstiges / English Section"}
+    - {id: 1101, cat: TV, desc: "Sonstiges / Kids"}
+    - {id: 1086, cat: Other/Misc, desc: "Sonstiges / Misc"}
+    - {id: 1096, cat: Other, desc: "Sonstiges / Sonstiges"}
+    - {id: 1075, cat: TV/Sport, desc: "Sport / Formel 1"}
+    - {id: 1074, cat: TV/Sport, desc: "Sport / Fussball"}
+    - {id: 1073, cat: TV/Sport, desc: "Sport / Sport"}
+    - {id: 1023, cat: TV/Sport, desc: "Sport / Wrestling"}
 
   modes:
     search: [q]
