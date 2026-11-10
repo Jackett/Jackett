@@ -41,7 +41,7 @@ caps:
   modes:
     search: [q]
     tv-search: [q, season, ep]
-    movie-search: [q, imdbid]
+    movie-search: [q]
     music-search: [q]
     book-search: [q]
 
@@ -60,7 +60,7 @@ settings:
 
 search:
   paths:
-    - path: "get-posts/order:{{ .Config.sort }}{{ range .Categories }}:category:{{.}}{{end}}{{ if or .Query.IMDBID .Keywords }}:keywords:{{ or .Query.IMDBID .Keywords }}{{ else }}:time:10D{{ end }}:paginate_by:100:format:json/"
+    - path: "get-posts/order:{{ .Config.sort }}{{ range .Categories }}:category:{{.}}{{end}}{{ if .Keywords }}:keywords:{{ .Keywords }}{{ else }}:time:10D{{ end }}:paginate_by:100:format:json/"
       response:
         type: json
 
