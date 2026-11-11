@@ -55,7 +55,7 @@ search:
     search: "{{ .Keywords }}"
 
   rows:
-    selector: "table.torrents > tbody > tr:has(a[href^=\"/download.php?id=\"]){{ if .Config.freeleech }}:has(img.sp_4){{ else }}{{ end }}"
+    selector: "table.torrents > tbody > tr:has(table.torrentname){{ if .Config.freeleech }}:has(img.sp_4){{ else }}{{ end }}"
 
   fields:
     category:
@@ -70,12 +70,17 @@ search:
     details:
       selector: a[href^="/forum.php?mod=viewthread&tid="]
       attribute: href
-    download:
-      selector: a[href^="/download.php?id="]
+    _id:
+      selector: a[href*="bookmark("]
       attribute: href
+      filters:
+        - name: regexp
+          args: (\d+)
+    download:
+      text: "download.php?id={{ .Result._id }}"
     date_elapsed:
       # time type: time elapsed (default)
-      selector: td:nth-child(3) > span[title]
+      selector: td.rowfollow:nth-child(3) > span[title]
       attribute: title
       optional: true
       filters:
@@ -85,7 +90,7 @@ search:
           args: "yyyy-MM-dd HH:mm:ss zzz"
     date_added:
       # time added
-      selector: td:nth-child(3):not(:has(span))
+      selector: td.rowfollow:nth-child(3):not(:has(span))
       optional: true
       filters:
         - name: append
@@ -95,20 +100,23 @@ search:
     date:
       text: "{{ if or .Result.date_elapsed .Result.date_added }}{{ or .Result.date_elapsed .Result.date_added }}{{ else }}now{{ end }}"
     size:
-      selector: td:nth-child(4)
+      selector: td.rowfollow:nth-child(4)
     seeders:
-      selector: td:nth-child(5)
+      selector: td.rowfollow:nth-child(5)
     leechers:
-      selector: td:nth-child(6)
+      selector: td.rowfollow:nth-child(6)
     grabs:
-      selector: td:nth-child(7)
+      selector: td.rowfollow:nth-child(7)
     downloadvolumefactor:
       case:
+        img.sp_3: 0.35 # 35%
         img.sp_4: 0 # FREE
+        img.sp_5: 0 # 2xFREE
         img.sp_2: 0.5 # 50%
         "*": 1
     uploadvolumefactor:
       case:
+        img.sp_5: 2 # 2xFREE
 #          img.sp_0: 2 # do not know what a flag of 2xSFC means, but I dont think this is a 2xupload
         "*": 1
 # Discuz! X3.4
