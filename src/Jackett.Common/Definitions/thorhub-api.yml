@@ -5,6 +5,8 @@ description: "Thor HUB is a Private Torrent Tracker for MOVIES / TV / MUSIC"
 language: en-US
 type: private
 encoding: UTF-8
+certificates:
+  - b155398784de1df335cb6172eb45982f1de74396 # Expired 12th Nov 2026
 links:
   - https://thorhub.eu/
 
