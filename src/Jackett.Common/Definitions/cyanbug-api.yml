@@ -27,7 +27,6 @@ caps:
     music-search: [q]
 
 settings:
-settings:
   - name: apikey
     type: text
     label: API Token
