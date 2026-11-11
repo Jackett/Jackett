@@ -52,6 +52,7 @@ caps:
     - {id: 87, cat: Console, desc: "Playnite"}
     - {id: 30, cat: Console, desc: "Playstation"}
     - {id: 118, cat: Console, desc: "PS5.Roms"}
+    - {id: 151, cat: PC, desc: "Recomps"}
     - {id: 83, cat: PC, desc: "Retro eXo"}
     - {id: 56, cat: PC, desc: "Retro Minis"}
     - {id: 67, cat: PC, desc: "RetroBat"}
@@ -72,7 +73,6 @@ caps:
     - {id: 148, cat: TV/HD, desc: "TV HD"}
     - {id: 9, cat: TV, desc: "TV Packs"}
     - {id: 149, cat: TV/SD, desc: "TV SD"}
-    - {id: 11, cat: TV, desc: "TV Shows"}
     - {id: 145, cat: TV/UHD, desc: "TV UHD"}
     - {id: 117, cat: Console, desc: "Virtual Reality"}
     - {id: 73, cat: Console, desc: "Wolfanoz"}
