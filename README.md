@@ -320,6 +320,7 @@ Prior versions of Jackett are no longer supported.
  * BTSCHOOL
  * BWTorrents
  * BYRBT
+ * BytePeer
  * C411
  * cangbaoge (CBG)
  * CapybaraBR
