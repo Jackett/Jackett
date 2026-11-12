@@ -25,13 +25,11 @@ caps:
   modes:
     search: [q]
     movie-search: [q, imdbid, tmdbid]
-    # note: the api any supports movie search so there is no tv season/episode support.
-    # not using year search because torznab adds it to the q= which results in &q=keyword+2022&year=2022 sent to api !?!
 
 settings:
   - name: apikey
     type: text
-    label: APIKey
+    label: API Key
   - name: info_key
     type: info
     label: About your API key
@@ -69,17 +67,16 @@ search:
         type: json
 
   inputs:
-    api_key: "{{ .Config.apikey }}"
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     o: json
-    t: movie
     q: "{{ .Keywords }}"
     tmdb: "{{ .Query.TMDBID }}"
     imdb: "{{ .Query.IMDBIDShort }}"
-    # category filtering is disabled since it seems to rely on the AND operator that prevents some releases to show on search.
-    # cat: "{{ join .Categories \",\" }}"
+    cat: "{{ join .Categories \",\" }}"
     limit: 100
     offset: 0
-    # freetorrent: 0 normal, 1 freeleech, 2 neutral leechgi
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -90,56 +87,8 @@ search:
   fields:
     category:
       selector: category
-      filters:
-        - name: split
-          args: [",", -1]
-        - name: re_replace
-          args: ["1\\d{5}", "2000"]
-    year:
-      selector: year
-      optional: true
-    _codec:
-      selector: codec
-    _container:
-      selector: container
-      filters:
-        - name: toupper
-    _media:
-      selector: media
-      filters:
-        - name: replace
-          args: ["WEB", "WEB-DL"]
-    _resolution:
-      selector: resolution
-    _audioFormat:
-      selector: audioFormat
-    _subbing:
-      selector: subbing
-      optional: true
-    _flags:
-      selector: flags
-      optional: true
-      filters:
-        - name: replace
-          args: [",", " "]
-    _language:
-      selector: language
-      optional: true
-    _releaseGroup:
-      selector: releaseGroup
-      optional: true
-      filters:
-        - name: trim
-    title_optional:
-      selector: title
-      filters:
-        - name: htmldecode
-        - name: append
-          args: " {{ .Result.year }} {{ .Result._resolution }} {{ .Result._media }} {{ .Result._container }} {{ .Result._codec }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}{{ if and (.Result._releaseGroup) (ne .Result._releaseGroup \"NULL\") }}-{{ .Result._releaseGroup }}{{ else }}{{ end }}"
-        - name: replace
-          args: ["M2TS H265", "M2TS HEVC"]
-        - name: replace
-          args: ["M2TS H264", "M2TS AVC"]
+    title:
+      selector: releaseName
     details:
       selector: guid
     download:
@@ -181,11 +130,4 @@ search:
     minimumseedtime:
       # 3 day (as seconds = 3 x 24 x 60 x 60)
       text: 259200
-    _filename:
-      selector: "files[0].name"
-      filters:
-        - name: htmldecode
-      optional: true
-    title:
-      text: "{{ if and (eq .Result.files \"1\") (.Result._filename) }}{{ .Result._filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-# json api
+# torznab json
