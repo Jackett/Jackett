@@ -1,0 +1,42 @@
+{
+  "results": [
+    {
+      "id": 1,
+      "slug": "heroe-de-la-libertad",
+      "title": "Héroe de la Libertad",
+      "original_title": "Hero of Liberty",
+      "year": 2024,
+      "type": "pelicula",
+      "language": "Latino"
+    },
+    {
+      "id": 2,
+      "slug": "darwins-game",
+      "title": "Darwin's Game",
+      "original_title": "Darwin's Game",
+      "year": 2020,
+      "type": "anime",
+      "language": "Subtitulado"
+    },
+    {
+      "id": 3,
+      "slug": "stranger-things-relatos-del-85",
+      "title": "Stranger Things: Relatos del 85",
+      "original_title": "Stranger Things: Tales from '85",
+      "year": 2026,
+      "type": "serie",
+      "language": "Castellano"
+    },
+    {
+      "id": 4,
+      "slug": "some-doc",
+      "title": "Some Documentary",
+      "original_title": "Some Documentary",
+      "year": 2023,
+      "type": "documental",
+      "language": "Castellano"
+    }
+  ],
+  "total": 4,
+  "pages": 1
+}
