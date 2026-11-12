@@ -25,13 +25,11 @@ caps:
   modes:
     search: [q]
     movie-search: [q, imdbid, tmdbid]
-    # note: the api any supports movie search so there is no tv season/episode support.
-    # not using year search because torznab adds it to the q= which results in &q=keyword+2022&year=2022 sent to api !?!
 
 settings:
   - name: apikey
     type: text
-    label: APIKey
+    label: API Key
   - name: info_key
     type: info
     label: About your API key
@@ -49,29 +47,18 @@ login:
   path: api.php
   method: get
   inputs:
-    api_key: "{{ .Config.apikey }}"
-  error:
-    - selector: ":root:contains(\"Unrecognized key\")"
-      message:
-        text: "The API key was not accepted by {{ .Config.sitelink }}."
-    - selector: ":root:contains(\"No API_KEY provided\")"
-      message:
-        text: "You did not enter an API key."
-    - selector: ":root:contains(\"not have MFA\")"
-      message:
-        text: "User does not have MFA enabled on the account."
+    t: caps
+    apikey: "{{ .Config.apikey }}"
 
 search:
   paths:
-    # docs: https://anthelion.me/forums.php?action=viewthread&threadid=1026
     - path: api.php
       response:
-        type: json
+        type: xml
 
   inputs:
-    api_key: "{{ .Config.apikey }}"
-    o: json
-    t: movie
+    apikey: "{{ .Config.apikey }}"
+    t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     tmdb: "{{ .Query.TMDBID }}"
     imdb: "{{ .Query.IMDBIDShort }}"
@@ -79,113 +66,66 @@ search:
     # cat: "{{ join .Categories \",\" }}"
     limit: 100
     offset: 0
-    # freetorrent: 0 normal, 1 freeleech, 2 neutral leechgi
+    # freetorrent: 0 normal, 1 freeleech, 2 neutral leech
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
-    selector: item
-    count:
-      selector: response.total
+    selector: rss > channel > item
 
   fields:
     category:
-      selector: category
-      filters:
-        - name: split
-          args: [",", -1]
-        - name: re_replace
-          args: ["1\\d{5}", "2000"]
-    year:
-      selector: year
-      optional: true
-    _codec:
-      selector: codec
-    _container:
-      selector: container
-      filters:
-        - name: toupper
-    _media:
-      selector: media
-      filters:
-        - name: replace
-          args: ["WEB", "WEB-DL"]
-    _resolution:
-      selector: resolution
-    _audioFormat:
-      selector: audioFormat
-    _subbing:
-      selector: subbing
-      optional: true
-    _flags:
-      selector: flags
-      optional: true
-      filters:
-        - name: replace
-          args: [",", " "]
-    _language:
-      selector: language
-      optional: true
-    _releaseGroup:
-      selector: releaseGroup
-      optional: true
-      filters:
-        - name: trim
-    title_optional:
+      selector: "[name=category]"
+      attribute: value
+    title:
       selector: title
-      filters:
-        - name: htmldecode
-        - name: append
-          args: " {{ .Result.year }} {{ .Result._resolution }} {{ .Result._media }} {{ .Result._container }} {{ .Result._codec }} {{ .Result._audioFormat }}{{ if .Result._subbing }} Subs{{ else }}{{ end }}{{ if .Result._flags }} {{ .Result._flags }}{{ else }}{{ end }}{{ if .Result._language }} {{ .Result._language }}{{ else }}{{ end }}{{ if and (.Result._releaseGroup) (ne .Result._releaseGroup \"NULL\") }}-{{ .Result._releaseGroup }}{{ else }}{{ end }}"
-        - name: replace
-          args: ["M2TS H265", "M2TS HEVC"]
-        - name: replace
-          args: ["M2TS H264", "M2TS AVC"]
     details:
-      selector: guid
+      selector: comments
     download:
-      selector: link
-      filters:
-        - name: htmldecode
+      selector: enclosure
+      attribute: url
     infohash:
-      selector: infohash
+      selector: "[name=infohash]"
+      attribute: value
     imdbid:
-      selector: imdb
+      selector: "[name=imdb]"
+      attribute: value
+      optional: true
     tmdbid:
-      selector: tmdb
-    genre:
-      selector: tags
-      filters:
-        - name: replace
-          args: [".", "_"]
-    description:
-      text: "{{ .Result.genre }}"
-    files:
-      selector: fileCount
-    seeders:
-      selector: seeders
-    leechers:
-      selector: leechers
-    grabs:
-      selector: grabs
+      selector: "[name=tmdbid]"
+      attribute: value
+      optional: true
     date:
-      # 2022-08-07T20:56:06+0200
+      # Sat, 08 Nov 2025 03:49:12 +0000
       selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
     size:
       selector: size
-    downloadvolumefactor:
-      selector: downloadvolumefactor
-    uploadvolumefactor:
-      selector: uploadvolumefactor
-    minimumratio:
-      text: 1.0
-    minimumseedtime:
-      # 3 day (as seconds = 3 x 24 x 60 x 60)
-      text: 259200
-    _filename:
-      selector: "files[0].name"
-      filters:
-        - name: htmldecode
+    files:
+      selector: "[name=files]"
+      attribute: value
       optional: true
-    title:
-      text: "{{ if and (eq .Result.files \"1\") (.Result._filename) }}{{ .Result._filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
-# json api
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+      optional: true
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+    downloadvolumefactor:
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
+    uploadvolumefactor:
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
+    minimumseedtime:
+      selector: "[name=minimumseedtime]"
+      attribute: value
+    minimumratio:
+      selector: "[name=minimumratio]"
+      attribute: value
+# torznab xml
