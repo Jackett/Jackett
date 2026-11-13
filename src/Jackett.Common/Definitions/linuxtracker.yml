@@ -61,6 +61,7 @@ caps:
     - {id: 2026, cat: PC/ISO, desc: "Cae"}
     - {id: 1220, cat: PC/ISO, desc: "Caine"}
     - {id: 2028, cat: PC/ISO, desc: "Calculate Linux"}
+    - {id: 27, cat: PC/ISO, desc: "CatOS"}
     - {id: 102, cat: PC/ISO, desc: "CentOS"}
     - {id: 1216, cat: PC/ISO, desc: "Chakra"}
     - {id: 2033, cat: PC/ISO, desc: "Chapeau"}
@@ -145,6 +146,7 @@ caps:
     - {id: 2244, cat: PC/ISO, desc: "Hyperbola GNU"}
     - {id: 20, cat: PC/ISO, desc: "Infinity Linux"}
     - {id: 252, cat: PC/ISO, desc: "IPFire"}
+    - {id: 30, cat: PC/ISO, desc: "Kader⁴²"}
     - {id: 2294, cat: PC/ISO, desc: "Kaisen Linux"}
     - {id: 2051, cat: PC/ISO, desc: "Kali"}
     - {id: 2052, cat: PC/ISO, desc: "KaOS"}
@@ -176,6 +178,7 @@ caps:
     - {id: 10, cat: PC/ISO, desc: "MagOS Linux"}
     - {id: 2071, cat: PC/ISO, desc: "MakuluLinux"}
     - {id: 2073, cat: PC/ISO, desc: "Manjaro"}
+    - {id: 28, cat: PC/ISO, desc: "Maple Linux"}
     - {id: 343, cat: PC/ISO, desc: "MidnightBSD"}
     - {id: 2075, cat: PC/ISO, desc: "Minino"}
     - {id: 2076, cat: PC/ISO, desc: "Minix"}
@@ -204,6 +207,7 @@ caps:
     - {id: 401, cat: PC/ISO, desc: "OpenBSD"}
     - {id: 2089, cat: PC/ISO, desc: "Openelec"}
     - {id: 2090, cat: PC/ISO, desc: "OpenIndiana"}
+    - {id: 29, cat: PC/ISO, desc: "openKylin"}
     - {id: 7, cat: PC/ISO, desc: "Openmamba GNU/Linux"}
     - {id: 2091, cat: PC/ISO, desc: "OpenMandriva Lx"}
     - {id: 2092, cat: PC/ISO, desc: "Openmediavault"}
