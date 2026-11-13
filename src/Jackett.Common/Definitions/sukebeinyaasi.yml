@@ -7,9 +7,10 @@ type: public
 encoding: UTF-8
 links:
   - https://sukebei.nyaa.si/
-  - https://sukebei.nyaa.mom/
+  - https://sukebei.nyaa.wiki/
 legacylinks:
   - https://sukebei.nyaa.lol/
+  - https://sukebei.nyaa.mom/
 
 settings:
   - name: filter-id
