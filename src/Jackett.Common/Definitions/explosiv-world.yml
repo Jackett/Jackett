@@ -7,6 +7,8 @@ description: "Explosiv-World (E-W) is a GERMAN Private Torrent Tracker for MOVIE
 language: de-DE
 type: private
 encoding: UTF-8
+certificates:
+  - 2FB3D8C109E2CC4E3EB19B4D17E9FACCC8092423 # Expired 14th Nov 2026
 links:
   - https://explosiv-world.biz/
 legacylinks:
