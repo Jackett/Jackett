@@ -498,6 +498,7 @@ Prior versions of Jackett are no longer supported.
  * Nebulance (NBL) (TransmiTheNet)
  * NewHeaven (TorrentHeavenResurrection) [![(invite needed)][inviteneeded]](#)
  * NicePT
+ * NightBloom
  * Nirvana
  * njtupt (浦园)) [![(invite needed)][inviteneeded]](#)
  * NOBS (NUCLEAR ORDER BIT SYNDICATE)
