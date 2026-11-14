@@ -26,27 +26,30 @@ caps:
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
     - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
     # Serien
+    - {id: 257, cat: TV/HD, desc: "Serien HDR"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
     - {id: 215, cat: TV/UHD, desc: "Serien UHD"}
     - {id: 59, cat: TV, desc: "Serien HD->Pack"}
     - {id: 203, cat: TV/UHD, desc: "Serien UHD Pack"}
     - {id: 56, cat: TV/SD, desc: "Serien DVD"}
     - {id: 60, cat: TV/SD, desc: "Serien SD"}
+    # Anime
+    - {id: 212, cat: TV/Anime, desc: "Anime Serie HD"}
+    - {id: 183, cat: TV/Anime, desc: "Anime HD"}
+    - {id: 214, cat: TV/Anime, desc: "Anime UHD"}
+    - {id: 213, cat: TV/Anime, desc: "Anime Pack HD"}
+    - {id: 189, cat: TV/Anime, desc: "Anime Serie"}
+    - {id: 184, cat: TV/Anime, desc: "Anime SD"}
+    - {id: 186, cat: TV/Anime, desc: "Anime 4K"}
+    # Kids
+    - {id: 258, cat: Movies/UHD, desc: "Kids UHD"}
+    - {id: 259, cat: Movies/HD, desc: "Kids HDR"}
+    - {id: 222, cat: Movies/HD, desc: "Kids HD"}
     # TV
     - {id: 226, cat: Movies, desc: "TV Film"}
     - {id: 256, cat: TV/Documentary, desc: "TV Doku"}
     - {id: 223, cat: TV, desc: "TV Serie"}
     - {id: 228, cat: Books/Comics, desc: "TV Comic"}
-    # Anime
-    - {id: 212, cat: TV/Anime, desc: "Anime Serie HD"}
-    - {id: 214, cat: TV/Anime, desc: "Anime UHD"}
-    - {id: 213, cat: TV/Anime, desc: "Anime Pack HD"}
-    - {id: 183, cat: TV/Anime, desc: "Anime HD"}
-    - {id: 189, cat: TV/Anime, desc: "Anime Serie"}
-    - {id: 184, cat: TV/Anime, desc: "Anime SD"}
-    - {id: 186, cat: TV/Anime, desc: "Anime 4K"}
-    # Kids
-    - {id: 222, cat: Movies/HD, desc: "Kids HD"}
     # Klassiker
     - {id: 157, cat: Movies/HD, desc: "Klassiker HD"}
     # Music
@@ -59,20 +62,20 @@ caps:
     - {id: 54, cat: Audio, desc: "Music Single"}
     - {id: 55, cat: Audio/Video, desc: "Music Video"}
     - {id: 125, cat: Audio, desc: "Music Mixe"}
-    # Doku
-    - {id: 235, cat: TV/Documentary, desc: "Doku Serie"}
-    - {id: 221, cat: TV/Documentary, desc: "Doku HD"}
-    # Game
-    - {id: 218, cat: Console/Other, desc: "Game Nintendo Switch"}
-    - {id: 120, cat: Console/PS3, desc: "Game PlayStation"}
-    - {id: 17, cat: PC/Games, desc: "Game PC"}
-    - {id: 20, cat: Console/PSP, desc: "Game PSP"}
-    - {id: 22, cat: Console/Wii, desc: "Game Wii"}
-    - {id: 24, cat: Console/XBox, desc: "Game XBOX"}
     # Releaser
     - {id: 239, cat: Movies/DVD, desc: "Releaser DVD"}
     - {id: 244, cat: Movies/BluRay, desc: "Releaser BD"}
     - {id: 245, cat: Movies/UHD, desc: "Releaser UHD"}
+    # Doku
+    - {id: 221, cat: TV/Documentary, desc: "Doku HD"}
+    - {id: 235, cat: TV/Documentary, desc: "Doku Serie"}
+    # Game
+    - {id: 120, cat: Console/PS3, desc: "Game PlayStation"}
+    - {id: 218, cat: Console/Other, desc: "Game Nintendo Switch"}
+    - {id: 17, cat: PC/Games, desc: "Game PC"}
+    - {id: 20, cat: Console/PSP, desc: "Game PSP"}
+    - {id: 22, cat: Console/Wii, desc: "Game Wii"}
+    - {id: 24, cat: Console/XBox, desc: "Game XBOX"}
     # App
     - {id: 12, cat: PC/0day, desc: "App Win"}
     - {id: 11, cat: PC/Mobile-Other, desc: "App Other"}
