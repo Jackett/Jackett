@@ -10,7 +10,7 @@ links:
 
 caps:
   categorymappings:
-    - {id: Film, cat: Movies, desc: "Filmg"}
+    - {id: Film, cat: Movies, desc: "Film"}
     - {id: Sorozat, cat: TV, desc: "Sorozat"}
     - {id: Játék, cat: Console, desc: "Játék"}
     - {id: Zene, cat: Audio, desc: "Zene"}
@@ -81,6 +81,9 @@ search:
   fields:
     category:
       selector: span.ra-type-label
+      filters:
+        - name: replace
+          args: ["HANGOSK.", "eBook"]
     title:
       selector: a[href^="torrent.php?id="]
     details:
