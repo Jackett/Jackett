@@ -114,7 +114,7 @@ search:
     t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
-    season: "{{ .Query.Season }}"
+    season: "{{ if .Query.Ep }}{{ .Query.Season }}{{ else }}{{ end }}"
     ep: "{{ .Query.Ep }}"
     imdbid: "{{ .Query.IMDBID }}"
     tmdbid: "{{ .Query.TMDBID }}"
