@@ -92,6 +92,10 @@ login:
   inputs:
     uid: "{{ .Config.username }}"
     pwd: "{{ .Config.password }}"
+  selectorinputs:
+    csrfToken:
+      selector: input[name="csrfToken"]
+      attribute: value
   error:
     - selector: div > font[color="#FF0000"]
   test:
