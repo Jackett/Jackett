@@ -74,8 +74,18 @@ search:
     selector: .smallalbum
 
   fields:
-    title:
+    title_name:
       selector: a h3
+    title_format:
+      optional: true
+      selector: .smallalbum
+      filters:
+        - name: regexp
+          args: "Type:\\s*Music\\s*(?=[A-Z][a-z]+:)[\\s\\S]*?Format:\\s*(?![A-Z][a-z]+:)(\\S.*?)\\s*(?:[A-Z][a-z]+:|$)"
+        - name: re_replace
+          args: ["(?i)^lossless$", "FLAC"]
+    title:
+      text: "{{ .Result.title_name }}{{ if .Result.title_format }} [{{ .Result.title_format }}]{{ else }}{{ end }}"
     poster:
       selector: .thumb a img
       attribute: src
