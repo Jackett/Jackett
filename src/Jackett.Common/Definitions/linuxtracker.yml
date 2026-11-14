@@ -31,6 +31,7 @@ caps:
     - {id: 2212, cat: PC/ISO, desc: "ArchLabs"}
     - {id: 2183, cat: PC/ISO, desc: "Archman"}
     - {id: 2196, cat: PC/ISO, desc: "ArcoLinux"}
+    - {id: 33, cat: PC/ISO, desc: "Argent Linux"}
     - {id: 2216, cat: PC/ISO, desc: "Artix Linux"}
     - {id: 2227, cat: PC/ISO, desc: "AryaLinux"}
     - {id: 2288, cat: PC/ISO, desc: "Audiophile Linux"}
@@ -143,6 +144,7 @@ caps:
     - {id: 21, cat: PC/ISO, desc: "Helwan Linux"}
     - {id: 2293, cat: PC/ISO, desc: "Hiren's BootCD+PE"}
     - {id: 2166, cat: PC/ISO, desc: "Huayra Linux"}
+    - {id: 31, cat: PC/ISO, desc: "Hybrid-d77"}
     - {id: 2244, cat: PC/ISO, desc: "Hyperbola GNU"}
     - {id: 20, cat: PC/ISO, desc: "Infinity Linux"}
     - {id: 252, cat: PC/ISO, desc: "IPFire"}
@@ -261,6 +263,7 @@ caps:
     - {id: 2305, cat: PC/ISO, desc: "Rescuezilla"}
     - {id: 2270, cat: PC/ISO, desc: "Resilient Linux"}
     - {id: 2116, cat: PC/ISO, desc: "Robolinux"}
+    - {id: 32, cat: PC/ISO, desc: "Rocky Linux"}
     - {id: 1223, cat: PC/ISO, desc: "Rosa"}
     - {id: 2117, cat: PC/ISO, desc: "Runtu"}
     - {id: 14, cat: PC/ISO, desc: "Sabayon"}
