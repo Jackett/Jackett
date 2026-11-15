@@ -106,6 +106,7 @@ caps:
     - {id: 2179, cat: PC/ISO, desc: "Endless OS"}
     - {id: 2310, cat: PC/ISO, desc: "EnigmarsOS"}
     - {id: 2223, cat: PC/ISO, desc: "Enso OS"}
+    - {id: 34, cat: PC/ISO, desc: "ENux"}
     - {id: 2043, cat: PC/ISO, desc: "Exe GNU/Linux"}
     - {id: 2045, cat: PC/ISO, desc: "Extix"}
     - {id: 9, cat: PC/ISO, desc: "Ezarcher"}
@@ -344,7 +345,7 @@ caps:
     - {id: 24, cat: PC/ISO, desc: "ZelixOS"}
     - {id: 612, cat: PC/ISO, desc: "Zen"}
     - {id: 2159, cat: PC/ISO, desc: "Zentyal"}
-    - {id: 346, cat: PC/ISO, desc: "Zenwalk Linux"}
+    - {id: 346, cat: PC/ISO, desc: "Zenwalk GNU Linux"}
     - {id: 2160, cat: PC/ISO, desc: "Zeroshell"}
     - {id: 2193, cat: PC/ISO, desc: "Zevenet"}
     - {id: 1233, cat: PC/ISO, desc: "Zorin"}
