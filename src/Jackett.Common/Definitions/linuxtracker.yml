@@ -62,6 +62,7 @@ caps:
     - {id: 2026, cat: PC/ISO, desc: "Cae"}
     - {id: 1220, cat: PC/ISO, desc: "Caine"}
     - {id: 2028, cat: PC/ISO, desc: "Calculate Linux"}
+    - {id: 36, cat: PC/ISO, desc: "CarotOS"}
     - {id: 27, cat: PC/ISO, desc: "CatOS"}
     - {id: 102, cat: PC/ISO, desc: "CentOS"}
     - {id: 1216, cat: PC/ISO, desc: "Chakra"}
@@ -176,6 +177,7 @@ caps:
     - {id: 316, cat: PC/ISO, desc: "Livecd"}
     - {id: 1218, cat: PC/ISO, desc: "Lubuntu"}
     - {id: 2068, cat: PC/ISO, desc: "LXLE"}
+    - {id: 41, cat: PC/ISO, desc: "Lyra OS"}
     - {id: 2296, cat: PC/ISO, desc: "Mabox Linux"}
     - {id: 1228, cat: PC/ISO, desc: "Mageia"}
     - {id: 10, cat: PC/ISO, desc: "MagOS Linux"}
@@ -274,6 +276,7 @@ caps:
     - {id: 2304, cat: PC/ISO, desc: "Security Onion"}
     - {id: 2119, cat: PC/ISO, desc: "SELKS"}
     - {id: 2250, cat: PC/ISO, desc: "Septor"}
+    - {id: 40, cat: PC/ISO, desc: "Shanios"}
     - {id: 489, cat: PC/ISO, desc: "SharkLinux"}
     - {id: 2121, cat: PC/ISO, desc: "Siduction"}
     - {id: 2122, cat: PC/ISO, desc: "Simplicity Linux"}
@@ -328,9 +331,11 @@ caps:
     - {id: 2149, cat: PC/ISO, desc: "Untangle NG Firewall"}
     - {id: 2173, cat: PC/ISO, desc: "Uruk GNU/Linux"}
     - {id: 2, cat: PC/ISO, desc: "VailuxOS"}
+    - {id: 38, cat: PC/ISO, desc: "Valtux OS"}
     - {id: 579, cat: PC/ISO, desc: "Vector"}
     - {id: 3, cat: PC/ISO, desc: "Ventoy"}
     - {id: 2282, cat: PC/ISO, desc: "Virage"}
+    - {id: 37, cat: PC/ISO, desc: "Vitalinux"}
     - {id: 2151, cat: PC/ISO, desc: "Void Linux"}
     - {id: 2152, cat: PC/ISO, desc: "Volumio"}
     - {id: 2153, cat: PC/ISO, desc: "Voyager Live"}
