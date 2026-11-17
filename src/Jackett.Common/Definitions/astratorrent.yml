@@ -41,7 +41,7 @@ settings:
   - name: info_key
     type: info
     label: About your API key
-    default: "Your API key is also your Passkey, which you can find by accessing your <a href=\"https://astratorrent.la/v2/compte.php\" target=\"_blank\">AstraTorrent</a> account settings page."
+    default: "Your API key is also your Passkey, which you can find by accessing your <a href=\"https://astratorrent.la/v4/compte.php\" target=\"_blank\">AstraTorrent</a> account settings page and clicking on the <b>Seedbox & *Arr</b> button."
   - name: multilang
     type: checkbox
     label: Replace MULTi by another language in release name
