@@ -581,7 +581,7 @@ Prior versions of Jackett are no longer supported.
  * SceneRush [![(invite needed)][inviteneeded]](#)
  * SceneTime
  * Secret Cinema
- * SeedCore (RoTorrent)
+ * SeedCore (SC)
  * SeedFile (SF)
  * seedpool
  * SewerPT (下水道) [![(invite needed)][inviteneeded]](#)

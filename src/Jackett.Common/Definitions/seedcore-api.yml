@@ -3,7 +3,7 @@ id: seedcore-api
 replaces:
   - rotorrent-api
 name: SeedCore (API)
-description: "SeedCore (ROT) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
+description: "SeedCore (SC) is a ROMANIAN Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: ro-RO
 type: private
 encoding: UTF-8
