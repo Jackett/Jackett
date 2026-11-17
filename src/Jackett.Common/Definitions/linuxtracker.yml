@@ -14,7 +14,7 @@ caps:
     - {id: 2002, cat: PC/ISO, desc: "4MLinux"}
     - {id: 17, cat: PC/ISO, desc: "Abora OS"}
     - {id: 13, cat: PC/ISO, desc: "Absolute"}
-    - {id: 2311, cat: PC/ISO, desc: "AlmaLinux"}
+    - {id: 2311, cat: PC/ISO, desc: "AlmaLinux OS"}
     - {id: 2003, cat: PC/ISO, desc: "Alpine Linux"}
     - {id: 2004, cat: PC/ISO, desc: "ALT Linux"}
     - {id: 2292, cat: PC/ISO, desc: "Anarchy Linux"}
@@ -39,6 +39,7 @@ caps:
     - {id: 2012, cat: PC/ISO, desc: "AV Linux"}
     - {id: 1231, cat: PC/ISO, desc: "Backbox"}
     - {id: 2219, cat: PC/ISO, desc: "BackSlash Linux"}
+    - {id: 43, cat: PC/ISO, desc: "Basalt Linux"}
     - {id: 2237, cat: PC/ISO, desc: "Batocera Linux"}
     - {id: 2252, cat: PC/ISO, desc: "BBQLinux"}
     - {id: 2272, cat: PC/ISO, desc: "BeeFree OS"}
