@@ -8,7 +8,8 @@ language: de-DE
 type: private
 encoding: UTF-8
 certificates:
-  - 2FB3D8C109E2CC4E3EB19B4D17E9FACCC8092423 # Expired 14th Nov 2026
+  - 2fb3d8c109e2cc4e3eb19b4d17e9faccc8092423 # Expired 14th Nov 2026
+  - 1c1027f7b11679cbcca3ed3cfeb927b2eb1cd9b1 # CN=doc.explosiv-world.biz
 links:
   - https://explosiv-world.biz/
 legacylinks:
