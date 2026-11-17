@@ -24,7 +24,7 @@ caps:
     - {id: 124, cat: Movies, desc: "Movie HD->Pack"}
     - {id: 114, cat: Movies/DVD, desc: "Movie DVD"}
     - {id: 28, cat: Movies/SD, desc: "Movie SD"}
-    - {id: 26, cat: Movies/3D, desc: "Movie 3D"}
+    - {id: 26, cat: Movies/HD, desc: "Movie HDR"}
     # Serien
     - {id: 257, cat: TV/HD, desc: "Serien HDR"}
     - {id: 57, cat: TV/HD, desc: "Serien HD"}
