@@ -21,31 +21,22 @@ caps:
     - {id: 19, cat: Movies/Other, desc: "Films [Shorts]"}
     - {id: 17, cat: Movies/Other, desc: "Films [Documentary]"}
     - {id: 12, cat: Movies/Other, desc: "Films FanEdits/Restorations"}
-    - {id: 46, cat: Other, desc: "Films Collections [Various Media]"}
-    - {id: 20, cat: TV/Other, desc: "Films Stand-up"}
-    - {id: 16, cat: Audio/Video, desc: "Films Music Videos"}
-    - {id: 86, cat: Other, desc: "Films Education [Various]"}
-    - {id: 33, cat: Movies/Other, desc: "Films [TMDB UnListed]"}
-    - {id: 42, cat: Movies/Other, desc: "Films Shorts [TMDB UnListed]"}
-    - {id: 27, cat: Movies/Foreign, desc: "Films SubPar"}
+    - {id: 2, cat: TV, desc: "Series [Complete Seasons]"}
     - {id: 9, cat: TV/Anime, desc: "Anime [Series/OVAs]"}
-    - {id: 2, cat: TV, desc: "TV Complete Seasons"}
-    - {id: 41, cat: TV, desc: "TV Single Episodes"}
-    - {id: 31, cat: TV/Foreign, desc: "TV Series SubPar"}
+    - {id: 41, cat: TV, desc: "Series Single Episodes"}
+    - {id: 31, cat: TV/Foreign, desc: "Series Series SubPar"}
     - {id: 38, cat: TV/Other, desc: "TV [TMDB unlisted]"}
     - {id: 40, cat: TV/Documentary, desc: "Documentary [Series]"}
-    - {id: 35, cat: TV/Sport, desc: "TV Sports"}
-#    - {id: 8, cat: Movies/Other, desc: "Anime [Films]"}
-#    - {id: 9, cat: TV/Anime, desc: "Anime [Series/OVAs]"}
-    - {id: 85, cat: Books/Comics, desc: "Comics & Manga"}
-    - {id: 3, cat: Audio, desc: "Music"}
-#    - {id: 16, cat: Audio/Video, desc: "Films Music Videos"}
-    - {id: 34, cat: Audio/Audiobook, desc: "Audio Books"}
-    - {id: 44, cat: Audio, desc: "Audio"}
+    - {id: 46, cat: Other, desc: "Films Collections [Various Media]"}
+    - {id: 20, cat: TV/Other, desc: "TV Stand-up"}
     - {id: 7, cat: Books/EBook, desc: "Ebooks"}
     - {id: 84, cat: Books/Mags, desc: "Zines and Newspapers"}
-#    - {id: 85, cat: Books/Comics, desc: "Comics & Manga"}
-    - {id: 53, cat: Books/EBook, desc: "Ebooks/Manga/Comics"}
+    - {id: 85, cat: Books/Comics, desc: "Comics & Manga"}
+    - {id: 3, cat: Audio, desc: "Music"}
+    - {id: 16, cat: Audio/Video, desc: "Music Videos"}
+    - {id: 34, cat: Audio/Audiobook, desc: "Audio Books"}
+    - {id: 35, cat: TV/Sport, desc: "TV Sports"}
+    - {id: 86, cat: Other, desc: "Films Education [Various]"}
     - {id: 47, cat: PC/0day, desc: "Software PC"}
     - {id: 48, cat: PC/Mac, desc: "Software Mac"}
     - {id: 36, cat: Console, desc: "Software Console/ROMS"}
@@ -53,18 +44,24 @@ caps:
     - {id: 83, cat: PC/Games, desc: "Software Games"}
     - {id: 73, cat: Other, desc: "AI: MODELS [MIXED]"}
     - {id: 74, cat: Other, desc: "3D Prints and CAD"}
-    - {id: 51, cat: PC/Games, desc: "Software & Games"}
+    - {id: 33, cat: Movies/Other, desc: "Films [TMDB UnListed]"}
+    - {id: 42, cat: Movies/Other, desc: "Films Shorts [TMDB UnListed]"}
+    - {id: 27, cat: Movies/Foreign, desc: "Films SubPar"}
+    - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
+    - {id: 43, cat: Other, desc: "Internal Testing"}
     - {id: 6, cat: XXX, desc: "Mature NSFW [TMDB Listed]"}
     - {id: 30, cat: XXX, desc: "Mature NSFW"}
     - {id: 15, cat: XXX/Pack, desc: "Mature NSFW (MegaPacks)"}
     - {id: 80, cat: XXX, desc: "Mature VR"}
     - {id: 75, cat: XXX/ImageSet, desc: "Mature Pics"}
     - {id: 60, cat: XXX, desc: "Mature PMV"}
-#    - {id: 44, cat: Audio, desc: "Audio"}
-#    - {id: 53, cat: Books/EBook, desc: "Ebooks/Manga/Comics"}
-#    - {id: 51, cat: PC/Games, desc: "Software & Games"}
-    - {id: 23, cat: Other, desc: "Other_Or_Not_Sure"}
-    - {id: 43, cat: Other, desc: "Internal Testing"}
+    - {id: 67, cat: XXX, desc: "Mature Scheiße"}
+    - {id: 68, cat: XXX, desc: "Mature Golden Showers"}
+    - {id: 69, cat: XXX, desc: "Mature Rainbow Showers"}
+    - {id: 44, cat: Audio, desc: "Audio"}
+    - {id: 53, cat: Books/EBook, desc: "Ebooks/Manga/Comics"}
+    - {id: 51, cat: PC/Games, desc: "Software & Games"}
+    - {id: 11, cat: Other, desc: "NSFL [Unlisted]"}
 
   modes:
     search: [q]
