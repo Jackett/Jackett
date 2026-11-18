@@ -11,239 +11,196 @@ links:
 
 caps:
   categorymappings:
-    - {id: 1000, cat: TV/Sport, desc: "Formula 1 - Full races"}
-    - {id: 1010, cat: TV/Sport, desc: "F1 Full Seasons"}
-    - {id: 1020, cat: TV/Sport, desc: "F1 Full Season 1950-1980"}
-    - {id: 1030, cat: TV/Sport, desc: "F1 Full Season 1981-1990"}
-    - {id: 1040, cat: TV/Sport, desc: "F1 Full Season 1991-2000"}
-    - {id: 1050, cat: TV/Sport, desc: "F1 Full Season 2001-2010"}
-    - {id: 1060, cat: TV/Sport, desc: "F1 Full Season 2011-2020"}
-    - {id: 1070, cat: TV/Sport, desc: "F1 Full Season 2011-2020 (HD)"}
-    - {id: 2000, cat: TV/Sport, desc: "Formula 1 - Highlights"}
-    - {id: 2010, cat: TV/Sport, desc: "F1 Highlights 1950-1980"}
-    - {id: 2020, cat: TV/Sport, desc: "F1 Highlights 1981-1990"}
-    - {id: 2030, cat: TV/Sport, desc: "F1 Highlights 1991-2000"}
-    - {id: 2040, cat: TV/Sport, desc: "F1 Highlights 2001-2010"}
-    - {id: 2050, cat: TV/Sport, desc: "F1 Highlights 2011-2020"}
-    - {id: 2060, cat: TV/Sport, desc: "F1 Highlights 2011-2020 (HD)"}
-    - {id: 3000, cat: TV/Sport, desc: "Formula 1 - FP and quali"}
-    - {id: 3010, cat: TV/Sport, desc: "F1 FP and quali 1950-1980"}
-    - {id: 3020, cat: TV/Sport, desc: "F1 FP and quali 1981-1990"}
-    - {id: 3030, cat: TV/Sport, desc: "F1 FP and quali 1991-2000"}
-    - {id: 3040, cat: TV/Sport, desc: "F1 FP and quali 2001-2010"}
-    - {id: 3050, cat: TV/Sport, desc: "F1 FP and quali 2011-2020"}
-    - {id: 3060, cat: TV/Sport, desc: "F1 FP and quali 2011-2020 (HD)"}
-    - {id: 4000, cat: TV/Sport, desc: "Formula 1 - Onboard"}
-    - {id: 4010, cat: TV/Sport, desc: "F1 Onboard 1950-1980"}
-    - {id: 4020, cat: TV/Sport, desc: "F1 Onboard 1981-1990"}
-    - {id: 4030, cat: TV/Sport, desc: "F1 Onboard 1991-2000"}
-    - {id: 4040, cat: TV/Sport, desc: "F1 Onboard 2001-2010"}
-    - {id: 4050, cat: TV/Sport, desc: "F1 Onboard 2011-2020"}
-    - {id: 5000, cat: TV/Sport, desc: "Formula 1 - Miscellaneous"}
-    - {id: 5010, cat: TV/Sport, desc: "F1 Misc Documentaries"}
-    - {id: 5020, cat: TV/Sport, desc: "F1 Misc Driver/team specials"}
-    - {id: 5030, cat: TV/Sport, desc: "F1 Misc Event specials"}
-    - {id: 5040, cat: TV/Sport, desc: "F1 Misc Other"}
-    - {id: 6000, cat: TV/Sport, desc: "Formula 1 - current season"}
-    - {id: 6010, cat: TV/Sport, desc: "F1 current season Free practices"}
-    - {id: 6020, cat: TV/Sport, desc: "F1 current season Qualifications"}
-    - {id: 6030, cat: TV/Sport, desc: "F1 current season Races"}
-    - {id: 6040, cat: TV/Sport, desc: "F1 current season Highlights"}
-    - {id: 6050, cat: TV/Sport, desc: "F1 current season Onboards"}
-    - {id: 6060, cat: TV/Sport, desc: "F1 current season Other"}
-    - {id: 7000, cat: TV/Sport, desc: "Formula 1 - current season (HD)"}
-    - {id: 7010, cat: TV/Sport, desc: "F1 current season (HD) Free practices"}
-    - {id: 7020, cat: TV/Sport, desc: "F1 current season (HD) Qualifications"}
-    - {id: 7030, cat: TV/Sport, desc: "F1 current season (HD) Races"}
-    - {id: 7040, cat: TV/Sport, desc: "F1 current season (HD) Highlights"}
-    - {id: 7050, cat: TV/Sport, desc: "F1 current season (HD) Other"}
-    - {id: 8000, cat: TV/Sport, desc: "Moto3 / Moto2 / MotoGP"}
-    - {id: 8010, cat: TV/Sport, desc: "Moto 125cc"}
-    - {id: 8020, cat: TV/Sport, desc: "Moto 250cc"}
-    - {id: 8030, cat: TV/Sport, desc: "Moto Moto3"}
-    - {id: 8040, cat: TV/Sport, desc: "Moto Moto2"}
-    - {id: 8050, cat: TV/Sport, desc: "Moto MotoGP"}
-    - {id: 9000, cat: TV/Sport, desc: "Motorbikes"}
-    - {id: 9010, cat: TV/Sport, desc: "Motorbikes AMA"}
-    - {id: 9020, cat: TV/Sport, desc: "Motorbikes World Supersport"}
-    - {id: 9030, cat: TV/Sport, desc: "Motorbikes World Superstock"}
-    - {id: 9040, cat: TV/Sport, desc: "Motorbikes WSBK"}
-    - {id: 9050, cat: TV/Sport, desc: "Motorbikes BSB"}
-    - {id: 9060, cat: TV/Sport, desc: "Motorbikes Other"}
-    - {id: 9070, cat: TV/Sport, desc: "Motorbikes MotoAmerica"}
-    - {id: 10000, cat: TV/Sport, desc: "Touring cars"}
-    - {id: 10010, cat: TV/Sport, desc: "Touring cars WTCC"}
-    - {id: 10020, cat: TV/Sport, desc: "Touring cars DTM"}
-    - {id: 10030, cat: TV/Sport, desc: "Touring cars V8 Supercars"}
-    - {id: 10040, cat: TV/Sport, desc: "Touring cars BTCC"}
-    - {id: 10050, cat: TV/Sport, desc: "Touring cars Porsche Supercup"}
-    - {id: 10060, cat: TV/Sport, desc: "Touring cars Other"}
-    - {id: 11000, cat: TV/Sport, desc: "Sports cars"}
-    - {id: 11010, cat: TV/Sport, desc: "Sports cars BSS"}
-    - {id: 11020, cat: TV/Sport, desc: "Sports cars Le Mans 24H"}
-    - {id: 11030, cat: TV/Sport, desc: "Sports cars WSC/WEC"}
-    - {id: 11040, cat: TV/Sport, desc: "Sports cars IMSA"}
-    - {id: 11050, cat: TV/Sport, desc: "Sports cars USC"}
-    - {id: 11070, cat: TV/Sport, desc: "Sports cars BES"}
-    - {id: 11080, cat: TV/Sport, desc: "Sports cars Super GT"}
-    - {id: 11090, cat: TV/Sport, desc: "Sports cars IMSA Pilot Challenge"}
-    - {id: 11060, cat: TV/Sport, desc: "Sports cars Other"}
-    - {id: 12000, cat: TV/Sport, desc: "American open-wheelers"}
-    - {id: 12010, cat: TV/Sport, desc: "American open-wheelers CCWS"}
-    - {id: 12020, cat: TV/Sport, desc: "American open-wheelers IRL"}
-    - {id: 12030, cat: TV/Sport, desc: "American open-wheelers CART"}
-    - {id: 12040, cat: TV/Sport, desc: "American open-wheelers Indycar Series"}
-    - {id: 12050, cat: TV/Sport, desc: "American open-wheelers Indy Lights"}
-    - {id: 12060, cat: TV/Sport, desc: "American open-wheelers Other"}
-    - {id: 13000, cat: TV/Sport, desc: "Rally"}
-    - {id: 13010, cat: TV/Sport, desc: "Rally WRC"}
-    - {id: 13020, cat: TV/Sport, desc: "Rally ERC"}
-    - {id: 13030, cat: TV/Sport, desc: "Rally BRC"}
-    - {id: 13040, cat: TV/Sport, desc: "Rally National series"}
-    - {id: 13050, cat: TV/Sport, desc: "Rally Enduro-rally"}
-    - {id: 13060, cat: TV/Sport, desc: "Rally Rally cross"}
-    - {id: 13070, cat: TV/Sport, desc: "Rally Other"}
-    - {id: 14000, cat: TV/Sport, desc: "NASCAR / Stockcars"}
-    - {id: 14010, cat: TV/Sport, desc: "NASCAR Sprint Cup"}
-    - {id: 14020, cat: TV/Sport, desc: "NASCAR XFINITY Series"}
-    - {id: 14030, cat: TV/Sport, desc: "NASCAR CW Trucks"}
-    - {id: 14040, cat: TV/Sport, desc: "NASCAR ARCA"}
-    - {id: 14050, cat: TV/Sport, desc: "NASCAR Other"}
-    - {id: 15000, cat: TV/Sport, desc: "F3000 / GP2 / Formula 2"}
-    - {id: 15010, cat: TV/Sport, desc: "F2 1985-1990"}
-    - {id: 15020, cat: TV/Sport, desc: "F2 1991-2000"}
-    - {id: 15030, cat: TV/Sport, desc: "F2 2001-2011"}
-    - {id: 15040, cat: TV/Sport, desc: "F2 2012-2019"}
-    - {id: 15050, cat: TV/Sport, desc: "F2 GP2 Asia"}
-    - {id: 16000, cat: TV/Sport, desc: "Single seaters"}
-    - {id: 16010, cat: TV/Sport, desc: "Single seaters Formula 2"}
-    - {id: 16020, cat: TV/Sport, desc: "Single seaters FIA F3"}
-    - {id: 16030, cat: TV/Sport, desc: "Single seaters GP3"}
-    - {id: 16040, cat: TV/Sport, desc: "Single seaters WSBR 2.0"}
-    - {id: 16050, cat: TV/Sport, desc: "Single seaters WSBR 3.5"}
-    - {id: 16060, cat: TV/Sport, desc: "Single seaters British F3"}
-    - {id: 16070, cat: TV/Sport, desc: "Single seaters Formula E"}
-    - {id: 16080, cat: TV/Sport, desc: "Single seaters Other"}
-    - {id: 17000, cat: TV/Sport, desc: "Other Photographs"}
-    - {id: 17010, cat: TV/Sport, desc: "Other Formula 1"}
-    - {id: 17020, cat: TV/Sport, desc: "Other Motorbikes"}
-    - {id: 17030, cat: TV/Sport, desc: "Other Touring cars"}
-    - {id: 17040, cat: TV/Sport, desc: "Other Rally"}
-    - {id: 17050, cat: TV/Sport, desc: "Other Sports cars"}
-    - {id: 17060, cat: TV/Sport, desc: "Other"}
-    - {id: 18000, cat: TV/Sport, desc: "Miscellaneous"}
-    - {id: 18010, cat: TV/Sport, desc: "Documentaries"}
-    - {id: 18020, cat: TV/Sport, desc: "TV shows"}
-    - {id: 18030, cat: TV/Sport, desc: "DVD covers"}
-    - {id: 18040, cat: TV/Sport, desc: "E-books"}
-    - {id: 18050, cat: TV/Sport, desc: "Other"}
-    - {id: 19000, cat: TV/Sport, desc: "Other"}
-    - {id: 19010, cat: TV/Sport, desc: "Drag racing"}
-    - {id: 19020, cat: TV/Sport, desc: "Truck racing"}
-    - {id: 19030, cat: TV/Sport, desc: "Off-road"}
-    - {id: 19040, cat: TV/Sport, desc: "Drifting"}
-    - {id: 19050, cat: TV/Sport, desc: "Other"}
+    # from  https://api.racingfor.me/public/torznab?t=caps&apikey=YOUR-API-KEY
+    - {id: 5000, cat: TV/Sport, desc: "TV"}
+    - {id: 5060, cat: TV/Sport, desc: "TV/Sport"}
+    - {id: 112000, cat: TV/Sport, desc: "American open-wheelers"}
+    - {id: 112030, cat: TV/Sport, desc: "CART"}
+    - {id: 112010, cat: TV/Sport, desc: "CCWS"}
+    - {id: 112050, cat: TV/Sport, desc: "Indy Lights"}
+    - {id: 112040, cat: TV/Sport, desc: "Indycar Series"}
+    - {id: 112020, cat: TV/Sport, desc: "IRL"}
+    - {id: 112060, cat: TV/Sport, desc: "Other"}
+    - {id: 106000, cat: TV/Sport, desc: "Formula 1 (2026)"}
+    - {id: 106010, cat: TV/Sport, desc: "Free practices"}
+    - {id: 106040, cat: TV/Sport, desc: "Highlights"}
+    - {id: 106050, cat: TV/Sport, desc: "Onboards"}
+    - {id: 106060, cat: TV/Sport, desc: "Other"}
+    - {id: 106020, cat: TV/Sport, desc: "Qualifications"}
+    - {id: 106030, cat: TV/Sport, desc: "Races"}
+    - {id: 101000, cat: TV/Sport, desc: "Formula 1 (Archive)"}
+    - {id: 101020, cat: TV/Sport, desc: "1950-1980"}
+    - {id: 101030, cat: TV/Sport, desc: "1981-1990"}
+    - {id: 101040, cat: TV/Sport, desc: "1991-2000"}
+    - {id: 101050, cat: TV/Sport, desc: "2001-2010"}
+    - {id: 101060, cat: TV/Sport, desc: "2011-2020"}
+    - {id: 101080, cat: TV/Sport, desc: "2021-2025"}
+    - {id: 101010, cat: TV/Sport, desc: "Full Seasons"}
+    - {id: 105000, cat: TV/Sport, desc: "Formula 1 (Miscellaneous)"}
+    - {id: 105010, cat: TV/Sport, desc: "Documentaries"}
+    - {id: 105020, cat: TV/Sport, desc: "Driver/team specials"}
+    - {id: 105030, cat: TV/Sport, desc: "Event specials"}
+    - {id: 105040, cat: TV/Sport, desc: "Other"}
+    - {id: 118000, cat: TV/Sport, desc: "Miscellaneous"}
+    - {id: 118010, cat: TV/Sport, desc: "Documentaries"}
+    - {id: 118030, cat: TV/Sport, desc: "DVD covers"}
+    - {id: 118040, cat: TV/Sport, desc: "E-books"}
+    - {id: 118050, cat: TV/Sport, desc: "Other"}
+    - {id: 119052, cat: TV/Sport, desc: "Photographs"}
+    - {id: 118020, cat: TV/Sport, desc: "TV shows"}
+    - {id: 108000, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 108010, cat: TV/Sport, desc: "125cc"}
+    - {id: 108020, cat: TV/Sport, desc: "250cc"}
+    - {id: 108040, cat: TV/Sport, desc: "Moto2"}
+    - {id: 108030, cat: TV/Sport, desc: "Moto3"}
+    - {id: 108060, cat: TV/Sport, desc: "MotoE"}
+    - {id: 108050, cat: TV/Sport, desc: "MotoGP"}
+    - {id: 109000, cat: TV/Sport, desc: "Motorbikes"}
+    - {id: 109010, cat: TV/Sport, desc: "AMA"}
+    - {id: 109050, cat: TV/Sport, desc: "British Superbikes"}
+    - {id: 109070, cat: TV/Sport, desc: "MotoAmerica"}
+    - {id: 109060, cat: TV/Sport, desc: "Other"}
+    - {id: 109040, cat: TV/Sport, desc: "World Superbikes"}
+    - {id: 109020, cat: TV/Sport, desc: "World Supersport"}
+    - {id: 109030, cat: TV/Sport, desc: "World Superstock"}
+    - {id: 119051, cat: TV/Sport, desc: "World Women's Circuit Racing Championship"}
+    - {id: 114000, cat: TV/Sport, desc: "NASCAR / Stockcars"}
+    - {id: 114040, cat: TV/Sport, desc: "ARCA"}
+    - {id: 114010, cat: TV/Sport, desc: "Cup Series"}
+    - {id: 114020, cat: TV/Sport, desc: "O'Reilly Series"}
+    - {id: 114050, cat: TV/Sport, desc: "Other"}
+    - {id: 114030, cat: TV/Sport, desc: "Truck Series"}
+    - {id: 119000, cat: TV/Sport, desc: "Other series"}
+    - {id: 119010, cat: TV/Sport, desc: "Drag racing"}
+    - {id: 119040, cat: TV/Sport, desc: "Drifting"}
+    - {id: 119030, cat: TV/Sport, desc: "Off-road"}
+    - {id: 119050, cat: TV/Sport, desc: "Other"}
+    - {id: 119020, cat: TV/Sport, desc: "Truck racing"}
+    - {id: 113000, cat: TV/Sport, desc: "Rally"}
+    - {id: 113030, cat: TV/Sport, desc: "BRC"}
+    - {id: 113050, cat: TV/Sport, desc: "Enduro-rally"}
+    - {id: 113020, cat: TV/Sport, desc: "ERC"}
+    - {id: 113040, cat: TV/Sport, desc: "National series"}
+    - {id: 113070, cat: TV/Sport, desc: "Other"}
+    - {id: 113060, cat: TV/Sport, desc: "Rally cross"}
+    - {id: 113010, cat: TV/Sport, desc: "WRC"}
+    - {id: 116000, cat: TV/Sport, desc: "Single seaters"}
+    - {id: 116060, cat: TV/Sport, desc: "British F3"}
+    - {id: 119053, cat: TV/Sport, desc: "F3000"}
+    - {id: 116010, cat: TV/Sport, desc: "Formula 2"}
+    - {id: 116020, cat: TV/Sport, desc: "Formula 3"}
+    - {id: 116070, cat: TV/Sport, desc: "Formula E"}
+    - {id: 119054, cat: TV/Sport, desc: "GP2"}
+    - {id: 119055, cat: TV/Sport, desc: "GP2 Asia"}
+    - {id: 116030, cat: TV/Sport, desc: "GP3"}
+    - {id: 116080, cat: TV/Sport, desc: "Other"}
+    - {id: 116040, cat: TV/Sport, desc: "WSBR 2.0"}
+    - {id: 116050, cat: TV/Sport, desc: "WSBR 3.5"}
+    - {id: 111000, cat: TV/Sport, desc: "Sports cars"}
+    - {id: 111050, cat: TV/Sport, desc: "American Le Mans Series"}
+    - {id: 111070, cat: TV/Sport, desc: "BES"}
+    - {id: 111010, cat: TV/Sport, desc: "BSS"}
+    - {id: 111100, cat: TV/Sport, desc: "GT World Challenge Europe"}
+    - {id: 111040, cat: TV/Sport, desc: "IMSA"}
+    - {id: 111090, cat: TV/Sport, desc: "IMSA Pilot Challenge"}
+    - {id: 111020, cat: TV/Sport, desc: "Le Mans 24H"}
+    - {id: 111060, cat: TV/Sport, desc: "Other"}
+    - {id: 111080, cat: TV/Sport, desc: "Super GT"}
+    - {id: 111030, cat: TV/Sport, desc: "World Endurance Championship"}
+    - {id: 110000, cat: TV/Sport, desc: "Touring cars"}
+    - {id: 110040, cat: TV/Sport, desc: "BTCC"}
+    - {id: 110020, cat: TV/Sport, desc: "DTM"}
+    - {id: 110060, cat: TV/Sport, desc: "Other"}
+    - {id: 110050, cat: TV/Sport, desc: "Porsche Supercup"}
+    - {id: 110030, cat: TV/Sport, desc: "Supercars Championship"}
+    - {id: 110080, cat: TV/Sport, desc: "TCR"}
+    - {id: 110010, cat: TV/Sport, desc: "WTCC"}
 
   modes:
     search: [q]
     tv-search: [q, season, ep]
 
 settings:
-  - name: username
+  - name: apikey
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
-  - name: sort
-    type: select
-    label: Sort requested from site
-    default: date_desc
-    options:
-      date_desc: "created desc"
-      date_asc: "created asc"
-      sd_desc: "seeders desc"
-      sd_asc: "seeders asc"
-      sz_desc: "size desc"
-      sz_asc: "size asc"
-      name_desc: "title desc"
-      name_asc: "title asc"
+    label: API Key
+  - name: info_key
+    type: info
+    label: About your API Key
+    default: "Find your API key on your <a href=\"https://www.racingfor.me/user/profile#security\" target=\"_blank\">RFM Profile Security</a> page."
+  - name: apiurl
+    label: API URL
+    type: text
+    default: api.racingfor.me
 
 login:
-  path: login
-  method: post
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: "https://{{ .Config.apiurl }}/public/torznab"
+  method: get
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-    rememberme: on
-    redirect: ""
-  error:
-    - selector: div.front__error
-  test:
-    path: /
-    selector: a[href$="/logout"]
+    t: caps
+    apikey: "{{ .Config.apikey }}"
 
 search:
   paths:
-    # only 20 results per page
-    # https://www.racingfor.me/search/*?c=-1&ob=&offset=20#results
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
-      inputs:
-        offset: 20
-    - path: "search/{{ if .Keywords }}{{ .Keywords }}{{ else }}*{{ end }}"
-      inputs:
-        offset: 40
-  keywordsfilters:
-    # S2020E02 Becomes `2020 Round 02`
-    - name: re_replace
-      args: ["(?i)S(\\d{1,4})E(\\d{1,2})", "$1 Round $2"]
+    - path: "https://{{ .Config.apiurl }}/public/torznab"
+      response:
+        type: xml
+
   inputs:
-    c: -1
-    ob: "{{ .Config.sort }}"
+    apikey: "{{ .Config.apikey }}"
+    t: search
+    q: "{{ .Keywords }}"
+    cat: "{{ join .Categories \",\" }}"
+    limit: 100
 
   rows:
-    selector: div.row:has(div.torrent-item__download)
-#    selector: div.row:not(div[class^="mt-"])
-    # dateheaders are available, sometimes. But when there are none at all, then all rows are lost to errors. So we have to use 'date now' :-(
-#    dateheaders:
-#      # Monday March 29th, 2021
-#      selector: div.mt-4
-#      filters:
-#        - name: re_replace
-#          args: ["st,|nd,|rd,|th,", ""]
-#        - name: dateparse
-#          args: "dddd MMMM d yyyy"
+    selector: rss > channel > item
 
   fields:
     category:
-      selector: div.torrent-item__category span a
-      attribute: href
-      filters:
-        - name: querystring
-          args: c
+      selector: "[name=category]"
+      attribute: value
     title:
-      selector: div.torrent-item__title a
-    download:
-      selector: div.torrent-item__download a
-      attribute: href
+      selector: title
     details:
-      selector: div.torrent-item__title a
-      attribute: href
-    size:
-      selector: div.data-size
-    seeders:
-      selector: div.data-seeders
-    leechers:
-      selector: div.data-leechers
-    grabs:
-      selector: div.data-completed
+      selector: guid
+    download:
+      selector: enclosure
+      attribute: url
+    infohash:
+      selector: "[name=infohash]"
+      attribute: value
     date:
-      text: now
+      # Wed, 18 Nov 2026 14:50:29 +0000
+      selector: pubDate
+      filters:
+        - name: dateparse
+          args: "ddd, dd MMM yyyy HH:mm:ss zzz"
+    size:
+      selector: "[name=size]"
+      attribute: value
+    grabs:
+      selector: "[name=grabs]"
+      attribute: value
+      optional: true
+      default: 0
+    seeders:
+      selector: "[name=seeders]"
+      attribute: value
+      optional: true
+      default: 0
+    leechers:
+      selector: "[name=peers]"
+      attribute: value
+      optional: true
+      default: 0
     downloadvolumefactor:
-      text: 1
+      selector: "[name=downloadvolumefactor]"
+      attribute: value
     uploadvolumefactor:
-      text: 1
+      selector: "[name=uploadvolumefactor]"
+      attribute: value
     minimumratio:
       text: 0.5
-# crankShaft v2.0.1
+# torznab xml
