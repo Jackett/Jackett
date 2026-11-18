@@ -72,6 +72,7 @@ caps:
     - {id: 2264, cat: PC/ISO, desc: "ClearOS"}
     - {id: 107, cat: PC/ISO, desc: "Clonezilla"}
     - {id: 2248, cat: PC/ISO, desc: "ClonOS"}
+    - {id: 44, cat: PC/ISO, desc: "CloudLinux OS"}
     - {id: 2257, cat: PC/ISO, desc: "Condres OS"}
     - {id: 2036, cat: PC/ISO, desc: "Connochaet"}
     - {id: 2037, cat: PC/ISO, desc: "Container Linux"}
@@ -150,6 +151,7 @@ caps:
     - {id: 31, cat: PC/ISO, desc: "Hybrid-d77"}
     - {id: 2244, cat: PC/ISO, desc: "Hyperbola GNU"}
     - {id: 20, cat: PC/ISO, desc: "Infinity Linux"}
+    - {id: 45, cat: PC/ISO, desc: "InstantOS"}
     - {id: 252, cat: PC/ISO, desc: "IPFire"}
     - {id: 30, cat: PC/ISO, desc: "Kader⁴²"}
     - {id: 2294, cat: PC/ISO, desc: "Kaisen Linux"}
