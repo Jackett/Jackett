@@ -171,9 +171,17 @@ namespace Jackett.Common.Indexers.Definitions
                         // Protected downloads challenge solver
                         var protectedUrl = await GetProtectedDownloadUrlAsync(contentId, tabla);
                         if (!string.IsNullOrEmpty(protectedUrl))
+                        {
                             downloadLink = protectedUrl;
+                            if (downloadLink.StartsWith("/"))
+                            {
+                                downloadLink = SiteLink.TrimEnd('/') + downloadLink;
+                            }
+                        }
                         else
+                        {
                             downloadLink = rawHref.StartsWith("//") ? "https:" + rawHref : rawHref;
+                        }
 
                     }
                 }
