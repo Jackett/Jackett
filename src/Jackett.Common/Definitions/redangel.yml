@@ -76,25 +76,25 @@ search:
     sort: "{{ .Config.sort }}"
 
   rows:
-    selector: div.ra-desktop-table > table > tbody > tr:has(a[href^="download.php?id="])
+    selector: div.ra-desktop-table > table > tbody > tr:has(a.ra-list-download)
 
   fields:
     category:
-      selector: span.ra-type-label
+      selector: td.ra-catalog-type
       filters:
         - name: replace
           args: ["HANGOSK.", "eBook"]
     title:
-      selector: a[href^="torrent.php?id="]
+      selector: a.ra-torrent-title
     details:
-      selector: a[href^="torrent.php?id="]
+      selector: a.ra-torrent-title
       attribute: href
     download:
-      selector: a[href^="download.php?id="]
+      selector: a.ra-list-download
       attribute: href
     poster:
-      selector: a.ra-torrent-title
-      attribute: data-ra-cover
+      selector: a.ra-catalog-cover img
+      attribute: src
     size:
       selector: td:nth-last-child(5)
     seeders:
@@ -114,8 +114,8 @@ search:
     uploadvolumefactor:
       text: 1
     date:
-      selector: td:nth-last-child(1)
-      remove: span
+      selector: time
+      attribute: title
       filters:
         - name: append
           args: " +01:00" # CET
