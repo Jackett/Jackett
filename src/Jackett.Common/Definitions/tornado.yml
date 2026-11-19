@@ -5,6 +5,8 @@ description: "Tornado is a SLOVENIAN Private Torrent Tracker for MOVIES / TV / G
 language: sl-SI
 type: private
 encoding: UTF-8
+certificates:
+  - 33eb0282db43f99b91a11fd6f732c672d4cde63f # CN=games-torrent.si
 links:
   - https://www.tornado.si/
 
