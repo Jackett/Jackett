@@ -132,6 +132,7 @@ caps:
     - {id: 206, cat: PC/ISO, desc: "Gentoo"}
     - {id: 2048, cat: PC/ISO, desc: "GhostBSD"}
     - {id: 210, cat: PC/ISO, desc: "Gnewsense"}
+    - {id: 47, cat: PC/ISO, desc: "GNU/Linux KDu"}
     - {id: 22, cat: PC/ISO, desc: "GNUSlashLinux"}
     - {id: 216, cat: PC/ISO, desc: "GoboLinux"}
     - {id: 1212, cat: PC/ISO, desc: "GParted"}
@@ -233,6 +234,7 @@ caps:
     - {id: 421, cat: PC/ISO, desc: "Partedmagic"}
     - {id: 422, cat: PC/ISO, desc: "Pcbsd"}
     - {id: 423, cat: PC/ISO, desc: "PCLinuxOS"}
+    - {id: 46, cat: PC/ISO, desc: "PelandukOS"}
     - {id: 429, cat: PC/ISO, desc: "Pentoo"}
     - {id: 430, cat: PC/ISO, desc: "Peppermint"}
     - {id: 432, cat: PC/ISO, desc: "Pfsense"}
