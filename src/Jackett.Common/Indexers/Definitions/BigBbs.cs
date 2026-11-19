@@ -245,7 +245,7 @@ namespace Jackett.Common.Indexers.Definitions
             var queryCollection = new NameValueCollection
             {
                 { "p", "torrents" },
-                { "pid", "10" },
+                { "pid", "32" },
             };
 
             if (query.GetQueryString().IsNotNullOrWhiteSpace())
