@@ -166,11 +166,15 @@ search:
     Referer: ["{{ .Config.sitelink }}torrents.php"]
 
   rows:
-    selector: table.mg-b-0 > tbody > tr:has(a[href^="download.php?id="])
+    selector: div.tp-it
 
   fields:
-    categorydesc:
-      selector: span:has(i.fa-compact-disc)
+    category:
+      selector: a[href^="torrents.php?category="]
+      attribute: href
+      filters:
+        - name: querystring
+          args: category
     title:
       selector: a[href^="details.php?id="]
     details:
@@ -180,24 +184,29 @@ search:
       selector: a[href^="download.php?id="]
       attribute: href
     poster:
-      selector: img
+      selector: img.tp-poster
       attribute: src
-    size:
-      selector: td:nth-last-child(4)
+    date_day:
+      selector: div.tp-sd small
+    date_time:
+      selector: div.tp-sd small:nth-child(2)
     date:
-      selector: td:nth-last-child(5)
+      text: "{{ .Result.date_day }}{{ .Result.date_time }}"
       # auto adjusted by site account profile
       filters:
         - name: dateparse
-          args: "dd/MM/yyyyHH:mm:ss"
+          args: "dd.MM.yyyyHH:mm"
+    size:
+      selector: div.tp-sd
+      remove: small
     seeders:
-      selector: td:nth-last-child(3)
+      selector: a.s
     leechers:
-      selector: td:nth-last-child(2)
+      selector: a.l
     grabs:
-      selector: td:nth-last-child(1)
+      selector: a.c
     genre:
-      selector: td:nth-child(2) > span:nth-child(5)
+      selector: span.tp-genre
       filters:
         - name: re_replace
           args: ["(?i)(Znanstvena fantastika)", "Znanstvena_fantastika"]
@@ -209,6 +218,7 @@ search:
       case:
         "span:contains(\"100% Freeleech\")": 0
         "span:contains(\"50% Freeleech\")": 0.5
+        "span:contains(\"Freeleech\")": 0
         "*": 1
     uploadvolumefactor:
       text: 1
