@@ -654,6 +654,7 @@ Prior versions of Jackett are no longer supported.
  * TorrentLeech (TL)
  * ToTheGlory (TTG) [![(invite needed)][inviteneeded]](#)
  * TrackerMK
+ * Trackerformers
  * TrackerZero [PAY2DL]
  * TranceTraffic
  * Trellas (Magico) [![(invite needed)][inviteneeded]](#)
