@@ -76,16 +76,23 @@ namespace Jackett.Server
                         config => config.Filters.Add(
                             new AuthorizeFilter(
                                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
-                    .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
-                                        new DefaultContractResolver()); //Web app uses Pascal Case JSON);
+                    .AddJsonOptions(options =>
+                    {
+                        // Web app uses Pascal Case JSON)
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy()));
+                    });
 #else
 
             services.AddControllers(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
                                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
-                    .AddNewtonsoftJson(
-                        options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+                    .AddNewtonsoftJson(options =>
+                    {
+                        options.SerializerSettings.ContractResolver = new DefaultContractResolver();
+                        options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(new CamelCaseNamingStrategy()));
+                    });
 #endif
 
             var runtimeSettings = new RuntimeSettings();
