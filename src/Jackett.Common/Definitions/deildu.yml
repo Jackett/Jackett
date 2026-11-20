@@ -4,7 +4,7 @@ name: Deildu
 description: "Deildu is an ICELANDIC Semi-Private Torrent Tracker for MOVIES / TV / GENERAL"
 language: is-IS
 type: semi-private
-encoding: iso-8859-1
+encoding: UTF-8
 links:
   - https://deildu.net/
   - https://icetracker.org/
