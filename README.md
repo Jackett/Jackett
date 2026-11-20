@@ -68,7 +68,7 @@ A third-party Golang SDK for Jackett is available from [webtor-io/go-jackett](ht
 
 ## Supported Systems
 
-The currently supported version of Jackett is **0.24.+**, which is compatible with:
+The currently supported version of Jackett is **0.25.+**, which is compatible with:
 
 - **Windows:** Windows 10 Version 1607 or greater ([full list](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md#windows))
 - **Linux:** Various distributions ([full list](https://github.com/dotnet/core/blob/main/release-notes/10.0/supported-os.md#linux))
