@@ -11,7 +11,6 @@ legacylinks:
   - https://bj-share.me/
 
 caps:
-  allowtvsearchimdb: true
   categorymappings:
     - {id: 1, cat: Movies, desc: "Filmes"}
     - {id: 2, cat: TV, desc: "Seriados"}
@@ -40,6 +39,7 @@ caps:
     tv-search: [q, season, ep, imdbid]
     movie-search: [q, imdbid]
     book-search: [q]
+  allowtvsearchimdb: true
 
 settings:
   - name: cookie
