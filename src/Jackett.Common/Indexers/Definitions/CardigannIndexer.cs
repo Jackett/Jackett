@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Globalization;
-using System.IO;
 using System.Linq;
 using System.Net;
 using System.Text;
@@ -2209,6 +2208,8 @@ namespace Jackett.Common.Indexers.Definitions
 
         private string ParseFields(string value, string FieldName, ReleaseInfo release, List<string> FieldModifiers, Uri searchUrlUri)
         {
+            var categoryDelimiters = new[] { ',' };
+
             switch (FieldName)
             {
                 case "download":
@@ -2262,9 +2263,12 @@ namespace Jackett.Common.Indexers.Definitions
                         logger.Warn("CardigannIndexer ({0}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.", Id);
                     }
 
-                    var cats = MapTrackerCatToNewznab(value);
+                    var cats = value.Split(categoryDelimiters, StringSplitOptions.RemoveEmptyEntries)
+                                    .SelectMany(MapTrackerCatToNewznab)
+                                    .Distinct()
+                                    .ToList();
 
-                    if (cats.Any())
+                    if (cats.Count > 0)
                     {
                         release.Category = release.Category == null || FieldModifiers.Contains("noappend")
                             ? cats
@@ -2277,7 +2281,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                     else
                     {
-                        value = release.Category.ToString();
+                        value = string.Join(",", release.Category.Select(cat => cat.ToString(CultureInfo.InvariantCulture)));
                     }
 
                     break;
@@ -2287,9 +2291,12 @@ namespace Jackett.Common.Indexers.Definitions
                         logger.Warn("CardigannIndexer ({0}): The \"noappend\" modifier is deprecated. Please switch to \"default\". See the Definition Format in the Wiki for more information.", Id);
                     }
 
-                    var catsDesc = MapTrackerCatDescToNewznab(value);
+                    var catsDesc = value.Split(categoryDelimiters, StringSplitOptions.RemoveEmptyEntries)
+                                        .SelectMany(MapTrackerCatDescToNewznab)
+                                        .Distinct()
+                                        .ToList();
 
-                    if (catsDesc.Any())
+                    if (catsDesc.Count > 0)
                     {
                         release.Category = release.Category == null || FieldModifiers.Contains("noappend")
                             ? catsDesc
@@ -2302,7 +2309,7 @@ namespace Jackett.Common.Indexers.Definitions
                     }
                     else
                     {
-                        value = release.Category.ToString();
+                        value = string.Join(",", release.Category.Select(cat => cat.ToString(CultureInfo.InvariantCulture)));
                     }
 
                     break;
