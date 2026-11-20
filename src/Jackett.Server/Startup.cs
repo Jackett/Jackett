@@ -23,7 +23,6 @@ using Microsoft.AspNetCore.Rewrite;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Newtonsoft.Json.Serialization;
-using IPNetwork = Microsoft.AspNetCore.HttpOverrides.IPNetwork;
 #if !NET471
 using Microsoft.Extensions.Hosting;
 #endif
@@ -34,11 +33,18 @@ namespace Jackett.Server
     {
         private const string AllowAllOrigins = "AllowAllOrigins";
 
-        public Startup(IConfiguration configuration) => Configuration = configuration;
+        private readonly IConfiguration _configuration;
+        private readonly RuntimeSettings _runtimeSettings;
 
-        public IConfiguration Configuration { get; }
+        public Startup(IConfiguration configuration)
+        {
+            _configuration = configuration;
+            _runtimeSettings = new RuntimeSettings();
+            configuration.GetSection("RuntimeSettings").Bind(_runtimeSettings);
+        }
 
         // This method gets called by the runtime. Use this method to add services to the container.
+#if NET471
         public IServiceProvider ConfigureServices(IServiceCollection services)
         {
             services.AddResponseCompression()
@@ -64,34 +70,21 @@ namespace Jackett.Server
                 // See https://github.com/Jackett/Jackett/issues/3517
                 options.ForwardLimit = 10;
                 options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fc00::"), 7));
-                options.KnownNetworks.Add(new IPNetwork(IPAddress.Parse("fe80::"), 10));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("fc00::"), 7));
+                options.KnownNetworks.Add(new Microsoft.AspNetCore.HttpOverrides.IPNetwork(IPAddress.Parse("fe80::"), 10));
             });
 
-#if NET471
             services.AddMvc(
                         config => config.Filters.Add(
                             new AuthorizeFilter(
                                 new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
                     .AddJsonOptions(options => options.SerializerSettings.ContractResolver =
                                         new DefaultContractResolver()); //Web app uses Pascal Case JSON);
-#else
 
-            services.AddControllers(
-                        config => config.Filters.Add(
-                            new AuthorizeFilter(
-                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
-                    .AddNewtonsoftJson(
-                        options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
-#endif
-
-            var runtimeSettings = new RuntimeSettings();
-            Configuration.GetSection("RuntimeSettings").Bind(runtimeSettings);
-
-            var dataProtectionFolder = new DirectoryInfo(Path.Combine(runtimeSettings.DataFolder, "DataProtection"));
+            var dataProtectionFolder = new DirectoryInfo(Path.Combine(_runtimeSettings.DataFolder, "DataProtection"));
 
             services.AddDataProtection()
                         .PersistKeysToFileSystem(dataProtectionFolder)
@@ -104,7 +97,7 @@ namespace Jackett.Server
             Helper.SetupLogging(builder);
 
             builder.Populate(services);
-            builder.RegisterModule(new JackettModule(runtimeSettings));
+            builder.RegisterModule(new JackettModule(_runtimeSettings));
             builder.RegisterType<SecurityService>().As<ISecurityService>().SingleInstance();
             builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
             builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
@@ -121,6 +114,68 @@ namespace Jackett.Server
 
             return new AutofacServiceProvider(container);
         }
+# else
+        public void ConfigureServices(IServiceCollection services)
+        {
+            services.AddResponseCompression()
+                    .AddCors(
+                        options =>
+                        {
+                            options.AddPolicy(name: AllowAllOrigins, corsPolicyBuilder => corsPolicyBuilder.AllowAnyOrigin());
+
+                        })
+                    .AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                    .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
+                        options =>
+                        {
+                            options.LoginPath = new PathString("/UI/Login");
+                            options.AccessDeniedPath = new PathString("/UI/Login");
+                            options.LogoutPath = new PathString("/UI/Logout");
+                            options.Cookie.Name = "Jackett";
+                        });
+
+            services.Configure<ForwardedHeadersOptions>(options =>
+            {
+                // When adjusting these parameters make sure it's well tested with various environments
+                // See https://github.com/Jackett/Jackett/issues/3517
+                options.ForwardLimit = 10;
+                options.ForwardedHeaders = ForwardedHeaders.XForwardedFor | ForwardedHeaders.XForwardedProto | ForwardedHeaders.XForwardedHost;
+                options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse("10.0.0.0"), 8));
+                options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse("172.16.0.0"), 12));
+                options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse("192.168.0.0"), 16));
+                options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse("fc00::"), 7));
+                options.KnownIPNetworks.Add(new System.Net.IPNetwork(IPAddress.Parse("fe80::"), 10));
+            });
+
+            services.AddControllers(
+                        config => config.Filters.Add(
+                            new AuthorizeFilter(
+                                new AuthorizationPolicyBuilder().RequireAuthenticatedUser().Build())))
+                    .AddNewtonsoftJson(
+                        options => options.SerializerSettings.ContractResolver = new DefaultContractResolver());
+
+            var dataProtectionFolder = new DirectoryInfo(Path.Combine(_runtimeSettings.DataFolder, "DataProtection"));
+
+            services.AddDataProtection()
+                        .PersistKeysToFileSystem(dataProtectionFolder)
+                        .SetApplicationName("Jackett");
+
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+        }
+
+        public void ConfigureContainer(ContainerBuilder builder)
+        {
+            Helper.SetupLogging(builder);
+
+            builder.RegisterModule(new JackettModule(_runtimeSettings));
+            builder.RegisterType<SecurityService>().As<ISecurityService>().SingleInstance();
+            builder.RegisterType<ServerService>().As<IServerService>().SingleInstance();
+            builder.RegisterType<ProtectionService>().As<IProtectionService>().SingleInstance();
+            builder.RegisterType<CacheService>().As<ICacheService>().SingleInstance();
+            builder.RegisterType<ServiceConfigService>().As<IServiceConfigService>().SingleInstance();
+            builder.RegisterType<FilePermissionService>().As<IFilePermissionService>().SingleInstance();
+        }
+#endif
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 #if NET471
@@ -207,6 +262,6 @@ namespace Jackett.Server
             Helper.Logger.Info($"Jackett startup finished in {elapsed:0.000} s");
         }
 
-        private static void OnStopped() => Helper.Logger.Info($"Jackett stopped");
+        private static void OnStopped() => Helper.Logger.Info("Jackett stopped");
     }
 }

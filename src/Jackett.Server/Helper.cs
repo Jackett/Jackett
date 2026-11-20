@@ -11,7 +11,7 @@ namespace Jackett.Server
 {
     public static class Helper
     {
-        public static IContainer ApplicationContainer { get; set; }
+        public static ILifetimeScope ApplicationContainer { get; set; }
 
 #if NET471
         public static IApplicationLifetime applicationLifetime;
