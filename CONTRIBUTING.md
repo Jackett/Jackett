@@ -103,9 +103,9 @@ If you use something else, please add it here for others.
 
 <details open=true> <summary> Windows </summary>
 
-<details open=true> <summary> Visual Studio 2022 </summary>
+<details open=true> <summary> Visual Studio 2026 </summary>
 
-- Install [Visual Studio Community 2022](https://visualstudio.microsoft.com/vs/) for free.
+- Install [Visual Studio Community 2026](https://visualstudio.microsoft.com/vs/) for free.
   - About 2GB download, 8GB installed.
   -  Make sure it includes the following Workload and Individual Components:
      -  .NET desktop development
