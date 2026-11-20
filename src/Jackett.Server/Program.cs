@@ -3,15 +3,21 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Autofac.Extensions.DependencyInjection;
 using CommandLine;
 using CommandLine.Text;
 using Jackett.Common.Models.Config;
 using Jackett.Common.Services;
 using Jackett.Common.Services.Interfaces;
 using Jackett.Common.Utils;
+#if NET471
 using Microsoft.AspNetCore;
+#endif
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+#if !NET471
+using Microsoft.Extensions.Hosting;
+#endif
 using Microsoft.Extensions.Logging;
 using NLog;
 using NLog.Web;
@@ -122,7 +128,17 @@ namespace Jackett.Server
                     var applicationFolder = configurationService.GetContentFolder();
                     logger.Debug($"Content root path is: {applicationFolder}");
 
-                    CreateWebHostBuilder(args, url, applicationFolder).Build().Run();
+                    var host = CreateWebHostBuilder(args, url, applicationFolder).Build();
+
+#if !NET471
+                    Helper.ApplicationContainer = host.Services.GetAutofacRoot();
+
+                    Helper.Logger.Debug("Autofac container built");
+
+                    Helper.Initialize();
+#endif
+
+                    host.Run();
                 }
                 catch (Exception e)
                 {
@@ -166,6 +182,7 @@ namespace Jackett.Server
             }
         }
 
+#if NET471
         public static IWebHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
             WebHost.CreateDefaultBuilder(args)
                 .UseContentRoot(contentRoot)
@@ -180,5 +197,25 @@ namespace Jackett.Server
                     logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
                 })
                 .UseNLog();
+#else
+        public static IHostBuilder CreateWebHostBuilder(string[] args, string[] urls, string contentRoot) =>
+            Host.CreateDefaultBuilder(args)
+                .ConfigureLogging(logging =>
+                {
+                    logging.ClearProviders();
+                    logging.SetMinimumLevel(Microsoft.Extensions.Logging.LogLevel.Trace);
+                })
+                .UseNLog()
+                .UseServiceProviderFactory(new AutofacServiceProviderFactory())
+                .ConfigureAppConfiguration((_, config) => config.AddConfiguration(Configuration))
+                .ConfigureWebHostDefaults(webBuilder =>
+                {
+                    webBuilder.UseContentRoot(contentRoot)
+                              .UseWebRoot(contentRoot)
+                              .UseUrls(urls)
+                              .PreferHostingUrls(true)
+                              .UseStartup<Startup>();
+                });
+#endif
     }
 }
