@@ -84,7 +84,6 @@ login:
   path: api/torznab
   method: get
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: search
     limit: 1
 
@@ -95,7 +94,6 @@ search:
         type: xml
 
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
@@ -105,6 +103,9 @@ search:
     tmdbid: "{{ .Query.TMDBID }}"
     tvdbid: "{{ .Query.TVDBID }}"
     limit: 100
+
+  headers:
+    X-API-KEY: ["{{ .Config.apikey }}"]
 
   rows:
     selector: rss > channel > item
