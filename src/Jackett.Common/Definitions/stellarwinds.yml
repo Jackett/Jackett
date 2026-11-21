@@ -114,7 +114,7 @@ search:
       selector: "[name=seeders]"
       attribute: value
     leechers:
-      selector: "[name=peers]"
+      selector: "[name=leechers]"
       attribute: value
     grabs:
       selector: "[name=grabs]"
