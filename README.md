@@ -648,7 +648,6 @@ Prior versions of Jackett are no longer supported.
  * TorrentDay (TD)
  * TorrentDD (TodayBit)
  * Torrenteros (TTR)
- * TorrentHaven
  * TorrentHR
  * Torrenting (TT)
  * TorrentLeech (TL)
