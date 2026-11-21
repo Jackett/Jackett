@@ -109,6 +109,7 @@ search:
         tmdbid: "{{ .Query.TMDBID }}"
         free: "{{ if .Config.onlyupload }}yes{{ else }}{{ end }}"
         page: 1
+        limit: 100
 
   rows:
     selector: item
