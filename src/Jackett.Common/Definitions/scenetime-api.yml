@@ -71,9 +71,16 @@ settings:
     default: "Unused accounts (accounts with no activity) and inactive unparked accounts may be deleted."
 
 login:
-  # returns "401 Unauthorized, check your credentials" if passkey is invalid
-  path: "rss.php?apikey={{ .Config.apikey }}&view=html"
+  path: rss.php
   method: get
+  inputs:
+    apikey: "{{ .Config.apikey }}"
+    t: caps
+  error:
+    - selector: error
+      message:
+        selector: error[description]
+        attribute: description
 
 search:
   paths:
