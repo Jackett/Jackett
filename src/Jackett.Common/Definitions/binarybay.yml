@@ -46,7 +46,6 @@ login:
   method: get
   inputs:
     t: caps
-    apikey: "{{ .Config.apikey }}"
   error:
     - selector: error
       message:
@@ -61,7 +60,6 @@ search:
         type: xml
 
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.TMDBID }}movie{{ else }}{{ end }}{{ if or .Query.Artist .Query.Album }}music{{ else }}{{ end }}{{ if or .Query.Author .Query.Title }}book{{ else }}{{ end }}{{ if or .Query.Season .Query.Ep .Query.IMDBID .Query.TVDBID }}tvsearch{{ else }}{{ end }}{{ if or .Query.TVDBID .Query.IMDBID .Query.TMDBID .Query.Season .Query.Ep .Query.Author .Query.Title .Query.Artist .Query.Album }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
@@ -76,6 +74,9 @@ search:
     title: "{{ .Query.Title }}"
     "tag": "{{ if .Config.freeleech }}freeleech{{ else }}{{ end }}"
     limit: 100
+
+  headers:
+    X-API-KEY: ["{{ .Config.apikey }}"]
 
   rows:
     selector: channel > item
