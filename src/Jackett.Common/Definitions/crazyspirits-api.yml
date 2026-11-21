@@ -69,6 +69,7 @@ settings:
     default: false
 
 login:
+  # does not support headers: X-API-KEY:
   path: feed.php
   method: get
   inputs:

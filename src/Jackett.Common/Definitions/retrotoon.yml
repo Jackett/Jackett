@@ -43,6 +43,7 @@ settings:
     default: "Accounts with no login for 90 days get reminder emails and are then paused. Logging in within 180 days reactivates a paused account."
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: torznab.php
   method: get

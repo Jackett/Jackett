@@ -134,6 +134,7 @@ settings:
     default: api.racingfor.me
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: "https://{{ .Config.apiurl }}/public/torznab"
   method: get

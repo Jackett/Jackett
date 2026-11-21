@@ -95,6 +95,7 @@ settings:
     default: "IF you want to see 3x torrents access your <a href=\"https://c411.org/user/settings\" target=\"_blank\">C411 Paramètres</a> page and tick the <b>Afficher le contenu XXX</b> checkbox."
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: api/torznab
   method: get

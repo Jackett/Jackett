@@ -89,6 +89,7 @@ settings:
       asc: asc
 
 login:
+  # can it support headers: X-API-KEY: ? needs account to test
   path: ajax.php
   method: get
   inputs:

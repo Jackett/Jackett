@@ -87,6 +87,7 @@ settings:
     default: false
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
   path: api
   method: get

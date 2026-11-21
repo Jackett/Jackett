@@ -94,6 +94,7 @@ settings:
     default: "All accounts up to platinum users that are inactive for more than 8 weeks will be deleted!"
 
 login:
+  # can it support headers: X-API-KEY: ? to be tested
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: api/torznab.php
   method: get

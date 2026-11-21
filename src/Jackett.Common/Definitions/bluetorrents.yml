@@ -46,6 +46,7 @@ settings:
     default: "Accounts with no activity for 90+ days may be disabled."
 
 login:
+  # does not support headers: X-API-KEY:
   path: api/external
   method: get
   inputs:

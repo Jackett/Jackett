@@ -50,6 +50,7 @@ settings:
     default: "Magnetz needs a membership. Make your API key (it starts with <b>mgz_</b>) on the <a href=\"https://magnetz.eu/account/apps#api-key\" target=\"_blank\">Apps &amp; API</a> page. Each search or RSS sync uses one call of your daily allowance."
 
 login:
+  # can it support headers: X-API-KEY: ? needs a member account to test
   # returns a torznab <error code="100"> (401) for a bad key, <error code="101"> (402) without a membership
   path: api/torznab
   method: get

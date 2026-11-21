@@ -52,6 +52,7 @@ settings:
     default: "Account retention:<ol><li>6 months since your last login → your account is automatically disabled (contact staff to reactivate).</li><li>12 months since your last login → your account is automatically banned.</li></ol>"
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: torznab.php
   method: get

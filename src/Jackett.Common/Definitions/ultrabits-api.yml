@@ -91,6 +91,7 @@ settings:
     default: "Log in to the website at least every 3 months to avoid account deactivation."
 
 login:
+  # does not support headers: X-API-KEY:
   path: v1/jackett/search
   method: get
   inputs:

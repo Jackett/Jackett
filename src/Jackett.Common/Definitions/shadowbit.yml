@@ -56,6 +56,7 @@ settings:
     default: "Inactive accounts will be pruned after 6 months. Use the parking feature if you need extended absence (up to 2 years)."
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if passkey is invalid
   path: api/torznab
   method: get

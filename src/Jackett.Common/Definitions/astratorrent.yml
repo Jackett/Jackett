@@ -63,6 +63,7 @@ settings:
     default: false
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: api/torznab.php
   method: get

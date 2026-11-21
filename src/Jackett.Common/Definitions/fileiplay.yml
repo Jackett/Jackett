@@ -33,6 +33,7 @@ settings:
     default: "You can find your API Key by accessing the <a href=\"https://fileiplay.org/integrations/\" target=\"_blank\">FileIplay Integrations</a> page and scrolling down to <b>Your integration API key</b>."
 
 login:
+  # does not support headers: X-API-KEY:
   # returns "401 Unauthorized, check your credentials" if apikey is invalid
   path: torznab/api
   method: get

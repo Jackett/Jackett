@@ -31,6 +31,7 @@ settings:
     default: "You can find the API PassKey by accessing your <a href=\"https://periodical.me/\" target=\"_blank\">Periodical</a> account profile."
 
 login:
+  # can it support headers: X-API-KEY: ? to be tested
   path: api/torznab
   method: get
   inputs:

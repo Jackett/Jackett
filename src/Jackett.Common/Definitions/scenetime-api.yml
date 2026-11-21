@@ -71,6 +71,7 @@ settings:
     default: "Unused accounts (accounts with no activity) and inactive unparked accounts may be deleted."
 
 login:
+  # does not support headers: X-API-KEY:
   path: rss.php
   method: get
   inputs:

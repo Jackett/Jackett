@@ -62,6 +62,7 @@ settings:
     default: false
 
 login:
+  # can it support headers: X-API-KEY: ? to be tested
   path: api/torznab
   method: get
   inputs:
