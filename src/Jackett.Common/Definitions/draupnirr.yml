@@ -81,7 +81,6 @@ login:
   path: torznab/api
   method: get
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: caps
   error:
     - selector: error[code]
@@ -96,7 +95,6 @@ search:
         type: xml
 
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     # .Keywords already carries the SxxEyy episode string for tv searches
     q: "{{ .Keywords }}"
@@ -104,6 +102,9 @@ search:
     imdbid: "{{ .Query.IMDBID }}"
     tmdbid: "{{ .Query.TMDBID }}"
     limit: 100
+
+  headers:
+    X-API-KEY: ["{{ .Config.apikey }}"]
 
   rows:
     selector: rss > channel > item
