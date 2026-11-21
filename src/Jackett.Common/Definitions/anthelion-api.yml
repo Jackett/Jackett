@@ -46,8 +46,6 @@ settings:
 login:
   path: api.php
   method: get
-  inputs:
-    api_key: "{{ .Config.apikey }}"
   error:
     - selector: ":root:contains(\"Unrecognized key\")"
       message:
@@ -67,7 +65,6 @@ search:
         type: json
 
   inputs:
-    apikey: "{{ .Config.apikey }}"
     t: "{{ if .Query.Type }}{{ .Query.Type }}{{ else }}search{{ end }}"
     o: json
     q: "{{ .Keywords }}"
@@ -78,6 +75,9 @@ search:
     offset: 0
     # freetorrent: 0 normal, 1 freeleech, 2 neutral leech
     freetorrent: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
+
+  headers:
+    X-API-KEY: ["{{ .Config.apikey }}"]
 
   rows:
     selector: item
