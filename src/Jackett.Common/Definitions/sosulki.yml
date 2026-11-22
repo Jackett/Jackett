@@ -6,12 +6,13 @@ language: ru-RU
 type: public
 encoding: UTF-8
 links:
-  - https://sosulki.bosk.cc/
+  - https://sosulka.bosk.cc/
 legacylinks:
   - http://sosulki.net/
   - http://sosulki.com/ # site forces https
   - https://sosulki.com/
   - https://sosulki.hlom.ru/
+  - https://sosulki.bosk.cc/
 
 caps:
   categorymappings:
