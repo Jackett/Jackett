@@ -202,7 +202,6 @@ Prior versions of Jackett are no longer supported.
  * Gay-Torrents.net
  * HDGalaKtik
  * HellTorrents [PAY2DL]
- * HunTorrent
  * Il CorSaRo Blu
  * ilDraGoNeRo
  * Kinorun
