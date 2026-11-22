@@ -612,6 +612,7 @@ namespace Jackett.Updater
                 "Definitions/mircrew.yml",
                 "Definitions/mkvcage.yml",
                 "Definitions/moecat.yml",
+                "Definitions/momentpt.yml",
                 "Definitions/mononokebt.yml",
                 "Definitions/monova.yml",
                 "Definitions/montorrent.yml",
