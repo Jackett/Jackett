@@ -692,6 +692,7 @@ Prior versions of Jackett are no longer supported.
  * ZmPT (织梦)
  * ZooToons [![(invite needed)][inviteneeded]](#)
  * ZRPT (自然) [![(invite needed)][inviteneeded]](#)
+ * ZXX CLUB
 </details>
 
 **Note:** Trackers marked with [![(invite needed)][inviteneeded]](#) have no active maintainer and may be broken or missing features. If you have an invite, please send it to `jacketttest [at] gmail [dot] com` or `garfieldsixtynine [at] gmail [dot] com` to help improve these indexers.
