@@ -349,6 +349,7 @@ namespace Jackett.Updater
                 "Definitions/btworld.yml",
                 "Definitions/btxpress.yml",
                 "Definitions/bulltorrent.yml",
+                "Definitions/bytepeer.yml",
                 "Definitions/carphunter.yml", // renamed to herobit #9494
                 "Definitions/cartoonchaos.yml",
                 "Definitions/casatorrent.yml", // renamed to teamctgame
