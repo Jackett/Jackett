@@ -131,7 +131,8 @@ search:
 
   inputs:
     apikey: "{{ .Config.passkey }}"
-    t: "{{ if .Keywords }}{{ .Query.Type }}{{ else }}search{{ end }}"
+    # t=music and t=book return "unsupported function", t=movie and t=tvsearch without keywords return no results
+    t: "{{ if and .Keywords (or (eq .Query.Type \"movie\") (eq .Query.Type \"tvsearch\")) }}{{ .Query.Type }}{{ else }}search{{ end }}"
     q: "{{ .Keywords }}"
     cat: "{{ join .Categories \",\" }}"
     season: "{{ .Query.Season }}"
