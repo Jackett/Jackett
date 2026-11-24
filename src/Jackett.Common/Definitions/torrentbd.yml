@@ -98,7 +98,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: /
-    selector: button[href="account-logout.php"]
+    selector: form[action="account-logout.php"]
 
 search:
   headers:
