@@ -68,6 +68,7 @@ caps:
     - {id: 102, cat: PC/ISO, desc: "CentOS"}
     - {id: 1216, cat: PC/ISO, desc: "Chakra"}
     - {id: 2033, cat: PC/ISO, desc: "Chapeau"}
+    - {id: 50, cat: PC/ISO, desc: "Circle Linux"}
     - {id: 2253, cat: PC/ISO, desc: "Clear Linux"}
     - {id: 2264, cat: PC/ISO, desc: "ClearOS"}
     - {id: 107, cat: PC/ISO, desc: "Clonezilla"}
