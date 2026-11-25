@@ -54,7 +54,7 @@ caps:
     - {id: 62, cat: TV/Sport, desc: "Sport > SD"}
     - {id: 96, cat: Books/Other, desc: "ePaper > Zeitungen"}
     - {id: 136, cat: Books/EBook, desc: "ePaper > E-Book"}
-    - {id: 137, cat: Books/Comics, desc: "ePaper > Comics"}
+    - {id: 137, cat: Books/Mags, desc: "ePaper > ePaper"}
     - {id: 76, cat: XXX/SD, desc: "XXX > SD"}
     - {id: 73, cat: XXX/x264, desc: "XXX > HD"}
     - {id: 75, cat: XXX/Pack, desc: "XXX > Pack"}
