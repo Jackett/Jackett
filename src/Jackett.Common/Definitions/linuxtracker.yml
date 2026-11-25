@@ -37,6 +37,7 @@ caps:
     - {id: 2288, cat: PC/ISO, desc: "Audiophile Linux"}
     - {id: 56, cat: PC/ISO, desc: "Austrumi"}
     - {id: 2012, cat: PC/ISO, desc: "AV Linux"}
+    - {id: 51, cat: PC/ISO, desc: "AxOS"}
     - {id: 1231, cat: PC/ISO, desc: "Backbox"}
     - {id: 2219, cat: PC/ISO, desc: "BackSlash Linux"}
     - {id: 43, cat: PC/ISO, desc: "Basalt Linux"}
@@ -335,7 +336,7 @@ caps:
     - {id: 1, cat: PC/ISO, desc: "Ubuntu Unity"}
     - {id: 2277, cat: PC/ISO, desc: "Ultimate Boot CD"}
     - {id: 569, cat: PC/ISO, desc: "Ultimate Edition"}
-    - {id: 2222, cat: PC/ISO, desc: "Univention Corporate"}
+    - {id: 2222, cat: PC/ISO, desc: "Univention Corporate Server"}
     - {id: 2149, cat: PC/ISO, desc: "Untangle NG Firewall"}
     - {id: 2173, cat: PC/ISO, desc: "Uruk GNU/Linux"}
     - {id: 2, cat: PC/ISO, desc: "VailuxOS"}
