@@ -130,6 +130,7 @@ caps:
     - {id: 910, cat: Movies, desc: " |- Старые Зарубежные Фильмы (SD)"}
     - {id: 911, cat: Movies, desc: " |- Старые Зарубежные Фильмы (DVD)"}
     - {id: 912, cat: Movies, desc: " |- Старые Зарубежные Фильмы (HD, FHD, UHD, 3D)"}
+    - {id: 1382, cat: Movies, desc: " |- Старые Зарубежные Фильмы (UHD)"}
     - {id: 220, cat: Movies, desc: "Отечественное кино"}
     - {id: 221, cat: Movies, desc: " |- Отечественные Фильмы (SD)"}
     - {id: 222, cat: Movies, desc: " |- Отечественные Фильмы (DVD)"}
