@@ -109,13 +109,6 @@ search:
     imdb: "{{ .Query.IMDBID }}"
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
-  keywordsfilters:
-    # the API returns nothing when q has a colon or a year
-    - name: re_replace
-      args: ["\\s*:\\s*", " "]
-    - name: re_replace
-      args: ["(\\s*\\b((19|20)\\d{2})\\b)", ""]
-
   rows:
     selector: data
 
@@ -133,10 +126,8 @@ search:
       selector: info_hash
     imdbid:
       selector: imdb_id
-      optional: true
     poster:
       selector: poster
-      optional: true
     date:
       selector: published_at
     size:
