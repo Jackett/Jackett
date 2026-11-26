@@ -125,6 +125,7 @@ caps:
     - {id: 1210, cat: PC/ISO, desc: "Fuduntu"}
     - {id: 2046, cat: PC/ISO, desc: "FuguIta"}
     - {id: 2290, cat: PC/ISO, desc: "FuryBSD"}
+    - {id: 52, cat: PC/ISO, desc: "FUSS"}
     - {id: 2256, cat: PC/ISO, desc: "G4L"}
     - {id: 15, cat: PC/ISO, desc: "Galactic Mandate Linux"}
     - {id: 2235, cat: PC/ISO, desc: "GALPon MiniNo"}
