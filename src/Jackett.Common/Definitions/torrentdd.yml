@@ -59,12 +59,11 @@ caps:
     book-search: [q]
 
 settings:
-  - name: username
+  - name: cookie
     type: text
-    label: Username
-  - name: password
-    type: password
-    label: Password
+    label: Cookie
+  - name: info_cookie
+    type: info_cookie
   - name: freeleech
     type: checkbox
     label: Search freeleech only
@@ -86,16 +85,13 @@ settings:
       ASC: asc
 
 login:
-  path: takelogin.php
-  method: post
+  # using cookie method because login page has embedded Google reCAPTCHA
+  method: cookie
   inputs:
-    username: "{{ .Config.username }}"
-    password: "{{ .Config.password }}"
-  error:
-    - selector: div.alert-warning:contains("Login failed!")
+    cookie: "{{ .Config.cookie }}"
   test:
     path: home.php
-    selector: a[href="logout.php"]
+    selector: form[action="logout.php"]
 
 download:
   selectors:
