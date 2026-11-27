@@ -13,6 +13,7 @@ links:
 legacylinks:
   - https://huntorrent.net/
   - https://huntorrent.eu/
+  - https://bithorlo.info/
 
 caps:
   categorymappings:
@@ -93,7 +94,7 @@ login:
     cookie: "{{ .Config.cookie }}"
   test:
     path: browse/
-    selector: a[href*="logout.php?k="]
+    selector: a[href$="/logout.php"]
 
 search:
   headers:
@@ -124,7 +125,7 @@ search:
 
   fields:
     category:
-      selector: a[href*="/?cat="]
+      selector: a.torrent-category-tile
       attribute: href
       filters:
         - name: querystring
@@ -134,9 +135,9 @@ search:
       attribute: data-name
     details:
       selector: a.torrent-title-link
-      attribute: data-detail-url
+      attribute: href
     download:
-      selector: a[href^="/download/"]
+      selector: a.torrent-download-action
       attribute: href
     genre:
       selector: tr.torrent-row
@@ -154,9 +155,6 @@ search:
       selector: a[href*="themoviedb.org/movie/"], a[href*="themoviedb.org/tv/"]
       attribute: href
       optional: true
-    poster:
-      selector: a[data-poster]
-      attribute: data-poster
     date:
       selector: tr.torrent-row
       attribute: data-added
@@ -178,10 +176,6 @@ search:
     files:
       selector: tr.torrent-row
       attribute: data-numfiles
-      optional: true
-    comments:
-      selector: a[href*="tocomm=1"]
-      attribute: href
       optional: true
     downloadvolumefactor:
       text: 1
