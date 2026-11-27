@@ -7,6 +7,7 @@ description: "SeedCore (SC) is a ROMANIAN Private Torrent Tracker for MOVIES / T
 language: ro-RO
 type: private
 encoding: UTF-8
+requestDelay: 2
 links:
   - https://seedcore.net/
 legacylinks:
