@@ -75,8 +75,8 @@ caps:
     search: [q]
     # season/ep are declared so Sonarr sends episode and season searches. They are not sent to the API:
     # S02E04 goes into .Keywords, so q carries it.
-    tv-search: [q, season, ep, imdbid]
-    movie-search: [q, imdbid]
+    tv-search: [q, season, ep, imdbid, tmdbid]
+    movie-search: [q, imdbid, tmdbid]
 
 settings:
   - name: apikey
@@ -90,23 +90,37 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
+  - name: single_file_release_use_filename
+    type: checkbox
+    label: Use filename as title for single file releases
+    default: true
   - name: info_activity
     type: info
     label: Account Inactivity
     default: "Inactive accounts, that is, without access for 90 days (3 months), will be automatically deleted by the system; with no possibility of reactivation."
+
+login:
+  # returns "401 Unauthorized, check your credentials" if apikey is invalid
+  path: api/v1/torrents
+  method: get
+  inputs:
+    per_page: 1
 
 search:
   paths:
     - path: api/v1/torrents
       response:
         type: json
+
   headers:
     Authorization: ["Bearer {{ .Config.apikey }}"]
     Accept: ["application/json"]
+
   inputs:
     $raw: "{{ range .Categories }}categories[]={{.}}&{{end}}"
     q: "{{ .Keywords }}"
     imdb: "{{ .Query.IMDBID }}"
+    tmdb: "{{ .Query.TMDBID }}"
     freeleech: "{{ if .Config.freeleech }}1{{ else }}{{ end }}"
 
   rows:
@@ -116,8 +130,16 @@ search:
     # the site builds the release title, so the fields are a plain mapping
     category:
       selector: indexer_category
-    title:
+    title_optional:
+      selector: name
+    title_filename:
       selector: title
+    files:
+      selector: num_files
+    title:
+      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+    title:
+      selector: name
     details:
       selector: details_url
     download:
@@ -126,14 +148,14 @@ search:
       selector: info_hash
     imdbid:
       selector: imdb_id
+    tmdbid:
+      selector: tmdb_id
     poster:
       selector: poster
     date:
       selector: published_at
     size:
       selector: size
-    files:
-      selector: num_files
     seeders:
       selector: seeders
     leechers:
