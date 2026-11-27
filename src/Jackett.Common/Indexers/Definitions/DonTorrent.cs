@@ -273,7 +273,12 @@ namespace Jackett.Common.Indexers.Definitions
                     var result = await RequestWithCookiesAsync(url: SiteLink + "buscar", method: RequestType.POST, referer: SiteLink, data: formData);
 
                     if (result.Status != HttpStatusCode.OK)
+                    {
+                        if (page > 1)
+                            break;
+
                         throw new ExceptionWithConfigData(result.ContentString, configData);
+                    }
 
                     try
                     {
