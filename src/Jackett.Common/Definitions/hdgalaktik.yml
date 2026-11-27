@@ -106,17 +106,17 @@ search:
     Cookie: ["torrentviewblock=1"]
 
   rows:
-    selector: article.tor-card
+    selector: article.rls-item
 
   fields:
     category:
-      selector: a[href^="browse.php?cat="]
+      selector: a.rls-cat
       attribute: href
       filters:
         - name: querystring
           args: cat
     title:
-      selector: a.tor-card-t
+      selector: a.rls-t
       filters:
         # normalize to SXXEYY format
         - name: re_replace
@@ -176,17 +176,21 @@ search:
         - name: append
           args: "{{ if .Config.addrussiantotitle }} RUS{{ else }}{{ end }}"
     details:
-      selector: a.tor-card-t
+      selector: a.rls-t
       attribute: href
+    _id:
+      selector: a.rls-t
+      attribute: href
+      filters:
+        - name: querystring
+          args: id
     download:
-      selector: a[href^="download.php?id="]
-      attribute: href
-      optional: true # for users that do not have DL access
+      text: "download.php?id={{ .Result._id }}"
     poster:
-      selector: img.tor-img
+      selector: img.rls-img
       attribute: src
     date:
-      selector: a.tor-ago
+      selector: a.rls-ago
       # 11 минут назад (11 minutes ago)
       # 1 час, 5 минут назад (1 hour, 5 minutes ago)
       filters:
@@ -235,17 +239,14 @@ search:
         - name: replace
           args: ["лет", "years"]
         - name: timeago
-    size_nodl:
-      selector: span.tor-dl
-      optional: true
     size:
-      selector: a.tor-dl
-      optional: true
-      default: "{{ .Result.size_nodl }}"
+      selector: span.rls-size
     seeders:
-      selector: span.up
+      selector: span.is-seed
     leechers:
-      selector: span.down
+      selector: span.is-leech
+    grabs:
+      selector: span.rls-hits
     downloadvolumefactor:
       case:
         span.tv-badge-free: 0
