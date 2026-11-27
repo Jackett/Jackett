@@ -5,6 +5,8 @@ description: "ArabicSource is an ARABIC Private Torrent Tracker for MOVIES / TV"
 language: ar-SA
 type: private
 encoding: UTF-8
+certificates:
+  - e887b25a3e53f9d0bb38dc3b9ab0ee7e7d09635f # Expired 27th Nov 2026
 links:
   - https://arabicsource.net/
 
