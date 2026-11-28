@@ -90,10 +90,6 @@ settings:
     type: checkbox
     label: Search freeleech only
     default: false
-  - name: single_file_release_use_filename
-    type: checkbox
-    label: Use filename as title for single file releases
-    default: true
   - name: info_activity
     type: info
     label: Account Inactivity
@@ -127,29 +123,25 @@ search:
     selector: data
 
   fields:
-    # the site builds the release title, so the fields are a plain mapping
     category:
       selector: indexer_category
-    title_optional:
-      selector: name
-    title_filename:
-      selector: title
-    files:
-      selector: num_files
+    # the site builds the release title, so the fields are a plain mapping
     title:
-      text: "{{ if and (.Config.single_file_release_use_filename) (eq .Result.files \"1\") (.Result.title_filename) }}{{ .Result.title_filename }}{{ else }}{{ .Result.title_optional }}{{ end }}"
+      selector: title
     details:
       selector: details_url
     download:
       selector: download_url
+    poster:
+      selector: poster
     infohash:
       selector: info_hash
     imdbid:
       selector: imdb_id
     tmdbid:
       selector: tmdb_id
-    poster:
-      selector: poster
+    files:
+      selector: num_files
     date:
       selector: published_at
     size:
